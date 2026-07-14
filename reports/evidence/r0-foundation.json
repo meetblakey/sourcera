@@ -1,0 +1,27 @@
+{
+  "issue": "PLA-220",
+  "status": "pending-staging",
+  "sourceCommit": null,
+  "local": {
+    "verifiedAt": null,
+    "commands": {
+      "deployEnvironmentCheck": "pending",
+      "lint": "pending",
+      "typecheck": "pending",
+      "tests": "pending",
+      "productionBuild": "pending",
+      "dependencyAudit": "pending"
+    }
+  },
+  "staging": {
+    "deploymentUrl": null,
+    "healthUrl": null,
+    "healthCheckedAt": null,
+    "healthResult": "pending"
+  },
+  "rollback": {
+    "testedAt": null,
+    "restoredDeploymentUrl": null,
+    "healthResult": "pending"
+  }
+}
