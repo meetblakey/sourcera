@@ -111,7 +111,7 @@ test("fails a broken source path", () => {
 Run:
 
 ```bash
-node --import tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/sources.test.ts
+node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/sources.test.ts
 ```
 
 Expected: FAIL because `tools/delivery/lib/sources.ts` does not exist.
@@ -270,7 +270,7 @@ export function sourceReferenceFindings(rows: SourceRequirement[], root: string)
 Run:
 
 ```bash
-node --import tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/sources.test.ts
+node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/sources.test.ts
 tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
 ```
 
@@ -626,7 +626,7 @@ test("generates deterministic reports and verify fails on false readiness", () =
     writeFileSync(join(dir, "risks.json"), JSON.stringify({ risks: [] }));
     writeFileSync(join(dir, "validation.json"), JSON.stringify({ customerProof: [], operationalProof: [], forecastProof: [], executionEvidence: { tests: [], deploy: [], rollback: [], runtime: [] } }));
     writeFileSync(join(dir, "linear.json"), JSON.stringify({ issues: [] }));
-    const result = spawnSync(process.execPath, ["--import", "tools/spec-lint/node_modules/tsx/dist/loader.mjs", "tools/delivery/generate.ts", "--root", process.cwd(), "--inventory", join(dir, "inventory.md"), "--stamp", join(dir, "stamp.json"), "--exact", join(dir, "exact.json"), "--releases", join(dir, "releases.json"), "--release-plan", join(dir, "release-plan.json"), "--dispositions", join(dir, "dispositions.json"), "--decisions", join(dir, "decisions.jsonl"), "--risks", join(dir, "risks.json"), "--validation", join(dir, "validation.json"), "--linear", join(dir, "linear.json"), "--out", join(dir, "reports")], { cwd: process.cwd(), encoding: "utf8" });
+    const result = spawnSync(process.execPath, ["--import", "./tools/spec-lint/node_modules/tsx/dist/loader.mjs", "tools/delivery/generate.ts", "--root", process.cwd(), "--inventory", join(dir, "inventory.md"), "--stamp", join(dir, "stamp.json"), "--exact", join(dir, "exact.json"), "--releases", join(dir, "releases.json"), "--release-plan", join(dir, "release-plan.json"), "--dispositions", join(dir, "dispositions.json"), "--decisions", join(dir, "decisions.jsonl"), "--risks", join(dir, "risks.json"), "--validation", join(dir, "validation.json"), "--linear", join(dir, "linear.json"), "--out", join(dir, "reports")], { cwd: process.cwd(), encoding: "utf8" });
     assert.equal(result.status, 1);
     assert.match(readFileSync(join(dir, "reports", "drift-report.json"), "utf8"), /orphan_requirement/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
@@ -896,7 +896,7 @@ jobs:
           cache: npm
           cache-dependency-path: tools/spec-lint/package-lock.json
       - run: npm ci --prefix tools/spec-lint
-      - run: node --import tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+      - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
       - run: tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
       - name: Capture live release truth
         shell: bash
