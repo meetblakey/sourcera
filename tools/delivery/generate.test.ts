@@ -21,7 +21,13 @@ test("generates deterministic reports and fails on orphan work", () => {
       join(dir, "stamp.json"),
       JSON.stringify({ summary: {}, findings: [] }),
     );
-    writeFileSync(join(dir, "exact.json"), JSON.stringify({ open_rows: 0 }));
+    writeFileSync(
+      join(dir, "exact.json"),
+      JSON.stringify({
+        ledger: join(dir, "_audit", "DEFECT_LEDGER.md"),
+        open_rows: 0,
+      }),
+    );
     writeFileSync(
       join(dir, "releases.json"),
       JSON.stringify({ releases: [] }),
@@ -105,6 +111,13 @@ test("generates deterministic reports and fails on orphan work", () => {
     assert.match(
       readFileSync(join(dir, "reports", "drift-report.json"), "utf8"),
       /orphan_requirement/,
+    );
+    const manifest = JSON.parse(
+      readFileSync(join(dir, "reports", "delivery-manifest.json"), "utf8"),
+    );
+    assert.equal(
+      manifest.liveEvidence.exact.ledger,
+      "_audit/DEFECT_LEDGER.md",
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });

@@ -108,6 +108,21 @@ const exact = json<{
   summary?: { open_rows?: number };
   [key: string]: unknown;
 }>(exactPath);
+const exactEvidence = {
+  ...exact,
+  ...(typeof exact.ledger === "string"
+    ? {
+        ledger: (() => {
+          const normalized = exact.ledger.replaceAll("\\", "/");
+          const marker = "/_audit/";
+          const markerIndex = normalized.lastIndexOf(marker);
+          return markerIndex >= 0
+            ? normalized.slice(markerIndex + 1)
+            : normalized;
+        })(),
+      }
+    : {}),
+};
 const releases = json<{ releases: ReleaseDefinition[] }>(releasesPath)
   .releases;
 const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
@@ -503,7 +518,7 @@ const sortFindings = (findings: Finding[]) =>
   );
 const reports = {
   "delivery-manifest.json": {
-    liveEvidence: { stamp: stamp.summary, exact },
+    liveEvidence: { stamp: stamp.summary, exact: exactEvidence },
     rows: manifest,
   },
   "traceability-map.json": traceability,

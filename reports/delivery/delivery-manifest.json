@@ -19,7 +19,7 @@
       "tool_path": "tools/release/stamp_gate.ts"
     },
     "exact": {
-      "ledger": "/Users/blakeshomefolder/Library/Mobile Documents/com~apple~CloudDocs/Sourcera_latest/_audit/DEFECT_LEDGER.md",
+      "ledger": "_audit/DEFECT_LEDGER.md",
       "canonical_rows_scanned": 1929,
       "open_rows": 0,
       "open_by_severity": {
