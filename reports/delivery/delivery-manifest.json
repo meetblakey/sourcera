@@ -38,7 +38,9 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§1.1",
-      "dependencies": [],
+      "dependencies": [
+        "F-004"
+      ],
       "disposition": "executable",
       "release": "R0",
       "issueId": "PLA-217"

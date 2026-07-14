@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T22:58:36.289Z",
+  "generatedAt": "2026-07-14T23:21:43.685Z",
   "authority": {
     "repo": "Sourcera_Master_Spec.md",
     "runtime": [
@@ -9075,32 +9075,47 @@
     {
       "id": "PLA-217",
       "sourceId": "F-001",
-      "title": "[F-001] Three-Domain Architecture (Buyer / Seller / Marketplace)",
+      "title": "[F-001] Independently deployable Buyer, Seller, and Marketplace shells",
       "kind": "executable",
       "labels": [
         "Feature",
         "backend",
+        "codex-ready",
         "platform"
       ],
       "release": "R0",
       "milestone": "Platform contract ready",
-      "dependencies": [],
+      "dependencies": [
+        "F-004"
+      ],
       "owner": "Blake Rowley",
-      "reviewer": null,
-      "estimate": 2,
-      "paths": [],
+      "reviewer": "Blake Rowley (interim; split when a second human joins)",
+      "estimate": 5,
+      "paths": [
+        "package.json",
+        "app/api/health/route.ts",
+        "apps/buyer/package.json",
+        "apps/buyer/app/api/health/route.ts",
+        "apps/seller/package.json",
+        "apps/seller/app/api/health/route.ts",
+        "packages/domain/src/index.ts",
+        "tests/integration/domain-deployments.spec.ts",
+        ".github/workflows/app-ci.yml",
+        "docs/architecture/three-domain-system.md",
+        "reports/evidence/r0-three-domain-foundation.json"
+      ],
       "tests": {
-        "success": null,
-        "failure": null,
-        "recovery": null
+        "success": "a clean install, tests, and independent builds pass; each protected preview health route returns the correct domain and exact commit.",
+        "failure": "a missing or unknown domain, or a forbidden cross-console import, fails before deploy without exposing secrets.",
+        "recovery": "redeploy the immediately prior verified preview for the affected console and confirm all three health routes pass."
       },
-      "rollout": null,
-      "rollback": null,
-      "telemetry": null,
-      "proof": null,
-      "sourceVersion": "v6.0.0",
+      "rollout": "protected Buyer, Seller, and Marketplace previews; no customer traffic.",
+      "rollback": "redeploy the immediately prior verified preview for only the affected console.",
+      "telemetry": "domain_deployment_health_result with domain, commit, environment, assertion, result, and timestamp; no user data or secrets.",
+      "proof": "reports/evidence/r0-three-domain-foundation.json plus three linked preview health receipts.",
+      "sourceVersion": "v7.1.0a",
       "sourceSection": "§1.1",
-      "outcome": "Three-Domain Architecture (Buyer / Seller / Marketplace)"
+      "outcome": "Make Buyer, Seller, and Marketplace three independently deployable application shells that share only approved cross-domain packages."
     },
     {
       "id": "PLA-218",
@@ -9173,7 +9188,6 @@
       "kind": "executable",
       "labels": [
         "Feature",
-        "codex-ready",
         "infra",
         "platform"
       ],
@@ -45538,15 +45552,16 @@
       },
       {
         "identifier": "PLA-217",
-        "title": "[F-001] Three-Domain Architecture (Buyer / Seller / Marketplace)",
-        "descriptionFingerprint": "6b8b7a48",
-        "updatedAt": "2026-07-14T22:28:45.181Z",
-        "estimate": 2,
-        "state": "Backlog",
-        "stateType": "backlog",
+        "title": "[F-001] Independently deployable Buyer, Seller, and Marketplace shells",
+        "descriptionFingerprint": "46ea3384",
+        "updatedAt": "2026-07-14T23:21:43.685Z",
+        "estimate": 5,
+        "state": "Todo",
+        "stateType": "unstarted",
         "labels": [
           "Feature",
           "backend",
+          "codex-ready",
           "platform"
         ],
         "assignee": "Blake Rowley",
@@ -45558,7 +45573,8 @@
           "R0"
         ],
         "relations": [
-          "blocks:PLA-217:PLA-218"
+          "blocks:PLA-217:PLA-218",
+          "blocks:PLA-220:PLA-217"
         ]
       },
       {
@@ -45626,13 +45642,12 @@
         "identifier": "PLA-220",
         "title": "[F-004] Reproducible application foundation",
         "descriptionFingerprint": "7cb6f0bf",
-        "updatedAt": "2026-07-14T21:37:10.468Z",
+        "updatedAt": "2026-07-14T23:18:41.911Z",
         "estimate": 3,
-        "state": "Backlog",
-        "stateType": "backlog",
+        "state": "Done",
+        "stateType": "completed",
         "labels": [
           "Feature",
-          "codex-ready",
           "infra",
           "platform"
         ],
@@ -45644,7 +45659,9 @@
         "releases": [
           "R0"
         ],
-        "relations": []
+        "relations": [
+          "blocks:PLA-220:PLA-217"
+        ]
       },
       {
         "identifier": "PLA-221",

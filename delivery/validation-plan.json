@@ -66,9 +66,17 @@
   "operationalProof": [],
   "forecastProof": [],
   "executionEvidence": {
-    "tests": [],
-    "deploy": [],
-    "rollback": [],
-    "runtime": []
+    "tests": [
+      "reports/evidence/r0-foundation.json"
+    ],
+    "deploy": [
+      "reports/evidence/r0-foundation.json"
+    ],
+    "rollback": [
+      "reports/evidence/r0-foundation.json"
+    ],
+    "runtime": [
+      "reports/evidence/r0-foundation.json"
+    ]
   }
 }

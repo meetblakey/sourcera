@@ -10,17 +10,31 @@
     "issueId": "PLA-217",
     "release": "R0",
     "milestone": "Platform contract ready",
-    "dependencies": [],
-    "paths": [],
+    "dependencies": [
+      "F-004"
+    ],
+    "paths": [
+      "package.json",
+      "app/api/health/route.ts",
+      "apps/buyer/package.json",
+      "apps/buyer/app/api/health/route.ts",
+      "apps/seller/package.json",
+      "apps/seller/app/api/health/route.ts",
+      "packages/domain/src/index.ts",
+      "tests/integration/domain-deployments.spec.ts",
+      ".github/workflows/app-ci.yml",
+      "docs/architecture/three-domain-system.md",
+      "reports/evidence/r0-three-domain-foundation.json"
+    ],
     "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
+      "success": "a clean install, tests, and independent builds pass; each protected preview health route returns the correct domain and exact commit.",
+      "failure": "a missing or unknown domain, or a forbidden cross-console import, fails before deploy without exposing secrets.",
+      "recovery": "redeploy the immediately prior verified preview for the affected console and confirm all three health routes pass."
     },
-    "rollout": null,
-    "rollback": null,
-    "telemetry": null,
-    "proof": null
+    "rollout": "protected Buyer, Seller, and Marketplace previews; no customer traffic.",
+    "rollback": "redeploy the immediately prior verified preview for only the affected console.",
+    "telemetry": "domain_deployment_health_result with domain, commit, environment, assertion, result, and timestamp; no user data or secrets.",
+    "proof": "reports/evidence/r0-three-domain-foundation.json plus three linked preview health receipts."
   },
   {
     "requirementId": "F-002",
