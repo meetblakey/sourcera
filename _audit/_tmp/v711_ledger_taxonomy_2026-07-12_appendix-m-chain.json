@@ -1,0 +1,21 @@
+{
+  "ledger": "/Users/blakeshomefolder/Library/Mobile Documents/com~apple~CloudDocs/Sourcera_latest/_audit/DEFECT_LEDGER.md",
+  "canonical_rows": 1929,
+  "severity_counts": {
+    "P0": 56,
+    "P1": 952,
+    "P2": 695,
+    "P3": 226
+  },
+  "registered_class_count": 32,
+  "observed_class_count": 32,
+  "p0_trigger_rule_counts": {
+    "a_firewall": 11,
+    "b_pii_pci": 6,
+    "c_regulatory": 26,
+    "d_billing": 12,
+    "e_ci_gate": 1
+  },
+  "findings": [],
+  "result": "pass"
+}

@@ -1,0 +1,86 @@
+/**
+ * Sourcera Spec-Lint — §M.4.5 audit-trail emit aggregator (CLI).
+ *
+ * Authority anchor: Sourcera_Master_Spec.md §M.4.5 (audit trail) + §M.4.5.1
+ * (record schema) + §M.4.5.3 (idempotency). This is the top-level emitter the
+ * existing `.github/workflows/spec-lint.yml` "Emit §M.4.5 AuditEvent record"
+ * step already references (the prior reference was dangling — no file existed;
+ * this lands it). It reads the per-gate GateResult JSONs produced by each
+ * detector's `--emit-result` and fans them out to the four §M.4.5 destinations.
+ *
+ * Accepts the workflow's existing flags plus generic `--result <path>` (repeatable):
+ *   --pr-id --commit-sha --merge-base-sha --gate-run-id
+ *   --trigger-detector-result / --cross-validator-result / ... / --result
+ *
+ * Any `--*-result <path>` flag is treated as a GateResult JSON file.
+ */
+
+import { existsSync, readFileSync } from "node:fs";
+import { emit } from "./lib/emit.js";
+import type { GateResult } from "./lib/types.js";
+
+interface Parsed {
+  prId?: string;
+  commitSha?: string;
+  mergeBaseSha?: string;
+  gateRunId?: string;
+  resultPaths: string[];
+}
+
+function parse(argv: string[]): Parsed {
+  const p: Parsed = { resultPaths: [] };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    const next = () => argv[++i];
+    if (a === "--pr-id") p.prId = next();
+    else if (a === "--commit-sha") p.commitSha = next();
+    else if (a === "--merge-base-sha") p.mergeBaseSha = next();
+    else if (a === "--gate-run-id") p.gateRunId = next();
+    else if (a === "--result") p.resultPaths.push(next());
+    else if (a.startsWith("--") && a.endsWith("-result")) p.resultPaths.push(next());
+  }
+  return p;
+}
+
+async function main() {
+  const p = parse(process.argv.slice(2));
+  const reports: unknown[] = [];
+  let anyFail = false;
+
+  for (const path of p.resultPaths) {
+    if (!existsSync(path)) continue;
+    let result: GateResult;
+    try {
+      result = JSON.parse(readFileSync(path, "utf-8")) as GateResult;
+    } catch {
+      continue; // a malformed/partial result file is itself a CI signal elsewhere
+    }
+    if (result.outcome === "fail" || result.outcome === "parse_error") {
+      anyFail = true;
+    }
+    const report = await emit(result, {
+      prId: p.prId,
+      commitSha: p.commitSha,
+      mergeBaseSha: p.mergeBaseSha,
+      // The per-gate run id is derived deterministically inside emit() from
+      // (pr_id, commit_sha, gate_id); the workflow's run id is the batch id.
+    });
+    reports.push({ gate_id: result.gate_id, outcome: result.outcome, ...report });
+  }
+
+  process.stdout.write(
+    JSON.stringify(
+      { batch_gate_run_id: p.gateRunId ?? null, emitted: reports, any_fail: anyFail },
+      null,
+      2,
+    ) + "\n",
+  );
+  // The emitter never changes the gate verdict; the workflow's final-gate step
+  // owns the merge decision. Exit 0 unless a result file itself was a failure
+  // AND the caller wants emit to propagate (kept non-fatal by default).
+}
+
+main().catch((e) => {
+  process.stderr.write(`audit_emit error: ${(e as Error).message}\n`);
+  process.exitCode = 0; // never block merge on audit-emit failure path here
+});

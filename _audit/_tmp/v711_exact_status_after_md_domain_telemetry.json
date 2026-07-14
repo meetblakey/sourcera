@@ -1,0 +1,12 @@
+{
+  "ledger": "/Users/blakeshomefolder/Library/Mobile Documents/com~apple~CloudDocs/Sourcera_latest/_audit/DEFECT_LEDGER.md",
+  "canonical_rows_scanned": 1979,
+  "open_rows": 346,
+  "open_by_severity": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 256,
+    "P3": 90
+  },
+  "method": "full canonical rows only; pipe-aware; status transitions in canonical status cells are closed; supplementary tables excluded"
+}

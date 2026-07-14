@@ -1,0 +1,20 @@
+{
+  "name": "sourcera-spec-lint",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sourcera Master Spec CI gate detectors (§M.4 / §M.5). Spec-tree-lint harness landed in implementation pack M02.3 per Build_Execution_Strategy.md §11.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "gate": "tsx run-gate.ts",
+    "all": "tsx run-all.ts --spec ../../Sourcera_Master_Spec.md --ux ../../UX_Design_of_Sourcera.md",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "@types/node": "^22.9.0"
+  }
+}

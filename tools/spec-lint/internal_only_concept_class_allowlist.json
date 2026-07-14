@@ -1,0 +1,53 @@
+[
+  {
+    "conceptClass": "entity_field",
+    "internalOnlyKinds": [
+      "internal_cache_ttl_field",
+      "reactivity_machinery_field",
+      "internal_ipc_header_field",
+      "deployment_only_flag",
+      "internal_property_test_seed",
+      "dr_drill_fixture_field",
+      "chaos_synthetic_fixture_field",
+      "release_orchestration_signal_field",
+      "convex_cron_internal_state_field",
+      "audit_chain_internal_field",
+      "spec_lint_internal_field"
+    ]
+  },
+  {
+    "conceptClass": "enum_value",
+    "internalOnlyKinds": [
+      "internal_property_test_seed",
+      "dr_drill_fixture_field",
+      "chaos_synthetic_fixture_field",
+      "spec_lint_internal_field"
+    ]
+  },
+  {
+    "conceptClass": "state_machine_state",
+    "internalOnlyKinds": [
+      "internal_property_test_seed",
+      "dr_drill_fixture_field",
+      "chaos_synthetic_fixture_field",
+      "release_orchestration_signal_field",
+      "convex_cron_internal_state_field"
+    ]
+  },
+  {
+    "conceptClass": "named_ci_gate",
+    "internalOnlyKinds": [
+      "spec_lint_internal_field",
+      "release_orchestration_signal_field"
+    ]
+  },
+  {
+    "conceptClass": "posthog_event",
+    "internalOnlyKinds": [
+      "spec_lint_internal_field",
+      "release_orchestration_signal_field",
+      "dr_drill_fixture_field",
+      "chaos_synthetic_fixture_field"
+    ]
+  }
+]

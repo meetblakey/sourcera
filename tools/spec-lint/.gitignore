@@ -1,0 +1,7 @@
+# Spec-lint local + CI artifacts (do not commit).
+node_modules/
+# §M.4.5 run logs are persisted via git-LFS in CI per the workflow, NOT committed
+# from local runs. Ignore the local-run directory.
+run-logs/
+*.local.json
+.DS_Store

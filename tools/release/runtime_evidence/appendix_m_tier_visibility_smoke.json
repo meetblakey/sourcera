@@ -1,0 +1,15 @@
+{
+  "gate_id": "appendix_m_tier_visibility_smoke",
+  "runtime_status": "runtime_active",
+  "execution_context": "synthetic_monitor",
+  "evidence_class": "external_pack_manifest",
+  "implementation_pack": "M11.3 Playwright tier-flip smoke pack",
+  "landed_at": "2026-04-27",
+  "authority": [
+    "Sourcera_Master_Spec.md §M.5.4 row appendix_m_tier_visibility_smoke",
+    "_audit/PHASE3_REM_VERIFY.md §2.2 Spot-check",
+    "_integration/RECONCILIATION.md v7.2.0-REM Phase 3 cosmetic-hygiene pass"
+  ],
+  "assertion": "Buyer and Seller test orgs cycled through each plan tier render Appendix M hidden-tier cells exactly as specified.",
+  "release_gate_note": "The Playwright pack is external to this spec repository; this manifest is the local release-orchestration evidence pointer used by tools/release/stamp_gate.ts."
+}

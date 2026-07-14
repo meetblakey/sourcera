@@ -1,0 +1,303 @@
+# Sourcera Spec-Lint CI Workflow
+#
+# Authority anchor: Sourcera_Master_Spec.md §M.4.1 (scope) + §M.4.4.2 (cross-validation) + §M.4.5 (audit trail) + §M.4.6 (nightly digest).
+#
+# This workflow is the runtime artifact for the §M.4 CI gate cluster:
+#   - appendix_m_coverage_on_diff  (runtime_active at v7.1.0; hardened v7.2.0-REM Phase 2)
+#   - appendix_m_tier_visibility_smoke  (runtime_active at v7.1.0 via M11.3)
+#   - appendix_k_glossary_canonicality  (Phase 2V audit remediation; runtime_active at v7.2.0-REM Phase 2 closure 2026-05-18)
+#   - the Phase V8.4 / V9 / V11 spec-lint clusters
+#
+# Implementation pack: M02.3 (per Build_Execution_Strategy.md §11) for the §M.4
+# trigger detector + override-grammar parser + nightly digest cron; release-orchestration
+# for the v7.2.0-REM Phase 2 §M.4.4.2 cross-validator extensions and for the
+# `appendix_k_glossary_canonicality` detector (this file).
+#
+# Sign-offs (v7.2.0-REM Phase 2 closure 2026-05-15):
+#   - Security Officer (§M.4.4.2 predicate set + detector-flag pre-merge cross-validation)
+#   - Engineering Lead (this workflow's wiring + step ordering + fail-closed posture)
+#
+# Subsequent edits (v7.2.0-REM Phase 2 Glossary Canonicality closure 2026-05-18):
+#   - Engineering Lead (appendix_k_glossary_canonicality detector wiring;
+#     step ordering between sibling override checks and inline review comments;
+#     §M.4.5 audit-trail integration via audit_emit.ts; final-gate exit-code
+#     aggregation including parse_error halt)
+
+name: spec-lint
+
+on:
+  pull_request:
+    branches: [main, "release/**"]
+    paths:
+      - "Sourcera_Master_Spec.md"
+      - "UX_Design_of_Sourcera.md"
+      - "tools/spec-lint/**"
+      - ".github/workflows/spec-lint.yml"
+  push:
+    branches: [main]
+    paths:
+      - "Sourcera_Master_Spec.md"
+      - "UX_Design_of_Sourcera.md"
+
+permissions:
+  contents: read
+  pull-requests: write  # Required for inline review-comment posting per §M.4.3
+  checks: write  # Required for the GitHub branch-protection required check
+
+concurrency:
+  # Re-run on every push to the same PR / branch; cancel in-flight runs to keep
+  # the audit-trail keyed on (pr_id, commit_sha) idempotent per §M.4.5.3.
+  group: spec-lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  spec-lint:
+    name: Spec-Lint (§M.4 CI gate cluster)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout PR (with merge-base fetch)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for merge-base diff per §M.4.2 trigger detector
+          # For PRs from forks, GitHub auto-checks out the merge ref; we keep
+          # the full history so the merge-base SHA resolves at parse time.
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install spec-lint dependencies
+        run: npm ci --prefix tools/spec-lint
+
+      - name: Resolve merge-base SHA
+        id: merge_base
+        run: |
+          MERGE_BASE=$(git merge-base "origin/${{ github.base_ref || 'main' }}" HEAD)
+          echo "sha=${MERGE_BASE}" >> "$GITHUB_OUTPUT"
+          echo "Resolved merge-base SHA: ${MERGE_BASE}"
+
+      - name: Run §M.4.2 trigger detector
+        id: trigger_detector
+        env:
+          PR_ID: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+          MERGE_BASE_SHA: ${{ steps.merge_base.outputs.sha }}
+        run: |
+          npx tsx tools/spec-lint/appendix_m_coverage_on_diff.ts \
+            --pr-id "${PR_ID}" \
+            --commit-sha "${COMMIT_SHA}" \
+            --merge-base-sha "${MERGE_BASE_SHA}" \
+            --post-edit-spec Sourcera_Master_Spec.md \
+            --emit-triggered-concepts /tmp/triggered_concepts.json \
+            --emit-parse-error /tmp/parse_error.json
+          # The detector exits non-zero on parse_error; the workflow halts here
+          # per §M.4.3 (parse_error is not override-eligible).
+
+      - name: Run §M.4.4.1 override-grammar parser
+        id: override_parser
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_ID: ${{ github.event.pull_request.number }}
+        run: |
+          # The parser reads the PR description from PR_BODY and emits the
+          # parsed override annotations. Grammar failures (invalid rationale,
+          # missing prefix, missing cross-class qualifier) emit `invalid_override_rationale`
+          # status and the workflow exits non-zero. Per §M.4.4.1.
+          printf '%s' "${PR_BODY}" > /tmp/pr_description.txt
+          npx tsx tools/spec-lint/override_parser.ts \
+            --pr-description /tmp/pr_description.txt \
+            --emit-parsed-annotations /tmp/parsed_annotations.json \
+            --emit-grammar-failures /tmp/grammar_failures.json \
+            --triggered-concepts /tmp/triggered_concepts.json
+
+      - name: Run §M.4.4.2 cross-validator (v7.2.0-REM Phase 2)
+        id: cross_validator
+        env:
+          PR_ID: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+          MERGE_BASE_SHA: ${{ steps.merge_base.outputs.sha }}
+        run: |
+          # This step runs ONLY when the override parser emitted ≥1 annotation
+          # AND the trigger detector flagged ≥1 concept. Otherwise the override
+          # path is short-circuited.
+          npx tsx tools/spec-lint/cross_validation_cli.ts \
+            --pr-id "${PR_ID}" \
+            --commit-sha "${COMMIT_SHA}" \
+            --merge-base-sha "${MERGE_BASE_SHA}" \
+            --post-edit-spec Sourcera_Master_Spec.md \
+            --pre-edit-spec-ref "${MERGE_BASE_SHA}" \
+            --detected-concepts /tmp/triggered_concepts.json \
+            --override-annotations /tmp/parsed_annotations.json \
+            --internal-only-allowlist tools/spec-lint/internal_only_concept_class_allowlist.json \
+            --serializer-locks tools/spec-lint/serializer_redaction_locks.json \
+            --anchor-aliases tools/spec-lint/anchor_aliases.json \
+            --emit-result /tmp/cross_validation_result.json
+          # The CLI wraps the cross_validation.ts entrypoint. Exit 0 = all overrides
+          # pass; exit 1 = at least one rejection (override_target_not_flagged_by_detector
+          # OR override_target_customer_visible). Fail-closed per §M.4.4.2.G.
+
+      - name: Run §M.4.4.5 sibling override grammar checks
+        id: sibling_override
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # Validates @ci-gate-override: annotations against §M.5 catalog.
+          # Failure modes (registered in Appendix I Spec-Lint CI Gate Internal
+          # Failure Modes sub-section):
+          #   - override_rationale_too_short  (§M.4.4.5 ¶1)
+          #   - override_unknown_gate         (§M.4.4.5 ¶2)
+          #   - ci_gate_override_not_permitted (§M.4.4.5 ¶3)
+          #   - override_coupled_gate_unknown  (§M.4.4.5 ¶4 — boot-time catalog self-consistency)
+          #   - override_requires_audit_event_kind_unknown  (§M.4.4.5 ¶5 — boot-time)
+          npx tsx tools/spec-lint/sibling_override_cli.ts \
+            --pr-description /tmp/pr_description.txt \
+            --catalog-spec Sourcera_Master_Spec.md \
+            --emit-result /tmp/sibling_override_result.json
+
+      - name: Run appendix_k_glossary_canonicality detector
+        id: appendix_k_canonicality
+        run: |
+          # §M.5 catalog row `appendix_k_glossary_canonicality` — runtime
+          # binding promoted to `runtime_active` at v7.2.0-REM Phase 2
+          # closure (2026-05-18). Closes D-AK-001 / D-AK-002 / D-AK-003 /
+          # D-2V-002. Implementation pack: release-orchestration.
+          #
+          # Scope: Master Spec §1–§51 + RECONCILIATION.md entries dated ≥
+          # 2026-04-26 (Phase 12.3 amendment boundary).
+          #
+          # Exit codes (fail-closed):
+          #   0 = pass
+          #   1 = fail (≥1 non-exempt match in either input domain)
+          #   2 = parse_error (non-overridable per §M.4.3)
+          #
+          # Override path (only deliberate Phase-12.3 contrast prose):
+          #   @ci-gate-override: appendix_k_glossary_canonicality — <≥60 chars>
+          npx tsx tools/spec-lint/appendix_k_canonicality.ts \
+            --master-spec Sourcera_Master_Spec.md \
+            --reconciliation _integration/RECONCILIATION.md \
+            > /tmp/appendix_k_canonicality_result.json
+
+      - name: Run comment-template canonicality verifier
+        id: comment_template_canonicality
+        run: |
+          # §M.4.3 / §M.4.4.2.G comment text is centralized in
+          # tools/spec-lint/comment_templates.ts so inline review comments do
+          # not drift from the Master Spec examples.
+          npx tsx tools/spec-lint/comment_templates.ts \
+            --spec Sourcera_Master_Spec.md \
+            --emit-result /tmp/comment_templates_result.json
+
+      - name: Run M02.3 spec-tree-lint batch (runtime_active gates)
+        id: m02_3_batch
+        env:
+          PR_ID: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+          MERGE_BASE_SHA: ${{ steps.merge_base.outputs.sha }}
+          # §M.4.5 four-destination emit. Secrets gate the network destinations;
+          # when unset (forks), the emitter writes the spec-repo run log only.
+          CONVEX_SPEC_LINT_DEPLOY_KEY: ${{ secrets.CONVEX_SPEC_LINT_DEPLOY_KEY }}
+          CONVEX_SPEC_LINT_URL: ${{ secrets.CONVEX_SPEC_LINT_URL }}
+          POSTHOG_SPEC_LINT_API_KEY: ${{ secrets.POSTHOG_SPEC_LINT_API_KEY }}
+          DATADOG_SPEC_LINT_API_KEY: ${{ secrets.DATADOG_SPEC_LINT_API_KEY }}
+        run: |
+          # M02.3 runtime-active spec-tree-lint batch.
+          # Runs every §M.5.4 gate listed in run-all.ts `GATES_RUNTIME_ACTIVE` as
+          # a merge-blocking required check. The 2026-06-24 promotion added
+          # solo_tier_numeric_single_source, retention_singleton_section_40_2_canonical,
+          # and section_anchor_slug_no_colon after each returned 0 findings on the
+          # live Master Spec plus pass/fail fixtures. run-all.ts exits non-zero
+          # when a BLOCKING gate fails; each gate emits its
+          # §M.4.5 audit record (run-log + Convex + PostHog + Datadog) via the
+          # env-gated emitter (lib/emit.ts). Per-gate detectors live at
+          # tools/spec-lint/gates/<gate_id>.ts. Fail-closed per §M.4.3.
+          npx tsx tools/spec-lint/run-all.ts \
+            --spec Sourcera_Master_Spec.md \
+            --ux UX_Design_of_Sourcera.md \
+            --reconciliation _integration/RECONCILIATION.md \
+            --pr-body /tmp/pr_description.txt
+
+      - name: Run cosmetic-edit filter (§M.4.2 epilogue)
+        id: cosmetic_filter
+        run: |
+          npx tsx tools/spec-lint/cosmetic_edit_filter.ts \
+            --post-edit-spec Sourcera_Master_Spec.md \
+            --merge-base-sha "${{ steps.merge_base.outputs.sha }}" \
+            --emit-filtered-diff /tmp/filtered_diff.json
+
+      - name: Post inline review comments (§M.4.3 + §M.4.4.2.G)
+        id: post_comments
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_ID: ${{ github.event.pull_request.number }}
+        run: |
+          # Aggregates failures from the trigger detector, override parser,
+          # cross-validator, sibling override checks, and cosmetic filter; emits
+          # one inline review comment per failure. Per §M.4.3.1 fail-secure:
+          # if the GitHub API is degraded, the gate falls closed (comment_post_failed).
+          # Retry: 1s / 4s / 16s / 64s / 256s; max 5.
+          npx tsx tools/spec-lint/comment_poster.ts \
+            --pr-id "${PR_ID}" \
+            --trigger-detector-result /tmp/triggered_concepts.json \
+            --override-parser-grammar-failures /tmp/grammar_failures.json \
+            --cross-validator-result /tmp/cross_validation_result.json \
+            --sibling-override-result /tmp/sibling_override_result.json \
+            --cosmetic-filter-result /tmp/filtered_diff.json \
+            --appendix-k-canonicality-result /tmp/appendix_k_canonicality_result.json \
+            --max-retries 5 \
+            --emit-post-status /tmp/comment_post_status.json
+
+      - name: Emit §M.4.5 AuditEvent record
+        id: audit_emit
+        if: always()
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_SPEC_LINT_DEPLOY_KEY }}
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_SPEC_LINT_API_KEY }}
+          DATADOG_API_KEY: ${{ secrets.DATADOG_SPEC_LINT_API_KEY }}
+          PR_ID: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+          MERGE_BASE_SHA: ${{ steps.merge_base.outputs.sha }}
+        run: |
+          # Emits to all four destinations per §M.4.5:
+          #   1. Spec-repo run log (git-LFS at tools/spec-lint/run-logs/{gate_run_id}.json)
+          #   2. Convex AuditEvent table (§4.6.1 emitter)
+          #   3. PostHog event spec_lint.appendix_m_gate_run
+          #   4. Datadog log service=spec-lint
+          # Per §M.4.5.3 idempotency: keyed on (pr_id, commit_sha); re-runs on
+          # the same commit_sha update the record in place.
+          npx tsx tools/spec-lint/audit_emit.ts \
+            --pr-id "${PR_ID}" \
+            --commit-sha "${COMMIT_SHA}" \
+            --merge-base-sha "${MERGE_BASE_SHA}" \
+            --gate-run-id "${{ github.run_id }}-${{ github.run_attempt }}" \
+            --trigger-detector-result /tmp/triggered_concepts.json \
+            --override-parser-grammar-failures /tmp/grammar_failures.json \
+            --cross-validator-result /tmp/cross_validation_result.json \
+            --sibling-override-result /tmp/sibling_override_result.json \
+            --appendix-k-canonicality-result /tmp/appendix_k_canonicality_result.json \
+            --comment-post-status /tmp/comment_post_status.json
+
+      - name: Final gate decision (fail-closed)
+        if: always()
+        run: |
+          # Aggregate exit codes from every step above. Any non-zero step
+          # causes the workflow to fail. Per §M.4.3 + §M.4.4.2.F.
+          STATUS=0
+          for f in /tmp/triggered_concepts.json /tmp/cross_validation_result.json /tmp/sibling_override_result.json /tmp/appendix_k_canonicality_result.json /tmp/comment_templates_result.json; do
+            if [ -f "$f" ] && jq -e '.outcome == "fail" or .outcome == "rejected_detector_flag" or (.outcome | tostring | startswith("rejected_predicate_"))' "$f" >/dev/null 2>&1; then
+              STATUS=1
+            fi
+            # appendix_k_canonicality_result emits parse_error as a non-overridable
+            # halt per §M.4.3; treat outcome=="parse_error" identically to "fail".
+            if [ -f "$f" ] && jq -e '.outcome == "parse_error"' "$f" >/dev/null 2>&1; then
+              STATUS=1
+            fi
+          done
+          if [ "${STATUS}" = "1" ]; then
+            echo "::error::spec-lint failed; see inline PR review comments and audit trail at tools/spec-lint/run-logs/${{ github.run_id }}-${{ github.run_attempt }}.json"
+            exit 1
+          fi
+          echo "spec-lint pass."

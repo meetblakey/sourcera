@@ -1,0 +1,22 @@
+[
+  {
+    "conceptName": "audit_chain_in_scope",
+    "redactedFrom": [
+      "buyer_console",
+      "seller_console",
+      "marketplace_public",
+      "webhook_payload",
+      "email_template"
+    ]
+  },
+  {
+    "conceptName": "spec_lint_gate_run_id",
+    "redactedFrom": [
+      "buyer_console",
+      "seller_console",
+      "marketplace_public",
+      "webhook_payload",
+      "email_template"
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "deprecatedAnchor": "principle-9",
+    "canonicalAnchor": "3.13-principle-9-surface-simplicity-engine-complexity",
+    "retiredInPhase": "14.1",
+    "retiredAt": "2026-04-22"
+  },
+  {
+    "deprecatedAnchor": "3.13-principle-9",
+    "canonicalAnchor": "3.13-principle-9-surface-simplicity-engine-complexity",
+    "retiredInPhase": "14.1",
+    "retiredAt": "2026-04-22"
+  },
+  {
+    "deprecatedAnchor": "appendix-i:-error-codes",
+    "canonicalAnchor": "appendix-i-api-error-code-catalog",
+    "retiredInPhase": "V8.4",
+    "retiredAt": "2026-05-08"
+  }
+]

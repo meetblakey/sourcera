@@ -1,0 +1,1550 @@
+{
+  "gate_id": "v7_1_1_stamp_gate_runtime_status_audit",
+  "outcome": "fail",
+  "summary": {
+    "runtime_rows": 420,
+    "runtime_status_counts": {
+      "runtime_active": 200,
+      "spec_binding_pending_pack_m02_3": 85,
+      "spec_binding_pending_pack_m11_3": 102,
+      "spec_binding_pending_pack_m24_3": 5,
+      "spec_binding_pending_pack_m21_3": 26,
+      "spec_binding_release_gate_only": 2
+    },
+    "blocker_count": 218,
+    "scanned_files": [
+      "Sourcera_Master_Spec.md",
+      "_integration/AUTHORED_EXTENSIONS_LEDGER.md",
+      "_audit/DEFECT_LEDGER.md"
+    ],
+    "tool_path": "tools/release/stamp_gate.ts"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66720,
+      "id": "solo_mode_engine_field_not_in_seller_serializers",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/solo_mode_engine_field_not_in_seller_serializers.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66722,
+      "id": "solo_deadline_countdown_renders_in_user_timezone",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66723,
+      "id": "solo_mode_team_to_solo_blocked_with_stakeholders",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66724,
+      "id": "solo_mode_chip_ribbon_suppression_buyer",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66726,
+      "id": "console_bridge_no_defense_view_event_kinds",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66727,
+      "id": "webhook_payload_no_selection_record_body",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66729,
+      "id": "defense_view_regeneration_throttle_5min",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66735,
+      "id": "pipeline_surface_compression_seller_always_compressed",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66736,
+      "id": "pipeline_surface_compression_soft_gate_solo_only",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66738,
+      "id": "eval_vertical_eval_starter_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/eval_vertical_eval_starter_coverage.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66739,
+      "id": "eval_starter_seed_schema_currency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/eval_starter_seed_schema_currency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66740,
+      "id": "eval_starter_seed_use_case_index_validity",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/eval_starter_seed_use_case_index_validity.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66741,
+      "id": "eval_starter_marketplace_category_mapping_present",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/eval_starter_marketplace_category_mapping_present.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66745,
+      "id": "seller_maya_solo_free_copy_string_lint",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66746,
+      "id": "seller_maya_chip_list_auto_publish_state_machine",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66747,
+      "id": "seller_maya_match_score_three_label_compression",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66750,
+      "id": "solo_charge_kind_registered",
+      "message": "Runtime status is still spec_binding_pending_pack_m24_3; required artifact evidence not promoted. Checked: .github/workflows/billing-runtime.yml, tests/billing, convex/deploy_validators."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66751,
+      "id": "solo_dual_console_independent_invoicing",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66752,
+      "id": "solo_plan_change_console_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66753,
+      "id": "aiwallet_response_excludes_solo_envelope",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66754,
+      "id": "solo_subscription_blocks_per_charge",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66757,
+      "id": "solo_engine_metering_parity",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66758,
+      "id": "solo_telemetry_no_customer_routing",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66761,
+      "id": "solo_throttling_class_change_takes_effect_at_next_envelope_rollover",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66762,
+      "id": "solo_envelope_per_console_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66764,
+      "id": "solo_envelope_throttling_targets_low_priority_background_only",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66775,
+      "id": "console_isolation_violation_no_data_path_use",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66776,
+      "id": "vendor_opt_out_capability_layer_enforcement",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66812,
+      "id": "audit_event_hash_chain_full_corpus_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66813,
+      "id": "audit_event_break_glass_integrity_scan_triggered",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66814,
+      "id": "auth_audit_event_emission_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66815,
+      "id": "dsar_cascade_residency_partition_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/dsar_cascade_residency_partition_isolation.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66820,
+      "id": "dsar_manifestly_unfounded_rejection_audit_emission",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66821,
+      "id": "cross_org_guest_sso_bypass_blocked",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66830,
+      "id": "workos_raw_attributes_not_consumed",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/workos_raw_attributes_not_consumed.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66831,
+      "id": "workos_predefined_attributes_consumed",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66832,
+      "id": "workos_groups_api_membership_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66833,
+      "id": "workos_directory_group_role_assignment_precedence",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66840,
+      "id": "dsar_cascade_aggregate_recompute_synchronous",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66841,
+      "id": "dsar_cascade_aggregate_recompute_suppression_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66842,
+      "id": "dsar_cascade_aggregate_recompute_backstop_drift",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66843,
+      "id": "dsar_cascade_bridge_payload_body_pii_sweep_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66844,
+      "id": "dsar_cascade_bridge_redaction_hash_recompute",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66846,
+      "id": "bridge_payload_body_pii_sweep_buyer_seller_parity",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66847,
+      "id": "dsar_cascade_partial_failure_pagerduty_sla",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66848,
+      "id": "dsar_cascade_partial_failure_resume_sla_24h",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66849,
+      "id": "dsar_cascade_statutory_ceiling_auto_escalation",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66850,
+      "id": "dsar_cascade_per_row_idempotency_marker_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/dsar_cascade_per_row_idempotency_marker_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66851,
+      "id": "dsar_cascade_pseudonym_epoch_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66852,
+      "id": "dr_failover_residency_bound",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66853,
+      "id": "dns_failover_target_residency_match",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66854,
+      "id": "dr_failover_no_cross_residency",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66855,
+      "id": "dr_restore_test_residency_partition",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66856,
+      "id": "dr_game_day_overdue",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66857,
+      "id": "backup_residency_partition_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66858,
+      "id": "s3_replication_policy_residency_bound",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66859,
+      "id": "s3_cross_region_replica_dpa_approval_required",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66860,
+      "id": "backup_dsar_repseudonymization_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66861,
+      "id": "dsar_excluded_snapshot_restore_blocked",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66862,
+      "id": "snapshot_catalog_residency_partition",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66863,
+      "id": "attachment_dsar_72h_binary_detach_sla",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66872,
+      "id": "cost_base_recalc_notice_window_trajectory_gate",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66875,
+      "id": "kb_bootstrap_per_org_concurrency_lock_active",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66876,
+      "id": "bid_disqualification_cascade_active",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66877,
+      "id": "wallet_read_role_gate_scope",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66878,
+      "id": "committed_spend_single_pool_invariant",
+      "message": "Runtime status is still spec_binding_pending_pack_m24_3; required artifact evidence not promoted. Checked: .github/workflows/billing-runtime.yml, tests/billing, convex/deploy_validators."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66879,
+      "id": "committed_spend_single_auto_renew_invariant",
+      "message": "Runtime status is still spec_binding_pending_pack_m24_3; required artifact evidence not promoted. Checked: .github/workflows/billing-runtime.yml, tests/billing, convex/deploy_validators."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66880,
+      "id": "committed_spend_console_scope_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m24_3; required artifact evidence not promoted. Checked: .github/workflows/billing-runtime.yml, tests/billing, convex/deploy_validators."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66892,
+      "id": "accessibility_settings_preference_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66895,
+      "id": "no_hardcoded_directional_css",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/no_hardcoded_directional_css.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66896,
+      "id": "rtl_directionality_runtime_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66897,
+      "id": "locale_resolution_engine_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66902,
+      "id": "workspace_pulse_health_persistence_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 66906,
+      "id": "seller_pulse_surface_engine_mapping",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67059,
+      "id": "firecrawl_outage_progress_line_substitution",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/firecrawl_outage_progress_line_substitution.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67060,
+      "id": "kb_bootstrap_allowance_compensation_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/kb_bootstrap_allowance_compensation_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67061,
+      "id": "buyer_activation_metric_canonical_consumer",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67063,
+      "id": "conversion_funnel_registry_canonical_consumer",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/conversion_funnel_registry_canonical_consumer.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67064,
+      "id": "usage_dashboard_plan_gating_canonical_6_tier_consumer",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67067,
+      "id": "m16_same_domain_enforcement_dual_point_canonical",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/m16_same_domain_enforcement_dual_point_canonical.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67074,
+      "id": "solo_tier_buyer_hero_moment_slo_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67075,
+      "id": "hero_moment_abandonment_recovery_cadence_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/hero_moment_abandonment_recovery_cadence_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67076,
+      "id": "dsar_erased_seller_excluded_from_recovery_cadence",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/dsar_erased_seller_excluded_from_recovery_cadence.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67077,
+      "id": "dsar_erased_buyer_excluded_from_recovery_cadence",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67078,
+      "id": "posthog_event_payload_single_source_per_event",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/posthog_event_payload_single_source_per_event.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67080,
+      "id": "network_effects_dashboard_outage_render_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/network_effects_dashboard_outage_render_contract.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67081,
+      "id": "network_effects_residency_partition_canonical_consumer",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67114,
+      "id": "entitlement_matrix_registry_binding_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67115,
+      "id": "qa_suggestion_family_cardinality",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67116,
+      "id": "qa_suggestion_family_outcome_contract_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67142,
+      "id": "kb_suggestion_family_cardinality",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67143,
+      "id": "kb_suggestion_family_outcome_contract_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67144,
+      "id": "kb_suggestion_alias_console_resolution_integrity",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67168,
+      "id": "first_pass_rfp_draft_outcome_contract_isolation",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67203,
+      "id": "legal_entity_residency_change_revenue_leak_test",
+      "message": "Runtime status is still spec_binding_pending_pack_m24_3; required artifact evidence not promoted. Checked: .github/workflows/billing-runtime.yml, tests/billing, convex/deploy_validators."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67205,
+      "id": "org_custom_residency_label_required",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67290,
+      "id": "solo_trial_one_per_org_lifetime",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/solo_trial_one_per_org_lifetime.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67300,
+      "id": "solo_upgrade_cta_threshold_3_events_30d_subscription_immediate_per_eval_bid",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/solo_upgrade_cta_threshold_3_events_30d_subscription_immediate_per_eval_bid.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67364,
+      "id": "member_role_permission_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67365,
+      "id": "org_admin_billing_read_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67366,
+      "id": "buyer_console_role_permission_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67367,
+      "id": "seller_console_role_permission_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67377,
+      "id": "console_bridge_redaction_kind_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/console_bridge_redaction_kind_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67387,
+      "id": "seller_onboarding_reactivation_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67388,
+      "id": "seller_onboarding_staleness_window_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67565,
+      "id": "email_bounce_complaint_suppression_runtime",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/email_bounce_complaint_suppression_runtime.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67582,
+      "id": "contest_window_db_trigger_present",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67583,
+      "id": "free_allowance_plan_entitlement_partitioning",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67586,
+      "id": "wallet_auto_topup_period_cap_counter_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67600,
+      "id": "buyer_inbox_pulse_api_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/buyer_inbox_pulse_api_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67602,
+      "id": "inbox_pulse_plan_gating_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/inbox_pulse_plan_gating_coverage.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67603,
+      "id": "pulse_digest_summary_firewall",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67605,
+      "id": "pulse_digest_day_enum_canonicality",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/pulse_digest_day_enum_canonicality.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67606,
+      "id": "inbox_mutation_idempotency_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67607,
+      "id": "pulse_dependency_degraded_mode_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/pulse_dependency_degraded_mode_contract.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67619,
+      "id": "agent_threshold_config_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/agent_threshold_config_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67620,
+      "id": "agent_feedback_no_model_training",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67621,
+      "id": "agent_prompt_injection_catalog_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/agent_prompt_injection_catalog_consistency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67622,
+      "id": "custom_agent_instructions_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/custom_agent_instructions_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67623,
+      "id": "agent_output_surface_registry_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/agent_output_surface_registry_consistency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67637,
+      "id": "policy_ingestion_partial_resume_idempotency",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67639,
+      "id": "policy_ingestion_parent_child_settlement",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67641,
+      "id": "policy_ingestion_buyer_console_firewall",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67656,
+      "id": "workspace_template_idempotency_atomicity",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67668,
+      "id": "scenario_modeling_entity_contract_resolution",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/scenario_modeling_entity_contract_resolution.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67669,
+      "id": "scenario_modeling_plan_cap_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/scenario_modeling_plan_cap_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67670,
+      "id": "scenario_modeling_endpoint_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/scenario_modeling_endpoint_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67671,
+      "id": "scenario_modeling_event_catalog_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/scenario_modeling_event_catalog_consistency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67672,
+      "id": "scenario_modeling_lifecycle_state_machine",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/scenario_modeling_lifecycle_state_machine.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67673,
+      "id": "scenario_modeling_aioperation_settlement",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67674,
+      "id": "scenario_modeling_appendix_m_surface_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/scenario_modeling_appendix_m_surface_coverage.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67689,
+      "id": "entitlement_matrix_non_ai_runtime_branching",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67716,
+      "id": "qa_thread_numeric_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/qa_thread_numeric_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67717,
+      "id": "appendix_m_qa_section_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/appendix_m_qa_section_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67718,
+      "id": "appendix_m_qa_phase_and_tier_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/appendix_m_qa_phase_and_tier_consistency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67719,
+      "id": "qa_suggestion_cross_console_firewall_boundary",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67731,
+      "id": "marketplace_match_score_entity_field_table_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/marketplace_match_score_entity_field_table_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67732,
+      "id": "marketplace_match_score_forward_reference_resolution",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/marketplace_match_score_forward_reference_resolution.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67733,
+      "id": "marketplace_match_score_snapshot_tuple_uniqueness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67745,
+      "id": "marketplace_proactive_offer_entity_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/marketplace_proactive_offer_entity_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67746,
+      "id": "marketplace_proactive_offer_offer_kind_channel_split",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/marketplace_proactive_offer_offer_kind_channel_split.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67747,
+      "id": "marketplace_proactive_offer_pre_acceptance_redaction",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67748,
+      "id": "marketplace_proactive_offer_lifecycle_state_machine",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67760,
+      "id": "mcp_tool_catalog_diagram_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/mcp_tool_catalog_diagram_consistency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67761,
+      "id": "kb_review_cadence_default_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/kb_review_cadence_default_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67762,
+      "id": "kb_lifecycle_state_alias_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/kb_lifecycle_state_alias_contract.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67763,
+      "id": "kb_retrieve_freshness_enum_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/kb_retrieve_freshness_enum_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67764,
+      "id": "mcp_session_token_record_entity_home",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67765,
+      "id": "kb_mcp_webhook_alert_catalog_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67777,
+      "id": "seller_profile_public_field_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/seller_profile_public_field_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67778,
+      "id": "verification_tier_criteria_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/verification_tier_criteria_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67779,
+      "id": "capability_declaration_section_26_no_shadow_schema",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/capability_declaration_section_26_no_shadow_schema.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67780,
+      "id": "seller_page_enrichment_capability_id_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/seller_page_enrichment_capability_id_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67781,
+      "id": "seller_software_transfer_request_entity_home",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67782,
+      "id": "seller_software_unclaimed_stub_render_mode",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/seller_software_unclaimed_stub_render_mode.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67783,
+      "id": "opt_out_http_response_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/opt_out_http_response_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67795,
+      "id": "responsive_breakpoint_enum_registry_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_breakpoint_enum_registry_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67796,
+      "id": "responsive_posthog_event_catalog_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_posthog_event_catalog_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67797,
+      "id": "responsive_mobile_error_catalog_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_mobile_error_catalog_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67798,
+      "id": "responsive_design_appendix_m_surface_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_design_appendix_m_surface_coverage.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67799,
+      "id": "responsive_conformance_suite",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67800,
+      "id": "tap_count_probe",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67801,
+      "id": "feature_parity_matrix_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/feature_parity_matrix_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67803,
+      "id": "spec_matrix_lint",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/spec_matrix_lint.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67804,
+      "id": "responsive_mobile_ci_gate_catalog_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_mobile_ci_gate_catalog_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67805,
+      "id": "responsive_dashboard_anchor_resolution",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_dashboard_anchor_resolution.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67806,
+      "id": "responsive_mobile_performance_budget_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/responsive_mobile_performance_budget_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67807,
+      "id": "cross_console_shared_ui_preference_firewall",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67819,
+      "id": "core_web_vitals_in_app_singleton",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/core_web_vitals_in_app_singleton.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67820,
+      "id": "core_web_vitals_in_app_lighthouse_ci",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67821,
+      "id": "api_latency_p95_regression",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67822,
+      "id": "convex_reactivity_slo_regression",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67823,
+      "id": "agent_budget_breach",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67824,
+      "id": "load_test_sla_breach",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67825,
+      "id": "bundle_size_budget_in_app",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67826,
+      "id": "agent_cost_authority_no_section44_inline_restatement",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/agent_cost_authority_no_section44_inline_restatement.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67827,
+      "id": "solo_tier_surface_treatment_appendix_m_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/solo_tier_surface_treatment_appendix_m_coverage.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67828,
+      "id": "solo_absorption_cap_enforced",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67829,
+      "id": "solo_absorption_cap_event_catalog_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/solo_absorption_cap_event_catalog_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67830,
+      "id": "solo_absorption_cap_counter_state_contract",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67846,
+      "id": "bid_workspace_deal_size_band_firewall",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67847,
+      "id": "first_pass_high_stakes_band_only",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67848,
+      "id": "pro_trial_no_refund_after_vendor_notification",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67849,
+      "id": "wallet_autotopup_ops_override_bounds",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67850,
+      "id": "wallet_autotopup_override_api_surface_guard",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/wallet_autotopup_override_api_surface_guard.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67851,
+      "id": "wallet_free_free_additive_pool",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67852,
+      "id": "wallet_free_paid_additive_pool_solo_exception",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67864,
+      "id": "seller_solo_onboarding_consumption_invisibility",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67865,
+      "id": "seller_solo_per_bid_charge_stage_binding",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67866,
+      "id": "seller_onboarding_dropoff_recovery_registry_complete",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/seller_onboarding_dropoff_recovery_registry_complete.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67867,
+      "id": "seller_onboarding_activation_events_use_51_envelope",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/seller_onboarding_activation_events_use_51_envelope.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67868,
+      "id": "seller_onboarding_conversion_moment_kind_canonical",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/seller_onboarding_conversion_moment_kind_canonical.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67869,
+      "id": "seller_onboarding_provider_outage_visible",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67870,
+      "id": "seller_onboarding_stage3_abandonment_allowance_not_debited",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67887,
+      "id": "audit_event_residency_partitioning_bound",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67888,
+      "id": "dsar_export_delivery_residency_bound",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67889,
+      "id": "observability_residency_routing_bound",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67903,
+      "id": "appendix_g_legacy_alias_retirement_enforced",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/appendix_g_legacy_alias_retirement_enforced.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67904,
+      "id": "appendix_g_event_family_binding_exhaustive",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/appendix_g_event_family_binding_exhaustive.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67916,
+      "id": "downgrade_excess_bucket_status_enum_canonical",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/downgrade_excess_bucket_status_enum_canonical.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67917,
+      "id": "protected_asset_archive_state_canonical",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/protected_asset_archive_state_canonical.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67918,
+      "id": "protected_asset_purge_guard",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/protected_asset_purge_guard.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67919,
+      "id": "plan_upgrade_carry_over_single_source",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/plan_upgrade_carry_over_single_source.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67920,
+      "id": "downgrade_api_integration_bucket_classes_registered",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/downgrade_api_integration_bucket_classes_registered.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67944,
+      "id": "integration_export_contract_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/integration_export_contract_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67945,
+      "id": "integration_export_payload_allowlist",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67946,
+      "id": "integration_export_terminal_event_pairing",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/integration_export_terminal_event_pairing.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67958,
+      "id": "core_api_endpoint_detail_completeness",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/core_api_endpoint_detail_completeness.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67959,
+      "id": "core_api_error_code_registration_consistency",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/core_api_error_code_registration_consistency.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67960,
+      "id": "internal_comment_legacy_alias_no_shadow_schema",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/internal_comment_legacy_alias_no_shadow_schema.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67972,
+      "id": "cmek_rotation_runtime_evidence",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67973,
+      "id": "field_encryption_plaintext_egress_guard",
+      "message": "Runtime status is still spec_binding_pending_pack_m11_3; required artifact evidence not promoted. Checked: .github/workflows/deploy-validator.yml, .github/workflows/test-strategy.yml, convex/deploy_validators, tests/integration."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67974,
+      "id": "rubric_version_score_immutability",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/rubric_version_score_immutability.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67975,
+      "id": "requirement_relation_same_workspace_guard",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/requirement_relation_same_workspace_guard.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67976,
+      "id": "pipeline_overlay_canonical_phase_mapping",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/pipeline_overlay_canonical_phase_mapping.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67977,
+      "id": "video_demo_transcript_pii_redaction",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67978,
+      "id": "localization_bundle_critical_string_coverage",
+      "message": "Runtime status is still spec_binding_pending_pack_m02_3; required artifact evidence not promoted. Checked: tools/spec-lint/gates/localization_bundle_critical_string_coverage.ts."
+    },
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 67979,
+      "id": "mobile_full_parity_closure",
+      "message": "Runtime status is still spec_binding_pending_pack_m21_3; required artifact evidence not promoted. Checked: .github/workflows/marketplace-runtime.yml, convex/deploy_validators, tests/marketplace, tests/analytics."
+    }
+  ]
+}
