@@ -1,6 +1,6 @@
 # Sourcera Delivery Control Plane Design
 
-**Status:** Approved direction; written specification pending final review
+**Status:** Approved
 **Date:** 2026-07-14
 **Scope:** Delivery-system control plane and the entry gate for R0 execution
 
@@ -52,6 +52,7 @@ Canonical human-authored inputs:
 ```text
 delivery/
   releases.json
+  release-plan.json
   dispositions.json
   decisions.jsonl
   risks.json
@@ -77,6 +78,7 @@ Implementation and tests:
 tools/delivery/
   generate.ts
   verify.ts
+  linear-live.ts
   lib/
     sources.ts
     releases.ts
@@ -101,6 +103,8 @@ Every manifest row has a stable `requirement_id` and one disposition:
 - `retired_source`: excluded from current work with a named current authority.
 
 No row may disappear silently. Every source inventory row and live runtime blocker must resolve to a manifest row or an explicit disposition. Companion and retired-source rows never override the Master Spec.
+
+`delivery/release-plan.json` assigns every executable requirement and live runtime gate to one release with a rationale. Generated reports compare that repository plan with Linear; Linear does not define its own release placement.
 
 Traceability is bidirectional:
 
