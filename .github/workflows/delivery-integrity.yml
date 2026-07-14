@@ -1,0 +1,56 @@
+name: Delivery integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 9 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  delivery-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+      - run: tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
+      - name: Capture live release truth
+        shell: bash
+        run: |
+          set +e
+          tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json > /tmp/stamp.json
+          stamp_status=$?
+          tools/spec-lint/node_modules/.bin/tsx tools/release/exact_status_scan.ts --json > /tmp/exact.json
+          exact_status=$?
+          set -e
+          if (( stamp_status > 1 )); then exit "$stamp_status"; fi
+          exit "$exact_status"
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json
+      - run: npm --prefix tools/spec-lint run typecheck
+      - run: npm --prefix tools/spec-lint run all
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
+
+  linear-drift:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix tools/spec-lint
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --snapshot delivery/linear-snapshot.json
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}

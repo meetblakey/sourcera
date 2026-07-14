@@ -55,3 +55,10 @@ npm --prefix tools/spec-lint run all
 tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
 tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
 ```
+
+## Delivery control plane
+
+- Canonical inputs: `delivery/`.
+- Generated reports: `reports/delivery/`; never hand edit them.
+- Local verifier: `tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json`.
+- Scheduled Linear drift: `tools/delivery/linear-live.ts`; it requires `LINEAR_API_KEY` and fails closed.
