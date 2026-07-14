@@ -64,10 +64,11 @@
 // tools/delivery/sources.test.ts
 import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import test from "node:test";
 import { parseFeatureInventory, parseRuntimeGate, sourceReferenceFindings } from "./lib/sources.js";
 
-const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), "utf8");
+const fixture = (name: string) => readFileSync(resolve(process.cwd(), "tools/delivery/fixtures", name), "utf8");
 
 test("parses stable feature and runtime identities", () => {
   const features = parseFeatureInventory(fixture("feature-inventory-valid.md"));
@@ -258,7 +259,7 @@ export function sourceReferenceFindings(rows: SourceRequirement[], root: string)
 ```json
 {
   "extends": "../spec-lint/tsconfig.json",
-  "compilerOptions": { "noEmit": true },
+  "compilerOptions": { "noEmit": true, "typeRoots": ["../spec-lint/node_modules/@types"] },
   "include": ["**/*.ts"],
   "exclude": ["fixtures"]
 }
