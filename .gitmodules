@@ -1,0 +1,3 @@
+[submodule "assets/brandguidelines"]
+	path = assets/brandguidelines
+	url = https://github.com/meetblakey/BrandGuidelines.git
