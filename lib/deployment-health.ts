@@ -1,4 +1,5 @@
 export {
+  createHealthFailurePayload,
   createHealthPayload,
   readRequiredDeploymentIdentity,
   SOURCERA_DOMAINS,
@@ -6,4 +7,4 @@ export {
   type DeploymentIdentity,
   type HealthPayload,
   type SourceraDomain,
-} from "../packages/domain/src/index";
+} from "@sourcera/domain";

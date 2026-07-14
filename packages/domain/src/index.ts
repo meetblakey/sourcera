@@ -14,6 +14,16 @@ export interface HealthPayload extends DeploymentIdentity {
   status: "ok";
 }
 
+export interface HealthFailurePayload {
+  assertion: "domain-health";
+  checkedAt: string;
+  commitSha: string;
+  domain: SourceraDomain;
+  environment: string;
+  event: "domain_deployment_health_result";
+  result: "failed";
+}
+
 function deploymentIdentityFrom(
   environment: DeploymentEnvironment,
 ): Partial<Omit<DeploymentIdentity, "domain">> & { domain?: string } {
@@ -82,21 +92,48 @@ export function createHealthPayload(
   checkedAt = new Date(),
   expectedDomain: SourceraDomain = "marketplace",
 ): HealthPayload {
-  const identity = deploymentIdentityFrom(environment);
-  const domain = parseDomain(identity.domain ?? expectedDomain);
+  const candidate = deploymentIdentityFrom(environment);
+  const isEmptyDevelopmentIdentity =
+    environment.NODE_ENV === "development" &&
+    !candidate.commitSha &&
+    !candidate.domain &&
+    !candidate.environment;
 
-  if (domain !== expectedDomain) {
-    throw new Error(
-      `SOURCERA_DOMAIN expected ${expectedDomain}, received ${domain}`,
-    );
+  if (isEmptyDevelopmentIdentity) {
+    return {
+      checkedAt: checkedAt.toISOString(),
+      commitSha: "local",
+      domain: expectedDomain,
+      environment: "local",
+      service: "sourcera",
+      status: "ok",
+    };
   }
+
+  const identity = readRequiredDeploymentIdentity(environment, expectedDomain);
 
   return {
     checkedAt: checkedAt.toISOString(),
-    commitSha: identity.commitSha ?? "local",
-    domain,
-    environment: identity.environment ?? "local",
+    ...identity,
     service: "sourcera",
     status: "ok",
+  };
+}
+
+export function createHealthFailurePayload(
+  environment: DeploymentEnvironment,
+  expectedDomain: SourceraDomain,
+  checkedAt = new Date(),
+): HealthFailurePayload {
+  const identity = deploymentIdentityFrom(environment);
+
+  return {
+    assertion: "domain-health",
+    checkedAt: checkedAt.toISOString(),
+    commitSha: identity.commitSha ?? "missing",
+    domain: expectedDomain,
+    environment: identity.environment ?? "unknown",
+    event: "domain_deployment_health_result",
+    result: "failed",
   };
 }

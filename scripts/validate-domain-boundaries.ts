@@ -3,7 +3,7 @@ import path from "node:path";
 import { validateDomainBoundaries } from "./domain-boundaries";
 
 async function main() {
-  const violations = await validateDomainBoundaries(path.resolve("."));
+  const violations = await validateDomainBoundaries(path.resolve(__dirname, ".."));
 
   process.stdout.write(
     `${JSON.stringify({

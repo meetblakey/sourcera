@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 type ApplicationDomain = "buyer" | "marketplace" | "seller";
+type BoundaryDomain = ApplicationDomain | "shared" | "unapproved";
 
 export interface SourceFile {
   path: string;
@@ -10,10 +11,12 @@ export interface SourceFile {
 
 export interface DomainBoundaryViolation {
   importPath: string;
-  sourceDomain: ApplicationDomain;
+  sourceDomain: Exclude<BoundaryDomain, "unapproved">;
   sourcePath: string;
-  targetDomain: ApplicationDomain;
+  targetDomain: BoundaryDomain;
 }
+
+const approvedSharedPackages = new Set(["@sourcera/domain"]);
 
 const ignoredDirectories = new Set([
   ".git",
@@ -25,11 +28,14 @@ const ignoredDirectories = new Set([
   "tools",
 ]);
 
-function domainForPath(filePath: string): ApplicationDomain | undefined {
+function domainForPath(
+  filePath: string,
+): Exclude<BoundaryDomain, "unapproved"> | undefined {
   const normalized = filePath.replaceAll("\\", "/").replace(/^\.\//, "");
 
   if (normalized.startsWith("apps/buyer/")) return "buyer";
   if (normalized.startsWith("apps/seller/")) return "seller";
+  if (normalized.startsWith("packages/")) return "shared";
   if (/^(app|components|lib)\//.test(normalized)) return "marketplace";
 
   return undefined;
@@ -50,8 +56,9 @@ function importsFrom(source: string): string[] {
 function targetDomainForImport(
   sourcePath: string,
   importPath: string,
-): ApplicationDomain | undefined {
-  if (importPath === "@sourcera/domain") return undefined;
+): BoundaryDomain | undefined {
+  if (approvedSharedPackages.has(importPath)) return undefined;
+  if (importPath.startsWith("@sourcera/")) return "unapproved";
   if (importPath.startsWith("@sourcera/buyer")) return "buyer";
   if (importPath.startsWith("@sourcera/seller")) return "seller";
   if (importPath.startsWith("@sourcera/marketplace")) return "marketplace";

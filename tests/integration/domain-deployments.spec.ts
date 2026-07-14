@@ -42,6 +42,14 @@ test("buyer and seller are independent Next.js applications", async () => {
       scripts["validate:deploy"],
       `tsx ../../scripts/validate-deploy-env.ts --domain ${domain}`,
     );
+    assert.equal(
+      scripts["validate:boundaries"],
+      "tsx ../../scripts/validate-domain-boundaries.ts",
+    );
+    assert.equal(
+      scripts["vercel-build"],
+      "npm run validate:deploy && npm run validate:boundaries && npm run build",
+    );
 
     await access(path.join(repositoryRoot, `apps/${domain}/app/page.tsx`));
     await access(

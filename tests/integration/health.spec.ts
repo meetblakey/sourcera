@@ -3,13 +3,28 @@ import test from "node:test";
 
 import { GET } from "../../app/api/health/route";
 import {
+  createHealthFailurePayload,
   createHealthPayload,
   readRequiredDeploymentIdentity,
 } from "../../lib/deployment-health";
 
 test("health route returns a non-cacheable, safe receipt", async () => {
+  const previous = {
+    commitSha: process.env.SOURCERA_COMMIT_SHA,
+    domain: process.env.SOURCERA_DOMAIN,
+    environment: process.env.SOURCERA_ENV,
+  };
+  process.env.SOURCERA_COMMIT_SHA =
+    "0123456789abcdef0123456789abcdef01234567";
+  process.env.SOURCERA_DOMAIN = "marketplace";
+  process.env.SOURCERA_ENV = "test";
+
   const response = await GET();
   const body = await response.json();
+
+  restoreEnvironment("SOURCERA_COMMIT_SHA", previous.commitSha);
+  restoreEnvironment("SOURCERA_DOMAIN", previous.domain);
+  restoreEnvironment("SOURCERA_ENV", previous.environment);
 
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("cache-control"), "no-store");
@@ -22,6 +37,10 @@ test("health route returns a non-cacheable, safe receipt", async () => {
     "status",
   ]);
   assert.equal(body.domain, "marketplace");
+  assert.equal(
+    body.commitSha,
+    "0123456789abcdef0123456789abcdef01234567",
+  );
   assert.equal(body.service, "sourcera");
   assert.equal(body.status, "ok");
   assert.match(body.checkedAt, /^\d{4}-\d{2}-\d{2}T/);
@@ -78,3 +97,64 @@ test("health payload never copies unrelated environment values", () => {
 
   assert.equal(JSON.stringify(payload).includes("must-not-leak"), false);
 });
+
+test("production health fails closed without deployment identity", () => {
+  assert.throws(
+    () =>
+      createHealthPayload(
+        { NODE_ENV: "production" },
+        new Date("2026-07-14T12:00:00.000Z"),
+        "marketplace",
+      ),
+    /Missing required deployment environment keys/,
+  );
+});
+
+test("local health fallback is development-only", () => {
+  assert.deepEqual(
+    createHealthPayload(
+      { NODE_ENV: "development" },
+      new Date("2026-07-14T12:00:00.000Z"),
+      "marketplace",
+    ),
+    {
+      checkedAt: "2026-07-14T12:00:00.000Z",
+      commitSha: "local",
+      domain: "marketplace",
+      environment: "local",
+      service: "sourcera",
+      status: "ok",
+    },
+  );
+});
+
+test("health failure telemetry is safe and explicit", () => {
+  const failure = createHealthFailurePayload(
+    {
+      NODE_ENV: "production",
+      SOURCERA_DOMAIN: "marketplace",
+      WORKOS_API_KEY: "must-not-leak",
+    },
+    "marketplace",
+    new Date("2026-07-14T12:00:00.000Z"),
+  );
+
+  assert.deepEqual(failure, {
+    assertion: "domain-health",
+    checkedAt: "2026-07-14T12:00:00.000Z",
+    commitSha: "missing",
+    domain: "marketplace",
+    environment: "unknown",
+    event: "domain_deployment_health_result",
+    result: "failed",
+  });
+  assert.equal(JSON.stringify(failure).includes("must-not-leak"), false);
+});
+
+function restoreEnvironment(key: string, value: string | undefined) {
+  if (value === undefined) {
+    delete process.env[key];
+    return;
+  }
+  process.env[key] = value;
+}
