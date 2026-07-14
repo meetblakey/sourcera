@@ -1,23 +1,31 @@
 {
-  "name": "sourcera",
+  "name": "@sourcera/marketplace",
   "version": "0.1.0",
   "private": true,
   "engines": {
     "node": "24.x"
   },
   "packageManager": "npm@11.13.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "next build",
+    "build:all": "npm run build && npm run build --workspace @sourcera/buyer && npm run build --workspace @sourcera/seller",
     "dev": "next dev",
     "lint": "eslint . --max-warnings=0",
     "start": "next start",
     "test": "tsx --test tests/**/*.spec.ts",
     "typecheck": "tsc --noEmit",
-    "validate:deploy": "tsx scripts/validate-deploy-env.ts",
+    "typecheck:all": "npm run typecheck && npm run typecheck --workspace @sourcera/buyer && npm run typecheck --workspace @sourcera/seller",
+    "validate:boundaries": "tsx scripts/validate-domain-boundaries.ts",
+    "validate:deploy": "tsx scripts/validate-deploy-env.ts --domain marketplace",
     "vercel-build": "npm run validate:deploy && npm run build",
-    "verify": "npm run lint && npm run typecheck && npm test && npm run build"
+    "verify": "npm run lint && npm run validate:boundaries && npm run typecheck:all && npm test && npm run build:all"
   },
   "dependencies": {
+    "@sourcera/domain": "0.1.0",
     "@base-ui/react": "1.6.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

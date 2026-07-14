@@ -6,8 +6,8 @@ export default defineConfig([
   ...nextVitals,
   ...nextTypescript,
   globalIgnores([
-    ".next/**",
-    "node_modules/**",
+    "**/.next/**",
+    "**/node_modules/**",
     "reports/**",
     "tools/**",
   ]),

@@ -22,5 +22,16 @@ jobs:
           cache: npm
           node-version: 24
       - run: npm ci
-      - run: npm run validate:deploy
+      - name: Validate Marketplace deployment
+        run: npm run validate:deploy
+        env:
+          SOURCERA_DOMAIN: marketplace
+      - name: Validate Buyer deployment
+        run: npm run validate:deploy --workspace @sourcera/buyer
+        env:
+          SOURCERA_DOMAIN: buyer
+      - name: Validate Seller deployment
+        run: npm run validate:deploy --workspace @sourcera/seller
+        env:
+          SOURCERA_DOMAIN: seller
       - run: npm run verify

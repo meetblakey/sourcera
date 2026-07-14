@@ -9,7 +9,9 @@ export async function GET() {
 
   logger.info(
     {
-      event: "deployment_health_check_result",
+      assertion: "domain-health",
+      event: "domain_deployment_health_result",
+      result: "passed",
       ...payload,
     },
     "deployment health check",

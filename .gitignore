@@ -16,3 +16,4 @@ _versions/
 _audit/_tmp/
 *.bak
 *.orig
+.vercel
