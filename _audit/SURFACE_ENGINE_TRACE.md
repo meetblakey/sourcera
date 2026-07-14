@@ -5,7 +5,7 @@
 **Audit run:** 2026-05-11, single Opus session.
 **Scope:** Coverage trace from `_audit/FEATURE_INVENTORY.md` (898 active F-* feature rows including 71 F-AE-* rows and 1 F-BC-* row) → Master Spec Appendix M.1 (327 mapping rows over lines 49004–49371) → Master Spec Appendix M.5 (103 CI-gate rows over lines 49444–49563) → `_integration/AUTHORED_EXTENSIONS_LEDGER.md` (218 AE-* rows).
 
-**Output discipline.** Per the Audit Prompts non-destructive default, this trace artifact and the `DEFECT_LEDGER.md` entries `D-11.4-001` through `D-11.4-004` are the only writes. No Master Spec edits performed. No `/_versions/` snapshot required.
+**Output discipline.** Per the Audit Prompts non-destructive default, this trace artifact and the `DEFECT_LEDGER.md` entries `D-11.4-001` through `D-11.4-004` are the only writes. No Master Spec edits performed. No `legacy-import:_versions/` snapshot required.
 
 ---
 

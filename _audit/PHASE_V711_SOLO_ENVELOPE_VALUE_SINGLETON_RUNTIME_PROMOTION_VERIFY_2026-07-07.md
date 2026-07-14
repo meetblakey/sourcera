@@ -25,7 +25,7 @@ The Solo engine-absorbed envelope amount is now single-sourced to Master Spec §
 | :---- | :---- |
 | Runtime harness | Added `tools/spec-lint/gates/solo_envelope_value_single_source.ts` and registered it in `tools/spec-lint/run-all.ts` `GATES_RUNTIME_ACTIVE`. |
 | §M.5 status | Promoted `solo_envelope_value_single_source` from `spec_binding_pending_pack_m02_3` to `runtime_active`. |
-| Backup | `_versions/Sourcera_Master_Spec_pre-solo-envelope-value-single-source-2026-07-07.md`. |
+| Backup | `legacy-import:_versions/Sourcera_Master_Spec_pre-solo-envelope-value-single-source-2026-07-07.md`. |
 | Blocker inventory | `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-07.md` and `.csv` regenerated from the latest stamp-gate JSON. |
 | Stamp-gate posture | Current stamp gate parses 420 runtime rows and fails on 352 blockers, down from 353. Remaining blockers: 219 M02.3, 102 M11.3, 26 M21.3, 5 M24.3. |
 

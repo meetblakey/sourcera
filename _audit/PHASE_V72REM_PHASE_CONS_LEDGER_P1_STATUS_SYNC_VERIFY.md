@@ -31,10 +31,10 @@ Lower-severity ledger hygiene remains where applicable for P2/P3 status propagat
 
 ## Backups
 
-- `_versions/DEFECT_LEDGER_pre-cons-ledger-p1-status-sync-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-cons-ledger-p1-status-sync-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-cons-ledger-p1-status-sync-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-cons-ledger-p1-status-sync-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-cons-ledger-p1-status-sync-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-cons-ledger-p1-status-sync-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-cons-ledger-p1-status-sync-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-cons-ledger-p1-status-sync-2026-06-24.md`
 
 ## Verification
 

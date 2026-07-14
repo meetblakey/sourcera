@@ -3,7 +3,7 @@
 **Date:** 2026-07-13  
 **Source command:** `tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json`  
 **Full row inventory:** `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.csv`  
-**JSON source:** `_audit/_tmp/v711_stamp_gate_2026-07-13_documentation-major-rewrite.json`
+**JSON source:** live `tools/release/stamp_gate.ts --json` output
 
 ## Verdict
 

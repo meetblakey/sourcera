@@ -1,7 +1,7 @@
 # Sourcera Master Spec v6.0.0 → v7.0.0 — DELTA INVENTORY
 
 **Produced:** 2026-04-14 (Prompt 0.2); Part E addendum 2026-04-17 (v1.1 re-invocation); Part F + Part G conformance refresh 2026-04-24 (Prompt 0.2 re-invocation for exhaustive-row coverage).
-**Baseline:** `Sourcera_Master_Spec.md` v6.0.0 (snapshot at `/_versions/Sourcera_Master_Spec_v6.0.0.md`)
+**Baseline:** `Sourcera_Master_Spec.md` v6.0.0 (snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`)
 **Sources walked in full:** `Sourcera_Master_Summary.md` v1.1 (§1–§6.38, Appendices A–C with all 141 items including C.1–C.127 from v1.0 and C.128–C.141 new in v1.1), `KB_Engineering_Spec.md` (§0–§20). `Sourcera_Buyer_Pricing_Strategy.md` v2 and `Sourcera_Seller_Pricing_Strategy.md` v2 are the v1.1 pricing authority co-sources for Part E.
 **Do not edit `Sourcera_Master_Spec.md` from this prompt.** This inventory is authoritative input to Phases 1–13.
 **Part layout.** Part A — v1.0 Summary deltas (SUM-###). Part B — KB Engineering Spec deltas (KB-###). Part C — cross-cutting enum, appendix, and state-machine aggregations (ENUM-### / APX-###). Part D — v1.0 conflicts requiring explicit reconciliation (CON-###). Part E — Summary v1.1 addenda and Seller Pricing v2 (SUM-v11-### / CON-v11-###). Part F — one row per Appendix-C item C.128–C.141 (SUM-C.###) for exhaustive-row conformance. Part G — coverage-verification attestation against the Phase-0 prompt requirements.

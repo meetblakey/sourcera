@@ -8,12 +8,12 @@
 
 Pre-edit backups were taken before the Appendix G residual pass:
 
-- `_versions/Sourcera_Master_Spec.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
-- `_versions/RECONCILIATION.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase-9-1-appendix-g-residual-p1-2026-06-23.md`
 
 ## 2. Sources Read
 

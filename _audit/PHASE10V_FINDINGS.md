@@ -227,13 +227,13 @@ No P0 surfaced. One P1 (D-10V-001) consistent with Phase 10's existing P1 inheri
 
 ## 11. Pre-edit Backup
 
-Non-destructive verification pass on the V10 walk; no Master Spec edits performed during initial verification. **Spec-side remediation pass (see §12 below) is destructive and was backed up separately at `/_versions/Sourcera_Master_Spec_pre-PHASE10V-remediation-2026-05-11.md` (5,716,330 bytes).**
+Non-destructive verification pass on the V10 walk; no Master Spec edits performed during initial verification. **Spec-side remediation pass (see §12 below) is destructive and was backed up separately at `legacy-import:_versions/Sourcera_Master_Spec_pre-PHASE10V-remediation-2026-05-11.md` (5,716,330 bytes).**
 
 ---
 
 ## 12. Phase 10V Spec-Side Remediation (2026-05-11)
 
-All 6 defects (D-10V-001 P1 + D-10V-002 / 003 / 004 / 005 / 006 P2) transition `open → remediated 2026-05-11`. The remediation pass authored 8 catalog rows across §3.7.6.1 / §3.7.6.2 / §3.7.6.3 / §3.7.6.4 / §3.7.6.6 and a 3-paragraph Per-Surface Conformance Binding block in §37.1. One Authored Extension row (AE-37-01) opened in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` for the §37.1 / Appendix M.1 / §M.5 structural-binding scope. Pre-edit Master Spec backup at `/_versions/Sourcera_Master_Spec_pre-PHASE10V-remediation-2026-05-11.md`.
+All 6 defects (D-10V-001 P1 + D-10V-002 / 003 / 004 / 005 / 006 P2) transition `open → remediated 2026-05-11`. The remediation pass authored 8 catalog rows across §3.7.6.1 / §3.7.6.2 / §3.7.6.3 / §3.7.6.4 / §3.7.6.6 and a 3-paragraph Per-Surface Conformance Binding block in §37.1. One Authored Extension row (AE-37-01) opened in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` for the §37.1 / Appendix M.1 / §M.5 structural-binding scope. Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-PHASE10V-remediation-2026-05-11.md`.
 
 ### 12.1 Edits Authored
 

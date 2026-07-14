@@ -2,7 +2,7 @@
 
 **Phase 0 / Prompt 0.2** — Master Spec v7.1.0 baseline, walked end-to-end across §1–§51 and Appendices A–M, plus companion docs (Buyer Pricing Strategy v3, Seller Pricing Strategy v3, UX Design v2.0.0, retired KB Engineering Spec) and the Authored Extensions Ledger.
 
-**Conflict surfaced.** Audit_Prompts.md Prompt 0.2 lists `KB_Engineering_Spec.md` as an end-to-end input, but per `CLAUDE.md` and `_audit/AUDIT_README.md` that file was retired in v7.0.0; its content was integrated into Master Spec §22. Resolution: read the retired snapshot at `_versions/KB_Engineering_Spec_retired_2026-04-26.md` for cross-check coverage; companion-doc rows from KB Eng are flagged "[verify §22 redundancy]" in `one_line_summary` for the Phase 0 verification pass.
+**Conflict surfaced.** Audit_Prompts.md Prompt 0.2 lists `KB_Engineering_Spec.md` as an end-to-end input, but per `CLAUDE.md` and `_audit/AUDIT_README.md` that file was retired in v7.0.0; its content was integrated into Master Spec §22. Resolution: read the retired snapshot at `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` for cross-check coverage; companion-doc rows from KB Eng are flagged "[verify §22 redundancy]" in `one_line_summary` for the Phase 0 verification pass.
 
 **Companion-doc fidelity.** Pricing-strategy and UX-Design rows are captured at coarser fidelity than Master Spec rows per Prompt 0.2 ("be conservative; do NOT duplicate features clearly in Master Spec"). UX Design tokens/components are captured as engine_concept / surface families; per-variant population happens in the §3 / UX-Design audit phases.
 

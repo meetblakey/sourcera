@@ -33,12 +33,12 @@ No §M.5 runtime row was promoted.
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/DEFECT_LEDGER_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/RECONCILIATION_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/AGENTS_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-phase-8-webhook-p2-2026-07-09.md`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-phase-8-webhook-p2-2026-07-09.csv`
-- `_versions/PHASE_V711_REMAINING_RUNTIME_BLOCKER_CLASSIFICATION_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/AGENTS_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-phase-8-webhook-p2-2026-07-09.md`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-phase-8-webhook-p2-2026-07-09.csv`
+- `legacy-import:_versions/PHASE_V711_REMAINING_RUNTIME_BLOCKER_CLASSIFICATION_pre-phase-8-webhook-p2-2026-07-09.md`

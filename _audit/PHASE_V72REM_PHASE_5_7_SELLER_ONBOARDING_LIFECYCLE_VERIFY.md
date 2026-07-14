@@ -33,12 +33,12 @@ Pre-edit backups were taken before touching the authoritative files.
 
 | File | Backup | Pre-edit md5 |
 |---|---|---|
-| Sourcera_Master_Spec.md | _versions/Sourcera_Master_Spec_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 28e12aac00375563291876d9e4d34fef |
-| _audit/DEFECT_LEDGER.md | _versions/DEFECT_LEDGER_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 1f79175bd145901677f7608d7123c4bc |
-| _audit/REMEDIATION_BACKLOG.md | _versions/REMEDIATION_BACKLOG_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | f2265153135e543a0f7e3ee9f2d9e6bb |
-| _audit/V711_BACKLOG_INDEX.md | _versions/V711_BACKLOG_INDEX_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 19f0a10432309ab5f36d9e0e7cb3883a |
-| _integration/AUTHORED_EXTENSIONS_LEDGER.md | _versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 895450a4d65f54ff75e5a55245b1e8e6 |
-| _integration/RECONCILIATION.md | _versions/RECONCILIATION_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 11b3c776d8dc13cda4fae4100ed9b5d6 |
+| Sourcera_Master_Spec.md | legacy-import:_versions/Sourcera_Master_Spec_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 28e12aac00375563291876d9e4d34fef |
+| _audit/DEFECT_LEDGER.md | legacy-import:_versions/DEFECT_LEDGER_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 1f79175bd145901677f7608d7123c4bc |
+| _audit/REMEDIATION_BACKLOG.md | legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | f2265153135e543a0f7e3ee9f2d9e6bb |
+| _audit/V711_BACKLOG_INDEX.md | legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 19f0a10432309ab5f36d9e0e7cb3883a |
+| _integration/AUTHORED_EXTENSIONS_LEDGER.md | legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 895450a4d65f54ff75e5a55245b1e8e6 |
+| _integration/RECONCILIATION.md | legacy-import:_versions/RECONCILIATION_pre-phase-5-7-seller-onboarding-lifecycle-2026-06-22.md | 11b3c776d8dc13cda4fae4100ed9b5d6 |
 
 ## Files Changed
 

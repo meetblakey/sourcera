@@ -37,18 +37,18 @@ Closed five lower-severity pricing / numerical-singleton residual rows:
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
-- `_versions/Sourcera_Buyer_Pricing_Strategy_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
-- `_versions/Sourcera_Seller_Pricing_Strategy_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
-- `_versions/DEFECT_LEDGER_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
-- `_versions/AGENTS_pre-pricing-singleton-count-sync-2026-07-09.md`
-- `_versions/CLAUDE_pre-pricing-singleton-count-sync-2026-07-09.md`
-- `_versions/REMEDIATION_BACKLOG_pre-pricing-singleton-count-sync-2026-07-09.md`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-pricing-singleton-count-sync-2026-07-09.md`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-pricing-singleton-count-sync-2026-07-09.csv`
-- `_versions/V711_PRODUCTION_GRADE_DOCUMENTATION_GOAL_PROMPT_pre-pricing-singleton-count-sync-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Buyer_Pricing_Strategy_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Seller_Pricing_Strategy_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION_pre-pricing-singleton-residual-cleanup-2026-07-09.md`
+- `legacy-import:_versions/AGENTS_pre-pricing-singleton-count-sync-2026-07-09.md`
+- `legacy-import:_versions/CLAUDE_pre-pricing-singleton-count-sync-2026-07-09.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-pricing-singleton-count-sync-2026-07-09.md`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-pricing-singleton-count-sync-2026-07-09.md`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-pricing-singleton-count-sync-2026-07-09.csv`
+- `legacy-import:_versions/V711_PRODUCTION_GRADE_DOCUMENTATION_GOAL_PROMPT_pre-pricing-singleton-count-sync-2026-07-09.md`
 
 ## Verification
 

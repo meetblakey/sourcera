@@ -14,14 +14,14 @@ Closed seven canonical Phase 3.5 DSAR P2 rows:
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/DEFECT_LEDGER_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/RECONCILIATION_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/AGENTS_pre-phase35-dsar-p2-closure-2026-07-09.md`
-- `_versions/CLAUDE_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/AGENTS_pre-phase35-dsar-p2-closure-2026-07-09.md`
+- `legacy-import:_versions/CLAUDE_pre-phase35-dsar-p2-closure-2026-07-09.md`
 
 ## Gap Findings
 

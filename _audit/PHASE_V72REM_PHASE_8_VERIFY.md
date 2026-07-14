@@ -127,7 +127,7 @@ A general-purpose verification subagent independently re-audited all three files
 | `_integration/RECONCILIATION.md` | 2,136,152 B / md5 `7a3c441a1e0b8d010c4febd2426ff001` | 2,147,218 B | `c780792e78e7c7558b75f5effd20823b` |
 | `_audit/DEFECT_LEDGER.md` | 3,704,533 B / md5 `4de7a8570fc8229ccad409add82bc177` | 3,708,890 B | `856fff2f35cb5a0584bc57815238c961` |
 
-Pre-edit backups in `_versions/`: `AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase8-2026-06-13.md`, `RECONCILIATION.pre-v72REM-Phase8-2026-06-13.md`, `DEFECT_LEDGER.pre-v72REM-Phase8-2026-06-13.md`.
+Pre-edit backups in `legacy-import:_versions/`: `AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase8-2026-06-13.md`, `RECONCILIATION.pre-v72REM-Phase8-2026-06-13.md`, `DEFECT_LEDGER.pre-v72REM-Phase8-2026-06-13.md`.
 
 ---
 

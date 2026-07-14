@@ -19,7 +19,7 @@
  *       on the override target. ANY predicate evaluating `true` rejects the
  *       override. Failure → `override_target_customer_visible`.
  *
- * Predicates (per `_audit/REMEDIATION_BACKLOG.md §2 → P0 #5`):
+ * Predicates (per `Sourcera_Master_Spec.md §M.4.4.2`):
  *   1. Console enum reachability     — §M.4.4.2.B
  *   2. RBAC reachability             — §M.4.4.2.C
  *   3. Plan-tier reachability        — §M.4.4.2.D

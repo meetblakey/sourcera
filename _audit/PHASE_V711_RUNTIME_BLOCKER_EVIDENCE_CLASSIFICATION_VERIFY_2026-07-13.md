@@ -36,9 +36,9 @@ The M02.3 audit confirms the eleven rows without complete local proof require pr
 
 Backups:
 
-- `_versions/AGENTS.pre-runtime-inventory-evidence-posture-2026-07-13.md`
-- `_versions/V711_BACKLOG_INDEX.pre-runtime-inventory-evidence-posture-2026-07-13.md`
-- `_versions/REMEDIATION_BACKLOG.pre-runtime-inventory-evidence-posture-2026-07-13.md`
+- `legacy-import:_versions/AGENTS.pre-runtime-inventory-evidence-posture-2026-07-13.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-runtime-inventory-evidence-posture-2026-07-13.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-runtime-inventory-evidence-posture-2026-07-13.md`
 
 ## Verification
 

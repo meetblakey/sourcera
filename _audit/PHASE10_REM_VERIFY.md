@@ -2,7 +2,7 @@
 
 **Pass type.** Independent Opus adversarial verification + sign-off of the canonical **Phase 10 — P1 Catalog-Completeness Sweep** (`_integration/RECONCILIATION.md` L10984), which is executed by the **§6.1 Catalog-Completeness Sweep** landed earlier on 2026-06-14. This log does not re-author spec content; it verifies the already-landed sweep against the live `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, and `tools/spec-lint/` artifacts, runs the 5 prompt-mandated adversarial spot-checks, and renders the HALT/sign-off determination.
 
-**No Master Spec edit.** Phase 10 is a verification phase. `Sourcera_Master_Spec.md` is **not** touched (no pre-edit backup required). The sweep it verifies is backed up at `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase6-catalog-2026-06-14.md` (6,413,689 bytes; md5 `5056b4928487ef14723ecdd7fb064f41`).
+**No Master Spec edit.** Phase 10 is a verification phase. `Sourcera_Master_Spec.md` is **not** touched (no pre-edit backup required). The sweep it verifies is backed up at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase6-catalog-2026-06-14.md` (6,413,689 bytes; md5 `5056b4928487ef14723ecdd7fb064f41`).
 
 **Phase-identity binding (closes D-V72REM-PH6-003 recommendation).** "Phase 10" and the in-spec "v7.2.0-REM Phase 6 Additions … Catalog-Completeness" labels denote the **same** body of work — the §6.1 sweep. D-V72REM-PH6-003's recommendation ("assign this sweep a free phase number, e.g., Phase 10") is hereby executed: **Phase 10 ≡ the §6.1 Catalog-Completeness Sweep**. The 2026-05-20 "v7.2.0-REM Phase 6 — P0 Closure Audit + v7.1.0a Stamp" is a distinct program event and is not implicated here. Disambiguator: the "Catalog-Completeness / §6.1" scope tag + the 2026-06-14 date.
 

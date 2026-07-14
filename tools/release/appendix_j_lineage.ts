@@ -9,15 +9,15 @@ const root = resolve(import.meta.dirname, "../..");
 const sources = [
   {
     label: "<=v6.0.0",
-    path: "_versions/Sourcera_Master_Spec_v6.0.0.md",
+    path: "_baselines/Sourcera_Master_Spec_v6.0.0.md",
   },
   {
     label: "v7.0.0",
-    path: "_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md",
+    path: "_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md",
   },
   {
     label: "v7.1.0a",
-    path: "_versions/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md",
+    path: "_baselines/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md",
   },
   {
     label: "current_unstamped",

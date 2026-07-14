@@ -1,7 +1,7 @@
 # Sourcera Master Spec v7.0.0 — Reconciliation Log
 
 **Target Version:** 7.0.0
-**Baseline Version:** 6.0.0 (snapshot at `/_versions/Sourcera_Master_Spec_v6.0.0.md`)
+**Baseline Version:** 6.0.0 (snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`)
 **Integration Start:** 2026-04-14
 **Integration Program:** 13-phase Opus-optimized program defined in `Integration_Prompts.md`
 
@@ -26,7 +26,7 @@ High-level running summary of the integration. Populated progressively as phases
 **Status:** Complete
 
 **Actions:**
-- Copied `Sourcera_Master_Spec.md` (v6.0.0) to `/_versions/Sourcera_Master_Spec_v6.0.0.md` as the immutable baseline snapshot.
+- Copied `Sourcera_Master_Spec.md` (v6.0.0) to `/_baselines/Sourcera_Master_Spec_v6.0.0.md` as the immutable baseline snapshot.
 - Added version header block at the top of `Sourcera_Master_Spec.md` (above Table of Contents): Version 7.0.0-integration-in-progress, Last Updated 2026-04-14, Prior Version 6.0.0, Status "Under integration".
 - Created `/_integration/` directory.
 - Seeded `/_integration/RECONCILIATION.md` (this file) with Summary, Phase Log (0–13), Enum Additions, Entity Additions, Endpoint Additions, Webhook Additions, Breaking Changes, Known Gaps, Authored Extensions, and Self-Challenge Log sections.
@@ -40,18 +40,18 @@ High-level running summary of the integration. Populated progressively as phases
 **Prompt:** 0.1 (re-invoked)
 **Status:** No-op — scaffolding preserved
 
-**Context:** Prompt 0.1 was re-invoked on 2026-04-17. Executing it literally at this point would be destructive: it would overwrite the pristine `/_versions/Sourcera_Master_Spec_v6.0.0.md` baseline with the current mid-integration spec (~2.3MB at v7.0.0-integration-in-progress), blank this RECONCILIATION.md (~531KB of accumulated phase log, enum additions, entity additions, endpoint additions, webhook additions, breaking changes, known gaps, authored extensions, and self-challenge log), and blank `/_integration/DELTA_INVENTORY.md` (~72KB). Phases 1 through 5 have already been authored and verified against the baseline in place; their audit trail lives in this log and in `PHASE1_VERIFY.md` through `PHASE5_VERIFY.md`.
+**Context:** Prompt 0.1 was re-invoked on 2026-04-17. Executing it literally at this point would be destructive: it would overwrite the pristine `/_baselines/Sourcera_Master_Spec_v6.0.0.md` baseline with the current mid-integration spec (~2.3MB at v7.0.0-integration-in-progress), blank this RECONCILIATION.md (~531KB of accumulated phase log, enum additions, entity additions, endpoint additions, webhook additions, breaking changes, known gaps, authored extensions, and self-challenge log), and blank `/_integration/DELTA_INVENTORY.md` (~72KB). Phases 1 through 5 have already been authored and verified against the baseline in place; their audit trail lives in this log and in `PHASE1_VERIFY.md` through `PHASE5_VERIFY.md`.
 
 **Conflict surfaced to operator.** Operator elected to skip the destructive path and preserve the existing scaffolding (option: "Skip — already done").
 
 **Actions taken:**
-- No changes to `/_versions/Sourcera_Master_Spec_v6.0.0.md` (pristine baseline preserved).
+- No changes to `/_baselines/Sourcera_Master_Spec_v6.0.0.md` (pristine baseline preserved).
 - No changes to `/_integration/DELTA_INVENTORY.md` (existing delta inventory preserved).
 - No changes to any prior Phase Log entries, Enum Additions, Entity Additions, Endpoint Additions, Webhook Additions, Breaking Changes, Known Gaps, Authored Extensions, or Self-Challenge Log content in this file.
 - Refreshed the `Last Updated` field in `Sourcera_Master_Spec.md` from 2026-04-14 to 2026-04-17. Version (7.0.0-integration-in-progress), Prior Version (6.0.0), and Status (Under integration) fields unchanged.
 - Appended this no-op entry to preserve the audit trail of re-invocations.
 
-**Guidance for future operators:** Prompt 0.1 is scaffolding-only and is not safe to re-run once any later-phase work has landed. If a true reset is required, use the documented "Hard reset to v6.0.0" procedure (restore `Sourcera_Master_Spec.md` from `/_versions/Sourcera_Master_Spec_v6.0.0.md`, archive the current RECONCILIATION.md and DELTA_INVENTORY.md to a timestamped subfolder under `/_versions/`, then re-execute 0.1 against the clean baseline). Do not silently overwrite these files.
+**Guidance for future operators:** Prompt 0.1 is scaffolding-only and is not safe to re-run once any later-phase work has landed. If a true reset is required, use the documented "Hard reset to v6.0.0" procedure (restore `Sourcera_Master_Spec.md` from `/_baselines/Sourcera_Master_Spec_v6.0.0.md`, archive the current RECONCILIATION.md and DELTA_INVENTORY.md to a timestamped subfolder under `legacy-import:_versions/`, then re-execute 0.1 against the clean baseline). Do not silently overwrite these files.
 
 ### Phase 1 — §4.3 Buyer Console Entities Extension (Internal Comments, Presence, Unread, Referrals, Pro Trial Seats, Usage Events, Time-Saved Credits)
 
@@ -466,7 +466,7 @@ Phase 10 exit gates remain PASS after the residual resolutions:
 
 - `Sourcera_Master_Spec.md` — Appendix J extended with Phase 12.1 Closure Cluster subsection (inserted before Appendix K).
 - `_integration/PHASE12_1_VERIFY.md` — new verification artifact (methodology, per-enum coverage table, naming-consistency findings, orphan-scan results, Phase 12.2 deferred-work list, self-challenge log).
-- `_versions/Sourcera_Master_Spec_pre-phase12.1-appendixJ-audit-2026-04-25.md` — pre-edit backup.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.1-appendixJ-audit-2026-04-25.md` — pre-edit backup.
 
 **Authored Extensions (require human sign-off).**
 
@@ -531,7 +531,7 @@ All eight items now live in `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phas
 - `Sourcera_Master_Spec.md` — Table of Contents updated to reflect new §22.1–§22.9 subsection layout.
 - `Sourcera_Master_Spec.md` — Appendix J Controlled Vocabulary Registry: 14 new enum blocks added (see Enum Additions below) inserted after the `Free Allowance Next-Bills-Against` block and before the `Appendix K: Glossary` header.
 - `Sourcera_Master_Spec.md` — Appendix K Glossary: new "Terms Introduced in §22 (v7.0.0 KB Rewrite)" subsection appended with 16 new glossary entries.
-- Backup snapshot saved to `_versions/Sourcera_Master_Spec_pre-22-kb-rewrite.md`.
+- Backup snapshot saved to `legacy-import:_versions/Sourcera_Master_Spec_pre-22-kb-rewrite.md`.
 
 **New / rewritten subsections.**
 
@@ -577,7 +577,7 @@ All eight items now live in `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phas
 **Prompt:** §22 structural rewrite incorporating `KB_Engineering_Spec.md §0–§3` in full (re-invoked).
 **Status:** No-op — prior rewrite preserved; verification pass completed.
 
-**Context.** The Phase 22-Rewrite prompt was re-invoked on 2026-04-18. Executing it literally at this point would be destructive: (a) the target structure (§22.1 Purpose & Scope → §22.8.6 MCP Server Implementation Requirements) is already fully authored in `Sourcera_Master_Spec.md` from the 2026-04-15 Phase 22-Rewrite and the 2026-04-18 §22.8 MCP refinement (backup `_versions/Sourcera_Master_Spec_pre-22-mcp-rewrite-2026-04-18.md`); (b) §22.9 Retrieval Engineering through §22.17 Acceptance Criteria, added by subsequent rewrite phases (backup `_versions/Sourcera_Master_Spec_pre-22.9-22.17-rewrite.md`), fall outside the target structure but would be collaterally damaged by a full §22 replace; (c) Appendix J controlled-vocabulary entries (`kb_console`, `kb_namespace_kind`, `kb_entry_kind`, `kb_compliance_framework`, `kb_customer_segment`, `kb_entry_status`, `kb_entry_flag_reason`, `kb_document_category`, `kb_document_status`, `kb_firecrawl_frequency`, `kb_firecrawl_crawl_status`, `mcp_tool_name`, `mcp_permission_scope`, `mcp_session_revocation_reason`) are all registered and cross-linked from §22 inline references.
+**Context.** The Phase 22-Rewrite prompt was re-invoked on 2026-04-18. Executing it literally at this point would be destructive: (a) the target structure (§22.1 Purpose & Scope → §22.8.6 MCP Server Implementation Requirements) is already fully authored in `Sourcera_Master_Spec.md` from the 2026-04-15 Phase 22-Rewrite and the 2026-04-18 §22.8 MCP refinement (backup `legacy-import:_versions/Sourcera_Master_Spec_pre-22-mcp-rewrite-2026-04-18.md`); (b) §22.9 Retrieval Engineering through §22.17 Acceptance Criteria, added by subsequent rewrite phases (backup `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-22.17-rewrite.md`), fall outside the target structure but would be collaterally damaged by a full §22 replace; (c) Appendix J controlled-vocabulary entries (`kb_console`, `kb_namespace_kind`, `kb_entry_kind`, `kb_compliance_framework`, `kb_customer_segment`, `kb_entry_status`, `kb_entry_flag_reason`, `kb_document_category`, `kb_document_status`, `kb_firecrawl_frequency`, `kb_firecrawl_crawl_status`, `mcp_tool_name`, `mcp_permission_scope`, `mcp_session_revocation_reason`) are all registered and cross-linked from §22 inline references.
 
 **Resolution.** Following the 2026-04-17 Phase 0 Re-Invocation precedent, the destructive path was skipped. A verification pass was run against the prompt's target structure and requirements.
 
@@ -618,9 +618,9 @@ All eight items now live in `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phas
 
 **Gaps identified:** None. Every target-structure element and every explicit requirement in the 2026-04-18 re-invocation prompt is already present at Master Spec fidelity in `Sourcera_Master_Spec.md` §22 and supporting Appendix J / Appendix L / Appendix C entries.
 
-**Files modified (2026-04-18 re-invocation):** none (no-op). An informational backup was written to `_versions/Sourcera_Master_Spec_pre-22-full-rewrite-2026-04-18.md` before verification began, per operator convention, in case a later forensic comparison is needed. No spec content changed.
+**Files modified (2026-04-18 re-invocation):** none (no-op). An informational backup was written to `legacy-import:_versions/Sourcera_Master_Spec_pre-22-full-rewrite-2026-04-18.md` before verification began, per operator convention, in case a later forensic comparison is needed. No spec content changed.
 
-**Guidance for future operators.** The Phase 22-Rewrite prompt has been executed and subsequently refined. Further changes to §22.1–§22.8 should be framed as targeted extensions (e.g., "author §22.8.4.8 `kb_entry_draft_create` and §22.8.4.9 `kb_dedupe_check`" per the Known Gaps entry on those missing tools) rather than a structural rewrite. If a true reset is required, restore `Sourcera_Master_Spec.md` from `_versions/Sourcera_Master_Spec_v6.0.0.md` and re-run the full phase sequence; do not silently overwrite the current §22.
+**Guidance for future operators.** The Phase 22-Rewrite prompt has been executed and subsequently refined. Further changes to §22.1–§22.8 should be framed as targeted extensions (e.g., "author §22.8.4.8 `kb_entry_draft_create` and §22.8.4.9 `kb_dedupe_check`" per the Known Gaps entry on those missing tools) rather than a structural rewrite. If a true reset is required, restore `Sourcera_Master_Spec.md` from `_baselines/Sourcera_Master_Spec_v6.0.0.md` and re-run the full phase sequence; do not silently overwrite the current §22.
 
 ---
 
@@ -1706,7 +1706,7 @@ For each major surface in §34, the failure-mode enumeration is embedded in the 
 **Prompt:** Phase 4b (RBAC integration of `billing_admin` per Summary §6.22.1, C.75–C.87; resolves the forward-reference flagged in Phase 4 / §34.7 BillingSeatSnapshot inclusion of `billing_admin` and §5.2 omission).
 **Status:** Complete (authored; awaiting human sign-off on Authored Extensions enumerated below).
 
-**Pre-edit Backup:** `Sourcera_Master_Spec.md` snapshotted to `/_versions/Sourcera_Master_Spec_pre-billing-admin-rbac.md` prior to Phase 4b edits.
+**Pre-edit Backup:** `Sourcera_Master_Spec.md` snapshotted to `legacy-import:_versions/Sourcera_Master_Spec_pre-billing-admin-rbac.md` prior to Phase 4b edits.
 
 **Change Summary**
 
@@ -1833,7 +1833,7 @@ None. The role is a permission profile against existing entities; no new schema 
 - Confirmed §5.11 matrix pipe count: 13 raw pipes per row (regex row has extra `\|` escapes that render as literal pipes — verified column count via pre-publish render check).
 - Confirmed §34.12.6 (existing narrative) and §34.14.7 #33 (existing acceptance criterion) align with the new authoring; no contradictions introduced.
 - Cross-references validated: §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §6.8, §11, §32, §34.12.5, §34.12.6, §34.12.7, §34.13, §34.14.7, §35, §40.2, §6.1 all present in the Master Spec.
-- Backup created at `/_versions/Sourcera_Master_Spec_pre-billing-admin-rbac.md` (14,805 lines pre-edit).
+- Backup created at `legacy-import:_versions/Sourcera_Master_Spec_pre-billing-admin-rbac.md` (14,805 lines pre-edit).
 - Glossary entry for "Billing Admin" added inline in §5.2.1.7 with explicit instruction for Appendix B propagation in the Glossary harmonization phase.
 
 **Post-Audit Correction (2026-04-15, same day)**
@@ -1848,7 +1848,7 @@ Also reverted in the correction:
 
 All verification checks re-executed post-correction:
 
-- `diff` of §5.1, §5.3–§5.10, §5.12 vs `/_versions/Sourcera_Master_Spec_pre-billing-admin-rbac.md` → zero diffs (confirmed).
+- `diff` of §5.1, §5.3–§5.10, §5.12 vs `legacy-import:_versions/Sourcera_Master_Spec_pre-billing-admin-rbac.md` → zero diffs (confirmed).
 - `diff` of §5.2 Org Owner, Org Admin, Member rows vs the backup → zero diffs (confirmed).
 - `diff` of §5.2 scope → only the additive changes (new Billing Admin row in the table; new §5.2.1 sub-section) remain.
 - §5.11 matrix pipe count unchanged (13 per row); all Org Admin cells in the Billing & AI Accounting row group now ✗.
@@ -1861,7 +1861,7 @@ All verification checks re-executed post-correction:
 **Date:** 2026-04-15
 **Prompt:** Phase 4c — §32 Billing API Endpoint Detail
 **Status:** Complete
-**Spec Pre-Edit Backup:** `/_versions/Sourcera_Master_Spec_pre-billing-api-endpoints.md` (15,022 lines)
+**Spec Pre-Edit Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-billing-api-endpoints.md` (15,022 lines)
 **Spec Post-Edit Line Count:** 16,023 lines (delta +1,001 lines)
 
 **Authoring Intent**
@@ -1980,7 +1980,7 @@ All Authored Extensions above are flagged for human reviewer sign-off. Sign-off 
 
 **Verification Performed**
 
-- Spec line count: 15,022 → 16,023 (+1,001). Backup at `/_versions/Sourcera_Master_Spec_pre-billing-api-endpoints.md` (15,022 lines).
+- Spec line count: 15,022 → 16,023 (+1,001). Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-billing-api-endpoints.md` (15,022 lines).
 - All nine prompt-required endpoints authored in §32.8 with full method/path/auth/RBAC/rate-limit/request/response/errors/pagination/idempotency/example block per the prompt's REQUIREMENTS clause.
 - All 25 (+1) new error codes added to Appendix I in a dedicated Billing Endpoint Errors sub-table; the preamble disambiguates entity-level codes from endpoint-surface codes.
 - All three new API token scopes added to Appendix J with implication rule, back-fill rule, per-endpoint mapping, and RBAC cross-reference.
@@ -2051,7 +2051,7 @@ All Authored Extensions above are flagged for human reviewer sign-off. Sign-off 
 
 - `/sessions/ecstatic-stoic-keller/mnt/Sourcera/Sourcera_Master_Spec.md` — §31.8 added (10 sub-blocks, ~330 lines), Appendix C extended, Appendix F §F.2 added, Appendix G extended, Appendix J extended (10 enum blocks).
 - `/sessions/ecstatic-stoic-keller/mnt/Sourcera/_integration/RECONCILIATION.md` — Webhook Additions populated with full catalog, Phase 4d block (this entry) appended, Enum Additions extended, Authored Extensions extended, Self-Challenge Log extended.
-- Pre-edit snapshot: `/sessions/ecstatic-stoic-keller/mnt/Sourcera/_versions/Sourcera_Master_Spec_pre-billing-webhooks.md`.
+- Pre-edit snapshot: `/sessions/ecstatic-stoic-keller/mntlegacy-import:_versions/Sourcera_Master_Spec_pre-billing-webhooks.md`.
 
 **No existing webhook event was removed.** §31.1–§31.7 transport semantics preserved verbatim. Four Phase 4c interim events preserved on standard retry curve (per §F.2 backwards-compatibility note). All §31.8 additions are additive.
 
@@ -2130,7 +2130,7 @@ For each of the 4 new entities, the failure-mode enumeration is embedded in the 
 **Owner:** Opus integration agent (this run).
 **Source documents:** `Sourcera_Master_Summary.md` §6.12.1, §6.12.2, Appendix C.55, C.73, C.76, C.80; `Sourcera_Buyer_Pricing_Strategy.md` §3, §5, §7; `Sourcera_Seller_Pricing_Strategy.md` §3, §6, §9; `KB_Engineering_Spec.md` §6.2–6.7, §13.2, §13.4.
 **Authoritative target:** `Sourcera_Master_Spec.md` §21.4 and §21.5.
-**Pre-edit snapshot:** `_versions/Sourcera_Master_Spec_pre-21.4-registry.md`.
+**Pre-edit snapshot:** `legacy-import:_versions/Sourcera_Master_Spec_pre-21.4-registry.md`.
 
 ### Change Summary
 
@@ -2226,7 +2226,7 @@ Per integration prompt requirement, ≥3 realistic failure modes per new feature
   - Appendix I Agent Errors block (5 codes added).
   - Appendix K Glossary (new "Terms Introduced in §21.4 (v7.0.0 Capability Registry Rewrite)" block, 7 entries).
 - `_integration/RECONCILIATION.md`: this entry appended.
-- `_versions/Sourcera_Master_Spec_pre-21.4-registry.md`: pre-edit snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-21.4-registry.md`: pre-edit snapshot.
 
 ### Verification
 
@@ -2292,7 +2292,7 @@ All seven feature areas address ≥ 3 realistic failure modes with explicit hand
 - `Sourcera_Master_Spec.md` — Appendix J: `MCP Tool Name` extended with `kb_entry_draft_create`, `kb_dedupe_check` (engineering-side draft-write surface for §22.10.3 / §22.10.6); `Audit Event Action Type — KB additions` extended with `agent_definition_updated`, `skill_definition_updated`, `environment_definition_updated`, `kb_injection_suspected`, `ai_kb_retrieved`, `ai_draft_emitted`, `ai_session_started`, `ai_session_ended`.
 - `Sourcera_Master_Spec.md` — Appendix C: new "KB-Domain Events" subsection with 8 webhook events (`kb.entry.published`, `kb.entry.archived`, `kb.entry.flagged_stale`, `kb.namespace.migrated`, `kb.document.attached`, `kb.draft.needs_clarification`, `kb.session.terminated`, `kb.session.mcp_auth_failed`).
 - `Sourcera_Master_Spec.md` — Appendix G: new "KB / MCP / Managed-Agent Events" subsection with 12 PostHog events.
-- Backup snapshot saved to `_versions/Sourcera_Master_Spec_pre-22.9-22.17-rewrite.md`.
+- Backup snapshot saved to `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-22.17-rewrite.md`.
 
 **New / rewritten subsections.**
 
@@ -2396,7 +2396,7 @@ All eight new feature areas address ≥ 3 realistic failure modes with explicit 
 
 ## Phase Section-48 Authoring — PLG, Growth Mechanics & Network Effects (2026-04-15)
 
-**Scope.** Authored a new §48 "PLG, Growth Mechanics & Network Effects" positioned after §47 (Governance) and before the existing Appendices, integrating Summary §3 (PLG Motion, Growth, and Network Effects) into the Master Spec at engineering fidelity. Spec line count: 19,168 → 20,241 (+1,073 lines). Backup taken at `_versions/Sourcera_Master_Spec_pre-section-48-plg.md`.
+**Scope.** Authored a new §48 "PLG, Growth Mechanics & Network Effects" positioned after §47 (Governance) and before the existing Appendices, integrating Summary §3 (PLG Motion, Growth, and Network Effects) into the Master Spec at engineering fidelity. Spec line count: 19,168 → 20,241 (+1,073 lines). Backup taken at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48-plg.md`.
 
 ### Sections Added
 
@@ -2531,7 +2531,7 @@ Total §48 ACs: 84 numbered, testable acceptance criteria.
 
 ## Phase Section-48.5 Authoring — M1–M8 Growth Mechanics (2026-04-15)
 
-**Scope.** Authored a new §48.5 "M1–M8 Growth Mechanics" positioned after §48.4 and before the existing APPENDICES marker, integrating Summary §3.3 M1–M8 entries plus Summary C.63 (M5), C.64 (M6), C.65 (M7), C.66 (M8) into the Master Spec at engineering fidelity. Spec line count: 20,241 → 22,211 (+1,970 lines). Backup taken at `_versions/Sourcera_Master_Spec_pre-section-48.5-m1-m8.md`.
+**Scope.** Authored a new §48.5 "M1–M8 Growth Mechanics" positioned after §48.4 and before the existing APPENDICES marker, integrating Summary §3.3 M1–M8 entries plus Summary C.63 (M5), C.64 (M6), C.65 (M7), C.66 (M8) into the Master Spec at engineering fidelity. Spec line count: 20,241 → 22,211 (+1,970 lines). Backup taken at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48.5-m1-m8.md`.
 
 ### Sections Added
 
@@ -2782,7 +2782,7 @@ Post-authoring audit against the original task requirements identified two gaps;
 **Date:** 2026-04-15
 **Prompt:** §48.6 M9–M13 (content-generation-heavy mechanics with editorial/review requirements)
 **Status:** Complete
-**Pre-edit backup:** `/_versions/Sourcera_Master_Spec_pre-section-48.6-m9-m13.md`
+**Pre-edit backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48.6-m9-m13.md`
 
 **Change summary.** Added §48.6 (M9–M13 Public Marketplace Content Mechanics) immediately after §48.5.10 and immediately before the orphan state-diagram block at line 19736. §48.6 authors the operational, editorial, render-contract, takedown/appeal, k-anonymity, cost-center, anti-abuse, telemetry, notification, webhook, API-endpoint, and acceptance-criteria machinery for the five Sourcera-owned, AI-generated, public-Marketplace content mechanics M9 / M10 / M11 / M12 / M13. The persisted entity schemas already exist in §4.4.12 (CategoryPage), §4.4.13 (GuidePage), §4.4.14 (ComparisonPage), §4.4.15 (MarketIntelligenceReport), §4.4.16 (HeatMapCell); §48.6 cross-links to each rather than duplicating field tables. The capability registry §21.4.3 already registers `category_faq_generation`, `guide_draft_generation`, `guide_refresh_analysis`, `comparison_page_generation`, `market_intelligence_report`, `heat_map_cell_summary` as `platform_marketing` (cost-center routed to Sourcera Platform Marketing, never customer-billed). §48.6 formalizes the operational invariants per the prompt's explicit per-mechanic requirements.
 
@@ -3119,7 +3119,7 @@ Public render paths (anonymous): `https://marketplace.sourcera.io/categories/{sl
 **Date:** 2026-04-19
 **Prompt:** Extend §48 with §48.7 M14–M17 (re-issued).
 **Status:** Re-verified; targeted refinements applied; new §48.7.6 cross-mechanic invariants subsection authored.
-**Backup:** `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-48.7-m14-m17-reverify.md`
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48.7-m14-m17-reverify.md`
 
 **Context.** §48.7 was previously authored and verified (see entry immediately above). On re-issue of the prompt, a hostile staff-engineer review pass was performed against the existing content. The pass surfaced four categories of defects: (a) an orphan state-diagram block contaminating the §48.7.5 → §48.8 boundary; (b) a semantic conflict between §48.7.3's exclusivity-rule placement and the authoritative §4.3.16 + Appendix L.2 specification; (c) an API contract bug where the create-time `m16_referee_already_referred` error blocked the concurrent-pending semantics that Appendix L.2 requires; (d) missing cross-mechanic invariants that were implicit in the per-mechanic subsections but not enumerated at a single authoritative site. All four categories were remediated in this pass. The prompt-named M14–M17 requirements are fully covered by the combination of the prior §48.7 authoring and the new §48.7.6 invariants subsection.
 
@@ -3174,7 +3174,7 @@ Public render paths (anonymous): `https://marketplace.sourcera.io/categories/{sl
 | Appendix I updates | ✓ (2 new codes appended: `referral_credit_issuance_deferred`, `mechanic_disabled_by_ops`) |
 | Appendix J enum extension | ✓ (`referral_forfeit_reason` extended with `referee_exclusivity_claimed` at line 29098+) |
 | No content deletion of M14–M17 substance | ✓ (all prior authoring retained; only bug fixes + new §48.7.6 subsection + orphan removal) |
-| Backup captured | ✓ (`_versions/Sourcera_Master_Spec_pre-section-48.7-m14-m17-reverify.md`) |
+| Backup captured | ✓ (`legacy-import:_versions/Sourcera_Master_Spec_pre-section-48.7-m14-m17-reverify.md`) |
 
 ---
 
@@ -3183,7 +3183,7 @@ Public render paths (anonymous): `https://marketplace.sourcera.io/categories/{sl
 **Date:** 2026-04-16
 **Prompts:** 5.1 (§27.4 Match Score Internals), 5.2 (§27.6 Controlled Vocabulary Registry), 5.3 (§27.7 cross-reference refresh), 5.4 (§27.8 Abuse & Takedown)
 **Status:** Complete
-**Backup:** `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-27-marketplace.md` (pre-edit snapshot)
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-section-27-marketplace.md` (pre-edit snapshot)
 
 **Scope:**
 - §27.4 Match Score Internals — expanded from a one-paragraph stub to a full v7 learned-ensemble specification (Summary C.61).
@@ -3558,7 +3558,7 @@ Added row groups **Seller Signals — Seller Console**, **Buyer Signal Opt-In �
 **Owner:** Opus authoring agent (this run).
 **Source documents consulted:** `Sourcera_Master_Spec.md` (full, with focus on §4.4.8 `VendorOptOutRecord`, §4.5.6 Marketplace-Domain Read & Render Contract, §7.2 Dual-Console Firewall, §27.1–§27.9 structure, §31 Webhook Transport, §32 API Patterns, §34.10 AI Wallet Service, §39 Object Size Constraints, §40.2 Retention, §42.1 Data Residency, Appendix C / F / G / I / J / K); `Sourcera_Master_Summary.md` §C.123 (Vendor Opt-Out Registry).
 **Authoritative target:** `Sourcera_Master_Spec.md` §27.10 (new; inserted between the end of §27.9.15.6 and the `---` separator preceding `# 28. The Markdown Editor`).
-**Pre-edit snapshot:** `_versions/Sourcera_Master_Spec_pre-27.10-vendor-opt-out-global-registry.md` (2,312,868 bytes).
+**Pre-edit snapshot:** `legacy-import:_versions/Sourcera_Master_Spec_pre-27.10-vendor-opt-out-global-registry.md` (2,312,868 bytes).
 **Spec version before Phase 7:** v6.10.x (post-Phase-6 state).
 **Spec version after Phase 7:** v6.11.x (pending Master Spec version header update in the final integration phase).
 
@@ -3782,7 +3782,7 @@ All events are Seller-console-scoped for attribution; Ops receives read-through 
 | File | Change |
 | :---- | :---- |
 | `Sourcera_Master_Spec.md` | Inserted §27.10 (approx. 800 lines of new authored content) between end of §27.9.15.6 and the `---` separator preceding `# 28. The Markdown Editor`. |
-| `_versions/Sourcera_Master_Spec_pre-27.10-vendor-opt-out-global-registry.md` | Pre-edit snapshot created before edit (2,312,868 bytes). |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-27.10-vendor-opt-out-global-registry.md` | Pre-edit snapshot created before edit (2,312,868 bytes). |
 | `_integration/RECONCILIATION.md` | This Phase 7 entry. |
 
 ### 7Q. Verification
@@ -3947,7 +3947,7 @@ Three or more failure modes considered per new state machine:
 | File | Change |
 | :---- | :---- |
 | `Sourcera_Master_Spec.md` | (1) Appendix L authored (lines 27094–27318), 225 lines, 5 state machines; (2) Appendix I subsection "§4.3 Buyer Console Entity Errors" added (lines 25126–25162), 20 error codes; (3) §4.8 AI Operation state-machine prose note updated (line 4209) to reflect Appendix L existence. |
-| `_versions/Sourcera_Master_Spec_pre-appendix-L-and-I-additions.md` | Pre-edit snapshot created before edit (~2.4 MB). |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-appendix-L-and-I-additions.md` | Pre-edit snapshot created before edit (~2.4 MB). |
 | `_integration/RECONCILIATION.md` | This Phase 1-Closeout entry. |
 
 ### Verification
@@ -4004,7 +4004,7 @@ Parallel to this, Summary §2.9 / C.130 / Seller Pricing §10 describe 12 seller
 | File | Change |
 | :---- | :---- |
 | `Sourcera_Master_Spec.md` | (1) §4.8.12 MarketplaceDiscoveryRevenueRecord authored (starting line 5514, ~102 lines); (2) §4.8.13 SellerOutcomeSignalConfig authored (starting line ~5616, ~116 lines); (3) Appendix J extended with 10 new enum blocks (~46 lines); (4) Appendix K extended with 14 new glossary terms (~23 lines); (5) Appendix I extended with 20 new error codes across a new §4.8.12–§4.8.13 subsection (~20 lines); (6) Phase 4e Self-Challenge in-place revisions to §4.8.12 state machine (refund companion row fields, paid-state legal-hold routing, k-anonymity timeout trigger name), §4.8.12 Failure Modes (3 new modes: unsupported-residency, DSAR-during-pending, refund-chain-forbidden), §4.8.13 Acceptance Criterion #1 (enum-cardinality-driven). |
-| `_versions/Sourcera_Master_Spec_pre-4.8-billing-entities.md` | Pre-edit snapshot created at the start of Phase 4e. |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-4.8-billing-entities.md` | Pre-edit snapshot created at the start of Phase 4e. |
 | `_integration/RECONCILIATION.md` | Phase 4e blocks added to Enum Additions, Entity Additions, Known Gaps, Authored Extensions; this Phase Log block appended to the end of the file. |
 
 No existing content deleted. All additions strictly additive. The Self-Challenge in-place revisions expand the entity authoring rather than replacing any prior claim.
@@ -4052,7 +4052,7 @@ Operator attempts `timeout_default='accepted'` to game resolution stats (DB CHEC
 
 ### Scope
 
-Adversarial verification pass covering every entity authored by Integration Prompts 1.1–1.4 (Reconciliation-log phases 1, 2, 2b, 3, 4, 4e). Supersedes the §4.3-only partial verification dated 2026-04-15; prior partial preserved at `/Sourcera/_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md`.
+Adversarial verification pass covering every entity authored by Integration Prompts 1.1–1.4 (Reconciliation-log phases 1, 2, 2b, 3, 4, 4e). Supersedes the §4.3-only partial verification dated 2026-04-15; prior partial preserved at `legacy-import:_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md`.
 
 Full report at `/Sourcera/_integration/PHASE1_VERIFY.md`.
 
@@ -4123,7 +4123,7 @@ Four new §4 entity subsections (Target Account §4.3.20, Attachment §4.6.2, Se
 ### Files produced by this verification
 
 - `/Sourcera/_integration/PHASE1_VERIFY.md` — comprehensive verification (replaces prior §4.3-only partial).
-- `/Sourcera/_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md` — backup of prior partial (no content lost).
+- `legacy-import:_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md` — backup of prior partial (no content lost).
 - `/Sourcera/_integration/RECONCILIATION.md` — this entry.
 
 ### Verification (meta)
@@ -4145,7 +4145,7 @@ Four new §4 entity subsections (Target Account §4.3.20, Attachment §4.6.2, Se
 
 **Scope.** Surgical authoring pass that resolves all HIGH structural findings (F-S-1, F-S-3, F-S-4, F-S-5, F-S-6, F-S-7) and all adversarial findings (F-A-1 through F-A-8, excluding F-A-4 which was not opened) from the Prompt V1 Adversarial Verification of Phase 1. No re-run of Prompts 1.1–1.4. Zero field-level deletions against v6.0.0 baseline. Zero Appendix J enum-value removals. All additive.
 
-**Backup.** Pre-edit Master Spec snapshot: `/_versions/Sourcera_Master_Spec_pre-phase-1.5-2026-04-17.md` (28,532 lines; authoritative rollback target if human sign-off rejects any of the new content).
+**Backup.** Pre-edit Master Spec snapshot: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-1.5-2026-04-17.md` (28,532 lines; authoritative rollback target if human sign-off rejects any of the new content).
 
 #### Entities authored (four new §4 subsections, at Master Spec fidelity)
 
@@ -4279,7 +4279,7 @@ Completed. Key observations addressed in-place prior to delivery:
 
 - `/Sourcera/Sourcera_Master_Spec.md` — modified in place (entities, retention paragraphs, indexes, attestations, state-machine addition, Appendix J Phase 1.5 Enum Cluster, Appendix L.6).
 - `/Sourcera/_integration/RECONCILIATION.md` — this entry.
-- `/_versions/Sourcera_Master_Spec_pre-phase-1.5-2026-04-17.md` — pre-edit backup.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-1.5-2026-04-17.md` — pre-edit backup.
 
 #### Verification (meta)
 
@@ -4470,7 +4470,7 @@ Each new section contains explicit failure modes:
 ### Files Produced / Modified by §34ewrite
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §34 rewritten end-to-end. Old §34.14 Acceptance Criteria renumbered to §34.20 (with sub-headers §34.14.1–.10 renumbered to §34.20.1–.10). New §34.14 Seller Rate Card, §34.15 Seller Outcome Signals, §34.16 Marketplace Discovery Pricing, §34.17 Pricing Engineering Requirements, §34.18 Financial Targets, §34.19 Seller Plan Upgrade Carry-Over Guarantee inserted before §34.20. §34.20 extended with six new sub-sections (§34.20.11–.16) adding 35 new acceptance criteria (total: 81 criteria post-rewrite, up from 46 pre-rewrite). All cross-references to old §34.14 (meaning Outcome Resolver) corrected to §34.11.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-34-outcome-rewrite-2026-04-18.md` — pre-rewrite backup (2,641,284 bytes).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-section-34-outcome-rewrite-2026-04-18.md` — pre-rewrite backup (2,641,284 bytes).
 - `/Sourcera/_integration/RECONCILIATION.md` — this entry.
 
 ### Verification (meta)
@@ -4553,7 +4553,7 @@ Each new section contains explicit failure modes:
 
 **Verification (meta).**
 
-- Pre-edit backup captured at `/Sourcera/_versions/Sourcera_Master_Spec_pre-5-rbac-billing-admin-verify-2026-04-18.md` (2,718,243 bytes).
+- Pre-edit backup captured at `legacy-import:_versions/Sourcera_Master_Spec_pre-5-rbac-billing-admin-verify-2026-04-18.md` (2,718,243 bytes).
 - All four prompt bullets re-verified against the post-edit Spec; three were already discharged, one gap closed this pass.
 - No other §5 role was modified this pass. §5.2 role table (Org Owner, Org Admin, Member, Billing Admin) byte-identical to pre-edit except for unchanged state; §5.3 Buyer Console roles, §5.4 Guest Permission Profiles, §5.5 Seller Console roles, §5.6 Marketplace roles, §5.7–§5.10 untouched.
 - Every permission in §5.2.1.1 was cross-checked against a concrete API operation in §32.8 (Billing endpoints) or a named Convex mutation (`billing.wallet.*`, `billing.contests.*`, `billing.committedSpend.*`, `billing.proTrialSeat.*`, `billing.aiOperations.*`, `billing.freeAllowance.*`, `billing.downgradeBucket.*`, `billing.seatSnapshot.*`, `billing.plan.*`, `audit.billing.list`). All 22 Operations map to a concrete surface. Operation #19 (Public Pricing API) is public-unauthenticated and maps to the hosted rate-card endpoint.
@@ -4566,7 +4566,7 @@ Each new section contains explicit failure modes:
 ### Files Produced / Modified by Phase 4b-Verify
 
 - `/Sourcera/Sourcera_Master_Spec.md` — three blocks inserted at Appendix J → Audit Event Action Types (bare-verb enum clarification, Enum Extension, Deploy-Time Validator Rules, Cross-Reference); one row added to Appendix I Validation Errors (`audit_event_action_namespace_mismatch`); two acceptance criteria added to §5.2.1.6 (#16, #17).
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-5-rbac-billing-admin-verify-2026-04-18.md` — pre-edit backup.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-5-rbac-billing-admin-verify-2026-04-18.md` — pre-edit backup.
 - `/Sourcera/_integration/RECONCILIATION.md` — this section.
 
 ### Sign-off Verdict
@@ -4581,7 +4581,7 @@ The §34 rewrite closes the v6.0.0 → v7.0.0 Pricing Rewrite Track core authori
 
 **Scope.** Re-verification pass executed against the integration-program billing-webhook prompt (13 webhook event_types + 7 PostHog event_names + HMAC-SHA256 signing + idempotency + retry curve + DLQ + Appendix C notifications + Appendix F retry curve + Appendix G PostHog mirrors). Verifies Phase 4d authoring (2026-04-15 / 2026-04-16) against the post-§34-rewrite Spec.
 
-**Scope explicitly OUT.** No Master Spec content was rewritten this pass. Authoring was complete as of the Phase 4d entry above; this is a verification-only pass. Pre-verification snapshot captured at `/Sourcera/_versions/Sourcera_Master_Spec_pre-31-billing-webhooks-posthog-2026-04-18.md` (2,722,847 bytes, byte-identical to the live Spec at verification start; retained for audit).
+**Scope explicitly OUT.** No Master Spec content was rewritten this pass. Authoring was complete as of the Phase 4d entry above; this is a verification-only pass. Pre-verification snapshot captured at `legacy-import:_versions/Sourcera_Master_Spec_pre-31-billing-webhooks-posthog-2026-04-18.md` (2,722,847 bytes, byte-identical to the live Spec at verification start; retained for audit).
 
 ### Completeness Verification Matrix
 
@@ -4617,7 +4617,7 @@ The §34 rewrite closes the v6.0.0 → v7.0.0 Pricing Rewrite Track core authori
 
 ### Regression Audit — No Existing Webhook Removed
 
-Confirmed by bytewise comparison between `/Sourcera/_versions/Sourcera_Master_Spec_pre-billing-webhooks.md` (the Phase 4d pre-authoring snapshot, 1,077,091 bytes) and the live Spec:
+Confirmed by bytewise comparison between `legacy-import:_versions/Sourcera_Master_Spec_pre-billing-webhooks.md` (the Phase 4d pre-authoring snapshot, 1,077,091 bytes) and the live Spec:
 
 - §31.1 Webhook Event Types & Idempotency — unchanged.
 - §31.2 Webhook Payload Structure — unchanged.
@@ -4693,7 +4693,7 @@ New this pass (2026-04-18):
 ### Files Produced / Modified by Phase 4d-Verify
 
 - `/Sourcera/Sourcera_Master_Spec.md` — NO content changes this pass. All §31.8, Appendix C, Appendix F.2, Appendix G Billing-Domain Events, and Appendix J enum blocks were authored in Phase 4d (2026-04-15 / 2026-04-16) and are confirmed present + structurally sound.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-31-billing-webhooks-posthog-2026-04-18.md` — pre-verification snapshot; byte-identical to the post-verification Spec (no edits this pass).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-31-billing-webhooks-posthog-2026-04-18.md` — pre-verification snapshot; byte-identical to the post-verification Spec (no edits this pass).
 - `/Sourcera/_integration/RECONCILIATION.md` — this section.
 
 ### Sign-off Verdict
@@ -4814,7 +4814,7 @@ All authored extensions from this remediation (13 new endpoints, 15 new error co
 ## Phase 5a-Cleanup — §21.4.1.A Deduplication Pass (2026-04-18)
 
 **Authoritative target:** `Sourcera_Master_Spec.md` §21.4.1.A, §21.4 Glossary (Appendix K "Initial Registry Seed (v6 → v7)" entry).
-**Pre-edit snapshot:** `_versions/Sourcera_Master_Spec_pre-21.4-capability-registry-rewrite-2026-04-18.md`.
+**Pre-edit snapshot:** `legacy-import:_versions/Sourcera_Master_Spec_pre-21.4-capability-registry-rewrite-2026-04-18.md`.
 **Trigger:** Self-verification pass on Phase 5a §21.4 rewrite surfaced a semantic duplicate (`seller_page_enrichment`) appearing in both §21.4.1.A (KB-Spec / SPS augmentations table) and §21.4.2 (Extended Capabilities catalog). Violates Authoring Convention #15 ("Before saving, run a pass to remove duplicate content that already exists in the Spec (exact or semantic duplicates)").
 
 ### Change Summary
@@ -4855,7 +4855,7 @@ Two §21.4-adjacent drifts were identified during verification but are **out of 
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §21.4.1.A (preamble rewrite, table row deletion, three classification notes), Appendix K Glossary ("Initial Registry Seed (v6 → v7)" entry rewrite).
 - `/Sourcera/_integration/RECONCILIATION.md` — this section.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-21.4-capability-registry-rewrite-2026-04-18.md` — pre-edit backup created.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-21.4-capability-registry-rewrite-2026-04-18.md` — pre-edit backup created.
 
 ### New Entities / Enums / Endpoints / Webhooks
 
@@ -4873,7 +4873,7 @@ None. This is a documentation-only deduplication pass. The `CapabilityRegistryEn
 **Prompt:** §22 rewrite extension — §22.9 Retrieval Engineering, §22.10 Managed Agent Definitions, §22.11 Custom Tool Contracts, §22.12 Skills, §22.13 Environments, §22.14 Session Lifecycle, §22.15 Event Stream Handling, §22.16 Observability & Evaluation, §22.17 Acceptance Criteria — incorporating `KB_Engineering_Spec.md §4–§18` in full.
 **Status:** No-op — prior rewrite preserved; verification pass completed. Follows the 2026-04-17 Phase 0 Re-Invocation precedent and the 2026-04-18 Phase 22-Rewrite Re-Invocation precedent.
 
-**Context.** The Master Spec already contains the full §22.9–§22.17 rewrite produced in an earlier phase (backup at `_versions/Sourcera_Master_Spec_pre-22.9-22.17-rewrite.md`). Line-by-line inspection of the existing sections against Prompt 3.3's target structure and explicit requirements confirms complete coverage. A literal destructive rewrite would have overwritten preserved content with no net gain. A verification-pass-and-log approach is applied instead.
+**Context.** The Master Spec already contains the full §22.9–§22.17 rewrite produced in an earlier phase (backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-22.17-rewrite.md`). Line-by-line inspection of the existing sections against Prompt 3.3's target structure and explicit requirements confirms complete coverage. A literal destructive rewrite would have overwritten preserved content with no net gain. A verification-pass-and-log approach is applied instead.
 
 ### Verification Pass — Target-Structure Coverage
 
@@ -4932,7 +4932,7 @@ These Authored Extensions were flagged in the prior §22.9–§22.17 rewrite pha
 
 ### Files Produced / Modified by Phase 22-Rewrite-Extension Re-Invocation
 
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-22.9-22.17-verification-2026-04-18.md` — informational backup (pre-verification snapshot).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-22.17-verification-2026-04-18.md` — informational backup (pre-verification snapshot).
 - `/Sourcera/_integration/RECONCILIATION.md` — this no-op verification entry appended.
 
 No edits to `Sourcera_Master_Spec.md` were performed.
@@ -4955,8 +4955,8 @@ No edits to `Sourcera_Master_Spec.md` were performed.
 
 | Artifact | SHA / size comparison | Result |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` vs `_versions/Sourcera_Master_Spec_pre-22.9-22.17-verification-2026-04-18.md` (19:24 snapshot) | `diff -q` = identical; both 2,799,845 bytes | No drift since first re-invocation |
-| `Sourcera_Master_Spec.md` vs `_versions/Sourcera_Master_Spec_pre-22.9-retrieval-indexing-2026-04-18.md` (19:28 snapshot, this session) | `diff -q` = identical; both 2,799,845 bytes | No drift within this session |
+| `Sourcera_Master_Spec.md` vs `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-22.17-verification-2026-04-18.md` (19:24 snapshot) | `diff -q` = identical; both 2,799,845 bytes | No drift since first re-invocation |
+| `Sourcera_Master_Spec.md` vs `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-retrieval-indexing-2026-04-18.md` (19:28 snapshot, this session) | `diff -q` = identical; both 2,799,845 bytes | No drift within this session |
 | §22.9–§22.17 anchor headings | `## 22.9 Retrieval Engineering {#22.9-retrieval-engineering}` at line 12348; §22.10 @ 12508; §22.11 @ 12691; §22.12 @ 12783; §22.13 @ 12932; §22.14 @ 13020; §22.15 @ 13130; §22.16 @ 13217; §22.17 @ 13503 | All nine anchors at identical offsets to the prior verification entry's recorded locations — confirms no intervening edit |
 
 ### Verification Pass — Target-Structure Coverage (Reconfirmed)
@@ -4989,7 +4989,7 @@ Identical to prior re-invocation — §22.9.9 Failure Modes, §22.12.6 `skill_so
 
 ### Files Produced / Modified by Phase 22-Rewrite-Extension Second Re-Invocation
 
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-22.9-retrieval-indexing-2026-04-18.md` — informational backup (pre-verification snapshot; byte-identical to the 19:24 backup and to the current live Master Spec).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-22.9-retrieval-indexing-2026-04-18.md` — informational backup (pre-verification snapshot; byte-identical to the 19:24 backup and to the current live Master Spec).
 - `/Sourcera/_integration/RECONCILIATION.md` — this no-op drift-check verification entry appended.
 
 No edits to `Sourcera_Master_Spec.md` were performed.
@@ -5005,7 +5005,7 @@ No edits to `Sourcera_Master_Spec.md` were performed.
 **Timestamp:** 2026-04-18T20:21+10:00
 **Invocation:** Directive — *"Fix everything with most appropriate resolutions, updating Master_Spec and update Reconciliation as required."*
 **Scope:** The five-item remediation docket surfaced by `PHASE3_VERIFY.md` against §22.8–§22.17 / §21.4.2 / §22.10 / Appendix C / Appendix I / Appendix J.
-**Backup:** `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase3-remediation-2026-04-18.md` (pre-edit snapshot).
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase3-remediation-2026-04-18.md` (pre-edit snapshot).
 
 ### Docket Summary
 
@@ -5168,7 +5168,7 @@ The table is followed by four normalization rules:
 
 ### Files Produced / Modified by Phase 3 Remediation Pass
 
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase3-remediation-2026-04-18.md` — backup snapshot of the Master Spec prior to this pass.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase3-remediation-2026-04-18.md` — backup snapshot of the Master Spec prior to this pass.
 - `/Sourcera/Sourcera_Master_Spec.md` — edits enumerated in the per-docket sections above.
 - `/Sourcera/_integration/RECONCILIATION.md` — this remediation entry appended.
 
@@ -5206,7 +5206,7 @@ The table is followed by four normalization rules:
 
 ### Sign-off Verdict
 
-**PASS — Phase 3 docket (P3-R1..R5) resolved in full; one secondary drift surfaced and resolved during verification.** Master Spec edits are consistent with the hierarchy of authoritative sources; state-machine fidelity preserved; four Authored Extensions are explicitly flagged for human sign-off; error, event, and enum registry deltas are catalogued; `ghost_rfp_ingestion` tool-allowlist alignment closes the final internal contradiction. The pre-edit Master Spec is preserved at `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase3-remediation-2026-04-18.md`.
+**PASS — Phase 3 docket (P3-R1..R5) resolved in full; one secondary drift surfaced and resolved during verification.** Master Spec edits are consistent with the hierarchy of authoritative sources; state-machine fidelity preserved; four Authored Extensions are explicitly flagged for human sign-off; error, event, and enum registry deltas are catalogued; `ghost_rfp_ingestion` tool-allowlist alignment closes the final internal contradiction. The pre-edit Master Spec is preserved at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase3-remediation-2026-04-18.md`.
 
 ---
 
@@ -5214,7 +5214,7 @@ The table is followed by four normalization rules:
 
 **Source authority resolution.** This pass is governed by Sourcera_Master_Summary.md §3.1 (Buyer paid path PLG funnel), §3.1b (Seller paid path PLG funnel), §3.2 (10 Core Growth Loops), §3.4 (Seller-side Compounding Network Effects, C.138), §3.5 (Anti-Spam & Abuse Controls including seller-pricing-specific constraints), §3.6 (Seller Hero Moment & Onboarding Anti-Patterns, C.132 / C.141), and the supporting C-numbered concept registry entries C.128–C.141. Where the Master Spec was previously silent on Hero Moment surface specification, conversion-moment binding, network-effect telemetry, or anti-pattern enforcement, the authoring-pass extends the Master Spec at v6.0.0 fidelity per the project's Authoring Conventions.
 
-**Backup.** Pre-pass Master Spec snapshot preserved at `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-48-plg-2026-04-18.md`.
+**Backup.** Pre-pass Master Spec snapshot preserved at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48-plg-2026-04-18.md`.
 
 ### Change Summary
 
@@ -5309,7 +5309,7 @@ The table is followed by four normalization rules:
 
 ### Files Produced / Modified by §48 Authoring Pass
 
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-48-plg-2026-04-18.md` — pre-pass backup snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48-plg-2026-04-18.md` — pre-pass backup snapshot.
 - `/Sourcera/Sourcera_Master_Spec.md` — edits enumerated in the Change Summary above:
     - §48.1 intro paragraph rewritten
     - §48.1.5–§48.1.8 inserted before §48.2
@@ -5330,13 +5330,13 @@ The table is followed by four normalization rules:
 
 ### Sign-off Verdict
 
-**PASS — §48 PLG, Growth Mechanics & Network Effects authoring pass complete.** Both buyer and seller paid paths are fully specified with parallel binding to existing entities; all 10 growth loops are registered (with L5 / L9 retired-annotated rather than deleted); all 7 seller-side compounding network effects are present with §4 entity refs, telemetry, k-anonymity floors; seller-pricing-specific anti-spam constraints are codified with cross-constraint interaction firewall; six banned anti-patterns are HARD-enforced via CI gate + runtime guard with five extended bans (AP7–AP11) covered by runtime guard + post-deploy audit. Appendix G / I / J registrations complete in this pass; 15 Authored Extensions explicitly flagged for human sign-off. The pre-pass Master Spec is preserved at `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-48-plg-2026-04-18.md`.
+**PASS — §48 PLG, Growth Mechanics & Network Effects authoring pass complete.** Both buyer and seller paid paths are fully specified with parallel binding to existing entities; all 10 growth loops are registered (with L5 / L9 retired-annotated rather than deleted); all 7 seller-side compounding network effects are present with §4 entity refs, telemetry, k-anonymity floors; seller-pricing-specific anti-spam constraints are codified with cross-constraint interaction firewall; six banned anti-patterns are HARD-enforced via CI gate + runtime guard with five extended bans (AP7–AP11) covered by runtime guard + post-deploy audit. Appendix G / I / J registrations complete in this pass; 15 Authored Extensions explicitly flagged for human sign-off. The pre-pass Master Spec is preserved at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48-plg-2026-04-18.md`.
 
 ---
 
 ### §48.6 M9–M13 Re-Verification Pass (2026-04-19)
 
-**Trigger.** Prompt re-issued to "Extend §48 with §48.6 M9–M13 (content-generation-heavy mechanics with editorial/review requirements)." Pre-existing Master Spec §48.6 authoring (completed earlier, pre-edit backup at `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-48.6-m9-m13.md`) was re-audited rather than re-authored, because the authored content already satisfies every stated requirement at Master Spec fidelity. Overwriting would be destructive AND violate the project instructions non-destructive-extend rule.
+**Trigger.** Prompt re-issued to "Extend §48 with §48.6 M9–M13 (content-generation-heavy mechanics with editorial/review requirements)." Pre-existing Master Spec §48.6 authoring (completed earlier, pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48.6-m9-m13.md`) was re-audited rather than re-authored, because the authored content already satisfies every stated requirement at Master Spec fidelity. Overwriting would be destructive AND violate the project instructions non-destructive-extend rule.
 
 **Per-requirement re-verification vs. the 2026-04-19 prompt.**
 
@@ -5366,7 +5366,7 @@ Full-corpus cross-reference count for §4.4.12–§4.4.16: 163 occurrences (veri
 
 **Decision.** No further authoring required. §48.6 stands as authored. The earlier audit-verification matrix (above, §48.6 phase entry in this log) remains the operative audit record. Re-verification of today's prompt requirements is now registered as part of that record.
 
-**Pre-edit backup.** The pre-authoring Master Spec remains available at `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-48.6-m9-m13.md` for historical diff comparison.
+**Pre-edit backup.** The pre-authoring Master Spec remains available at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-48.6-m9-m13.md` for historical diff comparison.
 
 **Sign-off.** PASS — re-verification confirms §48.6 M9–M13 authoring is complete, consistent with task prompt requirements, and faithful to source documents (Summary §3.3, §3.4, §3.5; §4.4.12–§4.4.16 entity authorings; §21.4.3 Platform-Owned Capability Registry; §48.4 Anti-Spam framework).
 
@@ -5444,7 +5444,7 @@ Full-corpus cross-reference count for §4.4.12–§4.4.16: 163 occurrences (veri
 
 **Scope of pass.** All 18 non-blocking findings (NB-1 through NB-18) from `PHASE4_VERIFY.md` §15.1 / §15.2 are resolved in this pass: five Medium-severity hard-block items (NB-1–NB-5), four Medium-severity Phase-5-flagged items promoted into this remediation pass (NB-6–NB-9), one Phase-5 entity-schema batch (NB-10), seven low-severity housekeeping items (NB-11–NB-17), and the prompt-corpus drift fix (NB-18). Master Spec v7.0.0-rc was modified in-place; `Integration_Prompts.md` Phase 4 prompt was corrected; this log entry records every resolution path and flags every Authored Extension.
 
-**Pre-edit backup.** The pre-remediation Master Spec is preserved at `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase-4-remediation-2026-04-19.md` (3,001,129 bytes) for historical diff comparison. A post-remediation snapshot will be tagged at Phase 13 freeze as `Sourcera_Master_Spec_v7.0.0-rc.md`.
+**Pre-edit backup.** The pre-remediation Master Spec is preserved at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-remediation-2026-04-19.md` (3,001,129 bytes) for historical diff comparison. A post-remediation snapshot will be tagged at Phase 13 freeze as `Sourcera_Master_Spec_v7.0.0-rc.md`.
 
 **Per-NB resolution log.**
 
@@ -5539,7 +5539,7 @@ Full-corpus cross-reference count for §4.4.12–§4.4.16: 163 occurrences (veri
 - `/Sourcera/Sourcera_Master_Spec.md` — in-place amendments to §4.4.4, §48.1.2, §48.3.5, §48.4.7, §48.6 (Appendix G subsection), §48.7.1, §48.7 (Appendix G subsection), §48.8.6, §48.8.7, §48 Extensions (Appendix G subsection). Seven new entity subsections at §4.4.23–§4.4.29.
 - `/Sourcera/Integration_Prompts.md` — Phase 4 prompt amended at six anchor points + Phase 13.3 TOC-regeneration prompt expanded.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase 4 Remediation Pass entry appended.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase-4-remediation-2026-04-19.md` — pre-edit backup (3,001,129 bytes) retained.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-remediation-2026-04-19.md` — pre-edit backup (3,001,129 bytes) retained.
 
 **Verdict.** FULL PASS, contingent on the six human sign-offs listed above. All 18 NB findings are resolved. The Master Spec v7.0.0-rc is now:
 
@@ -5557,7 +5557,7 @@ Full-corpus cross-reference count for §4.4.12–§4.4.16: 163 occurrences (veri
 **Date:** 2026-04-20
 **Operator:** Opus authoring pass
 **Prompt:** Re-execution of the Phase 5 prompt (§26.7–§26.10 per Summary §6.15.4, §6.15.5) treated as an extension-and-hardening pass against the prior Phase 5 baseline. The base Phase 5 deliverable was already in place; this pass authors the production-grade operational layers identified by the Self-Challenge Pass as load-bearing-but-missing in the base spec.
-**Pre-edit backup:** `/Sourcera/_versions/Sourcera_Master_Spec_pre-26.7-26.10-seller-pages-2026-04-20.md`
+**Pre-edit backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-26.7-26.10-seller-pages-2026-04-20.md`
 
 **Change Summary.** Six new subsections appended to §26.7, §26.8, and §26.9 plus 20 new acceptance criteria appended to §26.10. The base Phase 5 content (§26.7.1–§26.7.5, §26.8.1–§26.8.6, §26.9.1–§26.9.6, §26.10 ACs #1–#25) was preserved verbatim. Five new error codes added to Appendix I; four new enums added to Appendix J. Extensions are operational concerns that downstream engineering and SRE need to build against (CDN, anti-scraping, M&A flow, bulk-write API, social cards, accessibility, performance budgets, i18n deferral).
 
@@ -5695,7 +5695,7 @@ All Authored Extensions are flagged here for explicit human review and sign-off 
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — in-place additions: §26.7.6 (new subsection between §26.7.5 and §26.8), §26.8.7 (new subsection between §26.8.6 and §26.9), §26.9.7–§26.9.10 (four new subsections between §26.9.6 and §26.10), §26.10 ACs #26–#45 (appended), Appendix I "Seller Pages & SEO Error Codes" table extended with 8 new rows, Appendix J extended with 4 new enum entries (`page_cache_purge_event_kind`, `page_cache_purge_status`, `seller_software_transfer_status`, `social_card_format`).
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-26.7-26.10-seller-pages-2026-04-20.md` — pre-edit backup retained for audit reversal.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-26.7-26.10-seller-pages-2026-04-20.md` — pre-edit backup retained for audit reversal.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase 5.1 entry appended.
 
 **Verdict.** EXTENSION PASS COMPLETE — pending fifteen named human sign-offs above. The base Phase 5 deliverable (§26.7.1–§26.7.5, §26.8.1–§26.8.6, §26.9.1–§26.9.6, §26.10 ACs #1–#25) remains the build-ready surface for engineering. The Phase 5.1 extensions are the operational layers (CDN, anti-scraping, M&A, bulk API, OG/social cards, breadcrumbs, accessibility, CWV, i18n deferral) that downstream SRE, security, marketing, and design teams need to implement against. Sign-offs unlock the follow-up housekeeping pass to register Glossary entries, webhooks in Appendix C / G, and the entity field-table extensions for the Authored Extensions enumerated above.
@@ -6045,7 +6045,7 @@ All 10 failure modes are addressed by the authored content; no residual gaps.
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — in-place additions: §27.11 (ten sub-subsections: §27.11.1 through §27.11.10; 40 ACs in §27.11.8; 20 edge cases in §27.11.9). No modification to §27.1–§27.10.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre_27_11_20260419T223047Z.md` — pre-edit backup snapshot of Master Spec.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre_27_11_20260419T223047Z.md` — pre-edit backup snapshot of Master Spec.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase log entry appended.
 
 **Verdict.** EXTENSION PASS COMPLETE — pending nine named human sign-offs above plus an upstream Summary §6.16.6 revision. The pass delivers a build-ready product-behavior specification for Sourcera's non-AI monetization layer (Promoted Listings, Verification Tiers, Featured Placements) that cleanly defers billing / ledger / accounting semantics to the pre-existing §34.16 and §4.8.12 authorities. The critical invariants — buyer-trust labeling (FTC 16 CFR 255.5), Dual-Console Firewall (§7.2), k=5 anonymization, quality-floor enforcement, cost-center isolation, editorial-default Featured with paid-mode feature-flag gating, and $0-always Verification — are codified at every layer (state machines, acceptance criteria, API contracts, webhook catalog, error codes, failure modes, self-challenge log, counterfactual register).
@@ -6093,7 +6093,7 @@ All 10 failure modes are addressed by the authored content; no residual gaps.
 | `/Sourcera/Sourcera_Master_Spec.md` §49.1.1 | AP reference remediation — AP1 → AP5 throughout (matches canonical §48.8.7 zero-form ban semantics). |
 | `/Sourcera/Sourcera_Master_Spec.md` §49.1.4 | AP reference remediation — "AP2 / AP6" → "AP1 / AP4 / AP6" (AP2 does not apply to Stage-4 dormant window). |
 | `/Sourcera/Sourcera_Master_Spec.md` §49.1.9 | AP-enum-drift Build-Blocker paragraph added (see Build-Blocker log below). |
-| `/Sourcera/_versions/Sourcera_Master_Spec_post_section_49_seller_onboarding_20260420T000000Z.md` | NEW — post-pass snapshot checkpoint. |
+| `legacy-import:_versions/Sourcera_Master_Spec_post_section_49_seller_onboarding_20260420T000000Z.md` | NEW — post-pass snapshot checkpoint. |
 | `/Sourcera/_integration/RECONCILIATION.md` | NEW — this Phase-12 entry. |
 
 **Conflicts Surfaced and Resolution.**
@@ -6190,7 +6190,7 @@ All 12 failure modes addressed by authored content; no residual gaps identified.
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §49 authored (§49.1 container + §49.1.1 through §49.1.10); Appendix G §49.1 block appended; §49.1.1 / §49.1.4 AP-reference remediation; §49.1.9 [BUILD-BLOCKER] enum-drift paragraph appended.
-- `/Sourcera/_versions/Sourcera_Master_Spec_post_section_49_seller_onboarding_20260420T000000Z.md` — post-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_post_section_49_seller_onboarding_20260420T000000Z.md` — post-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase-12 entry.
 
 **Verdict.** EXTENSION PASS COMPLETE for §49 authoring — pending (a) AP-enum-drift Build-Blocker resolution, (b) four P1/P2 build-blockers (schema, capabilities, enum/error/glossary registrations), and (c) ten named human sign-offs. §49 delivers the build-ready implementation-level engineering contract for the seven-stage seller-onboarding pipeline: per-stage trigger conditions, workflows, data read/written, capabilities invoked, AIWallet debits, telemetry events, failure modes, and 54 numbered acceptance criteria. The engineering-contract fidelity closes the gap between §35.2 (narrative), §48.8 (Hero Moment UX), §4.4.22 (entity schema), §21.4 (capabilities), §22 (KB Bootstrap), and §34 (settlement). The AP-enum-drift discovery surfaces a pre-existing Master Spec inconsistency that MUST be resolved before v7.0.0 cutover — this is the single largest residual risk from this pass.
@@ -6242,7 +6242,7 @@ All 12 failure modes addressed by authored content; no residual gaps identified.
 | `/Sourcera/Sourcera_Master_Spec.md` §27.8.12 | NEW — Cross-Report Aggregation, Evidence Bundles & Coordinated-Abuse Signatures (10 ACs). |
 | `/Sourcera/Sourcera_Master_Spec.md` §27.8.13 | NEW — Court-Order, Subpoena, and Legal-Process Ingestion (10 ACs). |
 | `/Sourcera/Sourcera_Master_Spec.md` §27.8.14 | NEW — Public Transparency Reporting (10 ACs). |
-| `/Sourcera/_versions/Sourcera_Master_Spec_pre-27.4-27.6-27.8-extension-2026-04-20.md` | NEW — pre-pass snapshot. |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-27.4-27.6-27.8-extension-2026-04-20.md` | NEW — pre-pass snapshot. |
 | `/Sourcera/_integration/RECONCILIATION.md` | NEW — this Phase-13 entry. |
 
 Total authored content across the seven new sub-subsections: **72 numbered Acceptance Criteria**, **3 new entities**, **8 new enums**, **13 new webhook events**, **13 new API endpoints**, **18 new error codes**, **4 new role identifiers**, **8 new alert classes**. Strictly additive. No existing §27 content modified. No Appendix B / C / F / G / I / J entries deleted.
@@ -6486,7 +6486,7 @@ All 20 failure modes have explicit specific-§27 handling. No residual gaps iden
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — seven new sub-subsections authored in-place: §27.4.11, §27.4.12, §27.6.10, §27.6.11, §27.8.12, §27.8.13, §27.8.14. No pre-existing content modified. 72 numbered ACs, 3 new entities, 8 new enums, 13 new webhooks, 13 new endpoints, 18 new error codes, 4 new roles, 8 new alert classes.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-27.4-27.6-27.8-extension-2026-04-20.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-27.4-27.6-27.8-extension-2026-04-20.md` — pre-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase-13 entry.
 
 **Verdict.** EXTENSION PASS COMPLETE for §27.4 / §27.6 / §27.8 Match Score internals + Controlled Vocabulary Registry + Abuse & Takedown expansions. The seven new sub-subsections close the implementation-readiness gaps surfaced by the prompt (Match Score feature-registry authority, free-vs-paid surface differentiation, model deprecation policy, taxonomy public read surface, per-dimension authoring nuance, cross-report abuse aggregation, legal-process ingestion, public transparency reporting). The pass is strictly additive: no pre-existing §27.1–§27.11 content is modified, renamed, or re-authored. 20 Authored Extensions are flagged for formal registration across §4.5.x entity schema, Appendix B/C/G/I/J/K, §6.3 role registry, §33 alerting registry, §32 endpoint catalog, §5.11 / §34.1 / §34.6 plan-gate matrix, §42.1 residency allowlist, and i18n / validator infrastructure. None are P0; all are P1/P2 follow-through work. The largest unresolved residuals are (a) the §4.5.9 `MarketplaceMatchFeatureRegistry` entity and (b) the 4 new ops-role additions requiring §6.3 permission-matrix bindings — both have clear ownership paths and no blocking dependencies.
@@ -6562,7 +6562,7 @@ Owner: Integration program (Appendix G PostHog Event Taxonomy pass). Not a webho
 **Artifacts produced in this pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §4.4.8 extended with `authority_attestation_id_ref` field + index + Failure Mode #6 + Acceptance Criteria #6–7; §27.10.9 AC #29 cross-reference updated. No other §27.10 content modified; no content deleted.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-4.4.8-authority-attestation-ref-2026-04-20.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-4.4.8-authority-attestation-ref-2026-04-20.md` — pre-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase 7-Closeout entry.
 
 **Open Gaps from this pass (P2 — follow-on).**
@@ -6579,7 +6579,7 @@ Owner: Integration program (Appendix G PostHog Event Taxonomy pass). Not a webho
 
 **Source.** `/Sourcera/_integration/PHASE5_VERIFY.md` — ten non-blocking findings NB-1 through NB-10 authored during Phase 5 verification. This pass resolves all ten in-place in `/Sourcera/Sourcera_Master_Spec.md`; each edit is strictly additive (new paragraphs, new AC rows, new Authored Extension registrations) with no deletions of pre-existing content.
 
-**Backup.** `/Sourcera/_versions/Sourcera_Master_Spec.v7.0.0-pre-phase5-nb-remediation.2026-04-21.md` — full pre-pass snapshot of the Master Spec before any NB-1…NB-10 edit landed.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-phase5-nb-remediation.2026-04-21.md` — full pre-pass snapshot of the Master Spec before any NB-1…NB-10 edit landed.
 
 **Authority rail.** PHASE5_VERIFY.md is the authoritative specification of what needs fixing; Sourcera_Master_Spec.md is the authoritative target of all edits; Summary §6.22 / C.60 / C.95 / C.100 / C.111 / C.112 / C.123 / C.135 / C.136 provide source-of-truth for any content extension introduced by this pass. No Summary content was modified.
 
@@ -6674,7 +6674,7 @@ Owner: Integration program (Appendix G PostHog Event Taxonomy pass). Not a webho
 ### Artifacts Produced in This Pass
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §22.18.1 new paragraph (NB-8); §22.18.7 AC #78 + Authored Extension #16 (NB-9); §26.10 AC #46 (NB-5); §27.6.2 new editorial-vs-structural matrix + new paragraph (NB-6, NB-7); §27.6.9 AC #15 + AC #16 (NB-6, NB-7); §27.9.5 snapshot-age paragraph (NB-2); §27.9.5.1 new subsection (NB-1); §27.9.12 AC #23, #24, #25 (NB-1, NB-2, NB-3); §27.10.3 k-floor disambiguation footnote (NB-4); §48.8.10 AC #41 (NB-10); §48.8.11 new subsection (NB-10). All edits strictly additive; no prior content deleted.
-- `/Sourcera/_versions/Sourcera_Master_Spec.v7.0.0-pre-phase5-nb-remediation.2026-04-21.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-phase5-nb-remediation.2026-04-21.md` — pre-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase 5 NB Remediation entry.
 
 **Verdict.** All ten Phase 5 non-blocking findings are resolved in-place at Master Spec fidelity. Ten new acceptance criteria, three new subsections, three new Appendix I error codes, one new Appendix J registration, one new Appendix F alert, one new audit action type, four new CI gates, eleven new QA tests, three new Authored Extensions, and one new footnote were authored. No prior content was modified apart from additions. Eight P2/P3 Open Gaps are documented for Phase 13 / Appendix maintenance pass follow-up. Phase 5 verification status advances from "VERIFIED with 10 non-blocking items" to "VERIFIED — all non-blocking items remediated; Phase 13 consolidation backlog updated."
@@ -6723,7 +6723,7 @@ Owner: Integration program (Appendix G PostHog Event Taxonomy pass). Not a webho
 4. **Appendix G extension authored** (new "§50 Ops Console Event Additions" subsection). Registers 16 new PostHog events with full property cardinality budget, residency partition, correlation requirements, outbox / retry semantics (financial-impact curve for audit-integrity-spine events), and sampling discipline. Customer-visibility replication semantics defined: `ops_session_activated`, `ops_session_closed`, `ops_session_auto_closed_time_box_expired`, `ops_session_customer_revoked` are dual-emitted to the customer PostHog project with a redacted property envelope matching §50.4.8 Customer-Visible Projection. Deploy-time test asserts the customer-project event schema contains no disallowed property.
 5. **Appendix I extension authored** (new "§50 Sourcera Ops Console Errors" subsection). Registers 35 new error codes spanning audit-chain integrity under Ops attribution, OpsSession lifecycle immutability, authentication / step-up / posture, justification / quorum discipline, envelope / residency / console-firewall enforcement, rate-limit / privilege-escalation control, and customer-notification / customer-revocation integrity. Counterfactual coverage summary cross-references §50.7 failure modes.
 6. **Appendix J extension authored** (new "§50 Ops Console Controlled Vocabulary Additions" subsection). Registers 10 new canonical enums: `ops_role_kind` (six canonical + two Ops-internal variants + backward-compatibility preservation of pre-§50 granular roles), `ops_session_state`, `ops_session_justification_category`, `ops_session_close_reason`, `ops_session_notification_failure_code`, `ops_session_console_scope`, `audit_event_actor_type`, `ops_role_assignment_state`, `ops_capability_kind`, `ops_policy_kind_enum`. Extends the existing `ops_action_kind` enum (§4.4.27) with 19 additional values. Also registers the "Ops-Tagged Audit Action Types" extension to §4.6.1 audit-event action registry — the bare-verb namespace is preserved with the attribution-field extension. Deploy-time CI gate `ops_actor_audit_event_dual_path_integrity` asserts every Ops-session Customer-API mutation commits both a customer-surface AuditEvent row and an Ops-internal OpsActionRecord row in the same transaction.
-7. **Version snapshot created.** Pre-pass snapshot at `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-50-ops-console-2026-04-21.md`.
+7. **Version snapshot created.** Pre-pass snapshot at `legacy-import:_versions/Sourcera_Master_Spec_pre-section-50-ops-console-2026-04-21.md`.
 
 **Sections / Files Modified.**
 
@@ -6735,7 +6735,7 @@ Owner: Integration program (Appendix G PostHog Event Taxonomy pass). Not a webho
 | `/Sourcera/Sourcera_Master_Spec.md` Appendix G | EXTENDED — §50 Ops Console Event Additions (16 events; dual-emit redaction envelope; financial-impact retry curve for audit-spine events). |
 | `/Sourcera/Sourcera_Master_Spec.md` Appendix I | EXTENDED — §50 Sourcera Ops Console Errors (35 codes; counterfactual coverage map). |
 | `/Sourcera/Sourcera_Master_Spec.md` Appendix J | EXTENDED — §50 Ops Console Controlled Vocabulary Additions (10 new enums + 19-value extension to `ops_action_kind`; Ops-Tagged Audit Action Types registry). |
-| `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-50-ops-console-2026-04-21.md` | NEW — pre-pass snapshot. |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-section-50-ops-console-2026-04-21.md` | NEW — pre-pass snapshot. |
 | `/Sourcera/_integration/RECONCILIATION.md` | NEW — this §50 entry. |
 
 **Numbering Decision (§49 → §50).**
@@ -6860,7 +6860,7 @@ Re-read as a production-grade staff engineer:
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §4.6.3 OpsSession entity inserted; Section 50 inserted (nine subsections); Appendix C extension appended (Ops-Console-Domain Events); Appendix G extension appended (§50 Ops Console Event Additions); Appendix I extension appended (§50 Sourcera Ops Console Errors); Appendix J extension appended (§50 Ops Console Controlled Vocabulary Additions + Ops-Tagged Audit Action Types registry).
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-50-ops-console-2026-04-21.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-section-50-ops-console-2026-04-21.md` — pre-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this §50 entry.
 
 **Verdict.** §50 Sourcera Ops Console authoring is COMPLETE at Master Spec fidelity. The section delivers the canonical Sourcera-internal control-plane specification: separation architecture (deployment isolation, authentication model, mutation path, no-direct-DB-access), six-role matrix with capability envelope, impersonation audit requirements (justification + time-box + customer notification + quorum + hard limits + customer revocation + Customer-Visible Projection), Ops-tagged audit actor pattern (AuditEvent extension, AIOperation extension, OpsActionRecord extension, Billing Admin Audit View rendering), operational surfaces, 10 counterfactual failure modes, and 15 aggregate acceptance criteria. Supporting registrations land in Appendix C (7 new events), Appendix G (16 new PostHog events with redaction envelope), Appendix I (35 new error codes), Appendix J (10 new enums + 19-value extension to `ops_action_kind` + Ops-Tagged Audit Action Types registry). Twelve Authored Extensions are flagged for Ops Director + Legal sign-off before v7.0.0 cutover. Twelve follow-through items (API catalog, Ops-side UI, residency-evacuation integration, §43 supersedence wiring, Appendix L state machines, deploy-time tests, glossary, Authored Extensions sign-off) are documented. No pre-§50 content modified; no cross-references broken. §50 is numbered §50 (not §49) to preserve the 53 existing §49 cross-references per the Numbering Decision above.
@@ -6995,7 +6995,7 @@ Each failure mode has a mitigation authored into the corresponding section befor
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §50.10–§50.14 authored; §50.9 Authored Extensions list extended (items #13–#28).
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-50-ops-surfaces-extension-2026-04-21.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-section-50-ops-surfaces-extension-2026-04-21.md` — pre-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this §50.10–§50.14 entry.
 
 **Verdict.** §50.10–§50.14 authoring is COMPLETE at Master Spec fidelity. The five subsections deliver (a) the Ops Console Taxonomy CMS authoring surface wiring to §27.6; (b) a structured, versioned, calibration-gated Seller Template Review Rubric with reviewer workflow, SLA, appeal flow, and PII-safe customer projection; (c) a pricing admin surface with proposer/simulator/approver workflow, hard two-approver gates at 5% rate-card drift / 10% cost_base drift / any allowance reduction, margin-floor enforcement, publish locks, and customer comms lead-time gating; (d) a Baseline Assumption Manager with versioned conversion factors tied immutably to §4.3.19 Time-Saved Credit emissions via binding-contract tightening; (e) five role-specific Ops analytics dashboards (Growth PM, GTM Lead, Support, Fraud Analyst, Finance) sourced exclusively from the customer-API plus PostHog with CI-asserted source allowlist, residency isolation, PII-projection gating, and drill-through audit. 13 new entities, 23 new enums (plus 17-value `ops_action_kind` extension), 25 new error codes, 15 new webhook events, 33 new PostHog events, 8 new granular Ops roles, 3 pre-existing entity field additions, one §4.3.19 binding-contract tightening. 30 counterfactual failure modes enumerated with mitigations authored inline. 10 Authored Extensions flagged for human sign-off. 12 Pending Follow-Through opens captured. No pre-existing content modified except the targeted §50.9 extension list and the three pre-existing entity field additions flagged as Authored Extensions. No cross-references broken.
@@ -7138,7 +7138,7 @@ Each failure mode has a mitigation authored into the corresponding section befor
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §50.15–§50.18 authored and inserted between §50.14.12 (line 32696, pre-edit) and the `---` separator preceding Appendix C. Post-edit Master Spec: 38,341 lines (pre-edit 37,490 lines; +851 lines). `## 50.15`, `## 50.16`, `## 50.17`, `## 50.18` headings verified present at lines 32700, 33229, 33511, 33538 respectively.
-- `/Sourcera/_versions/Sourcera_Master_Spec.v7.0.0-pre-section-50-sim-fraud-analyst-2026-04-21.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-section-50-sim-fraud-analyst-2026-04-21.md` — pre-pass snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this §50.15–§50.17 entry.
 
 **Verdict.** §50.15–§50.17 authoring is COMPLETE at Master Spec fidelity. The three subsections (plus Authored Extensions addendum §50.18) deliver (a) a Signal Integrity Monitor surface with 4 new detector categories per task brief, extending the §48.4.10 signal-class catalog from 11 to 15 classes; (b) a kill-switch mechanics contract satisfying all three task-brief hard requirements — 60-second cluster-wide propagation SLO measured via 12 geographically-distributed probes (§50.17 AC #2), Ops-Admin-only reversibility enforced via middleware-asserted role inheritance through §50.3.2 specialized-role mapping with HTTP 403 on violation (§50.17 AC #3), Slack alert to `#eng-oncall` on every activation + deactivation within 5 s p95 of state-write commit with exactly-once delivery (§50.17 AC #4); (c) a Fraud Analyst Surface with review queue, case lifecycle state machine (`flagged → investigating → resolved`; `flagged → escalated`; `investigating → escalated`; `escalated → resolved`), and four reversible case actions (suspend Org, suspend User, reverse referral credit, revoke opt-out claim) each with quorum-gating, distinct-signer enforcement, cross-console firewall preservation, ping-pong protection, and reversibility-catalog-completeness CI gate; (d) 20 cross-subsection consolidated acceptance criteria in §50.17; (e) 16 counterfactual failure modes enumerated across §50.15.12 + §50.16.8 with mitigations authored inline. 2 new entities (`SIMSignal`, `SIMCase`), 9 new enums (plus a 4-value `sim_signal_class` extension, a 17-value `ops_action_kind` extension, a 1-value `webhook_event_class` extension, and `organization.state` + `user.state` value additions), 15 new error codes, 20 new webhook events, 19 new PostHog events, 1 new specialized Ops role (`ops_sim_admin`), 2 pre-existing entity state-value additions (Org + User), 1 §48.2.12.4 deactivation-contract tightening. 8 Authored Extensions flagged for human sign-off. 12 Pending Follow-Through opens captured. Task-brief verification directive satisfied: §50.15.1 explicitly cross-links to §48.4 anti-spam controls; RECONCILIATION.md updated (this entry). No pre-existing content modified except the targeted §48.2.12.4 contract tightening (flagged as Authored Extension #29 pending entity-prose amendment in Pending Follow-Through). No cross-references broken.
@@ -7280,7 +7280,7 @@ Each failure mode has a mitigation authored into the corresponding section befor
 - `/Sourcera/Integration_Prompts.md` — Phase 6 block rewritten with §49→§50 mapping + reconciliation preamble; two Phase 7 §49.9 → §50.13 cross-references updated.
 - `/Sourcera/_integration/PHASE6_VERIFY.md` — Item 1 verdict flipped `PARTIAL → PASS`; §6 updated post-remediation; pre-v7.0.0 cut gate boxes checked.
 - `/Sourcera/_integration/RECONCILIATION.md` — this §50 Phase 6 Verification Remediation entry.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase6-verify-remediation-2026-04-21.md` — pre-pass snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase6-verify-remediation-2026-04-21.md` — pre-pass snapshot.
 
 **Verdict.** §50 Phase 6 Verification Remediation is COMPLETE at Master Spec fidelity. PHASE6_VERIFY.md Item 1 verdict is advanced from PARTIAL → PASS via Option A propagation: (a) `Integration_Prompts.md` Phase 6 block updated with the §49.x → §50.x mapping and a Numbering Reconciliation preamble documenting the full subsection mapping table; (b) Phase 7 cross-references updated from §49.9 to §50.13; (c) §50.19 Consolidated Acceptance Criteria Pointer authored as the canonical signpost covering the distributed AC homes. The five remediation-scope polish items from PHASE6_VERIFY.md §4/§5 are closed: (i) §4.6.3 OpsSession `ops_user_id` cascade behavior tightened to ON DELETE RESTRICT + tombstone procedure; (ii) §4.6.3 `api_request_ids[]` replaced with linked-denormalized-table storage strategy; (iii) §50.4.5 FM#4 break-glass operational-continuity policy authored; (iv) §48.2.12.4 dependency-outage automated-activation policy authored with override semantics; (v) §50.12.13 AC #13 + #14 + §50.12.14 FM#7 + #8 close cumulative-drift and withdrawal-rate-limit gates. 6 new Authored Extensions (#37–#42) flagged for human sign-off. 7 Pending Follow-Through opens captured (including Phase 7 Verification remediation as a distinct next pass). No pre-v7.0.0 blockers remain from Phase 6. All five PHASE6_VERIFY.md verification items now PASS.
 
@@ -7444,7 +7444,7 @@ Authored end-to-end; spot-checks:
 **Artifacts Produced in This Pass.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §51 (H1) + §51.1–§51.8 (~600 lines of new body; lines 33567+); Appendix G preamble + §51 event additions; Appendix I §51 error codes; Appendix J §51 enum cluster (20+ enums); Appendix K §51 glossary (8 entries); §40.2 retention rows (4 new rows); Table of Contents updated with §49/§50/§51 entries (pre-existing §49/§50 drift closed).
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-s51-author_<timestamp>.md` — pre-pass snapshot (registered at authoring start).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-s51-author_<timestamp>.md` — pre-pass snapshot (registered at authoring start).
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase §51 Product Usage Analytics Authoring Pass entry.
 
 **Verdict.** Phase §51 Product Usage Analytics & PLG Instrumentation Authoring Pass is COMPLETE at Master Spec fidelity. 8 new §51 subsections authored with full data models, APIs, ACs, FMs, and cross-references. Appendix G preamble formalized. Appendix G +13 events, Appendix I +15 error codes, Appendix J +20 enums + 2 rate-limit classes, Appendix K +8 glossary entries, §40.2 +4 retention rows. ToC drift closed for §49, §50, and §51 (§49/§50 backfill noted as Authored Extension #11). 11 Authored Extensions flagged for sign-off. 9 Pending Follow-Through opens captured. No pre-v7.0.0 blockers introduced. Conflict with existing §50 (Ops Console) and prompt's "§49.9" typo reconciled to §50.13. Customer-facing analytics surface (§51.3–§51.5) is firewall-isolated from Ops-facing §50.14 per §25 console firewall discipline.
@@ -7459,7 +7459,7 @@ Authored end-to-end; spot-checks:
 
 | Step | Action | Target |
 |------|--------|--------|
-| 1 | Backup Master Spec to `_versions/` | `Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md` |
+| 1 | Backup Master Spec to `legacy-import:_versions/` | `Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md` |
 | 2 | Confirm Polish #6 already satisfied (Appendix J spot-check of 10 new enums) | No edits required — verified all 10 enums registered at Appendix J lines 38584–38678: `usage_dashboard_kind`, `usage_dashboard_panel_id`, `usage_dashboard_viewer_role_kind`, `usage_envelope_violation_kind`, `usage_outbox_curve_kind`, `usage_dsar_redaction_kind`, `usage_k_anon_floor_kind`, `usage_conversion_factor_drift_direction`, `usage_event_family_registration_action`, `usage_alias_retirement_pager_tier` |
 | 3 | Confirm Polish #7 already satisfied (§50.13 sub-anchor spot-check) | No edits required — verified §50.13.1 through §50.13.10 sub-anchors exist at Master Spec lines 32403–32586, including the specific sub-anchors cited from §51: §50.13.2, §50.13.3, §50.13.4, §50.13.10 |
 | 4 | Close Polish #1 + #2 — §51.8.4 #11 stale anchor and stale event count | Master Spec line 34432 — rewrote §51.8.4 #11 to reference "Appendix G → §51 Product Usage Analytics Event Additions, Master Spec lines 35739–35775; NOT an anchor inside §51 body" and changed "Ten new events" → "Thirteen new events" with full enumeration (6 customer-visible dashboard-surface events + 7 Sourcera-internal meta-events) |
@@ -7503,7 +7503,7 @@ All nine Pending Follow-Through opens from the original §51 Product Usage Analy
 
 - `/Sourcera/Sourcera_Master_Spec.md` — 5 edits: §51.8.4 #11 (line 34432) anchor + count rewrite; §51.5.3 KB ROI row (line 34169) breadcrumb strengthening; §51.4.6 AC-9 (line 34139) self-service export event emission; §51.5.6 AC-11 (line 34201) Seller Parity SLO + deferred-compute fallback; no other edits. Net line-delta: +5 lines (four inline acceptance criteria additions; one in-place rewrite with no net-new lines).
 - `/Sourcera/Integration_Prompts.md` — Phase 7 block (lines 1504–1590) rewrite with Numbering Reconciliation (2026-04-22) preamble, §50.x → §51.x mapping table, §49.9 → §50.13 reconciliation note, Appendix G event additions anchor clarification, Prompt 7.1 and Prompt V7 as-landed rewrites.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md` — 4.08 MB pre-remediation snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md` — 4.08 MB pre-remediation snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this §51 Phase 7 Verification Remediation (2026-04-22) entry.
 - `/Sourcera/_integration/PHASE7_VERIFY.md` — §0 Remediation Completion Addendum + §5.1 Verdict Matrix post-remediation update + §5.3 Polish Items table (all CLOSED) + §5.4 Release Recommendation flipped from CONDITIONAL → UNCONDITIONAL SIGN-OFF.
 
@@ -7532,7 +7532,7 @@ Total authored content: ~900 new lines inserted in §3; six subsection families;
 
 | Step | Action | Target |
 |------|--------|--------|
-| 1 | Backup Master Spec to `_versions/` | `Sourcera_Master_Spec_pre-section-3-ux-tokens-states-2026-04-22.md` |
+| 1 | Backup Master Spec to `legacy-import:_versions/` | `Sourcera_Master_Spec_pre-section-3-ux-tokens-states-2026-04-22.md` |
 | 2 | Read existing §3.1–§3.5 end-to-end; read §4.3.14 Presence Record schema; read Master Summary C.109–C.115; read UX_Design_of_Sourcera.md §2.2, §2.9, §3.7, §9 | Foundation for authoring |
 | 3 | Author §3.6 Form & Input Tokens (30+ tokens across height/radius/padding/border/focus-ring/typography/label/helper families; 7 validation states; fieldsets; accessibility rules) | Master Spec §3.6 |
 | 4 | Author §3.7 Loading/Empty/Error State Catalog (state governance table; content-shaped skeleton rules; Next-Best-Action empties; Failure/Reason/Recovery error contract; per-surface catalog for 6 page types) | Master Spec §3.7 |
@@ -7631,7 +7631,7 @@ Total authored content: ~900 new lines inserted in §3; six subsection families;
 **Files Modified.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §3.6–§3.11 inserted (~900 new lines) between end of §3.5 (line 1770) and start of §4 Global Data Model (now relocated). TOC anchors updated.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-section-3-ux-tokens-states-2026-04-22.md` — Pre-edit backup snapshot.
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-section-3-ux-tokens-states-2026-04-22.md` — Pre-edit backup snapshot.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase §3-UX entry.
 
 **Verification.**
@@ -7666,7 +7666,7 @@ Total authored content: ~600 new lines inserted in §38; three subsection famili
 
 | Step | Action | Target |
 |------|--------|--------|
-| 1 | Backup Master Spec to `_versions/` | `Sourcera_Master_Spec_pre-38.6-38.8-mobile-breakpoints-gestures-2026-04-22.md` |
+| 1 | Backup Master Spec to `legacy-import:_versions/` | `Sourcera_Master_Spec_pre-38.6-38.8-mobile-breakpoints-gestures-2026-04-22.md` |
 | 2 | Read existing §38.1–§38.5, §3.4 Mobile Translation, Appendix J enum cluster pattern, §4.3.14 Presence Record, Master Summary C.114, UX_Design_of_Sourcera.md §3.4 and §9.7 | Foundation for authoring |
 | 3 | Author §38.6 Breakpoints (5-tier taxonomy; per-breakpoint layout rules table with 24 dimensions; UserUIPreference entity; tier-transition edge cases; responsive conformance CI suite; 10 acceptance criteria) | Master Spec §38.6 |
 | 4 | Author §38.7 Gesture Equivalents (17-row keyboard-to-gesture translation table across 4 tier-contexts; normative 5-tap ceiling definition with destructive +1 exception; gesture safety & conflicts table covering iOS edge-swipe safe area + Android hardware back; tap-count probe test harness using Playwright + Appium + @sourcera/tap-probe; 4 new error codes; 12 acceptance criteria) | Master Spec §38.7 |
@@ -7764,7 +7764,7 @@ Total authored content: ~600 new lines inserted in §38; three subsection famili
 **Files Modified.**
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §38.6, §38.7, §38.8 inserted (~600 new lines) between end of §38.5 Acceptance Criteria and start of `# 39. Object Size Constraints`. TOC anchors updated.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-38.6-38.8-mobile-breakpoints-gestures-2026-04-22.md` — Pre-edit backup snapshot (4.08 MB).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-38.6-38.8-mobile-breakpoints-gestures-2026-04-22.md` — Pre-edit backup snapshot (4.08 MB).
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase §38-Mobile entry.
 
 **Verification.**
@@ -7789,7 +7789,7 @@ Total authored content: ~600 new lines inserted in §38; three subsection famili
 **Date:** 2026-04-24
 **Prompt:** Phase 22 (Cross-Console Mechanics Extension) per Integration_Prompts.md.
 **Status:** Complete.
-**Backup:** `/_versions/Sourcera_Master_Spec_pre-25-cross-console-extension-2026-04-24.md` (4,261,666 bytes pre-edit snapshot).
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-25-cross-console-extension-2026-04-24.md` (4,261,666 bytes pre-edit snapshot).
 
 ### Scope of Extension
 
@@ -7898,7 +7898,7 @@ All events registered with standardized property schema: `org_id`, `console`, `b
 ### Files Modified
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §25 rewritten (§25.1 extended, §25.2 extended, §25.4 extended, §25.5 new, §25.6 new); §4.4.2 Bid Response entity extended with six new fields + state-machine interaction note.
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-25-cross-console-extension-2026-04-24.md` — pre-edit backup snapshot (4,261,666 bytes).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-25-cross-console-extension-2026-04-24.md` — pre-edit backup snapshot (4,261,666 bytes).
 - `/Sourcera/_integration/DELTA_INVENTORY.md` — Part F added (14 rows: SUM-C.128 through SUM-C.141 for Appendix-C exhaustive-row coverage); Part G added (coverage-verification attestation); header updated to reflect v1.1 comprehensive coverage.
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase §25-Cross-Console entry.
 
@@ -7927,7 +7927,7 @@ All events registered with standardized property schema: `org_id`, `console`, `b
 **Date:** 2026-04-24
 **Prompt:** §25.3 Disqualification Formalization per Summary C.118
 **Status:** Complete (authored; awaiting human sign-off for Authored Extensions)
-**Pre-edit backup:** `/Sourcera/_versions/Sourcera_Master_Spec.v7.0.0-pre-25.3-formalization-2026-04-24.md` (4,305,771 bytes)
+**Pre-edit backup:** `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-25.3-formalization-2026-04-24.md` (4,305,771 bytes)
 
 ### Summary
 
@@ -8046,7 +8046,7 @@ Per §16 authoring convention, re-read output as a hostile staff engineer before
 ### Files Modified
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §25.3 rewritten (16 subsections); Appendix D extended (1 transition row + 1 AC); Appendix E extended (5 transition rows + state-diagram update); Appendix J extended (Bid Workspace Statuses + 3 new enums); Appendix I extended (new Disqualification Errors subsection, 14 codes); Appendix C extended (new Disqualification-Domain Events subsection, 4 webhooks + frequency-override rules; Transactional Events row refinement); §32.5 endpoints block extended (4 endpoint lines); §5.11 Feature Access Matrix extended (new 7-row Vendor Curation & Disqualification block).
-- `/Sourcera/_versions/Sourcera_Master_Spec.v7.0.0-pre-25.3-formalization-2026-04-24.md` — pre-edit backup snapshot (4,305,771 bytes).
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-25.3-formalization-2026-04-24.md` — pre-edit backup snapshot (4,305,771 bytes).
 - `/Sourcera/_integration/RECONCILIATION.md` — this §25.3 Disqualification Formalization entry.
 
 ### Verification
@@ -8079,7 +8079,7 @@ Per §16 authoring convention, re-read output as a hostile staff engineer before
 
 **Trigger.** `PHASE9_VERIFY.md` passed all four exit gates but logged ten non-blocking follow-ups. This entry records their resolution in the v7.0.0 corpus.
 
-**Pre-edit backup.** `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase9-followups-2026-04-24.md` (4,404,023 bytes) — snapshot taken before any edits landed.
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase9-followups-2026-04-24.md` (4,404,023 bytes) — snapshot taken before any edits landed.
 
 ### Follow-Ups Resolved
 
@@ -8201,7 +8201,7 @@ Execution model: dedicated `audit-integrity` worker partition; cursor-resumable 
 ### Files Modified
 
 - `/Sourcera/Sourcera_Master_Spec.md` — §25.1.2 matrix (2 row additions / edits), §25.2.1 (SLO paragraph rewrite), §25.2.6 (new subsection), §25.3.9 (RBAC predicate addition), §25.3.10a (new reversal endpoint subsection), §25.3.10b (new org-level webhook subsection), §25.5.6 (CI gate consolidation note), §25.6.5 (gate sub-checks 5, 6 added + consolidation note), §32.6.1 (new Multi-Status pattern subsection), §42.6.1 (new audit integrity background jobs subsection).
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase9-followups-2026-04-24.md` — pre-edit backup snapshot (4,404,023 bytes).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase9-followups-2026-04-24.md` — pre-edit backup snapshot (4,404,023 bytes).
 - `/Sourcera/_integration/RECONCILIATION.md` — this Phase 9 Follow-Up Resolution entry.
 - `/Sourcera/_integration/PHASE9_VERIFY.md` — previously authored; no changes this pass.
 
@@ -8407,7 +8407,7 @@ All failure modes addressed in-place; no deferred handling. Counterfactual cover
 
 ### Pre-Edit Backup
 
-- `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase-summary-c119-c120-2026-04-24.md` (4,439,478 bytes; immutable snapshot).
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-summary-c119-c120-2026-04-24.md` (4,439,478 bytes; immutable snapshot).
 
 ### Verification
 
@@ -8437,7 +8437,7 @@ All failure modes addressed in-place; no deferred handling. Counterfactual cover
 
 **Scope.** Verify every term introduced or redefined across Phases 1–11 has an Appendix K Glossary entry. Confirm pre-existing entries remain accurate post-integration. Author missing entries at Master Spec fidelity.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-12.2-glossary-2026-04-25.md` (4,568,481 bytes).
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-12.2-glossary-2026-04-25.md` (4,568,481 bytes).
 
 **Verification log.** `_integration/PHASE12_2_VERIFY.md`.
 
@@ -8535,7 +8535,7 @@ Phase 12.2 closes with zero undefined terms across the prompt's TERMS TO VERIFY 
 
 **Scope.** Compare every numerical limit across the Master Spec; resolve conflicts in favor of the authoritative source per the §2 source-of-truth hierarchy; rewrite inline references to cite the source table rather than duplicate the value.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md` (4,586,119 bytes).
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md` (4,586,119 bytes).
 
 **Verification log.** `_integration/PHASE12_4_VERIFY.md`.
 
@@ -8662,7 +8662,7 @@ Five realistic failure modes considered, all resolved by the post-edit citation 
 
 ### Verification
 
-- [x] Master Spec backed up at `_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md`.
+- [x] Master Spec backed up at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md`.
 - [x] Every plan-tier limit duplication outside §34.1 either removed or rewritten to cite §34.1.
 - [x] Every retention duplication outside §40.2 / §4.8.10 either removed or rewritten to cite the source.
 - [x] Every performance target duplication outside §44.1 either removed or rewritten to cite §44.1.
@@ -8692,7 +8692,7 @@ Per Integration_Prompts.md L1905–L1928 (Prompt 12.3), confirm cross-reference 
 
 ### Backups
 
-`_versions/Sourcera_Master_Spec_pre-phase12.3-2026-04-26.md` (4.59 MB — pre-edit Master Spec).
+`legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.3-2026-04-26.md` (4.59 MB — pre-edit Master Spec).
 
 ### Phase 12.3 Sections Authored / Patched
 
@@ -8815,7 +8815,7 @@ The Master Spec is ready for Phase 13 (Final QA, Version Finalization, TOC) with
 Phase 13 (Final Engineering Review — 8-gate audit) closes **CONDITIONAL PASS**. Five gates pass cleanly; three gates carry conditional-pass remediation deferred to scoped follow-on phases (13.1, 13.2, 13.3). Six inline fixes applied. Zero hard-fail conditions remain. Master Spec ready for v7.0.0 publish provided the four named follow-ons land on the post-publish remediation timeline.
 
 **Verification artifact:** `_integration/PHASE13_ENG_REVIEW.md` (authored 2026-04-26).
-**Pre-edit Spec snapshot:** `_versions/Sourcera_Master_Spec_pre-phase13-eng-review-2026-04-26.md`.
+**Pre-edit Spec snapshot:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase13-eng-review-2026-04-26.md`.
 
 ### Eight-Gate Result Table
 
@@ -9002,7 +9002,7 @@ Phase 13.2 produces `PHASE13_2_VERIFY.md` enumerating: subsections with added AC
 
 ### Phase 13.2 Status
 
-Authored AC blocks committed to `Sourcera_Master_Spec.md`. Pre-edit snapshot at `_versions/Sourcera_Master_Spec_pre-phase13_2_acceptance_criteria-2026-04-26.md`. Authored extensions logged.
+Authored AC blocks committed to `Sourcera_Master_Spec.md`. Pre-edit snapshot at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase13_2_acceptance_criteria-2026-04-26.md`. Authored extensions logged.
 
 
 ---
@@ -9011,7 +9011,7 @@ Authored AC blocks committed to `Sourcera_Master_Spec.md`. Pre-edit snapshot at 
 
 ### Change Summary
 
-Regenerated the Master Spec Table of Contents (lines 16–943, replacing the prior lines 16–836) so that every H1 / H2 heading in the body now has a corresponding TOC entry, every TOC entry resolves to a body anchor, and stale entries from v6.0.0 are corrected. Pre-edit snapshot at `_versions/Sourcera_Master_Spec_pre-toc-regeneration-2026-04-26.md`. Programmatic verification (post-edit) confirms 464 TOC entries match 464 body H1/H2 anchors with zero unresolved and zero missing (escape-normalization applied for `\(` / `\)` URL-encoding vs. body literal `(` / `)`).
+Regenerated the Master Spec Table of Contents (lines 16–943, replacing the prior lines 16–836) so that every H1 / H2 heading in the body now has a corresponding TOC entry, every TOC entry resolves to a body anchor, and stale entries from v6.0.0 are corrected. Pre-edit snapshot at `legacy-import:_versions/Sourcera_Master_Spec_pre-toc-regeneration-2026-04-26.md`. Programmatic verification (post-edit) confirms 464 TOC entries match 464 body H1/H2 anchors with zero unresolved and zero missing (escape-normalization applied for `\(` / `\)` URL-encoding vs. body literal `(` / `)`).
 
 ### Sections Added to TOC
 
@@ -9081,7 +9081,7 @@ Three failure modes for an out-of-date TOC: (a) a renamed section becomes unreac
 
 ### Change Summary
 
-Phase 13 finalizes the v6.0.0 → v7.0.0 integration program. The Master Spec version header is moved from `7.0.0-integration-in-progress` (Status: Under integration) to `7.0.0` (Status: Current). A `Changelog` section is inserted at the top of the Spec (between the version block and the Table of Contents) summarizing major new sections, replaced sections, major extensions, breaking changes, source-document retirement, and cumulative counts. The two source documents that have been fully integrated into the Master Spec — `Sourcera_Master_Summary.md` (v1.1, 2026-04-17) and `KB_Engineering_Spec.md` — are moved out of the Sourcera folder root into `/_versions/` with retirement-marked filenames so the corpus has a single authoritative engineering document. A pre-edit snapshot of the Spec is at `_versions/Sourcera_Master_Spec_pre-v7.0.0-finalize-2026-04-26.md`.
+Phase 13 finalizes the v6.0.0 → v7.0.0 integration program. The Master Spec version header is moved from `7.0.0-integration-in-progress` (Status: Under integration) to `7.0.0` (Status: Current). A `Changelog` section is inserted at the top of the Spec (between the version block and the Table of Contents) summarizing major new sections, replaced sections, major extensions, breaking changes, source-document retirement, and cumulative counts. The two source documents that have been fully integrated into the Master Spec — `Sourcera_Master_Summary.md` (v1.1, 2026-04-17) and `KB_Engineering_Spec.md` — are moved out of the Sourcera folder root into `legacy-import:_versions/` with retirement-marked filenames so the corpus has a single authoritative engineering document. A pre-edit snapshot of the Spec is at `legacy-import:_versions/Sourcera_Master_Spec_pre-v7.0.0-finalize-2026-04-26.md`.
 
 No new entities, enums, endpoints, webhooks, ACs, or breaking changes are introduced by Phase 13; all changes are metadata, narrative, and corpus hygiene. The Phase 13 verification artifact lives at `_integration/PHASE13_FINAL.md`.
 
@@ -9090,9 +9090,9 @@ No new entities, enums, endpoints, webhooks, ACs, or breaking changes are introd
 - **Master Spec header.** Updated lines 7–10 of `Sourcera_Master_Spec.md`: Version → `7.0.0`; Last Updated → `2026-04-26`; Prior Version → `6.0.0` (unchanged); Status → `Current`. Removed the prior `Under integration — see /_integration/RECONCILIATION.md` qualifier.
 - **Changelog inserted.** A new `# Changelog {#changelog}` section is inserted between the version block and `# Table of Contents`, with v7.0.0 (2026-04-26) and v6.0.0 (Pre-Integration Baseline) entries. v7.0.0 entry covers Major New Sections, Replaced Sections, Major Extensions, Breaking Changes, Source Document Retirement, Counts, and Phase 13 Closure Status.
 - **Source document retirement.**
-  - `Sourcera_Master_Summary.md` → `/_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. No longer authoritative for any topic; subsumed by §1, §2, §22, §27, §34, §48 of the Master Spec.
-  - `KB_Engineering_Spec.md` → `/_versions/KB_Engineering_Spec_retired_2026-04-26.md`. No longer authoritative for any topic; subsumed by §22.8–§22.18 of the Master Spec.
-- **Pre-edit snapshot.** `/_versions/Sourcera_Master_Spec_pre-v7.0.0-finalize-2026-04-26.md` captures the Spec at the moment the Phase 13 finalization edit began.
+  - `Sourcera_Master_Summary.md` → `/_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. No longer authoritative for any topic; subsumed by §1, §2, §22, §27, §34, §48 of the Master Spec.
+  - `KB_Engineering_Spec.md` → `/_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md`. No longer authoritative for any topic; subsumed by §22.8–§22.18 of the Master Spec.
+- **Pre-edit snapshot.** `legacy-import:_versions/Sourcera_Master_Spec_pre-v7.0.0-finalize-2026-04-26.md` captures the Spec at the moment the Phase 13 finalization edit began.
 - **Phase 13 verification artifact.** `_integration/PHASE13_FINAL.md` authored as the one-page executive summary.
 
 ### Cumulative Integration Summary Table (v6.0.0 → v7.0.0)
@@ -9121,7 +9121,7 @@ The following table summarizes the entire 13-phase integration program. Counts a
 | 13 — Engineering Review CLOSURE | 2026-04-26 | §16.2.3 NEW; §42.6.0 NEW; 6 inline fixes (F-3.1.A, F-3.2, F-4.1, F-5.1, F-7.1, F-7.2, F-8.1) | §34.8.5, §34.11.1, Appendix F preamble, §5.11 preamble, Appendix H (STALE banner) | 0 | 0 | 0 | 0 | 0 |
 | 13.2 — AC Coverage Pass | 2026-04-26 | AC blocks added to §8.2.6, §8.3.3, §8.4.4, §9.1.3, §9.2.4, §9.3.3, §9.4.3, §25.5.10, §25.6.6 | 9 anchors | 0 | 1 NEW (`seller_auto_mapping_tiebreaker_enum`) + ~20 error codes flagged | 0 | several flagged | 146 |
 | 13.x — TOC Regeneration | 2026-04-26 | TOC lines 16–943 rebuilt (464 entries ↔ 464 body anchors; 0 unresolved) | TOC only | 0 | 0 | 0 | 0 | 0 |
-| 13 — Final Closure (this entry) | 2026-04-26 | Changelog inserted; version header bumped to 7.0.0; source documents retired | Spec header; corpus hygiene (move Master Summary + KB Engineering Spec to `/_versions/`) | 0 | 0 | 0 | 0 | 0 |
+| 13 — Final Closure (this entry) | 2026-04-26 | Changelog inserted; version header bumped to 7.0.0; source documents retired | Spec header; corpus hygiene (move Master Summary + KB Engineering Spec to `legacy-import:_versions/`) | 0 | 0 | 0 | 0 | 0 |
 | **TOTAL** | **2026-04-14 → 2026-04-26** | **20+ new sections (incl. §4.7, §4.8, §22.8–§22.18, §25.5–§25.7, §26.7–§26.10, §27.8–§27.11, §29.7–§29.11, §31.6.1/§31.8/§31.9, §32.8/§32.9, §38.6–§38.12, §48, §49, §50, §51, Appendix K, Appendix L); §34 fully replaced** | **~40 sections modified across §3, §4, §5, §21, §22, §25, §26, §27, §29, §31, §32, §34, §38, §39, §40, §42, §50; Appendices C, F, G, I, J, K, L** | **~46** | **~165 enum blocks** | **~13 endpoint families catalogued (billing, KB export, CRM sync); ~11 customer-facing REST families flagged for 13.1** | **~25+ (billing-domain 13; KB-domain 5; KB-Session 3; marketplace-monetization 5; plus §27/§29/§31/§50)** | **~280+ tracked (146 in Phase 13.2 + 46 in §34 + 25 in §26.10 + 22 in §25.5 + 23 in §25.6 + 20 in §22.17 + many inline)** |
 
 ### Authored Extensions
@@ -9152,7 +9152,7 @@ Cumulative count: 52+ Authored Extensions tracked in `_integration/AUTHORED_EXTE
 
 Re-read the Phase 13 finalization as a hostile staff engineer and reviewer:
 
-- **Q: Does removing the source documents from the root break anyone who scripts against `Sourcera_Master_Summary.md` or `KB_Engineering_Spec.md`?** A: The retirement is reflected in the Changelog and CLAUDE.md should be updated to remove these from the source-of-truth hierarchy. The files still exist at `/_versions/` with retirement-marked filenames, so any tooling that hard-codes the old paths can be redirected with a one-line config change. Risk acknowledged; no engineering blocker because the corpus is operator-managed, not externally consumed.
+- **Q: Does removing the source documents from the root break anyone who scripts against `Sourcera_Master_Summary.md` or `KB_Engineering_Spec.md`?** A: The retirement is reflected in the Changelog and CLAUDE.md should be updated to remove these from the source-of-truth hierarchy. The files still exist at `legacy-import:_versions/` with retirement-marked filenames, so any tooling that hard-codes the old paths can be redirected with a one-line config change. Risk acknowledged; no engineering blocker because the corpus is operator-managed, not externally consumed.
 - **Q: Does the Changelog double-count any item?** A: Verified against the per-phase inventory. §22.18 is reported under both "Major New Sections" (correctly, as a net-new subsection) and under "Major Extensions / §22 Seller KB" (correctly, because §22 itself is a major extension that also contains the new §22.18). This is faithful, not double-counting; the Changelog is structured by section-identity (new vs. extended) and by ancestor-section, both of which apply.
 - **Q: Are the cumulative counts in the summary table reconcilable with the per-phase logs?** A: Counts are derived from the prior phase entries verbatim; no count is invented. Where a phase's output was authored as "deferred" or "flagged" rather than concretely landing (e.g., §32 endpoint authoring deferred to Phase 13.1), the count reflects the deferred state explicitly so a downstream auditor can trace the discrepancy back to the originating phase log.
 - **Q: Could a future operator unintentionally re-run a destructive phase prompt?** A: The Phase 0 re-invocation guard (logged 2026-04-17) already documents the pattern. Phase 13 is non-destructive; a re-run would idempotently no-op on the version-block edit (already at `7.0.0` / `Current`), would no-op the move (files already retired), and would append a duplicate Phase-13 closure entry to RECONCILIATION.md (mildly noisy but recoverable). Acceptable.
@@ -9205,7 +9205,7 @@ All three are addressed.
 | §45.2 | Account-lockout bullet rewritten to cite §33.6. |
 | §45.3 | Workflow rewritten to cite §42.3.1 by stage name; numerical SLA values removed from inline prose. |
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-12.5-2026-04-26.md`.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-12.5-2026-04-26.md`.
 
 **Exit gates.**
 
@@ -9249,7 +9249,7 @@ All three are addressed.
 
 **Date opened:** 2026-04-26
 **Target Version:** 7.1.0
-**Baseline Version:** 7.0.0 (Master Spec stamp confirmed 2026-04-26; baseline snapshots at `/_versions/*pre-v7.1-2026-04-26.md`)
+**Baseline Version:** 7.0.0 (Master Spec stamp confirmed 2026-04-26; baseline snapshots at `legacy-import:_versions/*pre-v7.1-2026-04-26.md`)
 **Source authority:** Cowork session 2026-04-26 (PG-style validation pass + dual-Maya reframing + Blake's six locked decisions on 2026-04-26)
 **Program prompts:** Phase 14.0 (this pre-flight) through Phase 14.20 (final close)
 
@@ -9278,18 +9278,18 @@ The v7.1.0 program integrates eight content objects into the Master Spec and rew
 
 ### Source-of-truth conflict surfaced at Phase 14.0
 
-The Phase 14.0 prompt instructs a backup of `Sourcera_Master_Summary.md` from the project root. The Master Summary was retired during the v7.0.0 closeout (2026-04-26) and moved to `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md` per the v7.0.0 changelog (`Sourcera_Master_Spec.md` line 18). The file is no longer at root.
+The Phase 14.0 prompt instructs a backup of `Sourcera_Master_Summary.md` from the project root. The Master Summary was retired during the v7.0.0 closeout (2026-04-26) and moved to `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md` per the v7.0.0 changelog (`Sourcera_Master_Spec.md` line 18). The file is no longer at root.
 
-**Resolution.** The retired snapshot was copied to `_versions/Sourcera_Master_Summary.v1.1-pre-v7.1-2026-04-26.md` to preserve the program's audit-trail naming convention. The Master Summary is **not** expected to be edited during v7.1.0; if any v7.1.0 sub-phase requires un-retiring it, that decision must be logged here before the edit.
+**Resolution.** The retired snapshot was copied to `legacy-import:_versions/Sourcera_Master_Summary.v1.1-pre-v7.1-2026-04-26.md` to preserve the program's audit-trail naming convention. The Master Summary is **not** expected to be edited during v7.1.0; if any v7.1.0 sub-phase requires un-retiring it, that decision must be logged here before the edit.
 
 ### Pre-flight artifacts
 
-- Five primary-corpus backups copied to `_versions/` with `*-pre-v7.1-2026-04-26.md` suffix (Master Spec, Master Summary [retired], Buyer Pricing, Seller Pricing, UX Design).
+- Five primary-corpus backups copied to `legacy-import:_versions/` with `*-pre-v7.1-2026-04-26.md` suffix (Master Spec, Master Summary [retired], Buyer Pricing, Seller Pricing, UX Design).
 - Verification-log skeleton: `_integration/PHASE14_VERIFY.md` with rows for Phase 14.0 → Phase 14.20.
 
 ### Phase 14.0 — Pre-flight (closed 2026-04-26)
 
-v7.0.0 baseline confirmed (Master Spec front matter `Version: 7.0.0`). Five backups copied to `_versions/`. v7.1.0 program header opened. `PHASE14_VERIFY.md` skeleton created. Master Summary retirement conflict surfaced and resolved per audit-trail-preservation rule. No content edits.
+v7.0.0 baseline confirmed (Master Spec front matter `Version: 7.0.0`). Five backups copied to `legacy-import:_versions/`. v7.1.0 program header opened. `PHASE14_VERIFY.md` skeleton created. Master Summary retirement conflict surfaced and resolved per audit-trail-preservation rule. No content edits.
 
 ### Phase 14.1 — Principle 9 added (closed 2026-04-26)
 
@@ -9305,7 +9305,7 @@ Master Spec §3 now contains Principle 9 (Surface Simplicity, Engine Complexity)
 1. **`Sourcera_Master_Spec.md` §3.13** — new sub-section authored. Heading: `## 3.13 Principle 9 — Surface Simplicity, Engine Complexity {#3.13-principle-9-surface-simplicity-engine-complexity}`. Body includes (a) the numbering-note disambiguation, (b) the engine-vs-surface narrative, (c) the "Surfacing complexity is a defect" assertion, (d) the Acid Test (panicked-first-timer / 30-seconds / no-training), (e) explicit forward-references to Appendix M (Phase 14.2) and the First-30-Seconds Test (Phase 14.17), (f) a Status-of-Forward-References paragraph that records the in-force-but-pending-enforcement state, (g) a Scope-of-Authority paragraph that confines Principle 9 to surface decisions and disclaims any data-model / RBAC / billing introductions, (h) a Cross-references roundup pointing to §1.1, Appendix M, the First-30-Seconds Test, Single-Operator Mode (§13.x/§14.x — Phase 14.4), and Defense View (§13.x/§14.x — Phase 14.5).
 2. **`Sourcera_Master_Spec.md` §1.1** — new paragraph appended after the existing console/data-isolation closing paragraph and before §1.2. Names §3.13 Principle 9 as the binding constraint on all subsequent UI authoring decisions in the spec and in `UX_Design_of_Sourcera.md`; identifies Appendix M (Surface/Engine Mapping) as the canonical contract; identifies the First-30-Seconds Test as the operational quality gate; flags both as forward-pending (Phases 14.2 and 14.17); records the in-force-as-authoring-constraint state in the interim.
 
-**Backup.** `_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1.14.1-2026-04-26.md` (4,711,072 bytes; full pre-edit snapshot) per the Phase 14.0 backup-naming pattern `{Filename}.v{current-version}-pre-v7.1.{phase}-{YYYY-MM-DD}.md`.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1.14.1-2026-04-26.md` (4,711,072 bytes; full pre-edit snapshot) per the Phase 14.0 backup-naming pattern `{Filename}.v{current-version}-pre-v7.1.{phase}-{YYYY-MM-DD}.md`.
 
 **Verification gate (closed).**
 - §3.13 sub-section present with the exact heading and full body content; engine narrative, Acid Test, "Surfacing complexity is a defect" assertion, and forward-references all present.
@@ -9334,7 +9334,7 @@ Master Spec Appendix M now exists as the canonical Surface/Engine Mapping contra
 
 2. **Master Spec terminator** updated from `**End of Sourcera Master Specification v6.0.0**` to `**End of Sourcera Master Specification v7.1.0-integration-in-progress (Appendix M added in Phase 14.2)**` to reflect the in-progress v7.1.0 state. (Final v7.1.0 stamp is deferred to Phase 14.20 closeout, consistent with Phase 14.1's v7.0.0-stamp deferral pattern.)
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-appendix-m-2026-04-26.md` (4,715,700 bytes; full pre-edit snapshot taken before Appendix M was authored).
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-appendix-m-2026-04-26.md` (4,715,700 bytes; full pre-edit snapshot taken before Appendix M was authored).
 
 **Coverage walk (engine concept → row count).** Per the Phase 14.2 verification gate, every concept enumerated in §13.10 (scoring acceptance criteria), §17.8 (analytics acceptance criteria), §20.7 (pulse acceptance criteria), §22.x (KB), §27 (Marketplace), §31 (webhooks), §32 (APIs), §34 (plan tiers and consumption pricing), §39 (object-size constraints), and §44 (performance budgets) is represented by at least one row:
 - §4 (Data Model) — every entity in §4.2 (Org / Auth), §4.3 (Buyer Console — 22 entities), §4.4 (Seller Console — 29 entities), §4.5 (Marketplace — 8 entities), §4.6 (Audit — 3 entities), §4.7 (Cross-Console Bridge — 2 entities), §4.8 (Billing & AI Accounting — 13 entities) has a corresponding row, plus rows for the cross-cutting `console` enum, residency enum, soft-delete pattern, and reactivity layer.
@@ -9358,7 +9358,7 @@ Master Spec Appendix M now exists as the canonical Surface/Engine Mapping contra
 - M.2 Process Gates sub-section is present with seven binding gates.
 - Forward-references to Phase 14.18 enforcement (CI gates `appendix_m_engine_to_surface_completeness` and `appendix_m_no_inline_engine_concepts_in_ux_spec`) and Phase 14.19 adversarial-review enforcement are present in M.2.
 - Forward-reference rows for Phase 14.4 Single-Operator Mode, Phase 14.5 Defense View, Phase 14.6 Solo Pricing Tier, Phase 14.7 Marketplace-as-RFP-Exchange, Phase 14.8 Per-Vertical Eval Starters, and Phase 14.17 First-30-Seconds Test are present in M.1 with explicit "Forward reference. Row will be tightened when Phase X.Y lands." markers — to be back-filled by their respective phases.
-- Backup at `_versions/Sourcera_Master_Spec_pre-appendix-m-2026-04-26.md` (4,715,700 bytes) preserved.
+- Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-appendix-m-2026-04-26.md` (4,715,700 bytes) preserved.
 
 **Open follow-ups (do not block Phase 14.2 close).**
 - **Phase 14.3 onward** must add a row to Appendix M for every new engine concept introduced (entities, roles, states, capabilities, plan-gated features, webhooks, API endpoints) in the same change. Engine-only concepts must be flagged "Internal-only, never surfaced" with a documented rationale.
@@ -9379,7 +9379,7 @@ Workspace entity (Master Spec §4.3.1) now carries `evaluation_owner_mode` enum 
 3. **`Sourcera_Master_Spec.md` §5.11 Feature Access Matrix** — added "Switch Workspace `evaluation_owner_mode` (Solo ↔ Team; §4.3.1)" row to the Workspace Management group with role-grid cells matching "Edit workspace settings" (`org_owner` ✓, `workspace_owner` ✓; all other roles ✗). Added a Notes block entry documenting the per-tier default behavior at Workspace creation, the explicit-only switch path (no auto-recompute on plan change), and the Principle-9 / Appendix-M cross-references.
 4. **`Sourcera_Master_Spec.md` Appendix M** — added a row in the Buyer Console group immediately after the Workspace entity row binding `evaluation_owner_mode` as an internal-only field whose surface consequences (compressed vs. full multi-stakeholder UI) are authored in Phase 14.4. The row explicitly defers user-facing copy to Phase 14.4 and binds the underlying engine concept here.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-14.3-evaluation_owner_mode-2026-04-26.md` (4,779,712 bytes; full pre-edit snapshot).
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.3-evaluation_owner_mode-2026-04-26.md` (4,779,712 bytes; full pre-edit snapshot).
 
 **Verification gate (closed).**
 - Workspace entity field table updated with full schema discipline (Field / Type / Constraints / Notes; default-rule cited against §34.1.1 plan snapshot; never restated inline).
@@ -9387,7 +9387,7 @@ Workspace entity (Master Spec §4.3.1) now carries `evaluation_owner_mode` enum 
 - §5.11 row added to the Workspace Management group with role-grid cells, parenthetical reference to §4.3.1, and a Notes block entry that captures the per-tier default with cross-references to §3.13 and Appendix M.
 - Appendix M row added to the Buyer Console group adjacent to the Workspace entity row, with a "Hidden from tier(s)" cell explicitly marking the field as internal-only and the surface consequences as visible to all tiers.
 - No inline numerical values introduced. Plan-tier defaults are correlated to §34.1.1; transition guard is correlated to §4.3.1 / §4.3.2 row state.
-- Backup at `_versions/Sourcera_Master_Spec_pre-phase-14.3-evaluation_owner_mode-2026-04-26.md` preserved.
+- Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.3-evaluation_owner_mode-2026-04-26.md` preserved.
 
 **Resolved task drift.** Phase 14.3 task instructions carried a self-inconsistency between (a) the field constraint ("default `solo` for Free/Solo plan; default `team` on Starter+ plan") and (b) the §5.11 row description ("Solo Mode is the default surface for Free / Solo / Starter plans; Team Mode is the default for Growth / Scale / Enterprise") — the two groupings disagreed on whether the Buyer Starter tier defaults to Solo or Team. Resolved to the field-level constraint (Starter+ → `team` default) on three grounds: (1) the field-constraint wording is the more precise authoritative spec text; (2) "Starter+" is unambiguous and the corpus uses "+" notation consistently elsewhere (see §34.1.x and the Seller Plan Tier rows in §5.11 — "Growth+", "Scale+"); (3) authoring two contradictory defaults would be a P0 spec defect. Phase 14.4 surface authoring will codify the user-facing wording; the §5.11 Notes block in this phase encodes the resolved default explicitly so downstream phases inherit a single source of truth.
 
@@ -9418,7 +9418,7 @@ Master Spec §2 now treats Solo Mode as a first-class surface path. Method invar
 8. **`Sourcera_Master_Spec.md` Appendix M Pulse Digest Email row** — Solo Mode adds a default-suppressed / opt-in via Notification Preferences (§20.6) clause per §2.8.4 AC #6.
 9. **`Sourcera_Master_Spec.md` Appendix M SLA Timers row** — surface metaphor split by mode: Team Mode renders SLA pills on Pulse cards and red overdue pills on breach; Solo Mode suppresses pills and compresses to a single deadline countdown for the next phase-bound deadline. SLA computation, breach detection, and escalation auto-promotion (§2.6.3) all run identically in both modes; only the rendering compresses.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-14.4-single-operator-mode-2026-04-26.md` (4,785,565 bytes; full pre-edit snapshot) per the Phase-14 backup-naming pattern.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.4-single-operator-mode-2026-04-26.md` (4,785,565 bytes; full pre-edit snapshot) per the Phase-14 backup-naming pattern.
 
 **Verification gate (closed).**
 - §2.8 authored with full body covering definition, engine/surface compression, phase gates, SLA / Pulse, contextual invites, cross-console behavior, 12 acceptance criteria, and cross-references.
@@ -9428,7 +9428,7 @@ Master Spec §2 now treats Solo Mode as a first-class surface path. Method invar
 - §3.13 Principle 9 cross-reference tightened from placeholder ("§13.x or §14.x") to canonical ("§2.8, closed Phase 14.4").
 - Method invariant: §2.1–§2.7 unchanged; §10 (13-phase pipeline) unchanged; §13 (Scoring) unchanged; §17 (Workspace Analytics) unchanged.
 - No inline numerical values introduced; plan-tier defaults are correlated to §34.1.1 / §4.3.1; surface-suppression contract correlated to `Workspace.evaluation_owner_mode`.
-- Backup at `_versions/Sourcera_Master_Spec_pre-phase-14.4-single-operator-mode-2026-04-26.md` preserved.
+- Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.4-single-operator-mode-2026-04-26.md` preserved.
 - `_integration/PHASE14_VERIFY.md` row 14.4 updated from "not started" to "closed".
 
 **Authored Extensions (require human sign-off).**
@@ -9468,7 +9468,7 @@ Master Spec §13.11 now contains the Defense View feature spec at full Master Sp
 8. **`UX_Design_of_Sourcera.md` §4.2.13 Defense View** — full page spec authored. Sections: Master Spec / Appendix M / engine-entity / capability cross-references; Purpose; Entry points (Selection Report CTA, Workspace Overview CTA, direct URL, Cmd+D); Layout (desktop ≥ 1024px ASCII layout; mobile < 768px description); Anatomy (region-by-region token mapping); Tokens (deltas — none new; reuses existing §2 / §3.6 catalogs); Interaction states (10-state catalog: loading_initial, generating_overlay, ready, regenerated, watermarked_preview, low_confidence, error_generation_failed, error_third_party_outage, error_no_selection_record, error_archived, error_wallet_capped); Mobile divergence; Keyboard shortcuts (Cmd/Ctrl+D, Cmd/Ctrl+P, Esc, R, Tab/Shift+Tab); Accessibility (region semantics, evidence chip as `<button>`, WCAG 2.1 AA, prefers-reduced-motion, PDF-A11y); Performance budgets (cite §13.11.5 / §13.11.6 / §44.1); Empty / loading / error states explicitly enumerated; Engine cross-references (Appendix M-bound).
 9. **`UX_Design_of_Sourcera.md` §11.2 Defense View Acceptance Criteria** — authored 20 criteria DV-01 through DV-20 covering generation latency, cache-hit latency, hash-mismatch regeneration chip + PostHog event, watermarked preview, full-surface render, Enterprise PDF audit-receipt verbiage, keyboard shortcuts (Cmd+P, Esc, Cmd+D), mobile read-only, evidence chip Side Peek, generation failure, third-party outage, low confidence, archive cascade, cross-console / cross-Org firewall (404 non-leak), accessibility (WCAG 2.1 AA + PDF-A11y + prefers-reduced-motion), regeneration throttle (5 min), webhook contract.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-14.5-defense-view-2026-04-26.md` and `_versions/UX_Design_of_Sourcera_pre-phase-14.5-defense-view-2026-04-26.md` (full pre-edit snapshots) per the Phase-14 backup-naming pattern.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.5-defense-view-2026-04-26.md` and `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-14.5-defense-view-2026-04-26.md` (full pre-edit snapshots) per the Phase-14 backup-naming pattern.
 
 **Verification gate (closed).**
 
@@ -9482,7 +9482,7 @@ Master Spec §13.11 now contains the Defense View feature spec at full Master Sp
 - UX page-level acceptance criteria (DV-01 through DV-20) authored at §11.2.
 - Method invariant: §10 (13-phase pipeline), §10.12 (Phase 12 Selection Report production), §10.13 (Phase 13 Selection Record production), §13.1–§13.10 (Scoring), §17 (Workspace Analytics), §4.3.21 (Selection Report Draft) all unchanged. Defense View is a downstream read-only synthesis surface; it never mutates the Selection Report or Selection Record.
 - No inline plan-tier dollar values introduced; all plan-tier references cite §34.1.1 and §34.8.5; all object-size constraints cite §39; all wallet behavior cites §4.8.3 / §34.10; all Free-Allowance behavior cites §4.8.7 / §34.8.4.
-- Backups at `_versions/Sourcera_Master_Spec_pre-phase-14.5-defense-view-2026-04-26.md` and `_versions/UX_Design_of_Sourcera_pre-phase-14.5-defense-view-2026-04-26.md` preserved.
+- Backups at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.5-defense-view-2026-04-26.md` and `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-14.5-defense-view-2026-04-26.md` preserved.
 
 **Authored Extensions (require human sign-off).**
 
@@ -9525,7 +9525,7 @@ Master Spec §13.11 now contains the Defense View feature spec at full Master Sp
 9. **`UX_Design_of_Sourcera.md` §10 Insertion Mapping** — new row "5.2.19 PipelineSurface" linking to Master Spec §3.14, §2.8.2, §22.19, §3.3.1, §10, §10.16 with description "Dual-state pipeline component — `solo` (4-step compressed bar, both consoles) and `team` (13-phase chip ribbon, Buyer only); composes PhaseAdvancer (§5.2.16) and ToastNotification (§5.2.5) for advancement and soft-gate paths."
 10. **`UX_Design_of_Sourcera.md` §11.3 Component-Level Acceptance Criteria** — new "PipelineSurface Component (Phase 14.6)" sub-section with the 12 numbered criteria PS-01 through PS-12 mirroring the §5.2.19 acceptance block for QA-tooling integration.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` and `_versions/UX_Design_of_Sourcera_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` (full pre-edit snapshots) per the Phase-14 backup-naming pattern.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` and `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` (full pre-edit snapshots) per the Phase-14 backup-naming pattern.
 
 **Verification gate (closed).**
 
@@ -9535,7 +9535,7 @@ Master Spec §13.11 now contains the Defense View feature spec at full Master Sp
 - Appendix M rows confirmed: new "Pipeline Surface Compression" row authored; `pipeline_stage_id` row updated to describe dual rendering; 13 per-Phase rows annotated with Solo/Team/Seller step assignments; Single-Operator Mode row tightened with the canonical Phase-14.6 mapping reference.
 - §2.8.2 mapping conflict surfaced explicitly and resolved in favor of the Phase-14.6 canonical mapping; §2.8.2 updated to mirror §3.14.1.
 - Engine pipeline (§10), Phase Advancement API (§10.16), audit events (§4.6.1), webhooks (§31), SLA timers (§8.4), Pulse Health (§20.3), and per-phase plan gating (§5.11, §34) all unchanged. The §3.14.4 invariant `pipeline_surface_compression_engine_unchanged` codifies this.
-- Backups at `_versions/Sourcera_Master_Spec_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` and `_versions/UX_Design_of_Sourcera_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` preserved.
+- Backups at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` and `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-14.6-pipeline-surface-compression-2026-04-26.md` preserved.
 
 **Authored Extensions (require human sign-off).**
 
@@ -9573,7 +9573,7 @@ The "What are you evaluating?" intake flow is authored as the canonical Buyer Wo
 5. **`Sourcera_Master_Spec.md` Appendix M.1** — three new rows authored: (a) Marketplace data model group: "EvalStarter (Ops-managed per-vertical seed registry) — §4.5.9" mapping the engine registry to the §13.12 tile-grid surface metaphor; (b) Scoring Engine group: "What Are You Evaluating?" Intake — §13.12, §4.5.9 EvalStarter" binding the intake surface itself; (c) Scoring Engine group: "Workspace pre-population materializer" — §13.12.4" binding the seeding logic to the half-built-Workspace surface metaphor with the truncation banner. Forward-reference row "Per-Vertical Eval Starters (Phase 14.8)" closed and re-tightened to "Per-Vertical Eval Starters (Phase 14.7 — closed 2026-04-27)" with full surface-bound description. Forward-reference row "Marketplace-as-RFP-Exchange (Phase 14.7)" relabeled to "Marketplace-as-RFP-Exchange (forthcoming)" with an explanatory note about the Phase 14.7 reassignment. Appendix M.1 intro paragraph updated to mirror the new phase scoping.
 6. **`UX_Design_of_Sourcera.md` §4.4.2 "What Are You Evaluating?" Intake (Phase 14.7)** — full component spec authored. Inserted between the Seller Onboarding Step 7 (KB Setup) and §4.4.3 Inbox. Sections: Authoring intent + Master Spec / Appendix M cross-references; Two screens (Intake Screen and Post-Selection Landing Screen); Screen 1 Intake — full ASCII layout, layout copy, Tile Component (`EvalVerticalTile`) with token table (twelve tokens), Props (four props), Behavior (nine numbered behaviors), Other inline text input behavior, Interaction State Catalog (ten states), Accessibility (ARIA, keyboard, screen reader, contrast, reduced-motion, First-30-Seconds Test note); Screen 2 Post-Selection Landing — full ASCII layout, layout copy, Callout Component (`IntakeFillCallout`) with token table (thirteen tokens), Props (seven props), Behavior (nine numbered behaviors covering render, row layout, free-text vertical render, Free-tier truncation banner, no-recommendations affordance, dismissal, re-open, mobile, telemetry), Interaction State Catalog (ten states), Accessibility; Composition with Existing Components (Button, FormField, ToastNotification, Modal note, PipelineSurface note); Acceptance Criteria IF-01 through IF-12; Stop-Condition Disposition (recommended_longlist may be null until §22 inventory model lands; surface gracefully renders the no-recommendations affordance).
 
-**Backup.** `_versions/Sourcera_Master_Spec.v7.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` and `_versions/UX_Design_of_Sourcera.v2.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` (full pre-edit snapshots) per the Phase-14 backup-naming pattern.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` and `legacy-import:_versions/UX_Design_of_Sourcera.v2.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` (full pre-edit snapshots) per the Phase-14 backup-naming pattern.
 
 **Verification gate (closed).**
 
@@ -9583,7 +9583,7 @@ The "What are you evaluating?" intake flow is authored as the canonical Buyer Wo
 - Appendix J registers `EvalVertical`, `eval_starter_state`, `eval_starter_visibility`, `eval_starter_use_case_seed_schema_version`, `eval_starter_requirement_seed_schema_version`, and the `ops_eval_starter_admin` Ops Console role. Each enum carries semantics, deploy-time validator references, and authored-extension flags.
 - Appendix M.1 carries: (a) the new EvalStarter engine row in the Marketplace data model group; (b) two new surface rows in the Scoring Engine group binding §13.12 intake and §13.12.4 materializer; (c) the closed-and-tightened "Per-Vertical Eval Starters (Phase 14.7 — closed 2026-04-27)" forward-reference row; (d) the relabeled "Marketplace-as-RFP-Exchange (forthcoming)" row with the explanatory note about phase reassignment; (e) the updated Appendix M.1 intro paragraph mirroring the new phase scoping.
 - UX component spec authored at `UX_Design_of_Sourcera.md` §4.4.2 with both screens (Intake and Post-Selection Landing), full token tables, props, behaviors, interaction state catalogs, accessibility, composition, and IF-01 through IF-12 acceptance criteria.
-- Backups at `_versions/Sourcera_Master_Spec.v7.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` and `_versions/UX_Design_of_Sourcera.v2.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` preserved.
+- Backups at `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` and `legacy-import:_versions/UX_Design_of_Sourcera.v2.0.0-pre-phase-14.7-eval-starter-2026-04-27.md` preserved.
 - Engine pipeline (§10), Scoring engine (§13.1–§13.11), Phase Advancement API (§10.16), audit events (§4.6.1), webhooks (§31), Pulse Health (§20.3), Defense View (§13.11), and per-phase plan gating (§5.11, §34) all unchanged. The intake is purely a Workspace-creation entry surface that materializes downstream-engine artifacts inside a single transaction.
 
 **Authored Extensions (require human sign-off).**
@@ -9642,7 +9642,7 @@ The "What are you evaluating?" intake flow is authored as the canonical Buyer Wo
   - "Seller Maya Surface Abstraction — KB governance silent engine + weekly notification (Phase 14.8 — closed 2026-04-27)" — binds §22.20.3; surface metaphor is the single weekly notification + the "What changed this week" banner on the KB landing screen; engine concept is the silent §22.5 / §22.4 / §21.4.1 #17 governance pipeline; the §22.18.4 Seller Panel position #5 ("Health: 94%") is exempt from compression and continues to render across all tiers.
   - "Seller Maya Surface Abstraction — Match Score three-label compression (Phase 14.8 — closed 2026-04-27)" — binds §22.20.4; surface metaphor is the three-label set (Strong match / Likely match / Weak match) with the `insufficient_signal → Weak match + annotation` merge; engine concept is the unchanged §27.4 four-bucket numeric score and the `MarketplaceMatchScoreSnapshot` row writes; chip-click routing on Solo / Free targets the §22.20.2 chip-list edit drawer rather than the suppressed §27.4.6 provenance panel.
 - **`UX_Design_of_Sourcera.md` §4.4.2.** New sub-section "Seller Magic-Link Hero Moment Landing — Phase 14.8 Polish (2026-04-27)" added after the "Seller Onboarding (7 steps)" section and before the "What Are You Evaluating?" Intake (Phase 14.7). The new sub-section authors five screens end-to-end (Magic-Link Landing Page, In-SSO Progress-Storytelling, Bid Workspace First Paint with Hero Moment Counters, Citation Inline Hover with Phase 14.8 Polish, KB-Gap Detector Empty State Polish, Stake-Reveal Screen on Submission), with ASCII layouts, design tokens, behavior contracts, anti-pattern enforcement rules, telemetry references, and 10 numbered acceptance criteria (#41–#50). The §22.20.6 polish bindings (status-line variant set, fourth counter line, staleness contextual annotation, KB-gap educational annotation, non-monetary stake summary, chip list on Stake-Reveal) are all authored at this surface. The seven-step wizard above remains authoritative for the direct signup path; the Phase 14.8 polish supersedes it whenever `MarketplaceInviteLink.invite_source ∈ {buyer_invite, ghost_bid_conversion, pro_trial_seat_m17}`.
-- **`_versions/Sourcera_Master_Spec_pre-phase-14.8-seller-maya-surface-polish-2026-04-27.md`** — pre-edit backup created before any Master Spec mutation per CLAUDE.md §14.
+- **`legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.8-seller-maya-surface-polish-2026-04-27.md`** — pre-edit backup created before any Master Spec mutation per CLAUDE.md §14.
 
 **Engine preservation summary.**
 
@@ -9682,7 +9682,7 @@ The §22.20 contract preserves every engine concept. No entity is added (the `Ca
 - The seven-step wizard at `UX_Design_of_Sourcera.md` §4.4.2 Seller Onboarding (7 steps) is left in place and continues to be authoritative for the **direct signup path**. The Phase 14.8 polish supersedes it for the **magic-link path**; both paths coexist in the spec. Engineering must implement the routing at the §35.2 Seller Onboarding entry per `MarketplaceInviteLink.invite_source` evaluation. A future phase may consolidate the two surfaces into a single component with branching behavior; the current phase preserves both.
 - The §48.8.4 "Live AIWallet budget counter" specification continues to authoritatively describe the counter for sSt+ tiers; on Solo / Free, the counter is suppressed per §22.20.5 / Phase 14.10. The §48.8.4 prose is not retroactively edited; the §22.20.5 contract is the override. AC #95 asserts the suppression at deploy time.
 
-**Reconciliation log status.** Phase 14.8 closed; verification gates met (§22 surface-abstraction pass complete; AE/SE/Bid Manager persona note added at §22.1; UX magic-link landing screen polish authored end-to-end across five screens; Appendix M rows added under §22 KB block; reconciliation log entry written; Authored Extensions registered with sign-off pending). No engine concept divergence detected. Master Spec file size and structural integrity preserved. Backup at `_versions/Sourcera_Master_Spec_pre-phase-14.8-seller-maya-surface-polish-2026-04-27.md` retained.
+**Reconciliation log status.** Phase 14.8 closed; verification gates met (§22 surface-abstraction pass complete; AE/SE/Bid Manager persona note added at §22.1; UX magic-link landing screen polish authored end-to-end across five screens; Appendix M rows added under §22 KB block; reconciliation log entry written; Authored Extensions registered with sign-off pending). No engine concept divergence detected. Master Spec file size and structural integrity preserved. Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.8-seller-maya-surface-polish-2026-04-27.md` retained.
 
 ---
 
@@ -9697,7 +9697,7 @@ The §22.20 contract preserves every engine concept. No entity is added (the `Ca
 - `Sourcera_Buyer_Pricing_Strategy.md` v3 (full, 2026-04-26 — pre-Phase-14.9 absorption).
 - `Sourcera_Seller_Pricing_Strategy.md` v3 (full, 2026-04-26 — pre-Phase-14.9 absorption).
 - `Sourcera_Master_Spec.md` §34.1 Plan Tier Definitions (§34.1.1 Buyer, §34.1.2 Seller, §34.1.3 Cross-References), §34.2 Pricing (§34.2.1 Buyer, §34.2.2 Seller, §34.2.3 Universal Commercial Rules, §34.2.4 Volume Discount Bands), §34.3 Outcome-Based Pricing (§34.3.1–§34.3.5), §34.10 AI Wallet Service (§34.10.1–§34.10.7, with §34.10.3 Pooled Budget Across Consoles authoritative), §34.11 Outcome Resolver, §34.12 Cross-Side Billing Rules (§34.12.1–§34.12.7 pre-edit), §34.13 Buyer-Funded Pro Trial Seat, §34.18 Financial Targets (§34.18.1–§34.18.7), §34.19 Seller Plan Upgrade Carry-Over Guarantee, §34.20 Acceptance Criteria (§34.20.1–§34.20.7), §5.11 Feature Access Matrix (full, including Solo Mode default surface note), §39 Object Size Constraints (full table), Appendix J (Plan Tiers, Billing Currency, Capability Registry Billing Mode, AI Wallet State, Outcome Contract State, Contest Status, Cost-Base Recalc Drift Severity, Free Allowance Counter Status, Committed Spend Discount Band, Pricing Table Version Status, Downgrade Excess Bucket Status, Marketplace Discovery SKU, Billing Admin Role, plus the v6.0.0 single-console enum legacy entry that Phase 14.9 supersedes), Appendix M (M.1 full, all rows including Buyer / Seller Plan Tier enum rows and the existing Solo-Mode-Workspace forward-reference rows), §22.20 Seller Maya Surface Abstraction (Phase 14.8 — including Capability Declaration auto-publish state-machine row 7a and Match Score three-label compression), §13.11 Defense View (Phase 14.5), §3.14 Pipeline Surface Compression (Phase 14.6), §13.12 What Are You Evaluating Intake (Phase 14.7), §44 (Solo-Tier Surface Treatment — Phase 14.10 forward-referenced).
-- Master Summary references in pre-existing §34 source citations (`MS §2`, `MS §2.5`, `MS §2.12`, `MS C.77`, `MS C.80`, `MS C.84`, `MS C.119`, `MS C.131`, `MS C.135`) — consulted via the integrated Master Spec content (the Master Summary itself is retired post-v7.0.0 per `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`).
+- Master Summary references in pre-existing §34 source citations (`MS §2`, `MS §2.5`, `MS §2.12`, `MS C.77`, `MS C.80`, `MS C.84`, `MS C.119`, `MS C.131`, `MS C.135`) — consulted via the integrated Master Spec content (the Master Summary itself is retired post-v7.0.0 per `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`).
 - `_integration/RECONCILIATION.md` prior phase entries through Phase 14.8 (Seller Maya Surface Polish closed 2026-04-27).
 - `_integration/AUTHORED_EXTENSIONS_LEDGER.md` — referenced for AE registration conventions; Phase 14.9 AEs flagged below.
 
@@ -9709,7 +9709,7 @@ Resolution: per the source-of-truth hierarchy in `CLAUDE.md` §2 — **`Sourcera
 
 **Conflict surfaced and resolved — Master Summary §2.5 cross-side billing pooling.**
 
-The Phase 14.9 prompt's stop condition references potential conflict with "Master Summary §2.5" cross-side billing pooling logic for Solo. The Master Summary is retired (`_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`, dated 2026-04-26) and was retired explicitly because v7.0.0 absorbed its content into the Master Spec. The active cross-side billing pooling logic lives at Master Spec §34.10.3 (Pooled Budget Across Consoles) and §34.12 (Cross-Side Billing Rules). Phase 14.9 extends §34.10.3 with the Solo-co-resident pool rule (Solo's engine-absorbed envelope is never customer-visible and never pools with the contralateral console's wallet) and §34.12 with §34.12.6 (Solo-Tier Per-Console Subscription Billing, authoritative). No conflict with the retired Master Summary; the existing Free + Free / Free + Paid collapse rules generalize to Solo cleanly because Solo's envelope is engine-side (never visible) and therefore never pools by construction.
+The Phase 14.9 prompt's stop condition references potential conflict with "Master Summary §2.5" cross-side billing pooling logic for Solo. The Master Summary is retired (`_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`, dated 2026-04-26) and was retired explicitly because v7.0.0 absorbed its content into the Master Spec. The active cross-side billing pooling logic lives at Master Spec §34.10.3 (Pooled Budget Across Consoles) and §34.12 (Cross-Side Billing Rules). Phase 14.9 extends §34.10.3 with the Solo-co-resident pool rule (Solo's engine-absorbed envelope is never customer-visible and never pools with the contralateral console's wallet) and §34.12 with §34.12.6 (Solo-Tier Per-Console Subscription Billing, authoritative). No conflict with the retired Master Summary; the existing Free + Free / Free + Paid collapse rules generalize to Solo cleanly because Solo's envelope is engine-side (never visible) and therefore never pools by construction.
 
 **Edits applied.**
 
@@ -9730,9 +9730,9 @@ The Phase 14.9 prompt's stop condition references potential conflict with "Maste
 15. **`Sourcera_Master_Spec.md` Appendix M.** Updated tier-abbreviation legend to register `Bs` (Buyer Solo) and `sSo` (Seller Solo) per Phase 14.9. Updated Buyer Plan Tier enum row to include `buyer_solo`. Added new Seller Plan Tier enum row with all 6 values. Added 9 new Solo-binding rows under "Data Model — Billing & AI Accounting (§4.8)" group: Solo-tier engine-absorbed AI envelope (§44 / §34.10.3 binding), Solo billing surface (single-card line item), Solo per-evaluation charge orchestration, Solo per-bid charge orchestration, Solo Selection Report watermarking (Free → watermarked; Solo+ → unwatermarked), Solo Defense View access (Free → preview; Solo+ → full), Solo Verified-tier eligibility (Seller-only), Solo Capability Declaration auto-publish (Seller-only — Phase 14.8 binding extended), Solo Mode pipeline compression (Buyer Solo plan default), Solo upgrade CTAs. Updated existing Pro Trial Seat Grant row's "Hidden from tier(s)" column to include `Bs (Buyer Solo)` per BPS §5.3 (Solo cannot grant Pro Trial Seats).
 16. **`Sourcera_Buyer_Pricing_Strategy.md` v3 changeset header.** Updated Phase 14.9 status from "pending" to "landed (2026-04-27)"; replaced the §13.X / §44.X / §34.X / §34.Y forward-references with the canonical §34.1.1 / §34.2.1 / §34.2.5 / §34.10.3 / §34.12.6 / §39 / §5.11 / Appendix J / Appendix M binding citations. Updated the Phase-14.9 spec-sections-to-update list (was bulleted "pending" entries; now bulleted "updated" entries with explicit cross-references). Added Phase 14.9.1 / 14.10 follow-up entries for §44 / §21.4 capability registry / §5.11 inline tier-list audit.
 17. **`Sourcera_Seller_Pricing_Strategy.md` v3 changeset header.** Same treatment as the buyer doc. Updated the Phase-14.9 spec-sections-to-update list to mirror the buyer doc's structure but with §34.1.2-anchored citations and seller-side Phase 14.9.1 follow-ups (§22 KB integrated portions Solo Verified eligibility / 250 KB cap / 1 weekly Firecrawl / 1/yr re-bootstrap, §27.10 Verification Tier seller_solo accept inline check, §21.4.5 capability catalog Solo absorbed-envelope routing).
-18. **`_versions/Sourcera_Master_Spec_pre-phase-14.9-solo-tier-master-spec-scaffold-2026-04-27.md`** — pre-edit Master Spec backup created before any §34.1 / §34.2 / §34.10 / §34.12 / §39 / §5.11 / Appendix J / Appendix M mutation per CLAUDE.md §14.
-19. **`_versions/Sourcera_Buyer_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md`** — pre-edit Buyer pricing doc backup.
-20. **`_versions/Sourcera_Seller_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md`** — pre-edit Seller pricing doc backup.
+18. **`legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.9-solo-tier-master-spec-scaffold-2026-04-27.md`** — pre-edit Master Spec backup created before any §34.1 / §34.2 / §34.10 / §34.12 / §39 / §5.11 / Appendix J / Appendix M mutation per CLAUDE.md §14.
+19. **`legacy-import:_versions/Sourcera_Buyer_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md`** — pre-edit Buyer pricing doc backup.
+20. **`legacy-import:_versions/Sourcera_Seller_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md`** — pre-edit Seller pricing doc backup.
 
 **Verification gate (closed).**
 
@@ -9750,7 +9750,7 @@ The Phase 14.9 prompt's stop condition references potential conflict with "Maste
 - Master Spec Appendix J Plan Tiers replaced with per-console split + Solo registration + v6 → v7 migration spec; new `billing_event_charge_kind` enum registered.
 - Master Spec Appendix M tier-abbreviation legend extended with `Bs` / `sSo`; Buyer / Seller Plan Tier enum rows updated; 9 new Solo-binding rows added under the §4.8 Billing & AI Accounting group; existing Pro Trial Seat row's Hidden-from-tier list extended.
 - Numerical-homing invariant: every Solo numerical value (subscription price, per-eval / per-bid price, AI envelope, KB ceiling, Firecrawl sources, KB Bootstrap allowance, Storage, Active Evaluations, etc.) lives in §34.1.1 / §34.1.2 / §34.2.1 / §34.2.2 / §34.2.5; no inline restatement in any other Master Spec section. The deploy-time validator `solo_tier_numeric_single_source` (Phase 14.9 AE) MUST assert this on every commit.
-- Backup at `_versions/Sourcera_Master_Spec_pre-phase-14.9-solo-tier-master-spec-scaffold-2026-04-27.md` retained.
+- Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.9-solo-tier-master-spec-scaffold-2026-04-27.md` retained.
 
 **Authored Extensions (require human sign-off).**
 
@@ -9787,10 +9787,10 @@ The Phase 14.9 prompt's stop condition references potential conflict with "Maste
 - The `Sourcera_Master_Spec.md` line 11898 alias note ("`buyer_solo` (effective on Phase 14.6 landing); aliases to `business_starter` until then") is referenced by §34.1.3 but the actual line was not edited in Phase 14.9. Engineering must confirm the alias is removed from the §4.8.2 CapabilityRegistryEntry `plan_gate_min_tier` field documentation in a follow-up phase. The current Master Spec text on line 11898 still carries the alias note even though §34.1.3 has authoritatively retired the alias. Phase 14.9.1 should update line 11898 to remove the alias note.
 - The `Sourcera_Master_Spec.md` §35.1 Step 4 Buyer Onboarding Flow does NOT explicitly reference the Buyer Solo plan tier in its surface flow; the flow currently routes through the §13.12 What Are You Evaluating? Intake (Phase 14.7) which is universal across Buyer tiers. Phase 14.9 does not edit §35.1; the routing remains universal. If a Buyer-Solo-specific onboarding variant is needed (e.g., a "$49/mo Solo trial" CTA on the magic-link landing), Phase 14.9.1 or a later phase must author it.
 - The `Sourcera_Master_Spec.md` §48.8 Seller Hero Moment surfaces the Solo / Free engine-absorbed envelope rendering per §22.20.5 (Phase 14.8), but the §48.8.4 / §48.8.5 prose still reads as if AIWallet is the canonical surface for all tiers. The §22.20.5 / §22.20.6 / Phase 14.10 §44 contracts are the binding override on Solo / Free; the §48.8.4 / §48.8.5 prose is preserved as-is for paid-tier authoritativeness. Phase 14.9 does not edit §48.8.
-- The retired `Sourcera_Master_Summary.md` v1.1 (`_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`) was the source for several §34 citations (`MS §2`, `MS §2.5`, `MS §2.12`, `MS C.77`, `MS C.80`, `MS C.84`, `MS C.119`, `MS C.131`, `MS C.135`). Phase 14.9 preserves these citations as historical evidence — the integrated Master Spec content supersedes the Summary, but the source-attribution chain remains traceable. Phase 14.20 closeout may consider re-cite-ing all `MS §x.y` references to their integrated Master Spec equivalents; this Phase 14.9 does not undertake that re-cite.
+- The retired `Sourcera_Master_Summary.md` v1.1 (`_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`) was the source for several §34 citations (`MS §2`, `MS §2.5`, `MS §2.12`, `MS C.77`, `MS C.80`, `MS C.84`, `MS C.119`, `MS C.131`, `MS C.135`). Phase 14.9 preserves these citations as historical evidence — the integrated Master Spec content supersedes the Summary, but the source-attribution chain remains traceable. Phase 14.20 closeout may consider re-cite-ing all `MS §x.y` references to their integrated Master Spec equivalents; this Phase 14.9 does not undertake that re-cite.
 - The Phase 14.9 prompt's Solo monthly/annual price wording ("$49/mo (annual: $39/mo)") differs from the v3 docs' authored pricing ("$49/mo annual / $59/mo monthly"). Phase 14.9 honors the v3 docs per the source-of-truth hierarchy. If the user intends to re-price Solo to the prompt's $49 / $39 figures, a Phase 14.9.x re-pricing brief is required.
 
-**Reconciliation log status.** Phase 14.9 closed; verification gates met (both pricing docs reflect Phase 14.9 absorption status; Master Spec §34.1.1, §34.1.2, §34.1.3, §34.2.1, §34.2.2, §34.2.5, §34.10.3, §34.10.5, §34.12.1, §34.12.6, §34.12.8, §39, §5.11, Appendix J Plan Tiers, Appendix J `billing_event_charge_kind`, Appendix M tier-abbreviation legend, Appendix M Buyer / Seller Plan Tier enum rows, Appendix M 9 new Solo-binding rows, Appendix M Pro Trial Seat row Hidden-from-tier extension all updated; reconciliation log entry written; Authored Extensions registered with sign-off pending). No engine concept divergence detected — the Phase 14.9 edits are authoritative-registration edits, not engine-mutation edits. Master Spec file size and structural integrity preserved. Backups at `_versions/Sourcera_Master_Spec_pre-phase-14.9-solo-tier-master-spec-scaffold-2026-04-27.md`, `_versions/Sourcera_Buyer_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md`, `_versions/Sourcera_Seller_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md` retained.
+**Reconciliation log status.** Phase 14.9 closed; verification gates met (both pricing docs reflect Phase 14.9 absorption status; Master Spec §34.1.1, §34.1.2, §34.1.3, §34.2.1, §34.2.2, §34.2.5, §34.10.3, §34.10.5, §34.12.1, §34.12.6, §34.12.8, §39, §5.11, Appendix J Plan Tiers, Appendix J `billing_event_charge_kind`, Appendix M tier-abbreviation legend, Appendix M Buyer / Seller Plan Tier enum rows, Appendix M 9 new Solo-binding rows, Appendix M Pro Trial Seat row Hidden-from-tier extension all updated; reconciliation log entry written; Authored Extensions registered with sign-off pending). No engine concept divergence detected — the Phase 14.9 edits are authoritative-registration edits, not engine-mutation edits. Master Spec file size and structural integrity preserved. Backups at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.9-solo-tier-master-spec-scaffold-2026-04-27.md`, `legacy-import:_versions/Sourcera_Buyer_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md`, `legacy-import:_versions/Sourcera_Seller_Pricing_Strategy.v3-pre-phase-14.9-master-spec-absorption-2026-04-27.md` retained.
 
 ---
 
@@ -9876,7 +9876,7 @@ The Phase 14.10 stop condition reads "§44 baseline does not contain the cost-ba
 - The §22.20.5 line 17818 baseline naming `seller_aiwallet_solo_envelope_exhausted` as "Phase 14.10 event" is reconciled: the canonical Phase 14.10 event name is `solo.envelope.exhausted` per §44.6.5; `seller_aiwallet_solo_envelope_exhausted` is preserved as the historical reference name with §44.6.8 #18 establishing the 1:1 alias mapping (`console=seller`, `plan_tier=seller_solo`). Webhook subscribers receive the canonical `solo.envelope.exhausted` event name.
 - `Sourcera_Buyer_Pricing_Strategy.md` v3 §2.8 / §5.5 / §11 narrative content describing Solo invisible AI consumption is preserved as-is for narrative authoritativeness; the Master Spec §44.6 sub-section is the engine-side authority. No BPS / SPS edits in Phase 14.10.
 
-**Reconciliation log status.** Phase 14.10 closed; verification gates met (§44.6 authored with all eight sub-sections; UX §8.1.2 Solo-Tier Billing Surface authored; 9 new Appendix M rows added under "Solo-Tier Surface Treatment (§44.6)"; cross-references to §34.1 in place; stop condition satisfied in spirit and reconciled in writing; Section-Numbering Reconciliation entry written explicitly). No engine concept divergence detected — Phase 14.10 edits are surface-contract authoring + telemetry registration; the underlying AIOperation / AIWallet / OutcomeContract / CostBaseRecalculationLog engine path is unchanged. Master Spec file size grew by ~30 KB; Appendix M grew by 9 rows; UX_Design grew by ~7 KB. Backup at `_versions/Sourcera_Master_Spec_pre-phase-14.10-2026-04-28.md` retained.
+**Reconciliation log status.** Phase 14.10 closed; verification gates met (§44.6 authored with all eight sub-sections; UX §8.1.2 Solo-Tier Billing Surface authored; 9 new Appendix M rows added under "Solo-Tier Surface Treatment (§44.6)"; cross-references to §34.1 in place; stop condition satisfied in spirit and reconciled in writing; Section-Numbering Reconciliation entry written explicitly). No engine concept divergence detected — Phase 14.10 edits are surface-contract authoring + telemetry registration; the underlying AIOperation / AIWallet / OutcomeContract / CostBaseRecalculationLog engine path is unchanged. Master Spec file size grew by ~30 KB; Appendix M grew by 9 rows; UX_Design grew by ~7 KB. Backup at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.10-2026-04-28.md` retained.
 
 ## Phase 14.16 — Execution strategy updated (closed) — 2026-04-28
 
@@ -9894,9 +9894,9 @@ Net-new milestones added: Defense View, Single-Operator Mode, per-vertical eval 
 
 **Edits.**
 
-1. **`Build_Execution_Strategy.md`** — header bumped from v1.0.0 (2026-04-12) to v1.1.0 (2026-04-28, Phase 14.16); source authority list expanded to cite Master Spec v7.1.0-integration-in-progress, Linear blueprint v2.1.0, BPS / SPS v3, and Phase 14.0 → 14.10 reconciliation entries; single-ship discipline statement added to header. §6.2 Implementation Pack Schedule extended with five net-new packs (M02.3, M06.3, M11.3, M21.3, M24.3) and Phase 14.16 net-new pack ordering rules. §8.1 Code Review Gates extended with the Appendix M row checklist line item. §8.2 Automated Quality Gates extended with three Appendix M validators (`appendix_m_engine_to_surface_completeness`, `appendix_m_no_inline_engine_concepts_in_ux_spec`, `appendix_m_no_orphan_engine_concept`). New §11 "Phase 14.16 — Net-New v7.1.0 Milestones" appended with seven sub-sections: §11.1 M02.3 Single-Operator Mode (owning P02; cross-project consumers in P03 / P11 / P19 / P22), §11.2 M06.3 Per-Vertical Eval Starters (owning P06; cross-project consumers in P04 / P19 / P22), §11.3 M11.3 Defense View (owning P11; cross-project consumers in P04 / P19 / P21 / P22), §11.4 M21.3 Solo Tier Billing Surface (owning P21; cross-project consumers in P04 / P03 / P19 / P22 / P23), §11.5 M24.3 Appendix M Maintenance Gate (owning P24; cross-cutting CI + process across all projects), §11.6 Confirmation that all v1 milestones (Hero Moment buyer + seller, KB engineering, Marketplace destination, dual-console firewall, all 17 PLG / network-effects growth mechanics) remain in v1 scope unchanged, §11.7 Phase 14.16 Net-New Issue Count Delta (58 issues in owning projects + 11 cross-project consumer issues = 69 total; aggregate 462 → 531). Backup at `_versions/Build_Execution_Strategy_pre-phase-14.16-2026-04-28.md`.
+1. **`Build_Execution_Strategy.md`** — header bumped from v1.0.0 (2026-04-12) to v1.1.0 (2026-04-28, Phase 14.16); source authority list expanded to cite Master Spec v7.1.0-integration-in-progress, Linear blueprint v2.1.0, BPS / SPS v3, and Phase 14.0 → 14.10 reconciliation entries; single-ship discipline statement added to header. §6.2 Implementation Pack Schedule extended with five net-new packs (M02.3, M06.3, M11.3, M21.3, M24.3) and Phase 14.16 net-new pack ordering rules. §8.1 Code Review Gates extended with the Appendix M row checklist line item. §8.2 Automated Quality Gates extended with three Appendix M validators (`appendix_m_engine_to_surface_completeness`, `appendix_m_no_inline_engine_concepts_in_ux_spec`, `appendix_m_no_orphan_engine_concept`). New §11 "Phase 14.16 — Net-New v7.1.0 Milestones" appended with seven sub-sections: §11.1 M02.3 Single-Operator Mode (owning P02; cross-project consumers in P03 / P11 / P19 / P22), §11.2 M06.3 Per-Vertical Eval Starters (owning P06; cross-project consumers in P04 / P19 / P22), §11.3 M11.3 Defense View (owning P11; cross-project consumers in P04 / P19 / P21 / P22), §11.4 M21.3 Solo Tier Billing Surface (owning P21; cross-project consumers in P04 / P03 / P19 / P22 / P23), §11.5 M24.3 Appendix M Maintenance Gate (owning P24; cross-cutting CI + process across all projects), §11.6 Confirmation that all v1 milestones (Hero Moment buyer + seller, KB engineering, Marketplace destination, dual-console firewall, all 17 PLG / network-effects growth mechanics) remain in v1 scope unchanged, §11.7 Phase 14.16 Net-New Issue Count Delta (58 issues in owning projects + 11 cross-project consumer issues = 69 total; aggregate 462 → 531). Backup at `legacy-import:_versions/Build_Execution_Strategy_pre-phase-14.16-2026-04-28.md`.
 
-2. **`Linear_Execution_Blueprint.md`** — header bumped from v2.0.0 (2026-04-12) to v2.1.0 (2026-04-28, Phase 14.16); status updated to "Production-Ready — Hardened Post-Audit; Phase 14.16 v7.1.0 net-new milestones integrated"; source authority list aligned with Build_Execution_Strategy.md; single-ship discipline statement added. §2.3 Cross-Project Dependency Map extended with five Phase 14.16 net-new dependency rows (one per net-new milestone). §3 Initiative Map I1 / I2 / I6 success conditions extended with Phase 14.16 net-new exit criteria for M02.3 / M06.3 / M11.3 / M21.3 / M24.3. §4 Project Map P02 / P06 / P11 / P21 / P24 entries extended with net-new milestone scope, dependencies, and updated issue counts (P02: 32 → 42; P06: 28 → 40; P11: 16 → 30; P21: 14 → 30; P24: 28 → 34). §5 Milestone Map authored five new entries: M02.3 (Single-Operator Mode), M06.3 (Per-Vertical Eval Starters), M11.3 (Defense View), M21.3 (Solo Tier Billing Surface), M24.3 (Appendix M Maintenance Gate) — each with full entry / exit conditions and cross-references to Master Spec sections / Appendix entries. §8 Full Build Breakdown extended with 69 net-new issues across 7 projects: P02-033 → P02-042 (10 issues, M02.3); P03-051 (1 issue, M02.3 cross-project consumer — PipelineSurface); P04-049 → P04-052 (4 issues, M06.3 / M11.3 / M21.3 cross-project consumers — schemas); P06-029 → P06-040 (12 issues, M06.3); P11-017 → P11-030 (14 issues, M11.3); P19-035 (1 issue, M11.3 cross-project consumer — `defense_view_generate` Sonnet capability; buyer capability count 17 → 18); P21-015 → P21-030 (16 issues, M21.3); P22-023 → P22-026 (4 issues, cross-project consumers — webhooks + emails + notification suppression); P23-019 (1 issue, M21.3 cross-project consumer — Solo MFA-not-available); P24-029 → P24-034 (6 issues, M24.3). §11 Issue Distribution table fully rewritten as Baseline / Phase 14.16 Net-New / Total / Net-new attributed to columns; aggregate 462 → 531 with explicit per-project breakout and per-milestone attribution; Phase 14.16 net-new milestone summary appended; existing-v1-milestones-unchanged confirmation appended. Backup at `_versions/Linear_Execution_Blueprint_pre-phase-14.16-2026-04-28.md`.
+2. **`Linear_Execution_Blueprint.md`** — header bumped from v2.0.0 (2026-04-12) to v2.1.0 (2026-04-28, Phase 14.16); status updated to "Production-Ready — Hardened Post-Audit; Phase 14.16 v7.1.0 net-new milestones integrated"; source authority list aligned with Build_Execution_Strategy.md; single-ship discipline statement added. §2.3 Cross-Project Dependency Map extended with five Phase 14.16 net-new dependency rows (one per net-new milestone). §3 Initiative Map I1 / I2 / I6 success conditions extended with Phase 14.16 net-new exit criteria for M02.3 / M06.3 / M11.3 / M21.3 / M24.3. §4 Project Map P02 / P06 / P11 / P21 / P24 entries extended with net-new milestone scope, dependencies, and updated issue counts (P02: 32 → 42; P06: 28 → 40; P11: 16 → 30; P21: 14 → 30; P24: 28 → 34). §5 Milestone Map authored five new entries: M02.3 (Single-Operator Mode), M06.3 (Per-Vertical Eval Starters), M11.3 (Defense View), M21.3 (Solo Tier Billing Surface), M24.3 (Appendix M Maintenance Gate) — each with full entry / exit conditions and cross-references to Master Spec sections / Appendix entries. §8 Full Build Breakdown extended with 69 net-new issues across 7 projects: P02-033 → P02-042 (10 issues, M02.3); P03-051 (1 issue, M02.3 cross-project consumer — PipelineSurface); P04-049 → P04-052 (4 issues, M06.3 / M11.3 / M21.3 cross-project consumers — schemas); P06-029 → P06-040 (12 issues, M06.3); P11-017 → P11-030 (14 issues, M11.3); P19-035 (1 issue, M11.3 cross-project consumer — `defense_view_generate` Sonnet capability; buyer capability count 17 → 18); P21-015 → P21-030 (16 issues, M21.3); P22-023 → P22-026 (4 issues, cross-project consumers — webhooks + emails + notification suppression); P23-019 (1 issue, M21.3 cross-project consumer — Solo MFA-not-available); P24-029 → P24-034 (6 issues, M24.3). §11 Issue Distribution table fully rewritten as Baseline / Phase 14.16 Net-New / Total / Net-new attributed to columns; aggregate 462 → 531 with explicit per-project breakout and per-milestone attribution; Phase 14.16 net-new milestone summary appended; existing-v1-milestones-unchanged confirmation appended. Backup at `legacy-import:_versions/Linear_Execution_Blueprint_pre-phase-14.16-2026-04-28.md`.
 
 3. **`_integration/RECONCILIATION.md`** — this entry appended.
 
@@ -9924,7 +9924,7 @@ Net-new milestones added: Defense View, Single-Operator Mode, per-vertical eval 
 - The `Linear_Execution_Blueprint.md` v2.0.0 §1.1 lists four teams (Platform, Buyer Experience, Seller Experience, Intelligence). The Phase 14.16 net-new milestones do not require new teams; M02.3 lands in Platform (workspace lifecycle ownership), M06.3 in Buyer Experience (Workspace creation flow ownership), M11.3 in Buyer Experience (analytics / reporting domain ownership), M21.3 in Platform (billing ownership), M24.3 in Platform (CI / launch ownership). Cross-project consumer issues land in their natural team per the existing project / team mapping.
 - The `Sourcera_Master_Spec.md` front-matter version remains `7.0.0` at Phase 14.16 close (the v7.1.0 stamp is deferred to Phase 14.20 closeout per the Phase 14.1 / 14.2 protocol); the Linear blueprint and Build strategy headers cite "v7.1.0-integration-in-progress" to honor the in-progress state. Phase 14.20 closeout will reconcile this by stamping all three artifacts (Master Spec → v7.1.0; Linear blueprint → v2.1.0; Build strategy → v1.1.0) in the same change.
 
-**Reconciliation log status.** Phase 14.16 closed; verification gates met (net-new milestones added with implementation pack scoping; no existing milestones removed or deferred; Linear project structure consistent; single-ship discipline language consistent). No engine concept divergence detected — Phase 14.16 edits are execution-document authoring; the underlying Master Spec engine concepts (Single-Operator Mode, Defense View, Per-Vertical Eval Starters, Solo Tier Billing Surface, Appendix M maintenance) were authored in Phases 14.4 / 14.5 / 14.7 / 14.9 / 14.10 / 14.2 respectively and remain unchanged. `Build_Execution_Strategy.md` grew from ~30 KB to ~46 KB; `Linear_Execution_Blueprint.md` grew from ~146 KB to ~166 KB. Backups retained at `_versions/Build_Execution_Strategy_pre-phase-14.16-2026-04-28.md` and `_versions/Linear_Execution_Blueprint_pre-phase-14.16-2026-04-28.md`.
+**Reconciliation log status.** Phase 14.16 closed; verification gates met (net-new milestones added with implementation pack scoping; no existing milestones removed or deferred; Linear project structure consistent; single-ship discipline language consistent). No engine concept divergence detected — Phase 14.16 edits are execution-document authoring; the underlying Master Spec engine concepts (Single-Operator Mode, Defense View, Per-Vertical Eval Starters, Solo Tier Billing Surface, Appendix M maintenance) were authored in Phases 14.4 / 14.5 / 14.7 / 14.9 / 14.10 / 14.2 respectively and remain unchanged. `Build_Execution_Strategy.md` grew from ~30 KB to ~46 KB; `Linear_Execution_Blueprint.md` grew from ~146 KB to ~166 KB. Backups retained at `legacy-import:_versions/Build_Execution_Strategy_pre-phase-14.16-2026-04-28.md` and `legacy-import:_versions/Linear_Execution_Blueprint_pre-phase-14.16-2026-04-28.md`.
 
 ## Phase 14.17 — UX Discipline: First-30-Seconds Test (closed 2026-04-28)
 
@@ -9938,7 +9938,7 @@ UX spec now contains the operational quality gate for Master Spec §3.13 Princip
 
 **Edits.**
 
-1. **`UX_Design_of_Sourcera.md`** — new top-level section §1.4 First-30-Seconds Test authored, comprising §1.4.1 (required four-bullet sub-section template — Sees / Understands / Does next / Hidden, and why), §1.4.2 (Over-Engineering Trip-Wire with three-option re-scoping ladder and explicit prohibition on tooltips / in-app guides / "Learn more" scaffolding as remediation), §1.4.3 (CI-Gate Note registering `first_30_seconds_test_present_on_new_ux_surface` as a hard PR block, plus pairing with the existing `appendix_m_no_inline_engine_concepts_in_ux_spec` Master Spec gate), §1.4.4 (retro-documentation index for the four v7.1.0 surfaces with their respective home and phase), §1.4.5 (cross-references to Master Spec §3.13, Appendix M, §48.8.7, §22.20, §13.11, §13.12, and `Integration_Prompts_v7.1.md` Phase 14.17). Four "First 30 Seconds (per §1.4)" sub-sections retro-documented per the §1.4.1 template: (a) §4.2.13 Defense View; (b) §5.2.19 PipelineSurface; (c) Phase 14.8 Seller Magic-Link Hero Moment Landing — Screen 1 (with cross-reference to the existing five-screen self-check at the close of the Phase 14.8 polish, which audits Screens 2–5 in narrative form); (d) Phase 14.7 "What Are You Evaluating?" Intake — Screen 1 (with cross-reference to Screen 2 Post-Selection Landing inheritance via arithmetic-only callout copy). Backup at `_versions/UX_Design_of_Sourcera_pre-phase-14-17-first-30-seconds-test-2026-04-28.md`.
+1. **`UX_Design_of_Sourcera.md`** — new top-level section §1.4 First-30-Seconds Test authored, comprising §1.4.1 (required four-bullet sub-section template — Sees / Understands / Does next / Hidden, and why), §1.4.2 (Over-Engineering Trip-Wire with three-option re-scoping ladder and explicit prohibition on tooltips / in-app guides / "Learn more" scaffolding as remediation), §1.4.3 (CI-Gate Note registering `first_30_seconds_test_present_on_new_ux_surface` as a hard PR block, plus pairing with the existing `appendix_m_no_inline_engine_concepts_in_ux_spec` Master Spec gate), §1.4.4 (retro-documentation index for the four v7.1.0 surfaces with their respective home and phase), §1.4.5 (cross-references to Master Spec §3.13, Appendix M, §48.8.7, §22.20, §13.11, §13.12, and `Integration_Prompts_v7.1.md` Phase 14.17). Four "First 30 Seconds (per §1.4)" sub-sections retro-documented per the §1.4.1 template: (a) §4.2.13 Defense View; (b) §5.2.19 PipelineSurface; (c) Phase 14.8 Seller Magic-Link Hero Moment Landing — Screen 1 (with cross-reference to the existing five-screen self-check at the close of the Phase 14.8 polish, which audits Screens 2–5 in narrative form); (d) Phase 14.7 "What Are You Evaluating?" Intake — Screen 1 (with cross-reference to Screen 2 Post-Selection Landing inheritance via arithmetic-only callout copy). Backup at `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-14-17-first-30-seconds-test-2026-04-28.md`.
 
 2. **`_integration/RECONCILIATION.md`** — this entry appended.
 
@@ -9962,7 +9962,7 @@ UX spec now contains the operational quality gate for Master Spec §3.13 Princip
 - The Phase 14.7 sub-section already carried a one-line "First-30-Seconds Test (Master Spec §3.13 / Phase 14.17): the surface passes…" inside the Accessibility block of Screen 1 (line authored in Phase 14.7). The Phase 14.17 retro-documentation supersedes the one-liner with a structured §1.4.1-conformant sub-section; the original line is preserved (not deleted) because it is bound to the Accessibility block and removing it would orphan the §G-05 / WCAG cross-references in that paragraph.
 - The Phase 14.8 sub-section already carried a five-bullet "First-30-Seconds Test self-check" auditing Screens 1–5 (lines authored in Phase 14.8). The Phase 14.17 retro-documentation adds a structured §1.4.1-conformant sub-section for Screen 1 (the canonical first surface) and cross-references the existing self-check for the Screens 2–5 audit. Both artifacts coexist; the structured sub-section is the canonical §1.4 conformance citation, and the narrative self-check provides additional coverage for the four screens that follow Screen 1 in the Hero Moment sequence.
 
-**Reconciliation log status.** Phase 14.17 closed; verification gates met. No engine concept divergence detected — Phase 14.17 edits are UX-discipline authoring; the underlying Master Spec §3.13 Principle 9 and Appendix M contracts authored in Phases 14.1 / 14.2 remain unchanged. `UX_Design_of_Sourcera.md` grew from 464,205 bytes (5,459 lines) to a slightly larger size reflecting the §1.4 section plus four retro-doc sub-sections. Backup retained at `_versions/UX_Design_of_Sourcera_pre-phase-14-17-first-30-seconds-test-2026-04-28.md`.
+**Reconciliation log status.** Phase 14.17 closed; verification gates met. No engine concept divergence detected — Phase 14.17 edits are UX-discipline authoring; the underlying Master Spec §3.13 Principle 9 and Appendix M contracts authored in Phases 14.1 / 14.2 remain unchanged. `UX_Design_of_Sourcera.md` grew from 464,205 bytes (5,459 lines) to a slightly larger size reflecting the §1.4 section plus four retro-doc sub-sections. Backup retained at `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-14-17-first-30-seconds-test-2026-04-28.md`.
 
 ## Phase 14.18 — Decisions Ledger Close-Out + CI-Gate Authoring (closed 2026-04-28)
 
@@ -9984,7 +9984,7 @@ Seven v7.1.0-program decisions raised in the Cowork session 2026-04-26 are now c
 
 4. **`_integration/RECONCILIATION.md`** — this entry appended.
 
-**Backup.** `_versions/Sourcera_Master_Spec_pre-phase-14.18-ci-gate-appendix-m-2026-04-28.md` (5,092,279 bytes; full pre-edit snapshot taken before §M.4 was authored). Backup taken before destructive edit per project file-handling rules.
+**Backup.** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.18-ci-gate-appendix-m-2026-04-28.md` (5,092,279 bytes; full pre-edit snapshot taken before §M.4 was authored). Backup taken before destructive edit per project file-handling rules.
 
 **Verification gate (closed).**
 
@@ -10004,7 +10004,7 @@ Seven v7.1.0-program decisions raised in the Cowork session 2026-04-26 are now c
 - **§M.4.4 override audit cadence.** The §M.4.5 nightly digest of `override_applied` runs requires a human reviewer rotation. Phase 14.20 closeout must designate the rotation owner and the channel destination for the digest.
 - **Cross-link to `_integration/AUTHORED_EXTENSIONS_LEDGER.md`.** §M.4 is logged as an Authored Extension in §M.4.6; if the corpus carries a separate `_integration/AUTHORED_EXTENSIONS_LEDGER.md` (per Phase-12.3-C4 reference), Phase 14.20 closeout should add a row binding §M.4 to that ledger.
 
-**Reconciliation log status.** Phase 14.18 closed; verification gates met. Decisions ledger now carries the full v7.1.0 program decision corpus through 2026-04-26. Master Spec Appendix M now carries the binding CI-gate contract for §M.2 process gates #1, #4, and #7 — the Phase 14.2 forward references to "Phase 14.18 enforcement" are tightened from "pending" to "authored" at this phase close. `Sourcera_Master_Spec.md` grew from the Phase 14.17-close size to reflect §M.4 (~70 lines). Backup retained at `_versions/Sourcera_Master_Spec_pre-phase-14.18-ci-gate-appendix-m-2026-04-28.md`.
+**Reconciliation log status.** Phase 14.18 closed; verification gates met. Decisions ledger now carries the full v7.1.0 program decision corpus through 2026-04-26. Master Spec Appendix M now carries the binding CI-gate contract for §M.2 process gates #1, #4, and #7 — the Phase 14.2 forward references to "Phase 14.18 enforcement" are tightened from "pending" to "authored" at this phase close. `Sourcera_Master_Spec.md` grew from the Phase 14.17-close size to reflect §M.4 (~70 lines). Backup retained at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-14.18-ci-gate-appendix-m-2026-04-28.md`.
 
 ---
 
@@ -10235,7 +10235,7 @@ The following defects from the Phase 14.19 adversarial review are formally sched
 3. **`Sourcera_Master_Spec.md` terminator.** Resolved from "v7.1.0-integration-in-progress" to "v7.1.0 (… ; v7.1.0 stamped in Phase 14.20 on 2026-04-28)".
 4. **`Sourcera_Buyer_Pricing_Strategy.md`.** Already at v3 (2026-04-26) per Phase 14.9 / 14.10 landing dates; no re-stamp required at v7.1.0.
 5. **`Sourcera_Seller_Pricing_Strategy.md`.** Already at v3 (2026-04-26) per Phase 14.9 / 14.10 landing dates; no re-stamp required at v7.1.0.
-6. **`CLAUDE.md`.** Last updated `2026-04-24` → `2026-04-28`. Corpus state line replaced with: "Master Spec v7.1.0 stamped. v7.1.0 Surface-Abstraction & Dual-Maya program complete. Baseline v7.0.0 snapshot at `_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`. Next program is TBD." §3 file catalog row for Master Spec updated to v7.1.0 (2026-04-28). Pricing strategy file catalog rows updated to v3 (2026-04-26). Master Summary file catalog row updated to "(retired in v7.0.0)". §17 Known Drift / Open Issues replaced with the v7.1.0-state set: v7.1.0 stamp state; Master Summary supersession (no v1.2 — retired in v7.0.0); Solo plan tier and Defense View authoritative in Master Spec; Appendix M canonical surface/engine contract; §M.4 active and §M.5 partial runtime wiring; v7.1.x descopes (Phase 14.0.1); v7.1.1 backlog open; AE ledger ratification queue; pricing companion role.
+6. **`CLAUDE.md`.** Last updated `2026-04-24` → `2026-04-28`. Corpus state line replaced with: "Master Spec v7.1.0 stamped. v7.1.0 Surface-Abstraction & Dual-Maya program complete. Baseline v7.0.0 snapshot at `_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`. Next program is TBD." §3 file catalog row for Master Spec updated to v7.1.0 (2026-04-28). Pricing strategy file catalog rows updated to v3 (2026-04-26). Master Summary file catalog row updated to "(retired in v7.0.0)". §17 Known Drift / Open Issues replaced with the v7.1.0-state set: v7.1.0 stamp state; Master Summary supersession (no v1.2 — retired in v7.0.0); Solo plan tier and Defense View authoritative in Master Spec; Appendix M canonical surface/engine contract; §M.4 active and §M.5 partial runtime wiring; v7.1.x descopes (Phase 14.0.1); v7.1.1 backlog open; AE ledger ratification queue; pricing companion role.
 7. **`_integration/PHASE14_VERIFY.md`.** Phase 14.20 row in the phase status table updated from `not started` to `closed`.
 8. **`_integration/RECONCILIATION.md`.** This entry.
 
@@ -10262,7 +10262,7 @@ The following defects from the Phase 14.19 adversarial review are formally sched
 Phase 14.20 — v7.1.0 stamped (program closed): Master Spec v7.1.0,
 Master Summary (retired in v7.0.0; no v1.2 stamp), pricing strategy
 docs v3. CLAUDE.md updated. Surface-Abstraction & Dual-Maya program
-closed. Baseline preserved at `_versions/Sourcera_Master_Spec.v7.0.0-
+closed. Baseline preserved at `legacy-import:_versions/Sourcera_Master_Spec.v7.0.0-
 pre-v7.1-2026-04-26.md`. Source authority: Cowork session 2026-04-26 +
 adversarial pass complete.
 
@@ -10278,7 +10278,7 @@ adversarial pass complete. Program closed.
 
 **Program.** Audit Phase V11 (Adversarial Verification of Phase 11) ran 2026-05-11 against Appendix §M.4 / §M.5 / §M.1 plus their dependents. Sign-off was HALTED on 3 inherited P0 ci_gate defects (D-11.2-004 firewall override-bypass; D-11.3-001 per-row runtime_status absent; D-11.3-002 13 spec-body cross-references resolving into empty catalog space) plus 2 V11 net-new P1 ci_gate defects (D-11V-003 cascade-class-coverage override-prohibition silent; D-11V-005 Hero Moment / Solo override-prohibition silent across 7 gates). Phase V11 remediation pass closed 2026-05-11 with all 3 P0s and 12 P1s transitioned to `remediated` (D-11.4-001 P1 transitioned to `deferred_to_phase_11_5` per the M.1 backfill scope). The v7.1.0 spec-binding inheritance set updated per the §M.5.5 per-row runtime-status assignment table.
 
-**Pre-edit Master Spec backup.** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V11-remediation-2026-05-11.md` (5.7 MB; full v7.1.0 spec state immediately prior to V11 remediation edits).
+**Pre-edit Master Spec backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V11-remediation-2026-05-11.md` (5.7 MB; full v7.1.0 spec state immediately prior to V11 remediation edits).
 
 **Defects in scope.** 3 P0 + 12 P1 + 11 P2 + 6 P3 = 32 defects filed across Phase 11.1 (10) + Phase 11.2 (22) + Phase 11.3 (13) + Phase 11.4 (4) + Phase V11 (5). All defect-to-remediation mappings recorded inline in `_audit/PHASE11V_FINDINGS.md` § 4.3 remediation queue and Master Spec §M.5.9 V11 catalog-completeness remediation summary.
 
@@ -10315,7 +10315,7 @@ adversarial pass complete. Program closed.
 
 **Scope.** Closes 123 defects (8 P0 · 78 P1 · 29 P2 · 8 P3) across the operations / QA / observability / DR cohort: §42 (30 defects), §43 retirement (21 defects), §46 (22 defects), §50 (40 defects), V12 net-new (10 defects).
 
-**Pre-edit backup.** `Sourcera_Master_Spec.md` v7.1.0 baseline snapshotted to `_versions/Sourcera_Master_Spec.v7.1.0-pre-V12-remediation-2026-05-11.md` (5.6 MB).
+**Pre-edit backup.** `Sourcera_Master_Spec.md` v7.1.0 baseline snapshotted to `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V12-remediation-2026-05-11.md` (5.6 MB).
 
 **§43 Retirement Pack (highest-leverage closure — 6 P0 + 15 P1/P2/P3 in a single structural edit).** §43.1–§43.5 v6.0.0 prose retired in-place: the section head carries a retirement banner; §43.0 authoritative redirect table maps every v6.0.0 §43 capability to its v7.1.0 §50 successor surface; §43.1–§43.5 anchors retained as retirement stubs (backward-compatibility for inbound cross-references). The §43.7 narrative reference for Zendesk / Datadog / Sentry / PostHog / PagerDuty / Statuspage / Notion integrations preserved as a non-normative reference. `is_staff: true` boolean RETIRED; parallel `admin_audit_log` RETIRED; "Assume user session" button RETIRED; one-click workspace JSON export RETIRED; "retained forever" inline retention RETIRED.
 
@@ -10382,7 +10382,7 @@ adversarial pass complete. Program closed.
 | md5 | `914382e6488d74500cbf727ff0a3a4fb` |
 | mtime | 2026-05-13 04:44:17 UTC |
 
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-2026-05-15.md` (6,031,693 bytes; md5 `914382e6488d74500cbf727ff0a3a4fb` — exact match to source). Taken 2026-05-15 immediately prior to v7.2.0-REM Phase 0 scaffolding edits.
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-2026-05-15.md` (6,031,693 bytes; md5 `914382e6488d74500cbf727ff0a3a4fb` — exact match to source). Taken 2026-05-15 immediately prior to v7.2.0-REM Phase 0 scaffolding edits.
 
 ### Halt-Resolution Record (Prompt V0)
 
@@ -10436,7 +10436,7 @@ Filed; routed to Phase 0 patch (in-place edit, single line, no AE required).
 
 **Status:** D-2.2-042 spec-body remediation complete; D-V72REM-PH1-001 sibling spec-body remediation complete (surfaced in-flight 2026-05-15). D-11.2-004 deferred to a subsequent Phase 1 sub-session — the §M.4 override-path bypass requires a four-predicate cross-validator authoring pass that is independent of and parallel to D-2.2-042.
 
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-phase1-2026-05-15.md` (6,031,693 bytes; md5 `914382e6488d74500cbf727ff0a3a4fb`; lines 51,651). Exact match to the v7.2.0-REM Phase 0 anchor — confirms no intervening edits between Phase 0 scaffolding (2026-05-15) and Phase 1 kickoff (same day).
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-phase1-2026-05-15.md` (6,031,693 bytes; md5 `914382e6488d74500cbf727ff0a3a4fb`; lines 51,651). Exact match to the v7.2.0-REM Phase 0 anchor — confirms no intervening edits between Phase 0 scaffolding (2026-05-15) and Phase 1 kickoff (same day).
 
 **Edit summary.** Thirteen spec-body edits across §4.4.16 HeatMapCell, §M13 HeatMapAggregationCard authoring (sibling), §27.10.3 enforcement-surfaces catalog, §27.10.3 footnote ¹ k-floor disambiguation, §4.4.8 consumer-redaction-rules table, §M.5.13 newly authored CI gate catalog block (2 gates), Appendix I v7.2.0-REM Phase 1 block (1 error code), and Master Spec footer changelog. Full enumeration in `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → Phase 1 Closure Note (AE-V72REM-01)`.
 
@@ -10486,7 +10486,7 @@ Both gates wire into the existing M02.3 `.github/workflows/spec-lint.yml` workfl
 
 **Status:** D-11.2-004 spec-body remediation complete; AE-V11-06 ratified (`pending → approved` 2026-05-15); new AE-V72REM-09 row registered to capture the v7.2.0-REM Phase 2 extensions to §M.4.4 beyond the V11 hardening baseline. Phase 1 P0 closure scope now complete (D-2.2-042 + D-11.2-004 + D-V72REM-PH1-001 all canonical-row `remediated 2026-05-15`).
 
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0-pre-v720REM-D11.2-004-2026-05-15.md` (6,052,201 bytes; md5 `a8cefc94ab52441cb3b3193958fb0cf8`). Taken 2026-05-15 immediately prior to the §M.4.4 rewrite. The post-Phase-1-sub-session-1 Master Spec (post-D-2.2-042 closure) is the source for this sub-session; the sub-session-2 backup byte-count differs from sub-session-1 because the D-2.2-042 edits landed first.
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v720REM-D11.2-004-2026-05-15.md` (6,052,201 bytes; md5 `a8cefc94ab52441cb3b3193958fb0cf8`). Taken 2026-05-15 immediately prior to the §M.4.4 rewrite. The post-Phase-1-sub-session-1 Master Spec (post-D-2.2-042 closure) is the source for this sub-session; the sub-session-2 backup byte-count differs from sub-session-1 because the D-2.2-042 edits landed first.
 
 **Edit summary.** Seven Master Spec body edits + four new spec-lint repo artifacts:
 
@@ -10638,7 +10638,7 @@ Junior-engineer buildability review: the §M.4.4.2 rewrite enumerates four predi
 
 **Edit summary.** Five spec-body / spec-tree edits: (1) §M.5 catalog row L51579-51580 — cluster heading carries dual date stamp (spec-side 2026-05-03; runtime promoted 2026-05-18); row content expanded to declare RECONCILIATION post-amendment scan as a second input domain; allow-list exemptions enumerated as five named classes (A-E); runtime artifact + workflow step name + fail-closed exit codes inlined; override-rationale floor harmonized 30 → 60 chars per §M.4.4.5 ¶1; three legacy P0 hit patterns marked `not_permitted` (regression-lock). (2) §M.5.5 per-row runtime-status table — row transitioned to **`runtime_active`** under release-orchestration pack; stamp commitment cell rewritten ("Stamped at v7.2.0-REM Phase 2 closure; no v7.1.1 stamp dependency"). (3) §M.5.6 arithmetic — 2 → 3 runtime_active gates; 119 → 118 spec_binding_pending_pack_<id>; release-gate row count unchanged. Three repo-side artifacts: (4) `tools/spec-lint/appendix_k_canonicality.ts` (650 lines of TypeScript, full header authority-anchor commentary). (5) `.github/workflows/spec-lint.yml` (new "Run appendix_k_glossary_canonicality detector" step + comment-poster flag + audit-emitter flag + final-gate aggregation update). Defect-ledger row transitions: D-AK-001 / D-AK-002 / D-AK-003 from `open` → `remediated 2026-05-18` per D-CONS-001 P1 canonical-row authority. AE ledger: AE-12.3-12 `acknowledged` → `ratified 2026-05-18`.
 
-**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-glossary-canonicality-2026-05-18.md`. Pre-edit byte size 6,089,968; md5 `ff4983c6ada42005d6cd4ce4543ea72f`; line count 51,852.
+**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-glossary-canonicality-2026-05-18.md`. Pre-edit byte size 6,089,968; md5 `ff4983c6ada42005d6cd4ce4543ea72f`; line count 51,852.
 
 **Defect → landing-site map.**
 
@@ -10691,7 +10691,7 @@ Junior-engineer buildability review: the §M.4.4.2 rewrite enumerates four predi
 
 **Edit summary.** Single spec-body edit: Master Spec Appendix K Phase 2V cluster entry `brand_voice_guide_v1` (~L50138) rewritten from the inline-payload form to the structured-citation form. The rewrite adds: (a) a non-inline-restatement invariant paragraph at the entry head naming Counterfactual #1; (b) a five-slot schema definition by reference (each slot is a pointer, not a value); (c) a canonical-storage paragraph (target entity + interim file location); (d) a schema-version-axis paragraph (sibling-entry retirement convention); (e) a validator-binding paragraph clarifying that §48.4.4 reads the artifact, not this entry; (f) an ownership paragraph (Marketing / Ops / Founder roles); (g) an AE-provenance paragraph (AE-V2-001 + AE-V72REM-02); (h) a counterfactual-coverage paragraph with three documented propagation scenarios; (i) a cross-references paragraph. Three ledger-side edits: (1) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` AE-V72REM-02 row at the v7.2.0-REM Program registry — brief rewritten to reflect the structured-citation form + status transitioned to `ratified 2026-05-18`; (2) Phase 2 Closure Note block authored mirroring the Phase 1 Closure Note structure (13-item spec-edit enumeration + counter-signature trigger + pre-edit backup record + stack-alignment notes + coupled-AE-ratification block); (3) AE-V2-001 row at the v7.1.0 Phase 2V section — status transitioned to `ratified 2026-05-18 jointly with AE-V72REM-02` with body-rewrite note. One defect-ledger edit: D-AK-004 canonical row at `_audit/DEFECT_LEDGER.md` L492 transitioned `open → remediated 2026-05-18` per D-CONS-001 P1 canonical-row authority; the supplementary 2026-05-03 transition at L873 is preserved as the original authoring authority with an amended trace pointing to the 2026-05-18 re-remediation.
 
-**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-Prompt2.2-brand_voice_guide_v1-2026-05-18.md`. Pre-edit byte size 6,092,060; md5 `75296785e2f5b1cbfbe31f218befdaa7`; line count 51,852.
+**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-Prompt2.2-brand_voice_guide_v1-2026-05-18.md`. Pre-edit byte size 6,092,060; md5 `75296785e2f5b1cbfbe31f218befdaa7`; line count 51,852.
 
 **Defect → landing-site map.**
 
@@ -10758,7 +10758,7 @@ Single-view rollup of every Authored Extension row touched by v7.2.0-REM Program
 
 **Outputs landed:** All nine outputs landed in this Prompt 3.1 closure. The §M.5.3 schema text was originally authored at V11 close (2026-05-11) declaring the intended 6-column reduced overview (`Gate ID | Source phase | Row class | Runtime status | Override path | Authority anchor`) but the §M.5.4 actual table header remained at the original Phase 14.18.1 6-column format (`Gate ID | Source phase | Scope | Trigger | Failure mode | Authority anchor`). Prompt 3.1 reconciles by extending §M.5.4 to a 7-column transitional format (`Gate ID | Source phase | Runtime status | Scope | Trigger | Failure mode | Authority anchor`) — preserving the original Scope / Trigger / Failure mode columns for backward-compatibility while landing the D-11.3-001 P0 priority column. The remaining AE-V11-03 column extensions (`Row class`, `Execution context` / `Assertion` split per D-11.3-008, `Runbook` per D-11.3-007, `Override path` per D-11.3-012) remain staged for successive remediation passes per AE-V72REM-08 (the v7.2.0-REM Program 174-gate runtime-status migration plan); the in-line `Override path:` annotations carried in existing `Failure mode` cells per §M.5.2 row-level override-class set provide interim per-row override disclosure pending the formal column landing.
 
-**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P0-6-2026-05-18.md`. Pre-edit byte size 6,098,065; md5 `377e11bfcf568731b1d1e8d9a5017b59`.
+**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P0-6-2026-05-18.md`. Pre-edit byte size 6,098,065; md5 `377e11bfcf568731b1d1e8d9a5017b59`.
 
 **Edit summary.** Eight spec-side + ledger-side edits. (1) Master Spec §M.5.3 schema-text amendment at the "The full multi-column row representation appears in §M.5.5..." paragraph — extends the declared §M.5.4 index column set from 6 to 7 columns with explicit reconciliation note (v7.2.0-REM Phase 3 incremental landing; remaining four columns staged for AE-V72REM-08; §M.5.4 per-row authoritative against §M.5.5 default). (2) Master Spec §M.5.4 catalog-index table header amended from `Gate ID | Source phase | Scope | Trigger | Failure mode | Authority anchor` to `Gate ID | Source phase | Runtime status | Scope | Trigger | Failure mode | Authority anchor`; preamble paragraph above the table extended to note v7.2.0-REM Phase 1 cluster addition + the Phase 3 column landing; all 19 phase banner rows expanded from 6-cell empty cells to 7-cell empty cells. (3) Master Spec §M.5.4 122 catalog rows — per-row backfill of the `Runtime status` cell: 3 rows marked `runtime_active` (`appendix_m_coverage_on_diff` Phase V11 self-listing row; `appendix_m_tier_visibility_smoke` Phase 14.2 row; `appendix_k_glossary_canonicality` Phase 2V row — promoted at v7.2.0-REM Phase 2 closure earlier 2026-05-18), 1 row marked `spec_binding_release_gate_only` (`v7_1_1_stamp_gate_runtime_status_audit` Phase V11 Release Stamp Gate row), 118 rows marked `spec_binding_pending_pack_<id>` per the §M.5.5 default-by-cluster table (`m02_3` for spec-tree / grep / lint gates; `m11_3` for handler / SCIM / surface tests; `m21_3` for DR-residency / telemetry / chaos gates; `m24_3` for Stripe-meter / committed-spend Stripe-coupled gates). (4) Master Spec §M.5.6 aggregate-arithmetic amendment — retires the prior "post-V11 122-row" framing in favor of the post-v7.2.0-REM-Phase-1 181-row aggregate (122 + 33 V12 + 24 V13 + 2 Phase 1); registers the v7.2.0-REM Phase 3 closure paragraph documenting the column landing + AE-V11-03 / AE-V11-07 ratification + the remaining AE-V11-03 column staging. (5) Master Spec Appendix J new sub-section §J.v7.2.0-REM-Phase-3 — registers the `ci_gate_runtime_status` enum with 3 canonical values + per-value semantics table (used-by columns enumerate the §M.5 row counts per status) + 7 notes covering cardinality + parameter-token regex + transition protocol + override semantics + per-row vs default authority + the V12 capitalisation drift D-V72REM-PH3-002 P3 cross-flag. (6) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` AE-V11-03 row at L502 — status transitioned `pending → approved` with Engineering Lead sole-signer-posture sign-off; brief field amended to reflect incremental landing strategy. (7) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` AE-V11-07 row at L506 — status transitioned `pending → approved` with Engineering Lead sole-signer-posture sign-off; brief field amended to reflect §M.5.6 v7.2.0-REM-Phase-3 amendment. (8) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` AE-14.18.1-01 row at L280 — dependency-arrow status update (V11 cluster blockers satisfied 2026-05-18; awaiting Engineering Lead ratification per AE_RATIFICATION_RECOMMENDATIONS.md wave 7); brief field amended to reflect the 181-row aggregate + 7-column index landing. One defect-ledger edit: `_audit/DEFECT_LEDGER.md` D-11.3-001 canonical row at L4429 — status transitioned `open → remediated 2026-05-18` per D-CONS-001 P1 propagation rule; full closure-trace appended documenting the V11 spec-side schema declaration (2026-05-11) + the v7.2.0-REM Phase 3 column-landing closure (2026-05-18). One supplementary-block edit: `_audit/DEFECT_LEDGER.md` L4612 supplementary-status entry annotated to indicate the canonical-row propagation completion.
 
@@ -10845,11 +10845,11 @@ All six findings are P3 cosmetic or governance-protocol; none touch the D-11.3-0
 
 **Phase close date:** 2026-05-18 (v7.2.0-REM Phase 3 Prompt 3.2; same Cowork day as Phase 2 Prompt 2.1 + Prompt 2.2 + Phase 3 Prompt 3.1 closures).
 
-**Outputs owed:** (i) Walk the 17 spec-body cross-references at Master Spec L8287 / L8688 / L8692 / L9525 / L10104 / L17935 / L17937 / L19399 / L19401 / L29308 / L29336 / L30097 / L30106 / L30113 / L30135 / L30929 / L37988 and confirm each resolves to an existing §M.5.4 catalog-row gate-id back-tick token (resolution by gate-id, not line number; residual citation-line drift between the D-11.3-002 audit evidence (frozen 2026-05-14) and post-V11 line numbers is non-impactful because resolution binds on the back-ticked token); (ii) §M.5.6 v7.2.0-REM Phase 3 Prompt 3.2 closure paragraph appended documenting the 17-cite → §M.5.4-row resolution map + the Stripe-meter-coupled M24.3 binding preservation for the two committed-spend billing-invariant gates per Source-of-Truth Hierarchy §2 (Master Spec wins over v7.2.0-Remediation_Prompts.md Prompt 3.2 task-description "M02.3" verbiage); (iii) D-11.3-002 canonical-row transition `open → remediated 2026-05-18` at `_audit/DEFECT_LEDGER.md` L4430 per D-CONS-001 P1 propagation rule; supplementary block at L4613 annotated to indicate the canonical-row propagation completion; (iv) AE-14.18.1-01 brief amended to explicitly enumerate the 13 D-11.3-002 cross-reference orphan rows as confirmed members of the 122 §M.5.4 / 181 aggregate row count + name the meta-gate `appendix_m5_cross_reference_resolution_completeness` as the binding runtime-enforcement of the cross-reference completeness assertion + re-opened for re-ratification post-Phase-3.2; (v) AE-V11-07 brief amended (cosmetic addition) to acknowledge the Prompt 3.2 canonical-row propagation; AE-V11-07 status remains `approved` (no change); (vi) Master Spec pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3.2-D-11.3-002-2026-05-18.md` (md5 `917e55aa1c07f9f28e66f2adb24c63fa`; 6,112,078 bytes).
+**Outputs owed:** (i) Walk the 17 spec-body cross-references at Master Spec L8287 / L8688 / L8692 / L9525 / L10104 / L17935 / L17937 / L19399 / L19401 / L29308 / L29336 / L30097 / L30106 / L30113 / L30135 / L30929 / L37988 and confirm each resolves to an existing §M.5.4 catalog-row gate-id back-tick token (resolution by gate-id, not line number; residual citation-line drift between the D-11.3-002 audit evidence (frozen 2026-05-14) and post-V11 line numbers is non-impactful because resolution binds on the back-ticked token); (ii) §M.5.6 v7.2.0-REM Phase 3 Prompt 3.2 closure paragraph appended documenting the 17-cite → §M.5.4-row resolution map + the Stripe-meter-coupled M24.3 binding preservation for the two committed-spend billing-invariant gates per Source-of-Truth Hierarchy §2 (Master Spec wins over v7.2.0-Remediation_Prompts.md Prompt 3.2 task-description "M02.3" verbiage); (iii) D-11.3-002 canonical-row transition `open → remediated 2026-05-18` at `_audit/DEFECT_LEDGER.md` L4430 per D-CONS-001 P1 propagation rule; supplementary block at L4613 annotated to indicate the canonical-row propagation completion; (iv) AE-14.18.1-01 brief amended to explicitly enumerate the 13 D-11.3-002 cross-reference orphan rows as confirmed members of the 122 §M.5.4 / 181 aggregate row count + name the meta-gate `appendix_m5_cross_reference_resolution_completeness` as the binding runtime-enforcement of the cross-reference completeness assertion + re-opened for re-ratification post-Phase-3.2; (v) AE-V11-07 brief amended (cosmetic addition) to acknowledge the Prompt 3.2 canonical-row propagation; AE-V11-07 status remains `approved` (no change); (vi) Master Spec pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3.2-D-11.3-002-2026-05-18.md` (md5 `917e55aa1c07f9f28e66f2adb24c63fa`; 6,112,078 bytes).
 
 **Outputs landed:** All six outputs landed in this Prompt 3.2 closure. No spec-side row additions (the 13 cross-reference orphan rows + the meta-gate were already structurally present at V11 close 2026-05-11 per §M.5.4 L51694–51709); the Prompt 3.2 closure is a canonical-row defect-ledger propagation + AE-row amendment + RECONCILIATION-block authoring + §M.5.6 paragraph append, NOT a net-new gate authoring pass.
 
-**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3.2-D-11.3-002-2026-05-18.md`. Pre-edit byte size 6,112,078; md5 `917e55aa1c07f9f28e66f2adb24c63fa`.
+**Backup record (per CLAUDE.md §13 #2).** Pre-edit Master Spec snapshot at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3.2-D-11.3-002-2026-05-18.md`. Pre-edit byte size 6,112,078; md5 `917e55aa1c07f9f28e66f2adb24c63fa`.
 
 **Edit summary.** One Master Spec edit + two ledger edits + one defect-ledger edit + one supplementary-block annotation + this RECONCILIATION block authoring. (1) Master Spec §M.5.6 amendment: a new paragraph appended after the existing "v7.2.0-REM Phase 3 closure landing" paragraph (post-Prompt-3.1) and before the pre-V11 framing-retire paragraph at L51748, documenting the v7.2.0-REM Phase 3 Prompt 3.2 closure landing — the 13 cross-reference orphan rows enumerated, the 17 spec-body cross-reference → §M.5.4 catalog-row resolution map authored, the post-V11 line-number drift acknowledged with the resolution-by-gate-id-token discipline, the Stripe-meter-coupled M24.3 binding preservation for the two committed-spend billing-invariant gates documented per Source-of-Truth Hierarchy §2, the AE-14.18.1-01 re-opening recorded, and the Master Spec pre-edit backup file cited. (2) `_audit/DEFECT_LEDGER.md` D-11.3-002 canonical row at L4430 — status transitioned `open → remediated 2026-05-18 at v7.2.0-REM Phase 3 Prompt 3.2 closure` per D-CONS-001 P1 propagation rule; full closure-trace appended documenting the V11 spec-side row authoring + meta-gate authoring (2026-05-11) and the v7.2.0-REM Phase 3 Prompt 3.2 canonical-row propagation (2026-05-18). (3) `_audit/DEFECT_LEDGER.md` L4613 supplementary-status entry annotated to indicate the canonical-row propagation completion and preserve the V11 spec-side closure date. (4) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` AE-14.18.1-01 row at L280 — brief field amended to explicitly enumerate the 13 D-11.3-002 cross-reference orphan rows as confirmed members of the 122 §M.5.4 / 181 aggregate row count, name the meta-gate `appendix_m5_cross_reference_resolution_completeness` as the binding runtime enforcement, reconcile the prompt-task "122 → 135" verbiage to the actual 122 per Source-of-Truth Hierarchy §2 (the V11 spec-side closure pre-emptively absorbed the 13-row addition that the prompt-task description anticipated), and document the M24.3 binding preservation for the two committed-spend billing-invariant gates; status text amended to record the re-opening at Phase 3.2 closure for re-ratification jointly covering Phase 3.1 + Phase 3.2 cluster blockers. (5) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` AE-V11-07 row at L506 — brief field amended (cosmetic addition) to acknowledge the Phase 3.2 propagation; status remains `approved` (the AE row's body-of-work was completed at V11 close and ratified at Phase 3.1 closure earlier this same Cowork day; the Phase 3.2 closure adds no new spec-side work to AE-V11-07's scope).
 
@@ -10997,7 +10997,7 @@ All five findings are P3 cosmetic or governance-protocol; none touch the D-11.3-
 
 **Operator scope decision (2026-06-14).** F-1 (D-V72REM-PH10-001) resolved **option (b) — spec-wide**. Phase 10 re-scoped from {§6.1 + V12/V13} to **spec-wide catalog completeness**; it becomes the umbrella program for every catalog-class P1 defect and subsumes the catalog-class subset of Phase 11 (§3.1) / Phase 12 (§3.2). **Result: HALT** — under spec-wide scope the HALT clause fires (219 open P1 catalog-class at pass start). Phase 10 sign-off is **withheld** until the spec-wide catalog-class P1 count reaches 0. Authoritative verdict now lives in `_audit/PHASE10_REM_VERIFY.md` §8–§11 (Pass 2); §0–§7 preserved as the narrow-scope Pass-1 record.
 
-**Pre-edit Master Spec backup.** `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase10-specwide-2026-06-14.md` — 6,478,326 bytes; md5 `0fca14073cb84960a04fa31a6f438597`.
+**Pre-edit Master Spec backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase10-specwide-2026-06-14.md` — 6,478,326 bytes; md5 `0fca14073cb84960a04fa31a6f438597`.
 
 **First tranche executed — §12 Policy Ingestion catalog cluster (CLOSED).** Cross-cohort unit (`D-12-*` + `D-4.3-*`; divergent names reconciled to canonical with aliases recorded — CLAUDE.md §13 rule 3). **10 catalog-class P1 defects `open → remediated 2026-06-14 (v7.2.0-REM Phase 10)`:**
 
@@ -11169,7 +11169,7 @@ Per Verdict §7 (post-V13 catalog 177 rows; +V14 deltas pending Phase 18 catalog
 | Byte size | 6,116,478 | 6,123,024 (delta +6,546 bytes across four paired in-place prose replacements: §M.5.6 runtime-composition partition rewrite + §M.5.6 V13 row-count parenthetical update + §M.5.10 preamble pack-token correction + §M.5.12 closure-paragraph row-count amendment + Appendix J §J.v7.2.0-REM-Phase-3 cross-flag annotation update) |
 | md5 | `d290bf0d933011fe9551b12500392197` | `3e813a6fe38ee8dc456c39ad4b3d676d` |
 | Line count | 51,904 | 51,906 (delta +2 lines — within in-place-prose-replacement tolerance; no structural section additions) |
-| Pre-edit backup | `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3-cosmetic-hygiene-2026-05-18.md` (size 6,116,478; md5 `d290bf0d933011fe9551b12500392197`) | — |
+| Pre-edit backup | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3-cosmetic-hygiene-2026-05-18.md` (size 6,116,478; md5 `d290bf0d933011fe9551b12500392197`) | — |
 
 **Forward-defense.** The V11-cluster meta-gates that the cosmetic-hygiene pass strengthens (rather than introducing): §M.5.4 `appendix_m5_header_count_parity` (catches future row-count-prose drift via `grep '^| \`'` extraction over §M.5 catalog body, override path `not_permitted`); §M.5.4 `appendix_m5_runtime_status_coverage` (catches off-pattern `<id>` token drift via Appendix J `^spec_binding_pending_pack_(?P<pack_id>[a-z0-9_]+)$` regex, override path `not_permitted`); §M.5.4 `appendix_m5_cross_reference_resolution_completeness` (catches §M.5 cross-reference orphans, override path `not_permitted`); §M.5.4 `appendix_m5_ae_row_enumeration_parity` (catches AE-row gate-enumeration drift, override path `not_permitted`). All four meta-gates carry `spec_binding_pending_pack_m02_3` runtime status; runtime wiring lands at M02.3 prior to v7.1.1 stamp. Re-introduction of either drift form is admissible only via override, which is `not_permitted` per the catalog self-consistency invariant.
 
@@ -11189,7 +11189,7 @@ Per Verdict §7 (post-V13 catalog 177 rows; +V14 deltas pending Phase 18 catalog
 - `_audit/PHASE3_REM_VERIFY.md §5 + §7 + §8` (post-edit; reflects in-session closure).
 - `_audit/DEFECT_LEDGER.md → Phase v7.2.0-REM Phase 3 Verify-Pass In-Flight Defects (2026-05-18)` block.
 - `Sourcera_Master_Spec.md` §M.5.6 (post-edit; runtime-composition partition); §M.5.10 (post-edit; canonical `<id>` token rendering); §M.5.12 (post-edit; "24 V13 rows"); Appendix J §J.v7.2.0-REM-Phase-3 (post-edit; closure annotation).
-- Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3-cosmetic-hygiene-2026-05-18.md`.
+- Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3-cosmetic-hygiene-2026-05-18.md`.
 
 
 ---
@@ -11198,7 +11198,7 @@ Per Verdict §7 (post-V13 catalog 177 rows; +V14 deltas pending Phase 18 catalog
 
 **Scope.** P0 closure of D-EM-001 (entitlement; PROD-CRIT-008) — the `qa_suggestion` family-rooted sibling-split remediation. Authoring program executed against the v7.2.0-REM Phase 4 prompt (TASK: split §21.4.1 row 9 into `qa_suggestion_buyer` + `qa_suggestion_seller` family-rooted siblings per §4.8.2 field set; bind §34.8.5 matrix entries to the new registry rows; add CI gate `entitlement_matrix_registry_binding_completeness` that asserts every §34.8.5 capability_id resolves to a §21.4 row).
 
-**Pre-edit Master Spec baseline.** md5 `41f98ff81babf7ecce6a4ae27bc57049`; 6,118,811 bytes. Pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4-2026-05-18.md`.
+**Pre-edit Master Spec baseline.** md5 `41f98ff81babf7ecce6a4ae27bc57049`; 6,118,811 bytes. Pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4-2026-05-18.md`.
 
 **Defect-id → landing-site map.**
 
@@ -11254,7 +11254,7 @@ Post-Phase 4 catalog row count: post-v7.2.0-REM Phase 1 (124 rows) + 3 v7.2.0-RE
 - `_audit/DEFECT_LEDGER.md → Phase EM § canonical D-EM-001 row` (status transitioned `open → remediated 2026-05-18` per D-CONS-001 P1 canonical-row authority).
 - `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → AE-V72REM-PH4-01` (new AE row registered; Pricing Owner + Engineering Lead dual-signoff gate at v7.1.0a hot-patch stamp).
 - `Sourcera_Master_Spec.md` §21.4.1 row 9 (post-edit; family-root rollup identifier); §21.4.1 new "family-rooted sibling split" paragraph; §21.4.1.A canonical-ID reconciliation note (post-edit); §21.4.1.B new sub-section; §21.4.5 outcome-signal row split; §34.8.5 Buyer Core Evaluation block (new `qa_suggestion_buyer` row); §34.8.5 canonical-form lock (post-edit); §34.8.7 AC #6 (post-edit); §M.5.14 new sub-section; Master Spec footer (post-edit — v7.2.0-REM Phase 4 closure declaration).
-- Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4-2026-05-18.md` (6,118,811 bytes; md5 `41f98ff81babf7ecce6a4ae27bc57049`).
+- Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4-2026-05-18.md` (6,118,811 bytes; md5 `41f98ff81babf7ecce6a4ae27bc57049`).
 
 **P0 closure progress (post-Phase 4).** **8 of 12 truly-open P0 closed** (Phase 1: 3 — D-2.2-042 + D-V72REM-PH1-001 + D-11.2-004; Phase 2: 3 — D-AK-001 + D-AK-002 + D-AK-003; Phase 3: 2 — D-11.3-001 + D-11.3-002; **Phase 4: 1 — D-EM-001**). 4 P0 remain open across Phases 4 (D-EM-002 / -003 / -004) and 5 (D-RES-004). Next authorized phase: continuation of Phase 4 against D-EM-002 / -003 / -004 OR Phase 5 (D-RES-004 Stripe Customer reconciliation), per the v7.2.0-REM Program scaffolding at `_audit/PRODUCTION_READINESS_VERDICT.md §8`.
 
@@ -11262,7 +11262,7 @@ Post-Phase 4 catalog row count: post-v7.2.0-REM Phase 1 (124 rows) + 3 v7.2.0-RE
 
 **Scope.** P0 closure of D-EM-002 (entitlement; PROD-CRIT-009) — the seven-buyer-capability `§34.8.5 ↔ §21.4` binding-gap cluster. Authoring program executed against the v7.2.0-REM Phase 4.2 prompt (TASK: identify and author the seven buyer-side `capability_ids` cited in §34.8.5 L29178–29199 + §34.3.4 + §34.15.1 but absent from §21.4 registry seeds; bind §34.8.5 entries to the new registry rows; closure of D-EM-002).
 
-**Pre-edit Master Spec baseline.** md5 `64e6ca44000e94d1a2670e24380f8584`; 6,161,257 bytes. Pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4.2-2026-05-18.md`.
+**Pre-edit Master Spec baseline.** md5 `64e6ca44000e94d1a2670e24380f8584`; 6,161,257 bytes. Pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4.2-2026-05-18.md`.
 
 **Identified seven buyer-side capabilities.** The defect ledger and the §34.8.5 + §34.3.4 + §34.1.1 cross-reference reads:
 
@@ -11339,7 +11339,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 - `_audit/DEFECT_LEDGER.md → Phase EM § canonical D-EM-002 row` (status transitioned `open → remediated 2026-05-18` per D-CONS-001 P1 canonical-row authority).
 - `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → AE-V72REM-PH4.2-01` (new AE row registered; Pricing Owner + Engineering Lead + Ops Lead triple-signoff gate at v7.1.0a hot-patch stamp).
 - `Sourcera_Master_Spec.md` §21.4.1.C new sub-section; §21.4.1.D new sub-section; §21.4.5 outcome-signal table (8-row extension); §34.8.5 Buyer Core Evaluation + Seller Non-core block-header cross-references; §34.8.5 canonical-form lock (post-edit); §4.8.2 AC #9 (post-edit; generalized); §M.5.15 new sub-section; Master Spec footer (post-edit — v7.2.0-REM Phase 4.2 closure declaration).
-- Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4.2-2026-05-18.md` (6,161,257 bytes; md5 `64e6ca44000e94d1a2670e24380f8584`).
+- Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4.2-2026-05-18.md` (6,161,257 bytes; md5 `64e6ca44000e94d1a2670e24380f8584`).
 
 **P0 closure progress (post-Phase 4.2).** **9 of 12 truly-open P0 closed** (Phase 1: 3 — D-2.2-042 + D-V72REM-PH1-001 + D-11.2-004; Phase 2: 3 — D-AK-001 + D-AK-002 + D-AK-003; Phase 3: 2 — D-11.3-001 + D-11.3-002; Phase 4: 1 — D-EM-001; **Phase 4.2: 1 — D-EM-002**). 3 P0 remain open across Phases 4 (D-EM-003 / D-EM-004) and 5 (D-RES-004). Next authorized phase: continuation of Phase 4 against D-EM-003 (`first_pass_rfp_draft` registration) OR D-EM-004 (Solo `low_priority_background` capability seed) OR Phase 5 (D-RES-004 Stripe Customer reconciliation), per the v7.2.0-REM Program scaffolding at `_audit/PRODUCTION_READINESS_VERDICT.md §8`.
 
@@ -11394,7 +11394,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 - `_audit/DEFECT_LEDGER.md → Phase EM § canonical D-EM-003 row` (status transitioned `open → remediated 2026-05-19` per D-CONS-001 P1 canonical-row authority); `_audit/DEFECT_LEDGER.md → Phase EM § D-EM-020 row` (status transitioned `open → partially_remediated 2026-05-19`); `_audit/DEFECT_LEDGER.md → Phase EM § new D-EM-021 row` (filed open); `_audit/DEFECT_LEDGER.md → Phase EM § new D-NOM-016 row` (filed open).
 - `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → AE-V72REM-PH4.3-01` (new AE row registered; Pricing Owner + Engineering Lead + Ops Lead triple-signoff gate at v7.1.0a hot-patch stamp).
 - `Sourcera_Master_Spec.md` §21.4.1.E new sub-section; §22.10.1.A alias-table patched row; §34.8.5 line 30239 row description + block header amended; §34.14.1 row 1 description column + plan-gating column annotated; §34.15.1 row 1 Source column annotated; §34.11.1 OutcomeContract Version column annotated.
-- Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-PH4.3-D-EM-003-2026-05-19.md` (6,232,132 bytes; md5 `9c764712072feb4a3ff13890128a7459`).
+- Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-PH4.3-D-EM-003-2026-05-19.md` (6,232,132 bytes; md5 `9c764712072feb4a3ff13890128a7459`).
 
 **P0 closure progress (post-Phase 4.3).** **10 of 12 truly-open P0 closed** (Phase 1: 3 — D-2.2-042 + D-V72REM-PH1-001 + D-11.2-004; Phase 2: 3 — D-AK-001 + D-AK-002 + D-AK-003; Phase 3: 2 — D-11.3-001 + D-11.3-002; Phase 4: 1 — D-EM-001; Phase 4.2: 1 — D-EM-002; **Phase 4.3: 1 — D-EM-003**). 2 P0 remain open across Phases 4 (D-EM-004) and 5 (D-RES-004). Next authorized phase: Phase 4.4 against D-EM-004 (Solo `low_priority_background` capability seed — paired with AE-14.10-07 ratification) OR Phase 5 (D-RES-004 Stripe Customer reconciliation), per the v7.2.0-REM Program scaffolding at `_audit/PRODUCTION_READINESS_VERDICT.md §8`.
 
@@ -11448,7 +11448,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 - `_audit/DEFECT_LEDGER.md → Phase EM § canonical D-EM-004 row` (status transitioned `open → remediated 2026-05-19` per D-CONS-001 P1 canonical-row authority).
 - `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phase 14.10 § AE-14.10-07 row` (status transitioned `pending → approved 2026-05-19`); `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → AE-V72REM-PH4.4-01` (new row registered, approved jointly); `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → AE-V72REM-PH4.4-02` (new row registered, approved jointly).
 - `Sourcera_Master_Spec.md` new §21.4.6 sub-section; §4.8.2 `surface_throttling_class` field Notes line amended in-place; §44.6.4.1 enumeration block amended in-place; §21.4.5 outcome-signal table extended by 2 rows; §34.8.5 entitlement matrix extended by 3 rows; Appendix G extended by 3 PostHog event names; §M.5 extended by 1 new meta-gate + 2 upgraded runtime-status entries.
-- Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.4-DEM004-2026-05-19.md` (6,268,286 bytes; md5 `ece85087c3c4d0c0059cde24ed968ccb`).
+- Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.4-DEM004-2026-05-19.md` (6,268,286 bytes; md5 `ece85087c3c4d0c0059cde24ed968ccb`).
 
 **Counterfactual / Self-challenge artifact location.** Authored in §21.4.6 in-section (counterfactual coverage 3 scenarios + self-challenge pass 3 hostile-staff-engineer findings + failure-modes-addressed 4 scenarios + end-to-end trace check). All three counterfactual scenarios + three self-challenge findings + four failure modes resolved in place before save per Convention #15 / #16 of the v7.2.0-REM Program.
 
@@ -11488,7 +11488,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 
 **Scope.** Two-part loose-ends closure following the Phase 4 consolidated verification (2026-05-19). Closes the known §M.5.16 forward-reference deferred at Phase 4.3 closure + lands the four explicitly-cited Phase 4.3 D-NOM-016 P2 prose-hygiene rewrites. No new P0 or P1 work; this is mechanical authoring that closes gaps a future adversarial audit pass (V11 / V14 pattern) would flag as catalog-completeness drift.
 
-**Pre-edit Master Spec backup.** `_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.5-loose-ends-2026-05-19.md` (6,307,107 bytes; md5 `215b7e4354779d5e7c4ef63e82ded4d4`).
+**Pre-edit Master Spec backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.5-loose-ends-2026-05-19.md` (6,307,107 bytes; md5 `215b7e4354779d5e7c4ef63e82ded4d4`).
 
 **Spec edits landed.**
 
@@ -11558,7 +11558,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 
 **Phase scope.** Closure of D-RES-004 P0 (`numerical_singleton`; the legal-entity enum split between Appendix J body-side at L48027–48036 and envelope-side `legal_entity_kind` at L49594–49598; the §4.8.1 / §4.8.3 / §4.8.12 inline-citation drift; the §34.10.5 Stripe-Customer 1:1 binding silent on residency-change atomicity; the `custom`-residency Org AC #14 fail-closed regression; the dual-active Stripe Customer accumulation path on residency change) — the **last** of the 12 truly-open P0 defects from the Production-Readiness Verdict 2026-05-14. The Phase 5 closure additionally absorbs in-place: D-RES-015 P1 (`sourcera_uk_ltd` retirement propagation across §4.8.1 / §4.8.3 / §4.8.12 / Appendix J / Glossary — sibling to D-RES-004; previously routed through v7.1.1 Phase 14.13a billing rollup) and D-V14-007 P2 (pricing-adjacent cross-flag — previously routed through v7.1.1 stamp-gate readiness summary). The in-place closure unblocks the v7.1.1 Phase 14.13a billing rollup, which no longer carries D-RES-004 / D-RES-015 as dependencies.
 
-**Pre-edit Master Spec backup.** `_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md` (6,321,066 bytes; md5 `2be237b6f537fa904ea1de8b2ca7dad7`). Taken 2026-05-20 immediately prior to v7.2.0-REM Phase 5 spec edits.
+**Pre-edit Master Spec backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md` (6,321,066 bytes; md5 `2be237b6f537fa904ea1de8b2ca7dad7`). Taken 2026-05-20 immediately prior to v7.2.0-REM Phase 5 spec edits.
 
 **Spec edits landed (Phase 5 closure batch).**
 
@@ -11621,7 +11621,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 | :---- | :---- |
 | Self-challenge pass (7 questions; all PASS) | ✓ |
 | Counterfactual pass (4 failure modes addressed in spec) | ✓ |
-| Pre-edit Master Spec backup taken (`_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md`; 6,321,066 bytes; md5 `2be237b6f537fa904ea1de8b2ca7dad7`) | ✓ |
+| Pre-edit Master Spec backup taken (`legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md`; 6,321,066 bytes; md5 `2be237b6f537fa904ea1de8b2ca7dad7`) | ✓ |
 | §4.8.1 field-table `legal_entity` Notes cell rewritten | ✓ |
 | §4.8.1 Residency-Locked Invoicing block rewritten (canonical 4-row mapping; UK historical-row backstop) | ✓ |
 | §4.8.1 AC #14 hardened + AC #14a / #14b authored | ✓ |
@@ -11638,7 +11638,7 @@ Post-Phase-4.2 catalog row count: post-v7.2.0-REM Phase 4 (127 rows) + 3 v7.2.0-
 | D-RES-004 + D-RES-015 supplementary backlog-table entries amended to `remediated` | ✓ |
 | AE-V72REM-06 status updated; AE-V72REM-PH5-01 newly registered with full closure-note (17 spec-edit summary entries) | ✓ |
 | AE-9.3-02 marked `superseded` by AE-V72REM-06 + AE-V72REM-PH5-01 | ✓ |
-| Appendix C / Appendix G / Appendix I body-side row authoring | ✓ **body_landed_2026-05-20** in Phase 5 closure (post-spec-edit hardening pass per user directive "Fix everything with most appropriate resolutions"). Landing sites: Appendix I v7.2.0-REM Phase 5 block (`#appendix-i-v72rem-phase-5`) — 4 new error codes registered with full V8.4 row schema + 1 forward-tracked code with registration anchor; Appendix C v7.2.0-REM Phase 5 block (`#appendix-c-v72rem-phase-5`) — 4 new webhook events sequenced by `event_seq` per §34.10.5.A invariant #3 step (v) + Loops.so transactional templates `lo_org_residency_change_blocked` + `lo_org_residency_change_completed` registered inline + bridge firewall invariant `console_bridge_no_residency_change_event_kinds` forward-tracked; Appendix G v7.2.0-REM Phase 5 block (`#appendix-g-v72rem-phase-5`) — 5 new PostHog events (4 mirroring webhooks + `spec_lint.legal_entity_residency_change_revenue_leak.gate_run`) with firewall residency partitioning per §34.10.5.A invariant #3 step (iv) cutover instant. Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-PH5-bodyland-2026-05-20.md` (6,364,679 bytes; md5 `d0e99c9fb33e096a84bfb5eb8c4c6abd`). |
+| Appendix C / Appendix G / Appendix I body-side row authoring | ✓ **body_landed_2026-05-20** in Phase 5 closure (post-spec-edit hardening pass per user directive "Fix everything with most appropriate resolutions"). Landing sites: Appendix I v7.2.0-REM Phase 5 block (`#appendix-i-v72rem-phase-5`) — 4 new error codes registered with full V8.4 row schema + 1 forward-tracked code with registration anchor; Appendix C v7.2.0-REM Phase 5 block (`#appendix-c-v72rem-phase-5`) — 4 new webhook events sequenced by `event_seq` per §34.10.5.A invariant #3 step (v) + Loops.so transactional templates `lo_org_residency_change_blocked` + `lo_org_residency_change_completed` registered inline + bridge firewall invariant `console_bridge_no_residency_change_event_kinds` forward-tracked; Appendix G v7.2.0-REM Phase 5 block (`#appendix-g-v72rem-phase-5`) — 5 new PostHog events (4 mirroring webhooks + `spec_lint.legal_entity_residency_change_revenue_leak.gate_run`) with firewall residency partitioning per §34.10.5.A invariant #3 step (iv) cutover instant. Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-PH5-bodyland-2026-05-20.md` (6,364,679 bytes; md5 `d0e99c9fb33e096a84bfb5eb8c4c6abd`). |
 | Engineering Lead + Finance Lead counter-signatures pending per AE-V72REM-00 sole-signer trigger (5 BD after each named-role hire) | ⏸ (sole-signer posture per AE-V72REM-00) |
 
 **P0 closure progress (post-Phase 5).** **12 of 12 truly-open P0 closed.** (Phase 1: 3 — D-2.2-042 + D-V72REM-PH1-001 + D-11.2-004; Phase 2: 3 — D-AK-001 + D-AK-002 + D-AK-003; Phase 3: 2 — D-11.3-001 + D-11.3-002; Phase 4: 1 — D-EM-001; Phase 4.2: 1 — D-EM-002; Phase 4.3: 1 — D-EM-003; Phase 4.4: 1 — D-EM-004; **Phase 5: 1 — D-RES-004**.) The v7.2.0-REM Program's P0 closure surface is complete. Next authorized phase: Phase 6 (v7.1.0a hot-patch stamp protocol + release-gate policy tightening per AE-V72REM-07), per the v7.2.0-REM Program scaffolding at `_audit/PRODUCTION_READINESS_VERDICT.md §8`.
@@ -11741,7 +11741,7 @@ All v7.1.0a stamp dependencies cleared per the release-gate policy preamble at A
 
 **Stamp date.** 2026-05-20.
 
-**Backup record (per CLAUDE.md §13 #2).** Pre-stamp Master Spec snapshot at `_versions/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md`. Pre-edit byte size 6,388,739; md5 `a186f1b7844e6961f4fb8a12f77f114a`. The snapshot is an exact match to the post-Phase-5 Master Spec state; no intervening edits between Phase 5 closure (2026-05-20 earlier in the same Cowork day) and the v7.1.0a stamp protocol invocation (2026-05-20 later same day).
+**Backup record (per CLAUDE.md §13 #2).** Pre-stamp Master Spec snapshot at `_baselines/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md`. Pre-edit byte size 6,388,739; md5 `a186f1b7844e6961f4fb8a12f77f114a`. The snapshot is an exact match to the post-Phase-5 Master Spec state; no intervening edits between Phase 5 closure (2026-05-20 earlier in the same Cowork day) and the v7.1.0a stamp protocol invocation (2026-05-20 later same day).
 
 **Header bump (Master Spec lines 7–10).**
 
@@ -11799,7 +11799,7 @@ All 7 self-challenge questions pass.
 | # | Failure mode | Mitigation in this stamp |
 | :---- | :---- | :---- |
 | 1 | A reader misreads v7.1.0a as the SHIP-READY stamp and ships to production with 808 P1 defects open | Header `Status: P0 hot-patch`; Changelog §1 explicit P0-hot-patch posture; §6.2 names 808 P1 residual count; §6.4 names v7.2.0 as the SHIP-READY target; CLAUDE.md §16 v7.1.0a bullet repeats the residual count and stamp gate; sign-off scoreboard records "v7.1.0a stamp closure" (not "ship-ready closure"). |
-| 2 | The Phase V8.4 v7.1.0a sub-stamp is silently overwritten or deleted | The Phase V8.4 sub-stamp at 2026-05-08 is preserved at its dedicated `## v7.1.0a (Phase V8.4 sub-stamp) — 2026-05-08` heading; its §6 Known Issues is preserved at its sub-stamp; the new §6 Known Issues at the 2026-05-20 sub-stamp explicitly states supersession + rebinding. Pre-stamp backup at `_versions/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md` (6,388,739 bytes; md5 `a186f1b7844e6961f4fb8a12f77f114a`) is revertible. |
+| 2 | The Phase V8.4 v7.1.0a sub-stamp is silently overwritten or deleted | The Phase V8.4 sub-stamp at 2026-05-08 is preserved at its dedicated `## v7.1.0a (Phase V8.4 sub-stamp) — 2026-05-08` heading; its §6 Known Issues is preserved at its sub-stamp; the new §6 Known Issues at the 2026-05-20 sub-stamp explicitly states supersession + rebinding. Pre-stamp backup at `_baselines/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md` (6,388,739 bytes; md5 `a186f1b7844e6961f4fb8a12f77f114a`) is revertible. |
 | 3 | A downstream consumer reads the stamp without context and cannot identify which CI gates are runtime-active at v7.1.0a | Changelog §5 names the 3 runtime-active gates by Gate ID + workflow line numbers + runtime artifact paths; Phase 6 CI gate → §M.5-row map in the preceding RECONCILIATION block reinforces; CLAUDE.md §16 v7.1.0a bullet repeats the v7.1.1 stamp gate runtime artifact path (`tools/release/stamp_gate.ts`); §M.5.6 enumerates the same 3 gates Gate-ID-by-Gate-ID. |
 
 All 3 counterfactual failure modes addressed.
@@ -11815,7 +11815,7 @@ All 3 counterfactual failure modes addressed.
 - `_audit/DEFECT_LEDGER.md` canonical rows L385 / L489 / L490 / L491 / L818 / L3229 / L3230 / L3231 / L3232 / L3886 / L4431 / L4432.
 - `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program` block.
 - `.github/workflows/spec-lint.yml` (md5 `de3ad4567e41a5ea2184035e63e041da`).
-- `_versions/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md` (pre-stamp Master Spec snapshot).
+- `_baselines/Sourcera_Master_Spec.v7.1.0a-pre-stamp-2026-05-20.md` (pre-stamp Master Spec snapshot).
 
 **Post-stamp program state.** v7.2.0-REM Program advances to Phase 7 (AE Ratification Sweep Wave 1). v7.1.0a is the current Master Spec stamp. v7.1.1 stamp gate is the next release-gate; v7.1.2 carries the deferred Phase 11.5 M.1 backfill; v7.2.0 is the final SHIP-READY stamp target. The 808 P1 defect surface is the v7.2.0-REM Phase 9 + Phase 10 execution surface.
 
@@ -11909,7 +11909,7 @@ All 3 counterfactual failure modes addressed.
 
 **Closure authority.** Phase 8 (AE Ratification Sweep Wave 2 — Phase 12.x DEF Reconciliation) closed 2026-05-20 as a v7.1.0a hot-patch stamp aftermath pass under the v7.2.0-REM Program. Authority chain: (1) `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.1 Phase 12.x DEF Cluster — RECONCILE FIRST` class-level recommendation (audit run 2026-05-12); (2) `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §3 Per-Cluster Ratification Sequence — Recommended Order → Wave 1 (Phase 12.x DEF reconciliation; re-target + supersede)`; (3) `_integration/RECONCILIATION.md → v7.2.0-REM Program → Phase 7 — AE Ratification Sweep Wave 1 — Phase 12.3 / 12.4 Release-Gating Closure (2026-05-20)` "Post-Phase-7 program state" advancement note. Pass scope: AE Ledger ledger-only edit — no Master Spec touch; no Sourcera-stack runtime wiring touched.
 
-**Pre-edit AE Ledger backup.** `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-Phase12xDEF-Reconciliation-2026-05-20.md` (253,555 bytes; md5 `059699a44873c3e3d085d298a1452ade`).
+**Pre-edit AE Ledger backup.** `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-Phase12xDEF-Reconciliation-2026-05-20.md` (253,555 bytes; md5 `059699a44873c3e3d085d298a1452ade`).
 
 **Edit summary.** Nine row-cluster transitions executed against `_integration/AUTHORED_EXTENSIONS_LEDGER.md` (18 AE Ledger rows total). Pattern: re-target every Phase 12.x DEF row from `Phase 12.5` (a phase that was never run as a discrete stamped milestone — the v7.0.0 → v7.1.0 integration absorbed its scope into Phase 14) or pre-stamp `v7.1.0` (for the 3 Phase 12.2 DEF rows that slid past the v7.1.0 stamp without ratification) to the canonical `v7.1.1` stamp gate venue. Where the row body has been substantively superseded by a subsequent audit-remediation pass (Phase 2V / Phase V9 / Phase 6R), transition the status from `pending` to `superseded` with a forwarding pointer to the superseding AE row(s). Where the row body has landed in-place under the v7.1.0 numerical-singleton hardening pass but no later audit-remediation cluster supersedes it (DEF-03, DEF-04), leave the status `pending` but annotate with the verification result and the in-place §-anchor landing pointer. Where the row carries partial supersession (DEF-14 by AE-V11-05; DEF-03 of cluster #2 by AE-V2-005), annotate the partial-supersession scope and leave the residual scope owed at v7.1.1.
 
@@ -11997,7 +11997,7 @@ All 3 counterfactual failure modes addressed.
 
 - **Convex / Stripe / WorkOS / Anthropic / PostHog / Datadog / PagerDuty / Loops.so / Sentry / Statuspage / Notion / AWS S3 / Vercel / Firecrawl / Perplexity / Zendesk** — All unaffected (AE Ledger ledger-only edit; no Sourcera-stack runtime wiring touched).
 - **GitHub Actions** — No new CI gate wirings in this pass. The `ae_ledger_target_version_completeness` + `ae_ledger_acceptance_test_completeness` schema-upgrade gates (D-AE-001 + D-AE-002 deliverables) remain in the v7.1.1 mechanical hygiene pack at M02.3 implementation pack. The `release_gate_policy_compliance` gate (Phase 7 deliverable) runs at v7.1.1 stamp time per AE-V72REM-08 runtime-wiring plan.
-- **Filesystem** — 1 new file: `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-Phase12xDEF-Reconciliation-2026-05-20.md` (pre-edit AE Ledger backup; 253,555 bytes; md5 `059699a44873c3e3d085d298a1452ade`).
+- **Filesystem** — 1 new file: `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-Phase12xDEF-Reconciliation-2026-05-20.md` (pre-edit AE Ledger backup; 253,555 bytes; md5 `059699a44873c3e3d085d298a1452ade`).
 - **No new third-party dependencies introduced.**
 
 **Cross-references.**
@@ -12012,7 +12012,7 @@ All 3 counterfactual failure modes addressed.
 - `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §3 Wave 1` (recommended ratification sequence).
 - `_audit/DEFECT_LEDGER.md → Phase AE Spec-Side Remediation` block → D-AE-006 / -007 / -008 / -009 transitions `open → remediated 2026-05-20`.
 - `_integration/RECONCILIATION.md → v7.2.0-REM Program → Phase 7 — AE Ratification Sweep Wave 1 — Phase 12.3 / 12.4 Release-Gating Closure (2026-05-20)` (immediate predecessor closure; ratification-sequence context).
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-Phase12xDEF-Reconciliation-2026-05-20.md` (pre-edit AE Ledger backup; 253,555 bytes; md5 `059699a44873c3e3d085d298a1452ade`).
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-Phase12xDEF-Reconciliation-2026-05-20.md` (pre-edit AE Ledger backup; 253,555 bytes; md5 `059699a44873c3e3d085d298a1452ade`).
 
 **Post-Phase-8 program state.** v7.2.0-REM Program advances to Phase 9 (AE Ratification Sweep Wave 3 — Phase 14.x cluster bundles per `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.3` + §3 Wave 3). The v7.1.1 stamp gate inheritance set now carries: 4 `superseded` Phase 12.x DEF rows whose ratification gestures fold into the V9 / AE-12.4-01 / AE-PH6R-012 / AE-V2-006 ratifications (already on critical path); 13 `pending` re-targeted Phase 12.x DEF rows owed Engineering sign-off at v7.1.1 stamp (12 body-authoring + 1 confirmation pass); 2 verified-in-place-landing Phase 12.x DEF rows (DEF-03, DEF-04) owed Engineering sign-off on the §44.1 / §33.6 in-place landings; 2 partial-supersession Phase 12.x DEF rows (DEF-14, DEF-03 of cluster #2) owed Engineering sign-off on the residual scope. v7.1.0a remains the current Master Spec stamp. The Phase 12.x DEF cluster orphaning surface (D-AE-006) is CLOSED. The 3 explicit supersession transitions (D-AE-007 / D-AE-008 / D-AE-009) are CLOSED.
 
@@ -12028,7 +12028,7 @@ All 3 counterfactual failure modes addressed.
 
 **Audit authority.** `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.3 Phase 14.x Cluster — STANDARD V7.1.1 RATIFICATION` recommendation table (~45 row recommendations across 10 sub-clusters) + `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §1` per-row recommendations for the 4 CLAUDE.md §16 v7.1.0-program-residual-queue carry-flag rows in scope of Phase 14.x (AE-14.9-01, AE-14.14-21, AE-14.0.1-01, AE-14.0.1-02; AE-14.10-07 already-approved at Phase 4.4; AE-14.18.1-01 / -02 BLOCKED) + `_audit/DEFECT_LEDGER.md → Phase AE → D-AE-005 (P2)` recommendation column (8 forward-reference-stale rows re-targeted to canonical Phase 14.13a / b / c / d sub-phases).
 
-**Pre-edit AE Ledger snapshot.** `_versions/AUTHORED_EXTENSIONS_LEDGER.v7.1.0a-pre-Phase8.2-2026-05-20.md` (302,788 bytes; md5 `f9e6a49cd7b1c53a656dfddd1c5d0f7e`). Identical baseline to the file state immediately after Phase 8 (Phase 12.x DEF Reconciliation) closure but before this Phase 8.2 pass.
+**Pre-edit AE Ledger snapshot.** `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.v7.1.0a-pre-Phase8.2-2026-05-20.md` (302,788 bytes; md5 `f9e6a49cd7b1c53a656dfddd1c5d0f7e`). Identical baseline to the file state immediately after Phase 8 (Phase 12.x DEF Reconciliation) closure but before this Phase 8.2 pass.
 
 **Edit summary.** 9 cluster-bundle ratifications transitioned 38 AE Ledger rows total + 8 D-AE-005-driven re-targets + 2 BLOCKED-row reaffirmations + 1 new program-level AE-V72REM-PH8.2-01 registry row + 1 new Phase 8.2 Closure Note in the v7.2.0-REM Authored Extensions Registry block.
 
@@ -12105,7 +12105,7 @@ D-AE-005 closes by virtue of all 8 component rows being re-targeted to the canon
 
 - **Convex / Stripe / WorkOS / Anthropic / PostHog / Datadog / PagerDuty / Loops.so / Sentry / Statuspage / Notion / AWS S3 / Vercel / Firecrawl / Perplexity / Zendesk** — Unaffected (ledger-only edit; no Master Spec body touch).
 - **GitHub Actions** — No new CI gate wirings (the `ae_ledger_target_version_completeness` + `ae_ledger_acceptance_test_completeness` schema-upgrade gates per D-AE-001 / -002 + the `release_gate_policy_compliance` gate per AE-V72REM-07 land in the M02.3 + release-orchestration packs).
-- **Filesystem** — 1 new file: `_versions/AUTHORED_EXTENSIONS_LEDGER.v7.1.0a-pre-Phase8.2-2026-05-20.md` (pre-edit AE Ledger backup; 302,788 bytes; md5 `f9e6a49cd7b1c53a656dfddd1c5d0f7e`).
+- **Filesystem** — 1 new file: `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.v7.1.0a-pre-Phase8.2-2026-05-20.md` (pre-edit AE Ledger backup; 302,788 bytes; md5 `f9e6a49cd7b1c53a656dfddd1c5d0f7e`).
 - **No new third-party dependencies introduced.**
 
 **Cross-references.**
@@ -12119,7 +12119,7 @@ D-AE-005 closes by virtue of all 8 component rows being re-targeted to the canon
 - `_audit/DEFECT_LEDGER.md → Phase AE Spec-Side Remediation` block → D-AE-005 transitions `open → remediated 2026-05-20`.
 - `_integration/RECONCILIATION.md → v7.2.0-REM Program → Phase 8 — AE Ratification Sweep Wave 2 — Phase 12.x DEF Reconciliation (Phase AE Hygiene Pass) (2026-05-20)` (immediate predecessor closure; ratification-sequence context).
 - `_integration/RECONCILIATION.md → v7.2.0-REM Program → Phase 7 — AE Ratification Sweep Wave 1 — Phase 12.3 / 12.4 Release-Gating Closure (2026-05-20)` (Wave 1 predecessor; release-gate-policy amendment authority).
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.v7.1.0a-pre-Phase8.2-2026-05-20.md` (pre-edit AE Ledger backup; 302,788 bytes; md5 `f9e6a49cd7b1c53a656dfddd1c5d0f7e`).
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.v7.1.0a-pre-Phase8.2-2026-05-20.md` (pre-edit AE Ledger backup; 302,788 bytes; md5 `f9e6a49cd7b1c53a656dfddd1c5d0f7e`).
 
 **Post-Phase-8.2 program state.** v7.2.0-REM Program advances to Phase 9 (AE Ratification Sweep Wave 4 — Phase V11 cluster ratification + AE-14.18.1-01 / -02 BLOCKED-row closure per `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §1` + §3 Wave 6/7). The v7.1.1 stamp gate inheritance set now carries: 36 newly `approved` Phase 14.x rows (no further ratification gesture owed before v7.1.1 stamp); 2 `acknowledged` AE-14.0.1 scope-amendment rows (no further ratification gesture owed); 8 `re-targeted` Phase 14.x rows whose Phase 14.13a / b / c / d sub-phase closures are now part of the v7.1.1 mechanical hygiene pack critical path; 2 AE-14.18.1 BLOCKED rows whose Phase V11 cluster dependency closures are now part of Phase 9 critical path. The CLAUDE.md §16 v7.1.0-program residual queue carry-flags (AE-14.9-01, AE-14.14-21, AE-14.0.1-01, AE-14.0.1-02 — 4 rows) are CLOSED at this Phase 8.2 batch. AE-14.10-07 remains `approved` from Phase 4.4 (unchanged). v7.1.0a remains the current Master Spec stamp. D-AE-005 is CLOSED.
 
@@ -12191,7 +12191,7 @@ D-AE-005 closes by virtue of all 8 component rows being re-targeted to the canon
 
 #### Independent Re-Verification (2026-06-13)
 
-Prompt V7 re-run against live corpus state (anchors: AE Ledger md5 `c07e44c303142c25202c6c1c21967bac`; DEFECT_LEDGER md5 `10a8d3f06633afe0b844717039c2aedb`; Master Spec md5 `3401b429d6c9a1ba77b7a93e2a3879fe`). **Result: PASS — confirms the 2026-05-20 closure.** 71/71 in-scope rows transitioned (§2.1 18 + §2.2 6 + §2.3 47); 0 rows pending their required Phase-7 transition; HALT not triggered. All five adversarial spot-checks re-confirmed against live files (5/5 bodies present; 5/5 re-targets valid; 3/3 supersession trails; preamble amendment present; BC-12.4-01 acknowledged under AE-V72REM-00). The 2026-05-20 verification log is preserved at `_versions/PHASE7_REM_VERIFY.pre-reverify-2026-06-13.md` (md5 `53e5df531b38957078981ac31a813aa2`); the authoritative log `_audit/PHASE7_REM_VERIFY.md` is refreshed with tightened SIGN-OFF criterion semantics (status-`pending` vs pending-its-transition: 22 in-scope rows retain status `pending` by design, all forward-pointed; 0 lack their required transition) and four findings. Findings F1 (criterion semantics — resolved), F3 (two of three D-AE supersedors — AE-V2-006, AE-V9-004/-005 — are themselves `pending`, valid for supersession; confirm ratification at v7.1.1), F4 (`release_gate_policy_compliance` runtime activation gated on AE-V72REM-08, interim control = AE-V72REM-07 clause 4) are non-blocking annotations. **Finding F2 (P2; EXECUTED 2026-06-13 — filed + remediated as D-AE-016 via AE-V72REM-PH7R-01; see the Phase 7 Renumbering Reconciliation block immediately below):** the execution split the canonical single Phase 7 (Prompts 7.1/7.2/7.3) into separately-labeled "Phase 7" (§2.2) / "Phase 8" (§2.1) / "Phase 8.2" (§2.3) closure passes, where the "Phase 8" label collides with the canonical prompts-file Phase 8 (1V/2V/3V/3V+/6R/V7/V8.4/V9/10V cluster ratification — all rows verified still `pending` 2026-06-13). The corpus tracks the wave-order inversion (conflict #4) and Phase-9 forward-projection (conflict #3) but not this prompts-vs-execution phase-number collision; recommend a program-renumbering reconciliation note in `v7.2.0-Remediation_Prompts.md` + this log before the canonical Phase 8 cluster ratification executes. Non-blocking for the Phase 7 verdict (content scope §2.1/§2.2/§2.3 fully transitioned).
+Prompt V7 re-run against live corpus state (anchors: AE Ledger md5 `c07e44c303142c25202c6c1c21967bac`; DEFECT_LEDGER md5 `10a8d3f06633afe0b844717039c2aedb`; Master Spec md5 `3401b429d6c9a1ba77b7a93e2a3879fe`). **Result: PASS — confirms the 2026-05-20 closure.** 71/71 in-scope rows transitioned (§2.1 18 + §2.2 6 + §2.3 47); 0 rows pending their required Phase-7 transition; HALT not triggered. All five adversarial spot-checks re-confirmed against live files (5/5 bodies present; 5/5 re-targets valid; 3/3 supersession trails; preamble amendment present; BC-12.4-01 acknowledged under AE-V72REM-00). The 2026-05-20 verification log is preserved at `legacy-import:_versions/PHASE7_REM_VERIFY.pre-reverify-2026-06-13.md` (md5 `53e5df531b38957078981ac31a813aa2`); the authoritative log `_audit/PHASE7_REM_VERIFY.md` is refreshed with tightened SIGN-OFF criterion semantics (status-`pending` vs pending-its-transition: 22 in-scope rows retain status `pending` by design, all forward-pointed; 0 lack their required transition) and four findings. Findings F1 (criterion semantics — resolved), F3 (two of three D-AE supersedors — AE-V2-006, AE-V9-004/-005 — are themselves `pending`, valid for supersession; confirm ratification at v7.1.1), F4 (`release_gate_policy_compliance` runtime activation gated on AE-V72REM-08, interim control = AE-V72REM-07 clause 4) are non-blocking annotations. **Finding F2 (P2; EXECUTED 2026-06-13 — filed + remediated as D-AE-016 via AE-V72REM-PH7R-01; see the Phase 7 Renumbering Reconciliation block immediately below):** the execution split the canonical single Phase 7 (Prompts 7.1/7.2/7.3) into separately-labeled "Phase 7" (§2.2) / "Phase 8" (§2.1) / "Phase 8.2" (§2.3) closure passes, where the "Phase 8" label collides with the canonical prompts-file Phase 8 (1V/2V/3V/3V+/6R/V7/V8.4/V9/10V cluster ratification — all rows verified still `pending` 2026-06-13). The corpus tracks the wave-order inversion (conflict #4) and Phase-9 forward-projection (conflict #3) but not this prompts-vs-execution phase-number collision; recommend a program-renumbering reconciliation note in `v7.2.0-Remediation_Prompts.md` + this log before the canonical Phase 8 cluster ratification executes. Non-blocking for the Phase 7 verdict (content scope §2.1/§2.2/§2.3 fully transitioned).
 
 ---
 
@@ -12240,7 +12240,7 @@ Prompt V7 re-run against live corpus state (anchors: AE Ledger md5 `c07e44c30314
 
 **This is the canonical Phase 8 cluster ratification pass (Prompt 8.1 scope).** Per the **D-AE-016 canonical-going-forward binding rule** (the Phase 7 Renumbering Reconciliation block immediately above, L12159–L12196), this block (i) titles itself with explicit cluster scope and (ii) cross-references D-AE-016 — so it is not confused with the Phase 7 Sweep-Pass B block titled "Phase 8 — … Phase 12.x DEF Reconciliation" (= Prompt 7.1 / §2.1) or the Sweep-Pass C block "Phase 8.2 — … Phase 14.x Cluster" (= Prompt 7.3 / §2.3). Per the D-AE-016 crosswalk, canonical **Phase 8** was reserved at the RECONCILIATION scaffold L10972 for the 1V/2V/3V/3V+/6R/V7/V8.4/V9/10V cluster ratification. **This pass executes the 1V/2V/3V/3V+/6R sub-cluster (= `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §3` Wave 4 = `§2.4`).** V7 + V8.4 + V9 + 10V (= `§3` Wave 5) remain `pending` for the subsequent Phase 8 sub-pass (Prompt 8.2) and are explicitly out of scope here. All cluster rows were verified still `pending` before this pass per the D-AE-016 block.
 
-**Edit summary.** Ledger-only ratification edit (no `Sourcera_Master_Spec.md` touch — all cited bodies landed in prior spec-side passes: Phase 1V 2026-04-29, Phase 2V 2026-05-03, Phase 3V 2026-05-04, Phase 6R 2026-05-06). Edits: (a) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` — **68 status-cell transitions `pending → approved`** across Phase 1V (11), Phase 2V (6), Phase 3V (34), Phase 6R (17), ratified as bundles per `§2.4` (Phase 3V as 5 owner-aligned sub-bundles + 2 CI-gate batches); 3 owner-notification gate-closure annotations (2V / 3V / 6R); 1 Phase 8 Closure Note (with the AE-V72REM-PH8-01 program-level registration). (b) `_audit/DEFECT_LEDGER.md` — 6 canonical-row transitions `open → remediated 2026-06-13` (D-6.1-001, D-V6-001, D-V6-002, D-6.2-002, D-6.2-010, D-6.2-011) per D-CONS-001. Pre-edit backups: `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase8-2026-06-13.md` (356,412 bytes; md5 `f34f2d83d47fb72a6dabafdc71c974d8`); `_versions/RECONCILIATION.pre-v72REM-Phase8-2026-06-13.md` (2,136,152 bytes; md5 `7a3c441a1e0b8d010c4febd2426ff001`); `_versions/DEFECT_LEDGER.pre-v72REM-Phase8-2026-06-13.md` (3,704,533 bytes; md5 `4de7a8570fc8229ccad409add82bc177`).
+**Edit summary.** Ledger-only ratification edit (no `Sourcera_Master_Spec.md` touch — all cited bodies landed in prior spec-side passes: Phase 1V 2026-04-29, Phase 2V 2026-05-03, Phase 3V 2026-05-04, Phase 6R 2026-05-06). Edits: (a) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` — **68 status-cell transitions `pending → approved`** across Phase 1V (11), Phase 2V (6), Phase 3V (34), Phase 6R (17), ratified as bundles per `§2.4` (Phase 3V as 5 owner-aligned sub-bundles + 2 CI-gate batches); 3 owner-notification gate-closure annotations (2V / 3V / 6R); 1 Phase 8 Closure Note (with the AE-V72REM-PH8-01 program-level registration). (b) `_audit/DEFECT_LEDGER.md` — 6 canonical-row transitions `open → remediated 2026-06-13` (D-6.1-001, D-V6-001, D-V6-002, D-6.2-002, D-6.2-010, D-6.2-011) per D-CONS-001. Pre-edit backups: `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase8-2026-06-13.md` (356,412 bytes; md5 `f34f2d83d47fb72a6dabafdc71c974d8`); `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase8-2026-06-13.md` (2,136,152 bytes; md5 `7a3c441a1e0b8d010c4febd2426ff001`); `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase8-2026-06-13.md` (3,704,533 bytes; md5 `4de7a8570fc8229ccad409add82bc177`).
 
 **Row-count reconciliation.** 70 in-scope cluster rows = 68 `pending → approved` + 2 preserved (AE-D1V-014 `acknowledged`; AE-V2-001 `ratified 2026-05-18`, Marketing + Founder — confirmed). The `§2.4` "~66" estimate (≈12 + 7 + ~30 + 17) is superseded by the precise count of **70** (Phase 3V carries 34 rows, not ~30). AE-V2-001's Marketing + Founder sign-off requirement was already satisfied at its 2026-05-18 joint ratification with AE-V72REM-02; ratification permanence preserved (not re-ratified).
 
@@ -12296,7 +12296,7 @@ The four P0 closures the task asks to confirm are reflected in the post-v7.1.0a 
 
 **This is the canonical Phase 8 cluster ratification pass, Prompt 8.2 scope — the second and final sub-pass of canonical Phase 8.** Prompt 8.1 (1V/2V/3V/3V+/6R) closed earlier on 2026-06-13 (block immediately above). Per the **D-AE-016 canonical-going-forward binding rule** (`→ v7.2.0-REM Program → Phase 7 Renumbering Reconciliation (D-AE-016 closure) (2026-06-13)`, L12159–L12196), this block (i) titles itself with explicit cluster scope and (ii) cross-references D-AE-016. **Disambiguation:** it is NOT the pre-existing "Phase 8.2 — AE Ratification Sweep Wave 3 — Phase 14.x Cluster" block (RECONCILIATION L11980; AE Ledger `AE-V72REM-PH8.2-01`; 2026-05-20), which is **Phase 7 Sweep-Pass C** (Prompt 7.3 / `§2.3`) per the crosswalk. To prevent the collision recurring, this pass registers as **AE-V72REM-PH8-02** (sibling to Prompt 8.1's AE-V72REM-PH8-01), never "PH8.2". **Scope = V7 + V8.4 + V9 + 10V (= recommendations `§3` Wave 5 + the Phase 10V row), per `AE_RATIFICATION_RECOMMENDATIONS.md §2.4` (V7) + `§2.5` (V8.4 / V9 / 10V).** All 23 rows verified `pending` before this pass.
 
-**Edit summary.** Ledger-only ratification edit (no `Sourcera_Master_Spec.md` touch — every cited body landed in prior spec-side passes: Phase 7 V7 2026-05-07; Phase V8.4 2026-05-08; Phase V9 2026-05-09; Phase 10V 2026-05-11; all landing anchors re-confirmed present in the post-v7.1.0a Master Spec by grep). Edits: (a) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` — **23 status-cell transitions** (22 `pending → approved` [AE-V7-01..-10, AE-V8.4-01..-05, AE-V9-001..-007] + 1 `pending → acknowledged` [AE-37-01]); 2 registry rows (AE-V72REM-PH8-02 new + AE-V72REM-PH8-01 backfill); 1 Phase 8 Closure Note (Prompt 8.2). (b) `_audit/DEFECT_LEDGER.md` — **17 P0 canonical-row propagations** `open → remediated` per D-CONS-001 P1 (dates preserved from the authoritative transition tables: V9 2026-05-09, V7 2026-05-07, V8.4 2026-05-08; 2026-06-13 recorded in-cell as the propagation date). (c) `_integration/RECONCILIATION.md` — this block. Pre-edit backups: `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase8.2-2026-06-13.md` (416,305 bytes; md5 `81f126107b4ec11fcc445df89aeeb590`); `_versions/RECONCILIATION.pre-v72REM-Phase8.2-2026-06-13.md` (2,147,218 bytes; md5 `c780792e78e7c7558b75f5effd20823b`); `_versions/DEFECT_LEDGER.pre-v72REM-Phase8.2-2026-06-13.md` (3,708,890 bytes; md5 `856fff2f35cb5a0584bc57815238c961`).
+**Edit summary.** Ledger-only ratification edit (no `Sourcera_Master_Spec.md` touch — every cited body landed in prior spec-side passes: Phase 7 V7 2026-05-07; Phase V8.4 2026-05-08; Phase V9 2026-05-09; Phase 10V 2026-05-11; all landing anchors re-confirmed present in the post-v7.1.0a Master Spec by grep). Edits: (a) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` — **23 status-cell transitions** (22 `pending → approved` [AE-V7-01..-10, AE-V8.4-01..-05, AE-V9-001..-007] + 1 `pending → acknowledged` [AE-37-01]); 2 registry rows (AE-V72REM-PH8-02 new + AE-V72REM-PH8-01 backfill); 1 Phase 8 Closure Note (Prompt 8.2). (b) `_audit/DEFECT_LEDGER.md` — **17 P0 canonical-row propagations** `open → remediated` per D-CONS-001 P1 (dates preserved from the authoritative transition tables: V9 2026-05-09, V7 2026-05-07, V8.4 2026-05-08; 2026-06-13 recorded in-cell as the propagation date). (c) `_integration/RECONCILIATION.md` — this block. Pre-edit backups: `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase8.2-2026-06-13.md` (416,305 bytes; md5 `81f126107b4ec11fcc445df89aeeb590`); `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase8.2-2026-06-13.md` (2,147,218 bytes; md5 `c780792e78e7c7558b75f5effd20823b`); `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase8.2-2026-06-13.md` (3,708,890 bytes; md5 `856fff2f35cb5a0584bc57815238c961`).
 
 **Row-count reconciliation.** 23 in-scope AE rows = 22 `pending → approved` + 1 `pending → acknowledged`. V7 = 10 (`§2.4`), V8.4 = 5 (`§2.5` sequenced), V9 = 7 (`§2.5` sequenced), 10V = 1 (`§2.5` acknowledge). Matches the task OUTPUT estimate ("~23 AE rows ratified").
 
@@ -12349,7 +12349,7 @@ The non-P0 canonical rows (V7 P1/P2; V8.4 P1/P2/P3; V9 P1 retention + P1 DSAR; D
 
 **Post-Phase-8 program state.** Canonical **Phase 8 (cluster ratification) is now COMPLETE** — Prompt 8.1 (1V/2V/3V/3V+/6R, 68 rows) + Prompt 8.2 (V7/V8.4/V9/10V, 23 rows) = 91 cluster rows ratified. v7.2.0-REM advances to **Phase 9**: Phase V11 cluster (AE-V11-01..-08; AE-V11-04 stub → v7.1.2 per D-AE-015), then the now-unblockable AE-14.18.1-01 / -02, then Phase V12 (AE-V12-01..-11) + Phase V13 (AE-V13-001..-006). v7.1.0a remains the current Master Spec stamp. Status-sync 2026-06-30: the v7.1.1 stamp-gate inheritance set carries AE-V9-004 as a v7.1.2 legal-review-pack obligation, not a v7.1.1 stamp blocker; AE-37-01 WCAG-firm counter-signature remains owed around annual §37.4 / Phase 37 work.
 
-**Cross-references.** `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phase 8 Closure Note — V7/V8.4/V9/10V Cluster Ratification (cluster pass — Prompt 8.2) (2026-06-13)` + AE-V72REM-PH8-02 (+ AE-V72REM-PH8-01 backfill); `→ Phase 7 Renumbering Reconciliation (D-AE-016 closure)` (binding-rule authority); `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.4` + `§2.5` + `§3` Wave 5; `_audit/DEFECT_LEDGER.md` 17 P0 canonical rows `open → remediated`; `_audit/PHASE_V72REM_PHASE_8_2_VERIFY.md` (verification log); `_versions/{AUTHORED_EXTENSIONS_LEDGER,RECONCILIATION,DEFECT_LEDGER}.pre-v72REM-Phase8.2-2026-06-13.md` (pre-edit backups).
+**Cross-references.** `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phase 8 Closure Note — V7/V8.4/V9/10V Cluster Ratification (cluster pass — Prompt 8.2) (2026-06-13)` + AE-V72REM-PH8-02 (+ AE-V72REM-PH8-01 backfill); `→ Phase 7 Renumbering Reconciliation (D-AE-016 closure)` (binding-rule authority); `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.4` + `§2.5` + `§3` Wave 5; `_audit/DEFECT_LEDGER.md` 17 P0 canonical rows `open → remediated`; `_audit/PHASE_V72REM_PHASE_8_2_VERIFY.md` (verification log); `legacy-import:_versions/{AUTHORED_EXTENSIONS_LEDGER,RECONCILIATION,DEFECT_LEDGER}.pre-v72REM-Phase8.2-2026-06-13.md` (pre-edit backups).
 
 ---
 
@@ -12361,10 +12361,10 @@ The non-P0 canonical rows (V7 P1/P2; V8.4 P1/P2/P3; V9 P1 retention + P1 DSAR; D
 
 | File | Bytes | md5 |
 | :---- | :---- | :---- |
-| `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase9-2026-06-14.md` | 460,148 | `c7de3ad6f0099fddcc9eda9f6bf3c24f` |
-| `_versions/RECONCILIATION.pre-v72REM-Phase9-2026-06-14.md` | 2,159,617 | `656747da08c09dba16bd931434630789` |
-| `_versions/DEFECT_LEDGER.pre-v72REM-Phase9-2026-06-14.md` | 3,713,303 | `ea35c730a0ebe9eab1286ad0c24e7ee9` |
-| `_versions/CLAUDE.md.pre-v72REM-Phase9-2026-06-14.md` | 42,466 | `eb454422f28828a5046490d720e9fe5b` |
+| `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase9-2026-06-14.md` | 460,148 | `c7de3ad6f0099fddcc9eda9f6bf3c24f` |
+| `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase9-2026-06-14.md` | 2,159,617 | `656747da08c09dba16bd931434630789` |
+| `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase9-2026-06-14.md` | 3,713,303 | `ea35c730a0ebe9eab1286ad0c24e7ee9` |
+| `legacy-import:_versions/CLAUDE.md.pre-v72REM-Phase9-2026-06-14.md` | 42,466 | `eb454422f28828a5046490d720e9fe5b` |
 
 **Edit summary.** (1) `_integration/AUTHORED_EXTENSIONS_LEDGER.md` — Phase V11 section: AE-V11-01 / -02 / -05 / -08 `pending → approved`; AE-V11-04 `pending (stub) → re-targeted to v7.1.2`; Phase-9 update paragraph appended to the Phase V11 sign-off transition. Phase 14.18.1 section: AE-14.18.1-01 / -02 `pending → approved`. v7.2.0-REM Authored Extensions Registry: new program-level row AE-V72REM-PH9-01. New "### Phase 9 Closure Note" sub-section appended. (2) `_audit/DEFECT_LEDGER.md` — D-AE-011 + D-AE-015 canonical rows `open → remediated 2026-06-14`; D-11.4-001 tracking note re-bound v7.1.1 → v7.1.2 (status stays `open` / `deferred_to_phase_11_5`). (3) `CLAUDE.md §16` — five amendments (Appendix M 122/181 clarity; §M.5 runtime-split current-state parenthetical; v7.1.1-backlog V11 carry-over disposition; AE-ratification-queue "2 BLOCKED → approved"; new dedicated Phase 9 bullet). (4) This RECONCILIATION block.
 
@@ -12418,7 +12418,7 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 **Post-Phase-9 program state.** Phase 9 V11-cluster + AE-14.18.1-unblock portion **COMPLETE**. v7.1.1 stamp-gate inheritance set no longer carries a Phase-V11 blocker (AE-V11-04 → v7.1.2). **Phase 9 continuation owed:** Phase V12 (AE-V12-01..-11) + Phase V13 (AE-V13-001..-006) cluster ratifications remain `pending` (per the prompts-file canonical "Phase 9 = V11/V12/V13 + 14.18.1" definition, only the V11 + 14.18.1 portion is closed here). Status-sync 2026-06-30: AE-V9-004 outside-counsel GDPR Art. 12(3) counter-signature is re-targeted to v7.1.2 legal review; AE-37-01 WCAG-firm counter-signature is owed at annual §37.4 / Phase 37; non-P0 D-CONS-001 release-blocking propagation is closed. v7.1.2 now carries: AE-V11-04 M.1 backfill body authoring (~135-row pack) + AE-V11-08 mechanical row-rewrite + D-11.4-001 closure.
 
-**Cross-references.** `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phase 9 Closure Note — Phase V11 Cluster Ratification + AE-14.18.1 Unblock (cluster pass) (2026-06-14)` + `→ AE-V72REM-PH9-01` (registry row) + `→ Phase V11 … Phase 9 cluster-ratification update`; `_audit/DEFECT_LEDGER.md` D-AE-011 + D-AE-015 (`open → remediated 2026-06-14`) + D-11.4-001 (re-bound → v7.1.2); `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.6` + `§4` + `§1`; `_audit/PHASE_V72REM_PHASE_9_VERIFY.md` (verification log: self-challenge + Counterfactual #1 + #2); `CLAUDE.md §16` (Phase 9 bullet + 4 framing updates); Master Spec §M.5.4 / §M.5.6 (authoritative 122 / 181 counts) + §M.4.4.5 (override grammar); `_versions/{AUTHORED_EXTENSIONS_LEDGER,RECONCILIATION,DEFECT_LEDGER}.pre-v72REM-Phase9-2026-06-14.md` + `_versions/CLAUDE.md.pre-v72REM-Phase9-2026-06-14.md` (pre-edit backups; md5s above).
+**Cross-references.** `_integration/AUTHORED_EXTENSIONS_LEDGER.md → Phase 9 Closure Note — Phase V11 Cluster Ratification + AE-14.18.1 Unblock (cluster pass) (2026-06-14)` + `→ AE-V72REM-PH9-01` (registry row) + `→ Phase V11 … Phase 9 cluster-ratification update`; `_audit/DEFECT_LEDGER.md` D-AE-011 + D-AE-015 (`open → remediated 2026-06-14`) + D-11.4-001 (re-bound → v7.1.2); `_audit/AE_RATIFICATION_RECOMMENDATIONS.md §2.6` + `§4` + `§1`; `_audit/PHASE_V72REM_PHASE_9_VERIFY.md` (verification log: self-challenge + Counterfactual #1 + #2); `CLAUDE.md §16` (Phase 9 bullet + 4 framing updates); Master Spec §M.5.4 / §M.5.6 (authoritative 122 / 181 counts) + §M.4.4.5 (override grammar); `legacy-import:_versions/{AUTHORED_EXTENSIONS_LEDGER,RECONCILIATION,DEFECT_LEDGER}.pre-v72REM-Phase9-2026-06-14.md` + `legacy-import:_versions/CLAUDE.md.pre-v72REM-Phase9-2026-06-14.md` (pre-edit backups; md5s above).
 
 ---
 
@@ -12430,10 +12430,10 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 | File | Bytes | md5 |
 | :---- | :---- | :---- |
-| `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase9-V12V13-2026-06-14.md` | 480,811 | `a22f4941c25272273ec1cbc449820d56` |
-| `_versions/RECONCILIATION.pre-v72REM-Phase9-V12V13-2026-06-14.md` | 2,171,761 | `489040d3f975b7ce2415da162ec95f84` |
-| `_versions/DEFECT_LEDGER.pre-v72REM-Phase9-V12V13-2026-06-14.md` | 3,716,509 | `4379473ce669a9b8ebaaf11ab01f6153` |
-| `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase9-V12V13-2026-06-14.md` | 6,410,415 | `3401b429d6c9a1ba77b7a93e2a3879fe` |
+| `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72REM-Phase9-V12V13-2026-06-14.md` | 480,811 | `a22f4941c25272273ec1cbc449820d56` |
+| `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase9-V12V13-2026-06-14.md` | 2,171,761 | `489040d3f975b7ce2415da162ec95f84` |
+| `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase9-V12V13-2026-06-14.md` | 3,716,509 | `4379473ce669a9b8ebaaf11ab01f6153` |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase9-V12V13-2026-06-14.md` | 6,410,415 | `3401b429d6c9a1ba77b7a93e2a3879fe` |
 
 **AE-row → ratification-status map (17 ratified + 1 new authored).**
 
@@ -12499,7 +12499,7 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 **Chosen scope (operator selection 2026-06-14).** Execute the §6.1 17-defect sweep at full fidelity + the §6.4/§6.5 roll-under items; register the 5 CI gates + `webhook_default_retry_class`; transition the ledger; **assert (not re-author) V12/V13**. The task-prompt framing "V12 catalog cluster + V13 catalog cluster ≈ 72 defects" does not reconcile against the corpus: V12 filed **zero** catalog-completeness defects, and V13's catalog rows were authored 2026-05-12 (Appendix C/I/J `Phase V13 Additions`) + ratified at Phase 9 (2026-06-14). The "~72" reflects the **expanded appendix row count** of the §6.1 17 defects (35 webhooks + 55 PostHog + 88 error codes + 26 enums + 11 state-machine cross-refs + 5 surfaces + 5 gates = ~225 catalog rows). Surfaced + resolved before execution per CLAUDE.md §13 rule 3.
 
-**Edit summary (Master Spec body; pre-edit backup `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase6-catalog-2026-06-14.md`, 6,413,689 bytes, md5 `5056b4928487ef14723ecdd7fb064f41`).**
+**Edit summary (Master Spec body; pre-edit backup `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase6-catalog-2026-06-14.md`, 6,413,689 bytes, md5 `5056b4928487ef14723ecdd7fb064f41`).**
 
 | Appendix / § | Anchor | Additions |
 |---|---|---|
@@ -12549,7 +12549,7 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 ### v7.2.0-REM Program → Phase 11 — Top-50 Cluster Execution Verification (HALT) (2026-06-14)
 
-**Pass.** Prompt V11 (`v7.2.0-Remediation_Prompts.md` L1466–1482) — independent verification of the canonical **Phase 11 — P1 Top-50 Cluster Execution** (`REMEDIATION_BACKLOG §3.1`, 50 clusters). Verification phase only: **no Master Spec edit, no defect transitions.** Output: `_audit/PHASE11_REM_VERIFY.md`. Pre-edit backup of this log: `_versions/RECONCILIATION.pre-v72REM-Phase11-verify-2026-06-14.md` (2,195,223 bytes; md5 `2fb49ec108995a24a7bc39426ed85463`).
+**Pass.** Prompt V11 (`v7.2.0-Remediation_Prompts.md` L1466–1482) — independent verification of the canonical **Phase 11 — P1 Top-50 Cluster Execution** (`REMEDIATION_BACKLOG §3.1`, 50 clusters). Verification phase only: **no Master Spec edit, no defect transitions.** Output: `_audit/PHASE11_REM_VERIFY.md`. Pre-edit backup of this log: `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase11-verify-2026-06-14.md` (2,195,223 bytes; md5 `2fb49ec108995a24a7bc39426ed85463`).
 
 **Verdict: HALT.** STRUCTURAL bar ("All 269 P1 defects in the top-50 clusters transitioned") **failed**. A full canonical-ledger scan returns **0 Phase-11-attributable closures** across the 50 §3.1 clusters and **≥241 open P1** (cluster-mapped) + 10 untransitioned findings-only defects. Phase 11 *execution* (Prompt 11.1 × 50) has not run — corroborated by the `(pending)` roadmap marker (this file L11023) and `PHASE10_REM_VERIFY.md §19`.
 
@@ -12596,7 +12596,7 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 ## v7.2.0-REM Program → Phase 12 — Cross-Phase Programs → enum (PROD-402) — Batch 1 + Course Correction (2026-06-15)
 
-**Context.** "Walk them all" directive: execute all 25 `§3.2` cross-phase programs in dependency order per `_integration/v7.2.0-REM_CrossPhase_Walk_Plan.md`. Program 1 = enum. Pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase12-walk-2026-06-15.md` (6,506,716 bytes; md5 `899858e70feff2279a97166e7dee3c08`; 53,669 lines).
+**Context.** "Walk them all" directive: execute all 25 `§3.2` cross-phase programs in dependency order per `_integration/v7.2.0-REM_CrossPhase_Walk_Plan.md`. Program 1 = enum. Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase12-walk-2026-06-15.md` (6,506,716 bytes; md5 `899858e70feff2279a97166e7dee3c08`; 53,669 lines).
 
 **What happened (full transparency).** Batch 1 targeted the additive-registration subset of the `D-AJ-*` cluster (D-AJ-001/-002/-007/-008/-009/-010/-011). The pre-authoring existence check used `^### \`<enum>\`` / `^**\`<enum>\` enum` grep patterns and concluded the seven enums were absent from Appendix J; on that basis a "v7.2.0-REM Phase 12 enum Batch 1" registration block plus four inline-citation rewrites were authored. **Self-challenge verification then caught a duplicate-occurrence signal** (each `D-AJ` id appears at two line-starts in `DEFECT_LEDGER.md`). Reading the second occurrence — the supplementary "Tier 2 — P1 Remediations Landed" table (L868–887) — revealed all seven were already `remediated 2026-05-03` via the **"Phase 2V Audit-Remediation Enum Registrations" section (Master Spec Appendix J, L50627)**, which the grep MISSED because Phase 2V uses `#### \`name\` (… — D-AJ-NNN)` headings, not the `###`/`**` forms searched. The seven enums were therefore already registered; **Batch 1 was a duplicate-registration error, and for `defense_view_lifecycle_state`, `regeneration_reason_code`, `solo_charge_workspace_state`, and `capability_declaration_origin` the Batch-1 values CONFLICTED with the canonical Phase-2V values.**
 
@@ -12625,13 +12625,13 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 **Scope honesty.** This is transcription of existing audited closures (each cited to its source transition), NOT independent body re-verification. Closures that live only in the spec body with no supplementary row (e.g., the Phase-2V `#### ` enum registrations) are NOT caught by Tier-1 and remain in the Tier-2 surface (~1,771 canonical `open`) pending per-program body-existence checks.
 
-**Backup.** Pre-edit ledger snapshot `_versions/DEFECT_LEDGER.pre-v72REM-Phase12-Tier1-propagation-2026-06-15.md` (3,759,949 bytes). Master Spec untouched this pass (md5 `899858e70feff2279a97166e7dee3c08`).
+**Backup.** Pre-edit ledger snapshot `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase12-Tier1-propagation-2026-06-15.md` (3,759,949 bytes). Master Spec untouched this pass (md5 `899858e70feff2279a97166e7dee3c08`).
 
 **Result.** Advances the staged v7.1.1 D-CONS-001 ledger-hygiene pass by 90 rows; shrinks the canonical `open` surface ahead of per-program Tier-2 authoring. Full triage report + per-class Tier-2 surface: `_audit/V72REM_PHASE12_DCONS001_TRIAGE.md`.
 
 **Sign-off scoreboard.** Ledger: 90 canonical-lag propagations (7 enum + 83 cross-class). Master Spec: 0. New findings: 3 (F-PH12-01/-02/-03, prior block). Next: per-program Tier-2 body-existence checks in Walk Plan dependency order (recommended start: enum 95 + glossary 20).
 
-**Cross-references.** `_audit/V72REM_PHASE12_DCONS001_TRIAGE.md`; `_integration/v7.2.0-REM_CrossPhase_Walk_Plan.md §7`; `_versions/DEFECT_LEDGER.pre-v72REM-Phase12-Tier1-propagation-2026-06-15.md`.
+**Cross-references.** `_audit/V72REM_PHASE12_DCONS001_TRIAGE.md`; `_integration/v7.2.0-REM_CrossPhase_Walk_Plan.md §7`; `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase12-Tier1-propagation-2026-06-15.md`.
 
 ---
 
@@ -12663,7 +12663,7 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 **Trigger.** The Phase-12 verification adversarial spot-check (`PHASE12_REM_VERIFY.md §2.3`, F-PH12V-01) surfaced that two §13.11 Defense View enums carried value sets that diverge **inside the Master Spec body**. On the operator directive to fix, both were reconciled to their authoritative source in place. This is the first genuine authoring landed in the Phase-12 enum program (the Batch-1 attempt was reverted; the Tier-1 pass only propagated catalog-lag).
 
-**Backups (Convention #14).** Pre-edit Master Spec → `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase12-enum-fix-2026-06-15.md` (6,506,716 bytes; md5 `899858e70feff2279a97166e7dee3c08`). Post-edit Master Spec: 6,508,666 bytes; md5 `893c6b7f0c1cabd0a43e975ad3bf4aae`.
+**Backups (Convention #14).** Pre-edit Master Spec → `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase12-enum-fix-2026-06-15.md` (6,506,716 bytes; md5 `899858e70feff2279a97166e7dee3c08`). Post-edit Master Spec: 6,508,666 bytes; md5 `893c6b7f0c1cabd0a43e975ad3bf4aae`.
 
 **Edit 1 — `defense_view_lifecycle_state` (D-V72REM-PH12-01, P1 enum → remediated).** Appendix J registration (L50663) corrected `generated_unopened, regenerated_unopened, viewed, viewed_archived` → `generated_unopened, opened, regenerated_unopened, archived` to match the authoritative §L.7 Defense View State Machine (which the §13.11 inline state table and the Appendix C `defense_view.regenerated` transition prose already used). The state machine was unchanged — the Appendix-J registry was the sole outlier (a Phase-2V audit-remediation registration that introduced a non-canonical vocabulary). No AE required (straight correction to the authoritative source). Notes line annotated with the correction provenance.
 
@@ -12685,7 +12685,7 @@ Bundle accounting: 8 V11 rows fully dispositioned (4 newly `approved` + 3 alread
 
 **Scope.** Implementation pack **M02.3** (per `Build_Execution_Strategy.md` §11; `Linear_Execution_Blueprint.md` §5) lands the runtime wiring for the **spec-tree-lint** subset of its assigned §M.5 gates. This is the spec-repo-resident half of M02.3 — the half whose gate scan-target is the Master Spec / UX Spec markdown that physically lives in this repository. The product-codebase half (Convex serializers, GraphQL/REST handlers, RBAC enum declarations, MFA code paths, DSAR cascade-walker, EvalStarter registry) is **not** addressable here and lands in the product-repo M02.3 pack. Full classification at `_integration/M02_3_RUNTIME_WIRING_PLAN.md`.
 
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-M02.3-runtime-2026-06-15.md` (6,508,666 bytes; md5 `893c6b7f0c1cabd0a43e975ad3bf4aae`).
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-M02.3-runtime-2026-06-15.md` (6,508,666 bytes; md5 `893c6b7f0c1cabd0a43e975ad3bf4aae`).
 
 **Edit summary (Master Spec).** Six §M.5.4 `Runtime status` cells flipped `spec_binding_pending_pack_m02_3 → runtime_active`; §M.5.6 arithmetic paragraph extended with a labeled v7.2.0-REM M02.3 successor note (3→9 `runtime_active`, 118→112 §M.5.4 pending; 181-aggregate 9/171/1); Appendix J `ci_gate_runtime_status` enum rows updated (runtime_active enumeration + 118→112 pending); one Changelog entry (`v7.1.0a — 2026-06-15`) + `Last Updated` bump. No catalog rows added/removed; `122`/`181` totals unchanged (re-verified by `appendix_m5_header_count_parity` on the post-edit spec).
 
@@ -12729,7 +12729,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 5.5 P1 Authoring Pass — Seller Q&A / NDA Canonicalization (2026-06-21)
 
-**Scope.** Focused Phase 5.5 P1 authoring slice from the D-5.5 findings-only backfill created by the Phase 11 scope-hygiene pass. Master Spec body touched: §4.4.2.1, §24.1, §24.2, Appendix J, Appendix M. Ledger touched: canonical D-5.5-001/-002/-003/-005 status cells. AE touched: AE-V72REM-PH5.5-01. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`.
+**Scope.** Focused Phase 5.5 P1 authoring slice from the D-5.5 findings-only backfill created by the Phase 11 scope-hygiene pass. Master Spec body touched: §4.4.2.1, §24.1, §24.2, Appendix J, Appendix M. Ledger touched: canonical D-5.5-001/-002/-003/-005 status cells. AE touched: AE-V72REM-PH5.5-01. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`.
 
 **Edit summary.**
 - Authored §4.4.2.1 Q&A Thread Seller Projection as the seller-side §4 catalog home for Q&A read/write/firewall fields while preserving §18.3.1 as the canonical conversation schema.
@@ -12751,7 +12751,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.2 P1 Authoring Pass — §5.11 Ops M9-M13 + Seller Template Tier Canonicalization (2026-06-21)
 
-**Scope.** Focused Phase 3.2 P1 authoring slice covering D-3.2-006, D-3.2-012, and D-3.2-014. Master Spec body touched: §5.11, §48.6.11, §50.11. Ledger touched: canonical D-3.2-006/-012/-014 status cells and the Phase 11 scope-hygiene summary text. Verification touched: `_audit/PHASE_V72REM_PHASE_3_2_P1_AUTHORING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-Phase32-ops-m913-rbac-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-Phase32-ops-m913-rbac-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-Phase32-ops-m913-rbac-2026-06-21.md`.
+**Scope.** Focused Phase 3.2 P1 authoring slice covering D-3.2-006, D-3.2-012, and D-3.2-014. Master Spec body touched: §5.11, §48.6.11, §50.11. Ledger touched: canonical D-3.2-006/-012/-014 status cells and the Phase 11 scope-hygiene summary text. Verification touched: `_audit/PHASE_V72REM_PHASE_3_2_P1_AUTHORING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-Phase32-ops-m913-rbac-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-Phase32-ops-m913-rbac-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-Phase32-ops-m913-rbac-2026-06-21.md`.
 
 **Edit summary.**
 - Authored §5.11.1 Ops Console Feature Access Overlay for M9-M13 Marketplace editorial/admin operations, with Ops-role columns for `ops_marketing_editor`, `ops_marketing_supervisor`, `ops_taxonomy_admin`, `ops_legal_takedown_admin`, `ops_marketing_finance_reviewer`, `ops_template_reviewer`, and `ops_finance_admin`.
@@ -12774,7 +12774,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Stale P1 Ledger Sync — `plan_tier_kind` + §7.2 Firewall Anchor (2026-06-21)
 
-**Scope.** Canonical-row synchronization for two P1 defects whose body remediation already exists in the current Master Spec: D-1.1-014 (`plan_tier_kind`) and D-6.1-013 (§7.2 Dual-Console Firewall anchor disambiguation). Also closes D-V72REM-PH10-002 (P3) because its only contradiction was the stale-open D-6.1-013 canonical row. Master Spec untouched. Ledger touched: three status cells. Verification touched: `_audit/PHASE_V72REM_STALE_P1_LEDGER_SYNC_VERIFY.md`. Pre-edit backups: `_versions/DEFECT_LEDGER_pre-v72REM-stale-p1-ledger-sync-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-stale-p1-ledger-sync-2026-06-21.md`.
+**Scope.** Canonical-row synchronization for two P1 defects whose body remediation already exists in the current Master Spec: D-1.1-014 (`plan_tier_kind`) and D-6.1-013 (§7.2 Dual-Console Firewall anchor disambiguation). Also closes D-V72REM-PH10-002 (P3) because its only contradiction was the stale-open D-6.1-013 canonical row. Master Spec untouched. Ledger touched: three status cells. Verification touched: `_audit/PHASE_V72REM_STALE_P1_LEDGER_SYNC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-stale-p1-ledger-sync-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-stale-p1-ledger-sync-2026-06-21.md`.
 
 **Edit summary.**
 - D-1.1-014 transitioned `open → remediated 2026-06-21` because Appendix J `plan_tier_kind` already carries the 13-value canonical union from the Phase 2V D-AJ-003 remediation and explicitly retires the stale values.
@@ -12791,7 +12791,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Match Score Plan-Gating P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-gating drift pass covering D-AS-012 and D-PXC-005. Master Spec body touched: §34.14.1 row 10 `match_score_numeric` and §48.8.6 Conversion Moment #2 modal body. Ledger touched: D-AS-012 and D-PXC-005 canonical status cells. Verification touched: `_audit/PHASE_V72REM_MATCH_SCORE_PLAN_GATING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-match-score-plan-gating-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-match-score-plan-gating-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-match-score-plan-gating-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-gating drift pass covering D-AS-012 and D-PXC-005. Master Spec body touched: §34.14.1 row 10 `match_score_numeric` and §48.8.6 Conversion Moment #2 modal body. Ledger touched: D-AS-012 and D-PXC-005 canonical status cells. Verification touched: `_audit/PHASE_V72REM_MATCH_SCORE_PLAN_GATING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-match-score-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-match-score-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-match-score-plan-gating-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.14.1 row 10 Plan Gating from the conflicting "Free: 25/mo. Starter: 500/mo. Growth+: unmetered" allowance text to a citation back to §34.1.2 Match Scoring (numeric) and §34.8.5 `match_score_numeric`: Seller Growth+ only; Free, Solo, and Starter see qualitative labels only.
@@ -12810,7 +12810,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Seller Page Enrichment Plan-Gating P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton / plan-gating drift pass covering D-PXC-004. Master Spec body touched: §34.14.1 row 8 `seller_page_enrichment`, §4.4.10 state-machine notes, and §26.7.2 enrichment workflow. Ledger touched: D-PXC-004 canonical status cell. Verification touched: `_audit/PHASE_V72REM_SELLER_PAGE_ENRICHMENT_PLAN_GATING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-seller-page-enrichment-plan-gating-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-seller-page-enrichment-plan-gating-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-seller-page-enrichment-plan-gating-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton / plan-gating drift pass covering D-PXC-004. Master Spec body touched: §34.14.1 row 8 `seller_page_enrichment`, §4.4.10 state-machine notes, and §26.7.2 enrichment workflow. Ledger touched: D-PXC-004 canonical status cell. Verification touched: `_audit/PHASE_V72REM_SELLER_PAGE_ENRICHMENT_PLAN_GATING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-seller-page-enrichment-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-seller-page-enrichment-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-seller-page-enrichment-plan-gating-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.14.1 row 8 Plan Gating from monthly quota copies to a citation back to §34.1.2 Seller Page Enrichment (Opus).
@@ -12829,7 +12829,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → KB Bootstrap Plan-Gating P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton / plan-gating drift pass covering D-PXC-003. Master Spec body touched: §34.14.1 row 4 `kb_bootstrap`. Ledger touched: D-PXC-003 canonical status cell. Verification touched: `_audit/PHASE_V72REM_KB_BOOTSTRAP_PLAN_GATING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-kb-bootstrap-plan-gating-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-kb-bootstrap-plan-gating-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-kb-bootstrap-plan-gating-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton / plan-gating drift pass covering D-PXC-003. Master Spec body touched: §34.14.1 row 4 `kb_bootstrap`. Ledger touched: D-PXC-003 canonical status cell. Verification touched: `_audit/PHASE_V72REM_KB_BOOTSTRAP_PLAN_GATING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-kb-bootstrap-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-kb-bootstrap-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-kb-bootstrap-plan-gating-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.14.1 row 4 Plan Gating from conflicting quota text to a citation back to §34.1.2 KB Bootstrap and §34.14.4 Free Allowance Overrides.
@@ -12849,7 +12849,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Volume Discount Companion P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton cleanup covering D-AS-002. Companion docs touched: Buyer Pricing v3 §7 and Seller Pricing v3 §9. Ledger touched: D-AS-002 canonical status cell and the stale held-summary row. Verification touched: `_audit/PHASE_V72REM_VOLUME_DISCOUNT_COMPANION_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Buyer_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`; `_versions/Sourcera_Seller_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton cleanup covering D-AS-002. Companion docs touched: Buyer Pricing v3 §7 and Seller Pricing v3 §9. Ledger touched: D-AS-002 canonical status cell and the stale held-summary row. Verification touched: `_audit/PHASE_V72REM_VOLUME_DISCOUNT_COMPANION_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Buyer_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`; `legacy-import:_versions/Sourcera_Seller_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the inline Enterprise volume-discount threshold ladders in Buyer Pricing v3 §7 and Seller Pricing v3 §9 with a citation to Master Spec §34.2.4.
@@ -12866,7 +12866,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Inline Plan/Price P1 Pass (2026-06-21)
 
-**Scope.** Focused inline numerical-authority cleanup covering D-AS-001 and D-MD-001. Incidental same-line citation closure: D-AS-013. Master Spec body touched: §48.8.6 Conversion Moment #1 modal body, §34.16 `rev_subscription` Source column, and the same-pattern §5.2 Billing Admin plan-tier-list phrase. Ledger touched: D-AS-001, D-AS-013, D-MD-001 canonical status cells plus stale held-summary rows for D-AS-001 and D-AS-013. Verification touched: `_audit/PHASE_V72REM_INLINE_PLAN_PRICE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-inline-plan-price-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-inline-plan-price-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-inline-plan-price-p1-2026-06-21.md`.
+**Scope.** Focused inline numerical-authority cleanup covering D-AS-001 and D-MD-001. Incidental same-line citation closure: D-AS-013. Master Spec body touched: §48.8.6 Conversion Moment #1 modal body, §34.16 `rev_subscription` Source column, and the same-pattern §5.2 Billing Admin plan-tier-list phrase. Ledger touched: D-AS-001, D-AS-013, D-MD-001 canonical status cells plus stale held-summary rows for D-AS-001 and D-AS-013. Verification touched: `_audit/PHASE_V72REM_INLINE_PLAN_PRICE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-inline-plan-price-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-inline-plan-price-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-inline-plan-price-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §48.8.6 Conversion Moment #1's stale inline Seller Starter price with a §34.2.2 price-resolution binding.
@@ -12885,7 +12885,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Free-to-Paid Solo P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-gating cleanup covering D-PXC-015. Master Spec body touched: §34.18.5 Monthly Finance Scorecard Free-to-paid conversion rows. Ledger touched: D-PXC-015 canonical status cell. Verification touched: `_audit/PHASE_V72REM_FREE_TO_PAID_SOLO_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-free-to-paid-solo-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-free-to-paid-solo-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-free-to-paid-solo-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-gating cleanup covering D-PXC-015. Master Spec body touched: §34.18.5 Monthly Finance Scorecard Free-to-paid conversion rows. Ledger touched: D-PXC-015 canonical status cell. Verification touched: `_audit/PHASE_V72REM_FREE_TO_PAID_SOLO_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-free-to-paid-solo-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-free-to-paid-solo-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-free-to-paid-solo-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Updated §34.18.5 Buyer Free-to-paid conversion to include Solo in the paid Buyer tier set and to count Solo subscription or per-eval conversions.
@@ -12902,7 +12902,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Magic-Link Retired-Citation P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 documentation-gap cleanup covering D-PXC-013. Master Spec body touched: §34.17.1 row 13 Magic-link SSO orchestrator. Ledger touched: D-PXC-013 canonical status cell. Verification touched: `_audit/PHASE_V72REM_MAGIC_LINK_RETIRED_CITE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-magic-link-retired-cite-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-magic-link-retired-cite-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-magic-link-retired-cite-p1-2026-06-21.md`.
+**Scope.** Focused P1 documentation-gap cleanup covering D-PXC-013. Master Spec body touched: §34.17.1 row 13 Magic-link SSO orchestrator. Ledger touched: D-PXC-013 canonical status cell. Verification touched: `_audit/PHASE_V72REM_MAGIC_LINK_RETIRED_CITE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-magic-link-retired-cite-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-magic-link-retired-cite-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-magic-link-retired-cite-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.17.1 row 13 Implemented By retired-Master-Summary citation with `SellerOnboardingSession` (§4.4.22), §35.2.12 item 1, and SPS v3 §15.1 / §17.2 capability 1.
@@ -12919,7 +12919,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Plan-Gate P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-gating cleanup covering D-PXC-009. Master Spec body touched: §34.16.1 SKU 1 auction step 2 and §34.16.8 Acceptance Criteria. Ledger touched: D-PXC-009 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_LISTING_PLAN_GATE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-listing-plan-gate-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-listing-plan-gate-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-listing-plan-gate-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-gating cleanup covering D-PXC-009. Master Spec body touched: §34.16.1 SKU 1 auction step 2 and §34.16.8 Acceptance Criteria. Ledger touched: D-PXC-009 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_LISTING_PLAN_GATE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-listing-plan-gate-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-listing-plan-gate-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-listing-plan-gate-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added the Seller Scale / Seller Enterprise eligibility gate to §34.16.1 Promoted Listing bid submission.
@@ -12937,7 +12937,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Verification Tier Plan-Gating P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-gating cleanup covering D-PXC-011. Master Spec body touched: §34.16.2 Plan Gating paragraph, §4.4.21 VerificationReviewRecord tier definitions and AC #1, Appendix I `verification_review_plan_tier_insufficient`, Appendix K Verification Tier entries, and Appendix M Solo Verified-tier row. Ledger touched: D-PXC-011 canonical status cell. Verification touched: `_audit/PHASE_V72REM_VERIFICATION_TIER_PLAN_GATING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-verification-tier-plan-gating-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-verification-tier-plan-gating-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-verification-tier-plan-gating-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-gating cleanup covering D-PXC-011. Master Spec body touched: §34.16.2 Plan Gating paragraph, §4.4.21 VerificationReviewRecord tier definitions and AC #1, Appendix I `verification_review_plan_tier_insufficient`, Appendix K Verification Tier entries, and Appendix M Solo Verified-tier row. Ledger touched: D-PXC-011 canonical status cell. Verification touched: `_audit/PHASE_V72REM_VERIFICATION_TIER_PLAN_GATING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-verification-tier-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-verification-tier-plan-gating-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-verification-tier-plan-gating-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.16.2's stale "available to sellers on all plans" / future Growth+ restriction language with the live §34.1.2 Verification Tier Cap: Basic on Seller Free, Verified eligibility from Seller Solo+, and Certified eligibility from Seller Growth+.
@@ -12957,7 +12957,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Quality-Floor P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 documentation-gap cleanup covering D-MD-007. Master Spec body touched: §34.16.4 Buyer Guardrails #2, §34.16.7 `promoted_listing_quality_floor_failed`, §34.16.8 Acceptance Criteria, §27.11.1 design principle #5, §27.11.6 G7, §27.11.8 AC #7, and Appendix I. Ledger touched: D-MD-007 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_QUALITY_FLOOR_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-quality-floor-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-quality-floor-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-quality-floor-p1-2026-06-21.md`.
+**Scope.** Focused P1 documentation-gap cleanup covering D-MD-007. Master Spec body touched: §34.16.4 Buyer Guardrails #2, §34.16.7 `promoted_listing_quality_floor_failed`, §34.16.8 Acceptance Criteria, §27.11.1 design principle #5, §27.11.6 G7, §27.11.8 AC #7, and Appendix I. Ledger touched: D-MD-007 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_QUALITY_FLOOR_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-quality-floor-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-quality-floor-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-quality-floor-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the partial §34.16.4 quality-floor restatement with the canonical §4.4.19 Eligibility Gate plus §27.11.6 anti-spam checks.
@@ -12976,7 +12976,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Monthly-Cap P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton cleanup covering D-MD-002. Master Spec body touched: §34.16.1 Pricing / Auction Mechanic, §34.16.8 AC #6, §34.20.13 AC #60, Appendix J `promoted_listing_placement_mode`, and Appendix K `Included Allotment vs. Purchased Top-Up`. Ledger touched: D-MD-002 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_MONTHLY_CAP_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-monthly-cap-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-monthly-cap-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-monthly-cap-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton cleanup covering D-MD-002. Master Spec body touched: §34.16.1 Pricing / Auction Mechanic, §34.16.8 AC #6, §34.20.13 AC #60, Appendix J `promoted_listing_placement_mode`, and Appendix K `Included Allotment vs. Purchased Top-Up`. Ledger touched: D-MD-002 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_MONTHLY_CAP_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-monthly-cap-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-monthly-cap-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-monthly-cap-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.16.1's stale "4 additional beyond their first" monthly-cap phrasing with a citation to §34.1.2 **Promoted Marketplace Placements** for plan-included allotments plus the existing 4 purchased-top-up hard cap.
@@ -12995,7 +12995,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Plan-Gate Error-Code P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-gating/error-code cleanup covering D-MD-003. Master Spec body touched: §4.8.12 failure mode #2, §4.8.12 AC #7, §34.16.7 error-code table, and Appendix I `marketplace_discovery_sku_unavailable_on_plan`. Ledger touched: D-MD-003 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_PLAN_GATE_ERROR_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-plan-gate-error-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-plan-gate-error-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-plan-gate-error-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-gating/error-code cleanup covering D-MD-003. Master Spec body touched: §4.8.12 failure mode #2, §4.8.12 AC #7, §34.16.7 error-code table, and Appendix I `marketplace_discovery_sku_unavailable_on_plan`. Ledger touched: D-MD-003 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_PLAN_GATE_ERROR_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-plan-gate-error-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-plan-gate-error-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-plan-gate-error-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added `promoted_listing_plan_tier_below_scale` to the §34.16.7 error-code table for Promoted Listing plan-tier failures.
@@ -13014,7 +13014,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Max-Bid Reject P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 API-contract cleanup covering D-MD-004. Master Spec body touched: §34.16.5 Failure Mode #1. Ledger touched: D-MD-004 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_MAX_BID_REJECT_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-max-bid-reject-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-max-bid-reject-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-max-bid-reject-p1-2026-06-21.md`.
+**Scope.** Focused P1 API-contract cleanup covering D-MD-004. Master Spec body touched: §34.16.5 Failure Mode #1. Ledger touched: D-MD-004 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PROMOTED_MAX_BID_REJECT_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-max-bid-reject-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-max-bid-reject-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-max-bid-reject-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.16.5's clamp behavior for over-max Promoted Listing bids with HTTP 400 rejection using `promoted_listing_bid_above_max`.
@@ -13032,7 +13032,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Max-Bid Singleton P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton cleanup covering D-MD-006. Master Spec body touched: §4.4.19 PromotedListing field table, §39 Object Size Constraints, §34.16.5 Failure Mode #1, §34.16.7 error-code table, and Appendix I. Ledger touched: D-MD-006 canonical status cell plus stale residual notes in D-MD-002 / D-MD-004 / D-MD-007. Verification touched: `_audit/PHASE_V72REM_PROMOTED_MAX_BID_SINGLETON_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton cleanup covering D-MD-006. Master Spec body touched: §4.4.19 PromotedListing field table, §39 Object Size Constraints, §34.16.5 Failure Mode #1, §34.16.7 error-code table, and Appendix I. Ledger touched: D-MD-006 canonical status cell plus stale residual notes in D-MD-002 / D-MD-004 / D-MD-007. Verification touched: `_audit/PHASE_V72REM_PROMOTED_MAX_BID_SINGLETON_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §39 `PromotedListing.max_bid_cents (system cap)` as the single source of truth for the $10,000 per-category weekly submitted-bid ceiling.
@@ -13052,7 +13052,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Promoted Listing Auction Webhook Audience P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 firewall-leakage cleanup covering D-MD-005. Master Spec body touched: §27.11.8 AC #30, §34.16.7 webhook catalog / idempotency / audience privacy / correlation, §34.16.8 AC #11, Appendix C Marketplace-Discovery-Domain additions, Appendix G webhook mirrors, and §M.5.20. Ledger touched: D-MD-005 canonical status cell plus stale D-MD-002 / D-MD-007 residual notes. AE ledger touched: AE-V72REM-MD-005-01. Verification touched: `_audit/PHASE_V72REM_PROMOTED_AUCTION_WEBHOOK_AUDIENCE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`.
+**Scope.** Focused P1 firewall-leakage cleanup covering D-MD-005. Master Spec body touched: §27.11.8 AC #30, §34.16.7 webhook catalog / idempotency / audience privacy / correlation, §34.16.8 AC #11, Appendix C Marketplace-Discovery-Domain additions, Appendix G webhook mirrors, and §M.5.20. Ledger touched: D-MD-005 canonical status cell plus stale D-MD-002 / D-MD-007 residual notes. AE ledger touched: AE-V72REM-MD-005-01. Verification touched: `_audit/PHASE_V72REM_PROMOTED_AUCTION_WEBHOOK_AUDIENCE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-auction-webhook-audience-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the broad `promoted_listing.auction_settled` row (`winners[]` delivered to "bidders + winners") with a winner-only, recipient-owned payload carrying a single `winner` self row.
@@ -13073,7 +13073,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Year-1 Plan-Mix P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton cleanup covering D-AS-004 and D-AS-005. Master Spec body touched: §34.18.3, §34.18.4 `rev_subscription` note, and §34.20.15 AC #74. Ledger touched: D-AS-004 / D-AS-005 canonical status cells, held summary rows, and the D-PXC-015 stale link. AE ledger touched: AE-12.4-02 condition status. Verification touched: `_audit/PHASE_V72REM_YEAR1_PLAN_MIX_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton cleanup covering D-AS-004 and D-AS-005. Master Spec body touched: §34.18.3, §34.18.4 `rev_subscription` note, and §34.20.15 AC #74. Ledger touched: D-AS-004 / D-AS-005 canonical status cells, held summary rows, and the D-PXC-015 stale link. AE ledger touched: AE-12.4-02 condition status. Verification touched: `_audit/PHASE_V72REM_YEAR1_PLAN_MIX_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.18.3's pre-Solo Free-inclusive org-share table with an explicit paid-exit denominator.
@@ -13095,7 +13095,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Solo Scenario D P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-14.1-001 and D-14.2-001. Master Spec body touched: §34.18.6 Scenario Analysis and §34.18.7 AC #5. Ledger touched: D-14.1-001 / D-14.2-001 canonical status cells. AE ledger touched: new AE-V72REM-SCENARIO-D-01 pending row. Verification touched: `_audit/PHASE_V72REM_SOLO_SCENARIO_D_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-14.1-001 and D-14.2-001. Master Spec body touched: §34.18.6 Scenario Analysis and §34.18.7 AC #5. Ledger touched: D-14.1-001 / D-14.2-001 canonical status cells. AE ledger touched: new AE-V72REM-SCENARIO-D-01 pending row. Verification touched: `_audit/PHASE_V72REM_SOLO_SCENARIO_D_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-solo-scenario-d-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §34.18.6's "Three scenarios referenced in MS §2.12" preamble with a split between MS §2.12 top-down ARR scenarios and companion-doc Solo cohort economics.
@@ -13115,7 +13115,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → 90-Day Solo Trial P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-14.1-002 and D-14.2-002. Master Spec body touched: §4.2.1 `Organization.trial_state_ref`, new §34.9.5 90-Day Solo Trial, Appendix C Billing-Domain Events, Appendix G Billing-Domain Events, Appendix I error codes, Appendix J billing audit / trial enums / plan-change origin, the Billing Admin Audit View filters, and §M.5.21. Ledger touched: D-14.1-002 / D-14.2-002 canonical status cells. AE ledger touched: new AE-V72REM-SOLO-TRIAL-01 pending row. Verification touched: `_audit/PHASE_V72REM_SOLO_TRIAL_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-solo-trial-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-solo-trial-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-solo-trial-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-solo-trial-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-14.1-002 and D-14.2-002. Master Spec body touched: §4.2.1 `Organization.trial_state_ref`, new §34.9.5 90-Day Solo Trial, Appendix C Billing-Domain Events, Appendix G Billing-Domain Events, Appendix I error codes, Appendix J billing audit / trial enums / plan-change origin, the Billing Admin Audit View filters, and §M.5.21. Ledger touched: D-14.1-002 / D-14.2-002 canonical status cells. AE ledger touched: new AE-V72REM-SOLO-TRIAL-01 pending row. Verification touched: `_audit/PHASE_V72REM_SOLO_TRIAL_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-solo-trial-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-solo-trial-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-solo-trial-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-solo-trial-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §34.9.5 for one-time 90-day Solo migration trials for existing v2-cohort Buyer Free and Seller Free Orgs.
@@ -13137,7 +13137,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Solo Throttling Upgrade CTA P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-14.1-003 and D-14.2-003. Master Spec body touched: §34.5.1 Solo throttling-pressure upgrade row, new §34.5.4 Solo Throttling-Pressure Upgrade CTA, new §44.6.5.A Sustained Throttling Upgrade-CTA Aggregation, §44.6.8 AC #11 / #19, Appendix C Billing-Domain Events, Appendix G Billing-Domain Events, Appendix J controlled vocabulary, §51.1.3 billing-domain event family, and §M.5.22. Ledger touched: D-14.1-003 / D-14.2-003 canonical status cells. AE ledger touched: new AE-V72REM-SOLO-THROTTLE-CTA-01 pending row. Verification touched: `_audit/PHASE_V72REM_SOLO_THROTTLING_UPGRADE_CTA_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-14.1-003 and D-14.2-003. Master Spec body touched: §34.5.1 Solo throttling-pressure upgrade row, new §34.5.4 Solo Throttling-Pressure Upgrade CTA, new §44.6.5.A Sustained Throttling Upgrade-CTA Aggregation, §44.6.8 AC #11 / #19, Appendix C Billing-Domain Events, Appendix G Billing-Domain Events, Appendix J controlled vocabulary, §51.1.3 billing-domain event family, and §M.5.22. Ledger touched: D-14.1-003 / D-14.2-003 canonical status cells. AE ledger touched: new AE-V72REM-SOLO-THROTTLE-CTA-01 pending row. Verification touched: `_audit/PHASE_V72REM_SOLO_THROTTLING_UPGRADE_CTA_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-solo-throttling-upgrade-cta-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §34.5.1 row `Solo throttling-pressure CTA`: Buyer Solo routes to `business_starter`; Seller Solo routes to `seller_starter`; `upgrade_completed.trigger = solo_envelope_pressure`.
@@ -13158,7 +13158,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Pricing Engineering AE-12 through AE-18 P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-14.1-010 and D-14.2-004. Master Spec body touched: §34.17.1.b Authored Extensions Beyond MS §2.11 Baseline, §34.17.2 delivery-track grouping, §34.17.3 invariants, and §34.17.4 AC #2. Ledger touched: D-14.1-010 / D-14.2-004 canonical status cells and Phase 14.1 / 14.2 roll-up bullets. AE ledger touched: new AE-V72REM-PRICING-ENGINEERING-AE12-AE18-01 pending row. Verification touched: `_audit/PHASE_V72REM_PRICING_ENGINEERING_AE12_AE18_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-14.1-010 and D-14.2-004. Master Spec body touched: §34.17.1.b Authored Extensions Beyond MS §2.11 Baseline, §34.17.2 delivery-track grouping, §34.17.3 invariants, and §34.17.4 AC #2. Ledger touched: D-14.1-010 / D-14.2-004 canonical status cells and Phase 14.1 / 14.2 roll-up bullets. AE ledger touched: new AE-V72REM-PRICING-ENGINEERING-AE12-AE18-01 pending row. Verification touched: `_audit/PHASE_V72REM_PRICING_ENGINEERING_AE12_AE18_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-pricing-engineering-ae12-ae18-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §34.17.1.b rows AE-12 through AE-16 for Buyer Solo pricing-engineering surfaces: Solo-tier billing surface, per-evaluation / per-bid Stripe charge orchestration, Selection Report watermarking, Defense View preview gating, and Solo-tier silent throttling.
@@ -13178,7 +13178,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Seller Four Conversion Moments P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-14.2-005. Master Spec body touched: §4.4.22 SellerOnboardingSession `stage_7_*` fields and AC #10, §48.1.7, §48.1.8 AC #12 / #14 / #15, §48.8.6, §48.8.7 AP2, Appendix G conversion-moment event rows, Appendix J conversion-moment enums, §51.0.3 conversion-moment funnel row, and Appendix K glossary entries. Ledger touched: D-14.2-005 canonical status cell and Phase 14.2 roll-up / re-verification bullets. Verification touched: `_audit/PHASE_V72REM_SELLER_FOUR_CONVERSION_MOMENTS_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-seller-four-conversion-moments-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-seller-four-conversion-moments-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-seller-four-conversion-moments-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-14.2-005. Master Spec body touched: §4.4.22 SellerOnboardingSession `stage_7_*` fields and AC #10, §48.1.7, §48.1.8 AC #12 / #14 / #15, §48.8.6, §48.8.7 AP2, Appendix G conversion-moment event rows, Appendix J conversion-moment enums, §51.0.3 conversion-moment funnel row, and Appendix K glossary entries. Ledger touched: D-14.2-005 canonical status cell and Phase 14.2 roll-up / re-verification bullets. Verification touched: `_audit/PHASE_V72REM_SELLER_FOUR_CONVERSION_MOMENTS_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-seller-four-conversion-moments-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-seller-four-conversion-moments-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-seller-four-conversion-moments-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the §48.1.7 three-moment Seller conversion binding with the SPS v3 §15.3 four-moment binding.
@@ -13199,7 +13199,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → ApiToken Entity + Scope Canonicalization P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-1.1-002, D-1.1-015, D-3.3-032, sibling stale-count row D-V8.1-012, and vendor-opt-out/rate-limit split row D-V8.1-013. Master Spec body touched: §4.2.6 ApiToken (new schema home), §6.6.1 token-storage citation, §6.6.3 canonical scope vocabulary, Appendix J `api_token_scope`, Appendix J `api_token_revocation_reason`, Appendix K `api_token_scope` canonical-enum note, and §M.5 gate `appendix_j_api_token_scope_endpoint_consistency`. Ledger touched: D-1.1-002, D-1.1-015, D-3.3-032, D-V8.1-012, and D-V8.1-013 canonical status cells. AE ledger touched: AE-3.3-006 wording updated from obsolete scope-count wording to the corrected D-1.1-015 / D-V8.1-013 23 live endpoint-scope values. Verification touched: `_audit/PHASE_V72REM_API_TOKEN_ENTITY_SCOPE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-1.1-002, D-1.1-015, D-3.3-032, sibling stale-count row D-V8.1-012, and vendor-opt-out/rate-limit split row D-V8.1-013. Master Spec body touched: §4.2.6 ApiToken (new schema home), §6.6.1 token-storage citation, §6.6.3 canonical scope vocabulary, Appendix J `api_token_scope`, Appendix J `api_token_revocation_reason`, Appendix K `api_token_scope` canonical-enum note, and §M.5 gate `appendix_j_api_token_scope_endpoint_consistency`. Ledger touched: D-1.1-002, D-1.1-015, D-3.3-032, D-V8.1-012, and D-V8.1-013 canonical status cells. AE ledger touched: AE-3.3-006 wording updated from obsolete scope-count wording to the corrected D-1.1-015 / D-V8.1-013 23 live endpoint-scope values. Verification touched: `_audit/PHASE_V72REM_API_TOKEN_ENTITY_SCOPE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-api-token-entity-scope-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §4.2.6 ApiToken as the canonical Org-scoped schema for §6.6 API-token behavior, including token hash/prefix storage, scopes, console scope, issuer/updater/revoker FKs, expiration, rotation linkage, revocation metadata, indexes, retention, DSAR behavior, state machine, acceptance criteria, and failure modes.
@@ -13220,7 +13220,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Rate-Limit Class Registry P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 documentation-gap cleanup covering D-V8.1-011. Master Spec body touched: §32.4 Rate Limit Enforcement, new §32.4.5 Rate-Limit Class Registry, selected §27 / §31 / §32 / §48 / §50 / §51 inline class references, Appendix J `api_rate_limit_class`, the Phase 3V Appendix J mirror note, and §M.5 `api_rate_limit_class_registry_consistency`. Ledger touched: D-V8.1-011 canonical status cell. Verification touched: `_audit/PHASE_V72REM_RATE_LIMIT_CLASS_REGISTRY_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-rate-limit-class-registry-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-rate-limit-class-registry-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-rate-limit-class-registry-p1-2026-06-21.md`.
+**Scope.** Focused P1 documentation-gap cleanup covering D-V8.1-011. Master Spec body touched: §32.4 Rate Limit Enforcement, new §32.4.5 Rate-Limit Class Registry, selected §27 / §31 / §32 / §48 / §50 / §51 inline class references, Appendix J `api_rate_limit_class`, the Phase 3V Appendix J mirror note, and §M.5 `api_rate_limit_class_registry_consistency`. Ledger touched: D-V8.1-011 canonical status cell. Verification touched: `_audit/PHASE_V72REM_RATE_LIMIT_CLASS_REGISTRY_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-rate-limit-class-registry-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-rate-limit-class-registry-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-rate-limit-class-registry-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §32.4.5 as the canonical rate-limit-class registry with class ID, applies-to surface, scope, soft limit, hard limit, burst / concurrency, 429 error, and notes.
@@ -13239,7 +13239,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → KB Export Integrity HTTP Code P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 consistency cleanup covering D-V8.1-010. Master Spec body touched: §22.18.7 AC #55, Appendix I KB Export Endpoint Errors rate-limit citation, and §M.5 `kb_export_integrity_http_code_single_source`. Ledger touched: D-V8.1-010 canonical status cell and related Phase V8.4 sibling-list note. Verification touched: `_audit/PHASE_V72REM_KB_EXPORT_INTEGRITY_HTTP_CODE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-kb-export-integrity-http-code-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-kb-export-integrity-http-code-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-kb-export-integrity-http-code-p1-2026-06-21.md`.
+**Scope.** Focused P1 consistency cleanup covering D-V8.1-010. Master Spec body touched: §22.18.7 AC #55, Appendix I KB Export Endpoint Errors rate-limit citation, and §M.5 `kb_export_integrity_http_code_single_source`. Ledger touched: D-V8.1-010 canonical status cell and related Phase V8.4 sibling-list note. Verification touched: `_audit/PHASE_V72REM_KB_EXPORT_INTEGRITY_HTTP_CODE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-kb-export-integrity-http-code-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-kb-export-integrity-http-code-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-kb-export-integrity-http-code-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Updated §22.18.7 AC #55 from HTTP 502 to HTTP 410 for `kb_export_archive_integrity_failed`, matching §32.9.2, §32.9.4 AC #89, and Appendix I.
@@ -13257,7 +13257,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Billing POST Idempotency P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 API-authoring cleanup covering D-V8.1-014. Master Spec body touched: §32.8.0 common idempotency convention, §32.8.11, §32.8.13, §32.8.14, §32.8.15, §32.8.16, §32.8.17, §32.8.20, §32.8.23 AC #22, and §M.5 `billing_post_idempotency_key_required`. Ledger touched: D-V8.1-014 canonical status cell. Verification touched: `_audit/PHASE_V72REM_BILLING_POST_IDEMPOTENCY_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-billing-post-idempotency-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-billing-post-idempotency-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-billing-post-idempotency-p1-2026-06-21.md`.
+**Scope.** Focused P1 API-authoring cleanup covering D-V8.1-014. Master Spec body touched: §32.8.0 common idempotency convention, §32.8.11, §32.8.13, §32.8.14, §32.8.15, §32.8.16, §32.8.17, §32.8.20, §32.8.23 AC #22, and §M.5 `billing_post_idempotency_key_required`. Ledger touched: D-V8.1-014 canonical status cell. Verification touched: `_audit/PHASE_V72REM_BILLING_POST_IDEMPOTENCY_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-billing-post-idempotency-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-billing-post-idempotency-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-billing-post-idempotency-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Tightened §32.8.0 so every state-mutating §32.8 POST requires `Idempotency-Key` unless the endpoint-local block explicitly declares N/A.
@@ -13276,7 +13276,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Appendix I Billing Error Code Catalog P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 error-code catalog cleanup covering D-V8.1-016. Master Spec body touched: Appendix I Billing Endpoint Errors and §M.5 `appendix_i_billing_error_code_catalog_complete`. Ledger touched: D-V8.1-016 canonical status cell. Verification touched: `_audit/PHASE_V72REM_APPENDIX_I_BILLING_ERRORS_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-appendix-i-billing-errors-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-appendix-i-billing-errors-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-appendix-i-billing-errors-p1-2026-06-21.md`.
+**Scope.** Focused P1 error-code catalog cleanup covering D-V8.1-016. Master Spec body touched: Appendix I Billing Endpoint Errors and §M.5 `appendix_i_billing_error_code_catalog_complete`. Ledger touched: D-V8.1-016 canonical status cell. Verification touched: `_audit/PHASE_V72REM_APPENDIX_I_BILLING_ERRORS_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-appendix-i-billing-errors-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-appendix-i-billing-errors-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-appendix-i-billing-errors-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added the 39 missing §32.8.10-.22 billing API error codes to Appendix I Billing Endpoint Errors.
@@ -13294,7 +13294,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Idempotency Error-Code Canonicalization P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 error-code canonicalization covering D-V8.1-020. Master Spec body touched: §27.10.6.1, §27.10.9 AC #25, §32.9.1, §32.9.4 AC #91, Appendix I `idempotency_key_request_mismatch`, and §M.5 `idempotency_key_canonical_error_code`. Ledger touched: D-V8.1-020 canonical status cell. Verification touched: `_audit/PHASE_V72REM_IDEMPOTENCY_ERROR_CODE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-idempotency-error-code-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-idempotency-error-code-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-idempotency-error-code-p1-2026-06-21.md`.
+**Scope.** Focused P1 error-code canonicalization covering D-V8.1-020. Master Spec body touched: §27.10.6.1, §27.10.9 AC #25, §32.9.1, §32.9.4 AC #91, Appendix I `idempotency_key_request_mismatch`, and §M.5 `idempotency_key_canonical_error_code`. Ledger touched: D-V8.1-020 canonical status cell. Verification touched: `_audit/PHASE_V72REM_IDEMPOTENCY_ERROR_CODE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-idempotency-error-code-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-idempotency-error-code-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-idempotency-error-code-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced active endpoint references to `idempotency_key_body_mismatch` with the already-registered canonical `idempotency_key_request_mismatch`.
@@ -13313,7 +13313,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Contest Withdraw Settlement-State Canonicalization P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 state-machine cleanup covering D-V8.1-022. Master Spec body touched: §32.8.13 response prose, §32.8.13 atomicity block, and §M.5 `aioperation_settlement_state_canonical_consumer`. Ledger touched: D-V8.1-022 canonical status cell. Verification touched: `_audit/PHASE_V72REM_CONTEST_WITHDRAW_STATE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-contest-withdraw-state-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-contest-withdraw-state-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-contest-withdraw-state-p1-2026-06-21.md`.
+**Scope.** Focused P1 state-machine cleanup covering D-V8.1-022. Master Spec body touched: §32.8.13 response prose, §32.8.13 atomicity block, and §M.5 `aioperation_settlement_state_canonical_consumer`. Ledger touched: D-V8.1-022 canonical status cell. Verification touched: `_audit/PHASE_V72REM_CONTEST_WITHDRAW_STATE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-contest-withdraw-state-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-contest-withdraw-state-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-contest-withdraw-state-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the non-canonical §32.8.13 `contested → committed` wording with restoration to ContestRecord.`original_settlement_state` (`accepted` or `auto_accepted`).
@@ -13331,7 +13331,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Billing Pagination Envelope Canonicalization P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 pagination-envelope cleanup covering D-V8.1-023, with sibling D-V8.1-018 parameter cleanup in the same §32.8.18 surface. Master Spec body touched: §32.8.18, §32.8.19, §32.8.21, §32.8.22, and §M.5 `pagination_envelope_canonical` / `pagination_param_canonical`. Ledger touched: D-V8.1-023 and D-V8.1-018 canonical status cells. Verification touched: `_audit/PHASE_V72REM_BILLING_PAGINATION_ENVELOPE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-billing-pagination-envelope-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-billing-pagination-envelope-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-billing-pagination-envelope-p1-2026-06-21.md`.
+**Scope.** Focused P1 pagination-envelope cleanup covering D-V8.1-023, with sibling D-V8.1-018 parameter cleanup in the same §32.8.18 surface. Master Spec body touched: §32.8.18, §32.8.19, §32.8.21, §32.8.22, and §M.5 `pagination_envelope_canonical` / `pagination_param_canonical`. Ledger touched: D-V8.1-023 and D-V8.1-018 canonical status cells. Verification touched: `_audit/PHASE_V72REM_BILLING_PAGINATION_ENVELOPE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-billing-pagination-envelope-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-billing-pagination-envelope-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-billing-pagination-envelope-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Rewrote §32.8.18, §32.8.19, §32.8.21, and §32.8.22 response examples from flat `items` + `next_cursor` to §32.3 canonical `data` + `pagination`.
@@ -13350,7 +13350,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Console-Scope Disambiguation Header P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 API-header registry cleanup covering D-V8.1-024. Master Spec body touched: §32.2 new §32.2.1 Console-Scope Disambiguation Header and §M.5 `console_scope_both_header_required`. Ledger touched: D-V8.1-024 canonical status cell. Verification touched: `_audit/PHASE_V72REM_CONSOLE_SCOPE_HEADER_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-console-scope-header-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-console-scope-header-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-console-scope-header-p1-2026-06-21.md`.
+**Scope.** Focused P1 API-header registry cleanup covering D-V8.1-024. Master Spec body touched: §32.2 new §32.2.1 Console-Scope Disambiguation Header and §M.5 `console_scope_both_header_required`. Ledger touched: D-V8.1-024 canonical status cell. Verification touched: `_audit/PHASE_V72REM_CONSOLE_SCOPE_HEADER_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-console-scope-header-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-console-scope-header-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-console-scope-header-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §32.2.1 registering `X-Sourcera-Console` as the canonical request header for console-scope disambiguation.
@@ -13369,7 +13369,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase Advancement Error Envelope + Code Canonicalization P1 Pass (2026-06-21)
 
-**Scope.** Coupled P1 API/error-code cleanup covering D-V8.1-025 and D-4.2-006. Master Spec body touched: §10.1.1, §10.16.1 gate-failure response example, §10.16.1 error-code table, and §M.5 `error_envelope_canonical`. Ledger touched: D-V8.1-025 and D-4.2-006 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PHASE_ADVANCE_ERROR_ENVELOPE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-phase-advance-error-envelope-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-phase-advance-error-envelope-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-phase-advance-error-envelope-p1-2026-06-21.md`.
+**Scope.** Coupled P1 API/error-code cleanup covering D-V8.1-025 and D-4.2-006. Master Spec body touched: §10.1.1, §10.16.1 gate-failure response example, §10.16.1 error-code table, and §M.5 `error_envelope_canonical`. Ledger touched: D-V8.1-025 and D-4.2-006 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PHASE_ADVANCE_ERROR_ENVELOPE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase-advance-error-envelope-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase-advance-error-envelope-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase-advance-error-envelope-p1-2026-06-21.md`.
 
 **Conflict resolved.** D-V8.1-025's older recommendation said the nested envelope should emit `phase_gate_failed`, but D-4.2-006 and Appendix I identify `gate_validation_failed` as the canonical wire string. Source hierarchy resolves to Appendix I / §32.6 / D-4.2-006: this pass uses `gate_validation_failed` and retires `phase_gate_failed` from active Master Spec behavior.
 
@@ -13392,7 +13392,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase & Workflow Error-Code Catalog P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 Appendix I catalog cleanup covering D-4.2-004 and D-4.2-005. Master Spec body touched: Appendix I Phase & Workflow Errors and §M.5 `phase_workflow_error_code_catalog_complete`. Ledger touched: D-4.2-004 and D-4.2-005 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PHASE_WORKFLOW_ERROR_CODE_CATALOG_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-phase-workflow-error-code-catalog-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-phase-workflow-error-code-catalog-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-phase-workflow-error-code-catalog-p1-2026-06-21.md`.
+**Scope.** Focused P1 Appendix I catalog cleanup covering D-4.2-004 and D-4.2-005. Master Spec body touched: Appendix I Phase & Workflow Errors and §M.5 `phase_workflow_error_code_catalog_complete`. Ledger touched: D-4.2-004 and D-4.2-005 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PHASE_WORKFLOW_ERROR_CODE_CATALOG_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase-workflow-error-code-catalog-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase-workflow-error-code-catalog-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase-workflow-error-code-catalog-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Registered Appendix I Phase & Workflow Errors row `scores_immutable_phase_12_plus` with HTTP 409 for Phase 12+ score immutability per §10.10 and §10.12.
@@ -13410,7 +13410,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase Advancement Endpoint Contract P1 Pass (2026-06-21)
 
-**Scope.** Focused §10.16 endpoint-contract cleanup covering D-4.2-002, D-4.2-003, D-4.2-011, D-4.2-018, and sibling P3 D-4.2-036. Master Spec body touched: §10.16.6 acceptance criteria, Appendix I Standard HTTP / Entity-Specific / Phase & Workflow rows, and §M.5 `phase_advancement_endpoint_path_canonical`, `phase_advancement_endpoint_contract_complete`, `phase_advancement_idempotency_key_required`. Ledger touched: D-4.2-002, D-4.2-003, D-4.2-011, D-4.2-018, D-4.2-036 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PHASE_ADVANCEMENT_ENDPOINT_CONTRACT_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-phase-advancement-endpoint-contract-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-phase-advancement-endpoint-contract-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-phase-advancement-endpoint-contract-p1-2026-06-21.md`.
+**Scope.** Focused §10.16 endpoint-contract cleanup covering D-4.2-002, D-4.2-003, D-4.2-011, D-4.2-018, and sibling P3 D-4.2-036. Master Spec body touched: §10.16.6 acceptance criteria, Appendix I Standard HTTP / Entity-Specific / Phase & Workflow rows, and §M.5 `phase_advancement_endpoint_path_canonical`, `phase_advancement_endpoint_contract_complete`, `phase_advancement_idempotency_key_required`. Ledger touched: D-4.2-002, D-4.2-003, D-4.2-011, D-4.2-018, D-4.2-036 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PHASE_ADVANCEMENT_ENDPOINT_CONTRACT_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase-advancement-endpoint-contract-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase-advancement-endpoint-contract-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase-advancement-endpoint-contract-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Confirmed active §10.16 path is `POST /v1/workspaces/{workspace_id}/advance`; retained legacy `POST /workspaces/:workspaceId/advance-phase` only in historical / retired-path text.
@@ -13429,7 +13429,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Workspace Cancellation Reason Enum P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 enum-catalog cleanup covering D-4.2-015. Master Spec body touched: §10.14.1 cancellation initiation, §39 Object Size Constraints, Appendix G `workspace_canceled`, Appendix J `workspace_cancellation_reason`, and §M.5 `workspace_cancellation_reason_enum_registered`. Ledger touched: D-4.2-015 canonical status cell. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_CANCELLATION_REASON_ENUM_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-workspace-cancellation-reason-enum-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-workspace-cancellation-reason-enum-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-workspace-cancellation-reason-enum-p1-2026-06-21.md`.
+**Scope.** Focused P1 enum-catalog cleanup covering D-4.2-015. Master Spec body touched: §10.14.1 cancellation initiation, §39 Object Size Constraints, Appendix G `workspace_canceled`, Appendix J `workspace_cancellation_reason`, and §M.5 `workspace_cancellation_reason_enum_registered`. Ledger touched: D-4.2-015 canonical status cell. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_CANCELLATION_REASON_ENUM_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-workspace-cancellation-reason-enum-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-workspace-cancellation-reason-enum-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-workspace-cancellation-reason-enum-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Updated §10.14.1 to cite `cancellation_reason ∈ Appendix J workspace_cancellation_reason`.
@@ -13449,7 +13449,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 1 Stakeholder Confirmation Gate P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 acceptance-criteria cleanup covering D-4.2-013. Master Spec body touched: §10.2 Phase Gate Rules, §10.2 Acceptance Criteria, and §M.5 `phase_1_stakeholder_acceptance_not_gate`. Ledger touched: D-4.2-013 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE1_STAKEHOLDER_CONFIRMATION_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-phase1-stakeholder-confirmation-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-phase1-stakeholder-confirmation-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-phase1-stakeholder-confirmation-p1-2026-06-21.md`.
+**Scope.** Focused P1 acceptance-criteria cleanup covering D-4.2-013. Master Spec body touched: §10.2 Phase Gate Rules, §10.2 Acceptance Criteria, and §M.5 `phase_1_stakeholder_acceptance_not_gate`. Ledger touched: D-4.2-013 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE1_STAKEHOLDER_CONFIRMATION_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase1-stakeholder-confirmation-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase1-stakeholder-confirmation-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase1-stakeholder-confirmation-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the §10.2 Phase 1 gate "At least 1 stakeholder invited and confirmed" with "At least 1 stakeholder invited; invitation acceptance is optional and MUST NOT block Phase 1 → Phase 2 advancement."
@@ -13467,7 +13467,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 6 Bidding Window Floor P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 acceptance-criteria cleanup covering D-4.2-012. Master Spec body touched: §10.6 Phase Gate Rules / Acceptance Criteria, §10.16.1 Phase Advancement API error table, Appendix I Phase & Workflow Errors, and §M.5 `phase_6_bidding_close_minimum_seven_days`. Ledger touched: D-4.2-012 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE6_BIDDING_WINDOW_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-phase6-bidding-window-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-phase6-bidding-window-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-phase6-bidding-window-p1-2026-06-21.md`.
+**Scope.** Focused P1 acceptance-criteria cleanup covering D-4.2-012. Master Spec body touched: §10.6 Phase Gate Rules / Acceptance Criteria, §10.16.1 Phase Advancement API error table, Appendix I Phase & Workflow Errors, and §M.5 `phase_6_bidding_close_minimum_seven_days`. Ledger touched: D-4.2-012 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE6_BIDDING_WINDOW_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase6-bidding-window-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase6-bidding-window-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase6-bidding-window-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §10.6 Phase Gate Rule requiring `bidding_close_at >= phase_6_entered_at + 7 calendar days`, evaluated in the Workspace `data_residency_region` time zone with UTC fallback.
@@ -13486,7 +13486,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Pipeline Phase Enum Canonicality P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 enum-canonicality cleanup covering D-4.2-007, with sibling canonical-row propagation for D-4.2-001. Master Spec body touched: §4.3.1 `pipeline_stage_id`, §4.5.8 EOI Acceptance Record phase scope, §5.10 Active Workspace Definition, §10.16 Phase Advancement examples, Appendix J Pipeline Phases, Appendix J `pipeline_phase`, Appendix J Pipeline Phase Integer ↔ Enum Mapping, Appendix J `workspace_phase_kind`, and §M.5 `pipeline_phase_canonical_13_value_consumer` / `workspace_status_canonical_consumer`. Ledger touched: D-4.2-001 and D-4.2-007 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PIPELINE_PHASE_ENUM_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-pipeline-phase-enum-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-pipeline-phase-enum-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-pipeline-phase-enum-p1-2026-06-21.md`.
+**Scope.** Focused P1 enum-canonicality cleanup covering D-4.2-007, with sibling canonical-row propagation for D-4.2-001. Master Spec body touched: §4.3.1 `pipeline_stage_id`, §4.5.8 EOI Acceptance Record phase scope, §5.10 Active Workspace Definition, §10.16 Phase Advancement examples, Appendix J Pipeline Phases, Appendix J `pipeline_phase`, Appendix J Pipeline Phase Integer ↔ Enum Mapping, Appendix J `workspace_phase_kind`, and §M.5 `pipeline_phase_canonical_13_value_consumer` / `workspace_status_canonical_consumer`. Ledger touched: D-4.2-001 and D-4.2-007 canonical status cells. Verification touched: `_audit/PHASE_V72REM_PIPELINE_PHASE_ENUM_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-pipeline-phase-enum-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-pipeline-phase-enum-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-pipeline-phase-enum-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the stale Appendix J "Pipeline Phases (Canonical 13)" table values with the §10-aligned 13-value vocabulary from `phase_1_stakeholder_alignment` through `phase_13_contract_closure`.
@@ -13506,7 +13506,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Pipeline Phase State Machine P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 state-machine cleanup covering D-4.2-008. Master Spec body touched: Appendix L.11 Pipeline Phase State Machine, Appendix J `pipeline_phase` cross-reference to Appendix L.11, and §M.5 `pipeline_phase_state_machine_canonicality`. Ledger touched: D-4.2-008 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PIPELINE_PHASE_STATE_MACHINE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-pipeline-phase-state-machine-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-pipeline-phase-state-machine-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-pipeline-phase-state-machine-p1-2026-06-21.md`.
+**Scope.** Focused P1 state-machine cleanup covering D-4.2-008. Master Spec body touched: Appendix L.11 Pipeline Phase State Machine, Appendix J `pipeline_phase` cross-reference to Appendix L.11, and §M.5 `pipeline_phase_state_machine_canonicality`. Ledger touched: D-4.2-008 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PIPELINE_PHASE_STATE_MACHINE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-pipeline-phase-state-machine-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-pipeline-phase-state-machine-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-pipeline-phase-state-machine-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added Appendix L.11 Pipeline Phase State Machine with state diagram, complete From / To / Trigger / Conditions / Notes transition table, rejected-transition rules, and numbered acceptance criteria.
@@ -13526,7 +13526,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 13 Workspace Status P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 Workspace lifecycle cleanup covering D-4.2-009. Master Spec body touched: §10.13 Contract Execution / Workspace Closure / Acceptance Criteria, Appendix E Workspace Status, Appendix J Workspace Statuses, and §M.5 `workspace_status_state_machine_canonicality`. Ledger touched: D-4.2-009 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE13_WORKSPACE_STATUS_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-workspace-status-phase13-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-workspace-status-phase13-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-workspace-status-phase13-p1-2026-06-21.md`.
+**Scope.** Focused P1 Workspace lifecycle cleanup covering D-4.2-009. Master Spec body touched: §10.13 Contract Execution / Workspace Closure / Acceptance Criteria, Appendix E Workspace Status, Appendix J Workspace Statuses, and §M.5 `workspace_status_state_machine_canonicality`. Ledger touched: D-4.2-009 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE13_WORKSPACE_STATUS_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-workspace-status-phase13-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-workspace-status-phase13-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-workspace-status-phase13-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced §10.13's invalid Workspace status `contract_executed` with contract metadata stamping (`contract_uploaded_at`, `contract_document_id`).
@@ -13548,7 +13548,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Workspace Cancellation Window Singleton P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 numerical-singleton cleanup covering D-4.2-010. Master Spec body touched: §10.13 Post-Closure Cancellation / Archive, §40.2 Workspace cancellation grace + processing window, and §M.5 `workspace_cancellation_window_single_source`. Ledger touched: D-4.2-010 canonical status cell. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_CANCELLATION_WINDOW_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-workspace-cancellation-window-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-workspace-cancellation-window-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-workspace-cancellation-window-p1-2026-06-21.md`.
+**Scope.** Focused P1 numerical-singleton cleanup covering D-4.2-010. Master Spec body touched: §10.13 Post-Closure Cancellation / Archive, §40.2 Workspace cancellation grace + processing window, and §M.5 `workspace_cancellation_window_single_source`. Ledger touched: D-4.2-010 canonical status cell. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_CANCELLATION_WINDOW_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-workspace-cancellation-window-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-workspace-cancellation-window-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-workspace-cancellation-window-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Rewrote §10.13 step 6 so Phase 13 no longer defines a separate 30-day-from-closure soft-delete, purge, or recovery window.
@@ -13567,7 +13567,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Plan Change Pipeline Preservation P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-change pipeline preservation cleanup covering D-4.2-014. Master Spec body touched: §10.16.4 Plan-Gating, new §10.17 Cross-Phase State Preservation Under Plan Change, the table of contents, and §M.5 `plan_change_pipeline_phase_grandfather_completeness`. Ledger touched: D-4.2-014 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PLAN_CHANGE_PIPELINE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-plan-change-pipeline-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-plan-change-pipeline-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-plan-change-pipeline-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-change pipeline preservation cleanup covering D-4.2-014. Master Spec body touched: §10.16.4 Plan-Gating, new §10.17 Cross-Phase State Preservation Under Plan Change, the table of contents, and §M.5 `plan_change_pipeline_phase_grandfather_completeness`. Ledger touched: D-4.2-014 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PLAN_CHANGE_PIPELINE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-plan-change-pipeline-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-plan-change-pipeline-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-plan-change-pipeline-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §10.17 as the §10-side plan-change policy for in-flight Buyer Workspaces.
@@ -13589,7 +13589,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Workspace Recovery Notification Catalog P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 notification-catalog cleanup covering D-4.2-016 and D-4.2-022. Master Spec body touched: §10.14.2 Vendor Notifications, §10.14.3 Cancellation Grace Period, §10.14.5 Workspace Recovery, §29.1 Standard Events, Appendix C Transactional Events, Appendix G Standard Events, and §M.5 `workspace_recovery_event_catalog_completeness`. Ledger touched: D-4.2-016 and D-4.2-022 canonical status cells. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_RECOVERY_NOTIFICATION_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-workspace-recovery-notification-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-workspace-recovery-notification-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-workspace-recovery-notification-p1-2026-06-21.md`.
+**Scope.** Focused P1 notification-catalog cleanup covering D-4.2-016 and D-4.2-022. Master Spec body touched: §10.14.2 Vendor Notifications, §10.14.3 Cancellation Grace Period, §10.14.5 Workspace Recovery, §29.1 Standard Events, Appendix C Transactional Events, Appendix G Standard Events, and §M.5 `workspace_recovery_event_catalog_completeness`. Ledger touched: D-4.2-016 and D-4.2-022 canonical status cells. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_RECOVERY_NOTIFICATION_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-workspace-recovery-notification-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-workspace-recovery-notification-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-workspace-recovery-notification-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Bound §10.14.2 cancellation notification to `workspace_canceled` and its §29.1 / Appendix C / Appendix G catalog rows.
@@ -13612,7 +13612,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Workspace Cancellation Event Delivery P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 webhook / delivery-conformance cleanup covering D-4.2-017. Master Spec body touched: §10.14.2 Vendor Notifications, new §10.14.7 Cancellation / Recovery Event Delivery, and §M.5 `workspace_cancellation_event_delivery_conformance`. Ledger touched: D-4.2-017 canonical status cell. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_CANCELLATION_EVENT_DELIVERY_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-workspace-cancellation-webhook-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-workspace-cancellation-webhook-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-workspace-cancellation-webhook-p1-2026-06-21.md`.
+**Scope.** Focused P1 webhook / delivery-conformance cleanup covering D-4.2-017. Master Spec body touched: §10.14.2 Vendor Notifications, new §10.14.7 Cancellation / Recovery Event Delivery, and §M.5 `workspace_cancellation_event_delivery_conformance`. Ledger touched: D-4.2-017 canonical status cell. Verification touched: `_audit/PHASE_V72REM_WORKSPACE_CANCELLATION_EVENT_DELIVERY_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-workspace-cancellation-webhook-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-workspace-cancellation-webhook-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-workspace-cancellation-webhook-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §10.14.7 as the local delivery contract for `workspace_canceled` and `workspace_recovered`.
@@ -13634,7 +13634,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Section 10 Plan-Gating Source Citation P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 plan-gating citation cleanup covering D-4.2-019. Master Spec body touched: §5.11 Feature Access Matrix, §10.6 Phase 6, §10.10 Phase 10 scoring, §10.12 Phase 12 Approval Workflow, §34.1.1 Buyer Plan Tiers, §39 Object Size Constraints, and §M.5 `section10_plan_gating_source_citation_completeness`. Ledger touched: D-4.2-019 canonical status cell. Verification touched: `_audit/PHASE_V72REM_SECTION10_PLAN_GATING_CITATIONS_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`.
+**Scope.** Focused P1 plan-gating citation cleanup covering D-4.2-019. Master Spec body touched: §5.11 Feature Access Matrix, §10.6 Phase 6, §10.10 Phase 10 scoring, §10.12 Phase 12 Approval Workflow, §34.1.1 Buyer Plan Tiers, §39 Object Size Constraints, and §M.5 `section10_plan_gating_source_citation_completeness`. Ledger touched: D-4.2-019 canonical status cell. Verification touched: `_audit/PHASE_V72REM_SECTION10_PLAN_GATING_CITATIONS_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §39 source rows `ScoreRationaleCharLimit`, `ScoreAssignmentsPerRequirement`, and `Phase6BiddingCloseMinimumDuration`.
@@ -13656,7 +13656,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase Advancement Third-Party Outage P1 Pass (2026-06-21)
 
-**Scope.** Focused P1 outage-handling cleanup covering D-4.2-023. Master Spec body touched: §10.16.1 Phase Advancement API error table, §10.16.6 Acceptance Criteria, new §10.16.7 Degradation and Third-Party Outage Handling, Appendix I `phase_advancement_dependency_unavailable`, and §M.5 `phase_advancement_third_party_outage_completeness`. Ledger touched: D-4.2-023 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE_ADVANCEMENT_OUTAGE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`.
+**Scope.** Focused P1 outage-handling cleanup covering D-4.2-023. Master Spec body touched: §10.16.1 Phase Advancement API error table, §10.16.6 Acceptance Criteria, new §10.16.7 Degradation and Third-Party Outage Handling, Appendix I `phase_advancement_dependency_unavailable`, and §M.5 `phase_advancement_third_party_outage_completeness`. Ledger touched: D-4.2-023 canonical status cell. Verification touched: `_audit/PHASE_V72REM_PHASE_ADVANCEMENT_OUTAGE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Narrowed the defect from "no outage mention" to "generic outage mention without dependency-specific operational policy"; §10.16.1 already had a generic HTTP 503 row.
@@ -13680,7 +13680,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Selection Entity and Approval Workflow P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 4.2 authoring cleanup covering D-4.2-020 and D-4.2-021, with sibling P2 D-4.2-032 closed by the same enum-registration edit. Master Spec body touched: new §4.3.23 Selection Report, §4.3.24 Selection Record, §4.3.25 Approval Workflow, §4.3.26 Cancellation Request, §4.3.27 Post-Evaluation Feedback; §10.12 Approval Workflow / Finalist Selection; §10.13 Post-Evaluation Engagement / Selection Record Creation; §13.11 Defense View source binding; Appendix J enum registrations; Appendix K glossary; Appendix L.11 / new L.12; §M.5 `selection_phase_entity_authoring_completeness` and `approval_workflow_state_machine_canonicality`. Ledger touched: D-4.2-020, D-4.2-021, D-4.2-032. Verification touched: `_audit/PHASE_V72REM_SELECTION_ENTITIES_APPROVAL_WORKFLOW_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`.
+**Scope.** Focused Phase 4.2 authoring cleanup covering D-4.2-020 and D-4.2-021, with sibling P2 D-4.2-032 closed by the same enum-registration edit. Master Spec body touched: new §4.3.23 Selection Report, §4.3.24 Selection Record, §4.3.25 Approval Workflow, §4.3.26 Cancellation Request, §4.3.27 Post-Evaluation Feedback; §10.12 Approval Workflow / Finalist Selection; §10.13 Post-Evaluation Engagement / Selection Record Creation; §13.11 Defense View source binding; Appendix J enum registrations; Appendix K glossary; Appendix L.11 / new L.12; §M.5 `selection_phase_entity_authoring_completeness` and `approval_workflow_state_machine_canonicality`. Ledger touched: D-4.2-020, D-4.2-021, D-4.2-032. Verification touched: `_audit/PHASE_V72REM_SELECTION_ENTITIES_APPROVAL_WORKFLOW_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added finalized Selection Report entity (§4.3.23) as the immutable, signable Phase 12 report, distinct from the existing mutable Selection Report Draft (§4.3.21).
@@ -13707,7 +13707,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Cold Pipeline No-Vendor-Response P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 4.2 empty-state cleanup covering D-4.2-024. Master Spec body touched: §4.3.1 Workspace `closure_reason`; §10.5 Phase 5 zero-confirmation fallback; §10.6 Phase 6 zero-response fallback; §10.9 zero-scoreable-response rejection; new §10.18 Cold-Pipeline No-Vendor-Response Abort; §32.5 Workspace Closure endpoint listing; Appendix E Workspace Status transition table; Appendix I Phase & Workflow Errors; Appendix J `workspace_closure_reason`; §29.1 / Appendix C / Appendix G `workspace_no_vendor_response_aborted`; §M.5 `cold_pipeline_no_vendor_response_abort_path`. Ledger touched: D-4.2-024. Verification touched: `_audit/PHASE_V72REM_COLD_PIPELINE_NO_VENDOR_RESPONSE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`.
+**Scope.** Focused Phase 4.2 empty-state cleanup covering D-4.2-024. Master Spec body touched: §4.3.1 Workspace `closure_reason`; §10.5 Phase 5 zero-confirmation fallback; §10.6 Phase 6 zero-response fallback; §10.9 zero-scoreable-response rejection; new §10.18 Cold-Pipeline No-Vendor-Response Abort; §32.5 Workspace Closure endpoint listing; Appendix E Workspace Status transition table; Appendix I Phase & Workflow Errors; Appendix J `workspace_closure_reason`; §29.1 / Appendix C / Appendix G `workspace_no_vendor_response_aborted`; §M.5 `cold_pipeline_no_vendor_response_abort_path`. Ledger touched: D-4.2-024. Verification touched: `_audit/PHASE_V72REM_COLD_PIPELINE_NO_VENDOR_RESPONSE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §10.5 fallback text for zero vendor confirmations; the Phase 5 -> Phase 6 gate remains blocking and routes to §10.18.
@@ -13731,7 +13731,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → Solo Deadline Countdown §M.5 Gate P1 Pass (2026-06-21)
 
-**Scope.** Focused v7.1.1 CI-gate catalog cleanup covering D-V711-009 P1 and duplicate sibling D-2-039 P2. Master Spec body touched: §2.8.7 AC #5, §M.5.4 Phase 14.4 Single-Operator Mode gate catalog, and §M.5.6 row-arithmetic note. Ledger touched: D-V711-009 and D-2-039. Verification touched: `_audit/PHASE_V711_SOLO_DEADLINE_COUNTDOWN_M5_GATE_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v711-solo-deadline-m5-gate-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-solo-deadline-m5-gate-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v711-solo-deadline-m5-gate-p1-2026-06-21.md`.
+**Scope.** Focused v7.1.1 CI-gate catalog cleanup covering D-V711-009 P1 and duplicate sibling D-2-039 P2. Master Spec body touched: §2.8.7 AC #5, §M.5.4 Phase 14.4 Single-Operator Mode gate catalog, and §M.5.6 row-arithmetic note. Ledger touched: D-V711-009 and D-2-039. Verification touched: `_audit/PHASE_V711_SOLO_DEADLINE_COUNTDOWN_M5_GATE_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v711-solo-deadline-m5-gate-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-solo-deadline-m5-gate-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v711-solo-deadline-m5-gate-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Updated §2.8.7 AC #5 from a forward-reference `§M.5 — to be added` citation to a concrete §M.5.4 citation.
@@ -13750,7 +13750,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → §M.5 Stale 37-Gate Numeric P1 Pass (2026-06-21)
 
-**Scope.** Focused v7.1.1 numerical-singleton cleanup covering D-V711-002. Master Spec body touched: Known Issues at v7.1.0 stamp time, items #1 and #8. Reconciliation body touched: v7.1.1 Backlog P1-11 and v7.1.1 carry-over §M.5 runtime wiring note. Ledger touched: D-V711-002. Verification touched: `_audit/PHASE_V711_M5_STALE_37_NUMERIC_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v711-m5-stale-37-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-m5-stale-37-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v711-m5-stale-37-p1-2026-06-21.md`.
+**Scope.** Focused v7.1.1 numerical-singleton cleanup covering D-V711-002. Master Spec body touched: Known Issues at v7.1.0 stamp time, items #1 and #8. Reconciliation body touched: v7.1.1 Backlog P1-11 and v7.1.1 carry-over §M.5 runtime wiring note. Ledger touched: D-V711-002. Verification touched: `_audit/PHASE_V711_M5_STALE_37_NUMERIC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v711-m5-stale-37-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-m5-stale-37-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v711-m5-stale-37-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced live Master Spec Known Issues item #1 `33 of 37 gates` wording with a source-table citation to §M.5.4 / §M.5.5 / §M.5.6.
@@ -13769,7 +13769,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → Backlog Owner / AC / AE-Link P1 Pass (2026-06-21)
 
-**Scope.** Focused v7.1.1 backlog-discipline cleanup covering D-V711-001, D-V711-003, D-V711-013, and sibling P2 rows D-V711-004 / D-V711-005. Reconciliation body touched: the v7.1.1 Backlog section. Remediation backlog touched: §6.1, §6.3, and §6.7. Ledger touched: five Phase V711 rows. Verification touched: `_audit/PHASE_V711_BACKLOG_OWNER_AC_AE_VERIFY.md`. Pre-edit backups: `_versions/RECONCILIATION_pre-v711-backlog-owner-ac-ae-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-backlog-owner-ac-ae-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-v711-backlog-owner-ac-ae-p1-2026-06-21.md`.
+**Scope.** Focused v7.1.1 backlog-discipline cleanup covering D-V711-001, D-V711-003, D-V711-013, and sibling P2 rows D-V711-004 / D-V711-005. Reconciliation body touched: the v7.1.1 Backlog section. Remediation backlog touched: §6.1, §6.3, and §6.7. Ledger touched: five Phase V711 rows. Verification touched: `_audit/PHASE_V711_BACKLOG_OWNER_AC_AE_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/RECONCILIATION_pre-v711-backlog-owner-ac-ae-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-backlog-owner-ac-ae-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-backlog-owner-ac-ae-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the RECONCILIATION v7.1.1 loose P1 / P2 bullet lists with tables carrying `Target`, `Owner`, AE / ledger links, and numbered AC predicates.
@@ -13788,7 +13788,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → Catalog-Completeness Backlog AC P1 Pass (2026-06-21)
 
-**Scope.** Focused backlog-authoring cleanup covering D-V711-006. Remediation backlog touched: §6.1 Catalog-Completeness Sweep, §6.2 Seller Signals Cluster, §6.4 Build-Reasonable Ambiguity, and §6.5 Cosmetic / Hygiene. Ledger touched: D-V711-006. Verification touched: `_audit/PHASE_V711_CATALOG_AC_VERIFY.md`. Pre-edit backups: `_versions/REMEDIATION_BACKLOG_pre-v711-catalog-ac-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-catalog-ac-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v711-catalog-ac-p1-2026-06-21.md`.
+**Scope.** Focused backlog-authoring cleanup covering D-V711-006. Remediation backlog touched: §6.1 Catalog-Completeness Sweep, §6.2 Seller Signals Cluster, §6.4 Build-Reasonable Ambiguity, and §6.5 Cosmetic / Hygiene. Ledger touched: D-V711-006. Verification touched: `_audit/PHASE_V711_CATALOG_AC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-catalog-ac-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-catalog-ac-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v711-catalog-ac-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added an `Acceptance criteria` column to the 17-row §6.1 catalog-completeness table.
@@ -13805,7 +13805,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → §M.5 Runtime-Wiring AC P1 Pass (2026-06-21)
 
-**Scope.** Focused backlog-authoring cleanup covering D-V711-007. Master Spec body touched: §M.5.1.1 Runtime-wiring acceptance criteria. Remediation backlog touched: §6.7 Phase 6 runtime-wiring gates. Ledger touched: D-V711-007. Verification touched: `_audit/PHASE_V711_RUNTIME_WIRING_AC_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v711-runtime-ac-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-v711-runtime-ac-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-runtime-ac-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v711-runtime-ac-p1-2026-06-21.md`.
+**Scope.** Focused backlog-authoring cleanup covering D-V711-007. Master Spec body touched: §M.5.1.1 Runtime-wiring acceptance criteria. Remediation backlog touched: §6.7 Phase 6 runtime-wiring gates. Ledger touched: D-V711-007. Verification touched: `_audit/PHASE_V711_RUNTIME_WIRING_AC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v711-runtime-ac-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-runtime-ac-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-runtime-ac-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v711-runtime-ac-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added Master Spec §M.5.1.1, an inherited runtime-wiring AC template for every `spec_binding_pending_pack_<id>` gate.
@@ -13825,7 +13825,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → Backlog Index P1 Pass (2026-06-21)
 
-**Scope.** Focused backlog-scope cleanup covering D-V711-008. New audit artifact: `_audit/V711_BACKLOG_INDEX.md`. Navigation touched: AGENTS.md §10 / §16 and CLAUDE.md §10 / §16. Remediation backlog touched: top-level reading order. Ledger touched: D-V711-008. Verification touched: `_audit/PHASE_V711_BACKLOG_INDEX_VERIFY.md`. Pre-edit backups: `_versions/AGENTS_pre-v711-backlog-index-p1-2026-06-21.md`; `_versions/CLAUDE_pre-v711-backlog-index-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-v711-backlog-index-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-backlog-index-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v711-backlog-index-p1-2026-06-21.md`.
+**Scope.** Focused backlog-scope cleanup covering D-V711-008. New audit artifact: `_audit/V711_BACKLOG_INDEX.md`. Navigation touched: AGENTS.md §10 / §16 and CLAUDE.md §10 / §16. Remediation backlog touched: top-level reading order. Ledger touched: D-V711-008. Verification touched: `_audit/PHASE_V711_BACKLOG_INDEX_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/AGENTS_pre-v711-backlog-index-p1-2026-06-21.md`; `legacy-import:_versions/CLAUDE_pre-v711-backlog-index-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-backlog-index-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-backlog-index-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v711-backlog-index-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Authored `_audit/V711_BACKLOG_INDEX.md` as the canonical aggregate index for v7.1.1 stamp-scope discovery.
@@ -13848,7 +13848,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → V4 Forward-Tracked Cluster AC P1 Pass (2026-06-21)
 
-**Scope.** Focused backlog-authoring cleanup covering D-V711-014. Remediation backlog touched: §6.10 V4 Forward-Tracked P1 Cluster AC Summary. Ledger touched: D-V711-014 and Phase V711 recommended-next-step text. Verification touched: `_audit/PHASE_V711_V4_CLUSTER_AC_VERIFY.md`. Pre-edit backups: `_versions/REMEDIATION_BACKLOG_pre-v711-v4-cluster-ac-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v711-v4-cluster-ac-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v711-v4-cluster-ac-p1-2026-06-21.md`.
+**Scope.** Focused backlog-authoring cleanup covering D-V711-014. Remediation backlog touched: §6.10 V4 Forward-Tracked P1 Cluster AC Summary. Ledger touched: D-V711-014 and Phase V711 recommended-next-step text. Verification touched: `_audit/PHASE_V711_V4_CLUSTER_AC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-v4-cluster-ac-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v711-v4-cluster-ac-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v711-v4-cluster-ac-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added `_audit/REMEDIATION_BACKLOG.md` §6.10, a 12-row V4 forward-tracked cluster AC summary.
@@ -13867,7 +13867,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.1.1 Program → Lower-Severity Disposition + M02.3 Advisory Runtime Promotion (2026-06-24)
 
-**Scope.** Closes the remaining Phase V711 P2 tracking/disposition rows named after the P1 closeout: D-V711-010, D-V711-011, D-V711-012, D-V711-015, and D-V711-016. Also corrects stale D-V711-014 residual prose in `_audit/V711_BACKLOG_INDEX.md` and promotes the three formerly advisory M02.3 spec-lint gates that now pass on the live Master Spec. Master Spec touched: §40.2 authoring note, §M.5.5, §M.5.10, §M.5.12. Tooling touched: `tools/spec-lint/run-all.ts`, `tools/spec-lint/README.md`, `tools/spec-lint/gates/section_anchor_slug_no_colon.ts`, `.github/workflows/spec-lint.yml`, and `tools/spec-lint/observability/datadog_monitors.tf`. Audit/ledger touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_audit/DEFECT_LEDGER.md`, and `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec.pre-v711-m023-runtime-promotion-2026-06-24.md`; `_versions/V711_BACKLOG_INDEX.pre-v711-p2-p3-disposition-2026-06-24.md`; `_versions/REMEDIATION_BACKLOG.pre-v711-p2-p3-disposition-2026-06-24.md`; `_versions/DEFECT_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`; `_versions/RECONCILIATION.pre-v711-p2-p3-disposition-2026-06-24.md`.
+**Scope.** Closes the remaining Phase V711 P2 tracking/disposition rows named after the P1 closeout: D-V711-010, D-V711-011, D-V711-012, D-V711-015, and D-V711-016. Also corrects stale D-V711-014 residual prose in `_audit/V711_BACKLOG_INDEX.md` and promotes the three formerly advisory M02.3 spec-lint gates that now pass on the live Master Spec. Master Spec touched: §40.2 authoring note, §M.5.5, §M.5.10, §M.5.12. Tooling touched: `tools/spec-lint/run-all.ts`, `tools/spec-lint/README.md`, `tools/spec-lint/gates/section_anchor_slug_no_colon.ts`, `.github/workflows/spec-lint.yml`, and `tools/spec-lint/observability/datadog_monitors.tf`. Audit/ledger touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_audit/DEFECT_LEDGER.md`, and `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec.pre-v711-m023-runtime-promotion-2026-06-24.md`; `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v711-p2-p3-disposition-2026-06-24.md`; `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v711-p2-p3-disposition-2026-06-24.md`; `legacy-import:_versions/DEFECT_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`; `legacy-import:_versions/RECONCILIATION.pre-v711-p2-p3-disposition-2026-06-24.md`.
 
 **Edit summary.**
 - Promoted `solo_tier_numeric_single_source`, `retention_singleton_section_40_2_canonical`, and `section_anchor_slug_no_colon` from advisory to `runtime_active` under §M.5.1.1 after all three returned 0 findings on the current Master Spec and pass/fail fixtures existed.
@@ -13887,7 +13887,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 2 CI Runtime P1 Pass (2026-06-21)
 
-**Scope.** Focused runtime-remediation pass covering D-V72REM-PH2-002, D-V72REM-PH2-003, and D-V72REM-PH2-004. Master Spec body touched: §M.5.4 and §M.5.6. Runtime artifacts touched: `tools/spec-lint/cross_validation.ts`, `tools/spec-lint/cross_validation_cli.ts`, `tools/spec-lint/sibling_override_cli.ts`, `tools/spec-lint/comment_templates.ts`, and `.github/workflows/spec-lint.yml`. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_PH2_CI_RUNTIME_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`.
+**Scope.** Focused runtime-remediation pass covering D-V72REM-PH2-002, D-V72REM-PH2-003, and D-V72REM-PH2-004. Master Spec body touched: §M.5.4 and §M.5.6. Runtime artifacts touched: `tools/spec-lint/cross_validation.ts`, `tools/spec-lint/cross_validation_cli.ts`, `tools/spec-lint/sibling_override_cli.ts`, `tools/spec-lint/comment_templates.ts`, and `.github/workflows/spec-lint.yml`. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_PH2_CI_RUNTIME_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-v72rem-ph2-ci-runtime-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Replaced the `buildSpecParseTree` empty-section stub with a Markdown heading parser that records explicit anchors, character offsets, and line ranges.
@@ -13906,7 +13906,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 2.2 Appendix J Enum Canonicalization P1 Pass (2026-06-21)
 
-**Scope.** Focused authoring-remediation pass covering D-2.2-001 through D-2.2-024. Master Spec body touched: Appendix J enum headings and the §4.4.4 `pending_review_reason` field citation. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_PHASE_2_2_ENUM_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase22-enum-canonical-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase22-enum-canonical-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase22-enum-canonical-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase22-enum-canonical-p1-2026-06-21.md`.
+**Scope.** Focused authoring-remediation pass covering D-2.2-001 through D-2.2-024. Master Spec body touched: Appendix J enum headings and the §4.4.4 `pending_review_reason` field citation. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_PHASE_2_2_ENUM_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase22-enum-canonical-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase22-enum-canonical-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase22-enum-canonical-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase22-enum-canonical-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Canonicalized Appendix J headings to exact code-name forms for the Phase 2.2 enum cluster.
@@ -13924,7 +13924,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase SS Surface-State Binding P1 Pass (2026-06-21)
 
-**Scope.** Focused authoring-remediation pass covering D-SS-001 through D-SS-041. Master Spec body touched: new §3.7.6.7 Phase SS Surface-State Binding Matrix and §3.7.11 AC #11. UX spec touched: §5.2.19 PipelineSurface Surface State Catalog and PS-13. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/PHASE_SS_SURFACE_STATE_P1_VERIFY.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, and `_integration/RECONCILIATION.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-ss-surface-state-p1-2026-06-21.md`; `_versions/UX_Design_of_Sourcera_pre-phase-ss-surface-state-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-ss-surface-state-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-ss-surface-state-p1-2026-06-21.md`.
+**Scope.** Focused authoring-remediation pass covering D-SS-001 through D-SS-041. Master Spec body touched: new §3.7.6.7 Phase SS Surface-State Binding Matrix and §3.7.11 AC #11. UX spec touched: §5.2.19 PipelineSurface Surface State Catalog and PS-13. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/PHASE_SS_SURFACE_STATE_P1_VERIFY.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, and `_integration/RECONCILIATION.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-ss-surface-state-p1-2026-06-21.md`; `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-ss-surface-state-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-ss-surface-state-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-ss-surface-state-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §3.7.6.7 as the authoritative 41-row Phase SS surface-state binding matrix.
@@ -13943,7 +13943,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.2 RBAC / Marketplace Overlay P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 3.2 P1 authoring slice covering D-3.2-004 and D-3.2-005. Master Spec body touched: §5.11 new overlay subsections. Ledger touched: canonical D-3.2-004 / D-3.2-005 status cells and the Phase 11 scope-hygiene summary text. Backlog touched: F-3 residual note. Verification touched: `_audit/PHASE_V72REM_PHASE_3_2_RBAC_MARKETPLACE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase32-rbac-marketplace-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase32-rbac-marketplace-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase32-rbac-marketplace-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase32-rbac-marketplace-p1-2026-06-21.md`.
+**Scope.** Focused Phase 3.2 P1 authoring slice covering D-3.2-004 and D-3.2-005. Master Spec body touched: §5.11 new overlay subsections. Ledger touched: canonical D-3.2-004 / D-3.2-005 status cells and the Phase 11 scope-hygiene summary text. Backlog touched: F-3 residual note. Verification touched: `_audit/PHASE_V72REM_PHASE_3_2_RBAC_MARKETPLACE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase32-rbac-marketplace-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase32-rbac-marketplace-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase32-rbac-marketplace-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase32-rbac-marketplace-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added §5.11.2 Seller Console Role Overlay Matrix for Seller Signals and CRM Sync, with explicit columns for `seller_org_owner`, `seller_org_admin`, `seller_marketing_editor`, and `seller_integrations_admin`.
@@ -13964,7 +13964,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.1 RBAC Stale-Status Sync (2026-06-21)
 
-**Scope.** Status reconciliation only for Phase 3.1 RBAC rows whose current Master Spec body text already resolves the original finding. No Master Spec product behavior was authored in this pass. Files touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_1_RBAC_STALE_SYNC_VERIFY.md`. Pre-edit backups: `_versions/DEFECT_LEDGER_pre-phase31-rbac-stale-sync-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase31-rbac-stale-sync-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase31-rbac-stale-sync-2026-06-21.md`.
+**Scope.** Status reconciliation only for Phase 3.1 RBAC rows whose current Master Spec body text already resolves the original finding. No Master Spec product behavior was authored in this pass. Files touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_1_RBAC_STALE_SYNC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/DEFECT_LEDGER_pre-phase31-rbac-stale-sync-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase31-rbac-stale-sync-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase31-rbac-stale-sync-2026-06-21.md`.
 
 **Closed body-backed rows.** D-3.1-001, D-3.1-006, D-3.1-013, D-3.1-015, D-3.1-017, D-3.1-018, D-3.1-019, D-3.1-021, and D-3.1-022 now carry `remediated 2026-06-21` stale-sync status. Closure basis: §5.1 role-overlay union rule; §5.3 canonical buyer workspace roles; §5.5 canonical 12-role seller-console registry; §5.6 marketplace role / scope normalization; §5.7 canonical scoring-role language; §5.8 Policy Ingestion role gate; §5.11.3 Marketplace Role and Plan-Gate Overlay Matrix.
 
@@ -13980,7 +13980,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Webhook Foundation P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 8 webhook-foundation authoring slice covering D-8.2-001, D-8.2-002, D-8.2-006, and D-8.2-008. Master Spec body touched: §31.2 root envelope, §31.5 standard headers, §31.6 consumer status handling, §31.7 acceptance criteria, §31.10 Webhook Secret Rotation, Appendix C, Appendix G, Appendix I, and §M.5.23. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_FOUNDATION_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-webhook-foundation-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-webhook-foundation-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-webhook-foundation-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-webhook-foundation-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-foundation-p1-2026-06-21.md`.
+**Scope.** Focused Phase 8 webhook-foundation authoring slice covering D-8.2-001, D-8.2-002, D-8.2-006, and D-8.2-008. Master Spec body touched: §31.2 root envelope, §31.5 standard headers, §31.6 consumer status handling, §31.7 acceptance criteria, §31.10 Webhook Secret Rotation, Appendix C, Appendix G, Appendix I, and §M.5.23. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_FOUNDATION_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-webhook-foundation-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-webhook-foundation-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-webhook-foundation-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-webhook-foundation-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-foundation-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Lifted webhook contract metadata to the §31.2 root envelope: `event_class`, `event_version`, `schema_version`, and `delivery_attempt`.
@@ -14004,7 +14004,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Webhook Delivery Attempt P1 Pass (2026-06-21)
 
-**Scope.** Focused addendum covering D-8.2-003 after the Webhook Foundation pass had already lifted `delivery_attempt` into the §31.2 root envelope and §31.5 delivery headers. Master Spec body touched in this addendum: §31.7 acceptance criteria, §31.8.2 billing-domain inheritance language, and §M.5.24. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_DELIVERY_ATTEMPT_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-delivery-attempt-p1-2026-06-21.md`.
+**Scope.** Focused addendum covering D-8.2-003 after the Webhook Foundation pass had already lifted `delivery_attempt` into the §31.2 root envelope and §31.5 delivery headers. Master Spec body touched in this addendum: §31.7 acceptance criteria, §31.8.2 billing-domain inheritance language, and §M.5.24. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_DELIVERY_ATTEMPT_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-webhook-delivery-attempt-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-delivery-attempt-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Added `delivery_attempt` to §31.7's root-delivery acceptance criterion alongside `event_class`, `event_version`, and `schema_version`.
@@ -14025,7 +14025,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Webhook Event ID Format P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 8 numerical-singleton pass covering D-8.2-004. Master Spec body touched: §25.3.10 transport, §27.6.7 taxonomy webhooks, §27.11 authority table, §31.1 canonical event-id format, §31.2 envelope example and field table, §31.5 idempotency row, §34.16.7 marketplace-discovery transport, and §M.5.25. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_EVENT_ID_FORMAT_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-webhook-event-id-format-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-webhook-event-id-format-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-webhook-event-id-format-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-webhook-event-id-format-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-event-id-format-p1-2026-06-21.md`.
+**Scope.** Focused Phase 8 numerical-singleton pass covering D-8.2-004. Master Spec body touched: §25.3.10 transport, §27.6.7 taxonomy webhooks, §27.11 authority table, §31.1 canonical event-id format, §31.2 envelope example and field table, §31.5 idempotency row, §34.16.7 marketplace-discovery transport, and §M.5.25. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_EVENT_ID_FORMAT_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-webhook-event-id-format-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-webhook-event-id-format-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-webhook-event-id-format-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-webhook-event-id-format-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-event-id-format-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Made §31.1 the single canonical home for webhook `event_id` format: `evt_{unix_ms}_{base32_random10}`.
@@ -14042,13 +14042,13 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 **CI-gate → §M.5 map.** §M.5.25 originally added one `spec_binding_pending_pack_m02_3` gate. Runtime promotion landed 2026-07-07 as `tools/spec-lint/gates/webhook_event_id_canonical_format.ts`; §M.5.25 is now `runtime_active` for spec-tree proof only.
 
-**Residuals intentionally left open at this pass close.** D-8.2-005 remained open for retry-curve singleton reconciliation; D-8.2-007 remained open for `webhook_critical_business`; D-8.2-009 remained open for subscription CRUD; D-8.2-010 and D-8.2-012+ remained open for CRM / lifecycle event-catalog long-tail work. D-V8.1-021 and related billing-domain emission coverage remained open. D-8.2-005 and D-8.2-007 are closed by the later Webhook Retry Singleton pass. Historical `_versions/` snapshots are not rewritten by this pass.
+**Residuals intentionally left open at this pass close.** D-8.2-005 remained open for retry-curve singleton reconciliation; D-8.2-007 remained open for `webhook_critical_business`; D-8.2-009 remained open for subscription CRUD; D-8.2-010 and D-8.2-012+ remained open for CRM / lifecycle event-catalog long-tail work. D-V8.1-021 and related billing-domain emission coverage remained open. D-8.2-005 and D-8.2-007 are closed by the later Webhook Retry Singleton pass. Historical `legacy-import:_versions/` snapshots are not rewritten by this pass.
 
 **Sign-off scoreboard.** Master Spec: §31.1 canonical-format rewrite + live transport citation cleanup + §M.5.25 one-gate block. Backlog: BL-P1-PH8-WH residual text updated; count remains 9 because D-8.2-004 is root transport singleton work, not part of the post-foundation event-catalog residual row. Ledger: 1 P1 canonical row `open → remediated 2026-06-21`. AE rows: 1 pending. Verification: `_audit/PHASE_V72REM_WEBHOOK_EVENT_ID_FORMAT_P1_VERIFY.md`.
 
 ## v7.2.0-REM Program → Webhook Retry Singleton P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 8 numerical-singleton / enum pass covering P1 D-8.2-005 and D-8.2-007, with status sync for tied P2 D-8.2-035. Master Spec body touched: Appendix F, §22, §25, §27, §29, §31, §34, §48, §50, §51, Appendix C, Appendix J, Appendix K, §M.5.18, and §M.5.26. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_RETRY_SINGLETON_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-webhook-retry-singleton-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-webhook-retry-singleton-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-webhook-retry-singleton-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-webhook-retry-singleton-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-retry-singleton-p1-2026-06-21.md`.
+**Scope.** Focused Phase 8 numerical-singleton / enum pass covering P1 D-8.2-005 and D-8.2-007, with status sync for tied P2 D-8.2-035. Master Spec body touched: Appendix F, §22, §25, §27, §29, §31, §34, §48, §50, §51, Appendix C, Appendix J, Appendix K, §M.5.18, and §M.5.26. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_WEBHOOK_RETRY_SINGLETON_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-webhook-retry-singleton-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-webhook-retry-singleton-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-webhook-retry-singleton-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-webhook-retry-singleton-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-webhook-retry-singleton-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Rewrote Appendix F.1 as the canonical `standard` webhook retry curve: five total delivery attempts, with attempt 1 immediate and retry attempts 2-5 at 1 minute, 5 minutes, 30 minutes, and 2 hours, for 2h36m cumulative delivery window.
@@ -14068,13 +14068,13 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 **CI-gate → §M.5 map.** §M.5.26 originally added one `spec_binding_pending_pack_m02_3` gate. Runtime promotion landed 2026-07-09 as `tools/spec-lint/gates/webhook_inline_retry_curve_lint.ts`; §M.5.26 is now `runtime_active` for spec-tree proof only.
 
-**Residuals intentionally left open.** D-8.2-009 remains open for webhook subscription CRUD; D-8.2-010 and D-8.2-011 remained open at this pass close and are closed by the later CRM Sync Webhook Canonicality P1 Pass; D-8.2-012 and the webhook lifecycle long-tail rows remain open. D-V8.1-021 and related billing-domain emission coverage remain open. Historical `_versions/` snapshots are not rewritten by this pass.
+**Residuals intentionally left open.** D-8.2-009 remains open for webhook subscription CRUD; D-8.2-010 and D-8.2-011 remained open at this pass close and are closed by the later CRM Sync Webhook Canonicality P1 Pass; D-8.2-012 and the webhook lifecycle long-tail rows remain open. D-V8.1-021 and related billing-domain emission coverage remain open. Historical `legacy-import:_versions/` snapshots are not rewritten by this pass.
 
 **Sign-off scoreboard.** Master Spec: Appendix F singleton rewrite + binary Appendix J retry class + live webhook retry reference cleanup + non-webhook schedule separation + §M.5.26 one-gate block. Backlog: BL-P1-PH8-WH residual text updated; count remains 9 because D-8.2-005 / D-8.2-007 are retry singleton / enum work, not part of the post-foundation event-catalog residual row. Ledger: 2 P1 canonical rows and 1 tied P2 row `open → remediated 2026-06-21`. AE rows: 1 pending. Verification: `_audit/PHASE_V72REM_WEBHOOK_RETRY_SINGLETON_P1_VERIFY.md`.
 
 ## v7.2.0-REM Program → CRM Sync Webhook Canonicality P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 8 catalog/state canonicality pass covering P1 D-8.2-010, D-8.2-011, D-V8.3-001, and D-V8.3-002. Master Spec body touched: §31.9.6 through §31.9.15, Appendix C, Appendix G, and §M.5.27. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_CRM_SYNC_WEBHOOK_CANONICALITY_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`.
+**Scope.** Focused Phase 8 catalog/state canonicality pass covering P1 D-8.2-010, D-8.2-011, D-V8.3-001, and D-V8.3-002. Master Spec body touched: §31.9.6 through §31.9.15, Appendix C, Appendix G, and §M.5.27. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_CRM_SYNC_WEBHOOK_CANONICALITY_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Chose `seller.crm_sync.*` as the canonical customer-facing CRM Sync webhook namespace and rewrote §31.9.10 to a 19-event source set.
@@ -14093,13 +14093,13 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 **CI-gate → §M.5 map.** §M.5.27 originally added one `spec_binding_pending_pack_m02_3` gate. Runtime promotion landed 2026-07-09 as `tools/spec-lint/gates/crm_sync_event_catalog_consistency.ts`; §M.5.27 is now `runtime_active` for spec-tree proof only.
 
-**Residuals intentionally left open.** D-8.2-009 remains open for webhook subscription CRUD; D-8.2-012 and the webhook lifecycle long-tail rows remain open. D-V8.1-021 and related billing-domain emission coverage remain open. D-V8.3-003 / 004 / 005 / 007 / 008 / 009 / 016 / 020 / 023 remain open for non-CRM Appendix C event catalog coverage. Historical `_versions/` snapshots are not rewritten by this pass.
+**Residuals intentionally left open.** D-8.2-009 remains open for webhook subscription CRUD; D-8.2-012 and the webhook lifecycle long-tail rows remain open. D-V8.1-021 and related billing-domain emission coverage remain open. D-V8.3-003 / 004 / 005 / 007 / 008 / 009 / 016 / 020 / 023 remain open for non-CRM Appendix C event catalog coverage. Historical `legacy-import:_versions/` snapshots are not rewritten by this pass.
 
 **Sign-off scoreboard.** Master Spec: §31.9 CRM Sync source-event rewrite + Appendix C/G parity + Appendix J-compatible state semantics + §M.5.27 one-gate block. Backlog: BL-P1-PH8-WH residual count reduced from 9 to 8; BL-P1-PH8P83-NOTIF residual notification count reduced from 10 to 9. Ledger: 4 P1 rows `open → remediated 2026-06-21`. AE rows: 1 pending. Verification: `_audit/PHASE_V72REM_CRM_SYNC_WEBHOOK_CANONICALITY_P1_VERIFY.md`.
 
 ## v7.2.0-REM Program → Phase 3.1 RBAC Residual P1 Pass (2026-06-21)
 
-**Scope.** Focused Phase 3.1 RBAC body/config pass covering D-3.1-003, D-3.1-004, D-3.1-005, D-3.1-007, and D-3.1-014. Master Spec body touched: §5.2, new §5.2.2, new §5.3.1, new §5.5.1, §5.11, and §M.5.28. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_PHASE_3_1_RBAC_RESIDUAL_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`.
+**Scope.** Focused Phase 3.1 RBAC body/config pass covering D-3.1-003, D-3.1-004, D-3.1-005, D-3.1-007, and D-3.1-014. Master Spec body touched: §5.2, new §5.2.2, new §5.3.1, new §5.5.1, §5.11, and §M.5.28. Audit records touched: `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, and `_audit/PHASE_V72REM_PHASE_3_1_RBAC_RESIDUAL_P1_VERIFY.md`. AE ledger touched: `_integration/AUTHORED_EXTENSIONS_LEDGER.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`.
 
 **Edit summary.**
 - Authored §5.2.2 Member Permission List with explicit allowed operations, explicit denials, SCIM default behavior, acceptance criteria, and `member_role_permission_completeness`.
@@ -14125,7 +14125,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.2 Plan-Gating Backlog Scope Sync (2026-06-21)
 
-**Scope.** Backlog hygiene only. No Master Spec product behavior was authored in this pass. Files touched: `_audit/REMEDIATION_BACKLOG.md` and this reconciliation log. Pre-edit backups: `_versions/REMEDIATION_BACKLOG_pre-phase-3-2-plan-backlog-sync-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-3-2-plan-backlog-sync-2026-06-21.md`.
+**Scope.** Backlog hygiene only. No Master Spec product behavior was authored in this pass. Files touched: `_audit/REMEDIATION_BACKLOG.md` and this reconciliation log. Pre-edit backups: `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-2-plan-backlog-sync-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-3-2-plan-backlog-sync-2026-06-21.md`.
 
 **Reason for sync.** The top-level backlog row for BL-P1-PH32-PLAN still said count `20` even though the same backlog already carried an F-3 cross-reference stating the row was no longer a 20-row execution surface. Canonical ledger and reconciliation history agree that D-3.2-004 / -005 / -006 / -012 / -014 and D-3.2-007 through D-3.2-023 have been remediated by the V3 / Phase 11 / 2026-06-21 overlay passes. The live residual is D-3.2-001 / D-3.2-002 / D-3.2-003 plus the §5.11 inline tier-list audit.
 
@@ -14149,7 +14149,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.3 Auth Residual P1 Closeout (2026-06-21)
 
-**Scope.** Closes the two true Phase 3.3 residual P1 rows left after the singleton/status-sync pass: D-3.3-003 exact Appendix M.1 surface mapping and D-3.3-012 MFA lifecycle webhook/PostHog catalog coverage. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_3_AUTH_P1_SYNC_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-3-3-auth-residual-p1-2026-06-21.md`.
+**Scope.** Closes the two true Phase 3.3 residual P1 rows left after the singleton/status-sync pass: D-3.3-003 exact Appendix M.1 surface mapping and D-3.3-012 MFA lifecycle webhook/PostHog catalog coverage. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_3_AUTH_P1_SYNC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-3-auth-residual-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-3-3-auth-residual-p1-2026-06-21.md`.
 
 **Master Spec corrections.** Appendix M.1 now carries exact rows for the nine §6 user-visible auth surfaces named in D-3.3-003: login screen, sign-out CTA, session-expiration toast, MFA enrollment wizard, recovery-code display screen, domain-claim wizard, DNS-verification flow, guest-invite acceptance flow, and API-token management page. The adjacent grouped MFA / Domain Governance / API Token rows were normalized to the current §6 / §34 / §39 authority wording so the new exact rows do not sit beside stale `mfa_enforced`, SMS, or inline API-key-limit phrasing.
 
@@ -14163,7 +14163,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.2 Plan-Gating Residual P1 Closeout (2026-06-21)
 
-**Scope.** Closes the three Phase 3.2 plan-gating residual P1 rows left after the backlog scope sync: D-3.2-001, D-3.2-002, and D-3.2-003. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_2_PLAN_RESIDUAL_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-3-2-plan-residual-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-3-2-plan-residual-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-3-2-plan-residual-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-3-2-plan-residual-p1-2026-06-21.md`.
+**Scope.** Closes the three Phase 3.2 plan-gating residual P1 rows left after the backlog scope sync: D-3.2-001, D-3.2-002, and D-3.2-003. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_2_PLAN_RESIDUAL_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-2-plan-residual-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-2-plan-residual-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-2-plan-residual-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-3-2-plan-residual-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - Rewrote the §5.11 V3 preamble so the body no longer says the Min-Tier / Solo plan dimension is deferred to future implementation packs.
@@ -14183,7 +14183,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 8 API Catalog Existing-Surfaces P1 Pass (2026-06-21)
 
-**Scope.** Catalog-only closeout for Phase 8 Prompt 8.1 defects where the endpoint behavior was already authored elsewhere in the Master Spec but absent from §32.5. Closes D-V8.1-003, D-V8.1-004, and D-V8.1-005. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_8_API_CATALOG_EXISTING_SURFACES_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`.
+**Scope.** Catalog-only closeout for Phase 8 Prompt 8.1 defects where the endpoint behavior was already authored elsewhere in the Master Spec but absent from §32.5. Closes D-V8.1-003, D-V8.1-004, and D-V8.1-005. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_8_API_CATALOG_EXISTING_SURFACES_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-8-api-catalog-existing-surfaces-2026-06-21.md`.
 
 **Master Spec corrections.**
 - Added §32.5 Vendor Opt-Outs endpoint-family registration for §27.10.6 create/list/read/revoke and authority-attestation lifecycle endpoints.
@@ -14203,7 +14203,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 8 Disqualification Reversal API Sync Pass (2026-06-21)
 
-**Scope.** Closes D-V8.1-015 by retiring stale §32 cross-reference text that still treated the Disqualification Reversal endpoint as a follow-on Known Gap. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_8_DISQUALIFICATION_REVERSAL_API_SYNC_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`.
+**Scope.** Closes D-V8.1-015 by retiring stale §32 cross-reference text that still treated the Disqualification Reversal endpoint as a follow-on Known Gap. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_8_DISQUALIFICATION_REVERSAL_API_SYNC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-8-disqualification-reversal-api-sync-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §25.3.9 reversal cross-reference now points to §25.3.10a full API detail, §4.7.2 reversal semantics, and §32.6.1 Multi-Status behavior instead of a future Known Gap.
@@ -14222,7 +14222,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 8 API Residual Authoring Pass (2026-06-21)
 
-**Scope.** Closes the three live Phase 8 Prompt 8.1 API-authoring residual rows: D-V8.1-002 (OutcomeContract introspection), D-V8.1-006 (EOI lifecycle), and D-V8.1-008 (seller-side Bid Workspace / KB / Managed Agent / Console Bridge API families). Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, `_audit/V711_BACKLOG_INDEX.md`, and `_audit/PHASE_V72REM_PHASE_8_API_RESIDUAL_AUTHORING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-8-api-residual-authoring-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-8-api-residual-authoring-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-8-api-residual-authoring-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-api-residual-authoring-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-8-api-residual-authoring-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-8-api-residual-authoring-2026-06-21.md`.
+**Scope.** Closes the three live Phase 8 Prompt 8.1 API-authoring residual rows: D-V8.1-002 (OutcomeContract introspection), D-V8.1-006 (EOI lifecycle), and D-V8.1-008 (seller-side Bid Workspace / KB / Managed Agent / Console Bridge API families). Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, `_audit/V711_BACKLOG_INDEX.md`, and `_audit/PHASE_V72REM_PHASE_8_API_RESIDUAL_AUTHORING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-api-residual-authoring-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-api-residual-authoring-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-api-residual-authoring-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-api-residual-authoring-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-8-api-residual-authoring-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-api-residual-authoring-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §32.5 now registers the endpoint families for Outcome Contracts, Expression of Interest Lifecycle, Seller Bid Workspaces, Seller KB Management, Managed Agent Invocation, and Console Bridge Events.
@@ -14241,7 +14241,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 8 Webhook Residual Authoring Pass (2026-06-21)
 
-**Scope.** Closes the live Phase 8 P1 webhook / subscription residuals plus the duplicate Phase 1.7 committed-spend webhook row: D-1.7-005, D-V8.1-021, D-8.2-009, D-8.2-012, D-8.2-013, D-8.2-014, D-8.2-015, D-8.2-016, D-8.2-017, and D-8.2-020. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, `_audit/V711_BACKLOG_INDEX.md`, and `_audit/PHASE_V72REM_PHASE_8_WEBHOOK_RESIDUAL_AUTHORING_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-8-webhook-residual-authoring-2026-06-21.md`.
+**Scope.** Closes the live Phase 8 P1 webhook / subscription residuals plus the duplicate Phase 1.7 committed-spend webhook row: D-1.7-005, D-V8.1-021, D-8.2-009, D-8.2-012, D-8.2-013, D-8.2-014, D-8.2-015, D-8.2-016, D-8.2-017, and D-8.2-020. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, `_audit/V711_BACKLOG_INDEX.md`, and `_audit/PHASE_V72REM_PHASE_8_WEBHOOK_RESIDUAL_AUTHORING_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-8-webhook-residual-authoring-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-webhook-residual-authoring-2026-06-21.md`.
 
 **Master Spec corrections.**
 - Added §31.8.11 Billing Webhook Completeness Pack covering every §32.8.23 billing emission, BuyerReferral lifecycle events, ProTrialSeatGrant lifecycle events, AIWallet suspended/closed events, CommittedSpendContract renewal/expiry/decommit events, and ContestRecord rejected/withdrawn events.
@@ -14262,7 +14262,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 1.1 Org/Auth Foundation P1 Pass (2026-06-21)
 
-**Scope.** Closes the twelve true Phase 1.1 Org/Auth foundation P1 rows left after the earlier API-token entity/scope and stale-status passes: D-1.1-001, D-1.1-003, D-1.1-004, D-1.1-005, D-1.1-006, D-1.1-007, D-1.1-008, D-1.1-009, D-1.1-010, D-1.1-011, D-1.1-012, and D-1.1-013. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_1_1_ORG_AUTH_FOUNDATION_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`.
+**Scope.** Closes the twelve true Phase 1.1 Org/Auth foundation P1 rows left after the earlier API-token entity/scope and stale-status passes: D-1.1-001, D-1.1-003, D-1.1-004, D-1.1-005, D-1.1-006, D-1.1-007, D-1.1-008, D-1.1-009, D-1.1-010, D-1.1-011, D-1.1-012, and D-1.1-013. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_1_1_ORG_AUTH_FOUNDATION_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-1-1-org-auth-foundation-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §4.2.1 Organization now preserves the post-D-RES canonical `data_residency_region` mapping (`us`, `eu`, `apac`, `custom`), cites Appendix J `console_modes_active`, points `trial_state_ref` to authored §4.2.13 TrialState, and carries indexes / scope-isolation / retention / DSAR / acceptance criteria / failure modes.
@@ -14285,7 +14285,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 8.3 Notification Catalog P1 Pass (2026-06-21)
 
-**Scope.** Closes the live residual Phase 8.3 Appendix C notification-catalog P1 cluster after the CRM Sync and Phase 8 Webhook Residual passes: D-V8.3-003, D-V8.3-004, D-V8.3-005, D-V8.3-006, D-V8.3-008, D-V8.3-009, D-V8.3-016, D-V8.3-020, and D-V8.3-023. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_8_3_NOTIFICATION_CATALOG_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`.
+**Scope.** Closes the live residual Phase 8.3 Appendix C notification-catalog P1 cluster after the CRM Sync and Phase 8 Webhook Residual passes: D-V8.3-003, D-V8.3-004, D-V8.3-005, D-V8.3-006, D-V8.3-008, D-V8.3-009, D-V8.3-016, D-V8.3-020, and D-V8.3-023. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_8_3_NOTIFICATION_CATALOG_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-8-3-notification-catalog-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §29.1 no longer carries duplicate Standard / Additional event tables. It points to Appendix C as canonical, preserves legacy aliases only as compatibility labels, and maps `policy_ingestion_complete` to the existing `policy.ingestion.published` row to preserve exactly-once coverage.
@@ -14310,7 +14310,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.5 DSAR P1 Pass (2026-06-21)
 
-**Scope.** Closes the live BL-P1-PH35-DSAR row: D-3.5-007, D-3.5-010, D-3.5-012, D-3.5-013, D-3.5-019, D-3.5-021, D-3.5-023, and D-3.5-024. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_5_DSAR_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-3-5-dsar-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-3-5-dsar-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-3-5-dsar-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-3-5-dsar-p1-2026-06-21.md`.
+**Scope.** Closes the live BL-P1-PH35-DSAR row: D-3.5-007, D-3.5-010, D-3.5-012, D-3.5-013, D-3.5-019, D-3.5-021, D-3.5-023, and D-3.5-024. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_5_DSAR_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-5-dsar-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-5-dsar-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-3-5-dsar-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-3-5-dsar-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §6.8.1 now has an exhaustive export inventory table, delivery contract, exclusions, and eight acceptance criteria covering schema publication, CSV alternative, per-request encryption, step-up download, residency partitioning, multipart bundles, other-user anonymization, and expired-link reissue.
@@ -14336,7 +14336,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 3.5 DSAR Continuation Pass (2026-06-22)
 
-**Scope.** Closes D-3.5-008, D-3.5-009, D-3.5-011, D-3.5-014, D-3.5-015, D-3.5-016, D-3.5-017, D-3.5-018, D-3.5-020, D-3.5-022, D-3.5-038, and paired P2 D-3.5-037. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_5_DSAR_CONTINUATION_VERIFY.md`. Pre-edit backups use the `2026-06-22-phase-3-5-dsar-p1-batch` suffix under `_versions/`.
+**Scope.** Closes D-3.5-008, D-3.5-009, D-3.5-011, D-3.5-014, D-3.5-015, D-3.5-016, D-3.5-017, D-3.5-018, D-3.5-020, D-3.5-022, D-3.5-038, and paired P2 D-3.5-037. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_3_5_DSAR_CONTINUATION_VERIFY.md`. Pre-edit backups use the `2026-06-22-phase-3-5-dsar-p1-batch` suffix under `legacy-import:_versions/`.
 
 **Master Spec corrections.**
 - §6.8.4 / §6.8.7-§6.8.11 / §33.9 / §40.2 now cite the §6.8.6 fulfillment window instead of owning duplicate DSAR SLA text.
@@ -14361,7 +14361,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 1.2 Data Model P1 Pass (2026-06-21)
 
-**Scope.** Closes the live BL-P1-PH12-DM row: D-1.2-001, D-1.2-002, D-1.2-003, D-1.2-005, D-1.2-007, D-1.2-008, and D-1.2-009. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_1_2_DATA_MODEL_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-1-2-data-model-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-1-2-data-model-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-1-2-data-model-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-1-2-data-model-p1-2026-06-21.md`.
+**Scope.** Closes the live BL-P1-PH12-DM row: D-1.2-001, D-1.2-002, D-1.2-003, D-1.2-005, D-1.2-007, D-1.2-008, and D-1.2-009. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_1_2_DATA_MODEL_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-1-2-data-model-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-1-2-data-model-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-1-2-data-model-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-1-2-data-model-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §4.3.1 Workspace now carries `intake_eval_starter_id`, `intake_eval_starter_version`, `intake_freetext_label`, `seeded_from_deprecated_redirect_to`, `rubric_config_json`, and `archived_at`, plus intake/archive indexes and retention notes.
@@ -14389,7 +14389,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 5.3 KB Data Model P1 Pass (2026-06-21)
 
-**Scope.** Closes the live BL-P1-PH5P53-DM row: D-5.3-002, D-5.3-003, D-5.3-004, D-5.3-005, D-5.3-006, D-5.3-007, and D-5.3-008. The same Master Spec edits also close duplicate P1 rows D-2.2-059, D-34.19-001, D-34.19-002, D-34.19-003, D-34.19-004, and D-DEC-003 because those rows pointed at the same missing KB value-capture fields/entities. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_5_3_KB_DATA_MODEL_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-5-3-kb-dm-p1-2026-06-21.md`.
+**Scope.** Closes the live BL-P1-PH5P53-DM row: D-5.3-002, D-5.3-003, D-5.3-004, D-5.3-005, D-5.3-006, D-5.3-007, and D-5.3-008. The same Master Spec edits also close duplicate P1 rows D-2.2-059, D-34.19-001, D-34.19-002, D-34.19-003, D-34.19-004, and D-DEC-003 because those rows pointed at the same missing KB value-capture fields/entities. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_5_3_KB_DATA_MODEL_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-5-3-kb-dm-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-5-3-kb-dm-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §22.3.1 now declares `KBEntry.confidence_score` and `KBEntry.win_rate_weight`; `base_confidence` is the seed prior, `confidence_score` is the live acceptance-rate scalar, `confidence_modifier` is the derived retrieval multiplier, and `win_rate_weight` is the closed-bid outcome scalar.
@@ -14416,7 +14416,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 2.2 Firewall P1 Pass (2026-06-21)
 
-**Scope.** Closes the live BL-P1-PH22-FW row: D-2.2-035, D-2.2-036, D-2.2-037, D-2.2-038, D-2.2-041, and D-2.2-055. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_2_2_FIREWALL_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-2-2-firewall-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-2-2-firewall-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-2-2-firewall-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-2-2-firewall-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-2-2-firewall-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-2-2-firewall-p1-2026-06-21.md`.
+**Scope.** Closes the live BL-P1-PH22-FW row: D-2.2-035, D-2.2-036, D-2.2-037, D-2.2-038, D-2.2-041, and D-2.2-055. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_2_2_FIREWALL_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-2-2-firewall-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-2-2-firewall-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-2-2-firewall-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-2-2-firewall-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-2-2-firewall-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-2-2-firewall-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §4.4.2 Bid Response now declares `console = seller` for query-time seller-console scope filtering.
@@ -14442,7 +14442,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 4.12 Sourcera Agent Drift P1 Pass (2026-06-21)
 
-**Scope.** Closes the live BL-P1-PH4P412-DRIFT row: D-4.12-004, D-4.12-005, D-4.12-006, D-4.12-007, D-4.12-008, and D-4.12-012. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_12_AGENT_DRIFT_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-4-12-agent-drift-p1-2026-06-21.md`.
+**Scope.** Closes the live BL-P1-PH4P412-DRIFT row: D-4.12-004, D-4.12-005, D-4.12-006, D-4.12-007, D-4.12-008, and D-4.12-012. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_12_AGENT_DRIFT_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-4-12-agent-drift-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §21.4.1 row 7 now marks `kb_to_response_suggestion` as a deprecated alias-only legacy string that rewrites to `kb_suggestion_seller` before AIOperation write; it no longer claims an independent `customer_billed` seller capability lacking a §34.14.1 rate-card row.
@@ -14469,7 +14469,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 4.4 Scoring & Grading Numerical P1 Pass (2026-06-21)
 
-**Scope.** Closes the live BL-P1-PH4P44-NUM row: D-4.4-001, D-4.4-002, D-4.4-004, D-4.4-005, D-4.4-011, and D-4.4-012. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_4_SCORING_NUMERICAL_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `_versions/DEFECT_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `_versions/RECONCILIATION_pre-phase-4-4-scoring-num-p1-2026-06-21.md`.
+**Scope.** Closes the live BL-P1-PH4P44-NUM row: D-4.4-001, D-4.4-002, D-4.4-004, D-4.4-005, D-4.4-011, and D-4.4-012. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_4_SCORING_NUMERICAL_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-4-4-scoring-num-p1-2026-06-21.md`.
 
 **Master Spec corrections.**
 - §13.4.2 no longer carries the inline `exception_reason` character cap; §39 now owns the `Score.exception_reason` limit.
@@ -14495,7 +14495,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 4.6 TCO Modeling P1 Pass (2026-06-22)
 
-**Scope.** Closes the live BL-P1-PH4P46-DM row: D-4.6-001, D-4.6-002, D-4.6-003, D-4.6-004, D-4.6-005, and D-4.6-006. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_6_TCO_MODELING_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `_versions/DEFECT_LEDGER_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `_versions/RECONCILIATION_pre-phase-4-6-tco-dm-p1-2026-06-22.md`.
+**Scope.** Closes the live BL-P1-PH4P46-DM row: D-4.6-001, D-4.6-002, D-4.6-003, D-4.6-004, D-4.6-005, and D-4.6-006. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_6_TCO_MODELING_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-6-tco-dm-p1-2026-06-22.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-4-6-tco-dm-p1-2026-06-22.md`.
 
 **Master Spec corrections.**
 - §4.3.1 Workspace now declares `default_currency` as the Buyer-console default for TCO display/calculation currency.
@@ -14526,7 +14526,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 9.1 Appendix G Instrumentation P1 Pass (2026-06-22)
 
-**Scope.** Closes the live BL-P1-PH9P91-INSTR row: D-9.1-001, D-9.1-004, D-9.1-005, D-9.1-006, D-9.1-010, and D-9.1-012. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_9_1_APPENDIX_G_INSTRUMENTATION_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `933ed70af65ec3e02e30b74607378aa8`); `_versions/DEFECT_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `b933867efc6e42faac5d4736c1fe9a65`); `_versions/REMEDIATION_BACKLOG_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `21b7f113acb71740d80d3784fcfa3669`); `_versions/V711_BACKLOG_INDEX_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `558d64bcc9929fc5fb49993ffc3123b1`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `9a727cc89f334f317fbe346cfe106ad2`); `_versions/RECONCILIATION_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `57c6785dad82d6091cfde58dcf40f207`).
+**Scope.** Closes the live BL-P1-PH9P91-INSTR row: D-9.1-001, D-9.1-004, D-9.1-005, D-9.1-006, D-9.1-010, and D-9.1-012. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_9_1_APPENDIX_G_INSTRUMENTATION_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `933ed70af65ec3e02e30b74607378aa8`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `b933867efc6e42faac5d4736c1fe9a65`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `21b7f113acb71740d80d3784fcfa3669`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `558d64bcc9929fc5fb49993ffc3123b1`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `9a727cc89f334f317fbe346cfe106ad2`); `legacy-import:_versions/RECONCILIATION_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` (md5 `57c6785dad82d6091cfde58dcf40f207`).
 
 **Master Spec corrections.**
 - §13.11.12 / §13.11.13 and the Appendix C Defense View coverage note now distinguish underscore-form Appendix G mirrors from dotted source webhook event types.
@@ -14554,7 +14554,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 14.2 / Phase 2.2 Backlog Status-Sync P1 Pass (2026-06-22)
 
-**Scope.** Status-syncs two stale executable backlog rows without Master Spec source edits: BL-P1-PH142-DRIFT (D-14.2-001, D-14.2-002, D-14.2-003, D-14.2-004, D-14.2-005) and BL-P1-PH22-NUM (D-2.2-006, D-2.2-007, D-2.2-008, D-2.2-009, D-2.2-010). Files touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, this reconciliation log, and `_audit/PHASE_V72REM_BACKLOG_STATUS_SYNC_P1_VERIFY.md`. Pre-edit backups: `_versions/REMEDIATION_BACKLOG_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` (md5 `d200dc15b9f802ddf9b83c50fe379e57`); `_versions/V711_BACKLOG_INDEX_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` (md5 `20eb769b0fbb2faff58835f4679235f3`); `_versions/RECONCILIATION_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` (md5 `097557dd003de815d61b9bacfe26dbc8`).
+**Scope.** Status-syncs two stale executable backlog rows without Master Spec source edits: BL-P1-PH142-DRIFT (D-14.2-001, D-14.2-002, D-14.2-003, D-14.2-004, D-14.2-005) and BL-P1-PH22-NUM (D-2.2-006, D-2.2-007, D-2.2-008, D-2.2-009, D-2.2-010). Files touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, this reconciliation log, and `_audit/PHASE_V72REM_BACKLOG_STATUS_SYNC_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` (md5 `d200dc15b9f802ddf9b83c50fe379e57`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` (md5 `20eb769b0fbb2faff58835f4679235f3`); `legacy-import:_versions/RECONCILIATION_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` (md5 `097557dd003de815d61b9bacfe26dbc8`).
 
 **Reconciliation choices.**
 - D-14.2-001 through D-14.2-005 were true cross-doc pricing drift issues when filed, but the canonical ledger already marks all five `remediated 2026-06-21` with existing verification records. The backlog row was stale and is reduced to 0 without reopening source text.
@@ -14572,7 +14572,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 24 Seller Q&A / Seller Inbox P1 Pass (2026-06-22)
 
-**Scope.** Closes the live P1 rows in BL-P1-PH24-DM: D-24-002 and D-24-005. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_24_SELLER_INBOX_QA_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `da48a019761ef94b5509fcf4a1ef6937`); `_versions/DEFECT_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `138824d6d5788a0a4637f8949a0dc13a`); `_versions/REMEDIATION_BACKLOG_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `6234fc500a77d183ed2460b3d0326703`); `_versions/V711_BACKLOG_INDEX_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `6302fcba7a040a93c353670021838aa0`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `3a909c9448489fe1434b7041ae370b24`); `_versions/RECONCILIATION_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `b5b97da8ec1053299c87811be750e722`).
+**Scope.** Closes the live P1 rows in BL-P1-PH24-DM: D-24-002 and D-24-005. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_24_SELLER_INBOX_QA_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `da48a019761ef94b5509fcf4a1ef6937`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `138824d6d5788a0a4637f8949a0dc13a`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `6234fc500a77d183ed2460b3d0326703`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `6302fcba7a040a93c353670021838aa0`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `3a909c9448489fe1434b7041ae370b24`); `legacy-import:_versions/RECONCILIATION_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` (md5 `b5b97da8ec1053299c87811be750e722`).
 
 **Master Spec corrections.**
 - §24.1.1 now maps Seller Q&A `nda_visibility_state` to canonical §4.5.3 NDA Record statuses and adds a server-side read/compose authorization predicate.
@@ -14598,7 +14598,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase SS / Phase 2.2 Backlog Count Status Sync (2026-06-22)
 
-**Scope.** Audit-only status sync for stale `_audit/REMEDIATION_BACKLOG.md` count fields after comparing backlog rows to canonical `_audit/DEFECT_LEDGER.md` status. Files touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_SS_AND_2_2_BACKLOG_COUNT_SYNC_VERIFY.md`. Pre-edit backups: `_versions/REMEDIATION_BACKLOG_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` (md5 `85b0edc639caa792c7a592a9f03ee7ec`); `_versions/V711_BACKLOG_INDEX_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` (md5 `f3185f3b6849ec2c5dde43dd13299f07`); `_versions/RECONCILIATION_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` (md5 `4858596c3ea598b91231153c0a0b843c`).
+**Scope.** Audit-only status sync for stale `_audit/REMEDIATION_BACKLOG.md` count fields after comparing backlog rows to canonical `_audit/DEFECT_LEDGER.md` status. Files touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_SS_AND_2_2_BACKLOG_COUNT_SYNC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` (md5 `85b0edc639caa792c7a592a9f03ee7ec`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` (md5 `f3185f3b6849ec2c5dde43dd13299f07`); `legacy-import:_versions/RECONCILIATION_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` (md5 `4858596c3ea598b91231153c0a0b843c`).
 
 **Adjudication.** No new Master Spec issue was identified. `BL-P1-PHSS-ACC` and `BL-P1-PH22-ENUM` already said closed but retained stale count values. `BL-P1-PH22-DM` was a stale duplicate / stale class label for D-2.2-011 through D-2.2-014; the canonical ledger classifies those rows as `enum` and marks them remediated by the Phase 2.2 Appendix J enum-canonical pass.
 
@@ -14608,7 +14608,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 34.19 Carry-Over P1 Pass (2026-06-22)
 
-**Scope.** Closes the live P1 rows in BL-P1-PH3419-DM: D-34.19-005 and D-34.19-008. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_34_19_CARRY_OVER_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `e9c05d0ef416669f75d9a06dc897232b`); `_versions/DEFECT_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `d8c24cfad122462df9eb855fdaaac7af`); `_versions/REMEDIATION_BACKLOG_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `9e25a6849bd69d181eedcae244806326`); `_versions/V711_BACKLOG_INDEX_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `db1d06891fc9809a930e4a9f189505be`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `c0b42a2533d420b84cb2ab3efad31194`); `_versions/RECONCILIATION_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `b566c0a25d97b82870217af02a13d3bf`).
+**Scope.** Closes the live P1 rows in BL-P1-PH3419-DM: D-34.19-005 and D-34.19-008. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_34_19_CARRY_OVER_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `e9c05d0ef416669f75d9a06dc897232b`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `d8c24cfad122462df9eb855fdaaac7af`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `9e25a6849bd69d181eedcae244806326`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `db1d06891fc9809a930e4a9f189505be`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `c0b42a2533d420b84cb2ab3efad31194`); `legacy-import:_versions/RECONCILIATION_pre-phase-34-19-carry-over-p1-2026-06-22.md` (md5 `b566c0a25d97b82870217af02a13d3bf`).
 
 **True-issue adjudication.** Both rows were true issues. D-34.19-005 was real because §34.19.1, §22.18.5.1, §22.18.7 AC #74, and §34.20.16 AC #76 described overlapping protected-asset classes without a single bridge table or harness-composition rule. D-34.19-008 was real because §34.19.1 Class 7 promised saved searches and alerts but no SavedSearch / SearchAlert entity existed.
 
@@ -14631,7 +14631,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 37 Accessibility & i18n P1 Pass (2026-06-22)
 
-**Scope.** Closes the canonical Phase 37 P1 rows D-37-001 through D-37-009 plus cross-linked touch-target singleton row D-38-008. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_37_ACCESSIBILITY_I18N_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `e83db52b8f354ac9d06d410c9724eef9`); `_versions/DEFECT_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `42ed0b9e1170dc0172d5ebdec9accdb9`); `_versions/REMEDIATION_BACKLOG_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `44703843aba09f993bf6dbf5366a12d0`); `_versions/V711_BACKLOG_INDEX_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `6a882f01d2f5b49553c05ef84cd4ac8e`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `db3e388080001da2e685679f6c6e99a3`); `_versions/RECONCILIATION_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `e53c2591163f37f4ce5856fcf00db08d`).
+**Scope.** Closes the canonical Phase 37 P1 rows D-37-001 through D-37-009 plus cross-linked touch-target singleton row D-38-008. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_37_ACCESSIBILITY_I18N_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `e83db52b8f354ac9d06d410c9724eef9`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `42ed0b9e1170dc0172d5ebdec9accdb9`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `44703843aba09f993bf6dbf5366a12d0`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `6a882f01d2f5b49553c05ef84cd4ac8e`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `db3e388080001da2e685679f6c6e99a3`); `legacy-import:_versions/RECONCILIATION_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` (md5 `e53c2591163f37f4ce5856fcf00db08d`).
 
 **True-issue adjudication.** All nine canonical Phase 37 P1 rows were true issues, and D-38-008 was a true cross-linked duplicate of D-37-001. The stale `_audit/REMEDIATION_BACKLOG.md` row listed only D-37-001 through D-37-005, but the canonical ledger carried D-37-001 through D-37-009 as open P1s. D-37-001 was a real touch-target singleton conflict; D-37-002 was a real RTL implementation contradiction; D-37-003 was a real missing settings / entity backing gap; D-37-004 was a real untestable acceptance-criteria gap; D-37-005 was a real Appendix M.1 / M.5 mapping gap; D-37-006 was a real VoiceOver coverage gap; D-37-007 was a real WCAG reflow fixture gap; D-37-008 was a real focus-management aggregator gap; D-37-009 was a real bypass-blocks / skip-link gap. D-38-008 was a real remaining touch-target singleton gap because §3.4, §38.1, and §38.5 still restated target-size values after the §37 fix.
 
@@ -14660,7 +14660,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 4.11 Inbox & Pulse P1 Pass (2026-06-22)
 
-**Scope.** Closes D-4.11-001, D-4.11-002, D-4.11-003, D-4.11-004, D-4.11-005, and D-4.11-007. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_11_INBOX_PULSE_P1_VERIFY.md`. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `9318272771ab4bd5d60af07120e0305c`); `_versions/DEFECT_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `543450d1ce365d2b39b43419e87b2195`); `_versions/REMEDIATION_BACKLOG_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `4620237bb2a4eaa95a7331d983dfd19b`); `_versions/V711_BACKLOG_INDEX_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `e55697e34b1d65701059d69fd2ac47d0`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `5e432075fcdfdf12920e662440698468`); `_versions/RECONCILIATION_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `58a62301cab5897ffe9119b2eaafb496`).
+**Scope.** Closes D-4.11-001, D-4.11-002, D-4.11-003, D-4.11-004, D-4.11-005, and D-4.11-007. Files touched: `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, `_integration/AUTHORED_EXTENSIONS_LEDGER.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_11_INBOX_PULSE_P1_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `9318272771ab4bd5d60af07120e0305c`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `543450d1ce365d2b39b43419e87b2195`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `4620237bb2a4eaa95a7331d983dfd19b`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `e55697e34b1d65701059d69fd2ac47d0`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `5e432075fcdfdf12920e662440698468`); `legacy-import:_versions/RECONCILIATION_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` (md5 `58a62301cab5897ffe9119b2eaafb496`).
 
 **True-issue adjudication.** All six closed P1s were true issues. D-4.11-001 was a real entity-definition gap because §20.2.2 used a surface JSON item shape instead of a §4 field table and did not bind to Inbox Item Group / Unread Marker. D-4.11-002 was a real surface/engine mapping gap because §20.2 did not reciprocate Appendix M.1 or author the Solo "What to do this week" panel. D-4.11-003 was a real math defect because the old `Phase_velocity_ratio` term rewarded lateness. D-4.11-004 was a real bounds defect because the score could exceed 100. D-4.11-005 was a real denominator-zero / state-selection defect because phase-band weight selection was prose-only and could yield NaN / Infinity. D-4.11-007 was a real persistence gap because `WorkspacePulseHealth` was referenced by §2.8.4 and Appendix M.1 without a §4 entity.
 
@@ -14686,7 +14686,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program → Phase 4.2 API Stale Backlog Status Sync (2026-06-22)
 
-**Scope.** Closes stale backlog row BL-P1-PH42-API without new Master Spec body edits. Files touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_2_API_STATUS_SYNC_VERIFY.md`. Pre-edit backups: `_versions/REMEDIATION_BACKLOG_pre-phase-4-2-api-status-sync-2026-06-22.md` (md5 `0128fb83c0b9deb3de0cc680a7c155b7`); `_versions/V711_BACKLOG_INDEX_pre-phase-4-2-api-status-sync-2026-06-22.md` (md5 `0506768e38ed9e98f82af9389de4c5b4`); `_versions/RECONCILIATION_pre-phase-4-2-api-status-sync-2026-06-22.md` (md5 `89d28a75a847558c0ec5e5cd83e5410f`).
+**Scope.** Closes stale backlog row BL-P1-PH42-API without new Master Spec body edits. Files touched: `_audit/REMEDIATION_BACKLOG.md`, `_audit/V711_BACKLOG_INDEX.md`, this reconciliation log, and `_audit/PHASE_V72REM_PHASE_4_2_API_STATUS_SYNC_VERIFY.md`. Pre-edit backups: `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-2-api-status-sync-2026-06-22.md` (md5 `0128fb83c0b9deb3de0cc680a7c155b7`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-2-api-status-sync-2026-06-22.md` (md5 `0506768e38ed9e98f82af9389de4c5b4`); `legacy-import:_versions/RECONCILIATION_pre-phase-4-2-api-status-sync-2026-06-22.md` (md5 `89d28a75a847558c0ec5e5cd83e5410f`).
 
 **Conflict surfaced.** `_audit/REMEDIATION_BACKLOG.md` row 24 listed `D-4.2-001…005`, but the canonical ledger and `_audit/_scratch_p1_clusters.md` identify the live Phase 4.2 API P1 cluster as D-4.2-002 / D-4.2-003 / D-4.2-011 / D-4.2-018 / D-4.2-023. The `D-4.2-001…005` shorthand mixed one P0 enum row (D-4.2-001), two API rows (D-4.2-002 / -003), and two error-code rows (D-4.2-004 / -005). Per source-of-truth hierarchy and D-CONS latest-status discipline, the canonical defect rows win.
 
@@ -15710,7 +15710,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 24 Seller Inbox / NDA / Seller Analytics P1 Continuation (2026-06-22)
 
-**Scope.** Focused closure for D-24-006, D-24-008, D-24-015, D-24-016, D-24-017, D-24-018, D-24-019, D-24-022, and D-24-028. Master Spec body touched: §4.5.3, §4.5.3.1, §4.5.3.2, §6.8.4.1, §24.2, §24.3, §24.5, §24.6, §32.5, §32.10.4.B, §38.8.2, §39, §40.2, §44.1, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-24 target rows, V711 count posture, REMEDIATION_BACKLOG Phase 24 row/update, and AE-V72REM-PH24-SELLER-INBOX-NDA-ANALYTICS-01. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `_versions/DEFECT_LEDGER_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `_versions/V711_BACKLOG_INDEX_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `_versions/REMEDIATION_BACKLOG_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `_versions/RECONCILIATION_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`.
+**Scope.** Focused closure for D-24-006, D-24-008, D-24-015, D-24-016, D-24-017, D-24-018, D-24-019, D-24-022, and D-24-028. Master Spec body touched: §4.5.3, §4.5.3.1, §4.5.3.2, §6.8.4.1, §24.2, §24.3, §24.5, §24.6, §32.5, §32.10.4.B, §38.8.2, §39, §40.2, §44.1, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-24 target rows, V711 count posture, REMEDIATION_BACKLOG Phase 24 row/update, and AE-V72REM-PH24-SELLER-INBOX-NDA-ANALYTICS-01. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `legacy-import:_versions/RECONCILIATION_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase24-seller-inbox-nda-analytics-p1-2026-06-22.md`.
 
 **Adjudication.**
 
@@ -15741,7 +15741,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase S17 Workspace Analytics P1 Pass (2026-06-22)
 
-**Scope.** Focused closure for D-S17-001, D-S17-002, D-S17-003, D-S17-004, D-S17-005, D-S17-006, D-S17-009b, D-S17-010, D-S17-012, D-S17-015, D-S17-016, D-S17-019, and D-S17-024. Master Spec body touched: §4.3.31, §4.3.32, §4.3.33, §5.11, §6.8.4.3, §17, §32.5, §32.10.3.A, §34.1.1, §39, §40.2, §44.1, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-S17 target rows, V711 count posture, REMEDIATION_BACKLOG PHASE17 alias row/update, and AE-V72REM-PHS17-WORKSPACE-ANALYTICS-P1-01. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `da184cda45dcfbdaaf92cd3ca1458972`); `_versions/DEFECT_LEDGER_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `febea3964a82707fe0268192cc181cbb`); `_versions/V711_BACKLOG_INDEX_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `125e8efdeab492b315a626115db2338a`); `_versions/REMEDIATION_BACKLOG_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `d8d2b389661959c0a13e0e08865fea8d`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `d84dd387373b24cbd8c9193e52212fa5`); `_versions/RECONCILIATION_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `8f515d8fe15e472a4b7f6b32bae531c2`).
+**Scope.** Focused closure for D-S17-001, D-S17-002, D-S17-003, D-S17-004, D-S17-005, D-S17-006, D-S17-009b, D-S17-010, D-S17-012, D-S17-015, D-S17-016, D-S17-019, and D-S17-024. Master Spec body touched: §4.3.31, §4.3.32, §4.3.33, §5.11, §6.8.4.3, §17, §32.5, §32.10.3.A, §34.1.1, §39, §40.2, §44.1, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-S17 target rows, V711 count posture, REMEDIATION_BACKLOG PHASE17 alias row/update, and AE-V72REM-PHS17-WORKSPACE-ANALYTICS-P1-01. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `da184cda45dcfbdaaf92cd3ca1458972`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `febea3964a82707fe0268192cc181cbb`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `125e8efdeab492b315a626115db2338a`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `d8d2b389661959c0a13e0e08865fea8d`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `d84dd387373b24cbd8c9193e52212fa5`); `legacy-import:_versions/RECONCILIATION_pre-phase-s17-workspace-analytics-p1-2026-06-22.md` (md5 `8f515d8fe15e472a4b7f6b32bae531c2`).
 
 **Adjudication.** All 13 target P1 rows were true live issues against the current Master Spec.
 
@@ -15775,7 +15775,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 34.PXC Pricing Baseline Snapshot + Verification Criteria P1 Pass (2026-06-22)
 
-**Scope.** Focused Phase 34.PXC P1 closure for D-PXC-001, D-PXC-010, and D-PXC-014. Master Spec body touched: Citation Convention, §34 Authoring Intent / Source-of-truth precedence / Citation key, §34.14, §34.15, §34.16.2, §34.17, §34.18, and §4.4.21 VerificationReviewRecord prerequisites. New frozen provenance artifacts: `_integration/snapshots/MS_2.8_baseline.md`, `_integration/snapshots/MS_2.9_baseline.md`, `_integration/snapshots/MS_2.11_baseline.md`, and `_integration/snapshots/MS_2.12_baseline.md`. Ledgers touched: D-PXC target rows, D-PXC-011 / D-PXC-013 status-sync notes, V711 count posture, and REMEDIATION_BACKLOG current-delta notes. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `968388b5861ac8a6c88bdb2f9c388199`); `_versions/DEFECT_LEDGER_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `5a817d2d50cd643358c91002d17f6ffe`); `_versions/V711_BACKLOG_INDEX_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `80f294f40da3ee0f172cd198ccb42348`); `_versions/REMEDIATION_BACKLOG_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `ea63de9c21f5cc0105c00539cd514ddd`); `_versions/RECONCILIATION_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `7b46e177704c64f05e910c93d985b382`).
+**Scope.** Focused Phase 34.PXC P1 closure for D-PXC-001, D-PXC-010, and D-PXC-014. Master Spec body touched: Citation Convention, §34 Authoring Intent / Source-of-truth precedence / Citation key, §34.14, §34.15, §34.16.2, §34.17, §34.18, and §4.4.21 VerificationReviewRecord prerequisites. New frozen provenance artifacts: `_integration/snapshots/MS_2.8_baseline.md`, `_integration/snapshots/MS_2.9_baseline.md`, `_integration/snapshots/MS_2.11_baseline.md`, and `_integration/snapshots/MS_2.12_baseline.md`. Ledgers touched: D-PXC target rows, D-PXC-011 / D-PXC-013 status-sync notes, V711 count posture, and REMEDIATION_BACKLOG current-delta notes. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `968388b5861ac8a6c88bdb2f9c388199`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `5a817d2d50cd643358c91002d17f6ffe`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `80f294f40da3ee0f172cd198ccb42348`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `ea63de9c21f5cc0105c00539cd514ddd`); `legacy-import:_versions/RECONCILIATION_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` (md5 `7b46e177704c64f05e910c93d985b382`).
 
 **Adjudication.** All 3 target P1 rows were true live issues against the current Master Spec.
 
@@ -15802,7 +15802,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 41 Email Domain P1 Pass (2026-06-22)
 
-**Scope.** Focused closure for D-41-001, D-41-002, D-41-003, D-41-004, D-41-005, D-41-006, D-41-007, D-41-008, D-41-012, and D-41-014. Master Spec body touched: §4.9, §5.11, §6.8.4.3, §6.8.4.8, §6.8.5, §34.1.1, §34.1.2, §39, §40.2, §41, §48.4.1, §48.4.8, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-41 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and AE-V72REM-PH41-EMAIL-DOMAIN-01. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `cf6d7c3991591e20b7c36974df8bccc9`); `_versions/DEFECT_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `d8c3cf4b567ea6cadb6f3d758be56975`); `_versions/V711_BACKLOG_INDEX_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `7b77ab1983d9ceef9d255513b104763a`); `_versions/REMEDIATION_BACKLOG_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `e40a0105dd3f7846a9be231707e64cc4`); `_versions/RECONCILIATION_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `e73f1e9064000078e72a58fd1ecbff1d`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `dcf9c3d26172a4e2f3ee58a642f83246`).
+**Scope.** Focused closure for D-41-001, D-41-002, D-41-003, D-41-004, D-41-005, D-41-006, D-41-007, D-41-008, D-41-012, and D-41-014. Master Spec body touched: §4.9, §5.11, §6.8.4.3, §6.8.4.8, §6.8.5, §34.1.1, §34.1.2, §39, §40.2, §41, §48.4.1, §48.4.8, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-41 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and AE-V72REM-PH41-EMAIL-DOMAIN-01. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `cf6d7c3991591e20b7c36974df8bccc9`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `d8c3cf4b567ea6cadb6f3d758be56975`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `7b77ab1983d9ceef9d255513b104763a`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `e40a0105dd3f7846a9be231707e64cc4`); `legacy-import:_versions/RECONCILIATION_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `e73f1e9064000078e72a58fd1ecbff1d`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` (md5 `dcf9c3d26172a4e2f3ee58a642f83246`).
 
 **Adjudication.** All 10 target P1 rows were true live issues against the current Master Spec.
 
@@ -15833,7 +15833,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 11 M.1 / CI Status-Sync P1 Pass (2026-06-22)
 
-**Scope.** Focused Phase 11 closure for D-11.1-001, D-11.1-002, D-11.1-003, D-11.1-004, D-11.2-001, D-11.2-002, D-11.2-005, D-11.2-006, D-11.2-007, D-11.2-008, D-11.2-012, and D-11.2-013. Master Spec body touched: Appendix M.1 only. Ledgers touched: D-11 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V11-04 partial-backfill note, and this reconciliation block. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `058aa11736757859d31121fe035243dd`); `_versions/DEFECT_LEDGER_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `42c5f9f733d79ee915c4d2a0933d61ce`); `_versions/V711_BACKLOG_INDEX_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `1eee958f88f3db4a1c8377000f1b272f`); `_versions/REMEDIATION_BACKLOG_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `5ed3993af91f920470340db412c18f1e`); `_versions/RECONCILIATION_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `ba2dcee5d9a67b633171365475b54709`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `5a61db54301fd632b175b8d0788b3d3d`).
+**Scope.** Focused Phase 11 closure for D-11.1-001, D-11.1-002, D-11.1-003, D-11.1-004, D-11.2-001, D-11.2-002, D-11.2-005, D-11.2-006, D-11.2-007, D-11.2-008, D-11.2-012, and D-11.2-013. Master Spec body touched: Appendix M.1 only. Ledgers touched: D-11 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V11-04 partial-backfill note, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `058aa11736757859d31121fe035243dd`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `42c5f9f733d79ee915c4d2a0933d61ce`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `1eee958f88f3db4a1c8377000f1b272f`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `5ed3993af91f920470340db412c18f1e`); `legacy-import:_versions/RECONCILIATION_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `ba2dcee5d9a67b633171365475b54709`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-11-m1-ci-status-p1-2026-06-22.md` (md5 `5a61db54301fd632b175b8d0788b3d3d`).
 
 **Adjudication.** Four target rows were true live Appendix M.1 mapping issues. Eight target rows were stale-open canonical statuses because current Master Spec §M.4 / §M.5 plus AE-V11-06 / AE-V72REM-09 already cover the filed gaps.
 
@@ -15868,7 +15868,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 43 Retirement Status-Sync Pass (2026-06-22)
 
-**Scope.** Status-sync closure for D-43-007, D-43-008, D-43-009, D-43-010, D-43-011, D-43-012, D-43-013, D-43-014, D-43-015, D-43-016, D-43-017, and D-43-018. Master Spec body touched: none. Ledgers touched: D-43 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and this reconciliation block. Pre-edit backups: `_versions/DEFECT_LEDGER_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `3cd4d50cbe6b041820205ea4c5e7855f`); `_versions/V711_BACKLOG_INDEX_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `1dca766e92ce965081c5f95eecd96a6e`); `_versions/REMEDIATION_BACKLOG_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `6a40e76c7d64ae755e2742f7a9786f2e`); `_versions/RECONCILIATION_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `be983415f6c684b0f0158f1d5e1537ff`).
+**Scope.** Status-sync closure for D-43-007, D-43-008, D-43-009, D-43-010, D-43-011, D-43-012, D-43-013, D-43-014, D-43-015, D-43-016, D-43-017, and D-43-018. Master Spec body touched: none. Ledgers touched: D-43 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/DEFECT_LEDGER_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `3cd4d50cbe6b041820205ea4c5e7855f`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `1dca766e92ce965081c5f95eecd96a6e`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `6a40e76c7d64ae755e2742f7a9786f2e`); `legacy-import:_versions/RECONCILIATION_pre-phase-43-retirement-status-sync-2026-06-22.md` (md5 `be983415f6c684b0f0158f1d5e1537ff`).
 
 **Adjudication.** All 12 target P1 rows were stale-open canonical statuses. The current Master Spec already carries the Phase V12 §43 retirement pack and successor §50 contracts. AE-V12-01 is approved and explicitly closes D-43-001 through D-43-021.
 
@@ -15895,7 +15895,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 4.7 Organizational Intelligence P1 Pass (2026-06-22)
 
-**Scope.** Focused closure for D-4.7-001, D-4.7-002, D-4.7-003, D-4.7-004, D-4.7-005, D-4.7-006, D-4.7-008, D-4.7-010, D-4.7-011, D-4.7-012, D-4.7-013, and D-4.7-014. Master Spec body touched: §4.3.7, new §4.3.7.1, §6.8.4.1, §6.8.4.3, §16, §32.5, §39, §40.2, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-4.7 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and AE-V72REM-PH4.7-ORG-INTELLIGENCE-P1-01. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `c8b42bbeacc471fbf534b174c7c37456`); `_versions/DEFECT_LEDGER_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `fb2663820c1985e31e68aa35d47c5189`); `_versions/V711_BACKLOG_INDEX_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `6a549023f3fbe6fba07a2cb5dabc2821`); `_versions/REMEDIATION_BACKLOG_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `806291545ab00f3c0f5fe1619ca4f012`); `_versions/RECONCILIATION_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `8c8d3f95d08a618804729dacc25c1ed2`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `17aade127ce890ae063436a6d6399657`).
+**Scope.** Focused closure for D-4.7-001, D-4.7-002, D-4.7-003, D-4.7-004, D-4.7-005, D-4.7-006, D-4.7-008, D-4.7-010, D-4.7-011, D-4.7-012, D-4.7-013, and D-4.7-014. Master Spec body touched: §4.3.7, new §4.3.7.1, §6.8.4.1, §6.8.4.3, §16, §32.5, §39, §40.2, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-4.7 target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and AE-V72REM-PH4.7-ORG-INTELLIGENCE-P1-01. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `c8b42bbeacc471fbf534b174c7c37456`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `fb2663820c1985e31e68aa35d47c5189`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `6a549023f3fbe6fba07a2cb5dabc2821`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `806291545ab00f3c0f5fe1619ca4f012`); `legacy-import:_versions/RECONCILIATION_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `8c8d3f95d08a618804729dacc25c1ed2`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-7-org-intelligence-p1-2026-06-22.md` (md5 `17aade127ce890ae063436a6d6399657`).
 
 **Adjudication.** All 12 target P1 rows were true live issues against the current Master Spec. Several rows had partial stale evidence because later V9/V12 work had already added adjacent retention / DSAR fragments, but each still had a live §16 / §4 / §32 / appendix tail that required canonical remediation.
 
@@ -15928,7 +15928,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 8 Intelligence Entity Status-Sync Pass (2026-06-22)
 
-**Scope.** Status-sync closure for D-V8.1-026 after the Phase 4.7 Organizational Intelligence P1 remediation. Master Spec body touched: none in this pass. Ledgers touched: D-V8.1-026 canonical row, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and this reconciliation block. Pre-edit backups: `_versions/DEFECT_LEDGER_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `f7913044bc00bc1db366e6ea89013659`); `_versions/V711_BACKLOG_INDEX_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `a667988a202709f358218695597d2159`); `_versions/REMEDIATION_BACKLOG_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `791ef33bb1b7852c77323332fae9c5dd`); `_versions/RECONCILIATION_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `3b160712511ceef60a284df70ed8d7c4`).
+**Scope.** Status-sync closure for D-V8.1-026 after the Phase 4.7 Organizational Intelligence P1 remediation. Master Spec body touched: none in this pass. Ledgers touched: D-V8.1-026 canonical row, V711 count posture, REMEDIATION_BACKLOG current-delta notes, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `f7913044bc00bc1db366e6ea89013659`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `a667988a202709f358218695597d2159`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `791ef33bb1b7852c77323332fae9c5dd`); `legacy-import:_versions/RECONCILIATION_pre-phase-8-intelligence-entity-status-sync-2026-06-22.md` (md5 `3b160712511ceef60a284df70ed8d7c4`).
 
 **Adjudication.** D-V8.1-026 was a true issue at filing, but is stale-open against the current Master Spec after the Phase 4.7 pass. The filed gap was that §32.5 Intelligence endpoints and Appendix I `invalid_briefing_id` referenced `IntelligenceBriefing` / Intelligence Cache Entry while §4 had no entity definitions.
 
@@ -15946,7 +15946,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase CONS Pricing Core P1 Pass (2026-06-22)
 
-**Scope.** Focused closure for D-CONS-003, D-CONS-004, D-CONS-005, D-CONS-006 (product/pricing row only), D-CONS-007, D-CONS-008, D-CONS-009, D-CONS-010, D-CONS-011, D-CONS-012, and D-CONS-013. Master Spec body touched: §4.8.1, §4.8.3, §4.8.5, §4.8.6, §4.8.7, new §4.8.14, §31.8.4, §31.8.12, §32.8.4, §34, §44.6, §48, §49, Appendix C, Appendix F, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-CONS target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PHCONS-PRICING-CORE-P1-01, and this reconciliation block. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `c1fabef4854b78a4b954e611d01eb936`); `_versions/DEFECT_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `f240534656bbf26e224f6a82f2b1fd5d`); `_versions/V711_BACKLOG_INDEX_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `5fda1f78ed82d42e02f1301dbcc04ef3`); `_versions/REMEDIATION_BACKLOG_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `62216d8f67771d5fc89de70a7f1a7f60`); `_versions/RECONCILIATION_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `7696e4a43b666e9f8574d828a9c6439b`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `15f4a8b9bcb098a55bee057c13c6eeec`).
+**Scope.** Focused closure for D-CONS-003, D-CONS-004, D-CONS-005, D-CONS-006 (product/pricing row only), D-CONS-007, D-CONS-008, D-CONS-009, D-CONS-010, D-CONS-011, D-CONS-012, and D-CONS-013. Master Spec body touched: §4.8.1, §4.8.3, §4.8.5, §4.8.6, §4.8.7, new §4.8.14, §31.8.4, §31.8.12, §32.8.4, §34, §44.6, §48, §49, Appendix C, Appendix F, Appendix G, Appendix I, Appendix J, Appendix K, and Appendix M. Ledgers touched: D-CONS target rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PHCONS-PRICING-CORE-P1-01, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `c1fabef4854b78a4b954e611d01eb936`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `f240534656bbf26e224f6a82f2b1fd5d`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `5fda1f78ed82d42e02f1301dbcc04ef3`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `62216d8f67771d5fc89de70a7f1a7f60`); `legacy-import:_versions/RECONCILIATION_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `7696e4a43b666e9f8574d828a9c6439b`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` (md5 `15f4a8b9bcb098a55bee057c13c6eeec`).
 
 **Adjudication.** Nine target rows were true live P1 issues requiring canonical spec remediation. Two target rows were stale/status-sync after current endpoint/webhook coverage but still needed stale placeholder cleanup in §34. No rows are blocked by a missing product decision.
 
@@ -15978,7 +15978,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 4.11 Inbox and Pulse P1 Continuation Pass (2026-06-22)
 
-**Scope.** Focused closure for D-4.11-006, D-4.11-008, D-4.11-009, D-4.11-010, D-4.11-011, D-4.11-012, D-4.11-013, D-4.11-014, D-4.11-015, and D-4.11-016, plus adjacent lower-severity rows D-4.11-017, D-4.11-020, D-4.11-021, D-4.11-022, D-4.11-024, D-4.11-025, D-4.11-028, D-4.11-029, D-4.11-030, D-4.11-031, and D-4.11-032. Master Spec body touched: §5.11, §20, §31.14, §32.5, §32.10.3.B, §38.8.2, §41.2, §44.6.1, Appendix C, Appendix G, Appendix I, Appendix J, and Appendix M. Ledgers touched: target D-4.11 rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PH4P411-INBOX-PULSE-CONT-01, and this reconciliation block. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `9e4562f2d058d88517cf8ba8277628f9`); `_versions/DEFECT_LEDGER_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `aca88057fea9797ed9d623547272179a`); `_versions/V711_BACKLOG_INDEX_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `642faa2aaca8005ac5d656d39cf46c7a`); `_versions/REMEDIATION_BACKLOG_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `572e353d9a334ca9d9e9831122fde29c`); `_versions/RECONCILIATION_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `526d7971035f1a8cd7741c89ca16cdd5`); `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `ed67cfbc1610493b363a3d27eba55770`).
+**Scope.** Focused closure for D-4.11-006, D-4.11-008, D-4.11-009, D-4.11-010, D-4.11-011, D-4.11-012, D-4.11-013, D-4.11-014, D-4.11-015, and D-4.11-016, plus adjacent lower-severity rows D-4.11-017, D-4.11-020, D-4.11-021, D-4.11-022, D-4.11-024, D-4.11-025, D-4.11-028, D-4.11-029, D-4.11-030, D-4.11-031, and D-4.11-032. Master Spec body touched: §5.11, §20, §31.14, §32.5, §32.10.3.B, §38.8.2, §41.2, §44.6.1, Appendix C, Appendix G, Appendix I, Appendix J, and Appendix M. Ledgers touched: target D-4.11 rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PH4P411-INBOX-PULSE-CONT-01, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `9e4562f2d058d88517cf8ba8277628f9`); `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `aca88057fea9797ed9d623547272179a`); `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `642faa2aaca8005ac5d656d39cf46c7a`); `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `572e353d9a334ca9d9e9831122fde29c`); `legacy-import:_versions/RECONCILIATION_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `526d7971035f1a8cd7741c89ca16cdd5`); `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-11-inbox-pulse-p1-continuation-2026-06-22.md` (md5 `ed67cfbc1610493b363a3d27eba55770`).
 
 **Adjudication.** All 10 target P1 rows were true live issues against the current Master Spec. The adjacent lower-severity rows listed below closed because the same canonical patch resolved their enum, AC, timing, audience, preference, firewall, Appendix M, idempotency, degraded-mode, and stale-channel evidence. No row in this batch is blocked by a missing product decision.
 
@@ -16020,7 +16020,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 4.12 Sourcera Agent Core P1 Continuation Pass (2026-06-23)
 
-**Scope.** Focused closure for D-4.12-001, D-4.12-013, D-4.12-018, D-4.12-019, D-4.12-025, D-4.12-029, and D-4.12-035, plus adjacent lower-severity rows D-4.12-002, D-4.12-003, D-4.12-009, D-4.12-014, D-4.12-017, D-4.12-021, D-4.12-024, D-4.12-026, D-4.12-027, D-4.12-028, D-4.12-030, D-4.12-031, D-4.12-032, D-4.12-033, D-4.12-034, D-4.12-036, D-4.12-037, D-4.12-038, D-4.12-039, and D-4.12-040. Master Spec body touched: §4.2.4, §4.8.2, §4.8.15, §4.8.16, §5.11, §8.5, §21, §32.5, §32.10.6, §34.5.3, §34.8.5, §39, §40.2, §44.1, §44.2, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, Appendix M.1, and Appendix M.5. Ledgers touched: target D-4.12 rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PH4P412-AGENT-CORE-01, and this reconciliation block. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `_versions/DEFECT_LEDGER_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `_versions/RECONCILIATION_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-12-agent-core-p1-2026-06-23.md`.
+**Scope.** Focused closure for D-4.12-001, D-4.12-013, D-4.12-018, D-4.12-019, D-4.12-025, D-4.12-029, and D-4.12-035, plus adjacent lower-severity rows D-4.12-002, D-4.12-003, D-4.12-009, D-4.12-014, D-4.12-017, D-4.12-021, D-4.12-024, D-4.12-026, D-4.12-027, D-4.12-028, D-4.12-030, D-4.12-031, D-4.12-032, D-4.12-033, D-4.12-034, D-4.12-036, D-4.12-037, D-4.12-038, D-4.12-039, and D-4.12-040. Master Spec body touched: §4.2.4, §4.8.2, §4.8.15, §4.8.16, §5.11, §8.5, §21, §32.5, §32.10.6, §34.5.3, §34.8.5, §39, §40.2, §44.1, §44.2, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, Appendix M.1, and Appendix M.5. Ledgers touched: target D-4.12 rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PH4P412-AGENT-CORE-01, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-4-12-agent-core-p1-2026-06-23.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-12-agent-core-p1-2026-06-23.md`.
 
 **Adjudication.** Seven target rows were true live P1 issues against the current Master Spec. The adjacent lower-severity rows listed below closed because the same canonical patch resolved their plan-gating, data-model, API, privacy, DSAR, residency, observability, enum, glossary, and catalog-completeness evidence. No row in this batch is blocked by a missing product decision.
 
@@ -16067,7 +16067,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 12 Policy Ingestion P1 Pass (2026-06-23)
 
-**Scope.** Focused closure for D-12-001, D-12-003, D-12-005, D-12-007, D-12-009, D-12-010, D-12-011, D-12-013, D-12-018, and D-12-022, plus superseded D-4.3 alias rows D-4.3-001, D-4.3-002, D-4.3-007, D-4.3-009, D-4.3-010, D-4.3-011, D-4.3-014, D-4.3-015, and D-4.3-016. Master Spec body touched: §4.3.34-§4.3.37, §5.8, §12, §21.4.1, §32.5, §32.10.3.C, §34.3.4, §34.8.5, §39, §40.2, §44.1, Appendix I, Appendix K, Appendix L.9-L.10, Appendix M.1, and Appendix M.5. Ledgers touched: target D-12 / D-4.3 rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PH12-POLICY-INGESTION-P1-01, and this reconciliation block. Pre-edit backups: `_versions/Sourcera_Master_Spec_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `_versions/DEFECT_LEDGER_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `_versions/V711_BACKLOG_INDEX_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `_versions/REMEDIATION_BACKLOG_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `_versions/RECONCILIATION_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-12-policy-ingestion-p1-2026-06-23.md`.
+**Scope.** Focused closure for D-12-001, D-12-003, D-12-005, D-12-007, D-12-009, D-12-010, D-12-011, D-12-013, D-12-018, and D-12-022, plus superseded D-4.3 alias rows D-4.3-001, D-4.3-002, D-4.3-007, D-4.3-009, D-4.3-010, D-4.3-011, D-4.3-014, D-4.3-015, and D-4.3-016. Master Spec body touched: §4.3.34-§4.3.37, §5.8, §12, §21.4.1, §32.5, §32.10.3.C, §34.3.4, §34.8.5, §39, §40.2, §44.1, Appendix I, Appendix K, Appendix L.9-L.10, Appendix M.1, and Appendix M.5. Ledgers touched: target D-12 / D-4.3 rows, V711 count posture, REMEDIATION_BACKLOG current-delta notes, AE-V72REM-PH12-POLICY-INGESTION-P1-01, and this reconciliation block. Pre-edit backups: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `legacy-import:_versions/DEFECT_LEDGER_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `legacy-import:_versions/RECONCILIATION_pre-phase-12-policy-ingestion-p1-2026-06-23.md`; `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-12-policy-ingestion-p1-2026-06-23.md`.
 
 **Adjudication.** All target rows were true live P1 issues against the current Master Spec. The D-4.3 rows are aliases/superseded rows for the same §12 Policy Ingestion contract and close only where the canonical D-12 remediation covers the filed evidence. No row in this batch is blocked by a missing product decision.
 
@@ -16474,7 +16474,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 ## v7.2.0-REM Program -> Phase 5.2 KB / MCP P1 Pass (2026-06-23)
 
-**Scope.** D-5.2-001, D-5.2-002, D-5.2-003, D-5.2-004, D-5.2-005, D-5.2-006, D-5.2-009, D-5.2-017, D-5.2-018, and D-5.2-021. Sources read: Master Spec §4.8, §22.2.1, §22.3, §22.4, §22.8, §22.15.1, §22.16, §22.17, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, and §M.5; `_audit/DEFECT_LEDGER.md`; `_audit/V711_BACKLOG_INDEX.md`; `_audit/REMEDIATION_BACKLOG.md`; `_integration/AUTHORED_EXTENSIONS_LEDGER.md`; historical `_versions/KB_Engineering_Spec_retired_2026-04-26.md` only as provenance where the current Master Spec cited retired material.
+**Scope.** D-5.2-001, D-5.2-002, D-5.2-003, D-5.2-004, D-5.2-005, D-5.2-006, D-5.2-009, D-5.2-017, D-5.2-018, and D-5.2-021. Sources read: Master Spec §4.8, §22.2.1, §22.3, §22.4, §22.8, §22.15.1, §22.16, §22.17, Appendix C, Appendix G, Appendix I, Appendix J, Appendix K, and §M.5; `_audit/DEFECT_LEDGER.md`; `_audit/V711_BACKLOG_INDEX.md`; `_audit/REMEDIATION_BACKLOG.md`; `_integration/AUTHORED_EXTENSIONS_LEDGER.md`; historical `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` only as provenance where the current Master Spec cited retired material.
 
 **Adjudication.** Seven target P1 rows were true live issues. D-5.2-003 was a stale-open status sync against the current §22.3.1 alias contract. D-5.2-006 and D-5.2-018 were adjacent P2 rows closed because the same patch resolved the §22.8 Authored Extension flagging gap and the auth-failure event-name drift. No row was duplicate. No row remains blocked by missing product decision.
 
@@ -16931,7 +16931,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 
 **Conflict resolution.** Buyer Pricing already treated integrations as available from Solo upward, while the prior Master Spec body had only an Enterprise-flavored **Custom Integrations** row and a vague §31.3 export target table. Source hierarchy preserves Buyer Pricing for pricing posture and resolves the Master Spec gap by adding the narrower §34.1.1 **Phase 13 Standard Integration Export** plan row for standard targets while leaving custom target adapters Enterprise-only under **Custom Integrations**.
 
-**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `_versions/Sourcera_Master_Spec_pre-integration-export-p1-2026-06-24.md`, `_versions/DEFECT_LEDGER_pre-integration-export-p1-2026-06-24.md`, `_versions/V711_BACKLOG_INDEX_pre-integration-export-p1-2026-06-24.md`, `_versions/REMEDIATION_BACKLOG_pre-integration-export-p1-2026-06-24.md`, `_versions/RECONCILIATION_pre-integration-export-p1-2026-06-24.md`, and `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-integration-export-p1-2026-06-24.md`.
+**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `legacy-import:_versions/Sourcera_Master_Spec_pre-integration-export-p1-2026-06-24.md`, `legacy-import:_versions/DEFECT_LEDGER_pre-integration-export-p1-2026-06-24.md`, `legacy-import:_versions/V711_BACKLOG_INDEX_pre-integration-export-p1-2026-06-24.md`, `legacy-import:_versions/REMEDIATION_BACKLOG_pre-integration-export-p1-2026-06-24.md`, `legacy-import:_versions/RECONCILIATION_pre-integration-export-p1-2026-06-24.md`, and `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-integration-export-p1-2026-06-24.md`.
 
 **Change summary.**
 - §4.3.38 and §4.3.39 add `IntegrationExportConfiguration` and `IntegrationExportRun` with field tables, scope isolation, indexes, retention/DSAR/residency treatment, state transitions, and acceptance criteria.
@@ -16956,7 +16956,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 | :---- | :---- | :---- |
 | D-V8.1-001 | True issue | §32.5 now declares endpoint-detail ownership; §32.10.9 now defines endpoint matrices, request schemas, response envelopes, error sets, auth scopes, RBAC, rate-limit classes, idempotency, examples, and ACs for Workspaces, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Audit Events, and Users & Organization; Internal Comment index rows now use §25.7.9 canonical paths; Appendix I registers missing core errors; §M.5.68 adds recurrence guardrails. |
 
-**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `_versions/Sourcera_Master_Spec_pre-phase-8-1-core-api-p1-2026-06-24.md`, `_versions/DEFECT_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`, `_versions/V711_BACKLOG_INDEX_pre-phase-8-1-core-api-p1-2026-06-24.md`, `_versions/REMEDIATION_BACKLOG_pre-phase-8-1-core-api-p1-2026-06-24.md`, `_versions/RECONCILIATION_pre-phase-8-1-core-api-p1-2026-06-24.md`, and `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`.
+**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-1-core-api-p1-2026-06-24.md`, `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`, `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-1-core-api-p1-2026-06-24.md`, `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-1-core-api-p1-2026-06-24.md`, `legacy-import:_versions/RECONCILIATION_pre-phase-8-1-core-api-p1-2026-06-24.md`, and `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`.
 
 **Change summary.**
 - §32.5 now states that the section is an index and routes each live family to its full endpoint-detail owner.
@@ -16983,7 +16983,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 | D-CONS-001 | Stale as P1 blocker after propagation | Canonical P0/P1 status propagation is complete for the release-blocking surface. Exact-status scanner after this pass returns 0 open P0 and only D-11.4-001 as open P1. |
 | D-CONS-006 | Stale as P1 blocker after duplicate-count scan | Exact-status scanner after this pass returns 1 open P1 row / 1 unique ID (`D-11.4-001`), so there are no duplicated open P1 IDs. Broad duplicate-candidate review, if needed for P2/P3, remains lower-severity hygiene. |
 
-**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `_versions/DEFECT_LEDGER_pre-cons-ledger-p1-status-sync-2026-06-24.md`, `_versions/V711_BACKLOG_INDEX_pre-cons-ledger-p1-status-sync-2026-06-24.md`, `_versions/REMEDIATION_BACKLOG_pre-cons-ledger-p1-status-sync-2026-06-24.md`, and `_versions/RECONCILIATION_pre-cons-ledger-p1-status-sync-2026-06-24.md`.
+**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `legacy-import:_versions/DEFECT_LEDGER_pre-cons-ledger-p1-status-sync-2026-06-24.md`, `legacy-import:_versions/V711_BACKLOG_INDEX_pre-cons-ledger-p1-status-sync-2026-06-24.md`, `legacy-import:_versions/REMEDIATION_BACKLOG_pre-cons-ledger-p1-status-sync-2026-06-24.md`, and `legacy-import:_versions/RECONCILIATION_pre-cons-ledger-p1-status-sync-2026-06-24.md`.
 
 **Change summary.**
 - `_audit/DEFECT_LEDGER.md` transitions D-CONS-001 and D-CONS-006 to `remediated 2026-06-24` with explicit P1-scope closure rationale.
@@ -17005,7 +17005,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 | :---- | :---- | :---- |
 | D-11.4-001 | True issue | Master Spec Appendix M.1 now contains a Phase 11.5 Engine-Concept Backfill block with 135 explicit `D-11.4-001 backfill F-*` rows before §M.2. Each row is trace-backed to `_audit/SURFACE_ENGINE_TRACE.md` §5.2, uses positive `Tier visibility`, and introduces no new product behavior. |
 
-**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `_versions/Sourcera_Master_Spec_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `_versions/DEFECT_LEDGER_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `_versions/V711_BACKLOG_INDEX_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `_versions/REMEDIATION_BACKLOG_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `_versions/RECONCILIATION_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, and `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`.
+**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `legacy-import:_versions/DEFECT_LEDGER_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, `legacy-import:_versions/RECONCILIATION_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`, and `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-11-5-m1-engine-backfill-p1-2026-06-24.md`.
 
 **Change summary.**
 - Master Spec §M.1.2 now states that the Phase 11.5 block registers the P1 `engine_concept` subset; UX Design rows use `Companion: UX_Design_of_Sourcera.md ...`, while retired KB Engineering concepts bind to current §22 homes per the source hierarchy.
@@ -17032,7 +17032,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 | D-V72REM-M023-003 | True numerical-singleton issue | Duplicate Solo `$49` / `$59` / `$199` literals outside §34.1.1 / §34.1.2 / §34.2.1 / §34.2.2 / §34.2.5 are replaced with §34 citations or render-token placeholders. `solo_tier_numeric_single_source` returns 0 findings. |
 | D-V72REM-M023-004 | True retention-singleton citation issue | Retention / TTL restatements now carry §40.2 authority citations where required. `retention_singleton_section_40_2_canonical` returns 0 findings. |
 
-**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `_versions/Sourcera_Master_Spec_pre-advisory-lint-cleanup-2026-06-24.md`, `_versions/DEFECT_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md`, `_versions/V711_BACKLOG_INDEX_pre-advisory-lint-cleanup-2026-06-24.md`, `_versions/REMEDIATION_BACKLOG_pre-advisory-lint-cleanup-2026-06-24.md`, `_versions/RECONCILIATION_pre-advisory-lint-cleanup-2026-06-24.md`, and `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md`.
+**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `legacy-import:_versions/Sourcera_Master_Spec_pre-advisory-lint-cleanup-2026-06-24.md`, `legacy-import:_versions/DEFECT_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md`, `legacy-import:_versions/V711_BACKLOG_INDEX_pre-advisory-lint-cleanup-2026-06-24.md`, `legacy-import:_versions/REMEDIATION_BACKLOG_pre-advisory-lint-cleanup-2026-06-24.md`, `legacy-import:_versions/RECONCILIATION_pre-advisory-lint-cleanup-2026-06-24.md`, and `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md`.
 
 **Change summary.**
 - Master Spec changelog and §M.5.6 now record that the three advisory content-debt rows are remediated and that the gates return 0 findings.
@@ -17059,7 +17059,7 @@ Closes the actionable remainder of the M02.3 spec-tree surface. **Supersedes Inc
 | Solo exception | Solo remains excluded from customer-visible pooling because Solo's envelope is engine-side and hidden. Solo+Free still renders $0 customer-visible wallet budget; Solo+Paid renders the paid side only. |
 | Enterprise + Free | Enterprise committed-spend burn priority remains §34.10.1; the Free contribution appears as $5 included-budget headroom and does not change the committed-spend floor. |
 
-**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `_versions/Sourcera_Master_Spec_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/Decisions_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/DEFECT_LEDGER_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/REMEDIATION_BACKLOG_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/V711_BACKLOG_INDEX_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/RECONCILIATION_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `_versions/AGENTS_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, and `_versions/CLAUDE_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`.
+**Backups.** Pre-edit backups were created before this batch for the touched authoritative files: `legacy-import:_versions/Sourcera_Master_Spec_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/Decisions_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/DEFECT_LEDGER_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/REMEDIATION_BACKLOG_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/V711_BACKLOG_INDEX_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/RECONCILIATION_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, `legacy-import:_versions/AGENTS_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`, and `legacy-import:_versions/CLAUDE_pre-d-dec-005-wallet-pool-additive-2026-06-24.md`.
 
 **Change summary.**
 - `Sourcera_Master_Spec.md` updates §21.10, §34.10.3, §34.10.7, §34.12.5.B, §34.12.8, §34.20.3, and §M.5.61 to the additive-pool rule and adds runtime-pending guardrails `wallet_free_free_additive_pool` and `wallet_free_paid_additive_pool_solo_exception`.
@@ -22835,7 +22835,7 @@ The final current-document scan found stale Verification routing in `AGENTS.md`,
 
 ## v7.1.1 Portability and Downgrade P2 Closure (2026-07-12)
 
-**Scope.** D-34.19-011 through D-34.19-016 plus stale-open D-V7-005. Pre-edit backup: `_versions/2026-07-12-pre-portability-downgrade-p2/`.
+**Scope.** D-34.19-011 through D-34.19-016 plus stale-open D-V7-005. Pre-edit backup: `legacy-import:_versions/2026-07-12-pre-portability-downgrade-p2/`.
 
 **Conflicts surfaced.** D-34.19-015 proposed suspending namespace-migration penalties while assets are downgrade-bucketed, which conflicts with SellerSoftware soft-delete as an explicit lifecycle action and would defer a historical mutation until restoration. D-34.19-016 proposed §31.9 retry and §49 outage routing, but current §31.9 is CRM Sync and current §49 is Seller Onboarding; current chaos/outage authority is §46.10. Event-id / timestamp ordering alone also cannot establish current Stripe subscription state.
 
@@ -22849,7 +22849,7 @@ The final current-document scan found stale Verification routing in `AGENTS.md`,
 
 ## v7.1.1 Appendix C Delivery-Metadata P2 Closure (2026-07-12)
 
-**Scope.** D-V8.3-010, D-V8.3-011, D-V8.3-012, D-V8.3-014, D-V8.3-015, D-V8.3-019, D-V8.3-021, D-V8.3-022, D-V8.3-025, and D-V8.3-027. Pre-edit backup: `_versions/2026-07-12-pre-appendix-c-delivery-metadata-p2/`.
+**Scope.** D-V8.3-010, D-V8.3-011, D-V8.3-012, D-V8.3-014, D-V8.3-015, D-V8.3-019, D-V8.3-021, D-V8.3-022, D-V8.3-025, and D-V8.3-027. Pre-edit backup: `legacy-import:_versions/2026-07-12-pre-appendix-c-delivery-metadata-p2/`.
 
 **Current-source findings.** §41.2.4 already generated one EmailTemplate binding for every affirmative Appendix C email row; §41.3.1 / §41.5 already owned SPF/DKIM/DMARC; §6.8.4.8, §6.8.5 row 14, §29.7, §40.2, EmailSend, and EmailEvent already owned notification DSAR / retention. Those filed premises were stale. The live gaps were cross-table delivery metadata, bounded Push discovery, and M1–M8 companion-webhook registration.
 
@@ -22863,7 +22863,7 @@ The final current-document scan found stale Verification routing in `AGENTS.md`,
 
 ## v7.1.1 Phase 44 Performance and Solo Runtime-Contract P2 Closure (2026-07-12)
 
-**Scope.** D-44-002, D-44-004, D-44-009, D-44-010, D-44-011, D-44-014, D-44-015, D-44-018, D-44-019, and D-44-020. Pre-edit backup: `_versions/2026-07-12-pre-phase44-runtime-p2/`.
+**Scope.** D-44-002, D-44-004, D-44-009, D-44-010, D-44-011, D-44-014, D-44-015, D-44-018, D-44-019, and D-44-020. Pre-edit backup: `legacy-import:_versions/2026-07-12-pre-phase44-runtime-p2/`.
 
 **Conflicts surfaced.** The filed webhook rate-limit recommendation treated Appendix F.1 `standard` delivery retry as an API rate-limit class. The old `solo_engine_metering_parity` prose also required every decision row to use provider settlement even though pre-provider throttling intentionally makes no provider call. The runtime-active Seller Maya preservation detector encoded that old contradiction.
 
@@ -22877,7 +22877,7 @@ The final current-document scan found stale Verification routing in `AGENTS.md`,
 
 ## v7.1.1 Phase 42 Observability P2 Closure (2026-07-12)
 
-**Scope.** D-42-022 through D-42-029. Backup: `_versions/2026-07-12-pre-phase42-observability-p2/`.
+**Scope.** D-42-022 through D-42-029. Backup: `legacy-import:_versions/2026-07-12-pre-phase42-observability-p2/`.
 
 **Current-source result.** §42.6.7 already repaired the broken Ops citations; §42.6.3–§42.6.6 already defined meta-observability fallback, post-retry delivery alarms, hysteresis, and false-positive measurement; §42.18 already owned device-class divergence; §42.6.2 already owned Sentry routing, PII, residency, retention, and correlation.
 

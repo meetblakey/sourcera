@@ -56,7 +56,7 @@ Runtime wiring for all three gates is deferred to M02.3 (1 gate) / M11.3 (1 gate
 
 | Backup | Size (bytes) | md5 | Phase |
 |---|---|---|---|
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md` | 6,321,066 | `2be237b6f537fa904ea1de8b2ca7dad7` | Phase 5 |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md` | 6,321,066 | `2be237b6f537fa904ea1de8b2ca7dad7` | Phase 5 |
 
 Pre-edit baseline captured 2026-05-20 immediately prior to v7.2.0-REM Phase 5 spec edits. The post-Phase-4.5 corpus is the baseline; the same md5 is recorded in the AE Ledger row body-landing trace and in the §M.5.17 closure paragraph. Backup verified by file-listing + md5sum at the canonical path; revert chain intact.
 
@@ -219,7 +219,7 @@ For the Phase 5 closure, three realistic failure modes — spec-side regression,
 
 - ✓ Self-challenge pass (10 questions, all PASS)
 - ✓ Counterfactual pass (3 failure modes, all addressed)
-- ✓ Pre-edit backup taken (`_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md`; 6,321,066 bytes; md5 `2be237b6f537fa904ea1de8b2ca7dad7`; revert chain intact; backup file verified at canonical path via file-listing + md5sum)
+- ✓ Pre-edit backup taken (`legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-D-RES-004-2026-05-20.md`; 6,321,066 bytes; md5 `2be237b6f537fa904ea1de8b2ca7dad7`; revert chain intact; backup file verified at canonical path via file-listing + md5sum)
 - ✓ Structural closures: D-RES-004 (P0) + D-RES-015 (P1, in-place sibling) + D-V14-007 (P2, parent-closure cross-flag) all `open → remediated 2026-05-20` in canonical DEFECT_LEDGER rows (L3886, L3897, L6046) + supplementary backlog-table rows (L4041, L4042, L6109) per D-CONS-001 P1 canonical-row-status discipline
 - ✓ AE-V72REM-06 (program-level scope row): `body_landed_2026-05-20; pending Engineering Lead + Finance Lead counter-signature` at AE Ledger L611
 - ✓ AE-V72REM-PH5-01 (closure-note row): `pending` ratification at v7.1.0a hot-patch stamp T-7 days per v7.2.0-REM Program stamp-gate batching contract at AE Ledger L904
@@ -233,7 +233,7 @@ For the Phase 5 closure, three realistic failure modes — spec-side regression,
 - ✓ Zero open P0 defects in Phase 5 scope (D-RES-004 `remediated`; the absorbed P1 + P2 siblings also `remediated`)
 - ⏸ Two v7.2.0-REM Phase 5 AE ratifications pending v7.1.0a hot-patch stamp (AE-V72REM-06 + AE-V72REM-PH5-01); NOT a Phase 5 blocker per v7.2.0-REM Program stamp-gate batching contract
 - ⏸ Three §M.5.17 CI gate runtime wirings deferred to M02.3 (1 gate) + M11.3 (1 gate) + M24.3 (1 gate) implementation packs per `Build_Execution_Strategy.md` §11 and `Linear_Execution_Blueprint.md` §5; NOT a Phase 5 blocker
-- ✓ Appendix I / Appendix C / Appendix G / Loops.so body-side row authoring (4 error codes + 1 forward-tracked code + 4 webhook events + 5 PostHog events + 2 Loops.so templates + 1 bridge-firewall invariant) **body_landed_2026-05-20** in the post-spec-edit Phase 5 hardening pass (per the user "fix everything" directive). Landing sites: Appendix I `#appendix-i-v72rem-phase-5`; Appendix C `#appendix-c-v72rem-phase-5`; Appendix G `#appendix-g-v72rem-phase-5`. Pre-edit Master Spec backup: `_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-PH5-bodyland-2026-05-20.md` (6,364,679 bytes; md5 `d0e99c9fb33e096a84bfb5eb8c4c6abd`). Cross-reference targets in §34.10.5.A + §M.5.17 cite forms validated. The v7.1.0a hot-patch stamp gate no longer carries this body-landing as an open dependency.
+- ✓ Appendix I / Appendix C / Appendix G / Loops.so body-side row authoring (4 error codes + 1 forward-tracked code + 4 webhook events + 5 PostHog events + 2 Loops.so templates + 1 bridge-firewall invariant) **body_landed_2026-05-20** in the post-spec-edit Phase 5 hardening pass (per the user "fix everything" directive). Landing sites: Appendix I `#appendix-i-v72rem-phase-5`; Appendix C `#appendix-c-v72rem-phase-5`; Appendix G `#appendix-g-v72rem-phase-5`. Pre-edit Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-PH5-bodyland-2026-05-20.md` (6,364,679 bytes; md5 `d0e99c9fb33e096a84bfb5eb8c4c6abd`). Cross-reference targets in §34.10.5.A + §M.5.17 cite forms validated. The v7.1.0a hot-patch stamp gate no longer carries this body-landing as an open dependency.
 - ⏸ D-RES-007 forward-tracked (§1.6.1 Org-side residency-change state machine + §6.8 DSAR deadlock-resolution + §32 endpoint + Appendix I error codes) — separate workstream landing at v7.1.1 stamp; NOT a Phase 5 blocker; the forward-link `§34.10.5.A → §1.6.1` is preserved at the §34.10.5.A Cross-references block
 
 ## Post-Phase-5 P0 Closure Progress
@@ -252,7 +252,7 @@ The §M.5.17 `legal_entity_residency_change_revenue_leak_test` gate (deploy_vali
 
 - Engineering Lead + Finance Lead counter-signature on AE-V72REM-06 + AE-V72REM-PH5-01 (and the v7.2.0-REM Phase 1 / 2 / 3 / 4 AE rows pending on the same stamp gate)
 - Engineering Lead + Ops Lead counter-signature on AE-V72REM-PH4.4-01 + AE-V72REM-PH4.4-02 (already approved 2026-05-19; gate-clear)
-- ~~Appendix I / Appendix C / Appendix G / Loops.so body-side row authoring~~ — **CLOSED 2026-05-20** as part of the Phase 5 post-spec-edit hardening pass (per the user "fix everything" directive). 4 Appendix I error codes + 1 forward-tracked code; 4 Appendix C webhook events + 2 Loops.so transactional templates + bridge firewall invariant `console_bridge_no_residency_change_event_kinds` (forward-tracked); 5 Appendix G PostHog events with firewall residency partitioning. Pre-edit Master Spec backup `_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-PH5-bodyland-2026-05-20.md` (6,364,679 bytes; md5 `d0e99c9fb33e096a84bfb5eb8c4c6abd`).
+- ~~Appendix I / Appendix C / Appendix G / Loops.so body-side row authoring~~ — **CLOSED 2026-05-20** as part of the Phase 5 post-spec-edit hardening pass (per the user "fix everything" directive). 4 Appendix I error codes + 1 forward-tracked code; 4 Appendix C webhook events + 2 Loops.so transactional templates + bridge firewall invariant `console_bridge_no_residency_change_event_kinds` (forward-tracked); 5 Appendix G PostHog events with firewall residency partitioning. Pre-edit Master Spec backup `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-PH5-bodyland-2026-05-20.md` (6,364,679 bytes; md5 `d0e99c9fb33e096a84bfb5eb8c4c6abd`).
 - M02.3 / M11.3 / M24.3 implementation-pack runtime wiring for the 3 new §M.5.17 gates + the cumulative v7.2.0-REM Phase 1–5 runtime-wiring backlog
 - ~~`_audit/V711_READINESS.md` post-Phase-5 hygiene update~~ — **CLOSED 2026-05-20** (D-RES-004 cross-flag row at L57 marked closed; aggregate count amended `~385+ → ~384+`)
 - D-RES-007 forward-tracked workstream landing at v7.1.1 stamp (§1.6.1 Org-side residency-change state machine + §6.8 DSAR deadlock-resolution + §32 endpoint + Appendix I error code `org_residency_change_blocked_by_active_dsar` body authoring; the code identifier is now registered in Appendix I v7.2.0-REM Phase 5 block at `#appendix-i-v72rem-phase-5` with cross-reference target in place)

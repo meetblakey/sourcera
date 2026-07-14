@@ -35,11 +35,11 @@ This pass addresses the v7.1.1 stamp-gate ambiguity left after the lower-severit
 
 Backups were created before edits:
 
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v711-ae-disposition-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-v711-ae-disposition-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-v711-ae-disposition-2026-06-24.md`
-- `_versions/DEFECT_LEDGER_pre-v711-ae-disposition-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-v711-ae-disposition-2026-06-24.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v711-ae-disposition-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-v711-ae-disposition-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-ae-disposition-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v711-ae-disposition-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v711-ae-disposition-2026-06-24.md`
 
 ## Verification
 

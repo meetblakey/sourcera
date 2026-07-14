@@ -589,7 +589,7 @@ No spec edits performed in this prompt (audit non-destructive by default per `Au
 
 **Pre-remediation determination (2026-05-07 14:00 UTC).** Phase 7 did NOT sign off. Two open P0 pricing/billing findings (D-CONS-001 cost-base publish-gating threshold contradiction; D-CONS-002 settlement-immutability contradiction) violated billing/settlement contracts. V7 surfaced ten net-new defects (5 P1, 5 P2 after self-challenge severity revision). All twelve defects (2 P0 + 10 D-V7-*) were halt-rule blockers or v7.1.1 stamp-gate inheritors.
 
-**Post-remediation determination (2026-05-07 16:00 UTC — same-day spec-side remediation pass).** All twelve defects transitioned `open → remediated` in the Phase 7 V7 Spec-Side Remediation Pass (`DEFECT_LEDGER.md`); spec edits landed against `Sourcera_Master_Spec.md` v7.1.0 (pre-edit backup at `/_versions/Sourcera_Master_Spec.v7.1.0-pre-V7-remediation-2026-05-07.md`). Halt rule "zero P0 in pricing/billing" now PASSES. Phase 7 sign-off: **PASS**. Audit advances to Phase 8.
+**Post-remediation determination (2026-05-07 16:00 UTC — same-day spec-side remediation pass).** All twelve defects transitioned `open → remediated` in the Phase 7 V7 Spec-Side Remediation Pass (`DEFECT_LEDGER.md`); spec edits landed against `Sourcera_Master_Spec.md` v7.1.0 (pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V7-remediation-2026-05-07.md`). Halt rule "zero P0 in pricing/billing" now PASSES. Phase 7 sign-off: **PASS**. Audit advances to Phase 8.
 
 **Authored Extensions queued for v7.1.1 stamp-gate ratification.** AE-V7-01 through AE-V7-10, registered in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` Phase 7 V7 section. Ratification dependencies:
 

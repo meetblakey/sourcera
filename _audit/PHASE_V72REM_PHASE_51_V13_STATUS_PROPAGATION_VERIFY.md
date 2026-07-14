@@ -26,10 +26,10 @@
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-51-v13-status-propagation.md` | `fddf09d3400539fa7ceb4fe9b1a8ec06` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-51-v13-status-propagation.md` | `a67438a5b98aad64660433fec3ee6e9e` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-51-v13-status-propagation.md` | `42158916594c9333b134ec9770f21ffc` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-51-v13-status-propagation.md` | `e88fdf473592081ac330e34c9eda04ca` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-51-v13-status-propagation.md` | `fddf09d3400539fa7ceb4fe9b1a8ec06` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-51-v13-status-propagation.md` | `a67438a5b98aad64660433fec3ee6e9e` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-51-v13-status-propagation.md` | `42158916594c9333b134ec9770f21ffc` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-51-v13-status-propagation.md` | `e88fdf473592081ac330e34c9eda04ca` |
 
 ## Verification Commands
 

@@ -22,11 +22,11 @@ Sources read before classification:
 
 ## 2. Backups
 
-- `_versions/Sourcera_Master_Spec_pre-api-path-prefix-p1-2026-06-24.md`
-- `_versions/DEFECT_LEDGER_pre-api-path-prefix-p1-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-api-path-prefix-p1-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-api-path-prefix-p1-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-api-path-prefix-p1-2026-06-24.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-api-path-prefix-p1-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-api-path-prefix-p1-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-api-path-prefix-p1-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-api-path-prefix-p1-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-api-path-prefix-p1-2026-06-24.md`
 
 ## 3. Classification
 

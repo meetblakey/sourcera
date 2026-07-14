@@ -21,10 +21,10 @@ After the prior commercial-wedge anchor sync, the PLG architecture doc still car
 
 ## Backups
 
-- `_versions/GTM_PLG_ARCHITECTURE.pre-source-authority-cleanup-2026-07-09.md`
-- `_versions/GTM_PLG_ARCHITECTURE.pre-plg-residual-pricing-ref-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-plg-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-plg-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_PLG_ARCHITECTURE.pre-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_PLG_ARCHITECTURE.pre-plg-residual-pricing-ref-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-plg-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-plg-source-authority-cleanup-2026-07-09.md`
 
 ## Verification
 

@@ -28,11 +28,11 @@ D-1.5-008 was a true live P1 issue. The filed line numbers were stale, but the d
 
 ## Backup Evidence
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `40d4998fcef4e739d756860764e64d49`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `dd69d1f4e7d36755a90643784c9f2807`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `749600205ae0f79f6dffb4fc3f99e781`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `e539eaae27d6f2f26ba447759e5b42b6`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `b366358f8d54597608bbfa98b6ef14a8`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `40d4998fcef4e739d756860764e64d49`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `dd69d1f4e7d36755a90643784c9f2807`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `749600205ae0f79f6dffb4fc3f99e781`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `e539eaae27d6f2f26ba447759e5b42b6`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-event-schema-single-source.md` md5 `b366358f8d54597608bbfa98b6ef14a8`
 
 ## Verification Commands
 

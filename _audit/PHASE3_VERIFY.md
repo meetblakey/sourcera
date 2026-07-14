@@ -466,7 +466,7 @@ V3 issues HALT until the following land:
 
 V3 sign-off was withheld at §8 above pending P0 / P1 remediation per §10. This section logs the spec-side remediation pass executed on 2026-05-04 in the same Cowork session, lifting the HALT for the audit-program-direct scope.
 
-**Pre-edit Master Spec backup:** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V3-remediation-2026-05-04.md` (5,294,799 bytes pre-edit).
+**Pre-edit Master Spec backup:** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V3-remediation-2026-05-04.md` (5,294,799 bytes pre-edit).
 
 ### 12.1 Tier 1 — P0 Remediations Landed
 
@@ -578,7 +578,7 @@ Most P2 / P3 defects close transitively via the structural cluster landings abov
 
 | phase | prompt | started_at | completed_at | opus_session_id | findings_count | status |
 |---|---|---|---|---|---|---|
-| Phase 3 | Prompt V3 — Spec-Side Remediation Pass | 2026-05-04T—:—:—Z | 2026-05-04T—:—:—Z | local-cowork-2026-05-04 | 0 (92 defect rows transitioned `open → remediated` or `partially_remediated` — 10 P0 + 54 P1 + 28 P2/P3; 43 tracked into v7.1.1 backlog under cross-phase escalation) | **complete — V3 sign-off granted post-remediation.** All Tier 1 + Tier 2 + Tier 3 contracts landed in the Master Spec on 2026-05-04 via this pass. Pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-V3-remediation-2026-05-04.md` (5,294,799 bytes; pre-edit). All 10 P0 defects closed via §6.7.5 + §6.7.6 + §6.8.4.2 + §6.8.6.1 + §6.8.6.2 + §6.8.7 + §6.8.8 + §6.8.9 + §6.8.10 + §6.8.11 + §6.9 + §4.6.5 V3 authoring. All 54 closed P1 defects via §5.1 / §5.3 / §5.5 / §5.6 / §5.7 / §5.8 / §5.9 / §5.10 / §5.11 V3 normalization + §6.1 / §6.1.2 / §6.2 / §6.2.5 / §6.3 / §6.4 / §6.5 / §6.5.1 / §6.5.2 / §6.6 / §6.6.5 / §6.6.6 V3 authoring + Appendix I Phase-3V (13 error codes) + Appendix J Phase-3V (8 enums + 12 disambiguation notes) + Appendix C Phase-3V (12 events) + Appendix M.5 Phase-3V (12 CI gates) + 32 AE Ledger rows (AE-3.1-001 through AE-3V-001). 43 defects formally tracked into v7.1.1 backlog. Phase 4 unblocked. |
+| Phase 3 | Prompt V3 — Spec-Side Remediation Pass | 2026-05-04T—:—:—Z | 2026-05-04T—:—:—Z | local-cowork-2026-05-04 | 0 (92 defect rows transitioned `open → remediated` or `partially_remediated` — 10 P0 + 54 P1 + 28 P2/P3; 43 tracked into v7.1.1 backlog under cross-phase escalation) | **complete — V3 sign-off granted post-remediation.** All Tier 1 + Tier 2 + Tier 3 contracts landed in the Master Spec on 2026-05-04 via this pass. Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V3-remediation-2026-05-04.md` (5,294,799 bytes; pre-edit). All 10 P0 defects closed via §6.7.5 + §6.7.6 + §6.8.4.2 + §6.8.6.1 + §6.8.6.2 + §6.8.7 + §6.8.8 + §6.8.9 + §6.8.10 + §6.8.11 + §6.9 + §4.6.5 V3 authoring. All 54 closed P1 defects via §5.1 / §5.3 / §5.5 / §5.6 / §5.7 / §5.8 / §5.9 / §5.10 / §5.11 V3 normalization + §6.1 / §6.1.2 / §6.2 / §6.2.5 / §6.3 / §6.4 / §6.5 / §6.5.1 / §6.5.2 / §6.6 / §6.6.5 / §6.6.6 V3 authoring + Appendix I Phase-3V (13 error codes) + Appendix J Phase-3V (8 enums + 12 disambiguation notes) + Appendix C Phase-3V (12 events) + Appendix M.5 Phase-3V (12 CI gates) + 32 AE Ledger rows (AE-3.1-001 through AE-3V-001). 43 defects formally tracked into v7.1.1 backlog. Phase 4 unblocked. |
 
 ---
 
@@ -644,7 +644,7 @@ The V3+ supplement is structurally compatible with all V3 closures. Key interact
 - **0 V3 closures invalidated** (all V3 spec content remains correct; V3+ extends rather than corrects).
 - **1 new AE row** (AE-3V-002).
 - **5 new CI gates** (catalog row count 50 → 55).
-- **Pre-edit Master Spec backup at V3 boundary:** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V3-remediation-2026-05-04.md` (5,294,799 bytes; covers both V3 and V3+ pre-edit state since both passes ran in the same Cowork session on the same date).
+- **Pre-edit Master Spec backup at V3 boundary:** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V3-remediation-2026-05-04.md` (5,294,799 bytes; covers both V3 and V3+ pre-edit state since both passes ran in the same Cowork session on the same date).
 
 ### 13.5 V3+ Sign-Off
 

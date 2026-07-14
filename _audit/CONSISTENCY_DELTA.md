@@ -57,7 +57,7 @@ _Cross-document drift inventory between the Master Spec and the companion docs (
 | §34.18.1 (multiple rows) | `MS §2.12` (margin floor / aspirational target) | D-PXC-001 |
 | §34.18.6 (preamble) | `Three scenarios referenced in MS §2.12 are authoritative` | D-PXC-001 |
 
-Master Summary is retired in v7.0.0 per CLAUDE.md §2 ("Do not consult"); snapshot at `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. Frozen-snapshot pattern at `_integration/snapshots/MS_2.9_baseline.md` (per §34.15.6 AC #10) is the correct precedent and should be replicated for §2.8 / §2.11 / §2.12.
+Master Summary is retired in v7.0.0 per CLAUDE.md §2 ("Do not consult"); snapshot at `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. Frozen-snapshot pattern at `_integration/snapshots/MS_2.9_baseline.md` (per §34.15.6 AC #10) is the correct precedent and should be replicated for §2.8 / §2.11 / §2.12.
 
 #### Drift Class D — Plan-Gating Surface Inconsistencies
 
@@ -818,7 +818,7 @@ The 7 recommended bulk remediations above are the seed of the UX-v2-Cross-Walk v
 
 ## KB Engineering Spec
 
-_Phase KB18 — exhaustive cross-walk of `_versions/KB_Engineering_Spec_retired_2026-04-26.md §0–§18` (the full retired KB Engineering Spec) ↔ `Sourcera_Master_Spec.md` v7.1.0 §22 (16277–18866). Run 2026-05-12. Non-destructive. Defect mnemonic `D-KB18-NNN`. Scratch log at `_audit/PHASE_KB18_FINDINGS.md`. Posture: a Phase 5.2 + Phase 5.3 re-walk with a clean Opus context, executed as a single sweep across all seven prompt checks (counterpart coverage, beta header, MCP I/O verbatim, retrieval pipeline math, indexing substrate, skill registry, memory store). Walk produced 6 net-new defects (D-KB18-001, -003, -004, -006, -009, -013). Severity distribution: 0 P0 / 3 P1 / 2 P2 / 1 P3. 11 re-confirmations of existing Phase 5.2 / 5.3 / 5V defects (not re-filed; ledger is append-only). Per CLAUDE.md §2 source-of-truth: Master Spec wins on every drift; the KB Engineering Spec snapshot is historical reference only._
+_Phase KB18 — exhaustive cross-walk of `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md §0–§18` (the full retired KB Engineering Spec) ↔ `Sourcera_Master_Spec.md` v7.1.0 §22 (16277–18866). Run 2026-05-12. Non-destructive. Defect mnemonic `D-KB18-NNN`. Scratch log at `_audit/PHASE_KB18_FINDINGS.md`. Posture: a Phase 5.2 + Phase 5.3 re-walk with a clean Opus context, executed as a single sweep across all seven prompt checks (counterpart coverage, beta header, MCP I/O verbatim, retrieval pipeline math, indexing substrate, skill registry, memory store). Walk produced 6 net-new defects (D-KB18-001, -003, -004, -006, -009, -013). Severity distribution: 0 P0 / 3 P1 / 2 P2 / 1 P3. 11 re-confirmations of existing Phase 5.2 / 5.3 / 5V defects (not re-filed; ledger is append-only). Per CLAUDE.md §2 source-of-truth: Master Spec wins on every drift; the KB Engineering Spec snapshot is historical reference only._
 
 ### CHECKS — Walk Result Summary
 
@@ -884,7 +884,7 @@ Three state-persisting MCP tool calls (`doc_attach`, `capability_declare_draft`,
 |---|---|---|---|
 | §22.10.6 `agent_sourcera_ghost_bid_ingestion` tool allowlist | KB §6.6 — "full toolset … **No MCP needed at ingestion stage**" | Adds MCP tools `kb_dedupe_check` (§22.8.4.9) + `kb_entry_draft_create` (§22.8.4.8) with `scoped_allow_with_quota` 200/AIOperation cap | DRIFT (D-KB18-013) |
 
-The Master Spec change is sound (Reviewer-Inbox routing per §22.4.1 requires the agent to write KBEntry drafts; KB §6.6's "no MCP" was inconsistent with the agent's actual job per `_versions/KB_Engineering_Spec_retired_2026-04-26.md §10.4` Ghost-Bid Importer Flow). But the deliberate divergence is silent — same Authored-Extension-unflagged pattern as D-5.2-006 / D-5.3-010 / D-5.3-011. D-KB18-013 (P2 authored_extension).
+The Master Spec change is sound (Reviewer-Inbox routing per §22.4.1 requires the agent to write KBEntry drafts; KB §6.6's "no MCP" was inconsistent with the agent's actual job per `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md §10.4` Ghost-Bid Importer Flow). But the deliberate divergence is silent — same Authored-Extension-unflagged pattern as D-5.2-006 / D-5.3-010 / D-5.3-011. D-KB18-013 (P2 authored_extension).
 
 #### Drift Class E — Engineering Decision Frame Lost (NEW; P3)
 

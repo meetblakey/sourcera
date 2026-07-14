@@ -45,11 +45,11 @@ No target row was stale, duplicate, or blocked by a missing product decision.
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-4-4-scoring-defense-buyer-maya-p1-2026-06-23.md`
 
 ## Count Verification
 

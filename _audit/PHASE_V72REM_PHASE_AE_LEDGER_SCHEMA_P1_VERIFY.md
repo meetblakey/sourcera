@@ -18,12 +18,12 @@ Pre-edit backups were created before the AE pass:
 
 | Artifact | Backup | Backup md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `bdedcaec27701a9949667bba87608655` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `c47ba1fc0346f046ad86aaa30091a30a` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `306dea8049e2bd1a1cb0072e0cf11b0d` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `1be685bc6ebbd15917da5b77cace7a9b` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `7de92a9c59a3379eb47d09b38db28ee7` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `35b28b15742a3fb91b153f77f47b7551` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `bdedcaec27701a9949667bba87608655` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `c47ba1fc0346f046ad86aaa30091a30a` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `306dea8049e2bd1a1cb0072e0cf11b0d` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `1be685bc6ebbd15917da5b77cace7a9b` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `7de92a9c59a3379eb47d09b38db28ee7` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-ae-ledger-schema-p1.md` | `35b28b15742a3fb91b153f77f47b7551` |
 
 ## 3. Changes Landed
 

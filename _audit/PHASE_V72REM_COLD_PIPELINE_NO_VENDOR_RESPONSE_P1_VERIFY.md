@@ -14,9 +14,9 @@ This pass closes D-4.2-024. The true issue was that §10.5 / §10.6 / §10.9 cou
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-cold-pipeline-no-vendor-response-p1-2026-06-21.md`
 
 ## Verification Checklist
 

@@ -4,7 +4,7 @@
 **Scope:** Master Spec v7.1.0 §M.5 (lines 49434–49572, plus the trailing `**End of Spec**` line 49575). All 103 catalog rows, all six pseudo-heading prose blocks, all inline AE references, every "Appendix M.5" cross-reference from elsewhere in the spec body.
 **Defect-ID convention:** `D-11.3-NNN` (sequential per Defect Ledger format).
 **Severity-rule application:** P0 reserved for `Audit_Prompts.md` Severity rule (a) firewall, (b) PII leakage, (c) residency-lock, (d) billing/revenue leakage, (e) "CI gate referenced runtime-unwireable as written." P1 for unbuildable-as-written contracts (missing rows / missing AE links / unverifiable count claims). P2 for ambiguity that two staff engineers would resolve differently. P3 for cosmetic / anchor / Markdown hygiene.
-**Pre-edit backup:** Non-destructive audit pass; no Master Spec edits performed; no `/_versions/` snapshot required.
+**Pre-edit backup:** Non-destructive audit pass; no Master Spec edits performed; no `legacy-import:_versions/` snapshot required.
 **Self-challenge revisions:** Three — logged at §6 below.
 **Counterfactual pass:** Logged at §7 below.
 
@@ -183,7 +183,7 @@ Aggregate counters not updated; matrix tightening rides the v7.1.1 hygiene pass 
 
 ## 12. Pre-edit Backup
 
-Non-destructive audit pass. No Master Spec edits performed. No `/_versions/` snapshot required.
+Non-destructive audit pass. No Master Spec edits performed. No `legacy-import:_versions/` snapshot required.
 
 ---
 

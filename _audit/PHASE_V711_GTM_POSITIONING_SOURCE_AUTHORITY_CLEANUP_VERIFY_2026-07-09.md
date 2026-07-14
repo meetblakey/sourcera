@@ -20,9 +20,9 @@ The Positioning doc still routed readers through old Master Spec §6-era anchors
 
 ## Backups
 
-- `_versions/GTM_POSITIONING.pre-source-authority-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-positioning-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-positioning-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_POSITIONING.pre-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-positioning-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-positioning-source-authority-cleanup-2026-07-09.md`
 
 ## Verification
 

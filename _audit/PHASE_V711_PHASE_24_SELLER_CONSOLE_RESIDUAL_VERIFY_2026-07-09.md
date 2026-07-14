@@ -82,6 +82,6 @@ Observed:
 - Blocker inventory: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-09.md`
 - Full blocker CSV: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-09.csv`
 - Authored Extension addendum: `_integration/AUTHORED_EXTENSIONS_LEDGER.md -> AE-V72REM-PH24-SELLER-INBOX-NDA-ANALYTICS-01`
-- Backups: `_versions/Sourcera_Master_Spec.pre-phase24-residual-closure-2026-07-09.md`, `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase24-residual-closure-2026-07-09.md`, `_versions/DEFECT_LEDGER.pre-phase24-residual-closure-2026-07-09.md`, `_versions/REMEDIATION_BACKLOG.pre-phase24-residual-closure-2026-07-09.md`
+- Backups: `legacy-import:_versions/Sourcera_Master_Spec.pre-phase24-residual-closure-2026-07-09.md`, `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase24-residual-closure-2026-07-09.md`, `legacy-import:_versions/DEFECT_LEDGER.pre-phase24-residual-closure-2026-07-09.md`, `legacy-import:_versions/REMEDIATION_BACKLOG.pre-phase24-residual-closure-2026-07-09.md`
 
 This is not a v7.1.1 stamp-ready verdict. Runtime rows remain release truth until their named artifacts exist, pass, and are explicitly promoted.

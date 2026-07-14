@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-06
 **Auditor model:** Claude Opus
-**Audit prompt:** Walk Master Spec §22.1–§22.8; cross-reference `_versions/KB_Engineering_Spec_retired_2026-04-26.md §0–§3` end-to-end.
+**Audit prompt:** Walk Master Spec §22.1–§22.8; cross-reference `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md §0–§3` end-to-end.
 **Status:** Findings promoted to `DEFECT_LEDGER.md` Phase 5.2 section. This file is the scratch artifact retained per audit-program protocol.
 
 ---
@@ -10,7 +10,7 @@
 ## Sources Read (in full)
 
 - `Sourcera_Master_Spec.md` §22.1 (lines 15936–15958), §22.2 (15959–16069), §22.3 (16070–16188), §22.4 (16189–16297), §22.5 (16299–16350), §22.6 (16351–16378), §22.7 (16379–16396), §22.8 (16397–17242)
-- `_versions/KB_Engineering_Spec_retired_2026-04-26.md` §0 (lines 1–32), §1 (34–60), §2 (61–155), §3 (156–442), §5 (573–631) for indexing-pipeline cross-checks, §6.3 (line 733) for tool-references-without-definitions
+- `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` §0 (lines 1–32), §1 (34–60), §2 (61–155), §3 (156–442), §5 (573–631) for indexing-pipeline cross-checks, §6.3 (line 733) for tool-references-without-definitions
 - `Sourcera_Master_Spec.md` Appendix C KB-Domain (lines 41496–41594), Appendix C preamble Coverage Invariant (line 41502), Appendix I sample (line 43151+), Appendix J reference (line 43868+), Appendix K MCPSessionTokenRecord glossary entry (line 47235), §22.10 alias table (line 17430), §22.17 acceptance criteria (lines 18421–18475), §1.3 console firewall
 
 ## Cross-Reference Walk — Per-Check Results

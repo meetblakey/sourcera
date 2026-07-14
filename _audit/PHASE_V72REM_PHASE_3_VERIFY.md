@@ -23,7 +23,7 @@
 | Byte size | 6,089,968 | 6,092,060 |
 | md5 | `ff4983c6ada42005d6cd4ce4543ea72f` | `75296785e2f5b1cbfbe31f218befdaa7` |
 | Line count | 51,852 | 51,852 |
-| Pre-edit backup | `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-glossary-canonicality-2026-05-18.md` (byte-identical snapshot of pre-edit state; size 6,089,968; md5 `ff4983c6ada42005d6cd4ce4543ea72f`) | — |
+| Pre-edit backup | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-glossary-canonicality-2026-05-18.md` (byte-identical snapshot of pre-edit state; size 6,089,968; md5 `ff4983c6ada42005d6cd4ce4543ea72f`) | — |
 
 **Runtime-artifact byte-state at verify-time.**
 
@@ -144,7 +144,7 @@ The following assertions are made against the post-edit corpus:
 | A7 | AE-12.3-12 status in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` reads `ratified 2026-05-18` with Engineering Lead sign-off. | PASS (row transitioned). |
 | A8 | Canonical rows D-AK-001 / D-AK-002 / D-AK-003 in `_audit/DEFECT_LEDGER.md` read `remediated 2026-05-18` with closure trace. | PASS (rows transitioned per D-CONS-001 P1). |
 | A9 | `_integration/RECONCILIATION.md → v7.2.0-REM Program → Phase 2` block is no longer `(pending)` and carries full closure documentation. | PASS (block rewritten at full authoring fidelity). |
-| A10 | Pre-edit Master Spec backup exists at the dated `_versions/` filename with byte size + md5 logged in RECONCILIATION. | PASS (backup landed; size 6,089,968; md5 `ff4983c6ada42005d6cd4ce4543ea72f`). |
+| A10 | Pre-edit Master Spec backup exists at the dated `legacy-import:_versions/` filename with byte size + md5 logged in RECONCILIATION. | PASS (backup landed; size 6,089,968; md5 `ff4983c6ada42005d6cd4ce4543ea72f`). |
 
 ---
 

@@ -3,7 +3,7 @@
 **Date:** 2026-04-26
 **Author:** Phase 13.2 authoring pass
 **Master Spec target:** `Sourcera_Master_Spec.md` (v7.0.0 integration in progress)
-**Pre-edit snapshot:** `_versions/Sourcera_Master_Spec_pre-phase13_2_acceptance_criteria-2026-04-26.md`
+**Pre-edit snapshot:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase13_2_acceptance_criteria-2026-04-26.md`
 
 ---
 
@@ -175,7 +175,7 @@ Three failure modes per authored block enumerated (full detail in RECONCILIATION
 
 ## 10. Phase 13.2 Verification Status
 
-- [x] Pre-edit snapshot taken: `_versions/Sourcera_Master_Spec_pre-phase13_2_acceptance_criteria-2026-04-26.md`
+- [x] Pre-edit snapshot taken: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase13_2_acceptance_criteria-2026-04-26.md`
 - [x] All 9 user-facing subsections lacking AC have authored AC blocks.
 - [x] Existing AC coverage map verified across §3 through §51.
 - [x] Authored AC follows §13.10 convention.

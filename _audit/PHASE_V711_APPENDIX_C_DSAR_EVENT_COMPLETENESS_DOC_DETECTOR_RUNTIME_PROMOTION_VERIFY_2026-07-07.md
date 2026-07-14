@@ -20,7 +20,7 @@ Promoted to `runtime_active`.
 |---|---|
 | Detector | `tools/spec-lint/gates/appendix_c_dsar_event_completeness.ts` |
 | Fixtures | `tools/spec-lint/fixtures/appendix_c_dsar_event_completeness/pass.md`; `tools/spec-lint/fixtures/appendix_c_dsar_event_completeness/fail.md` |
-| Master Spec backup | `_versions/Sourcera_Master_Spec_pre-appendix-c-dsar-event-completeness-runtime-promotion-2026-07-07.md` |
+| Master Spec backup | `legacy-import:_versions/Sourcera_Master_Spec_pre-appendix-c-dsar-event-completeness-runtime-promotion-2026-07-07.md` |
 
 ## Verification
 

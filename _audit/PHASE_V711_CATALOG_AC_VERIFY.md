@@ -8,9 +8,9 @@ This pass fixes backlog authoring only. It does not close the underlying Phase 6
 
 Backups:
 
-- `_versions/REMEDIATION_BACKLOG_pre-v711-catalog-ac-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v711-catalog-ac-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v711-catalog-ac-p1-2026-06-21.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-catalog-ac-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v711-catalog-ac-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v711-catalog-ac-p1-2026-06-21.md`
 
 ## Files Touched
 

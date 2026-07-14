@@ -22,10 +22,10 @@ Read and adjudicated against the current canonical corpus:
 
 Backups created before authoritative tracking edits:
 
-- `_versions/DEFECT_LEDGER_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-4-v4-carryforward-p1-status-sync-2026-06-23.md`
 
 No Master Spec backup was required because no Master Spec body edit was made in this status-sync pass.
 

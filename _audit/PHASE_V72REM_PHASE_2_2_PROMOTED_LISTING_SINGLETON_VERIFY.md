@@ -8,11 +8,11 @@
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `0fa948b315ab77ac0b4c7e604ef0a8ba` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `df6a3f2ae3510235fdd03d0fbf8f30cf` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `ac98a2724591516532f3ffd564795c26` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `30ac8060c6b50ee3291e64dbcf3db690` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `5b2392f5dd69a729e6936d7158d46d88` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `0fa948b315ab77ac0b4c7e604ef0a8ba` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `df6a3f2ae3510235fdd03d0fbf8f30cf` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `ac98a2724591516532f3ffd564795c26` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `30ac8060c6b50ee3291e64dbcf3db690` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-singletons.md` | `5b2392f5dd69a729e6936d7158d46d88` |
 
 ## 2. Adjudication
 

@@ -14,7 +14,7 @@ This pass promotes a documentation/spec-tree gate only. Product-codebase/runtime
 | Runtime harness | Added `tools/spec-lint/gates/solo_capability_registry_field_registration.ts` and registered it in `tools/spec-lint/run-all.ts` `GATES_RUNTIME_ACTIVE`. |
 | §M.5 status | Promoted `solo_capability_registry_field_registration` from `spec_binding_pending_pack_m02_3` to `runtime_active`. |
 | Spec proof | Detector asserts §4.8.2 `CapabilityRegistryEntry` field-table registration, Appendix J Surface Throttling Class values, §44.6.4.1 field/enum contract, §44.6.8 #17, and Appendix M row binding. |
-| Backup | `_versions/Sourcera_Master_Spec_pre-solo-capability-registry-field-detector-2026-07-07.md`. |
+| Backup | `legacy-import:_versions/Sourcera_Master_Spec_pre-solo-capability-registry-field-detector-2026-07-07.md`. |
 | Blocker inventory | `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-07.md` and `.csv` regenerated from the latest stamp-gate JSON. |
 | Stamp-gate posture | Current stamp gate parses 420 runtime rows and fails on 353 blockers, down from 354. Remaining blockers: 220 M02.3, 102 M11.3, 26 M21.3, 5 M24.3. |
 

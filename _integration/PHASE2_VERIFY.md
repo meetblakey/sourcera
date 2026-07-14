@@ -4,7 +4,7 @@
 
 **Reviewer role.** Hostile — actively looking for reasons the bundle should not ship as v7.0.0. Items 7, 8, and 10 were re-read against MS §2.8 / §2.9 / §2.11 line by line; drift is reported even where the Spec is internally consistent.
 
-**Baseline.** `_versions/Sourcera_Master_Spec_v6.0.0.md` (token-denominated §34; no §34.14–§34.20; no Billing Admin; no §31.8; no §32.8).
+**Baseline.** `_baselines/Sourcera_Master_Spec_v6.0.0.md` (token-denominated §34; no §34.14–§34.20; no Billing Admin; no §31.8; no §32.8).
 
 **Target.** `/Sourcera/Sourcera_Master_Spec.md` (current working copy; §34 = §34.1–§34.20, §5.2.1 = §5.2.1.1–§5.2.1.5, §32.8 = §32.8.0–§32.8.10, §31.8 = §31.8.1–§31.8.10).
 

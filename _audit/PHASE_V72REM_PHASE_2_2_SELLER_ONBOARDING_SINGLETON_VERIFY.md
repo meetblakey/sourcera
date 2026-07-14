@@ -133,13 +133,13 @@ Full spec lint:
 ## Backup Hashes
 
 ```text
-MD5 (_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = c18c69735516cc85bbeb66cfde5a5795
-MD5 (_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = 9db9ee23ce1140ef4dfff5191d98fc33
-MD5 (_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = b038ce2df3efb1d0008823bea692dceb
-MD5 (_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = 24e7fcd27f48995fa7c5246abba35399
-MD5 (_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = c7433b64ffe57be2d000fa261d4ad37b
-MD5 (_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = e8437184b787c81126c1cb34ec441df0
-MD5 (_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = 3b292fb126106d8e2e406d9b87580a5d
+MD5 (legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = c18c69735516cc85bbeb66cfde5a5795
+MD5 (legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = 9db9ee23ce1140ef4dfff5191d98fc33
+MD5 (legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = b038ce2df3efb1d0008823bea692dceb
+MD5 (legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = 24e7fcd27f48995fa7c5246abba35399
+MD5 (legacy-import:_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = c7433b64ffe57be2d000fa261d4ad37b
+MD5 (legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = e8437184b787c81126c1cb34ec441df0
+MD5 (legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-seller-onboarding-singletons.md) = 3b292fb126106d8e2e406d9b87580a5d
 ```
 
 ## Final Hashes

@@ -8,11 +8,11 @@
 
 Backups taken before the D-1.5-007 edit pass:
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `50655116c0373f59492c9da61a3d9258`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `d372e171e80c83e47a70a81caf46c6c4`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `58958fbedba8fdbbb10c1753b8539334`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `22f2617e0d93259f801d062eb82ee36d`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `f5455b4774889e68975e6eea9f87d94b`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `50655116c0373f59492c9da61a3d9258`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `d372e171e80c83e47a70a81caf46c6c4`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `58958fbedba8fdbbb10c1753b8539334`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `22f2617e0d93259f801d062eb82ee36d`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-actor-type-enum.md` — md5 `f5455b4774889e68975e6eea9f87d94b`
 
 ## 2. Adjudication
 

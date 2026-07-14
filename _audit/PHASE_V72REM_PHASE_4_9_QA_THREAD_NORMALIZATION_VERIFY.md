@@ -31,12 +31,12 @@ Residual rows intentionally remain open:
 
 | File | Backup | MD5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `d96b7f3848a01cf6bc5e535f57bd2ed6` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `81ce0285d95481344e725f138c788a49` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `1847a3a534e068ec1e207e25e40d070f` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `b5542ec904e3b727920ff881fe1b487f` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `6de372ae1e15c52b9d075f2902bd816c` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `e78b36fbab41002adbaa2d05d4744d58` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `d96b7f3848a01cf6bc5e535f57bd2ed6` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `81ce0285d95481344e725f138c788a49` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `1847a3a534e068ec1e207e25e40d070f` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `b5542ec904e3b727920ff881fe1b487f` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `6de372ae1e15c52b9d075f2902bd816c` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-4-9-qa-thread-normalization-2026-06-22.md` | `e78b36fbab41002adbaa2d05d4744d58` |
 
 ## Post-Edit Fingerprints
 

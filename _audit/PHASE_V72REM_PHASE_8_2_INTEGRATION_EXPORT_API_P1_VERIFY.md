@@ -18,12 +18,12 @@ Read current Master Spec §31.3 end-to-end for Integration Phase Export Mapping 
 
 Backups created before the batch:
 
-- `_versions/Sourcera_Master_Spec_pre-integration-export-p1-2026-06-24.md`
-- `_versions/DEFECT_LEDGER_pre-integration-export-p1-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-integration-export-p1-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-integration-export-p1-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-integration-export-p1-2026-06-24.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-integration-export-p1-2026-06-24.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-integration-export-p1-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-integration-export-p1-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-integration-export-p1-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-integration-export-p1-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-integration-export-p1-2026-06-24.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-integration-export-p1-2026-06-24.md`
 
 ## 4. Spec Changes
 

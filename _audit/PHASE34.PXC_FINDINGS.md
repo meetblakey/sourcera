@@ -69,9 +69,9 @@ The following defects in the ledger already cover findings surfaced by this walk
 
 **Location.** §34.1 preamble line 28638 (citation key); §34.1.1 source-column cells (e.g., line 28647 "MS §2", line 28657 "MS §2 (free core platform)", line 28680 "MS C.80"); §34.18.1 Margin Floor Table lines 30170, 30172, 30173 ("MS §2.12"); §34.17.1 row 13 line 30106 ("Summary §6.28.2"); §34.17.4 AC #1 line 30152 ("MS §2.11"); §34.15.1 lines 29824–29835 (12 cells citing "MS §2.9 row N"); §34.14.1 lines 29731–29742 (12 cells citing "MS §2.8 row N"); §34.17.1 lines 30094–30107 (14 cells citing "MS §2.11 item N").
 
-**Summary.** Master Spec §34 contains 50+ citations to "MS §2.X" referring to `Sourcera_Master_Summary.md §2`, but Master Summary is retired in v7.0.0 (snapshot at `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`). The citation key in §34.1 preamble (line 28638) still defines `MS = Sourcera_Master_Summary.md §2`, formalizing a non-authoritative source.
+**Summary.** Master Spec §34 contains 50+ citations to "MS §2.X" referring to `Sourcera_Master_Summary.md §2`, but Master Summary is retired in v7.0.0 (snapshot at `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`). The citation key in §34.1 preamble (line 28638) still defines `MS = Sourcera_Master_Summary.md §2`, formalizing a non-authoritative source.
 
-**Evidence.** Line 28638: `**MS** = `Sourcera_Master_Summary.md §2`; **AE** = Authored Extension`. CLAUDE.md §2 source-of-truth hierarchy: "`Sourcera_Master_Summary.md` *(retired in v7.0.0; snapshot at `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`)*… Superseded by Master Spec. **Do not consult.**"
+**Evidence.** Line 28638: `**MS** = `Sourcera_Master_Summary.md §2`; **AE** = Authored Extension`. CLAUDE.md §2 source-of-truth hierarchy: "`Sourcera_Master_Summary.md` *(retired in v7.0.0; snapshot at `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`)*… Superseded by Master Spec. **Do not consult.**"
 
 **Convention violated.** CLAUDE.md §2 source-of-truth hierarchy; Authoring Convention #10 (numerical singletons must cite a still-authoritative source); D-AS-006 partially covered the preamble citation but did not catalog the body-cell scatter.
 
@@ -404,7 +404,7 @@ The two source documents define different qualification gates for the same tier 
 
 **Location.** §34.17.1 row 13 line 30106.
 
-**Summary.** §34.17.1 row 13 (MS §2.11 item 13: Magic-link SSO orchestrator) cites "Seller onboarding orchestrator Summary §6.28.2" in the Implemented By column AND "Summary §6.28.2 AC" in the Acceptance Criteria column. `Sourcera_Master_Summary.md` is retired in v7.0.0 (snapshot at `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`); citation does not resolve to an authoritative source. SPS v3 §15 / §16 / §17 (PLG Motion + Forced-Vendor-Signup Playbook + Seller Onboarding Experience) document the seller magic-link onboarding orchestrator narratively and should be the cited source.
+**Summary.** §34.17.1 row 13 (MS §2.11 item 13: Magic-link SSO orchestrator) cites "Seller onboarding orchestrator Summary §6.28.2" in the Implemented By column AND "Summary §6.28.2 AC" in the Acceptance Criteria column. `Sourcera_Master_Summary.md` is retired in v7.0.0 (snapshot at `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`); citation does not resolve to an authoritative source. SPS v3 §15 / §16 / §17 (PLG Motion + Forced-Vendor-Signup Playbook + Seller Onboarding Experience) document the seller magic-link onboarding orchestrator narratively and should be the cited source.
 
 **Evidence.**
 - Master Spec line 30106: `13 | Magic-link SSO orchestrator (starts KB Bootstrap inside SSO redirect latency — seller onboarding) | Seller onboarding orchestrator Summary §6.28.2; Opus-tier Domain Bootstrap drawn from lifetime-free bootstrap allowance; 30–90s latency target hidden behind honest progress bar | Summary §6.28.2 AC | Phase 2 | MS §2.11 item 13`.
@@ -441,7 +441,7 @@ The two source documents define different qualification gates for the same tier 
 
 **Convention violated.** CLAUDE.md §16 (CI gate runtime-wireability — `Build_Execution_Strategy.md` requirement); CI gate cannot run if its source corpus is retired.
 
-**Recommendation.** Add to §34.17.4: `frozen MS §2.11 snapshot stored at _integration/snapshots/MS_2.11_baseline.md`. Create the snapshot file by extracting §2.11 from `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. Update AC #1 to `… asserts the Requirement column is a verbatim restatement of the frozen MS §2.11 snapshot at _integration/snapshots/MS_2.11_baseline.md`. Apply the same pattern to §34.18.7 AC #5 ("Scenario A/B/C reference MUST be preserved" — needs MS §2.12 snapshot pointer) and §34.14.6 (which currently does NOT have a snapshot pointer for MS §2.8).
+**Recommendation.** Add to §34.17.4: `frozen MS §2.11 snapshot stored at _integration/snapshots/MS_2.11_baseline.md`. Create the snapshot file by extracting §2.11 from `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. Update AC #1 to `… asserts the Requirement column is a verbatim restatement of the frozen MS §2.11 snapshot at _integration/snapshots/MS_2.11_baseline.md`. Apply the same pattern to §34.18.7 AC #5 ("Scenario A/B/C reference MUST be preserved" — needs MS §2.12 snapshot pointer) and §34.14.6 (which currently does NOT have a snapshot pointer for MS §2.8).
 
 **Severity rationale.** P1 ci_gate. Per Severity Definitions: "leaves a CI gate referenced in `Build_Execution_Strategy.md` runtime-unwireable as written" → close to P0; bumped to P1 because the gate is internally referenced (not in `Build_Execution_Strategy.md` directly per the v7.1.0 surface).
 

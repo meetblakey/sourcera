@@ -156,7 +156,7 @@ All transitions are on the **canonical** defect rows (not supplementary-only), s
 
 ## 6. Convention compliance (v7.2.0-REM authoring conventions)
 
-- **#14 No destructive edit without backup.** PASS — Pass A took 4 pre-edit backups (`_versions/{AUTHORED_EXTENSIONS_LEDGER,RECONCILIATION,DEFECT_LEDGER}.pre-v72REM-Phase9-2026-06-14.md` + CLAUDE.md); Pass B took 5 (adding `Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase9-V12V13-2026-06-14.md`); byte sizes + md5 recorded in RECONCILIATION + registry rows. This verification pass is read-only (no new backup required).
+- **#14 No destructive edit without backup.** PASS — Pass A took 4 pre-edit backups (`legacy-import:_versions/{AUTHORED_EXTENSIONS_LEDGER,RECONCILIATION,DEFECT_LEDGER}.pre-v72REM-Phase9-2026-06-14.md` + CLAUDE.md); Pass B took 5 (adding `Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase9-V12V13-2026-06-14.md`); byte sizes + md5 recorded in RECONCILIATION + registry rows. This verification pass is read-only (no new backup required).
 - **#1 / #2 Entity + AC fidelity.** PASS — AE-V13-007's sole spec touch is authored as numbered, testable ACs (§48.8.12 AC #8, §35.5.5 AC #8) with observable inputs (erasure inside the AC #4 retry window), observable outputs (dispatch dropped; PII-minimized AuditEvent), and a measurable threshold (the AC #4 Tier-2 retry curve window).
 - **#3 Enums (flagged).** PASS — `recovery_cadence_skip_reason = dsar_pseudonymized` is referenced by both AC #8 edits and explicitly registered as an owed Appendix J wiring item under the Authored-Extension-pending AE-V13-007 (lands at v7.1.1 ratification).
 - **#9 Retention & privacy.** PASS — AC #8 states §6.8 right-to-erasure behavior, GDPR Art. 17 in-flight path, and audit-PII-minimization (no erased PII in the skip-audit row).

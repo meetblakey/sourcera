@@ -13,10 +13,10 @@ Touched artifacts:
 
 Pre-edit backups:
 
-- `_versions/Sourcera_Buyer_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
-- `_versions/Sourcera_Seller_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Buyer_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Seller_Pricing_Strategy_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-volume-discount-companion-p1-2026-06-21.md`
 
 ## Closure
 

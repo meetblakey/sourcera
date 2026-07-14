@@ -518,7 +518,7 @@ Implementation: store the cap on `AIWallet.auto_topup_max_monthly_value_cents` w
 
 **The problem.** The spec proposes scanning seller KB content for prompt injection attacks. §22.16.7 enumerates starter patterns: `ignore previous`, `system:`, `<|im_start|>`. The comprehensive pattern library and acceptable false-positive rate need T&S review.
 
-**Historical source evidence; current authority.** The retired `_versions/KB_Engineering_Spec_retired_2026-04-26.md` §3.5 seeded the MCP Server Permission Policy. Current executable authority is Master Spec §22.8.5: the Submission Gate validates citation completeness and citation validity. The injection scanner is a separate, earlier-stage defense: it runs at ingestion time (when the seller adds content to the KB), not at retrieval time (when the AI agent reads from the KB).
+**Historical source evidence; current authority.** The retired `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` §3.5 seeded the MCP Server Permission Policy. Current executable authority is Master Spec §22.8.5: the Submission Gate validates citation completeness and citation validity. The injection scanner is a separate, earlier-stage defense: it runs at ingestion time (when the seller adds content to the KB), not at retrieval time (when the AI agent reads from the KB).
 
 The defense-in-depth model is:
 

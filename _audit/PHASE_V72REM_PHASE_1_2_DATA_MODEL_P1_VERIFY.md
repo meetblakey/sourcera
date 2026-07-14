@@ -31,12 +31,12 @@ Reviewed current Master Spec §4.3.1 through §4.3.28, §13.2.2, §13.11.7, §13
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `d1da625929e2aa20c2d2d98b884f4cca`
-- `_versions/DEFECT_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `77a5a2fd5cc1cb7a65d1d13bcc9ec2ba`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `8776da42f521dc27ef1cf53a90d3a5bd`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `8e1ad1f044f9f5644a42a637705221fd`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `c68c683d31280014a55216c22e0f9a03`
-- `_versions/RECONCILIATION_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `16803088d638c3ff496f2ca0146ceed8`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `d1da625929e2aa20c2d2d98b884f4cca`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `77a5a2fd5cc1cb7a65d1d13bcc9ec2ba`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `8776da42f521dc27ef1cf53a90d3a5bd`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `8e1ad1f044f9f5644a42a637705221fd`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `c68c683d31280014a55216c22e0f9a03`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-1-2-data-model-p1-2026-06-21.md` — md5 `16803088d638c3ff496f2ca0146ceed8`
 
 ## Validation
 

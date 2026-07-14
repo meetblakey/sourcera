@@ -31,12 +31,12 @@
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `0174d14e7ccdcd721b0a655437a608f4` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `6c40730f4339a42c306639766d7c9e80` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `88d0843121991bcf1c179f99bc94192c` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `b5a305460af28f811a10f2cbc4e18032` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `5a05e6a46a4d70a5ee89751de69b5e2f` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `f9a6e4b9ed9ac104e1b7f51b40153332` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `0174d14e7ccdcd721b0a655437a608f4` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `6c40730f4339a42c306639766d7c9e80` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `88d0843121991bcf1c179f99bc94192c` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `b5a305460af28f811a10f2cbc4e18032` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `5a05e6a46a4d70a5ee89751de69b5e2f` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-4-12-agent-drift-p1-2026-06-21.md` | `f9a6e4b9ed9ac104e1b7f51b40153332` |
 
 ## 4. Spec-Side Assertions
 

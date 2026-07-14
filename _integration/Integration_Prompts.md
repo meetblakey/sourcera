@@ -14,7 +14,7 @@
 
 1. Run each prompt in a **separate, fresh Cowork session on Opus** against the Sourcera project folder. Fresh sessions prevent cross-prompt assumption leakage and force each session to re-derive conclusions from the authoritative source files.
 2. **Run in numeric order within a phase.** Phases have ordering dependencies (data model before features, features before enum registry, enum registry before consistency sweep, consistency sweep before TOC regeneration).
-3. **After each prompt, commit the modified `Sourcera_Master_Spec.md` to git** (or a versioned backup in `/Sourcera/_versions/`) before running the next. This creates discrete, revertible integration steps.
+3. **After each prompt, commit the modified `Sourcera_Master_Spec.md` to git** (or a versioned backup in `legacy-import:_versions/`) before running the next. This creates discrete, revertible integration steps.
 4. **Run `Prompt V` (the Verification prompt at the end of each phase)** before moving to the next phase. Because you are running Opus, verification prompts are permitted to *challenge* the authoring phase rather than just checklist it — the verification prompt is a full adversarial review, not a tick-the-boxes pass.
 5. **Do not skip Phase 0.** It creates the scaffolding and reconciliation log the later phases depend on.
 6. **No model budgeting constraints.** Because every prompt runs on Opus and cost is not a limiting factor, prompts are sized for depth-of-reasoning, not token economy. If the model wants to ask for more context, read a full source document end-to-end, or produce a longer artifact than feels minimal, let it.
@@ -137,7 +137,7 @@ Goal: Create the working scaffold (version bump, reconciliation log, delta inven
 [PASTE GLOBAL CONVENTIONS PREAMBLE]
 
 TASK
-1. Copy the current `Sourcera_Master_Spec.md` to `/Sourcera/_versions/Sourcera_Master_Spec_v6.0.0.md` (baseline snapshot).
+1. Copy the current `Sourcera_Master_Spec.md` to `/Sourcera/_baselines/Sourcera_Master_Spec_v6.0.0.md` (baseline snapshot).
 2. At the top of `Sourcera_Master_Spec.md`, bump the version header to:
    Version: 7.0.0-integration-in-progress
    Last Updated: <today's ISO date>
@@ -2065,9 +2065,9 @@ TASK
    - Replaced sections (§34)
    - Major extensions (§21, §22, §25, §27, §26, §3, §38)
    - Breaking changes (token-budget pricing retired)
-6. Move `Sourcera_Master_Summary.md` to `/Sourcera/_versions/` (it is now
+6. Move `Sourcera_Master_Summary.md` to `legacy-import:_versions/` (it is now
    subsumed by the Master Spec v7.0.0).
-7. Move `KB_Engineering_Spec.md` to `/Sourcera/_versions/` (it is now
+7. Move `KB_Engineering_Spec.md` to `legacy-import:_versions/` (it is now
    integrated into §22).
 8. Finalize RECONCILIATION.md with a summary table: Phase | Sections Added |
    Sections Modified | Entities Added | Enums Added | Endpoints Added |
@@ -2090,7 +2090,7 @@ Final acceptance gate. Confirm:
 3. Every Phase 1–12 verification file shows exit-criteria-met.
 4. Zero orphan enums, zero broken cross-references, zero conflicting numerical
    limits, zero undefined glossary terms.
-5. Summary and KB Engineering Spec moved to /_versions/.
+5. Summary and KB Engineering Spec moved to legacy-import:_versions/.
 6. RECONCILIATION.md finalized.
 7. `/Sourcera/_integration/PHASE13_FINAL.md` exists.
 
@@ -2120,7 +2120,7 @@ DO NOT modify the Spec.
 
 8. **What to do if Opus wants to extend scope.** Let it, within the prompt's target section. Opus will occasionally identify adjacent gaps (e.g., a missing acceptance criterion in §13 while authoring §34). Record these extensions in RECONCILIATION.md under "Authored Extensions — In-Scope" and proceed. If Opus wants to extend into a section not owned by the current prompt, it must stop and defer to a later phase.
 
-9. **What this program does not do.** It does not regenerate the Master Summary after integration. The Summary is retired to `/_versions/` in Phase 13.4. If you need a post-integration summary, author a new one from v7.0.0 — do not resurrect v1.1.
+9. **What this program does not do.** It does not regenerate the Master Summary after integration. The Summary is retired to `legacy-import:_versions/` in Phase 13.4. If you need a post-integration summary, author a new one from v7.0.0 — do not resurrect v1.1.
 
 10. **Human review checkpoints.** Despite Opus's depth, this is a v7.0.0 of a business-critical document. Plan for human review at three checkpoints: end of Phase 2 (pricing model rewrite is a breaking change), end of Phase 6 (Ops Console is a new customer-impacting surface), and end of Phase 13 (final acceptance). At each, read RECONCILIATION.md end-to-end and sign off before advancing.
 

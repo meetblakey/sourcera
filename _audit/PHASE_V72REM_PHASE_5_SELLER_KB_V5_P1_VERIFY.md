@@ -30,11 +30,11 @@ Read and adjudicated against the current canonical corpus:
 
 Backups created before authoritative edits:
 
-- `_versions/Sourcera_Master_Spec_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-5-seller-kb-v5-p1-2026-06-23.md`
 
 ## 3. Classification
 

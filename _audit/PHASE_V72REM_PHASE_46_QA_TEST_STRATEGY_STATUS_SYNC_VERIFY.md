@@ -49,10 +49,10 @@
 
 ## Backups
 
-- `_versions/DEFECT_LEDGER.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
-- `_versions/V711_BACKLOG_INDEX.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
-- `_versions/REMEDIATION_BACKLOG.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
-- `_versions/RECONCILIATION.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
+- `legacy-import:_versions/RECONCILIATION.pre-v72rem-phase46-qa-status-sync-2026-06-22.md`
 
 ## Verification
 

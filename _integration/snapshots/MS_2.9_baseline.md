@@ -1,6 +1,6 @@
 # MS §2.9 Frozen Baseline Snapshot
 
-**Source:** `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md` §2.9.
+**Source:** `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md` §2.9.
 **Frozen for:** §34.15 seller outcome-signal baseline coverage and validator provenance.
 **Created:** 2026-06-22, Phase PXC pricing cross-check closure.
 **Authority note:** This is a historical frozen snapshot only. The current Master Spec §34 remains authoritative for product behavior, pricing, entitlement enforcement, and runtime implementation.

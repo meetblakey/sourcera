@@ -109,12 +109,12 @@ The lint runner reported `blocking gates worst exit code: 0`.
 
 ## 4. Backup Artifacts
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `fd93b61188dcc00d35e38280f2b68ae2`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `f81e042b34467f19f27f6cccdddb4d38`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `e49b8a9137d54589557ceac2bbbae24e`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `20a4202fa23c7e571b162ce3e3d293dc`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `93bbc5cd31a2ef6f74cecb00c3b23b1a`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `33cb96f232f977190634699de92916b7`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `fd93b61188dcc00d35e38280f2b68ae2`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `f81e042b34467f19f27f6cccdddb4d38`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `e49b8a9137d54589557ceac2bbbae24e`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `20a4202fa23c7e571b162ce3e3d293dc`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `93bbc5cd31a2ef6f74cecb00c3b23b1a`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-3-1-role-glossary.md` — md5 `33cb96f232f977190634699de92916b7`
 
 ## 5. Residuals
 

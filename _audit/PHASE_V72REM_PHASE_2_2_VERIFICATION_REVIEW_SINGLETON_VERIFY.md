@@ -8,12 +8,12 @@
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `e22d6a144bf0f71e598ba046c8286c48` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `663d8089bb88241c4aaf8fffd6d90973` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `bc9ac018f8a75f93eaade16769efe76d` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `86b0cb976b03bf9bc1c5718ae8777f5b` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `c1c88feb06a28f81e5e35b8c4d4193b3` |
-| `_audit/AUTHORITATIVE_SOURCE_MAP.md` | `_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `27c2ebe93ea3607ec15ff3bee83dd946` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `e22d6a144bf0f71e598ba046c8286c48` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `663d8089bb88241c4aaf8fffd6d90973` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `bc9ac018f8a75f93eaade16769efe76d` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `86b0cb976b03bf9bc1c5718ae8777f5b` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `c1c88feb06a28f81e5e35b8c4d4193b3` |
+| `_audit/AUTHORITATIVE_SOURCE_MAP.md` | `legacy-import:_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-verification-review-singletons.md` | `27c2ebe93ea3607ec15ff3bee83dd946` |
 
 ## 2. Adjudication
 

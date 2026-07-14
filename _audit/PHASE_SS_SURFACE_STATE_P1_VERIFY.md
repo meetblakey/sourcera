@@ -15,12 +15,12 @@
 
 ## Pre-Edit Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-ss-surface-state-p1-2026-06-21.md`
-- `_versions/UX_Design_of_Sourcera_pre-phase-ss-surface-state-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-ss-surface-state-p1-2026-06-21.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-phase-ss-surface-state-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-ss-surface-state-p1-2026-06-21.md`
+- `legacy-import:_versions/UX_Design_of_Sourcera_pre-phase-ss-surface-state-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-ss-surface-state-p1-2026-06-21.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-ss-surface-state-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-ss-surface-state-p1-2026-06-21.md`
 
 ## Remediation Summary
 

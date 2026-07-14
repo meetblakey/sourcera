@@ -31,12 +31,12 @@ Both targeted rows were true issues:
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `e9c05d0ef416669f75d9a06dc897232b`
-- `_versions/DEFECT_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `d8c24cfad122462df9eb855fdaaac7af`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `9e25a6849bd69d181eedcae244806326`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `db1d06891fc9809a930e4a9f189505be`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `c0b42a2533d420b84cb2ab3efad31194`
-- `_versions/RECONCILIATION_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `b566c0a25d97b82870217af02a13d3bf`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `e9c05d0ef416669f75d9a06dc897232b`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `d8c24cfad122462df9eb855fdaaac7af`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `9e25a6849bd69d181eedcae244806326`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `db1d06891fc9809a930e4a9f189505be`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `c0b42a2533d420b84cb2ab3efad31194`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-34-19-carry-over-p1-2026-06-22.md` — md5 `b566c0a25d97b82870217af02a13d3bf`
 
 ## Artifact Updates
 

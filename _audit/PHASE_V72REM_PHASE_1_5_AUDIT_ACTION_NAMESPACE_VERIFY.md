@@ -26,12 +26,12 @@ D-1.5-006 was a true live P1 issue. The action strings and entity-type bindings 
 
 ## Backup Evidence
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `bcfd20db0ed1d234f1604a82803b5290`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `082ab8eb83d7e4fc8cec6aa41a654b17`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `24e7fcd27f48995fa7c5246abba35399`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `7f836fe2c7b1cc3cecd2414fc333d648`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `8945179ce323b89d4662da5613811b0f`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `ce92b3978002811eedf6c5b7814d2887`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `bcfd20db0ed1d234f1604a82803b5290`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `082ab8eb83d7e4fc8cec6aa41a654b17`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `24e7fcd27f48995fa7c5246abba35399`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `7f836fe2c7b1cc3cecd2414fc333d648`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `8945179ce323b89d4662da5613811b0f`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-action-namespace.md` md5 `ce92b3978002811eedf6c5b7814d2887`
 
 ## Verification Commands
 

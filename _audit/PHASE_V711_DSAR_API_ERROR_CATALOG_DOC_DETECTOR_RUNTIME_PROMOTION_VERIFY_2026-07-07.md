@@ -19,7 +19,7 @@ Promoted to `runtime_active`.
 |---|---|
 | Detector | `tools/spec-lint/gates/dsar_api_error_catalog_completeness.ts` |
 | Fixtures | `tools/spec-lint/fixtures/dsar_api_error_catalog_completeness/pass.md`; `tools/spec-lint/fixtures/dsar_api_error_catalog_completeness/fail.md` |
-| Master Spec backup | `_versions/Sourcera_Master_Spec_pre-dsar-api-error-catalog-runtime-promotion-2026-07-07.md` |
+| Master Spec backup | `legacy-import:_versions/Sourcera_Master_Spec_pre-dsar-api-error-catalog-runtime-promotion-2026-07-07.md` |
 
 ## Verification
 

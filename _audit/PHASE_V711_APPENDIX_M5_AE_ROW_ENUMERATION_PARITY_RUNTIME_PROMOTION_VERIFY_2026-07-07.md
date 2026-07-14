@@ -50,4 +50,4 @@ Remaining blockers: 309.
 - Stamp-gate JSON: `/tmp/sourcera_stamp_gate_after_m5_ae_parity.json`
 - Blocker inventory: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-07.md`
 - Blocker CSV: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-07.csv`
-- Master Spec backup: `_versions/Sourcera_Master_Spec_pre-appendix-m5-ae-row-enumeration-parity-runtime-promotion-2026-07-07.md`
+- Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec_pre-appendix-m5-ae-row-enumeration-parity-runtime-promotion-2026-07-07.md`

@@ -20,12 +20,12 @@ Pre-edit backups were created for the touched authoritative files:
 
 | File | Backup |
 |---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-advisory-lint-cleanup-2026-06-24.md` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-advisory-lint-cleanup-2026-06-24.md` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-advisory-lint-cleanup-2026-06-24.md` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-advisory-lint-cleanup-2026-06-24.md` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-advisory-lint-cleanup-2026-06-24.md` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-advisory-lint-cleanup-2026-06-24.md` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-advisory-lint-cleanup-2026-06-24.md` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-advisory-lint-cleanup-2026-06-24.md` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-advisory-lint-cleanup-2026-06-24.md` |
 
 ## 3. Change Summary
 

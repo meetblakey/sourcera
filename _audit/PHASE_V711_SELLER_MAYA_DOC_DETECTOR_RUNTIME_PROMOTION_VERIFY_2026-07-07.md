@@ -15,7 +15,7 @@ Adjacent EvalStarter rows remain pending because they require product-codebase /
 | Detector | Added `tools/spec-lint/gates/seller_maya_surface_abstraction_engine_unchanged.ts`. |
 | Runtime harness | Registered detector in `tools/spec-lint/run-all.ts` `GATES_RUNTIME_ACTIVE`. |
 | Master Spec | Promoted §M.5.4 row from `spec_binding_pending_pack_m02_3` to `runtime_active`. |
-| Backup | `_versions/Sourcera_Master_Spec_pre-seller-maya-engine-detector-2026-07-07.md`. |
+| Backup | `legacy-import:_versions/Sourcera_Master_Spec_pre-seller-maya-engine-detector-2026-07-07.md`. |
 | Blocker inventory | Regenerated `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-07.csv` and updated the markdown summary. |
 
 ## Verification

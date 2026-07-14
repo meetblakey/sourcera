@@ -173,7 +173,7 @@ V5's second adversarial mandate: pick 3 KB tools; walk request/response/error en
 
 **`kb_entry_draft_create` cross-reference verdict:** ⚠ **Master Spec closure of KB Spec gap is sound but unflagged as Authored Extension (D-5.2-006 P2 + D-5.2-015 P3 documentation hygiene).** No V5-originated `kb_entry_draft_create` defect filed; the security boundary on direct invocation is correctly enforced via §22.8.3.1 token issuance.
 
-**Aggregate KB-tool walk verdict:** ✅ **three-tool walk confirms KB Engineering Spec congruence with two material drift clusters already filed:** (a) Master Spec authoring extensions to KB Spec §3 closure unflagged as AE (D-5.2-006 + D-5.3-009 / D-5.3-010 / D-5.3-011); (b) per-tool error envelope vs global envelope inconsistency (D-5.2-008 + D-5.2-012). No V5-originated KB-tool defect filed. The KB Spec is retired in v7.0.0 per CLAUDE.md §2 — V5 reads it via `_versions/KB_Engineering_Spec_retired_2026-04-26.md` for cross-reference congruence only. Master Spec §22 is the canonical home; the existing defect cluster represents the residual integration-program closure debt.
+**Aggregate KB-tool walk verdict:** ✅ **three-tool walk confirms KB Engineering Spec congruence with two material drift clusters already filed:** (a) Master Spec authoring extensions to KB Spec §3 closure unflagged as AE (D-5.2-006 + D-5.3-009 / D-5.3-010 / D-5.3-011); (b) per-tool error envelope vs global envelope inconsistency (D-5.2-008 + D-5.2-012). No V5-originated KB-tool defect filed. The KB Spec is retired in v7.0.0 per CLAUDE.md §2 — V5 reads it via `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` for cross-reference congruence only. Master Spec §22 is the canonical home; the existing defect cluster represents the residual integration-program closure debt.
 
 ### 2.3 Hero Moment Instrumentation End-to-End
 
@@ -451,7 +451,7 @@ V5 enumerates the remediation queue for Phase-5 P0 + structural-P1 closure.
 4. Add deploy-time validator `enrichment_cost_center_single_source` asserting §4.4.10 / §4.4.11 enrichment-cost-center cite §21.4.2 instead of hardcoding.
 5. Add CI gate `seller_page_enrichment_billing_mode_canonicality` to Appendix M.5 catalog.
 6. Update §29102 Entitlement Matrix row to confirm `hard` plan-gating, `seller_starter` minimum tier.
-7. Pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-V5-D-5.6-001-remediation-2026-05-XX.md`.
+7. Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V5-D-5.6-001-remediation-2026-05-XX.md`.
 8. Append AE row to `_integration/AUTHORED_EXTENSIONS_LEDGER.md` covering the §4.4.10 entity-field-constraint change (entity-level AE; ratification before v7.1.1 stamp).
 
 ### 10.2 Structural P1 Closure — D-5V-001 (Prompt 5.4 §23) and D-5V-002 (Prompt 5.5 §24)
@@ -481,7 +481,7 @@ V5 enumerates the remediation queue for Phase-5 P0 + structural-P1 closure.
 
 V5 re-issues when:
 
-1. D-5.6-001 P0 remediated in Master Spec (pre-edit backup at `_versions/`; 7 specified edits land).
+1. D-5.6-001 P0 remediated in Master Spec (pre-edit backup at `legacy-import:_versions/`; 7 specified edits land).
 2. PHASE5.4_FINDINGS.md and PHASE5.5_FINDINGS.md authored; D-5.4-NNN and D-5.5-NNN clusters promoted to DEFECT_LEDGER.
 3. D-5V-003 / D-5V-004 / D-5V-005 closed in Master Spec (or formally tracked into v7.1.1 with AE Ledger rows).
 4. Aggregate-counter recompute pass on COVERAGE_MATRIX.md (deferred from V4; not a hard re-verification blocker but desirable).
@@ -506,7 +506,7 @@ The following defects formally track into v7.1.1 backlog under cross-phase escal
 
 V5 sign-off was withheld (per §9 above) pending remediation of 1 inherited P0 (D-5.6-001), 4 V5-direct P1 (D-5V-001 / D-5V-002 / D-5V-003 / D-5V-004), 1 V5-direct P2 (D-5V-005), and 2 V5-direct P3 (D-5V-006 / D-5V-007). The V5 spec-side remediation pass was executed on 2026-05-06.
 
-**Pre-edit Master Spec backup:** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V5-remediation-2026-05-06.md` (5,489,006 bytes; md5 `3127ef030121cdab2b4f063f8250bc83`).
+**Pre-edit Master Spec backup:** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V5-remediation-2026-05-06.md` (5,489,006 bytes; md5 `3127ef030121cdab2b4f063f8250bc83`).
 
 ### 11.1 D-5.6-001 P0 (`seller_page_enrichment` Billing-Mode Contradiction)
 
@@ -603,7 +603,7 @@ The following defects formally track into v7.1.1 backlog under cross-phase escal
 
 **V5 sign-off granted post-remediation 2026-05-06.**
 
-All inherited P0 + V5-direct P1/P2/P3 contracts landed in the Master Spec on 2026-05-06 via the V5 spec-side remediation pass. Pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-V5-remediation-2026-05-06.md`. Per `Audit_Prompts.md → How to Use This Program §4` — "If any V prompt finds an unresolved P0 or P1 defect, STOP. Do not advance. Append remediation tasks and resolve before continuing." — V5 has resolved all blocking defects within scope.
+All inherited P0 + V5-direct P1/P2/P3 contracts landed in the Master Spec on 2026-05-06 via the V5 spec-side remediation pass. Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V5-remediation-2026-05-06.md`. Per `Audit_Prompts.md → How to Use This Program §4` — "If any V prompt finds an unresolved P0 or P1 defect, STOP. Do not advance. Append remediation tasks and resolve before continuing." — V5 has resolved all blocking defects within scope.
 
 **Sign-off criteria status (post-remediation):**
 

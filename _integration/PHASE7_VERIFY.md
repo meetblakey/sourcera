@@ -26,7 +26,7 @@
 
 | Step | Action | Target |
 |------|--------|--------|
-| 1 | Backup Master Spec to `_versions/` | `Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md` |
+| 1 | Backup Master Spec to `legacy-import:_versions/` | `Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md` |
 | 2 | Confirm Polish #6 already satisfied — Appendix J spot-check of 10 new enums | No edits required — all 10 enums confirmed registered at Appendix J lines 38584–38678 (`usage_dashboard_kind`, `usage_dashboard_panel_id`, `usage_dashboard_viewer_role_kind`, `usage_envelope_violation_kind`, `usage_outbox_curve_kind`, `usage_dsar_redaction_kind`, `usage_k_anon_floor_kind`, `usage_conversion_factor_drift_direction`, `usage_event_family_registration_action`, `usage_alias_retirement_pager_tier`) |
 | 3 | Confirm Polish #7 already satisfied — §50.13 sub-anchor spot-check | No edits required — §50.13.1 through §50.13.10 sub-anchors confirmed at Master Spec lines 32403–32586, including the §51-cited sub-anchors §50.13.2, §50.13.3, §50.13.4, §50.13.10 |
 | 4 | Close Polish #1 + #2 — §51.8.4 #11 stale anchor `(§51.9)` + stale event count "Ten new events" | Master Spec line 34432 — rewrote to cite "Appendix G → §51 Product Usage Analytics Event Additions, Master Spec lines 35739–35775; NOT an anchor inside §51 body"; changed "Ten new events" → "Thirteen new events" with full event enumeration (6 dashboard-surface events + 7 Sourcera-internal meta-events) |
@@ -426,7 +426,7 @@ All seven polish items from the original verification were closed as part of the
 - [ ] Human sign-off on §51.5.6 AC-11 deferred-compute fallback pattern (new implicit Authored Extension introduced during 2026-04-22 remediation). **Pending human action.** Frontend Platform lead sign-off recommended.
 
 **Artifacts of record:**
-- Master Spec backup: `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md`
+- Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase7-verify-remediation-2026-04-22.md`
 - Master Spec: `/Sourcera/Sourcera_Master_Spec.md` (§51.1–§51.8 at lines 33696–34432; Appendix G §51 additions at 35739–35775; Appendix I §51 additions at 36386–36414; Appendix J §51 enum cluster at 38584–38684; remediation edits at lines 34139, 34169, 34201, 34432)
 - Integration-program prompt: `/Sourcera/Integration_Prompts.md` (Phase 7 block, lines 1504–1590 — Option A rewrite executed 2026-04-22)
 - Reconciliation log: `/Sourcera/_integration/RECONCILIATION.md` (§51 Phase 7 Verification Remediation (2026-04-22) entry appended)

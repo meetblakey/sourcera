@@ -6,13 +6,13 @@
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-protected-asset-runtime-promotion-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX_pre-protected-asset-runtime-promotion-2026-07-09.md`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-protected-asset-runtime-promotion-2026-07-09.md`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-protected-asset-runtime-promotion-2026-07-09.csv`
-- `_versions/RECONCILIATION_pre-protected-asset-runtime-promotion-2026-07-09.md`
-- `_versions/AGENTS_pre-protected-asset-runtime-promotion-2026-07-09.md`
-- `_versions/PHASE_V711_REMAINING_RUNTIME_BLOCKER_CLASSIFICATION_pre-protected-asset-runtime-promotion-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-protected-asset-runtime-promotion-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-protected-asset-runtime-promotion-2026-07-09.md`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-protected-asset-runtime-promotion-2026-07-09.md`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-protected-asset-runtime-promotion-2026-07-09.csv`
+- `legacy-import:_versions/RECONCILIATION_pre-protected-asset-runtime-promotion-2026-07-09.md`
+- `legacy-import:_versions/AGENTS_pre-protected-asset-runtime-promotion-2026-07-09.md`
+- `legacy-import:_versions/PHASE_V711_REMAINING_RUNTIME_BLOCKER_CLASSIFICATION_pre-protected-asset-runtime-promotion-2026-07-09.md`
 
 ## Changes
 

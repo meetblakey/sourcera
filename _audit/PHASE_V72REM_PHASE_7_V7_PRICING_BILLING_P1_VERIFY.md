@@ -23,11 +23,11 @@ Canonical sources reviewed before classification:
 
 Backups created before the authoritative edits:
 
-- `_versions/Sourcera_Master_Spec_pre-phase-7-v7-pricing-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER_pre-phase-7-v7-pricing-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-7-v7-pricing-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-7-v7-pricing-p1-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-7-v7-pricing-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-7-v7-pricing-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-7-v7-pricing-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-7-v7-pricing-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-7-v7-pricing-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-7-v7-pricing-p1-2026-06-23.md`
 
 ## 3. Classification
 

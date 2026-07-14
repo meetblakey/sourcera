@@ -20,11 +20,11 @@ Touched authoritative files:
 
 Pre-edit backups:
 
-- `_versions/Sourcera_Master_Spec_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-3-1-rbac-residual-p1-2026-06-21.md`
 
 ## Landing Sites
 

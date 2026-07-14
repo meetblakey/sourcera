@@ -52,12 +52,12 @@ No target row was classified stale, duplicate, or blocked by a missing product d
 
 ## 5. Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-em-entitlement-matrix-p1-2026-06-23.md`
 
 ## 6. Verification
 

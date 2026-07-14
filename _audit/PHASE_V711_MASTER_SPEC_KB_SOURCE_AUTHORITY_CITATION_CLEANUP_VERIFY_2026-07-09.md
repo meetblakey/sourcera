@@ -22,7 +22,7 @@ Closed three live source-authority defects:
 Commands run:
 
 ```bash
-awk '/^## 22\./{in22=1} /^## 23\./{in22=0} in22' Sourcera_Master_Spec.md | rg -n 'KB_Engineering_Spec\.md|KB Engineering Spec §|KB-Spec §13\.2 cost tables are the engineering source|§17 \(KB Spec\)|per `_versions/KB_Engineering_Spec_retired_2026-04-26\.md`'
+awk '/^## 22\./{in22=1} /^## 23\./{in22=0} in22' Sourcera_Master_Spec.md | rg -n 'KB_Engineering_Spec\.md|KB Engineering Spec §|KB-Spec §13\.2 cost tables are the engineering source|§17 \(KB Spec\)|per `legacy-import:_versions/KB_Engineering_Spec_retired_2026-04-26\.md`'
 npm --prefix tools/spec-lint run all -- --no-emit --ae-ledger ../../_integration/AUTHORED_EXTENSIONS_LEDGER.md --decisions ../../_integration/Decisions.md
 tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json > _audit/_tmp/v711_stamp_gate_after_kb_source_authority_cleanup.json
 ```

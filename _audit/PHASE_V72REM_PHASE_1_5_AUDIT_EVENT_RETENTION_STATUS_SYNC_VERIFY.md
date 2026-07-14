@@ -8,9 +8,9 @@
 
 | File | Backup | MD5 |
 |---|---|---|
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-event-retention-status-sync.md` | `86965f62b5a214961ad532366b8d47d3` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-event-retention-status-sync.md` | `602875e6e27aa91b926593e7b43f9e32` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-event-retention-status-sync.md` | `67de8c60d9176baeca353825f48b70eb` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-event-retention-status-sync.md` | `86965f62b5a214961ad532366b8d47d3` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-event-retention-status-sync.md` | `602875e6e27aa91b926593e7b43f9e32` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-event-retention-status-sync.md` | `67de8c60d9176baeca353825f48b70eb` |
 
 ## Adjudication
 

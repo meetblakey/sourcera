@@ -119,12 +119,12 @@ The lint runner reported `blocking gates worst exit code: 0`.
 
 ## 4. Backup Artifacts
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `49d0af00cc52508cb4e918b2173e9280`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `5ae2bf306d46b92e91797195904dbc38`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `2986b3dd4d6ee65698cd4251e0aea859`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `5a196974d893be3469d556d77b62504a`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `d569f0896fb5c39bf235b291557bc93e`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `ad7bae5089c5ef7a2ae3fc09633eced2`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `49d0af00cc52508cb4e918b2173e9280`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `5ae2bf306d46b92e91797195904dbc38`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `2986b3dd4d6ee65698cd4251e0aea859`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `5a196974d893be3469d556d77b62504a`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `d569f0896fb5c39bf235b291557bc93e`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-4-marketplace-entities.md` — md5 `ad7bae5089c5ef7a2ae3fc09633eced2`
 
 ## 5. Residuals
 

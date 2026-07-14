@@ -36,7 +36,7 @@ Closes D-EM-003 P0 (entitlement; PROD-CRIT-009 cluster): registers `first_pass_r
 
 ## Pre-edit Master Spec backup
 
-`_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-PH4.3-D-EM-003-2026-05-19.md` (6,232,132 bytes; md5 `9c764712072feb4a3ff13890128a7459`).
+`legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-PH4.3-D-EM-003-2026-05-19.md` (6,232,132 bytes; md5 `9c764712072feb4a3ff13890128a7459`).
 
 ## Self-Challenge Pass (Opus-mandatory per v7.2.0-REM Program Convention #15)
 

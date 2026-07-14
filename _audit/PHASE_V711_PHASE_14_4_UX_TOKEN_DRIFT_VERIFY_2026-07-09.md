@@ -18,15 +18,15 @@ Touched files:
 
 Backups:
 
-- `_versions/UX_Design_of_Sourcera.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/Sourcera_Master_Spec.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/DEFECT_LEDGER.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/REMEDIATION_BACKLOG.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/AGENTS.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/CLAUDE.pre-phase-144-token-drift-2026-07-09.md`
-- `_versions/V711_PRODUCTION_GRADE_DOCUMENTATION_GOAL_PROMPT.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/UX_Design_of_Sourcera.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/AGENTS.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/CLAUDE.pre-phase-144-token-drift-2026-07-09.md`
+- `legacy-import:_versions/V711_PRODUCTION_GRADE_DOCUMENTATION_GOAL_PROMPT.pre-phase-144-token-drift-2026-07-09.md`
 
 ## Source Bindings
 

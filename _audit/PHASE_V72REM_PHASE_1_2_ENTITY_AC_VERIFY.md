@@ -9,11 +9,11 @@ Created before canonical edits:
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `1ca555b61b31ef855ff1a57e518230ce` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `07f3cca80c29407712e718ac0345873d` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `c7187db2ce3c25d51b000f16016c7d7b` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `4b8865cfa7af5ff0ec05cff8512550c7` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `f4950da73b4db99a1e480cbf6545d9bd` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `1ca555b61b31ef855ff1a57e518230ce` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `07f3cca80c29407712e718ac0345873d` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `c7187db2ce3c25d51b000f16016c7d7b` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `4b8865cfa7af5ff0ec05cff8512550c7` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-2-entity-acceptance-criteria.md` | `f4950da73b4db99a1e480cbf6545d9bd` |
 
 ## 2. Adjudication
 

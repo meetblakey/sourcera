@@ -39,4 +39,4 @@ This pass promotes documentation and spec-tree detector evidence only. It does n
 - `_audit/_tmp/v711_stamp_gate_latest.json`
 - `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-08.md`
 - `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-08.csv`
-- `_versions/Sourcera_Master_Spec_pre-template-library-api-event-runtime-promotion-2026-07-08.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-template-library-api-event-runtime-promotion-2026-07-08.md`

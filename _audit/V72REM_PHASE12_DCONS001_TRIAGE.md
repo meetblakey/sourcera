@@ -21,7 +21,7 @@
 | Tier-1 lag **remaining** | **0** |
 | Canonical `open` after pass (Tier-2 surface) | ~1,771 |
 
-3 arrow-matches were rejected as false positives (`D-1.6-008`, `D-8.2-014`, `D-V711-014` — `→` in description prose, not a transition). 78 of the 83 cross-class propagations targeted `remediated`, 5 `partially_remediated`. Pre-edit ledger backup: `_versions/DEFECT_LEDGER.pre-v72REM-Phase12-Tier1-propagation-2026-06-15.md` (3,759,949 bytes).
+3 arrow-matches were rejected as false positives (`D-1.6-008`, `D-8.2-014`, `D-V711-014` — `→` in description prose, not a transition). 78 of the 83 cross-class propagations targeted `remediated`, 5 `partially_remediated`. Pre-edit ledger backup: `legacy-import:_versions/DEFECT_LEDGER.pre-v72REM-Phase12-Tier1-propagation-2026-06-15.md` (3,759,949 bytes).
 
 Each propagated canonical row carries the cite: `[D-CONS-001 canonical-lag propagation 2026-06-15 -> supplementary transition DEFECT_LEDGER L<n>; canonical status synced from this audited transition]`. This is transcription of an existing audited closure, not an independent re-verification — the cite makes every propagation traceable to its source row.
 

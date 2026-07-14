@@ -62,8 +62,8 @@ Full breaking-change ledger in `_integration/RECONCILIATION.md` ("Phase 13 — F
 
 Both upstream source documents are now subsumed by the Master Spec and have been moved out of the Sourcera folder root:
 
-- `Sourcera_Master_Summary.md` (v1.1, 2026-04-17) → `/_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. Subsumed by §1, §2, §22, §27, §34, §48 of the Master Spec.
-- `KB_Engineering_Spec.md` → `/_versions/KB_Engineering_Spec_retired_2026-04-26.md`. Subsumed by §22.8–§22.18 of the Master Spec.
+- `Sourcera_Master_Summary.md` (v1.1, 2026-04-17) → `/_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`. Subsumed by §1, §2, §22, §27, §34, §48 of the Master Spec.
+- `KB_Engineering_Spec.md` → `/_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md`. Subsumed by §22.8–§22.18 of the Master Spec.
 
 After v7.0.0, the Master Spec is the **sole authoritative engineering document.** The pricing-strategy documents (`Sourcera_Buyer_Pricing_Strategy.md`, `Sourcera_Seller_Pricing_Strategy.md`) remain authoritative for buyer/seller pricing strategy commentary not in the Spec. CLAUDE.md should be updated in a follow-on commit to reflect the new hierarchy.
 
@@ -135,11 +135,11 @@ Each phase has a verification log under `_integration/`:
 ## Reference
 
 - Master Spec: `/Users/blake/Documents/Claude/Projects/Sourcera/Sourcera_Master_Spec.md` — v7.0.0 (Status: Current).
-- Baseline: `/_versions/Sourcera_Master_Spec_v6.0.0.md` — v6.0.0.
-- Pre-finalize snapshot: `/_versions/Sourcera_Master_Spec_pre-v7.0.0-finalize-2026-04-26.md`.
+- Baseline: `/_baselines/Sourcera_Master_Spec_v6.0.0.md` — v6.0.0.
+- Pre-finalize snapshot: `legacy-import:_versions/Sourcera_Master_Spec_pre-v7.0.0-finalize-2026-04-26.md`.
 - Reconciliation log: `/_integration/RECONCILIATION.md` — ~9,170 lines, authoritative line-by-line audit trail.
 - Authored Extensions ledger: `/_integration/AUTHORED_EXTENSIONS_LEDGER.md`.
-- Retired source documents: `/_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`, `/_versions/KB_Engineering_Spec_retired_2026-04-26.md`.
+- Retired source documents: `/_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`, `/_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md`.
 - Phase verification logs: `/_integration/PHASE{1..13}_VERIFY.md`, `PHASE12_{1..4}_VERIFY.md`, `PHASE12_GATE.md`, `PHASE13_ENG_REVIEW.md`, `PHASE13_2_VERIFY.md`.
 
 ---
@@ -156,7 +156,7 @@ The Phase 13 Final Acceptance Gate (re-issued 2026-04-26) ran the seven-criterio
 | 2 | Changelog present | PASS | Comprehensive Changelog at top of Spec. |
 | 3 | Every Phase 1–12 verification file shows exit-criteria-met | PASS | Closure addenda appended to `PHASE1_VERIFY.md` §4.7, `PHASE2_VERIFY.md` §14.4, `PHASE4_VERIFY.md`, `PHASE5_VERIFY.md` §13. Phase 11 GTM/Positioning Appendix formally de-scoped via `_integration/RECONCILIATION.md → Phase 11 GTM/Positioning Appendix — Formal De-Scoping (2026-04-26)`; the engineering surfaces that landed under the Phase 11 label remain individually verified through Phases 5, 7, 11-RECON, 13, and 13.2. |
 | 4 | Zero orphan enums / broken xrefs / numeric conflicts / undefined glossary terms | PASS | Phase 12.5 closure addenda appended to `PHASE12_3_VERIFY.md` §14 (Citation Closure Register absorbs all 39 unique residual labels) and `PHASE12_4_VERIFY.md` §8 (R-01/R-03/R-04/R-05/R-06 promoted to authoritative tables; R-02/R-07 routed to sign-off track per ledger policy). |
-| 5 | Summary and KB Engineering Spec moved to /_versions/ | PASS | Both files in `/_versions/` with `retired_2026-04-26` filenames; neither in root. |
+| 5 | Summary and KB Engineering Spec moved to legacy-import:_versions/ | PASS | Both files in `legacy-import:_versions/` with `retired_2026-04-26` filenames; neither in root. |
 | 6 | RECONCILIATION.md finalized | PASS | Final "Phase 13 — Final Closure" entry + new Phase 12.5 entry + Phase 11 de-scoping entry. |
 | 7 | `_integration/PHASE13_FINAL.md` exists | PASS | This artifact, with the Closure Addendum below. |
 
@@ -171,7 +171,7 @@ The Phase 13 Final Acceptance Gate (re-issued 2026-04-26) ran the seven-criterio
 - §44.1 — two new performance-target rows (Server-Side API Call Timeout 30s; Console Bridge Apply SLO).
 - §44.5 / §45.2 / §45.3 — bullets / workflow rewritten to cite authoritative rows; no inline value duplication.
 
-**Backup of pre-Phase-12.5 corpus:** `/_versions/Sourcera_Master_Spec_pre-phase-12.5-2026-04-26.md`.
+**Backup of pre-Phase-12.5 corpus:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-12.5-2026-04-26.md`.
 
 ### Outstanding Residuals (Independent of Acceptance Gate)
 

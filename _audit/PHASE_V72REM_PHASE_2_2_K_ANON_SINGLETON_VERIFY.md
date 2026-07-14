@@ -35,12 +35,12 @@ Conflict surfaced: D-2.2-025 named §48.6.4 as the canonical home for all seven 
 
 ## Backup Evidence
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `425c2c706ffbe1b0368cbead77ad740f`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `261ef3128b320195c18da61e5433052d`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `b63c6da3c072469fea07936648b4ec71`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `1766eb6e140be1ccb013942716c97532`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `d9997c432cc2414e13913a3dea058602`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `a215cf19a0e1e2da588e7fe1c8e0236c`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `425c2c706ffbe1b0368cbead77ad740f`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `261ef3128b320195c18da61e5433052d`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `b63c6da3c072469fea07936648b4ec71`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `1766eb6e140be1ccb013942716c97532`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `d9997c432cc2414e13913a3dea058602`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-k-anon-singleton.md` md5 `a215cf19a0e1e2da588e7fe1c8e0236c`
 
 ## Verification Results
 

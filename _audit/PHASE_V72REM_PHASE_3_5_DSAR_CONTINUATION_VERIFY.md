@@ -86,10 +86,10 @@ _integration/RECONCILIATION.md = fb25c479fdefb99376e9bb21de17cc68
 Pre-edit backups:
 
 ```text
-_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 75ce0f99baf154705f410ecbd2a21c4e
-_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 15398a0944c24cbeb7b73bc61964443f
-_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 8ca44bc5a1f8667b3ad96e4d3cad49ae
-_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 5c832667bf3ea2a6d5ebefef365aa925
-_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 40bb9a28a03b5a18e70cce3694ce2f89
-_versions/RECONCILIATION_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 48c35611d64bc06ab2bdce11201e89ab
+legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 75ce0f99baf154705f410ecbd2a21c4e
+legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 15398a0944c24cbeb7b73bc61964443f
+legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 8ca44bc5a1f8667b3ad96e4d3cad49ae
+legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 5c832667bf3ea2a6d5ebefef365aa925
+legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 40bb9a28a03b5a18e70cce3694ce2f89
+legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-3-5-dsar-p1-batch.md = 48c35611d64bc06ab2bdce11201e89ab
 ```

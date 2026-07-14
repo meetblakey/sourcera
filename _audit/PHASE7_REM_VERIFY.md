@@ -4,7 +4,7 @@
 
 **Run date.** 2026-06-13 (independent re-verification).
 
-**Supersedes.** `_audit/PHASE7_REM_VERIFY.md` authored 2026-05-20 (pre-edit md5 `53e5df531b38957078981ac31a813aa2`, 48,231 bytes; backed up at `_versions/PHASE7_REM_VERIFY.pre-reverify-2026-06-13.md`). This pass re-runs Prompt V7 against live corpus state, confirms the 2026-05-20 PASS independently, tightens the SIGN-OFF criterion semantics, and surfaces four verification findings (§9) — three of which the 2026-05-20 log did not isolate.
+**Supersedes.** `_audit/PHASE7_REM_VERIFY.md` authored 2026-05-20 (pre-edit md5 `53e5df531b38957078981ac31a813aa2`, 48,231 bytes; backed up at `legacy-import:_versions/PHASE7_REM_VERIFY.pre-reverify-2026-06-13.md`). This pass re-runs Prompt V7 against live corpus state, confirms the 2026-05-20 PASS independently, tightens the SIGN-OFF criterion semantics, and surfaces four verification findings (§9) — three of which the 2026-05-20 log did not isolate.
 
 **Verification posture.** Non-destructive read-only adversarial walk. No spec edits, no ledger status edits performed in this pass. State anchored to:
 

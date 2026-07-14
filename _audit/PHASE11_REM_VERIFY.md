@@ -2,7 +2,7 @@
 
 **Pass type.** Independent Opus adversarial verification + sign-off determination for the canonical **Phase 11 — P1 Top-50 Cluster Execution** (`_integration/RECONCILIATION.md` L11023; prompt `_integration/v7.2.0-Remediation_Prompts.md` L1412–1482, "Prompt V11"). This log does not author or re-author Master Spec content; it verifies the **claimed** Phase 11 execution against the live `Sourcera_Master_Spec.md`, `_audit/DEFECT_LEDGER.md`, and `_audit/REMEDIATION_BACKLOG.md §3.1`, runs the prompt-mandated structural + adversarial checks, and renders the HALT / sign-off determination.
 
-**No Master Spec edit. No defect transitions.** This is a verification phase. `Sourcera_Master_Spec.md` and `_audit/DEFECT_LEDGER.md` are **not** touched (no pre-edit backup of those files required). Because the verdict is **HALT**, **zero** defects are transitioned by this pass — transition is the job of the Phase 11 *execution* prompts (Prompt 11.1 × 50), which have not run. The reconciliation log it writes is backed up at `_versions/RECONCILIATION.pre-v72REM-Phase11-verify-2026-06-14.md` (2,195,223 bytes; md5 `2fb49ec108995a24a7bc39426ed85463`).
+**No Master Spec edit. No defect transitions.** This is a verification phase. `Sourcera_Master_Spec.md` and `_audit/DEFECT_LEDGER.md` are **not** touched (no pre-edit backup of those files required). Because the verdict is **HALT**, **zero** defects are transitioned by this pass — transition is the job of the Phase 11 *execution* prompts (Prompt 11.1 × 50), which have not run. The reconciliation log it writes is backed up at `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase11-verify-2026-06-14.md` (2,195,223 bytes; md5 `2fb49ec108995a24a7bc39426ed85463`).
 
 **Phase-identity binding.** "Phase 11" here = the canonical **Top-50 Cluster Execution** phase (`REMEDIATION_BACKLOG §3.1`, 269/337 P1 defects). It is distinct from **Phase V11** (the 2026-05-11 catalog-completeness remediation pass already closed) and from the audit-program **Phase 11.x findings** (`PHASE11.1–11.4_FINDINGS.md`). Disambiguator: the "Top-50 / §3.1" scope tag + the 2026-06-14 date. Per the D-AE-016 namespace-collision discipline, this block is titled with explicit scope and does not rename any existing header.
 
@@ -206,7 +206,7 @@ No revision to the verdict required.
 - Corroborating prior verification: `_audit/PHASE10_REM_VERIFY.md` §19 (open catalog-class P1 assigned to Phase 11 / Phase 12).
 - Evidence (live spec): §5.11 L9652–9770 (PH32-PLAN drift); §24.5 L20934 / §10.11 L12447 / §15.5 L14661 (PHSS-ACC); §4.4.8 L5054 / §27.10.2.1 / §4.7.1 L7928 (PH22-ENUM); §32.5 + §27.10.6 + §27.11.2 L25782 (PH8P81-API); §6.8.1 L10311 / §33.4 L29947 / §22.3.1 L17385 (PH35-DSAR).
 - Evidence (ledger): canonical P1 rows for the 50 families; §50 closures L5209–5239; `D-12V` V12 closures L5251–5254.
-- Backup: `_versions/RECONCILIATION.pre-v72REM-Phase11-verify-2026-06-14.md` (2,195,223 bytes; md5 `2fb49ec108995a24a7bc39426ed85463`).
+- Backup: `legacy-import:_versions/RECONCILIATION.pre-v72REM-Phase11-verify-2026-06-14.md` (2,195,223 bytes; md5 `2fb49ec108995a24a7bc39426ed85463`).
 
 ---
 

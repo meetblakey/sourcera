@@ -26,8 +26,8 @@
 | Byte size | 6,089,968 | 6,089,968 (spec-body unchanged; the spec edits had already landed 2026-05-03 in the V2 spec-side pass; Prompt 2.1 landed §M.5 catalog-row amendment + runtime-status promotion only) | 6,092,060 |
 | md5 | `ff4983c6ada42005d6cd4ce4543ea72f` | (unchanged) | `75296785e2f5b1cbfbe31f218befdaa7` |
 | Line count | 51,852 | 51,852 | 51,852 |
-| Pre-Prompt-2.1 backup | `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-glossary-canonicality-2026-05-18.md` | — | — |
-| Pre-Prompt-2.2 backup | — | — | `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-Prompt2.2-brand_voice_guide_v1-2026-05-18.md` (6,092,060 bytes; md5 `75296785e2f5b1cbfbe31f218befdaa7`) |
+| Pre-Prompt-2.1 backup | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-glossary-canonicality-2026-05-18.md` | — | — |
+| Pre-Prompt-2.2 backup | — | — | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-Phase2-Prompt2.2-brand_voice_guide_v1-2026-05-18.md` (6,092,060 bytes; md5 `75296785e2f5b1cbfbe31f218befdaa7`) |
 
 The 2,092-byte size delta from Prompt 2.1 → Prompt 2.2 is the structured-citation rewrite of the `brand_voice_guide_v1` Appendix K entry (replacing the 2026-05-03 Phase 2V inline-payload form with the five-slot schema-by-reference form, plus Counterfactual #1 non-inline-restatement invariant authoring). The md5 transitions are deterministic across both Prompt closures.
 
@@ -99,7 +99,7 @@ The Phase 2 SIGN-OFF directive requires five adversarial spot-checks against the
 
 L50138, L50149, and L50153 are all within the single Appendix K entry body (continuous block from L50138 through L50164). The three hits inside the entry are intra-entry self-references binding the entry's identity, canonical storage, and validator resolution — all required by the entry's structural invariants. No leakage to other Master Spec sections, no leakage to companion docs (`Sourcera_Buyer_Pricing_Strategy.md`, `Sourcera_Seller_Pricing_Strategy.md`, `UX_Design_of_Sourcera.md`, `Build_Execution_Strategy.md`, `Linear_Execution_Blueprint.md`, `SWE_Project_Instructions.md`, `CLAUDE.md`, or any `GTM/*.md` file).
 
-**Cross-corpus grep.** Hits in `_versions/` (~70 files) are historical snapshots — expected to retain the older inline-payload form. Hits in `_integration/{RECONCILIATION,AUTHORED_EXTENSIONS_LEDGER,v7.2.0-REM_Linear_Cycle_Plan,v7.2.0-Remediation_Prompts}.md` and `_audit/{DEFECT_LEDGER,REMEDIATION_BACKLOG,PRODUCTION_READINESS_VERDICT,AUDIT_README,COVERAGE_MATRIX,AE_RATIFICATION_RECOMMENDATIONS,PHASE_V72REM_PHASE_3_VERIFY,PHASE2_VERIFY,PHASE2.2_GLOSSARY_FINDINGS}.md` are governance / audit / ledger surfaces — expected to carry closure trace prose. No leak to a non-governance file.
+**Cross-corpus grep.** Hits in `legacy-import:_versions/` (~70 files) are historical snapshots — expected to retain the older inline-payload form. Hits in `_integration/{RECONCILIATION,AUTHORED_EXTENSIONS_LEDGER,v7.2.0-REM_Linear_Cycle_Plan,v7.2.0-Remediation_Prompts}.md` and `_audit/{DEFECT_LEDGER,REMEDIATION_BACKLOG,PRODUCTION_READINESS_VERDICT,AUDIT_README,COVERAGE_MATRIX,AE_RATIFICATION_RECOMMENDATIONS,PHASE_V72REM_PHASE_3_VERIFY,PHASE2_VERIFY,PHASE2.2_GLOSSARY_FINDINGS}.md` are governance / audit / ledger surfaces — expected to carry closure trace prose. No leak to a non-governance file.
 
 **Sibling-entry hygiene check.** L50151 references `brand_voice_guide_v2` (singular forward-reference per the schema-version axis discipline). This is the canonical sibling-entry forward-reference convention; no `brand_voice_guide_v2` Glossary entry exists at v7.1.0 (only `v1` is canonical per the entry's "Schema-version axis" paragraph at L50151).
 

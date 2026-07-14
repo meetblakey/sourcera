@@ -23,11 +23,11 @@ No product behavior changed. No §M.5 runtime row was promoted.
 
 ## Checkpoints
 
-- `_versions/GTM_90DAY_SPRINT.checkpoint-source-authority-cleanup-2026-07-09.md`
-- `_versions/GTM_NETWORK_EFFECTS.pre-residual-source-authority-cleanup-2026-07-09.md`
-- `_versions/GTM_PLG_ARCHITECTURE.pre-residual-source-authority-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-residual-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-residual-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_90DAY_SPRINT.checkpoint-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_NETWORK_EFFECTS.pre-residual-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_PLG_ARCHITECTURE.pre-residual-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-residual-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-residual-source-authority-cleanup-2026-07-09.md`
 
 Note: the 90-Day Sprint checkpoint was created after the first edit had started; the Network Effects / PLG checkpoints were created before residual edits.
 

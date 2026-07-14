@@ -315,7 +315,7 @@ V4 cannot release Phase-4 sign-off. The blocking conditions are:
 
 5. **One Phase-4 cross-section silence on a buyer-journey-critical transition** (§10.13 Phase 13 Solo $199 charge failure).
 
-V4 sign-off can be re-issued after: (a) D-4.2-001 and D-4.5-001 are closed via spec-side remediation pass with pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-{date}.md`; (b) Prompt 4.3 (§12) executes in a fresh Cowork / Opus session; (c) Prompt 4.8 / §17 naming is reconciled per `D-4V-002` recommendation; (d) `D-4V-004` Phase-13 Solo charge failure path is authored; (e) `D-4V-003` P3 index hygiene is corrected; (f) the AE Ledger Phase-4 cluster is fully populated and the eight §34.14.1.b registrations land in §21.4.2 / §21.4.5.
+V4 sign-off can be re-issued after: (a) D-4.2-001 and D-4.5-001 are closed via spec-side remediation pass with pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-{date}.md`; (b) Prompt 4.3 (§12) executes in a fresh Cowork / Opus session; (c) Prompt 4.8 / §17 naming is reconciled per `D-4V-002` recommendation; (d) `D-4V-004` Phase-13 Solo charge failure path is authored; (e) `D-4V-003` P3 index hygiene is corrected; (f) the AE Ledger Phase-4 cluster is fully populated and the eight §34.14.1.b registrations land in §21.4.2 / §21.4.5.
 
 ---
 
@@ -440,7 +440,7 @@ V4 sign-off is conditional on the following remediation steps. Re-verification w
 
 ### 10.1 Spec-Side Remediation Pass (Required for V4 sign-off)
 
-**Pre-edit Master Spec backup at the V4 boundary:** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-{YYYY-MM-DD}.md`. Mandatory before any of the destructive edits below.
+**Pre-edit Master Spec backup at the V4 boundary:** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-{YYYY-MM-DD}.md`. Mandatory before any of the destructive edits below.
 
 1. **D-4.2-001 (P0)** — Resolve §10 13-phase / 12-enum / `pipeline_stage_id` 0–15 three-way taxonomy collision. Recommended path: (a) extend Appendix J `pipeline_phase` enum from 12 to 13 values registering `phase_13_contract` (or canonical equivalent); (b) update §4.3.1 `pipeline_stage_id` doc-string to "Integer 0–15 with `0=Draft`, `1–13=Phases 1–13`, `14=Closed`, `15=Archived`"; (c) update §32.5 `POST /v1/workspaces/{wid}/advance` request schema to accept `target_phase ∈ {1..13}` as the canonical input; (d) update §22.19 / §3.14 / §4.7.1 / §48.5 consumers to bind to the 13-value enum; (e) update Appendix L state machine for Workspace status transitions to include Phase 13 entry; (f) update CI gate `workspace_status_canonical_consumer` matcher to assert 13-value enum.
 2. **D-4.5-001 (P0)** — Resolve §14.2.1 ↔ §4.3.8 ↔ §4.3.9 entity bifurcation. Recommended path: (a) hard-delete §4.3.9 (operational JSON is stale; no inbound consumers in v7.1.0 corpus per §47730 surface translation alignment); (b) migrate §14.2.1's structured parameter object into §4.3.8 as the canonical entity definition (weight_overrides / excluded_vendors / excluded_use_cases / rubric_overrides / min_threshold / tco_value_weight); (c) reconcile name/description constraints (recommend §4.3.8 1–200 / 0–2000 as more permissive); (d) add `console = buyer (fixed)`, `Indexes`, `Retention`, `Scope Isolation`, DSAR clause, residency clause to §4.3.8; (e) reference §4.3.8 from §14.2 by anchor instead of inline-redefining; (f) author Authored Extension row in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` to track ratification.
@@ -471,7 +471,7 @@ V4 re-verification will pick up cross-phase forward-references (Phase 5 / 6 / 7 
 
 ## 11. V4 Spec-Side Remediation Pass (2026-05-05)
 
-**Pre-edit Master Spec backup:** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-2026-05-05.md` (5,452,435 bytes; 48,220 lines). Mandatory backup taken before any destructive edit per `CLAUDE.md §13.2`.
+**Pre-edit Master Spec backup:** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-2026-05-05.md` (5,452,435 bytes; 48,220 lines). Mandatory backup taken before any destructive edit per `CLAUDE.md §13.2`.
 
 ### 11.1 P0 Closures
 
@@ -601,7 +601,7 @@ The 152 P1 sub-prompt defects + 13 P1 D-12-NNN §12 defects forward into v7.1.1 
 
 | phase | prompt | started_at | completed_at | opus_session_id | findings_count | status |
 |---|---|---|---|---|---|---|
-| Phase 4 | Prompt V4 — Spec-Side Remediation Pass | 2026-05-05T—:—:—Z | 2026-05-05T—:—:—Z | local-cowork-2026-05-05 | 0 net new defects (the transient D-4.3-NNN cluster authored mid-pass was withdrawn upon discovery of the D-12-NNN alias); 6 defect rows transitioned `open → remediated`: D-4.2-001 (P0), D-4.5-001 (P0), D-4V-001 (P1 alias-reconciled), D-4V-002 (P1), D-4V-003 (P3), D-4V-004 (P1); 165 P1 + 165 P2 + 43 P3 forwarded to v7.1.1 backlog under cross-phase escalation. Pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-2026-05-05.md` (5,452,435 bytes; 48,220 lines). | **complete — V4 sign-off granted post-remediation.** Phase 5 unblocked. |
+| Phase 4 | Prompt V4 — Spec-Side Remediation Pass | 2026-05-05T—:—:—Z | 2026-05-05T—:—:—Z | local-cowork-2026-05-05 | 0 net new defects (the transient D-4.3-NNN cluster authored mid-pass was withdrawn upon discovery of the D-12-NNN alias); 6 defect rows transitioned `open → remediated`: D-4.2-001 (P0), D-4.5-001 (P0), D-4V-001 (P1 alias-reconciled), D-4V-002 (P1), D-4V-003 (P3), D-4V-004 (P1); 165 P1 + 165 P2 + 43 P3 forwarded to v7.1.1 backlog under cross-phase escalation. Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V4-remediation-2026-05-05.md` (5,452,435 bytes; 48,220 lines). | **complete — V4 sign-off granted post-remediation.** Phase 5 unblocked. |
 
 ---
 

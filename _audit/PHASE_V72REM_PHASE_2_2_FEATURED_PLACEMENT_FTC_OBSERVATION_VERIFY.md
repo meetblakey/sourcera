@@ -12,13 +12,13 @@ D-2.2-043 was a true live P1 issue. Current Section 4.4.20 had `ftc_disclosure_l
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `b488525cb39fcf0c7667ff568bce1c1f` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `d942b3c39ad7dc5a866e3a26673fa1ad` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `15a49eaae7d490a6a3df46bd95168804` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `6f736de92c8de3455d5e6315d4495dfc` |
-| `_audit/AUTHORITATIVE_SOURCE_MAP.md` | `_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `6befe26db9fdd8a4956dff6030f93b2e` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `993d5d25d84b5bfa3d0ec5e9c8f7aeae` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `6e4e90f77c0805b93c1524b4e6010083` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `b488525cb39fcf0c7667ff568bce1c1f` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `d942b3c39ad7dc5a866e3a26673fa1ad` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `15a49eaae7d490a6a3df46bd95168804` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `6f736de92c8de3455d5e6315d4495dfc` |
+| `_audit/AUTHORITATIVE_SOURCE_MAP.md` | `legacy-import:_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `6befe26db9fdd8a4956dff6030f93b2e` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `993d5d25d84b5bfa3d0ec5e9c8f7aeae` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-featured-placement-ftc-observation.md` | `6e4e90f77c0805b93c1524b4e6010083` |
 
 ## 3. Change Summary
 

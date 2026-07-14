@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-06
 **Auditor model:** Claude Opus
-**Audit prompt:** Walk Master Spec §22.9–§22.20 and cross-reference `_versions/KB_Engineering_Spec_retired_2026-04-26.md §4–§18` end-to-end. Run the 10-check matrix from `Audit_Prompts.md → Phase 5.3 — KB Retrieval, Indexing, Skills, Lifecycle (§22.9–§22.20)`.
+**Audit prompt:** Walk Master Spec §22.9–§22.20 and cross-reference `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md §4–§18` end-to-end. Run the 10-check matrix from `Audit_Prompts.md → Phase 5.3 — KB Retrieval, Indexing, Skills, Lifecycle (§22.9–§22.20)`.
 **Status:** Findings promoted to `DEFECT_LEDGER.md` Phase 5.3 section. This file is the scratch artifact retained per audit-program protocol.
 
 ---
@@ -10,7 +10,7 @@
 ## Sources Read (in full)
 
 - `Sourcera_Master_Spec.md` §22.9 (lines 17243–17402), §22.10 (17403–17608) including §22.10.1.A alias table, §22.11 (17609–17699), §22.12 (17701–17848), §22.13 (17850–17936), §22.14 (17938–18046), §22.15 (18048–18133), §22.16 (18135–18419), §22.17 ACs #21–#49 (18421–18475), §22.18 (18476–19023) including §22.18.1–§22.18.7, §22.19 (19025–19088), §22.20 (19091–19359) including §22.20.1–§22.20.8
-- `_versions/KB_Engineering_Spec_retired_2026-04-26.md` §4 Retrieval Engineering (lines 443–571) including §4.1–§4.8, §5 Indexing Pipeline (573–631), §6 Managed Agent Definitions (634–777), §7 Custom Tool Contracts (779–847), §8 Skills (850–950), §9 Environments (953–1018), §10 Session Lifecycle (1020–1114), §11 Event Stream Handling (1116–1188), §12 Citation Guardrails (1191–1255), §13 Cost & Caching (1258–1335), §14 Eval Harness (1338–1394), §15 Observability (1396–1432), §16 Rollout & Canary (1436–1466), §17 Failure Modes (1469–1509), §18 Security & Residency (1511–1546)
+- `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` §4 Retrieval Engineering (lines 443–571) including §4.1–§4.8, §5 Indexing Pipeline (573–631), §6 Managed Agent Definitions (634–777), §7 Custom Tool Contracts (779–847), §8 Skills (850–950), §9 Environments (953–1018), §10 Session Lifecycle (1020–1114), §11 Event Stream Handling (1116–1188), §12 Citation Guardrails (1191–1255), §13 Cost & Caching (1258–1335), §14 Eval Harness (1338–1394), §15 Observability (1396–1432), §16 Rollout & Canary (1436–1466), §17 Failure Modes (1469–1509), §18 Security & Residency (1511–1546)
 - `Sourcera_Master_Spec.md` §22.3.1 KBEntry entity (16081–16125) for field-name canonicality verification, §22.5 KB Health Model (16299–16350) for decay-curve / win_rate cross-check, §22.8.4 MCP tool catalog (16503–17199) for retrieval-pipeline → tool I/O cross-check
 - `Sourcera_Master_Spec.md` §34.19 Seller Plan Upgrade Carry-Over Guarantee (30145–30249) including §34.19.1 Protected Asset Classes, §34.19.2 KB Value Meter formula and the `Organization.kb_value_meter_score` field claim
 - `Sourcera_Master_Spec.md` §51 Product Usage Analytics (40578–41320) for the §22 KB Hero Moment / KB Value Meter / Stake-Reveal event-family registration

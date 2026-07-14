@@ -37,10 +37,10 @@ No §M.5 runtime row was promoted. No new enum, webhook event, pricing rule, pla
 
 | File | Backup |
 |---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
-| `AGENTS.md` | `_versions/AGENTS_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
-| Runtime inventory markdown / CSV | `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` / `.csv` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
+| `AGENTS.md` | `legacy-import:_versions/AGENTS_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` |
+| Runtime inventory markdown / CSV | `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_pre-phase-3-1-rbac-governance-p2-2026-07-09.md` / `.csv` |

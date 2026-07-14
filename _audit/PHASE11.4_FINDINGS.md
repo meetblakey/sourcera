@@ -4,7 +4,7 @@
 **Scope:** Coverage trace joining `_audit/FEATURE_INVENTORY.md` (898 F-* feature rows; 72 of those F-AE-*) against Master Spec Appendix M.1 (327 mapping rows over lines 49004–49371) against Master Spec Appendix M.5 (103 CI-gate rows over lines 49444–49563) against `_integration/AUTHORED_EXTENSIONS_LEDGER.md` (218 AE-* row identifiers, deduplicated).
 **Defect-ID convention:** `D-11.4-NNN` (sequential per Defect Ledger format).
 **Severity-rule application:** P0 reserved for `Audit_Prompts.md` Severity Rules (a)–(e); P1 for "feature unbuildable as written: missing M.1 row" per the Phase 11.4 prompt's own missing-link rule; P2 for ambiguity that two staff engineers would resolve differently; P3 for cosmetic / hygiene drift.
-**Pre-edit backup:** Non-destructive audit pass; no Master Spec edits performed; no `/_versions/` snapshot required.
+**Pre-edit backup:** Non-destructive audit pass; no Master Spec edits performed; no `legacy-import:_versions/` snapshot required.
 **Self-challenge revisions:** Three — logged at §6 below.
 **Counterfactual pass:** Logged at §7 below.
 **Trace artifact:** `_audit/SURFACE_ENGINE_TRACE.md` (1,500+ lines; per-family trace tables for every F-* feature; AE Authored Extension trace; coverage gap inventory; cross-reference to prior phase findings).

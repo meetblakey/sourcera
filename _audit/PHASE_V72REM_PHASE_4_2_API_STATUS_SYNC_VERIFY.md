@@ -51,9 +51,9 @@ The canonical DEFECT_LEDGER rows and `_audit/_scratch_p1_clusters.md` identify t
 
 | File | md5 |
 |---|---:|
-| `_versions/REMEDIATION_BACKLOG_pre-phase-4-2-api-status-sync-2026-06-22.md` | `0128fb83c0b9deb3de0cc680a7c155b7` |
-| `_versions/V711_BACKLOG_INDEX_pre-phase-4-2-api-status-sync-2026-06-22.md` | `0506768e38ed9e98f82af9389de4c5b4` |
-| `_versions/RECONCILIATION_pre-phase-4-2-api-status-sync-2026-06-22.md` | `89d28a75a847558c0ec5e5cd83e5410f` |
+| `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-2-api-status-sync-2026-06-22.md` | `0128fb83c0b9deb3de0cc680a7c155b7` |
+| `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-2-api-status-sync-2026-06-22.md` | `0506768e38ed9e98f82af9389de4c5b4` |
+| `legacy-import:_versions/RECONCILIATION_pre-phase-4-2-api-status-sync-2026-06-22.md` | `89d28a75a847558c0ec5e5cd83e5410f` |
 
 ## Post-Edit Hashes
 

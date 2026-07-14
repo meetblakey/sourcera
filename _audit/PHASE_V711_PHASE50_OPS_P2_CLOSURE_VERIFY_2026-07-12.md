@@ -44,4 +44,4 @@ npx tsx tools/release/generate_runtime_blocker_inventory.ts --stamp-json _audit/
 - `_audit/_tmp/v711_stamp_gate_2026-07-12_phase50-ops-p2.json`
 - `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.md`
 - `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.csv`
-- `_versions/v711-phase50-ops-p2-pre-edit-2026-07-12/`
+- `legacy-import:_versions/v711-phase50-ops-p2-pre-edit-2026-07-12/`

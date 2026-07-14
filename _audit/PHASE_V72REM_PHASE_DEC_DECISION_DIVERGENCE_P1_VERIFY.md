@@ -35,12 +35,12 @@ Read and reconciled:
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-dec-decision-divergence-p1-2026-06-23.md`
 
 ## Verification
 

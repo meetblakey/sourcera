@@ -95,11 +95,11 @@ MD5 (_integration/RECONCILIATION.md) = 8d60992cb62c6d698a492b32bf8ef327
 ## 5. Pre-Edit Backups
 
 ```text
-_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = 7d5d6563835170cba77141749237e420
-_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = 323898d51f81c07edc7ecd4fa6cee4c3
-_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = 0d6c161bd49c4315dc66ddb90a919cf8
-_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = acda72e7cd45a9a09ef7c27308e43241
-_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = b64f2c51d4d0c6e6143a80dac8798fc7
+legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = 7d5d6563835170cba77141749237e420
+legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = 323898d51f81c07edc7ecd4fa6cee4c3
+legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = 0d6c161bd49c4315dc66ddb90a919cf8
+legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = acda72e7cd45a9a09ef7c27308e43241
+legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-verification-tier-downgrade-stale-sync.md = b64f2c51d4d0c6e6143a80dac8798fc7
 ```
 
 ## 6. Residuals

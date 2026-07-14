@@ -36,4 +36,4 @@ tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json
 **Observed:** live gate PASS; positive fixture PASS; negative fixture FAIL with expected findings; typecheck PASS; full spec-lint PASS. Stamp gate parses 431 runtime rows, 285 `runtime_active`, and still fails only on 144 product/runtime evidence blockers: 102 M11.3, 26 M21.3, 11 M02.3, and 5 M24.3.
 
 **Authored Extension:** approved AE-V711-PH46-TCO-AC-P2-01 addendum.  
-**Backup:** `_versions/Sourcera_Master_Spec.pre-phase46-tco-residual-closure-2026-07-09.md`.
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec.pre-phase46-tco-residual-closure-2026-07-09.md`.

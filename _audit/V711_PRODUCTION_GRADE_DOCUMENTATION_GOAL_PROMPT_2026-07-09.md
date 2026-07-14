@@ -14,7 +14,7 @@ Current baseline as of 2026-07-09:
 Binding rules:
 1. Read AGENTS.md first. Master Spec wins for product behavior. Pricing companions win only for pricing narrative where Master Spec §34 does not own the number.
 2. Use `_audit/V711_BACKLOG_INDEX.md` for live v7.1.1 routing, `_audit/DEFECT_LEDGER.md` for canonical row status, `_audit/REMEDIATION_BACKLOG.md` for cluster/pack routing, `_integration/Decisions.md` for decision conflicts, and `_integration/AUTHORED_EXTENSIONS_LEDGER.md` for AE release gates.
-3. Before editing an authoritative file, create a dated backup in `_versions/`.
+3. Before editing an authoritative file, create a dated backup in `legacy-import:_versions/`.
 4. For every gap, classify it as exactly one of: true-live remediation, stale-open status sync, superseded/re-targeted, lower-severity residual, or runtime-evidence blocker. Never close by calling it historical without landing-site proof.
 5. If authoring unsupported new product behavior, mark it as an Authored Extension and update the AE ledger.
 6. If a spec-tree invariant is closed, add or update a runtime-active detector plus pass/fail fixtures.

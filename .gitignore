@@ -7,3 +7,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+
+_versions/
+_audit/_tmp/
+*.bak
+*.orig

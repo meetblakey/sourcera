@@ -25,11 +25,11 @@
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-51-ae-status-note.md` | `47cc3f69c292404fed8577f4f0968918` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `8692c9c8e509be611b944195543537ad` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `77bec5a31d48614a868218e968dde62e` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `33bfb3a6cadc174639470e2e60a44e49` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `b6c56950c4fe306a975367113b8148a0` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-51-ae-status-note.md` | `47cc3f69c292404fed8577f4f0968918` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `8692c9c8e509be611b944195543537ad` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `77bec5a31d48614a868218e968dde62e` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `33bfb3a6cadc174639470e2e60a44e49` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-51-instrumentation-status-sync.md` | `b6c56950c4fe306a975367113b8148a0` |
 
 ## Verification Commands
 
@@ -39,7 +39,7 @@
 | `rg -n "BL-P1-PH51-INSTR \|[^\n]*\| [1-9][0-9]* \|" _audit/REMEDIATION_BACKLOG.md` | 0 matches |
 | `rg -n "^\| D-[^|]+ \| P1 \|[^\n]*\| open \|" _audit/DEFECT_LEDGER.md \| wc -l` | `410` |
 | `rg -n "AE-V13-005[^\n]*sign-off pending\|AE-V13-005[^\n]*pending v7\.1\.1" Sourcera_Master_Spec.md _integration/AUTHORED_EXTENSIONS_LEDGER.md _integration/RECONCILIATION.md` | 0 matches |
-| `rg -n "^<<<<<<<\|^=======\|^>>>>>>>" -g '!**/node_modules/**' -g '!_versions/**' .` | 0 matches |
+| `rg -n "^<<<<<<<\|^=======\|^>>>>>>>" -g '!**/node_modules/**' -g '!legacy-import:_versions/**' .` | 0 matches |
 | `npm --prefix tools/spec-lint run all -- --no-emit` | exit 0; all blocking gates passed |
 
 ## Lint Notes

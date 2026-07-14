@@ -2,7 +2,7 @@
 
 **Scope.** §4 Data Model extension executed by Integration Prompts 1.1–1.4 (Reconciliation-log Phases 1, 2, 2b, 3, 4, 4e). Forty-five new entity subsections authored across §4.3, §4.4, §4.5, §4.7, §4.8.
 
-**Verifier posture.** Hostile staff engineer preparing a production code review. Every claim is grounded in direct reads of `Sourcera_Master_Spec.md` and `_versions/Sourcera_Master_Spec_v6.0.0.md`. Prior partial verification (covering §4.3 only, dated 2026-04-15) has been superseded and backed up to `/Sourcera/_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md`. All findings from the prior partial are re-surfaced here and re-classified against the full Phase-1 surface.
+**Verifier posture.** Hostile staff engineer preparing a production code review. Every claim is grounded in direct reads of `Sourcera_Master_Spec.md` and `_baselines/Sourcera_Master_Spec_v6.0.0.md`. Prior partial verification (covering §4.3 only, dated 2026-04-15) has been superseded and backed up to `legacy-import:_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md`. All findings from the prior partial are re-surfaced here and re-classified against the full Phase-1 surface.
 
 **Verification date.** 2026-04-17.
 
@@ -354,7 +354,7 @@ If the user elects to waive the Completion Delta and advance to Phase 2 regardle
 
 **Verifier (this pass).** Opus-4.6, comprehensive adversarial run 2026-04-17.
 
-**Prior partial verification (§4.3 only, 2026-04-15).** Preserved at `/Sourcera/_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md`. All findings from the prior pass are incorporated above (S-1 through S-9 from the prior file map to F-S-1 through F-S-8 and F-S-12 in this comprehensive pass; no prior finding is silently dropped).
+**Prior partial verification (§4.3 only, 2026-04-15).** Preserved at `legacy-import:_versions/PHASE1_VERIFY_pre-comprehensive-rewrite-2026-04-17.md`. All findings from the prior pass are incorporated above (S-1 through S-9 from the prior file map to F-S-1 through F-S-8 and F-S-12 in this comprehensive pass; no prior finding is silently dropped).
 
 ---
 

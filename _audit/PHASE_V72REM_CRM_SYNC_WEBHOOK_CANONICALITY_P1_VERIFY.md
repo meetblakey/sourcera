@@ -19,11 +19,11 @@ Touched authoritative files:
 
 Pre-edit backups:
 
-- `_versions/Sourcera_Master_Spec_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
-- `_versions/REMEDIATION_BACKLOG_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-crm-sync-webhook-canonicality-p1-2026-06-21.md`
 
 ## Canonical Decisions Verified
 

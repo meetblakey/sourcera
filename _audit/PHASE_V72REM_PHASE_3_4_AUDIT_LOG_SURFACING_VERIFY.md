@@ -108,12 +108,12 @@ _integration/RECONCILIATION.md = 6d9ec824b8b50acaef5e4f700b082c90
 Pre-edit backups:
 
 ```text
-_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = eae22a0699bcc9adccadb986f000247a
-_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = b261ff797c791c58ec7a0462137df7a9
-_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = e42ec4db5c0f4fadee6a65be75b92517
-_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = c5518d19ce4d00455f0d38a76a42d67d
-_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = e7a59bcc5afe6e60aae31b39abbd95f2
-_versions/RECONCILIATION_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = cdd29cf6d5f7c85678a527fffa6deeb0
+legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = eae22a0699bcc9adccadb986f000247a
+legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = b261ff797c791c58ec7a0462137df7a9
+legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = e42ec4db5c0f4fadee6a65be75b92517
+legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = c5518d19ce4d00455f0d38a76a42d67d
+legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = e7a59bcc5afe6e60aae31b39abbd95f2
+legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-3-4-audit-log-surfacing.md = cdd29cf6d5f7c85678a527fffa6deeb0
 ```
 
 ## 6. Residuals

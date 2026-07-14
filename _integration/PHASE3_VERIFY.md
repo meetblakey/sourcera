@@ -4,7 +4,7 @@
 
 **Reviewer role.** Hostile — actively looking for reasons the bundle should not ship as v7.0.0. Every claim in §22 cross-read line-by-line against KB Engineering Spec §0–§20 and against §21.4 / §21.5 / §34.10 / §34.11. Drift reported even where §22 is internally consistent.
 
-**Baseline (Phase 3 pre-integration).** `_versions/Sourcera_Master_Spec_v6.0.0.md` §22 placeholder (retrieval + citation discipline stub; no MCP server; no Managed Agent definitions; no KB Entry lifecycle; no Ghost-Bid Importer; no Capability Registry rows for `kb_bootstrap`, `ghost_rfp_ingestion`, `first_pass_responses`, `capability_declaration_suggest`, or `document_attach_suggest`).
+**Baseline (Phase 3 pre-integration).** `_baselines/Sourcera_Master_Spec_v6.0.0.md` §22 placeholder (retrieval + citation discipline stub; no MCP server; no Managed Agent definitions; no KB Entry lifecycle; no Ghost-Bid Importer; no Capability Registry rows for `kb_bootstrap`, `ghost_rfp_ingestion`, `first_pass_responses`, `capability_declaration_suggest`, or `document_attach_suggest`).
 
 **Target.** `/Sourcera/Sourcera_Master_Spec.md` (current working copy; §22 = §22.1–§22.17; §21.4 = §21.4.1 → §21.4.5 + augmentations; §21.5 = AIWallet-referenced surface).
 

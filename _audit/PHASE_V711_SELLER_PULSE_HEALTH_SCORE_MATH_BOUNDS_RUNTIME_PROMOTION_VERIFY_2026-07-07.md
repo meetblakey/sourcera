@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-07
 **Scope:** M02.3 spec-tree runtime evidence for `seller_pulse_health_score_math_bounds`.
-**Backup:** `_versions/Sourcera_Master_Spec_pre-seller-pulse-health-score-math-bounds-runtime-promotion-2026-07-07.md`
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-seller-pulse-health-score-math-bounds-runtime-promotion-2026-07-07.md`
 
 ## Scope Boundary
 

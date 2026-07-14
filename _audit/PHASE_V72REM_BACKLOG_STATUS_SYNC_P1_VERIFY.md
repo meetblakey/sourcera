@@ -21,9 +21,9 @@ No Master Spec edits were made because these were tracking drift rows, not live 
 
 ## Backups
 
-- `_versions/REMEDIATION_BACKLOG_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` — md5 `d200dc15b9f802ddf9b83c50fe379e57`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` — md5 `20eb769b0fbb2faff58835f4679235f3`
-- `_versions/RECONCILIATION_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` — md5 `097557dd003de815d61b9bacfe26dbc8`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` — md5 `d200dc15b9f802ddf9b83c50fe379e57`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` — md5 `20eb769b0fbb2faff58835f4679235f3`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-14-2-and-2-2-status-sync-2026-06-22.md` — md5 `097557dd003de815d61b9bacfe26dbc8`
 
 ## Artifact Updates
 

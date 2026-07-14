@@ -3,7 +3,7 @@
 **Date:** 2026-04-25
 **Phase:** 12.2 (Glossary sweep — terms introduced across Phases 1–11)
 **Authoring section:** Master Spec Appendix K — Glossary
-**Backup:** `_versions/Sourcera_Master_Spec_pre-phase-12.2-glossary-2026-04-25.md`
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-12.2-glossary-2026-04-25.md`
 **Exit criterion:** Zero undefined cross-section terms.
 **Status:** PASS — exit criterion met.
 
@@ -176,7 +176,7 @@ The Phase 12.2 exit gate **passes**.
 | 2 | No deletions. | n/a |
 | 3 | No renames or rewrites of pre-existing entries. | n/a |
 
-Backup file: `_versions/Sourcera_Master_Spec_pre-phase-12.2-glossary-2026-04-25.md`. Restore is a single `cp` if rollback is required.
+Backup file: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-12.2-glossary-2026-04-25.md`. Restore is a single `cp` if rollback is required.
 
 ---
 

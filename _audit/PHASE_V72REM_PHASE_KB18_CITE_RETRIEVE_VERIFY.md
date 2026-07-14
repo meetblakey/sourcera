@@ -8,12 +8,12 @@
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `8ff0e041c3d288ead02fd238680a1890` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `b4013ac0fd63c25ff268df781bc4e82e` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `7912db722805b1257125db2fafff2110` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `86bcb6058ec386fb11bdbed0243ddd41` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `bce2cd631a35c5b889a1389473f52d41` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `65aa7bd5b2a88bfbed0174e057468799` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `8ff0e041c3d288ead02fd238680a1890` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `b4013ac0fd63c25ff268df781bc4e82e` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `7912db722805b1257125db2fafff2110` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `86bcb6058ec386fb11bdbed0243ddd41` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `bce2cd631a35c5b889a1389473f52d41` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-kb18-cite-retrieve-p1.md` | `65aa7bd5b2a88bfbed0174e057468799` |
 
 ## 2. Closure Map
 

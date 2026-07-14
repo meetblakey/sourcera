@@ -243,7 +243,7 @@ V9 is a verification prompt; it does not author new audit material. Two cosmetic
 
 **V9 = PASS pending AE ratification.**
 
-The V9 spec-side remediation pass landed in Master Spec v7.1.0 on 2026-05-09 (pre-edit backup at `/_versions/Sourcera_Master_Spec.v7.1.0-pre-V9-remediation-2026-05-09.md`, 5,623,540 bytes; 49,057 lines). The pass authored §6.8.4.3 / §6.8.4.4 / §6.8.4.5 / §6.8.4.6 (cascade completeness pack), §40.2 retention authoritative-home pack (12 new entity rows + 4 row rewrites), and §42.4.1 / §42.4.2 (residency-bound DR pack). Catalog deltas: Appendix I +9 error codes; Appendix J +6 enums; Appendix C +12 webhook events; §M.5 +27 CI gates. AE rows AE-V9-001 through AE-V9-007 authored in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` queued for v7.1.1 stamp-gate ratification.
+The V9 spec-side remediation pass landed in Master Spec v7.1.0 on 2026-05-09 (pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V9-remediation-2026-05-09.md`, 5,623,540 bytes; 49,057 lines). The pass authored §6.8.4.3 / §6.8.4.4 / §6.8.4.5 / §6.8.4.6 (cascade completeness pack), §40.2 retention authoritative-home pack (12 new entity rows + 4 row rewrites), and §42.4.1 / §42.4.2 (residency-bound DR pack). Catalog deltas: Appendix I +9 error codes; Appendix J +6 enums; Appendix C +12 webhook events; §M.5 +27 CI gates. AE rows AE-V9-001 through AE-V9-007 authored in `_integration/AUTHORED_EXTENSIONS_LEDGER.md` queued for v7.1.1 stamp-gate ratification.
 
 **Re-run sign-off scoreboard.**
 

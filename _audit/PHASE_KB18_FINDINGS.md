@@ -2,10 +2,10 @@
 
 **Run date.** 2026-05-12 (Cowork Opus 4.6 session)
 **Posture.** Non-destructive. Defect-ID mnemonic: `D-KB18-NNN` (per Audit_Prompts.md Defect Ledger Format mnemonic permission).
-**Scope.** Exhaustive cross-check of `_versions/KB_Engineering_Spec_retired_2026-04-26.md §0–§18` (the entire retired KB Engineering Spec) against `Sourcera_Master_Spec.md` v7.1.0 §22 (lines 16277–19805). Mirror of Phase 5.2 / 5.3 cross-walks but executed with a fresh context and all seven prompt checks walked sequentially. Findings that duplicate D-5.2-NNN / D-5.3-NNN / D-5V-NNN rows are NOT re-filed; the ledger is append-only and a re-walk does not republish prior decisions.
+**Scope.** Exhaustive cross-check of `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md §0–§18` (the entire retired KB Engineering Spec) against `Sourcera_Master_Spec.md` v7.1.0 §22 (lines 16277–19805). Mirror of Phase 5.2 / 5.3 cross-walks but executed with a fresh context and all seven prompt checks walked sequentially. Findings that duplicate D-5.2-NNN / D-5.3-NNN / D-5V-NNN rows are NOT re-filed; the ledger is append-only and a re-walk does not republish prior decisions.
 
 **Sources read in full.**
-- `_versions/KB_Engineering_Spec_retired_2026-04-26.md` §0–§18 (lines 1–1546) plus §19 References (1548–1566) and §20 Open Items (1570–1582).
+- `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` §0–§18 (lines 1–1546) plus §19 References (1548–1566) and §20 Open Items (1570–1582).
 - `Sourcera_Master_Spec.md` §22.1 (16277–16299), §22.2 (16300–16410), §22.3 (16411–16529), §22.4 (16530–16638), §22.5 (16640–16691), §22.6 (16692–16719), §22.7 (16720–16737), §22.8 (16738–17583), §22.9 (17584–17743), §22.10 (17744–17999), §22.11 (18001–18091), §22.12 (18093–18241), §22.13 (18242–18327), §22.14 (18330–18437), §22.15 (18440–18526), §22.16 (18527–18810), §22.17 ACs (18813–18866).
 - Targeted reads of `DEFECT_LEDGER.md` Phase 5.2 (lines 1877–1955), Phase 5.3 (1957–2042), Phase 5 V5 (2394–2434) to avoid re-filing prior findings.
 
@@ -286,7 +286,7 @@ Per Audit_Prompts.md output protocol. Phase 5.2 / 5.3 already populated §22.1�
 
 ## 14. Pre-Edit Backup
 
-No spec edits performed in this prompt (audit non-destructive). Master Spec at v7.1.0 unchanged. KB Spec snapshot at `_versions/KB_Engineering_Spec_retired_2026-04-26.md` unchanged.
+No spec edits performed in this prompt (audit non-destructive). Master Spec at v7.1.0 unchanged. KB Spec snapshot at `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` unchanged.
 
 ---
 

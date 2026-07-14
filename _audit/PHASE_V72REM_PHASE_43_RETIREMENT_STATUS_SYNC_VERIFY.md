@@ -44,10 +44,10 @@ No Master Spec body edit was required. No new Authored Extension row was require
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-43-retirement-status-sync-2026-06-22.md` | `3cd4d50cbe6b041820205ea4c5e7855f` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-43-retirement-status-sync-2026-06-22.md` | `1dca766e92ce965081c5f95eecd96a6e` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-43-retirement-status-sync-2026-06-22.md` | `6a40e76c7d64ae755e2742f7a9786f2e` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-43-retirement-status-sync-2026-06-22.md` | `be983415f6c684b0f0158f1d5e1537ff` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-43-retirement-status-sync-2026-06-22.md` | `3cd4d50cbe6b041820205ea4c5e7855f` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-43-retirement-status-sync-2026-06-22.md` | `1dca766e92ce965081c5f95eecd96a6e` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-43-retirement-status-sync-2026-06-22.md` | `6a40e76c7d64ae755e2742f7a9786f2e` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-43-retirement-status-sync-2026-06-22.md` | `be983415f6c684b0f0158f1d5e1537ff` |
 
 ## Verification
 

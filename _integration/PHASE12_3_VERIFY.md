@@ -2,7 +2,7 @@
 
 **Phase:** 12.3 — Cross-Reference Integrity sweep across the entire Master Spec.
 **Date:** 2026-04-26.
-**Master Spec baseline:** `_versions/Sourcera_Master_Spec_pre-phase12.3-2026-04-26.md`.
+**Master Spec baseline:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.3-2026-04-26.md`.
 **Master Spec post-edit:** `Sourcera_Master_Spec.md` (current; +484 lines net authoring delta).
 **Reconciliation entry:** `_integration/RECONCILIATION.md → Phase 12.3 — Cross-Reference Integrity`.
 **Stated exit criterion:** "Zero broken references is the exit criterion." (Integration_Prompts.md L1928.)
@@ -358,7 +358,7 @@ All 14 Authored Extensions are logged in `_integration/AUTHORED_EXTENSIONS_LEDGE
 
 ## 12. Verification Checklist
 
-- [x] Master Spec backed up at `_versions/Sourcera_Master_Spec_pre-phase12.3-2026-04-26.md`.
+- [x] Master Spec backed up at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.3-2026-04-26.md`.
 - [x] Every `§N.M` reference resolves to either a Master Spec heading anchor or carries an inter-document prefix per the Citation Convention.
 - [x] Every `Appendix X` body citation resolves to an H2 heading in the Master Spec body.
 - [x] Anchor slugs follow Master Spec convention (`{#N.N.N-...}` for body sections, `{#appendix-X:-...}` for appendices).

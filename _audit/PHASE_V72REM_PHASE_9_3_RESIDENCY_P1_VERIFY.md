@@ -8,12 +8,12 @@ Authoritative sources read for this pass: Master Spec §1.6, §4.2.1, §6.7, §6
 
 Backups created before edits:
 
-- `_versions/Sourcera_Master_Spec.v7.1.0a-pre-phase-residency-p1-2026-06-23.md`
-- `_versions/DEFECT_LEDGER.pre-phase-residency-p1-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX.pre-phase-residency-p1-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG.pre-phase-residency-p1-2026-06-23.md`
-- `_versions/RECONCILIATION.pre-phase-residency-p1-2026-06-23.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase-residency-p1-2026-06-23.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-phase-residency-p1-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-phase-residency-p1-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-phase-residency-p1-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-phase-residency-p1-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION.pre-phase-residency-p1-2026-06-23.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase-residency-p1-2026-06-23.md`
 
 ## Classification
 

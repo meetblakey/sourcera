@@ -25,9 +25,9 @@ No product behavior, pricing value, API contract, webhook family, enum namespace
 
 | File | Backup |
 | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-v711-doc-status-sync-2026-07-07.md` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-v711-doc-status-sync-2026-07-07.md` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-v711-doc-status-sync-2026-07-07.md` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-v711-doc-status-sync-2026-07-07.md` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-v711-doc-status-sync-2026-07-07.md` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-v711-doc-status-sync-2026-07-07.md` |
 
 ## Verification
 

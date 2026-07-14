@@ -5,14 +5,14 @@
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
-- `_versions/spec-lint-run-all_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.ts`
-- `_versions/spec-lint-README_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
-- `_versions/spec-lint-types_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.ts`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
+- `legacy-import:_versions/spec-lint-run-all_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.ts`
+- `legacy-import:_versions/spec-lint-README_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.md`
+- `legacy-import:_versions/spec-lint-types_pre-v711-phase6-phase10-runtime-gate-promotion-2026-06-24.ts`
 
 ## Runtime Wiring
 

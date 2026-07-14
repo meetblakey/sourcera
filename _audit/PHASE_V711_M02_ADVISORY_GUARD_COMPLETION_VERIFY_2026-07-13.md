@@ -58,10 +58,10 @@
 
 Backups:
 
-- `_versions/Sourcera_Master_Spec.v7.1.0a-pre-m02-local-guard-closure-2026-07-13.md`
-- `_versions/AGENTS.pre-m02-local-guard-closure-2026-07-13.md`
-- `_versions/V711_BACKLOG_INDEX.pre-m02-local-guard-closure-2026-07-13.md`
-- `_versions/REMEDIATION_BACKLOG.pre-m02-local-guard-closure-2026-07-13.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-m02-local-guard-closure-2026-07-13.md`
+- `legacy-import:_versions/AGENTS.pre-m02-local-guard-closure-2026-07-13.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-m02-local-guard-closure-2026-07-13.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-m02-local-guard-closure-2026-07-13.md`
 
 ## Verification Commands
 

@@ -28,16 +28,16 @@ Closed D-DEC-006 by adopting Decisions.md C-4 for Ops override guardrails on Buy
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/DEFECT_LEDGER.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/REMEDIATION_BACKLOG.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/V711_BACKLOG_INDEX.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-09.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/V711_PRODUCTION_GRADE_DOCUMENTATION_GOAL_PROMPT_2026-07-09.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/AGENTS.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/CLAUDE.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/Decisions.md.pre-d-dec-006-pro-trial-override-2026-07-09`
-- `_versions/RECONCILIATION.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/Sourcera_Master_Spec.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/DEFECT_LEDGER.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-09.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/V711_PRODUCTION_GRADE_DOCUMENTATION_GOAL_PROMPT_2026-07-09.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/AGENTS.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/CLAUDE.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/Decisions.md.pre-d-dec-006-pro-trial-override-2026-07-09`
+- `legacy-import:_versions/RECONCILIATION.md.pre-d-dec-006-pro-trial-override-2026-07-09`
 
 ## Verification
 

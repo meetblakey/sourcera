@@ -18,9 +18,9 @@
 
 ## Backups
 
-- `_versions/REMEDIATION_BACKLOG_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` — md5 `85b0edc639caa792c7a592a9f03ee7ec`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` — md5 `f3185f3b6849ec2c5dde43dd13299f07`
-- `_versions/RECONCILIATION_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` — md5 `4858596c3ea598b91231153c0a0b843c`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` — md5 `85b0edc639caa792c7a592a9f03ee7ec`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` — md5 `f3185f3b6849ec2c5dde43dd13299f07`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-ss-and-2-2-status-sync-2026-06-22.md` — md5 `4858596c3ea598b91231153c0a0b843c`
 
 ## Verification Results
 

@@ -24,7 +24,7 @@
 
 | Step | Action | Target |
 |------|--------|--------|
-| 1 | Backup Master Spec to `_versions/` | `Sourcera_Master_Spec_pre-phase6-verify-remediation-2026-04-21.md` |
+| 1 | Backup Master Spec to `legacy-import:_versions/` | `Sourcera_Master_Spec_pre-phase6-verify-remediation-2026-04-21.md` |
 | 2 | Execute Option A — accept §50 as permanent landing | Integration_Prompts.md Phase 6 block rewrite with 2026-04-21 Numbering Reconciliation preamble + §49.x → §50.x mapping table |
 | 3 | Close §4.6.3 `ops_user_id` cascade-delete gap (Polish #2) | Master Spec §4.6.3 — `ON DELETE RESTRICT` + tombstone-or-transfer procedure + `ops_session_ops_user_lifecycle_state` enum |
 | 4 | Close `api_request_ids` storage-strategy gap (Polish #3) | Master Spec §4.6.3 — linked-denormalized-table split: `api_request_ids_count`, `api_request_ids_recent_100` (rolling FIFO ≤100), `api_request_ids_table_ref` (FK to `OpsSessionApiRequestLink` sharded link table); hard cap raised 50k → 100k link rows; `ops_session_api_request_id_denorm_invariant` deploy-time test |
@@ -636,7 +636,7 @@ All seven polish items from the original verification were closed as part of the
 - [ ] Human sign-off from reviewer per Integration_Prompts.md checkpoint 2 ("end of Phase 6 — Ops Console is a new customer-impacting surface"). **Pending human action.** Sign-off covers the Phase 6 authoring + the six Authored Extensions (#37–#42) introduced during remediation.
 
 **Artifacts of record:**
-- Master Spec backup: `/Sourcera/_versions/Sourcera_Master_Spec_pre-phase6-verify-remediation-2026-04-21.md`
+- Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec_pre-phase6-verify-remediation-2026-04-21.md`
 - Integration-program update: `/Sourcera/Integration_Prompts.md` (Phase 6 block, 2026-04-21 preamble)
 - Reconciliation log: `/Sourcera/_integration/RECONCILIATION.md` (§50 Phase 6 Verification Remediation, 2026-04-21 entry)
 - This verification: `/Sourcera/_integration/PHASE6_VERIFY.md` (§0 addendum, §1.5 / §6.1 / §6.2 / §6.3 / §6.4 post-remediation edits)

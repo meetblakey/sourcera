@@ -141,7 +141,7 @@ Avoid: filler language, "genuinely / honestly / straightforward," startup clichÃ
 
 - The user's folder is the Sourcera project folder. Treat it as the single source of truth.
 - Save deliverables to the project folder with clear, dated filenames.
-- Back up the Master Spec to `/Sourcera/_versions/` before any destructive edit.
+- Create a Git commit before destructive edits. Use a tag for release baselines. Never create snapshot copies.
 - Use `/Sourcera/_integration/` for any integration-program artifacts (RECONCILIATION.md, DELTA_INVENTORY.md, phase verification logs).
 - Never expose internal session paths to the user â€” refer to "the Sourcera folder" or file names.
 

@@ -28,10 +28,10 @@ No new template authoring was required in this pass.
 
 Pre-edit backups:
 
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `482b8e8cdc1fe35799ae2e1493cb30f1`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `d80fa4864611de840a2bc2802b56eae4`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `abc8737fce1ff5f833c3c3cf3a6e13a5`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `59a54cdc6df280a89b29948c971f9cc3`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `482b8e8cdc1fe35799ae2e1493cb30f1`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `d80fa4864611de840a2bc2802b56eae4`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `abc8737fce1ff5f833c3c3cf3a6e13a5`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1v2-verifier-scope-status-sync.md` — md5 `59a54cdc6df280a89b29948c971f9cc3`
 
 ## Verification Commands
 

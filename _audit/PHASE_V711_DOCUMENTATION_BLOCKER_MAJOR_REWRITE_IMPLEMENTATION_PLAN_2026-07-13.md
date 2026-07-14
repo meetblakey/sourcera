@@ -13,7 +13,7 @@
 - Documentation only. Do not create application code, tests, workflows, deployment receipts, or provider evidence.
 - `Sourcera_Master_Spec.md` remains the product-behavior authority.
 - Pricing numbers remain unchanged.
-- Historical `_versions/` snapshots are read-only.
+- Historical `legacy-import:_versions/` snapshots are read-only.
 - Back up every authoritative file before its first destructive edit.
 - New behavior must include state, auth, concurrency, retries, notifications, privacy, residency, mobile behavior, and testable acceptance criteria.
 - Every new enum is registered in Appendix J; every new error in Appendix I; every notification in Appendix C; every analytics event in Appendix G.
@@ -50,13 +50,13 @@
 - Read: `_audit/V711_BACKLOG_INDEX.md`
 - Read: `_audit/REMEDIATION_BACKLOG.md`
 - Read: `AGENTS.md`
-- Create: `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- Create: `_versions/Build_Execution_Strategy.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- Create: `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- Create: `_versions/RECONCILIATION.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- Create: `_versions/V711_BACKLOG_INDEX.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- Create: `_versions/REMEDIATION_BACKLOG.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- Create: `_versions/AGENTS.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/Build_Execution_Strategy.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/RECONCILIATION.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- Create: `legacy-import:_versions/AGENTS.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
 
 **Interfaces:**
 - Consumes: Approved major-rewrite design and current live corpus.
@@ -79,16 +79,16 @@ Expected: repository tests, TypeScript, full spec lint, exact-status scan, and t
 
 - [ ] **Step 2: Create dated backups**
 
-Run one `cp -p` per source file to the exact `_versions/` paths listed above. Verify byte identity with:
+Run one `cp -p` per source file to the exact `legacy-import:_versions/` paths listed above. Verify byte identity with:
 
 ```sh
-cmp Sourcera_Master_Spec.md _versions/Sourcera_Master_Spec.v7.1.0a-pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
-cmp Build_Execution_Strategy.md _versions/Build_Execution_Strategy.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
-cmp _integration/AUTHORED_EXTENSIONS_LEDGER.md _versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
-cmp _integration/RECONCILIATION.md _versions/RECONCILIATION.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
-cmp _audit/V711_BACKLOG_INDEX.md _versions/V711_BACKLOG_INDEX.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
-cmp _audit/REMEDIATION_BACKLOG.md _versions/REMEDIATION_BACKLOG.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
-cmp AGENTS.md _versions/AGENTS.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp Sourcera_Master_Spec.md legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp Build_Execution_Strategy.md legacy-import:_versions/Build_Execution_Strategy.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp _integration/AUTHORED_EXTENSIONS_LEDGER.md legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp _integration/RECONCILIATION.md legacy-import:_versions/RECONCILIATION.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp _audit/V711_BACKLOG_INDEX.md legacy-import:_versions/V711_BACKLOG_INDEX.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp _audit/REMEDIATION_BACKLOG.md legacy-import:_versions/REMEDIATION_BACKLOG.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
+cmp AGENTS.md legacy-import:_versions/AGENTS.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md
 ```
 
 Expected: every `cmp` exits 0 with no output.

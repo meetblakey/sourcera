@@ -53,7 +53,7 @@ Landing-site enumeration on the canonical row (column 12 of the row):
 | 11 | §M.5.13 `heat_map_cell_field_allowlist_drift_detect` CI gate authored | ✓ Master Spec L51834 |
 | 12 | Appendix I v7.2.0-REM Phase 1 block — `heat_map_cell_vendor_identity_field_forbidden` HTTP 422 code | ✓ Master Spec L46403–L46411 |
 | 13 | Master Spec footer changelog | ✓ Master Spec L51852 |
-| 14 | Pre-edit backup `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-phase1-2026-05-15.md` (md5 `914382e6488d74500cbf727ff0a3a4fb`) | (Per reconciliation log §Phase 1 D-2.2-042 Closure Log — pre-edit anchor cite) |
+| 14 | Pre-edit backup `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-phase1-2026-05-15.md` (md5 `914382e6488d74500cbf727ff0a3a4fb`) | (Per reconciliation log §Phase 1 D-2.2-042 Closure Log — pre-edit anchor cite) |
 
 **Verdict.** Every landing site declared by the reconciliation log is present in the Master Spec body or referenced in cross-anchor artifacts. The canonical-row status cell is updated per D-CONS-001 discipline (not in a supplementary table). PASS.
 

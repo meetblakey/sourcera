@@ -103,10 +103,10 @@ _integration/RECONCILIATION.md = 48c35611d64bc06ab2bdce11201e89ab
 Pre-edit backups:
 
 ```text
-_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 88303dfd3e680a31f0c82c00effc1a55
-_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 878518ea28fa1e1fdd58cce6fe8236af
-_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 8c867bc6870ce9d3b561274bbb4d1417
-_versions/RECONCILIATION_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 6d9ec824b8b50acaef5e4f700b082c90
+legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 88303dfd3e680a31f0c82c00effc1a55
+legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 878518ea28fa1e1fdd58cce6fe8236af
+legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 8c867bc6870ce9d3b561274bbb4d1417
+legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-3-4-security-anomaly-status-sync.md = 6d9ec824b8b50acaef5e4f700b082c90
 ```
 
 ## 6. Residuals

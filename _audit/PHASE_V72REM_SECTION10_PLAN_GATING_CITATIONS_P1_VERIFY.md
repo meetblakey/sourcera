@@ -6,9 +6,9 @@
 
 **Pre-edit backups.**
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-section10-plan-gating-citations-p1-2026-06-21.md`
 
 **Landing sites.**
 

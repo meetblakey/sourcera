@@ -30,12 +30,12 @@
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `216eb70957a6f0559fb6e6ea460530b9` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `58bbcf2f74f5de5f6a8917c888ae303d` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `11fbb978b67af5c8bc97b696b87f06dd` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `dc40edb25c76d297a5845244916f7ecd` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `394df5fef50b2358b374e0d6f2cb0651` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `7a5a5f17ffb79ca923e69817a3ec715b` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `216eb70957a6f0559fb6e6ea460530b9` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `58bbcf2f74f5de5f6a8917c888ae303d` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `11fbb978b67af5c8bc97b696b87f06dd` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `dc40edb25c76d297a5845244916f7ecd` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `394df5fef50b2358b374e0d6f2cb0651` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-4-4-scoring-num-p1-2026-06-21.md` | `7a5a5f17ffb79ca923e69817a3ec715b` |
 
 ## 4. Checks
 

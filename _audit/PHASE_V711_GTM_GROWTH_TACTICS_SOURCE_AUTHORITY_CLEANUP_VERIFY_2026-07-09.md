@@ -22,9 +22,9 @@ The Growth Tactics inventory still routed growth-experiment executors through ol
 
 ## Backups
 
-- `_versions/GTM_GROWTH_TACTICS.pre-source-authority-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-growth-tactics-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-growth-tactics-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_GROWTH_TACTICS.pre-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-growth-tactics-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-growth-tactics-source-authority-cleanup-2026-07-09.md`
 
 ## Verification
 

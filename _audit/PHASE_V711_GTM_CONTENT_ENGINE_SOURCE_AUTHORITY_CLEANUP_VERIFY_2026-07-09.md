@@ -22,9 +22,9 @@ The Content Engine doc still routed content operators through old Master Spec §
 
 ## Backups
 
-- `_versions/GTM_CONTENT_ENGINE.pre-source-authority-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-content-engine-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-content-engine-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_CONTENT_ENGINE.pre-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-content-engine-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-content-engine-source-authority-cleanup-2026-07-09.md`
 
 ## Verification
 

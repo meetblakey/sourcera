@@ -71,7 +71,7 @@ Revisions made in place:
 - D-AS-001 recommendation now names the validator extension explicitly (`solo_tier_numeric_single_source` enclosing-section allowlist negation).
 - D-AS-002 recommendation now names the cross-companion-doc grep extension on `volume_discount_band_single_source`.
 - D-AS-004 / D-AS-005 recommendations cite `_integration/AUTHORED_EXTENSIONS_LEDGER.md` as the ratification ledger.
-- D-AS-007 recommendation explicitly names `_versions/Appendix_H_v6.0.0_archived.md` as the strike-through destination.
+- D-AS-007 recommendation explicitly names `legacy-import:_versions/Appendix_H_v6.0.0_archived.md` as the strike-through destination.
 - D-AS-009 / D-AS-010 recommendations are HTTP-422 / Appendix I additions.
 
 ---

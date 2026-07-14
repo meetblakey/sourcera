@@ -29,7 +29,7 @@ This pass does not claim product-code, MCP server runtime, Convex schema, deploy
 | `tools/spec-lint/fixtures/<gate_id>/pass.md` and `fail.md` | Added for all three gates |
 | `tools/spec-lint/run-all.ts` | All three gates registered in `GATES_RUNTIME_ACTIVE` |
 | `Sourcera_Master_Spec.md` §M.5.31 | Three rows promoted to `runtime_active` |
-| `_versions/Sourcera_Master_Spec_pre-kb18-cite-retrieve-runtime-promotion-2026-07-07.md` | Pre-edit backup |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-kb18-cite-retrieve-runtime-promotion-2026-07-07.md` | Pre-edit backup |
 
 ## Verification
 

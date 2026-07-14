@@ -4,7 +4,7 @@
 **Scope:** Adversarial verification of Phase 11. Three blocks: (1) structural — Appendix M coverage matches inventory; (2) adversarial — 5 §M.5 gates × violating diff (confirm rejection) + 5 §M.5 gates × override-accepted diff (confirm acceptance); (3) sign-off — zero P0 ci_gate.
 **Defect-ID convention:** `D-11V-NNN` (sequential per Defect Ledger format; phase-mnemonic form permitted per `Audit_Prompts.md` line 55 since this is a V-prompt rolled across the phase numbering).
 **Severity-rule application:** P0 reserved for `Audit_Prompts.md` Severity Rules (a)–(e); P1 for unbuildable-as-written gate contracts (missing override-prohibition for binding GDPR / firewall / numerical-singleton invariants); P2 for ambiguity that two staff engineers would resolve differently; P3 for cosmetic / anchor / Markdown hygiene.
-**Pre-edit backup:** Non-destructive audit pass. No Master Spec edits performed. No `/_versions/` snapshot required.
+**Pre-edit backup:** Non-destructive audit pass. No Master Spec edits performed. No `legacy-import:_versions/` snapshot required.
 **Self-challenge revisions:** Three — logged at §6 below.
 **Counterfactual pass:** Logged at §7 below.
 **Sources read end-to-end:** `_audit/PHASE11.1_FINDINGS.md`; `_audit/PHASE11.2_FINDINGS.md`; `_audit/PHASE11.3_FINDINGS.md`; `_audit/PHASE11.4_FINDINGS.md`; Master Spec Appendix M.1 (lines 49000–49371), M.2 (lines 49373–49389), M.3 (lines 49391–49393), M.4 (lines 49395–49432), M.5 (lines 49434–49572); `_audit/DEFECT_LEDGER.md` Phase 11.1 / 11.2 / 11.3 / 11.4 sections; `_audit/COVERAGE_MATRIX.md` Run Summary including Phase 11.2 / 11.3 delta blocks; `_audit/SURFACE_ENGINE_TRACE.md` § 5 / § 6 / § 10; `Audit_Prompts.md` Prompts V11 + Defect Ledger Format + Severity Definitions + Global Verification Protocol; `CLAUDE.md` §13 / §16.
@@ -561,7 +561,7 @@ Aggregate counters NOT updated in this V11 pass; the mechanical update rides the
 
 ## 11. Pre-edit Backup
 
-Non-destructive audit pass. No Master Spec edits performed. No `/_versions/` snapshot required.
+Non-destructive audit pass. No Master Spec edits performed. No `legacy-import:_versions/` snapshot required.
 
 ---
 

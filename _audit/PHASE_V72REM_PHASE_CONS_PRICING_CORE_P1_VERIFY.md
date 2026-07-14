@@ -11,12 +11,12 @@
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `c1fabef4854b78a4b954e611d01eb936`
-- `_versions/DEFECT_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `f240534656bbf26e224f6a82f2b1fd5d`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `5fda1f78ed82d42e02f1301dbcc04ef3`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `62216d8f67771d5fc89de70a7f1a7f60`
-- `_versions/RECONCILIATION_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `7696e4a43b666e9f8574d828a9c6439b`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `15f4a8b9bcb098a55bee057c13c6eeec`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `c1fabef4854b78a4b954e611d01eb936`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `f240534656bbf26e224f6a82f2b1fd5d`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `5fda1f78ed82d42e02f1301dbcc04ef3`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `62216d8f67771d5fc89de70a7f1a7f60`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `7696e4a43b666e9f8574d828a9c6439b`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-cons-pricing-core-p1-2026-06-22.md` md5 `15f4a8b9bcb098a55bee057c13c6eeec`
 
 ## Classification
 

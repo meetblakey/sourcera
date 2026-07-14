@@ -34,10 +34,10 @@ No row required new product behavior, Master Spec body edits, or a new Authored 
 
 Backups created before tracking edits:
 
-- `_versions/DEFECT_LEDGER_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
-- `_versions/RECONCILIATION_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-11-ci-catalog-residual-status-sync-2026-06-23.md`
 
 ## 4. Count Verification
 

@@ -12,7 +12,7 @@ Per `Audit_Prompts.md` Prompt V13. STRUCTURAL (§48 + §51 audited) + ADVERSARIA
 
 ## 2. V13 Spec-Side Remediation Pass (Post-Remediation)
 
-**Pre-edit backup.** Master Spec backed up to `_versions/Sourcera_Master_Spec.v7.1.0-pre-V13-remediation-2026-05-12.md` (5,927,250 bytes; 51,172 lines; md5 `e3794768e0960038f13e9407a932aafb`).
+**Pre-edit backup.** Master Spec backed up to `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V13-remediation-2026-05-12.md` (5,927,250 bytes; 51,172 lines; md5 `e3794768e0960038f13e9407a932aafb`).
 
 ### 2.1 Edits Authored
 
@@ -217,4 +217,4 @@ For each major edit, three realistic failure modes:
 
 Phase 14 (Cross-Document Consistency Audit) is **unblocked** by this remediation pass. The 17 `partially_remediated` defects are documented for v7.1.1 backlog absorption.
 
-**Pre-edit backup verified at:** `_versions/Sourcera_Master_Spec.v7.1.0-pre-V13-remediation-2026-05-12.md` (5,927,250 bytes; md5 `e3794768e0960038f13e9407a932aafb`).
+**Pre-edit backup verified at:** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V13-remediation-2026-05-12.md` (5,927,250 bytes; md5 `e3794768e0960038f13e9407a932aafb`).

@@ -5,14 +5,14 @@ Scope: D-V711-010, D-V711-011, D-V711-012, D-V711-015, D-V711-016, stale D-V711-
 
 ## 1. Source Backups
 
-Before structural edits, the following backups were written under `_versions/`:
+Before structural edits, the following backups were written under `legacy-import:_versions/`:
 
-- `_versions/Sourcera_Master_Spec.pre-v711-m023-runtime-promotion-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX.pre-v711-p2-p3-disposition-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG.pre-v711-p2-p3-disposition-2026-06-24.md`
-- `_versions/DEFECT_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`
-- `_versions/RECONCILIATION.pre-v711-p2-p3-disposition-2026-06-24.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.pre-v711-m023-runtime-promotion-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v711-p2-p3-disposition-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v711-p2-p3-disposition-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-p2-p3-disposition-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION.pre-v711-p2-p3-disposition-2026-06-24.md`
 
 ## 2. Remediation Summary
 

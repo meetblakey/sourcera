@@ -27,12 +27,12 @@ The current project-doc hierarchy already says the retired KB Engineering Spec a
 
 ## Backups
 
-- `_versions/AGENTS_pre-source-hierarchy-retired-doc-cleanup-2026-07-09.md`
-- `_versions/CLAUDE_pre-source-hierarchy-retired-doc-cleanup-2026-07-09.md`
-- `_versions/SWE_Project_Instructions_pre-source-hierarchy-retired-doc-cleanup-2026-07-09.md`
-- `_versions/Build_Execution_Strategy_pre-source-authority-routing-cleanup-2026-07-09.md`
-- `_versions/Linear_Execution_Blueprint_pre-source-authority-routing-cleanup-2026-07-09.md`
-- `_versions/GTM_Prompts_pre-source-authority-routing-cleanup-2026-07-09.md`
+- `legacy-import:_versions/AGENTS_pre-source-hierarchy-retired-doc-cleanup-2026-07-09.md`
+- `legacy-import:_versions/CLAUDE_pre-source-hierarchy-retired-doc-cleanup-2026-07-09.md`
+- `legacy-import:_versions/SWE_Project_Instructions_pre-source-hierarchy-retired-doc-cleanup-2026-07-09.md`
+- `legacy-import:_versions/Build_Execution_Strategy_pre-source-authority-routing-cleanup-2026-07-09.md`
+- `legacy-import:_versions/Linear_Execution_Blueprint_pre-source-authority-routing-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_Prompts_pre-source-authority-routing-cleanup-2026-07-09.md`
 
 ## Verification
 

@@ -33,10 +33,10 @@ This pass propagated the canonical DEFECT_LEDGER status cells to match the exist
 
 | File | Backup | MD5 |
 |---|---|---|
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `79e2ee0b0eb6df9fe08bbdd2251b4e63` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `f970713664d45acee3a78f989f00ddfa` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `638befabc3e48cece6064dc0bcde2d8d` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `63b61cbd62a5d9d913cbfe545228e206` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `79e2ee0b0eb6df9fe08bbdd2251b4e63` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `f970713664d45acee3a78f989f00ddfa` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `638befabc3e48cece6064dc0bcde2d8d` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-v8-4-appendix-i-status-propagation-2026-06-22.md` | `63b61cbd62a5d9d913cbfe545228e206` |
 
 ## Verification
 

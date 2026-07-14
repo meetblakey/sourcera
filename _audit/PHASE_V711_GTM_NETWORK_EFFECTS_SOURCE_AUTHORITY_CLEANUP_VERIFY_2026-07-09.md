@@ -22,9 +22,9 @@ The Network Effects strategy doc still carried old §2 / §3 / §5 / §6-era poi
 
 ## Backups
 
-- `_versions/GTM_NETWORK_EFFECTS.pre-source-authority-cleanup-2026-07-09b.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-network-effects-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-network-effects-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_NETWORK_EFFECTS.pre-source-authority-cleanup-2026-07-09b.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-network-effects-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-network-effects-source-authority-cleanup-2026-07-09.md`
 
 ## Verification
 

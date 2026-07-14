@@ -2,7 +2,7 @@
 
 **Program:** v7.1.0 — Surface-Abstraction & Dual-Maya Integration
 **Opened:** 2026-04-26
-**Baseline:** Master Spec v7.0.0 (snapshots at `/_versions/*pre-v7.1-2026-04-26.md`)
+**Baseline:** Master Spec v7.0.0 (snapshots at `legacy-import:_versions/*pre-v7.1-2026-04-26.md`)
 **Authority:** Cowork session 2026-04-26 (PG-style validation pass + dual-Maya reframing + Blake's six locked decisions on 2026-04-26)
 **Reconciliation log:** `_integration/RECONCILIATION.md` § "v7.1.0 — Surface-Abstraction & Dual-Maya Integration Program"
 
@@ -12,7 +12,7 @@ This file is the per-sub-phase verification ledger for the v7.1.0 program. One r
 
 | Phase | Status | Defects | Reviewer notes | Closed at |
 |---|---|---|---|---|
-| 14.0 — Pre-flight: Backup, Baseline Tagging, Reconciliation Header | closed | none | v7.0.0 baseline confirmed. Five backups copied to `_versions/`. v7.1.0 program header opened. Per RECONCILIATION.md Phase 14.0. | 2026-04-26 |
+| 14.0 — Pre-flight: Backup, Baseline Tagging, Reconciliation Header | closed | none | v7.0.0 baseline confirmed. Five backups copied to `legacy-import:_versions/`. v7.1.0 program header opened. Per RECONCILIATION.md Phase 14.0. | 2026-04-26 |
 | 14.0.1 — Scope amendment: descope GTM rewrites + Marketplace-as-RFP-Exchange to v7.1.x | closed | none | Phase 14.19 P0-1 / P0-2 fix-pass: formal descope of three GTM rewrites (+ GTM_90DAY_SPRINT for completeness) and Marketplace-as-RFP-Exchange to v7.1.x. Appendix M.1 forward-reference row relabeled. AE-14.0.1-01/02/03 registered in AUTHORED_EXTENSIONS_LEDGER.md. Per RECONCILIATION.md Phase 14.0.1. | 2026-04-28 |
 | 14.1 — Foundational: Principle 9 (Surface Simplicity, Engine Complexity) | closed | none | Principle 9 authored as §3.13. Per RECONCILIATION.md Phase 14.1. | 2026-04-26 |
 | 14.2 — Appendix M authored | closed | none | Appendix M authored with §M.1 (298 mapping rows + 38 thematic banners), §M.2 (7 process gates), §M.3 (Authored Extension Note). Per RECONCILIATION.md Phase 14.2. Drift correction back-filled in this row by the Phase 14.19 fix-pass on 2026-04-28. | 2026-04-26 |
@@ -42,8 +42,8 @@ This file is the per-sub-phase verification ledger for the v7.1.0 program. One r
 
 **Scope corpus audited (read in full).**
 
-- `_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md` (v7.0.0 baseline, 4,711,072 bytes) compared section-by-section against the current `Sourcera_Master_Spec.md` (5,092,279+ bytes; v7.1.0-integration-in-progress terminator at line 46295).
-- `Sourcera_Master_Summary.md` retirement state (`_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`, no v7.1.0 edits expected; verified clean).
+- `_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md` (v7.0.0 baseline, 4,711,072 bytes) compared section-by-section against the current `Sourcera_Master_Spec.md` (5,092,279+ bytes; v7.1.0-integration-in-progress terminator at line 46295).
+- `Sourcera_Master_Summary.md` retirement state (`_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`, no v7.1.0 edits expected; verified clean).
 - `Sourcera_Buyer_Pricing_Strategy.md` v3 (post-Phase-14.9 absorption header).
 - `Sourcera_Seller_Pricing_Strategy.md` v3 (post-Phase-14.9 absorption header).
 - `UX_Design_of_Sourcera.md` v2.0.0 with Phase 14.5 / 14.6 / 14.7 / 14.8 / 14.10 / 14.17 additions.
@@ -296,7 +296,7 @@ This file is the per-sub-phase verification ledger for the v7.1.0 program. One r
 
 ### P2-6 — `Sourcera_Master_Summary.md` retired snapshot referenced as scope-input but not editable
 
-- **Where.** Phase 14.19 prompt Read-First list includes `Master Summary`; the doc is retired (`_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`).
+- **Where.** Phase 14.19 prompt Read-First list includes `Master Summary`; the doc is retired (`_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md`).
 - **Defect.** Phase 14.19 cannot review v7.1.0 changes to a retired doc; the Phase 14.0 reconciliation explicitly stated no Master Summary edits expected during v7.1.0.
 - **Recommended fix.** Phase 14.19 Read-First list should be amended to drop Master Summary, or Phase 14.20 should formally document the doc's removal from the v7.1.0 corpus boundary.
 - **Owner phase to revisit.** Cosmetic prompt-correction.

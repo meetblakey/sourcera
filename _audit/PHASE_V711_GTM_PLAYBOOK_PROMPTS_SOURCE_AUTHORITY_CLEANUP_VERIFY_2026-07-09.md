@@ -19,9 +19,9 @@ The GTM prompt file still sent prompt executors to old §6.10 / §6.15 anchors f
 
 ## Backups
 
-- `_versions/GTM_PLAYBOOK_PROMPTS.pre-source-authority-cleanup-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-gtm-playbook-prompts-source-authority-cleanup-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-gtm-playbook-prompts-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/GTM_PLAYBOOK_PROMPTS.pre-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-gtm-playbook-prompts-source-authority-cleanup-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-gtm-playbook-prompts-source-authority-cleanup-2026-07-09.md`
 
 ## Verification
 

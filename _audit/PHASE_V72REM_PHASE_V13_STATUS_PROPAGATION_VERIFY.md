@@ -10,10 +10,10 @@ No Master Spec body edits were made. The pass reconciles the stale top-table row
 
 | File | Backup | md5 |
 |---|---|---|
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-v13-status-propagation.md` | `e0126108c99dc1fd86e1d2681c063a7c` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-v13-status-propagation.md` | `449ae0a15436fcc9ca7b47ee1424c0e3` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-v13-status-propagation.md` | `e8daa14ac67c561ffdbbe0d813bf5f30` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-v13-status-propagation.md` | `c524de4e9a207261e4a2a360b47cd238` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-v13-status-propagation.md` | `e0126108c99dc1fd86e1d2681c063a7c` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-v13-status-propagation.md` | `449ae0a15436fcc9ca7b47ee1424c0e3` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-v13-status-propagation.md` | `e8daa14ac67c561ffdbbe0d813bf5f30` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-v13-status-propagation.md` | `c524de4e9a207261e4a2a360b47cd238` |
 
 ## Evidence Read
 

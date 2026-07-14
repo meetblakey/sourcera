@@ -5,7 +5,7 @@
 **Scope of this verify log:** D-2.2-042 (PROD-CRIT-001; HeatMapCell vendor-opt-out sentinel admission) + D-V72REM-PH1-001 (P0 sibling surfaced in-flight; §M13 HeatMapAggregationCard parallel pattern). D-11.2-004 (PROD-CRIT-005; §M.4 override-path bypass) is deferred to a subsequent Phase 1 sub-session and verified in its own log.
 **Authored:** 2026-05-15.
 **Authority:** `_audit/PRODUCTION_READINESS_VERDICT.md` (2026-05-14, NOT-SHIP-READY); `_audit/REMEDIATION_BACKLOG.md §2 P0 row 1`; `_integration/v7.2.0-Remediation_Prompts.md → Prompt V72REM-PH1` (this run).
-**Master Spec baseline (pre-edit).** Byte size 6,031,693; md5 `914382e6488d74500cbf727ff0a3a4fb`; lines 51,651. Pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-phase1-2026-05-15.md`.
+**Master Spec baseline (pre-edit).** Byte size 6,031,693; md5 `914382e6488d74500cbf727ff0a3a4fb`; lines 51,651. Pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v7.2-rem-phase1-2026-05-15.md`.
 
 ---
 

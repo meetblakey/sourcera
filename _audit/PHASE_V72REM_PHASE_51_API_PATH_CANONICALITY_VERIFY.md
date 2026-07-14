@@ -17,12 +17,12 @@
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-51-api-path-canonicality.md` | `beee9f4dda13b8f2530e69eb9a07c772` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-51-api-path-canonicality.md` | `9e0a38d273999821d66e0ed3ec2008b5` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-51-api-path-canonicality.md` | `1b67543f6b2c8238bfde9a0c8ec316a0` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-51-api-path-canonicality.md` | `a67438a5b98aad64660433fec3ee6e9e` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-51-api-path-canonicality.md` | `42158916594c9333b134ec9770f21ffc` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-51-api-path-canonicality.md` | `e88fdf473592081ac330e34c9eda04ca` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-51-api-path-canonicality.md` | `beee9f4dda13b8f2530e69eb9a07c772` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-51-api-path-canonicality.md` | `9e0a38d273999821d66e0ed3ec2008b5` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-51-api-path-canonicality.md` | `1b67543f6b2c8238bfde9a0c8ec316a0` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-51-api-path-canonicality.md` | `a67438a5b98aad64660433fec3ee6e9e` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-51-api-path-canonicality.md` | `42158916594c9333b134ec9770f21ffc` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-51-api-path-canonicality.md` | `e88fdf473592081ac330e34c9eda04ca` |
 
 ## Change Summary
 
@@ -40,7 +40,7 @@
 | `rg -n "^\| D-51-[0-9]+ \| P1 \|[^\n]*\| open \|" _audit/DEFECT_LEDGER.md` | 0 matches |
 | `rg -n "/usage/dashboard\|/usage/snapshots\|/users/\{user_id\}/usage/dashboard\|/seller/usage/dashboard" Sourcera_Master_Spec.md \| rg -v 'legacy \`/usage/dashboard\` aliases'` | 0 matches |
 | `rg -n "^\| D-[^|]+ \| P1 \|[^\n]*\| open \|" _audit/DEFECT_LEDGER.md \| wc -l` | `400` |
-| `rg -n "^<<<<<<<\|^=======\|^>>>>>>>" -g '!**/node_modules/**' -g '!_versions/**' .` | 0 matches |
+| `rg -n "^<<<<<<<\|^=======\|^>>>>>>>" -g '!**/node_modules/**' -g '!legacy-import:_versions/**' .` | 0 matches |
 | `npm --prefix tools/spec-lint run all -- --no-emit` | exit 0; all blocking gates passed |
 
 ## Lint Notes

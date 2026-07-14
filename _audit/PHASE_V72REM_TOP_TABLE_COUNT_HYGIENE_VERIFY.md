@@ -18,9 +18,9 @@ This pass corrected five stale or internally contradicted rows in `_audit/REMEDI
 
 | File | Backup | MD5 |
 |---|---|---|
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-top-table-count-hygiene-2026-06-22.md` | `85b6c798a86910b7ce3b119e07619d5e` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-top-table-count-hygiene-2026-06-22.md` | `b10b7c121c4f93d6312ee1cc14448f1f` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-top-table-count-hygiene-2026-06-22.md` | `93dada72da9c7ed1b49196bd79a798d1` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-top-table-count-hygiene-2026-06-22.md` | `85b6c798a86910b7ce3b119e07619d5e` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-top-table-count-hygiene-2026-06-22.md` | `b10b7c121c4f93d6312ee1cc14448f1f` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-top-table-count-hygiene-2026-06-22.md` | `93dada72da9c7ed1b49196bd79a798d1` |
 
 ## Post-Edit Fingerprints
 

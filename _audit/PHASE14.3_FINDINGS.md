@@ -1,6 +1,6 @@
 # PHASE 14.3 FINDINGS — Master Spec ↔ KB Engineering Spec Cross-Doc Consistency Walk (§22 vs KB_Engineering_Spec §0–§18)
 
-**Audit prompt.** `Audit_Prompts.md → Prompt 14.3 — Master Spec ↔ KB Engineering Spec`. Walk `KB_Engineering_Spec.md` (retired snapshot at `_versions/KB_Engineering_Spec_retired_2026-04-26.md`; 91 KB; 1,586 lines) §0–§18 against `Sourcera_Master_Spec.md` v7.1.0 §22 (the canonical home for KB Engineering content per CLAUDE.md §2 / §3.1).
+**Audit prompt.** `Audit_Prompts.md → Prompt 14.3 — Master Spec ↔ KB Engineering Spec`. Walk `KB_Engineering_Spec.md` (retired snapshot at `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md`; 91 KB; 1,586 lines) §0–§18 against `Sourcera_Master_Spec.md` v7.1.0 §22 (the canonical home for KB Engineering content per CLAUDE.md §2 / §3.1).
 
 **Seven checks (per `Audit_Prompts.md → Prompt 14.3`).**
 

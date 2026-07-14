@@ -24,13 +24,13 @@ Files updated:
 
 ## Backups
 
-- `_versions/GTM_NETWORK_EFFECTS_pre-commercial-wedge-anchor-sync-2026-07-09.md`
-- `_versions/GTM_PLG_ARCHITECTURE_pre-commercial-wedge-anchor-sync-2026-07-09.md`
-- `_versions/GTM_POSITIONING_pre-commercial-wedge-anchor-sync-2026-07-09.md`
-- `_versions/GTM_CONTENT_ENGINE_pre-commercial-wedge-anchor-sync-2026-07-09.md`
-- `_versions/GTM_SALES_PLAYBOOK_pre-commercial-wedge-anchor-sync-2026-07-09.md`
-- `_versions/GTM_90DAY_SPRINT_pre-commercial-wedge-anchor-sync-2026-07-09.md`
-- `_versions/GTM_PLAYBOOK_PROMPTS_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_NETWORK_EFFECTS_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_PLG_ARCHITECTURE_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_POSITIONING_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_CONTENT_ENGINE_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_SALES_PLAYBOOK_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_90DAY_SPRINT_pre-commercial-wedge-anchor-sync-2026-07-09.md`
+- `legacy-import:_versions/GTM_PLAYBOOK_PROMPTS_pre-commercial-wedge-anchor-sync-2026-07-09.md`
 
 ## Verification
 

@@ -30,12 +30,12 @@ D-V8.1-001 was a true live buildability issue. The current Master Spec had remed
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-8-1-core-api-p1-2026-06-24.md`
-- `_versions/DEFECT_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-8-1-core-api-p1-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-8-1-core-api-p1-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-phase-8-1-core-api-p1-2026-06-24.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-8-1-core-api-p1-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-8-1-core-api-p1-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-8-1-core-api-p1-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-8-1-core-api-p1-2026-06-24.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-8-1-core-api-p1-2026-06-24.md`
 
 ## Verification
 

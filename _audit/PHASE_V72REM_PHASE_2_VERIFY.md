@@ -21,9 +21,9 @@
 | Byte size | 6,089,968 | 6,089,968 |
 | md5 | `ff4983c6ada42005d6cd4ce4543ea72f` | `ff4983c6ada42005d6cd4ce4543ea72f` |
 | Line count | 51,852 | 51,852 |
-| Pre-edit backup | `_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-D-11.2-004-2026-05-15.md` (byte-identical snapshot prior to Phase 2 verification pass) | — |
+| Pre-edit backup | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-V72REM-D-11.2-004-2026-05-15.md` (byte-identical snapshot prior to Phase 2 verification pass) | — |
 
-**Note on the byte-identical pre/post state.** The §M.4 spec-body edits, the Appendix I sub-section authoring, and the §M.4.5.1 record-schema expansion were landed in this Cowork session's predecessor sub-session against the same baseline; this verification pass is the Opus self-challenge + counterfactual review of the authored content. The verify pass identifies zero in-place defects requiring re-edit. The session's only filesystem mutations are this log and the prophylactic pre-edit backup at `_versions/`.
+**Note on the byte-identical pre/post state.** The §M.4 spec-body edits, the Appendix I sub-section authoring, and the §M.4.5.1 record-schema expansion were landed in this Cowork session's predecessor sub-session against the same baseline; this verification pass is the Opus self-challenge + counterfactual review of the authored content. The verify pass identifies zero in-place defects requiring re-edit. The session's only filesystem mutations are this log and the prophylactic pre-edit backup at `legacy-import:_versions/`.
 
 **Runtime-artifact byte-state at verify-time (md5).**
 

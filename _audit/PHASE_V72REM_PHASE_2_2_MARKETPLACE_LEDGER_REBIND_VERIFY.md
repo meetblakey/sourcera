@@ -30,13 +30,13 @@ The live defect was narrower and more precise:
 
 ## 3. Backups
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `af465f05b791cf92284de088c53ac057`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `6916fe08aa3877cfbb07da5a65b9706c`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `10a55ae9ad8eb258b870c38bcda9bbc3`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `5d74c9a3ce5541b1a10bca6a4a9f77af`
-- `_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `8817a0e3f59abbe647e1028bce824d73`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `d0ca659b3f7a889828709353f89655c5`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `38c6efbb92cdc62c3a1aa13509fe2776`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `af465f05b791cf92284de088c53ac057`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `6916fe08aa3877cfbb07da5a65b9706c`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `10a55ae9ad8eb258b870c38bcda9bbc3`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `5d74c9a3ce5541b1a10bca6a4a9f77af`
+- `legacy-import:_versions/AUTHORITATIVE_SOURCE_MAP_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `8817a0e3f59abbe647e1028bce824d73`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `d0ca659b3f7a889828709353f89655c5`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-marketplace-ledger-rebind.md` md5 `38c6efbb92cdc62c3a1aa13509fe2776`
 
 ## 4. Targeted Verification
 

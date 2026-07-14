@@ -6,10 +6,10 @@ Status: remediated in Master Spec body; AE-12.4-02 condition satisfied.
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-year1-plan-mix-p1-2026-06-21.md`
 
 ## Remediation Summary
 

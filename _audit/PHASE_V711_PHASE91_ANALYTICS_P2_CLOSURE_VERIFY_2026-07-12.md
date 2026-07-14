@@ -13,4 +13,4 @@ npx tsx tools/release/stamp_gate.ts --json
 npx tsx tools/release/generate_runtime_blocker_inventory.ts --stamp-json _audit/_tmp/v711_stamp_gate_2026-07-12_phase91-analytics-p2.json --md _audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.md --csv _audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.csv --date 2026-07-12
 ```
 
-Evidence: `_audit/_tmp/v711_exact_status_2026-07-12_phase91-analytics-p2.json`, `_audit/_tmp/v711_stamp_gate_2026-07-12_phase91-analytics-p2.json`, `_versions/v711-phase91-analytics-p2-pre-edit-2026-07-12/`.
+Evidence: `_audit/_tmp/v711_exact_status_2026-07-12_phase91-analytics-p2.json`, `_audit/_tmp/v711_stamp_gate_2026-07-12_phase91-analytics-p2.json`, `legacy-import:_versions/v711-phase91-analytics-p2-pre-edit-2026-07-12/`.

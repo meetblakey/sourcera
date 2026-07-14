@@ -41,5 +41,5 @@ This pass promotes a documentation/spec-tree gate only. It does not claim produc
 
 | File | Backup |
 |---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-first-30-seconds-detector-2026-07-07.md` |
-| `UX_Design_of_Sourcera.md` | `_versions/UX_Design_of_Sourcera_pre-first-30-seconds-detector-2026-07-07.md` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-first-30-seconds-detector-2026-07-07.md` |
+| `UX_Design_of_Sourcera.md` | `legacy-import:_versions/UX_Design_of_Sourcera_pre-first-30-seconds-detector-2026-07-07.md` |

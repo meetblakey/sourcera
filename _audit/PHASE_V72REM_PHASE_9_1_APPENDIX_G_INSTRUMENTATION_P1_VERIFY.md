@@ -38,12 +38,12 @@ All six rows were true spec issues against the current Master Spec before this p
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `933ed70af65ec3e02e30b74607378aa8`
-- `_versions/DEFECT_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `b933867efc6e42faac5d4736c1fe9a65`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `21b7f113acb71740d80d3784fcfa3669`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `558d64bcc9929fc5fb49993ffc3123b1`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `9a727cc89f334f317fbe346cfe106ad2`
-- `_versions/RECONCILIATION_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `57c6785dad82d6091cfde58dcf40f207`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `933ed70af65ec3e02e30b74607378aa8`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `b933867efc6e42faac5d4736c1fe9a65`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `21b7f113acb71740d80d3784fcfa3669`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `558d64bcc9929fc5fb49993ffc3123b1`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `9a727cc89f334f317fbe346cfe106ad2`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-9-1-appendix-g-instr-p1-2026-06-22.md` — md5 `57c6785dad82d6091cfde58dcf40f207`
 
 ## Artifact Updates
 

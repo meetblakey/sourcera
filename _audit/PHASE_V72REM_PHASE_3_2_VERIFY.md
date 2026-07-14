@@ -24,7 +24,7 @@
 | Byte size | 6,112,078 | 6,116,478 (delta +4,400 bytes; one new §M.5.6 paragraph append after the existing Phase 3.1 closure paragraph at L51746) |
 | md5 | `917e55aa1c07f9f28e66f2adb24c63fa` | `d290bf0d933011fe9551b12500392197` |
 | Line count | 51,902 | 51,904 (delta +2 lines: one blank line + one paragraph line for the appended §M.5.6 v7.2.0-REM Phase 3 Prompt 3.2 closure paragraph) |
-| Pre-edit backup | `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3.2-D-11.3-002-2026-05-18.md` (byte-identical snapshot of pre-edit state; size 6,112,078; md5 `917e55aa1c07f9f28e66f2adb24c63fa`) | — |
+| Pre-edit backup | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2.0-REM-P3.2-D-11.3-002-2026-05-18.md` (byte-identical snapshot of pre-edit state; size 6,112,078; md5 `917e55aa1c07f9f28e66f2adb24c63fa`) | — |
 
 **Runtime-artifact byte-state at verify-time.**
 

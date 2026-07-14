@@ -8,12 +8,12 @@ Scope: Phase 2 §2 Sourcera Method P1 pass for BL-P1-PH2-AC plus linked Method t
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-method-p1.md` | `73bf8a7b597d8d56742013b9c72f2f60` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-method-p1.md` | `6e8ed58d691b41a8bf082865de43b828` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-method-p1.md` | `6b7a51ab2f338d064275e1a216ed0f94` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-method-p1.md` | `90168b8500cc7034e6b9bf1a26109f2a` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-method-p1.md` | `ff4ac1871a50ad89f73bdb61798bacb4` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-2-method-p1.md` | `78949d3f411b2468b368bfd056838800` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-method-p1.md` | `73bf8a7b597d8d56742013b9c72f2f60` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-method-p1.md` | `6e8ed58d691b41a8bf082865de43b828` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-method-p1.md` | `6b7a51ab2f338d064275e1a216ed0f94` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-method-p1.md` | `90168b8500cc7034e6b9bf1a26109f2a` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-method-p1.md` | `ff4ac1871a50ad89f73bdb61798bacb4` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-method-p1.md` | `78949d3f411b2468b368bfd056838800` |
 
 ## Closed Rows
 

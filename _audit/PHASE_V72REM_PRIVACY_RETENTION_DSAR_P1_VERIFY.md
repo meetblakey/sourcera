@@ -15,12 +15,12 @@
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-privacy-retention-dsar-p1-2026-06-24.md`
-- `_versions/DEFECT_LEDGER_pre-privacy-retention-dsar-p1-2026-06-24.md`
-- `_versions/REMEDIATION_BACKLOG_pre-privacy-retention-dsar-p1-2026-06-24.md`
-- `_versions/V711_BACKLOG_INDEX_pre-privacy-retention-dsar-p1-2026-06-24.md`
-- `_versions/RECONCILIATION_pre-privacy-retention-dsar-p1-2026-06-24.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-privacy-retention-dsar-p1-2026-06-24.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-privacy-retention-dsar-p1-2026-06-24.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-privacy-retention-dsar-p1-2026-06-24.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-privacy-retention-dsar-p1-2026-06-24.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-privacy-retention-dsar-p1-2026-06-24.md`
+- `legacy-import:_versions/RECONCILIATION_pre-privacy-retention-dsar-p1-2026-06-24.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-privacy-retention-dsar-p1-2026-06-24.md`
 
 ## Classification
 

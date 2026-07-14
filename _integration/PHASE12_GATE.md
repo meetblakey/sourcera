@@ -140,7 +140,7 @@ For Phase 13 (Final Engineering Review, Final QA, Version Finalization, TOC) ent
 - [x] All Phase 12 Authored Extensions logged with sign-off owners.
 - [x] All Phase 12 Breaking Changes logged with downstream-impact owners.
 - [x] CI gates from Phase 12 (12.1: 5 deferred; 12.2: 0; 12.3: 12; 12.4: 0) registered or scheduled.
-- [x] Master Spec backups exist for every Phase 12 destructive edit (`_versions/Sourcera_Master_Spec_pre-phase12.{1,3,4}-...md`).
+- [x] Master Spec backups exist for every Phase 12 destructive edit (`legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.{1,3,4}-...md`).
 - [x] Reconciliation log at `_integration/RECONCILIATION.md` is complete through Phase 12 closure.
 - [x] Authored Extensions Ledger at `_integration/AUTHORED_EXTENSIONS_LEDGER.md` is current.
 - [x] Convention files (`CLAUDE.md`, `SWE_Project_Instructions.md`) reflect post-Phase-12 state.

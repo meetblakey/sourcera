@@ -35,12 +35,12 @@ D-AS-010 was a true paired P3 issue. §39 did not own `GhostBidImport.parsed_qa_
 
 ## Backup Evidence
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `4d602ef91d36afb759dcc96bccbd1efa`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `db5b40ff41e7de6df01e344e2a264f7e`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `0dca3fa641c21f3bfb2196a3601bda41`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `82a4a842cb5539c979dd730e2dad18f3`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `78d7e5e5bce4bca774e7678673b2509a`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `b18938c652e63d564d3d652c0acc0820`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `4d602ef91d36afb759dcc96bccbd1efa`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `db5b40ff41e7de6df01e344e2a264f7e`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `0dca3fa641c21f3bfb2196a3601bda41`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `82a4a842cb5539c979dd730e2dad18f3`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `78d7e5e5bce4bca774e7678673b2509a`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-ghost-bid-size-singleton.md` md5 `b18938c652e63d564d3d652c0acc0820`
 
 ## Verification Commands
 

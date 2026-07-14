@@ -6,8 +6,8 @@
 
 **Backups.**
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-Phase55-p1-authoring-2026-06-21.md`
 
 ## 1. Landing-Site Map
 

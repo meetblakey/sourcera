@@ -38,12 +38,12 @@ The original D-1.7-004 recommendation proposed `pricing_api_publish` for all Pri
 
 Pre-edit backups:
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `50989e992ae9a737a3a3dc8b1395e65d`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `5610e4d7b31bc754b4edde03754a8414`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `3c1e98d3c205210c5e155a04c1880174`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `ee7610826e414d843959445156f084ea`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `9d738e576c8c95e36700a42d4b5dbc87`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `8d60992cb62c6d698a492b32bf8ef327`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `50989e992ae9a737a3a3dc8b1395e65d`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `5610e4d7b31bc754b4edde03754a8414`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `3c1e98d3c205210c5e155a04c1880174`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `ee7610826e414d843959445156f084ea`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `9d738e576c8c95e36700a42d4b5dbc87`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-7-billing-governance-webhooks-continuation.md` — md5 `8d60992cb62c6d698a492b32bf8ef327`
 
 ## Verification Commands
 

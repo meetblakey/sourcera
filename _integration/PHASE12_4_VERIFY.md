@@ -2,7 +2,7 @@
 
 **Phase:** 12.4 — Compare every numerical limit across the Master Spec; resolve conflicts in favor of the authoritative source; rewrite inline references to cite the source table rather than duplicate the value.
 **Date:** 2026-04-25
-**Master Spec baseline:** `_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md`
+**Master Spec baseline:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md`
 **Authoritative-source hierarchy applied (per CLAUDE.md §2):** Plan tier limits → §34.1; Object size → §39; Performance → §44; Retention → §40.2 + §6.8 (consistent); SLA → §42.1; Pricing → §34.2 / §34.3; Webhook config → §31.5; API rate limits → §32.4; Pagination → §32.3.
 
 ---
@@ -181,7 +181,7 @@ The following items surfaced during the sweep but are out-of-scope for §12.4 (n
 
 ## 6. Verification Checklist
 
-- [x] Master Spec backed up at `_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md`.
+- [x] Master Spec backed up at `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.4-2026-04-25.md`.
 - [x] Every plan-tier limit duplication outside §34.1 either removed or rewritten to cite §34.1.
 - [x] Every retention duplication outside §40.2 / §4.8.10 either removed or rewritten to cite the source.
 - [x] Every performance target duplication outside §44.1 either removed or rewritten to cite §44.1.

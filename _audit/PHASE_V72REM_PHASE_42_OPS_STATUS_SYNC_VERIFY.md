@@ -59,12 +59,12 @@
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
-- `_versions/DEFECT_LEDGER.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
-- `_versions/V711_BACKLOG_INDEX.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
-- `_versions/REMEDIATION_BACKLOG.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
-- `_versions/RECONCILIATION.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
+- `legacy-import:_versions/RECONCILIATION.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72rem-phase42-ops-status-sync-and-tail-2026-06-22.md`
 
 ## Verification
 

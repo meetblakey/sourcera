@@ -10,11 +10,11 @@ Pre-edit backups were taken before touching authoritative files:
 
 | Source | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `9207f395c189fc361a67a2b7d13bb7c5` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `bcd2e9aaca647900a6740a621573a6ea` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `de221870f8eaa90cbda3f42256c26d77` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `0afd5ad4f99bb945eabb18cfa5606551` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `53920e6a3ec7162097e939efa3f4bbf1` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `9207f395c189fc361a67a2b7d13bb7c5` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `bcd2e9aaca647900a6740a621573a6ea` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `de221870f8eaa90cbda3f42256c26d77` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `0afd5ad4f99bb945eabb18cfa5606551` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-6-vendor-disqualification-dsar.md` | `53920e6a3ec7162097e939efa3f4bbf1` |
 
 ## 2. Adjudication
 

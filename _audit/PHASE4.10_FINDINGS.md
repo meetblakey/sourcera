@@ -124,4 +124,4 @@ Aggregate counters NOT updated in this pass (matrix-row tightening on §19 is 6 
 
 ## 9. Pre-edit Backup
 
-No spec edits performed in this prompt (audit non-destructive by default per `Audit_Prompts.md` doctrine). Master Spec at v7.1.0 unchanged. No `_versions/` snapshot taken because no edit was applied.
+No spec edits performed in this prompt (audit non-destructive by default per `Audit_Prompts.md` doctrine). Master Spec at v7.1.0 unchanged. No `legacy-import:_versions/` snapshot taken because no edit was applied.

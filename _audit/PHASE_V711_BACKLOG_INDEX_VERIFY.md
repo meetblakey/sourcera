@@ -14,11 +14,11 @@
 
 ## Backups
 
-- `_versions/AGENTS_pre-v711-backlog-index-p1-2026-06-21.md`
-- `_versions/CLAUDE_pre-v711-backlog-index-p1-2026-06-21.md`
-- `_versions/REMEDIATION_BACKLOG_pre-v711-backlog-index-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v711-backlog-index-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v711-backlog-index-p1-2026-06-21.md`
+- `legacy-import:_versions/AGENTS_pre-v711-backlog-index-p1-2026-06-21.md`
+- `legacy-import:_versions/CLAUDE_pre-v711-backlog-index-p1-2026-06-21.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-backlog-index-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v711-backlog-index-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v711-backlog-index-p1-2026-06-21.md`
 
 ## Verification
 

@@ -10,12 +10,12 @@ Out of scope and intentionally still open: D-4.11-006, D-4.11-008, D-4.11-009, D
 
 | File | md5 |
 |---|---:|
-| `_versions/Sourcera_Master_Spec_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `9318272771ab4bd5d60af07120e0305c` |
-| `_versions/DEFECT_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `543450d1ce365d2b39b43419e87b2195` |
-| `_versions/REMEDIATION_BACKLOG_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `4620237bb2a4eaa95a7331d983dfd19b` |
-| `_versions/V711_BACKLOG_INDEX_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `e55697e34b1d65701059d69fd2ac47d0` |
-| `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `5e432075fcdfdf12920e662440698468` |
-| `_versions/RECONCILIATION_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `58a62301cab5897ffe9119b2eaafb496` |
+| `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `9318272771ab4bd5d60af07120e0305c` |
+| `legacy-import:_versions/DEFECT_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `543450d1ce365d2b39b43419e87b2195` |
+| `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `4620237bb2a4eaa95a7331d983dfd19b` |
+| `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `e55697e34b1d65701059d69fd2ac47d0` |
+| `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `5e432075fcdfdf12920e662440698468` |
+| `legacy-import:_versions/RECONCILIATION_pre-phase-4-11-inbox-pulse-p1-2026-06-22.md` | `58a62301cab5897ffe9119b2eaafb496` |
 
 ## Closure Check
 

@@ -339,7 +339,7 @@ Phase 2 (RBAC + APIs) is largely orthogonal to D-1V-007 / D-1V-012 (RBAC operate
 
 All 13 spec-side V1 defects (`D-1V-001` … `D-1V-013`) were remediated in `Sourcera_Master_Spec.md`. The procedural defect `D-1V-014` (Phase 1 sub-prompts 1.1–1.7 not run) is `partially_remediated` — the V1 standalone read substantively executed the Phase-1 audit intent for six deep-read entities, and the resulting P0/P1/P2/P3 findings have all been closed in the spec; the formal Phase 1.1–1.7 sub-prompt re-run for the remaining §4 entities is downgraded to P3 priority post-remediation.
 
-Pre-edit Master Spec backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` (5,188,645 bytes; byte-identical to source at backup time).
+Pre-edit Master Spec backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` (5,188,645 bytes; byte-identical to source at backup time).
 
 ### 11.1 P0 remediations (regulatory blockers)
 
@@ -355,7 +355,7 @@ New sub-section §4.7.1.1 Retention & DSAR Cascade authored. Retention TTL bound
 
 **D-1V-001 + D-1V-002 — Plan tier 3-tier vs 6-tier and dual-console split.**
 
-§4.2.1 Organization field table extended with two new fields: `buyer_plan_tier` (Enum: `buyer_free` | `buyer_solo` | `business_starter` | `business_growth` | `business_scale` | `buyer_enterprise`; nullable iff `console_modes_active = seller_only`) and `seller_plan_tier` (Enum: `seller_free` | `seller_solo` | `seller_starter` | `seller_growth` | `seller_scale` | `seller_enterprise`; nullable iff `console_modes_active = buyer_only`). Both cite Appendix J Plan Tiers and §34.1.3 per-console split contract. Legacy single-console `plan_tier` field marked `[STALE — superseded by `buyer_plan_tier` / `seller_plan_tier` per §34.1.3 per-console split, 2026-04-29 D-1V-001 / D-1V-002 remediation]` and read-only post-2026-04-29; migration script tracked at `_versions/v7.1.1-migration-org-plan-tier-split.md`. CI gates added: `org_plan_tier_dual_console_consistency` (asserts at least one of the two new fields is non-null) and `data_model_plan_tier_enum_consistency` (asserts no inline 3-tier restatement appears in §4–§51 outside the legacy row's `[STALE]` annotation).
+§4.2.1 Organization field table extended with two new fields: `buyer_plan_tier` (Enum: `buyer_free` | `buyer_solo` | `business_starter` | `business_growth` | `business_scale` | `buyer_enterprise`; nullable iff `console_modes_active = seller_only`) and `seller_plan_tier` (Enum: `seller_free` | `seller_solo` | `seller_starter` | `seller_growth` | `seller_scale` | `seller_enterprise`; nullable iff `console_modes_active = buyer_only`). Both cite Appendix J Plan Tiers and §34.1.3 per-console split contract. Legacy single-console `plan_tier` field marked `[STALE — superseded by `buyer_plan_tier` / `seller_plan_tier` per §34.1.3 per-console split, 2026-04-29 D-1V-001 / D-1V-002 remediation]` and read-only post-2026-04-29; migration script tracked at `legacy-import:_versions/v7.1.1-migration-org-plan-tier-split.md`. CI gates added: `org_plan_tier_dual_console_consistency` (asserts at least one of the two new fields is non-null) and `data_model_plan_tier_enum_consistency` (asserts no inline 3-tier restatement appears in §4–§51 outside the legacy row's `[STALE]` annotation).
 
 **D-1V-003 — Organization data_residency_region 2-value vs 4-value.**
 
@@ -404,7 +404,7 @@ Substantively addressed by V1's standalone §4 read across six entities (Organiz
 | artifact | change |
 |---|---|
 | `Sourcera_Master_Spec.md` | §4.2.1 Organization (4 new fields, 2 enum updates, 1 stale marker, 2 CI gates); §4.2.2 Org Membership (3 new audit-trail fields); §4.2.4 Team (1 new field); §4.4.1 Bid Workspace (2 new fields, residency tie-break rule, 2 indexes, 2 CI gates); §4.6.1 Audit Event (3 field updates) + new §4.6.1.1 sub-section (indexes, scope-isolation, state-machine declaration, retention, DSAR cascade, 7 ACs, 3 failure modes, 3 new error codes, 1 CI gate); §4.6.2 Attachment (cross-console rule rewrite, 1 CI gate); §4.7.1 Console Bridge Event (event_kind annotation, 1 CI gate) + new §4.7.1.1 sub-section (retention rule, DSAR cascade, ACs); estimated +500 lines, no §4 fields removed. |
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` | Pre-edit backup, 5,188,645 bytes. |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` | Pre-edit backup, 5,188,645 bytes. |
 | `_audit/DEFECT_LEDGER.md` | 13 D-1V-NNN rows transitioned `open → remediated 2026-04-29`; D-1V-014 transitioned `open → partially_remediated 2026-04-29` with downgrade-to-P3 note. |
 | `_audit/PHASE1_VERIFY.md` | This §11 remediation block appended; §10 Run Log row added. |
 | `_audit/AUDIT_README.md` | Run Log row appended for the V1 spec-side remediation pass. |
@@ -488,7 +488,7 @@ This was vacuously satisfied at V1 (zero ❌ cells in the matrix). After Phase 1
 
 #### 12.3.3 No §4 field was authored or removed by the audit
 
-V1 §11 authored fields and CI gates against `Sourcera_Master_Spec.md`. That is a remediation pass (explicitly permitted under the V1 prompt's STOP-and-remediate clause), not an audit-pass mutation. Sub-prompts 1.1 / 1.3 / 1.5 / 1.6 / 1.7 are non-destructive — no §4 fields authored or removed. ✅ confirmed by `git`-style diff against the V1-pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` (size 5,188,645 bytes; current Master Spec extended by V1 remediations; no further audit-program edits since 2026-04-29T13:30:00Z).
+V1 §11 authored fields and CI gates against `Sourcera_Master_Spec.md`. That is a remediation pass (explicitly permitted under the V1 prompt's STOP-and-remediate clause), not an audit-pass mutation. Sub-prompts 1.1 / 1.3 / 1.5 / 1.6 / 1.7 are non-destructive — no §4 fields authored or removed. ✅ confirmed by `git`-style diff against the V1-pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` (size 5,188,645 bytes; current Master Spec extended by V1 remediations; no further audit-program edits since 2026-04-29T13:30:00Z).
 
 ---
 
@@ -599,7 +599,7 @@ Per the V1 prompt's closing instruction — "If any P0 cannot be resolved, STOP 
 
 #### 12.7.1 P0 spec-side remediation queue (8 defects)
 
-Author remediations against `Sourcera_Master_Spec.md` in a single remediation session (post-V1.2-sign-off). Pre-edit backup to `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.2-remediation-2026-04-30.md`.
+Author remediations against `Sourcera_Master_Spec.md` in a single remediation session (post-V1.2-sign-off). Pre-edit backup to `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.2-remediation-2026-04-30.md`.
 
 | Defect | Section | Remediation contract |
 |---|---|---|
@@ -715,7 +715,7 @@ V1.2 closed 2026-04-30T03:30:00Z citing `Phase 1.2 NOT RUN` and `Phase 1.4 NOT R
 
 **Net delta since V1.2:** Phase 1.2 ran on 2026-04-29 (per `PHASE1_FINDINGS.md` §9 `Run completed: 2026-04-29` — backfilled into the findings log after V1.2's session opened, so V1.2 did not see it; the Phase 1.2 sub-prompt closed PASS on 0 P0). The 8 open P0 set (`D-1.3-001`, `D-1.5-001`/-002/-003/-004/-005, `D-1.6-001`, `D-1.7-001`) is unchanged. **D-1V2-002's "Phase 1.2 not run" component is now obsolete; the residual is "Phase 1.4 not run." V1.3 partially_remediates D-1V2-002 in §13.7.2 below.**
 
-V1.3 also confirms via direct grep that **no Master Spec edit has landed since V1's 2026-04-29 spec-side remediation.** The pre-edit V1 backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` (5,188,645 bytes) is byte-size-identical to the current Master Spec; V1.2 §12.7.1's eight prescribed P0 remediation contracts are absent from the Master Spec (verified by grep: `audit_event_secret_field_redacted`: 0 occurrences; `console_bridge_row_level_seller_projection_consistency`: 0 occurrences; `seller_signal_distinctiveness_check_active`: 0 occurrences; `canonical_capability_id_lock` D-1.7-001 cross-link: 0 occurrences; `audit_logs_exported` Appendix-J registration: 0 occurrences). The V1.2 remediation queue has not been worked.
+V1.3 also confirms via direct grep that **no Master Spec edit has landed since V1's 2026-04-29 spec-side remediation.** The pre-edit V1 backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md` (5,188,645 bytes) is byte-size-identical to the current Master Spec; V1.2 §12.7.1's eight prescribed P0 remediation contracts are absent from the Master Spec (verified by grep: `audit_event_secret_field_redacted`: 0 occurrences; `console_bridge_row_level_seller_projection_consistency`: 0 occurrences; `seller_signal_distinctiveness_check_active`: 0 occurrences; `canonical_capability_id_lock` D-1.7-001 cross-link: 0 occurrences; `audit_logs_exported` Appendix-J registration: 0 occurrences). The V1.2 remediation queue has not been worked.
 
 ---
 
@@ -752,7 +752,7 @@ V1.3 spot-check across F-083 / F-117 / F-119 / F-120 / F-326 / F-326 / F-AE-042 
 
 #### 13.3.3 No §4 field was authored or removed by the audit
 
-V1.3 confirms: file size of `Sourcera_Master_Spec.md` is 5,188,645 bytes — byte-identical to the V1 pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md`. The V1 §11 spec-side remediation pass (which was authoring-licensed under the V1 STOP-and-remediate clause) is in the file; no further audit-program edits since. ✅
+V1.3 confirms: file size of `Sourcera_Master_Spec.md` is 5,188,645 bytes — byte-identical to the V1 pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1-remediation-2026-04-29.md`. The V1 §11 spec-side remediation pass (which was authoring-licensed under the V1 STOP-and-remediate clause) is in the file; no further audit-program edits since. ✅
 
 ---
 
@@ -966,7 +966,7 @@ No revisions. Promote `D-1V3-001` / `-002` / `-003` / `-004` to ledger.
 **Run window.** 2026-05-01 (immediately following V1.3 verification at §13).
 **Run owner.** Cowork / Opus session (local desktop).
 **Authorization.** V1.2 §12.7.1 P0 remediation queue + V1.3 §13.7.3 / §13.7.4 contracts. The audit-program rule "audit prompts are non-destructive by default" is preserved; this is a separately-scoped remediation pass with explicit license to author against `Sourcera_Master_Spec.md`. Mirrors the V1 §11 pattern.
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.3-remediation-2026-05-01.md` (5,188,645 bytes; byte-identical to source at backup time per md5 hash `39f34d3f24c9e73f095c754012012e95`).
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.3-remediation-2026-05-01.md` (5,188,645 bytes; byte-identical to source at backup time per md5 hash `39f34d3f24c9e73f095c754012012e95`).
 **Verdict (preview, justified in §14.5).** **PASS — V1.3 sign-off granted.** All 8 V1.2 §12.7.1 P0 contracts landed in the Master Spec. All 4 V1.3-originated defects (D-1V3-001/-002/-003/-004) closed (D-1V3-004 partially_remediated with residual scope tracked into v7.1.1 mechanical pass). Phase 1.4 §4.5 Marketplace sub-prompt run delivered 14 D-1.4-NNN defects; the 2 new P0 defects (D-1.4-001 / D-1.4-002 residency) closed in the same pass; the 12 P1 defects on §4.5.1 / §4.5.2 / §4.5.3 convention-bar / state-machine / retention / DSAR / numerical-singleton work remain `open` for the v7.1.1 entity-rewrite cycle.
 
 ---
@@ -1073,7 +1073,7 @@ D-1.5-002, D-1.5-003, D-1.5-004, D-1.5-005 ledger rows transitioned `open → re
 | artifact | change |
 |---|---|
 | `Sourcera_Master_Spec.md` | §4.4.18 SellerSignal (4 new fields, scope-isolation extension, FM #4 rewrite, new "Distinctiveness Secondary Check" sub-block, 5 new ACs, new Appendix J value); §4.5.1 Marketplace Listing (2 new fields); §4.5.2 EOI Record (2 new fields, cross-residency tie-break rule, new index, new Appendix-I error); §4.6.1 (`changes` field annotation extended); new §4.6.1.2 sub-section (closed forbidden-field-name registry, write-time validator, new Appendix-I error, CI gate, 7 ACs, 3 failure modes, legacy migration); §4.6.1.1 line 7137 (DSAR Cascade rewritten to Pattern B + canonical pseudonym citation); new §4.6.4 OpsSessionApiRequestLink entity (11 fields, sharding, 5 indexes, DSAR Pattern A/B mixed, 8 ACs, 5 failure modes, AE flag); §4.6.3 line 7274 stub annotation retired; §4.7.1 Scope Isolation block extended with new "Row-Level Seller Projection" sub-block (per-row allow-list / redaction matrix for 18 columns, defense-in-depth extension, CI gate, forward-compatibility rule); §4.7.1 "Seller-Visible Projection" payload-level block annotated to cross-reference row-level partition; §4.7.1.1 line 7473 (DSAR Cascade table rewritten to Pattern B + canonical pseudonym citation); §4.8.13 Seed Specification table (12 rows updated to canonical Appendix J values; FM #6 + AC #10 + min/max/approval-ratio prose updated; new AC #16 binding canonical_capability_id_lock); new §6.8.4.1 sub-section (Pattern A/B authoring, per-§4-entity assignment table, canonical pseudonym reaffirmation, 5 new ACs); §25.2 line 18516 namespace correction; Appendix J extended with new sub-sections (Audit-System / Workspace Lifecycle / Console-Bridge Ops / KB additions); new Appendix-I error codes registered (`audit_event_secret_field_forbidden`, `eoi_record_residency_lock_violation`, `ops_session_api_request_link_append_only`, `ops_session_api_request_link_immutable_field_mutation`, plus inline references to existing codes); §M.5 CI gate catalog extended (≈12 new gates: `audit_event_secret_field_redacted`, `audit_system_action_registry_completeness`, `workspace_lifecycle_audit_action_registry_completeness`, `kb_capability_audit_action_registry_completeness`, `console_bridge_ops_audit_action_registry_completeness`, `console_bridge_row_level_seller_projection_consistency`, `seller_signal_distinctiveness_check_active`, `seller_signal_distinctiveness_governance_flow_compliance`, `marketplace_listing_residency_required_at_create`, `eoi_record_residency_required_at_create`, `dsar_cascade_pseudonym_pattern_consistency`, `dsar_cascade_pattern_a_applicability_constraints`, `dsar_cascade_pattern_b_applicability_constraints`, `dsar_pseudonym_format_canonical_citation`, `seller_outcome_signal_seed_canonical_capability_id`, `ops_session_api_request_link_atomic_transaction`); estimated +1,800 lines, no §4 fields removed. |
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.3-remediation-2026-05-01.md` | Pre-edit backup, 5,188,645 bytes; md5 `39f34d3f24c9e73f095c754012012e95`. |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.3-remediation-2026-05-01.md` | Pre-edit backup, 5,188,645 bytes; md5 `39f34d3f24c9e73f095c754012012e95`. |
 | `_audit/DEFECT_LEDGER.md` | 8 P0 rows + 2 P1 (D-1V3-001 / D-1V3-002) + 1 P2 (D-1V3-003) + 4 Phase-1.4 (D-1.4-001 / D-1.4-002 / D-1.4-013 / D-1.4-014) transitioned `open → remediated 2026-05-01`; D-1V3-004 transitioned `open → partially_remediated 2026-05-01`; D-1V2-002 transitioned `partially_remediated → remediated 2026-05-01` (Phase 1.4 component closed). 14 new D-1.4-NNN defect rows appended (10 remain `open` for v7.1.1 cycle). |
 | `_audit/COVERAGE_MATRIX.md` | Phase 1.2 §9.4 propagation applied to F-083 through F-091 (≈40 cell transitions); F-119 OpsSession `data_model` ❌ (D-1V3-002 remediation reverses on v7.1.1 stamp post-§4.6.4 ratification); Run Summary extended with V1.3 propagation note. |
 | `_audit/PHASE1.4_FINDINGS.md` | New file — Phase 1.4 §4.5 Marketplace sub-prompt scratch log; 14 D-1.4-NNN defects promoted; sign-off HALT (2 P0 open) → closed in same V1.3 pass. |
@@ -1086,7 +1086,7 @@ D-1.5-002, D-1.5-003, D-1.5-004, D-1.5-005 ledger rows transitioned `open → re
 
 | phase | prompt | started_at | completed_at | opus_session_id | findings_count | status |
 |---|---|---|---|---|---|---|
-| Phase 1 | V1.3 — Spec-Side Remediation Pass | 2026-05-01T04:00:00Z | 2026-05-01T08:30:00Z | local-cowork-2026-05-01 | 0 (15 defect rows transitioned to remediated; 1 to partially_remediated; D-1V2-002 transitioned to remediated; 14 new D-1.4-NNN filed of which 4 closed in same pass) | **complete — V1.3 sign-off granted post-remediation.** All 8 V1.2 §12.7.1 P0 contracts landed. All 4 V1.3-originated defects closed (D-1V3-004 partially_remediated). Phase 1.4 §4.5 Marketplace sub-prompt run delivered + 4 of 14 defects closed in same pass. Pre-edit backup at `_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.3-remediation-2026-05-01.md`. |
+| Phase 1 | V1.3 — Spec-Side Remediation Pass | 2026-05-01T04:00:00Z | 2026-05-01T08:30:00Z | local-cowork-2026-05-01 | 0 (15 defect rows transitioned to remediated; 1 to partially_remediated; D-1V2-002 transitioned to remediated; 14 new D-1.4-NNN filed of which 4 closed in same pass) | **complete — V1.3 sign-off granted post-remediation.** All 8 V1.2 §12.7.1 P0 contracts landed. All 4 V1.3-originated defects closed (D-1V3-004 partially_remediated). Phase 1.4 §4.5 Marketplace sub-prompt run delivered + 4 of 14 defects closed in same pass. Pre-edit backup at `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v1.3-remediation-2026-05-01.md`. |
 
 ---
 

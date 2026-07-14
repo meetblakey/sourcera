@@ -41,12 +41,12 @@ The pass read the current Master Spec sections required by the cluster: §45, §
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `39719da56a752a063daa1b064c5bb4f4` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `1048483d4dc137ec4fae239a12680943` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `8907b46ab06b00c44bfab594d9114dcb` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `c4b7d559e9db486af8f0b429a3e12b01` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `fb25c479fdefb99376e9bb21de17cc68` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `d72a4392a182c8ab40d657ffcaa4e892` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `39719da56a752a063daa1b064c5bb4f4` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `1048483d4dc137ec4fae239a12680943` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `8907b46ab06b00c44bfab594d9114dcb` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `c4b7d559e9db486af8f0b429a3e12b01` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `fb25c479fdefb99376e9bb21de17cc68` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v72rem-phase45-privacy-abuse-p1-2026-06-22.md` | `d72a4392a182c8ab40d657ffcaa4e892` |
 
 ## Verification Commands
 

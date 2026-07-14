@@ -23,7 +23,7 @@ Each phase below is structured identically:
 
 Run one phase per session. Open the next session with: *"Run Phase 14.N from `Integration_Prompts_v7.1.md`."*
 
-Every destructive edit to `Sourcera_Master_Spec.md`, `Sourcera_Master_Summary.md`, or either pricing strategy doc must be preceded by a backup copy to `_versions/` with the naming pattern `{Filename}.v{current-version}-pre-v7.1.{phase}-{YYYY-MM-DD}.md`. This is enforced in Phase 14.0 and re-asserted in every subsequent phase.
+Every destructive edit to `Sourcera_Master_Spec.md`, `Sourcera_Master_Summary.md`, or either pricing strategy doc must be preceded by a backup copy to `legacy-import:_versions/` with the naming pattern `{Filename}.v{current-version}-pre-v7.1.{phase}-{YYYY-MM-DD}.md`. This is enforced in Phase 14.0 and re-asserted in every subsequent phase.
 
 ---
 
@@ -36,18 +36,18 @@ Snapshot the corpus before any v7.1.0 work. Establish the reconciliation header.
 None. Pre-flight only.
 
 ### Edit
-- `_versions/` — five new snapshots
+- `legacy-import:_versions/` — five new snapshots
 - `_integration/RECONCILIATION.md` — append header
 - `_integration/PHASE14_VERIFY.md` — create skeleton
 
 ### Authoring instructions
 1. Confirm v7.0.0 has been stamped. If `Sourcera_Master_Spec.md` front matter is not at `v7.0.0`, halt — v7.1.0 cannot begin.
-2. Copy the five primary files to `_versions/`:
-   - `Sourcera_Master_Spec.md` → `_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`
-   - `Sourcera_Master_Summary.md` → `_versions/Sourcera_Master_Summary.v1.1-pre-v7.1-2026-04-26.md`
-   - `Sourcera_Buyer_Pricing_Strategy.md` → `_versions/Sourcera_Buyer_Pricing_Strategy.v2-pre-v7.1-2026-04-26.md`
-   - `Sourcera_Seller_Pricing_Strategy.md` → `_versions/Sourcera_Seller_Pricing_Strategy.v2-pre-v7.1-2026-04-26.md`
-   - `UX_Design_of_Sourcera.md` → `_versions/UX_Design_of_Sourcera.v2.0.0-pre-v7.1-2026-04-26.md`
+2. Copy the five primary files to `legacy-import:_versions/`:
+   - `Sourcera_Master_Spec.md` → `_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`
+   - `Sourcera_Master_Summary.md` → `legacy-import:_versions/Sourcera_Master_Summary.v1.1-pre-v7.1-2026-04-26.md`
+   - `Sourcera_Buyer_Pricing_Strategy.md` → `legacy-import:_versions/Sourcera_Buyer_Pricing_Strategy.v2-pre-v7.1-2026-04-26.md`
+   - `Sourcera_Seller_Pricing_Strategy.md` → `legacy-import:_versions/Sourcera_Seller_Pricing_Strategy.v2-pre-v7.1-2026-04-26.md`
+   - `UX_Design_of_Sourcera.md` → `legacy-import:_versions/UX_Design_of_Sourcera.v2.0.0-pre-v7.1-2026-04-26.md`
 3. Append a v7.1.0 program header to `_integration/RECONCILIATION.md`:
    - Heading: `## v7.1.0 — Surface-Abstraction & Dual-Maya Integration Program`
    - Date opened: `2026-04-26`
@@ -56,12 +56,12 @@ None. Pre-flight only.
 4. Create `_integration/PHASE14_VERIFY.md` with one row per sub-phase (14.1 through 14.20), columns: `Phase | Status | Defects | Reviewer notes | Closed at`.
 
 ### Verification gate
-- Five files exist in `_versions/` with the exact naming pattern.
+- Five files exist in `legacy-import:_versions/` with the exact naming pattern.
 - Reconciliation header appended with all four required fields.
 - `PHASE14_VERIFY.md` skeleton created with 21 rows.
 
 ### Reconciliation log entry
-> **Phase 14.0 — Pre-flight (closed):** v7.0.0 baseline confirmed. Five backups copied to `_versions/`. v7.1.0 program header opened. PHASE14_VERIFY.md skeleton created. No content edits.
+> **Phase 14.0 — Pre-flight (closed):** v7.0.0 baseline confirmed. Five backups copied to `legacy-import:_versions/`. v7.1.0 program header opened. PHASE14_VERIFY.md skeleton created. No content edits.
 
 ### Stop conditions
 - v7.0.0 not stamped → halt.
@@ -907,7 +907,7 @@ Close the seven decisions resolved by the Cowork session 2026-04-26. Author the 
 Hostile-staff-engineer review of the v7.1.0 corpus state. Block final stamp on any P0 defect.
 
 ### Read first
-- Full diff between v7.0.0 baseline (`_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`) and current `Sourcera_Master_Spec.md`.
+- Full diff between v7.0.0 baseline (`_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`) and current `Sourcera_Master_Spec.md`.
 - All v7.1.0-touched files: Master Summary, both pricing strategy docs, UX spec, GTM_POSITIONING, GTM_PLG_ARCHITECTURE, GTM_SALES_PLAYBOOK, GTM_90DAY_SPRINT, Build_Execution_Strategy, Linear_Execution_Blueprint, Decisions.md, RECONCILIATION.md.
 - `_integration/PHASE14_VERIFY.md` — current phase log.
 
@@ -976,7 +976,7 @@ Version-bump, changelog, CLAUDE.md update, final reconciliation entry.
 4. Bump pricing strategy docs to v3.
 5. Update `CLAUDE.md`:
    - `Last updated` → today's date.
-   - `Corpus state` → `Master Spec v7.1.0 stamped. v7.1.0 Surface-Abstraction & Dual-Maya program complete. Baseline v7.0.0 snapshot at /_versions/. Next program is TBD.`
+   - `Corpus state` → `Master Spec v7.1.0 stamped. v7.1.0 Surface-Abstraction & Dual-Maya program complete. Baseline v7.0.0 snapshot at legacy-import:_versions/. Next program is TBD.`
 6. Update §17 (Known Drift / Open Issues) in `CLAUDE.md` to reflect v7.1.0 state. Specifically: Master Summary v1.2 supersedes prior; Solo tier and Defense View are now authoritative in Master Spec; Appendix M is the canonical surface/engine contract; CI gate is active.
 7. Append final reconciliation entry: `v7.1.0 stamp: [date]. Source authority: Cowork session 2026-04-26 + adversarial pass complete. Program closed.`
 
@@ -988,7 +988,7 @@ Version-bump, changelog, CLAUDE.md update, final reconciliation entry.
 - All v7.1.0 phases marked closed in PHASE14_VERIFY.md.
 
 ### Reconciliation log entry
-> **Phase 14.20 — v7.1.0 stamped (program closed):** Master Spec v7.1.0, Master Summary v1.2, pricing strategy docs v3. CLAUDE.md updated. Surface-Abstraction & Dual-Maya program closed. Baseline preserved at `_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`. Source authority: Cowork session 2026-04-26 + adversarial pass complete.
+> **Phase 14.20 — v7.1.0 stamped (program closed):** Master Spec v7.1.0, Master Summary v1.2, pricing strategy docs v3. CLAUDE.md updated. Surface-Abstraction & Dual-Maya program closed. Baseline preserved at `_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`. Source authority: Cowork session 2026-04-26 + adversarial pass complete.
 
 ### Stop conditions
 - Phase 14.19 status not `complete` → halt; do not stamp v7.1.0.
@@ -999,7 +999,7 @@ Version-bump, changelog, CLAUDE.md update, final reconciliation entry.
 
 **Session-per-phase discipline.** Each phase is one Claude session. Open with: *"Run Phase 14.N from `Integration_Prompts_v7.1.md`."* Do not run multiple phases in one session — context discipline degrades and reconciliation accuracy suffers.
 
-**Backup discipline.** Phase 14.0 takes the program-opening snapshots. Every subsequent destructive edit takes its own per-phase snapshot using the pattern `_versions/{Filename}.v{current-version}-pre-v7.1.{phase}-{YYYY-MM-DD}.md`.
+**Backup discipline.** Phase 14.0 takes the program-opening snapshots. Every subsequent destructive edit takes its own per-phase snapshot using the pattern `legacy-import:_versions/{Filename}.v{current-version}-pre-v7.1.{phase}-{YYYY-MM-DD}.md`.
 
 **Cross-phase dependencies.** The dependency order is roughly: 14.0 → 14.1 → 14.2 (foundational) → 14.3 → 14.4 → 14.5–14.10 (parallelizable in principle but recommended sequential for reconciliation cleanliness) → 14.11 → 14.12–14.16 (GTM/execution downstream) → 14.17 → 14.18 → 14.19 → 14.20. Do not execute 14.20 until 14.19 returns `complete`.
 

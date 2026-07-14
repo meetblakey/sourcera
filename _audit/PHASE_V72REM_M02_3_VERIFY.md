@@ -93,7 +93,7 @@ Runner: Node 22 / `tsx`. Sandbox copy at `/tmp/sl`; `npm install` resolved `tsx`
 | Defects filed (`open`) | D-V72REM-M023-002 (P3), -003 (P2), -004 (P2) |
 | AE rows (`pending`) | AE-V72REM-M023-01 (harness), -02 (observability) |
 | Self-challenge revisions | 3 (2 detector fixes + 1 fixture fix), all before delivery |
-| Backup | `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-M02.3-runtime-2026-06-15.md` (6,508,666 B; md5 893c6b7f0c1cabd0a43e975ad3bf4aae) |
+| Backup | `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-M02.3-runtime-2026-06-15.md` (6,508,666 B; md5 893c6b7f0c1cabd0a43e975ad3bf4aae) |
 
 **Disposition (Increment 1): PASS.** The 6 promotions are honest and self-validated; the held gates and product-codebase gates are documented with closure paths. No P0/P1 regression.
 

@@ -8,11 +8,11 @@
 
 | File | Backup | MD5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `f9950480c502184c804f61e5f9989c5b` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `8688ad5903d68971969fe2c7964780b8` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `508fe72eb2ad1bb6749b3794fff32375` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `17fccfafd125f63604f718c3cef75615` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `0793a590ace765d88776e96e9bd97ad7` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `f9950480c502184c804f61e5f9989c5b` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `8688ad5903d68971969fe2c7964780b8` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `508fe72eb2ad1bb6749b3794fff32375` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `17fccfafd125f63604f718c3cef75615` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-1-5-audit-log-scope-single-source.md` | `0793a590ace765d88776e96e9bd97ad7` |
 
 ## Change Summary
 

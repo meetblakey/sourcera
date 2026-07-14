@@ -96,7 +96,7 @@ Observed:
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec.pre-phase82-webhook-residual-closure-2026-07-09.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase82-webhook-residual-closure-2026-07-09.md`
-- `_versions/DEFECT_LEDGER.pre-phase82-webhook-residual-closure-2026-07-09.md`
-- `_versions/REMEDIATION_BACKLOG.pre-phase82-webhook-residual-closure-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.pre-phase82-webhook-residual-closure-2026-07-09.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase82-webhook-residual-closure-2026-07-09.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-phase82-webhook-residual-closure-2026-07-09.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-phase82-webhook-residual-closure-2026-07-09.md`

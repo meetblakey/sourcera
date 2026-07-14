@@ -14,9 +14,9 @@ This pass closes D-4.2-023 by hardening §10.16 Phase Advancement API outage beh
 
 ## Pre-Edit Backups
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-phase-advancement-outage-p1-2026-06-21.md`
 
 ## Verification Checklist
 

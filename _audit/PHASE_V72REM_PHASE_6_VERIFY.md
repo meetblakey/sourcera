@@ -4,7 +4,7 @@
 
 **Disambiguation.** "v7.2.0-REM Phase 6" already denotes the **P0 Closure Audit + v7.1.0a Stamp (2026-05-20)**. This sweep is the §6.1 catalog-completeness program (Linear `PROD-CATALOG-COMPL`), distinct from that stamp. The in-spec appendix labels are disambiguated by date (2026-06-14) + the "Catalog-Completeness" descriptor + unique anchors; the collision is filed as D-V72REM-PH6-003 (P3) and resolved non-destructively per D-AE-016. See `_integration/RECONCILIATION.md → v7.2.0-REM Program → Catalog-Completeness Sweep (REMEDIATION_BACKLOG §6.1) (2026-06-14)`.
 
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase6-catalog-2026-06-14.md` (6,413,689 bytes; md5 `5056b4928487ef14723ecdd7fb064f41`).
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v72REM-Phase6-catalog-2026-06-14.md` (6,413,689 bytes; md5 `5056b4928487ef14723ecdd7fb064f41`).
 
 ---
 

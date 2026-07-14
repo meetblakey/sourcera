@@ -6,7 +6,7 @@
 
 **Date.** 2026-05-11.
 
-**Pre-edit backup.** Non-destructive audit pass. No Master Spec edits. No `/_versions/` snapshot required.
+**Pre-edit backup.** Non-destructive audit pass. No Master Spec edits. No `legacy-import:_versions/` snapshot required.
 
 **Severity-rule application.** P0 reserved for `Audit_Prompts.md` Severity Rules (a)–(e). P1 for unbuildable-as-written contracts (missing entity, missing state machine, missing AC, missing API/webhook contract, missing error code, missing plan-gating row, missing retention/DSAR/residency, conflicting numerical singleton, surface introduced without Appendix-M row, CI gate runtime-unwireable). P2 for ambiguity that two staff engineers would resolve differently. P3 for cosmetic / heading anchor / nomenclature drift.
 

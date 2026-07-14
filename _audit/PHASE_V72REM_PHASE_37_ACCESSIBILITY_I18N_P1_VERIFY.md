@@ -14,12 +14,12 @@ The backlog row was stale before remediation: `_audit/REMEDIATION_BACKLOG.md` li
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `e83db52b8f354ac9d06d410c9724eef9` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `42ed0b9e1170dc0172d5ebdec9accdb9` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `44703843aba09f993bf6dbf5366a12d0` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `6a882f01d2f5b49553c05ef84cd4ac8e` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `db3e388080001da2e685679f6c6e99a3` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `e53c2591163f37f4ce5856fcf00db08d` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `e83db52b8f354ac9d06d410c9724eef9` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `42ed0b9e1170dc0172d5ebdec9accdb9` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `44703843aba09f993bf6dbf5366a12d0` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `6a882f01d2f5b49553c05ef84cd4ac8e` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `db3e388080001da2e685679f6c6e99a3` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-37-accessibility-i18n-p1-2026-06-22.md` | `e53c2591163f37f4ce5856fcf00db08d` |
 
 ## True-Issue Adjudication
 

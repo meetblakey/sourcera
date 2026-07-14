@@ -8,18 +8,18 @@
 
 - `Sourcera_Master_Spec.md` Citation Convention, §4.4.21, §34.1 preamble / citation key, §34.14, §34.15, §34.16.2, §34.17, §34.18, Appendix K Verification Tier entries.
 - `Sourcera_Seller_Pricing_Strategy.md` §13.2 Verification Tiers.
-- `_versions/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md` §2.8, §2.9, §2.11, §2.12 for frozen baseline extraction only.
+- `_baselines/retired-sources/Sourcera_Master_Summary_v1.1_retired_2026-04-26.md` §2.8, §2.9, §2.11, §2.12 for frozen baseline extraction only.
 - `_audit/DEFECT_LEDGER.md` D-PXC-001, D-PXC-010, D-PXC-014, plus D-PXC-011 / D-PXC-013 adjacent status-sync notes.
 
 ## 2. Backups
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `968388b5861ac8a6c88bdb2f9c388199` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `5a817d2d50cd643358c91002d17f6ffe` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `80f294f40da3ee0f172cd198ccb42348` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `ea63de9c21f5cc0105c00539cd514ddd` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `7b46e177704c64f05e910c93d985b382` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `968388b5861ac8a6c88bdb2f9c388199` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `5a817d2d50cd643358c91002d17f6ffe` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `80f294f40da3ee0f172cd198ccb42348` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `ea63de9c21f5cc0105c00539cd514ddd` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-pxc-pricing-crosscheck-2026-06-22.md` | `7b46e177704c64f05e910c93d985b382` |
 
 ## 3. Classification
 

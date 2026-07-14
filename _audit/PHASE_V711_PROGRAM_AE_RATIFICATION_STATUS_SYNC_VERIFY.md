@@ -15,10 +15,10 @@ Pre-edit backups:
 
 | File | Backup |
 |---|---|
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-v711-program-ae-ratification-sync-2026-06-24.md` |
 
 ## 3. Disposition
 

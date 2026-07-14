@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-07
 **Scope:** M02.3 spec-tree runtime evidence for `inbox_pulse_mobile_export_parity`.
-**Backup:** `_versions/Sourcera_Master_Spec_pre-inbox-pulse-mobile-export-parity-runtime-promotion-2026-07-07.md`
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-inbox-pulse-mobile-export-parity-runtime-promotion-2026-07-07.md`
 
 ## Scope Boundary
 

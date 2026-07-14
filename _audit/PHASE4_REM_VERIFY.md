@@ -56,10 +56,10 @@ The four sub-phase verification logs (`_audit/PHASE_V72REM_PHASE_4_3_VERIFY.md` 
 
 | Backup | Size (bytes) | md5 | Sub-Phase |
 |---|---|---|---|
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4-2026-05-18.md` | (per Phase 4 closure log) | `41f98ff81babf7ecce6a4ae27bc57049` | Phase 4 |
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4.2-2026-05-18.md` | (per Phase 4.2 closure log) | `64e6ca44000e94d1a2670e24380f8584` | Phase 4.2 |
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-PH4.3-D-EM-003-2026-05-19.md` | 6,232,132 | `9c764712072feb4a3ff13890128a7459` | Phase 4.3 |
-| `_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.4-DEM004-2026-05-19.md` | 6,268,286 | `ece85087c3c4d0c0059cde24ed968ccb` | Phase 4.4 |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4-2026-05-18.md` | (per Phase 4 closure log) | `41f98ff81babf7ecce6a4ae27bc57049` | Phase 4 |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v7.2-rem-phase4.2-2026-05-18.md` | (per Phase 4.2 closure log) | `64e6ca44000e94d1a2670e24380f8584` | Phase 4.2 |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-PH4.3-D-EM-003-2026-05-19.md` | 6,232,132 | `9c764712072feb4a3ff13890128a7459` | Phase 4.3 |
+| `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.4-DEM004-2026-05-19.md` | 6,268,286 | `ece85087c3c4d0c0059cde24ed968ccb` | Phase 4.4 |
 
 No new Master Spec edits authored in this consolidated Phase 4 verification log; no new backup required. The four sub-phase backups together provide a clean revert chain from current Master Spec v7.1.0 (post-Phase-4.4) back to v7.1.0 pre-Phase-4 entitlement remediation.
 
@@ -206,7 +206,7 @@ Following the Phase 4 consolidated sign-off, two known loose ends were closed in
 
 **Defect transitions.** D-NOM-016 `open → remediated 2026-05-19`. D-NOM-017 P2 newly filed for five residual non-canonical references that are out-of-scope for D-NOM-016 (BC-breaking to rewrite: §46.4.1 golden-dataset directory key + §44.6.8 AC #6 test name; display-text references to the §34.1.2 canonical customer-facing cell title: §44.6.3 line 34338 + §46.4.X line 34611 + UX_Design surface-registry entries §51850 / §51853). D-NOM-017 scoped to v7.1.1 stamp with explicit BC-impact analysis per location and a two-part remediation path (test-fixture directory rename + display-text dual-citation pass + AC test name preservation).
 
-**Pre-edit backup.** `_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.5-loose-ends-2026-05-19.md` (6,307,107 bytes; md5 `215b7e4354779d5e7c4ef63e82ded4d4`).
+**Pre-edit backup.** `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0-pre-v72REM-Ph4.5-loose-ends-2026-05-19.md` (6,307,107 bytes; md5 `215b7e4354779d5e7c4ef63e82ded4d4`).
 
 **Phase 4.5 sign-off scoreboard.** 5/5 self-challenge questions PASS (one known follow-on flagged: §M.5.17 sub-section authoring for Phase 4.4's `low_priority_background_solo_throttling_membership_canonical` in-prose registration — explicitly NOT in Phase 4.5 scope; queued for a separate phase to preserve scope discipline). 3/3 counterfactual failure modes addressed. All spec edits and ledger updates land consistently. AE-V72REM-PH4.3-01 status unchanged (`pending`; v7.1.0a hot-patch stamp batch); the §M.5.16 authoring sits under the existing AE sign-off envelope. **No P0 scope impact; 11 of 12 truly-open P0 closed.** Phase 5 authorization unchanged.
 

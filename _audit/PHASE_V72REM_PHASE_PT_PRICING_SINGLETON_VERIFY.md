@@ -11,12 +11,12 @@ Lower-severity Phase PT rows remain open: D-PT-003 through D-PT-009 (P2) and D-P
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `a6553d5eab04dc93a5317d8d18b26faa`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `4684ce5e687479cadb73556f0e8fe449`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `b2b92f8f49e83aaba9d0f6f7e0cae56f`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `545068bc083acc0692d2374bcb644b69`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `5289307ab44c9977487590a699761126`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `280d842c1a34c9f8ce3b087cd60a2044`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `a6553d5eab04dc93a5317d8d18b26faa`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `4684ce5e687479cadb73556f0e8fe449`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `b2b92f8f49e83aaba9d0f6f7e0cae56f`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `545068bc083acc0692d2374bcb644b69`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `5289307ab44c9977487590a699761126`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-pt-pricing-singletons-p1.md` — md5 `280d842c1a34c9f8ce3b087cd60a2044`
 
 ## Change Summary
 

@@ -8,12 +8,12 @@ Scope: Phase 9.2 DSAR cross-cascade residency pass for BL-P1-PH9P92-DSAR. Closed
 
 | File | Backup | md5 |
 | :---- | :---- | :---- |
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `ff7cbb3b1441520df86fee5488cad1c8` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `8a07f3eff36f777910c110a9368554c6` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `2871a6cddd54875caff22c4a71677906` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `7f899424d16aeafe4b03bc42282b37ef` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `8b9b49ea4ca424f1da66a04c0e13c18f` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `d8256bb801667352114e376769bf49ec` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `ff7cbb3b1441520df86fee5488cad1c8` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `8a07f3eff36f777910c110a9368554c6` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `2871a6cddd54875caff22c4a71677906` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `7f899424d16aeafe4b03bc42282b37ef` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `8b9b49ea4ca424f1da66a04c0e13c18f` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-9-2-dsar-residency-p1.md` | `d8256bb801667352114e376769bf49ec` |
 
 ## Closed Rows
 

@@ -3,7 +3,7 @@
 **Phase:** 12.1 — Appendix J Walk, Coverage Verification, Naming Consistency, Missing-Enum Authoring.
 **Authoring date:** 2026-04-25.
 **Authoritative artifact:** `Sourcera_Master_Spec.md` → `## Appendix J: Controlled Vocabulary Registry` → `### Phase 12.1 Closure Cluster — Appendix J Audit, Canonicalization & Missing Enum Authoring`.
-**Backup:** `_versions/Sourcera_Master_Spec_pre-phase12.1-appendixJ-audit-2026-04-25.md`.
+**Backup:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase12.1-appendixJ-audit-2026-04-25.md`.
 **Reconciliation entry:** `_integration/RECONCILIATION.md` → "Phase 12.1 — Appendix J Audit & Closure."
 
 ---

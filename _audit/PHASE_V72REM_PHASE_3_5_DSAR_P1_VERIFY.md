@@ -7,12 +7,12 @@
 
 ## 1. Source Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `50dacf12c264bd70b0b063ac51cd75c0`
-- `_versions/DEFECT_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `9b6f0896446c84915d2df752add616e0`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `2ed1c430417074fb5e4ce65c3b15ab58`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `46ff778ed77f6132a34e74982d4d6c8a`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `b202812d804361815e26b7777e1afa19`
-- `_versions/RECONCILIATION_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `7367cd27c2353e0d4aaf388f8cc746e0`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `50dacf12c264bd70b0b063ac51cd75c0`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `9b6f0896446c84915d2df752add616e0`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `2ed1c430417074fb5e4ce65c3b15ab58`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `46ff778ed77f6132a34e74982d4d6c8a`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `b202812d804361815e26b7777e1afa19`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-3-5-dsar-p1-2026-06-21.md` — md5 `7367cd27c2353e0d4aaf388f8cc746e0`
 
 ## 2. Remediation Landings
 

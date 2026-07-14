@@ -180,7 +180,7 @@ All five are **non-blocking for the Phase 8 verdict.**
 | 3 | Is calling (b) a PASS when no outside-counsel signature exists a rationalization? | NO — the required Phase-8 transition is `approved` (recorded); the external signature is correctly an un-fabricated BLOCKING downstream gate. The literal "no signature" answer is stated plainly and routed to v7.1.1 (F3). |
 | 4 | Did you let the D-V6-002 prompt label stand? | NO — surfaced as a hard conflict, resolved against the DEFECT_LEDGER, genuine P0 partner (D-6.1-001) identified and its body confirmed. |
 | 5 | Could a reader mistake this PASS for v7.1.1 readiness? | NO — F3 (outside-counsel BLOCKING + WCAG-firm owed) and §8 explicitly gate v7.1.1; Phase 9 (V11/V12/V13 + AE-14.18.1) is out of scope and still `pending`. |
-| 6 | Was the backup/no-destructive-edit discipline honored by the passes you verify? | YES — six pre-edit backups present in `_versions/` (`{AE_LEDGER,RECON,DEFECT}.pre-v72REM-Phase8` + `…-Phase8.2`), sizes chain correctly across both passes; Master Spec untouched (md5 unchanged). |
+| 6 | Was the backup/no-destructive-edit discipline honored by the passes you verify? | YES — six pre-edit backups present in `legacy-import:_versions/` (`{AE_LEDGER,RECON,DEFECT}.pre-v72REM-Phase8` + `…-Phase8.2`), sizes chain correctly across both passes; Master Spec untouched (md5 unchanged). |
 
 ---
 

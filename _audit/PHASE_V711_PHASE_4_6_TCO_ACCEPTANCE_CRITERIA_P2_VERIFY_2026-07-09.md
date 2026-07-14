@@ -3,14 +3,14 @@
 **Scope.** Closed D-4.6-015, D-4.6-016, D-4.6-018, D-4.6-019, D-4.6-020, D-4.6-022, D-4.6-028, and D-4.6-030.
 
 **Backups.**
-- `_versions/Sourcera_Master_Spec.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/DEFECT_LEDGER.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/REMEDIATION_BACKLOG.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/V711_BACKLOG_INDEX.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/RECONCILIATION.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/AGENTS.pre-phase-46-tco-ac-p2-2026-07-09.md`
-- `_versions/CLAUDE.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/DEFECT_LEDGER.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/RECONCILIATION.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/AGENTS.pre-phase-46-tco-ac-p2-2026-07-09.md`
+- `legacy-import:_versions/CLAUDE.pre-phase-46-tco-ac-p2-2026-07-09.md`
 
 ## Closure Summary
 

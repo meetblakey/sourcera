@@ -21,10 +21,10 @@ These were true P1 issues at filing. The active Master Spec already remediated t
 
 | File | Backup | MD5 |
 |---|---|---|
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-hm-status-propagation-2026-06-22.md` | `0a0cf1ac23e10293dc629ab5207856be` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-hm-status-propagation-2026-06-22.md` | `17de9a66088a11f5ca7d994b3e288737` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-hm-status-propagation-2026-06-22.md` | `852a8fd0862aed612479d16f752a6585` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-hm-status-propagation-2026-06-22.md` | `1ef38b64dca062dcfd830c22c95e79fb` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-hm-status-propagation-2026-06-22.md` | `0a0cf1ac23e10293dc629ab5207856be` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-hm-status-propagation-2026-06-22.md` | `17de9a66088a11f5ca7d994b3e288737` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-hm-status-propagation-2026-06-22.md` | `852a8fd0862aed612479d16f752a6585` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-hm-status-propagation-2026-06-22.md` | `1ef38b64dca062dcfd830c22c95e79fb` |
 
 ## Post-Edit Fingerprints
 

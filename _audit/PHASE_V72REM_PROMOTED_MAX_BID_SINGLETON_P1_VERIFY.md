@@ -6,9 +6,9 @@ Scope: D-MD-006 (`numerical_singleton`) for the Promoted Listing max-bid sanity 
 
 Backups taken before edit:
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-promoted-max-bid-singleton-p1-2026-06-21.md`
 
 ## Verdict
 

@@ -30,9 +30,9 @@ The 2026-06-22 work is a status-sync only. It corrects stale top-table counts an
 
 | File | Backup | MD5 |
 |---|---|---|
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-v12-family-status-sync-2026-06-22.md` | `afd5b2b320cdbdb3d810ad2c1817ccdb` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-v12-family-status-sync-2026-06-22.md` | `ac3e0c0c8e4bd9ee0e9a1ab81b3eb100` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-v12-family-status-sync-2026-06-22.md` | `62f701185f7995502377d35300cb70ab` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-v12-family-status-sync-2026-06-22.md` | `afd5b2b320cdbdb3d810ad2c1817ccdb` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-v12-family-status-sync-2026-06-22.md` | `ac3e0c0c8e4bd9ee0e9a1ab81b3eb100` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-v12-family-status-sync-2026-06-22.md` | `62f701185f7995502377d35300cb70ab` |
 
 ## Verification Commands
 

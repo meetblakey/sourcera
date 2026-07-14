@@ -19,12 +19,12 @@ Pre-edit backups were taken before the Master Spec body edit:
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `2df968222ad9bfb2f052ae1f9615f570` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `cd3c22c4015f0882833eea7b96b36346` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `c55253ae8e33fd190c9e777a8b5623d4` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `bf13327ced43999869cb2386c2dd72ce` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `214a39320421d41993aa9ac308559fc5` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `5bb24b84dc87976a76ecea21251c4009` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `2df968222ad9bfb2f052ae1f9615f570` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `cd3c22c4015f0882833eea7b96b36346` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `c55253ae8e33fd190c9e777a8b5623d4` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `bf13327ced43999869cb2386c2dd72ce` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `214a39320421d41993aa9ac308559fc5` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-5-1-seller-teams-dm-2026-06-22.md` | `5bb24b84dc87976a76ecea21251c4009` |
 
 ## Landing Sites
 

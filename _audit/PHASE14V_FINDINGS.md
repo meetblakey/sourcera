@@ -13,7 +13,7 @@
 |---|---|---|---|
 | 14.1 — Master Spec ↔ Buyer Pricing v3 | `Sourcera_Buyer_Pricing_Strategy.md` v3 | `_audit/PHASE14.1_FINDINGS.md` + DEFECT_LEDGER.md → Phase 14.1 block + CONSISTENCY_DELTA.md → "Buyer Pricing v3" block | ✅ PASS |
 | 14.2 — Master Spec ↔ Seller Pricing v3 | `Sourcera_Seller_Pricing_Strategy.md` v3 | `_audit/PHASE14.2_FINDINGS.md` + DEFECT_LEDGER.md → Phase 14.2 block + CONSISTENCY_DELTA.md → "Seller Pricing v3" block | ✅ PASS |
-| 14.3 — Master Spec ↔ KB Engineering Spec | `_versions/KB_Engineering_Spec_retired_2026-04-26.md` | `_audit/PHASE14.3_FINDINGS.md` + DEFECT_LEDGER.md → Phase 14.3 block + CONSISTENCY_DELTA.md → "KB Engineering Spec" block | ✅ PASS |
+| 14.3 — Master Spec ↔ KB Engineering Spec | `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` | `_audit/PHASE14.3_FINDINGS.md` + DEFECT_LEDGER.md → Phase 14.3 block + CONSISTENCY_DELTA.md → "KB Engineering Spec" block | ✅ PASS |
 | 14.4 — Master Spec ↔ UX Design v2 | `UX_Design_of_Sourcera.md` v2.0.0 | DEFECT_LEDGER.md → Phase 14.4 block + CONSISTENCY_DELTA.md → "UX Design v2" block (no discrete `_audit/PHASE14.4_FINDINGS.md`) | ⚠ PASS w/ defect — scratch-log discipline gap, see D-V14-001 |
 | 14.5 — AE Ledger Ratification | `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_audit/AE_RATIFICATION_RECOMMENDATIONS.md` + DEFECT_LEDGER.md → Phase AE block (15 defects D-AE-001..-015) | ✅ PASS |
 | 14.6 — Decisions Ledger Resolution | `_integration/Decisions.md` | `_audit/DECISIONS_STATUS_REPORT.md` + DEFECT_LEDGER.md → Phase DEC block (11 D-DEC-NNN defects) | ✅ PASS |

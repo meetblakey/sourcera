@@ -29,12 +29,12 @@ D-2.2-045 was a true live P1 data-model/buildability issue. §4.4.19 referenced 
 
 ## 3. Backups
 
-- `_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `bbcae3d29f6c50cccbf888f5095a0501`
-- `_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `eead96be9b10769d80cdce6c9233c664`
-- `_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `3f93b2566e78a23f0c3879521ae6ef90`
-- `_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `62dccdcbc20c270882cd38ec03d63856`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `dfb50e4576887215cd937137ff654d61`
-- `_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `3dd859ca897304642215a8dac2263b7b`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `bbcae3d29f6c50cccbf888f5095a0501`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `eead96be9b10769d80cdce6c9233c664`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `3f93b2566e78a23f0c3879521ae6ef90`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `62dccdcbc20c270882cd38ec03d63856`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `dfb50e4576887215cd937137ff654d61`
+- `legacy-import:_versions/RECONCILIATION_pre-2026-06-22-phase-2-2-promoted-listing-auction-run.md` md5 `3dd859ca897304642215a8dac2263b7b`
 
 ## 4. Targeted Verification
 

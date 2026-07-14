@@ -58,4 +58,4 @@ Those remain product-pack / runtime evidence surfaces.
 - Promotion stamp JSON: `_audit/_tmp/v711_stamp_gate_after_posthog_event_payload_single_source.json`
 - Current blocker inventory: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-09.md`
 - Current blocker CSV: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY_2026-07-09.csv`
-- Master Spec backup: `_versions/Sourcera_Master_Spec_pre-posthog-event-payload-single-source-runtime-promotion-2026-07-09.md`
+- Master Spec backup: `legacy-import:_versions/Sourcera_Master_Spec_pre-posthog-event-payload-single-source-runtime-promotion-2026-07-09.md`

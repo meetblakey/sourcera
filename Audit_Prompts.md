@@ -3,7 +3,7 @@
 **Version:** 1.0
 **Author:** Sourcera Technical Product Strategy
 **Required Model:** **Claude Opus 4.6 (1M context)** — every prompt in this program must be run with Opus. Audit gates are calibrated for Opus-level depth, cross-document synthesis, and adversarial review. Sonnet/Haiku will silently miss whole defect classes (numerical-singleton drift, RBAC/firewall leakage, retention/DSAR breaks, Appendix-M coverage holes, Authored Extension ratification gaps).
-**Baseline:** `Sourcera_Master_Spec.md` v7.1.0 (2026-04-28). Snapshot reference: `_versions/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`.
+**Baseline:** `Sourcera_Master_Spec.md` v7.1.0 (2026-04-28). Snapshot reference: `_baselines/Sourcera_Master_Spec.v7.0.0-pre-v7.1-2026-04-26.md`.
 **Purpose:** Sequenced, pastable prompt program that audits the entire Master Spec at production-grade fidelity. Confirms that every feature is fully defined, plan-gated, instrumented, retention-typed, residency-typed, DSAR-compatible, accessibility-compliant, surface/engine-mapped, and cross-document-consistent. Identifies every gap and produces a prioritized remediation backlog.
 **Outcome:** A defensible production-readiness verdict for v7.1.0 plus a P0/P1/P2 remediation backlog, persisted under `/Sourcera/_audit/`.
 
@@ -286,7 +286,7 @@ RUN row to AUDIT_README.md.
 TASK
 Walk every section of `Sourcera_Master_Spec.md` end-to-end, plus
 `Sourcera_Buyer_Pricing_Strategy.md`, `Sourcera_Seller_Pricing_Strategy.md`,
-`_versions/KB_Engineering_Spec_retired_2026-04-26.md` (historical integration-completeness comparison only), and `UX_Design_of_Sourcera.md`. Produce the canonical
+`_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` (historical integration-completeness comparison only), and `UX_Design_of_Sourcera.md`. Produce the canonical
 list of every feature, surface, engine, and capability the platform claims
 to deliver.
 
@@ -294,7 +294,7 @@ INPUTS (READ END-TO-END, NOT SAMPLED)
 - Sourcera_Master_Spec.md §1–§51, Appendices A–M
 - Sourcera_Buyer_Pricing_Strategy.md
 - Sourcera_Seller_Pricing_Strategy.md
-- `_versions/KB_Engineering_Spec_retired_2026-04-26.md` — historical comparison only; never current behavior authority
+- `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` — historical comparison only; never current behavior authority
 - UX_Design_of_Sourcera.md
 
 `Sourcera_Master_Spec.md` is the current behavior authority. The retired KB snapshot may identify integration coverage only; it cannot establish or override an executable contract.
@@ -1482,7 +1482,7 @@ OUTPUT
 [PASTE GLOBAL CONVENTIONS PREAMBLE]
 
 TASK
-Walk §22.1–§22.8 end-to-end. Use `_versions/KB_Engineering_Spec_retired_2026-04-26.md` §0–§3 only to check historical integration lineage; Master Spec §22 is the executable authority.
+Walk §22.1–§22.8 end-to-end. Use `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` §0–§3 only to check historical integration lineage; Master Spec §22 is the executable authority.
 
 CHECKS
 1. Layered model (§22.2.1) retains required historical baseline coverage from retired KB Spec §2.1 without deferring current behavior outside §22.
@@ -2803,7 +2803,7 @@ OUTPUT
 [PASTE GLOBAL CONVENTIONS PREAMBLE]
 
 TASK
-Walk `_versions/KB_Engineering_Spec_retired_2026-04-26.md` §0–§18 against §22. The snapshot is historical integration evidence only; §22 is the current executable authority.
+Walk `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` §0–§18 against §22. The snapshot is historical integration evidence only; §22 is the current executable authority.
 
 CHECKS (mirror Phase 5.2 / 5.3 cross-checks but exhaustively)
 1. Every retired KB Spec subsection has a §22 counterpart or an explicit

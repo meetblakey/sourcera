@@ -117,13 +117,13 @@ Generated evidence:
 
 Exact pre-edit backups were created and compared before editing:
 
-- `_versions/Sourcera_Master_Spec.v7.1.0a-pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- `_versions/Build_Execution_Strategy.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- `_versions/RECONCILIATION.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- `_versions/V711_BACKLOG_INDEX.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- `_versions/REMEDIATION_BACKLOG.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
-- `_versions/AGENTS.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/Sourcera_Master_Spec.v7.1.0a-pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/Build_Execution_Strategy.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/RECONCILIATION.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/V711_BACKLOG_INDEX.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/REMEDIATION_BACKLOG.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
+- `legacy-import:_versions/AGENTS.pre-v711-documentation-blocker-major-rewrite-2026-07-13.md`
 
 ## Changed Documentation
 

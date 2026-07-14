@@ -3,7 +3,7 @@
 **Phase:** 13 — End-to-end engineering review pass over `Sourcera_Master_Spec.md` against the eight Phase 13 acceptance gates.
 **Date:** 2026-04-26
 **Reviewer scope:** Production-readiness audit; gate items 1–8 from `Integration_Prompts.md` Phase 13.
-**Master Spec baseline at review start:** `_versions/Sourcera_Master_Spec_pre-phase13-eng-review-2026-04-26.md` (43,681 lines / 4.4 MB).
+**Master Spec baseline at review start:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase13-eng-review-2026-04-26.md` (43,681 lines / 4.4 MB).
 **Master Spec at review close:** `Sourcera_Master_Spec.md` (post-fixes; see §3 Inline Fixes Applied).
 
 ---
@@ -319,5 +319,5 @@ The following deploy-time validators are recommended as part of Phase 13.1 / 13.
 Phase 13 (Final Engineering Review) closes **CONDITIONAL PASS**. Five gates pass cleanly; three carry conditional-pass remediation deferred to scoped follow-on phases (13.1 Endpoint Authoring, 13.2 Test-Catalog Aggregation, 13.3 Appendix H Rewrite). Six inline fixes have been applied (F-3.1.A, F-3.2, F-4.1, F-5.1, F-7.1+F-7.2, F-8.1). Zero hard-fail conditions remain. The Master Spec is ready for v7.0.0 publish provided the four named follow-ons land on the post-publish remediation timeline.
 
 **Master Spec baseline at review close:** `Sourcera_Master_Spec.md` (with six inline fixes applied; line count delta ≈ +95).
-**Pre-edit snapshot:** `_versions/Sourcera_Master_Spec_pre-phase13-eng-review-2026-04-26.md`.
+**Pre-edit snapshot:** `legacy-import:_versions/Sourcera_Master_Spec_pre-phase13-eng-review-2026-04-26.md`.
 **Reconciliation log update:** see `_integration/RECONCILIATION.md → Phase 13 Engineering Review CLOSURE` (appended in this same edit).

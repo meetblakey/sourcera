@@ -250,7 +250,7 @@ Explicit user approval of this design file is the product-owner sign-off. The AE
 - `AGENTS.md` current-release correction after verification
 - a dated `_audit/PHASE_V711_DOCUMENTATION_BLOCKER_MAJOR_REWRITE_VERIFY_2026-07-13.md`
 
-Before destructive edits, every authoritative file receives a dated `_versions/` backup.
+Before destructive edits, every authoritative file receives a dated `legacy-import:_versions/` backup.
 
 ## 12. Verification
 

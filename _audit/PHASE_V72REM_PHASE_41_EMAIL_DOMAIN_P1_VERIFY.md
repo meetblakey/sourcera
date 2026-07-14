@@ -14,12 +14,12 @@
 
 | File | Backup | md5 |
 |---|---|---|
-| `Sourcera_Master_Spec.md` | `_versions/Sourcera_Master_Spec_pre-phase-41-email-domain-p1-2026-06-22.md` | `cf6d7c3991591e20b7c36974df8bccc9` |
-| `_audit/DEFECT_LEDGER.md` | `_versions/DEFECT_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` | `d8c3cf4b567ea6cadb6f3d758be56975` |
-| `_audit/V711_BACKLOG_INDEX.md` | `_versions/V711_BACKLOG_INDEX_pre-phase-41-email-domain-p1-2026-06-22.md` | `7b77ab1983d9ceef9d255513b104763a` |
-| `_audit/REMEDIATION_BACKLOG.md` | `_versions/REMEDIATION_BACKLOG_pre-phase-41-email-domain-p1-2026-06-22.md` | `e40a0105dd3f7846a9be231707e64cc4` |
-| `_integration/RECONCILIATION.md` | `_versions/RECONCILIATION_pre-phase-41-email-domain-p1-2026-06-22.md` | `e73f1e9064000078e72a58fd1ecbff1d` |
-| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` | `dcf9c3d26172a4e2f3ee58a642f83246` |
+| `Sourcera_Master_Spec.md` | `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-41-email-domain-p1-2026-06-22.md` | `cf6d7c3991591e20b7c36974df8bccc9` |
+| `_audit/DEFECT_LEDGER.md` | `legacy-import:_versions/DEFECT_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` | `d8c3cf4b567ea6cadb6f3d758be56975` |
+| `_audit/V711_BACKLOG_INDEX.md` | `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-41-email-domain-p1-2026-06-22.md` | `7b77ab1983d9ceef9d255513b104763a` |
+| `_audit/REMEDIATION_BACKLOG.md` | `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-41-email-domain-p1-2026-06-22.md` | `e40a0105dd3f7846a9be231707e64cc4` |
+| `_integration/RECONCILIATION.md` | `legacy-import:_versions/RECONCILIATION_pre-phase-41-email-domain-p1-2026-06-22.md` | `e73f1e9064000078e72a58fd1ecbff1d` |
+| `_integration/AUTHORED_EXTENSIONS_LEDGER.md` | `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-41-email-domain-p1-2026-06-22.md` | `dcf9c3d26172a4e2f3ee58a642f83246` |
 
 ## 3. Classification
 

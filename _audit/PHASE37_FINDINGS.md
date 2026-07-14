@@ -149,7 +149,7 @@ No P0. Phase 37 does not halt the audit program. The 9 P1 defects route to a §3
 
 ## Pre-edit backup
 
-Non-destructive audit pass; no Master Spec edits performed; no `/_versions/` snapshot required.
+Non-destructive audit pass; no Master Spec edits performed; no `legacy-import:_versions/` snapshot required.
 
 ## Cross-references
 

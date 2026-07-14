@@ -14,9 +14,9 @@ This pass closes D-4.2-020 and D-4.2-021, with sibling closure of D-4.2-032. The
 
 ## Pre-Edit Backups
 
-- `_versions/Sourcera_Master_Spec_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`
-- `_versions/DEFECT_LEDGER_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`
-- `_versions/RECONCILIATION_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`
+- `legacy-import:_versions/RECONCILIATION_pre-v72REM-selection-entities-approval-workflow-p1-2026-06-21.md`
 
 ## Verification Checklist
 

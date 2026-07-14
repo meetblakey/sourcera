@@ -73,7 +73,7 @@ These advisory findings predate this pass and are not part of the D-8.2-004 clos
 - D-8.2-009 remains open for webhook subscription CRUD.
 - D-8.2-010 and D-8.2-012+ remain open for CRM / lifecycle event-catalog long-tail work.
 - D-V8.1-021 and related billing-domain §32.8 emission coverage remain open.
-- Historical `_versions/` snapshots and old `_integration/` prose were not rewritten.
+- Historical `legacy-import:_versions/` snapshots and old `_integration/` prose were not rewritten.
 
 ## Verdict
 

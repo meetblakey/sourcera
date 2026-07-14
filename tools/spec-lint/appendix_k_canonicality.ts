@@ -36,7 +36,7 @@
  *
  *   (2) _integration/RECONCILIATION.md, but ONLY entries dated 2026-04-26
  *       or later. The 2026-04-26 boundary is the Phase 12.3 amendment date
- *       per CLAUDE.md §11 Authoring Convention #4. Historical reconciliation
+ *       per the Appendix K authority rule in AGENTS.md. Historical reconciliation
  *       entries authored before Phase 12.3 were correctly written against
  *       the pre-amendment convention (Appendix B was the named Glossary
  *       slot) and MUST NOT be retroactively flagged.
@@ -166,7 +166,7 @@
  * ============================================================================
  *
  * Promoted to `runtime_active` at v7.2.0-REM Phase 2 closure (2026-05-18).
- * Implementation pack: release-orchestration (per CLAUDE.md §16 + §M.5.5
+ * Implementation pack: release-orchestration (per AGENTS.md + §M.5.5
  * per-row runtime-status assignment table). Stack alignment: GitHub
  * Actions (existing `.github/workflows/spec-lint.yml`); Convex AuditEvent;
  * PostHog `spec_lint.appendix_m_gate_run` event (schema reused — gate-id
@@ -256,7 +256,7 @@ export interface GateRunMetadata {
  * historical content (Appendix B was the named Glossary slot) and the
  * v7.0.0+ corpus (Appendix K is the canonical Glossary).
  *
- * Per CLAUDE.md §11 Authoring Convention #4 (Phase 12.3 amendment) +
+ * Per the Appendix K authority rule in AGENTS.md +
  * Master Spec Appendix K authoring note + _integration/RECONCILIATION.md
  * Phase 12.3 block.
  */
@@ -738,7 +738,7 @@ export function renderReviewComment(match: DetectedMatch): string {
     "",
     `Matcher: ${matcher.description}`,
     "",
-    `Per CLAUDE.md §11 Authoring Convention #4 (Phase 12.3 amendment, 2026-04-26): **Appendix K** is the canonical Glossary; **Appendix B** is the Keyboard Shortcut Reference.`,
+    `Per AGENTS.md and the Master Spec: **Appendix K** is the canonical Glossary; **Appendix B** is the Keyboard Shortcut Reference.`,
     "",
     `Recommended replacement: rewrite the cited token to reference \`Appendix K Glossary\` and (for new additions) cite the Phase 12.3 amendment inline.`,
     "",

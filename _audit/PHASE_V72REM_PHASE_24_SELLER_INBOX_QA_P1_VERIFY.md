@@ -32,12 +32,12 @@ Both targeted rows were true issues:
 
 ## Backups
 
-- `_versions/Sourcera_Master_Spec_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `da48a019761ef94b5509fcf4a1ef6937`
-- `_versions/DEFECT_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `138824d6d5788a0a4637f8949a0dc13a`
-- `_versions/REMEDIATION_BACKLOG_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `6234fc500a77d183ed2460b3d0326703`
-- `_versions/V711_BACKLOG_INDEX_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `6302fcba7a040a93c353670021838aa0`
-- `_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `3a909c9448489fe1434b7041ae370b24`
-- `_versions/RECONCILIATION_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `b5b97da8ec1053299c87811be750e722`
+- `legacy-import:_versions/Sourcera_Master_Spec_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `da48a019761ef94b5509fcf4a1ef6937`
+- `legacy-import:_versions/DEFECT_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `138824d6d5788a0a4637f8949a0dc13a`
+- `legacy-import:_versions/REMEDIATION_BACKLOG_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `6234fc500a77d183ed2460b3d0326703`
+- `legacy-import:_versions/V711_BACKLOG_INDEX_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `6302fcba7a040a93c353670021838aa0`
+- `legacy-import:_versions/AUTHORED_EXTENSIONS_LEDGER_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `3a909c9448489fe1434b7041ae370b24`
+- `legacy-import:_versions/RECONCILIATION_pre-phase-24-seller-inbox-qna-p1-2026-06-22.md` — md5 `b5b97da8ec1053299c87811be750e722`
 
 ## Artifact Updates
 
