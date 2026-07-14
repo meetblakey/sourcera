@@ -1,0 +1,295 @@
+{
+  "overrides": [
+    {
+      "requirementId": "F-795",
+      "disposition": "proof_only",
+      "replacementId": "RG:appendix_m_coverage_on_diff",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-804",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_mode_team_to_solo_blocked_with_stakeholders",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-805",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_mode_chip_ribbon_suppression_buyer",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-806",
+      "disposition": "proof_only",
+      "replacementId": "RG:console_bridge_no_defense_view_event_kinds",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-807",
+      "disposition": "proof_only",
+      "replacementId": "RG:webhook_payload_no_selection_record_body",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-808",
+      "disposition": "proof_only",
+      "replacementId": "RG:defense_view_regeneration_throttle_5min",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-812",
+      "disposition": "proof_only",
+      "replacementId": "RG:pipeline_surface_compression_seller_always_compressed",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-813",
+      "disposition": "proof_only",
+      "replacementId": "RG:pipeline_surface_compression_soft_gate_solo_only",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-819",
+      "disposition": "proof_only",
+      "replacementId": "RG:seller_maya_solo_free_copy_string_lint",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-820",
+      "disposition": "proof_only",
+      "replacementId": "RG:seller_maya_chip_list_auto_publish_state_machine",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-821",
+      "disposition": "proof_only",
+      "replacementId": "RG:seller_maya_match_score_three_label_compression",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-823",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_charge_kind_registered",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-824",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_dual_console_independent_invoicing",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-825",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_plan_change_console_isolation",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-826",
+      "disposition": "proof_only",
+      "replacementId": "RG:aiwallet_response_excludes_solo_envelope",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-827",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_subscription_blocks_per_charge",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-829",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_engine_metering_parity",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-830",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_telemetry_no_customer_routing",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-833",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_throttling_class_change_takes_effect_at_next_envelope_rollover",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-834",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_envelope_per_console_isolation",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-836",
+      "disposition": "proof_only",
+      "replacementId": "RG:solo_envelope_throttling_targets_low_priority_background_only",
+      "rationale": "The live runtime-gate identity owns execution and proof status."
+    },
+    {
+      "requirementId": "F-838",
+      "disposition": "narrative_context",
+      "rationale": "Buyer pricing narrative; Master Spec §34 owns executable pricing."
+    },
+    {
+      "requirementId": "F-839",
+      "disposition": "narrative_context",
+      "rationale": "Buyer pricing narrative; Master Spec §44 and the named dependency own executable behavior."
+    },
+    {
+      "requirementId": "F-840",
+      "disposition": "narrative_context",
+      "rationale": "Buyer acquisition scenario; the named Master Spec dependency owns executable behavior."
+    },
+    {
+      "requirementId": "F-841",
+      "disposition": "narrative_context",
+      "rationale": "Buyer Solo scenario; Master Spec §2.8 owns executable behavior."
+    },
+    {
+      "requirementId": "F-842",
+      "disposition": "narrative_context",
+      "rationale": "Buyer team scenario; the named Master Spec dependency owns executable behavior."
+    },
+    {
+      "requirementId": "F-843",
+      "disposition": "narrative_context",
+      "rationale": "Enterprise pricing narrative; Master Spec §34 owns executable pricing."
+    },
+    {
+      "requirementId": "F-844",
+      "disposition": "narrative_context",
+      "rationale": "Buyer forecast narrative; the named Master Spec dependency owns executable behavior."
+    },
+    {
+      "requirementId": "F-845",
+      "disposition": "narrative_context",
+      "rationale": "Buyer rate-card narrative; Master Spec §34 owns executable pricing."
+    },
+    {
+      "requirementId": "F-846",
+      "disposition": "narrative_context",
+      "rationale": "Buyer downgrade narrative; the named Master Spec dependency owns executable behavior."
+    },
+    {
+      "requirementId": "F-847",
+      "disposition": "narrative_context",
+      "rationale": "Buyer overage narrative; Master Spec §44 and the named dependency own executable behavior."
+    },
+    {
+      "requirementId": "F-848",
+      "disposition": "narrative_context",
+      "rationale": "Seller pricing narrative; Master Spec §34 owns executable pricing."
+    },
+    {
+      "requirementId": "F-849",
+      "disposition": "narrative_context",
+      "rationale": "Seller signup playbook narrative; Master Spec F-645 and F-559 own executable behavior."
+    },
+    {
+      "requirementId": "F-850",
+      "disposition": "narrative_context",
+      "rationale": "Seller knowledge-base narrative; Master Spec F-370 owns executable behavior."
+    },
+    {
+      "requirementId": "F-851",
+      "disposition": "narrative_context",
+      "rationale": "Seller network-effects narrative; Master Spec F-653 owns executable behavior."
+    },
+    {
+      "requirementId": "F-852",
+      "disposition": "narrative_context",
+      "rationale": "Seller claim scenario; Master Spec F-849 context and its executable dependencies own behavior."
+    },
+    {
+      "requirementId": "F-853",
+      "disposition": "narrative_context",
+      "rationale": "Seller Solo scenario; Master Spec §2.8 owns executable behavior."
+    },
+    {
+      "requirementId": "F-854",
+      "disposition": "narrative_context",
+      "rationale": "Seller conversion scenario; Master Spec F-518 owns executable behavior."
+    },
+    {
+      "requirementId": "F-855",
+      "disposition": "narrative_context",
+      "rationale": "Seller agent-consumption narrative; Master Spec §44 and F-352 own executable behavior."
+    },
+    {
+      "requirementId": "F-856",
+      "disposition": "narrative_context",
+      "rationale": "Seller enterprise pricing narrative; Master Spec §34 and F-520 own executable behavior."
+    },
+    {
+      "requirementId": "F-857",
+      "disposition": "narrative_context",
+      "rationale": "Seller downgrade narrative; Master Spec F-555 owns executable behavior."
+    },
+    {
+      "requirementId": "F-858",
+      "disposition": "narrative_context",
+      "rationale": "Seller referral narrative is context only; no Master Spec executable contract is introduced."
+    },
+    {
+      "requirementId": "F-887",
+      "disposition": "retired_source",
+      "replacementId": "F-336",
+      "rationale": "Retired KB source; current Master Spec MCP server contract is F-336."
+    },
+    {
+      "requirementId": "F-888",
+      "disposition": "retired_source",
+      "replacementId": "F-361",
+      "rationale": "Retired KB source; current Master Spec skill registry contract is F-361."
+    },
+    {
+      "requirementId": "F-889",
+      "disposition": "retired_source",
+      "replacementId": "F-349",
+      "rationale": "Retired KB source; current Master Spec chunking contract is F-349."
+    },
+    {
+      "requirementId": "F-890",
+      "disposition": "retired_source",
+      "replacementId": "F-350",
+      "rationale": "Retired KB source; current Master Spec reranking contract is F-350."
+    },
+    {
+      "requirementId": "F-891",
+      "disposition": "retired_source",
+      "replacementId": "F-329",
+      "rationale": "Retired KB source; current Master Spec indexing contract is F-329."
+    },
+    {
+      "requirementId": "F-892",
+      "disposition": "retired_source",
+      "replacementId": "F-363",
+      "rationale": "Retired KB source; current Master Spec tool-use contract is F-363."
+    },
+    {
+      "requirementId": "F-893",
+      "disposition": "retired_source",
+      "replacementId": "F-366",
+      "rationale": "Retired KB source; current Master Spec citation contract is F-366."
+    },
+    {
+      "requirementId": "F-894",
+      "disposition": "retired_source",
+      "replacementId": "F-329",
+      "rationale": "Retired KB source; current Master Spec document registry contract is F-329."
+    },
+    {
+      "requirementId": "F-895",
+      "disposition": "retired_source",
+      "replacementId": "F-332",
+      "rationale": "Retired KB source; current Master Spec freshness contract is F-332."
+    },
+    {
+      "requirementId": "F-896",
+      "disposition": "retired_source",
+      "replacementId": "F-368",
+      "rationale": "Retired KB source; current Master Spec agent telemetry contract is F-368."
+    }
+  ]
+}

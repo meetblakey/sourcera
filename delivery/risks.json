@@ -1,0 +1,39 @@
+{
+  "risks": [
+    {
+      "id": "RISK-001",
+      "statement": "False readiness can start oversized or ambiguous work.",
+      "owner": "Blake Rowley",
+      "trigger": "Any codex-ready issue fails a readiness rule.",
+      "response": "Remove the label and repair the issue before execution."
+    },
+    {
+      "id": "RISK-002",
+      "statement": "The repository has no deployable application, staging receipt, or rollback receipt yet.",
+      "owner": "Blake Rowley",
+      "trigger": "Any product or runtime row is claimed ready before the R0 foundation slice proves deployment and rollback.",
+      "response": "Keep the row pending and execute the R0 foundation slice first."
+    },
+    {
+      "id": "RISK-003",
+      "statement": "The Linear workspace has no release pipeline.",
+      "owner": "Blake Rowley",
+      "trigger": "R0 through R5 cannot be created or assigned.",
+      "response": "Create and read back one scheduled production pipeline before release writes."
+    },
+    {
+      "id": "RISK-004",
+      "statement": "The same person is the interim owner and reviewer.",
+      "owner": "Blake Rowley",
+      "trigger": "A second active human workspace member becomes available.",
+      "response": "Split owner and reviewer before qualifying another product issue."
+    },
+    {
+      "id": "RISK-005",
+      "statement": "Scheduled Linear drift enforcement depends on a repository secret.",
+      "owner": "Blake Rowley",
+      "trigger": "The scheduled workflow runs without LINEAR_API_KEY.",
+      "response": "Fail closed and configure the read-only key before treating scheduled drift as operational."
+    }
+  ]
+}

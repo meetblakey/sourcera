@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "releaseValidation": [
+    {
+      "release": "R0",
+      "activation": "Buyer creates an evaluation and sends one seller invitation.",
+      "completion": "Buyer records a selection after one submitted seller response.",
+      "timeToValue": "Elapsed time from evaluation creation to immutable selection record.",
+      "abandonment": "Pilot exits before response submission or selection.",
+      "trust": "Buyer confirms the retained result and evidence are sufficient to defend the decision.",
+      "reliability": "Journey, recovery, rollback, and access-enforcement checks pass for one commit.",
+      "support": "Pilot completes without unplanned data repair and every support intervention is recorded."
+    },
+    {
+      "release": "R1",
+      "activation": "A second buyer-team member accepts access and contributes to an evaluation.",
+      "completion": "A multi-role team completes scoring and selection with attributable changes.",
+      "timeToValue": "Elapsed time from second-member activation to team-completed selection.",
+      "abandonment": "Team stalls after member activation or requires manual conflict repair.",
+      "trust": "Team accepts role enforcement, attribution, and final scoring integrity.",
+      "reliability": "Concurrency, notification, and recovery checks pass under team use.",
+      "support": "Collaboration support burden stays within the pilot threshold set before entry."
+    },
+    {
+      "release": "R2",
+      "activation": "A returning buyer starts from retained work or a reusable template.",
+      "completion": "A repeat evaluation produces and uses a decision report.",
+      "timeToValue": "Repeat-run duration compared with the buyer's first completed run.",
+      "abandonment": "Repeat flow falls back to unstructured manual setup.",
+      "trust": "Buyer and operations reviewer accept report accuracy and retained history.",
+      "reliability": "Export, retention, restore, admin, and support checks pass.",
+      "support": "Repeat and reporting support burden stays within the predeclared pilot threshold."
+    },
+    {
+      "release": "R3",
+      "activation": "An approved seller is discoverable in the bounded pilot category.",
+      "completion": "A buyer engages a qualified match and the seller receives the opportunity.",
+      "timeToValue": "Elapsed time from buyer discovery intent to qualified seller engagement.",
+      "abandonment": "Buyer exits discovery without a trusted candidate or seller declines due to poor fit.",
+      "trust": "Pilot users accept match provenance, seller credibility, and abuse controls.",
+      "reliability": "Ingestion, matching replay, moderation, rollback, and recovery checks pass.",
+      "support": "Moderation and marketplace support load stays within the pilot threshold."
+    },
+    {
+      "release": "R4",
+      "activation": "An opted-in user invokes an intelligence, scenario, TCO, or agent capability.",
+      "completion": "The assisted workflow produces a human-reviewed decision artifact.",
+      "timeToValue": "Assisted completion time compared with the unassisted baseline.",
+      "abandonment": "User rejects or bypasses the assisted workflow before reviewed output.",
+      "trust": "Human reviewer accepts provenance, control, and output quality.",
+      "reliability": "Evaluation, safety, cost, fallback, replay, and recovery checks pass.",
+      "support": "Agent-related support and correction load stays within the pilot threshold."
+    },
+    {
+      "release": "R5",
+      "activation": "An enterprise design partner connects an agreed identity or integration path.",
+      "completion": "The partner completes the scoped enterprise journey in its required region and control boundary.",
+      "timeToValue": "Elapsed time from enterprise setup start to accepted controlled operation.",
+      "abandonment": "Partner blocks on identity, integration, compliance, residency, or scale evidence.",
+      "trust": "Partner accepts the supplied compliance and operational control evidence.",
+      "reliability": "Integration, residency, scale, rollback, and recovery checks pass.",
+      "support": "Enterprise support load and escalation paths meet the agreed pilot threshold."
+    }
+  ],
+  "customerProof": [],
+  "operationalProof": [],
+  "forecastProof": [],
+  "executionEvidence": {
+    "tests": [],
+    "deploy": [],
+    "rollback": [],
+    "runtime": []
+  }
+}
