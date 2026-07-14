@@ -76,3 +76,25 @@ test("only approved shared packages can cross a console boundary", () => {
     ],
   );
 });
+
+test("unscoped internal workspace packages are not an escape hatch", () => {
+  assert.deepEqual(
+    findDomainBoundaryViolations(
+      [
+        {
+          path: "apps/buyer/lib/example.ts",
+          source: 'import "seller-internals";',
+        },
+      ],
+      new Set(["@sourcera/domain", "seller-internals"]),
+    ),
+    [
+      {
+        importPath: "seller-internals",
+        sourceDomain: "buyer",
+        sourcePath: "apps/buyer/lib/example.ts",
+        targetDomain: "unapproved",
+      },
+    ],
+  );
+});

@@ -56,8 +56,12 @@ function importsFrom(source: string): string[] {
 function targetDomainForImport(
   sourcePath: string,
   importPath: string,
+  internalPackageNames: ReadonlySet<string>,
 ): BoundaryDomain | undefined {
-  if (approvedSharedPackages.has(importPath)) return undefined;
+  const matchesPackage = (packageName: string) =>
+    importPath === packageName || importPath.startsWith(`${packageName}/`);
+  if ([...approvedSharedPackages].some(matchesPackage)) return undefined;
+  if ([...internalPackageNames].some(matchesPackage)) return "unapproved";
   if (importPath.startsWith("@sourcera/")) return "unapproved";
   if (importPath.startsWith("@sourcera/buyer")) return "buyer";
   if (importPath.startsWith("@sourcera/seller")) return "seller";
@@ -72,6 +76,7 @@ function targetDomainForImport(
 
 export function findDomainBoundaryViolations(
   files: SourceFile[],
+  internalPackageNames: ReadonlySet<string> = approvedSharedPackages,
 ): DomainBoundaryViolation[] {
   const violations: DomainBoundaryViolation[] = [];
 
@@ -80,7 +85,11 @@ export function findDomainBoundaryViolations(
     if (!sourceDomain) continue;
 
     for (const importPath of importsFrom(file.source)) {
-      const targetDomain = targetDomainForImport(file.path, importPath);
+      const targetDomain = targetDomainForImport(
+        file.path,
+        importPath,
+        internalPackageNames,
+      );
       if (!targetDomain || targetDomain === sourceDomain) continue;
 
       violations.push({
@@ -93,6 +102,31 @@ export function findDomainBoundaryViolations(
   }
 
   return violations;
+}
+
+async function readWorkspacePackageNames(
+  repositoryRoot: string,
+): Promise<Set<string>> {
+  const names = new Set<string>();
+
+  for (const workspaceDirectory of ["apps", "packages"]) {
+    const workspaceRoot = path.join(repositoryRoot, workspaceDirectory);
+    for (const entry of await readdir(workspaceRoot, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+
+      const packageJson = JSON.parse(
+        await readFile(path.join(workspaceRoot, entry.name, "package.json"), "utf8"),
+      ) as { name?: unknown };
+      if (typeof packageJson.name !== "string" || packageJson.name.length === 0) {
+        throw new Error(
+          `${workspaceDirectory}/${entry.name}/package.json must declare a name`,
+        );
+      }
+      names.add(packageJson.name);
+    }
+  }
+
+  return names;
 }
 
 async function collectSourceFiles(
@@ -124,5 +158,8 @@ async function collectSourceFiles(
 export async function validateDomainBoundaries(
   repositoryRoot: string,
 ): Promise<DomainBoundaryViolation[]> {
-  return findDomainBoundaryViolations(await collectSourceFiles(repositoryRoot));
+  return findDomainBoundaryViolations(
+    await collectSourceFiles(repositoryRoot),
+    await readWorkspacePackageNames(repositoryRoot),
+  );
 }

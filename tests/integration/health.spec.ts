@@ -151,6 +151,21 @@ test("health failure telemetry is safe and explicit", () => {
   assert.equal(JSON.stringify(failure).includes("must-not-leak"), false);
 });
 
+test("health failure telemetry replaces invalid metadata with sentinels", () => {
+  const failure = createHealthFailurePayload(
+    {
+      SOURCERA_COMMIT_SHA: "secret-token-value",
+      SOURCERA_ENV: "secret_environment_value",
+    },
+    "buyer",
+    new Date("2026-07-14T12:00:00.000Z"),
+  );
+
+  assert.equal(failure.commitSha, "invalid");
+  assert.equal(failure.environment, "invalid");
+  assert.equal(JSON.stringify(failure).includes("secret"), false);
+});
+
 function restoreEnvironment(key: string, value: string | undefined) {
   if (value === undefined) {
     delete process.env[key];

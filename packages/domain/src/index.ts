@@ -1,6 +1,16 @@
 export type DeploymentEnvironment = Record<string, string | undefined>;
 export const SOURCERA_DOMAINS = ["buyer", "seller", "marketplace"] as const;
 export type SourceraDomain = (typeof SOURCERA_DOMAINS)[number];
+const SAFE_TELEMETRY_ENVIRONMENTS = new Set([
+  "ci",
+  "development",
+  "local",
+  "preview",
+  "production",
+  "staging",
+  "test",
+]);
+const FULL_GIT_COMMIT_SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 
 export interface DeploymentIdentity {
   commitSha: string;
@@ -69,7 +79,7 @@ export function readRequiredDeploymentIdentity(
     throw new Error("SOURCERA_ENV must be a lowercase environment name");
   }
 
-  if (!/^[a-f0-9]{7,64}$/i.test(identity.commitSha!)) {
+  if (!FULL_GIT_COMMIT_SHA.test(identity.commitSha!)) {
     throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
   }
 
@@ -126,13 +136,23 @@ export function createHealthFailurePayload(
   checkedAt = new Date(),
 ): HealthFailurePayload {
   const identity = deploymentIdentityFrom(environment);
+  const commitSha = identity.commitSha
+    ? FULL_GIT_COMMIT_SHA.test(identity.commitSha)
+      ? identity.commitSha
+      : "invalid"
+    : "missing";
+  const deploymentEnvironment = identity.environment
+    ? SAFE_TELEMETRY_ENVIRONMENTS.has(identity.environment)
+      ? identity.environment
+      : "invalid"
+    : "unknown";
 
   return {
     assertion: "domain-health",
     checkedAt: checkedAt.toISOString(),
-    commitSha: identity.commitSha ?? "missing",
+    commitSha,
     domain: expectedDomain,
-    environment: identity.environment ?? "unknown",
+    environment: deploymentEnvironment,
     event: "domain_deployment_health_result",
     result: "failed",
   };
