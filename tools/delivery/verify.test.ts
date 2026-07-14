@@ -63,6 +63,10 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       JSON.stringify({ overrides: [] }),
     );
     writeFileSync(
+      join(dir, "runtime-dependencies.json"),
+      JSON.stringify({ dependencies: [] }),
+    );
+    writeFileSync(
       join(dir, "decisions.jsonl"),
       ["DEC-REPO-001", "DEC-WIP-001", "DEC-OWNER-001", "DEC-HEADER-001"]
         .map((id) =>
@@ -149,6 +153,8 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       join(dir, "release-plan.json"),
       "--dispositions",
       join(dir, "dispositions.json"),
+      "--runtime-dependencies",
+      join(dir, "runtime-dependencies.json"),
       "--decisions",
       join(dir, "decisions.jsonl"),
       "--risks",

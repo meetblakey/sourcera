@@ -1,0 +1,1580 @@
+{
+  "dependencies": [
+    {
+      "requirementId": "RG:accessibility_settings_preference_contract",
+      "dependencies": [
+        "F-062"
+      ],
+      "rationale": "Highest source-section and assertion match: F-062 Theme Mode Resolution."
+    },
+    {
+      "requirementId": "RG:agent_budget_breach",
+      "dependencies": [
+        "F-613",
+        "F-318"
+      ],
+      "rationale": "Agent performance budgets and graceful failure handling own timeout and retry enforcement."
+    },
+    {
+      "requirementId": "RG:agent_feedback_no_model_training",
+      "dependencies": [
+        "F-315",
+        "F-625"
+      ],
+      "rationale": "Agent guardrails and the privacy posture own feedback-training exclusion."
+    },
+    {
+      "requirementId": "RG:ai_response_generation_billing_consistency",
+      "dependencies": [
+        "F-207"
+      ],
+      "rationale": "Highest source-section and assertion match: F-207 AI Response Generation."
+    },
+    {
+      "requirementId": "RG:ai_wallet_state_machine_runtime_consistency",
+      "dependencies": [
+        "F-125",
+        "F-536"
+      ],
+      "rationale": "The wallet entity and wallet service own runtime state transitions."
+    },
+    {
+      "requirementId": "RG:aiwallet_response_excludes_solo_envelope",
+      "dependencies": [
+        "F-125",
+        "F-385",
+        "F-619"
+      ],
+      "rationale": "The wallet response, Solo-hidden consumption, and envelope cap jointly own this assertion."
+    },
+    {
+      "requirementId": "RG:api_latency_p95_regression",
+      "dependencies": [
+        "F-612"
+      ],
+      "rationale": "Highest source-section and assertion match: F-612 Performance Targets."
+    },
+    {
+      "requirementId": "RG:api_multistatus_schema_registration",
+      "dependencies": [
+        "F-498"
+      ],
+      "rationale": "Highest source-section and assertion match: F-498 Multi-Status (HTTP 207) Pattern."
+    },
+    {
+      "requirementId": "RG:api_rate_limit_plan_quota_runtime_consistency",
+      "dependencies": [
+        "F-497"
+      ],
+      "rationale": "Highest source-section and assertion match: F-497 API Rate Limit Enforcement."
+    },
+    {
+      "requirementId": "RG:api_standard_retry_after_runtime_consistency",
+      "dependencies": [
+        "F-496",
+        "F-497",
+        "F-782"
+      ],
+      "rationale": "The API, rate limiter, and error catalog own the retry header contract."
+    },
+    {
+      "requirementId": "RG:appendix_g_legacy_alias_retirement_enforced",
+      "dependencies": [
+        "F-754"
+      ],
+      "rationale": "Highest source-section and assertion match: F-754 Event Naming Convention & Registry Governance."
+    },
+    {
+      "requirementId": "RG:appendix_m_coverage_on_diff",
+      "dependencies": [
+        "F-796"
+      ],
+      "rationale": "Highest source-section and assertion match: F-796 @appendix-m-internal-only Override Annotation."
+    },
+    {
+      "requirementId": "RG:attachment_dsar_72h_binary_detach_sla",
+      "dependencies": [
+        "F-177"
+      ],
+      "rationale": "Highest source-section and assertion match: F-177 DSAR Operational SLA."
+    },
+    {
+      "requirementId": "RG:audit_event_break_glass_integrity_scan_triggered",
+      "dependencies": [
+        "F-607"
+      ],
+      "rationale": "Highest source-section and assertion match: F-607 Audit Integrity Background Jobs."
+    },
+    {
+      "requirementId": "RG:audit_event_hash_chain_full_corpus_coverage",
+      "dependencies": [
+        "F-405"
+      ],
+      "rationale": "Highest source-section and assertion match: F-405 Disqualification Audit Trail (hash-chain)."
+    },
+    {
+      "requirementId": "RG:audit_event_residency_partitioning_bound",
+      "dependencies": [
+        "F-772"
+      ],
+      "rationale": "Highest source-section and assertion match: F-772 Usage Analytics Residency Partition."
+    },
+    {
+      "requirementId": "RG:audit_events_export_ready_delivery_runtime",
+      "dependencies": [
+        "F-171"
+      ],
+      "rationale": "Highest source-section and assertion match: F-171 Audit Log Export."
+    },
+    {
+      "requirementId": "RG:audit_integrity_exemption_redaction_path_correctness",
+      "dependencies": [
+        "F-176"
+      ],
+      "rationale": "Highest source-section and assertion match: F-176 Audit-Integrity Exemption & Retention Override."
+    },
+    {
+      "requirementId": "RG:auth_audit_event_emission_completeness",
+      "dependencies": [
+        "F-117"
+      ],
+      "rationale": "The AuditEvent entity owns auth-event completeness."
+    },
+    {
+      "requirementId": "RG:backup_dsar_repseudonymization_completeness",
+      "dependencies": [
+        "F-175",
+        "F-603"
+      ],
+      "rationale": "DSAR cascade behavior and disaster recovery jointly own restored identity safety."
+    },
+    {
+      "requirementId": "RG:backup_residency_partition_isolation",
+      "dependencies": [
+        "F-012",
+        "F-603"
+      ],
+      "rationale": "Multi-region deployment and disaster recovery own backup residency."
+    },
+    {
+      "requirementId": "RG:bid_disqualification_cascade_active",
+      "dependencies": [
+        "F-403"
+      ],
+      "rationale": "Highest source-section and assertion match: F-403 Vendor Disqualification Workflow."
+    },
+    {
+      "requirementId": "RG:bid_response_bulk_submit_runtime_consistency",
+      "dependencies": [
+        "F-389"
+      ],
+      "rationale": "Highest source-section and assertion match: F-389 Response Submission (per response_type)."
+    },
+    {
+      "requirementId": "RG:bid_response_editor_lock_runtime_consistency",
+      "dependencies": [
+        "F-106"
+      ],
+      "rationale": "Highest source-section and assertion match: F-106 Bid Response Entity."
+    },
+    {
+      "requirementId": "RG:bid_workspace_buyer_purge_orphan_runtime",
+      "dependencies": [
+        "F-105"
+      ],
+      "rationale": "Highest source-section and assertion match: F-105 Bid Workspace Entity."
+    },
+    {
+      "requirementId": "RG:bid_workspace_deal_size_band_firewall",
+      "dependencies": [
+        "F-105"
+      ],
+      "rationale": "Highest source-section and assertion match: F-105 Bid Workspace Entity."
+    },
+    {
+      "requirementId": "RG:bid_workspace_surface_state_runtime_consistency",
+      "dependencies": [
+        "F-776"
+      ],
+      "rationale": "Highest source-section and assertion match: F-776 Workspace & Bid Workspace Status State Machine."
+    },
+    {
+      "requirementId": "RG:bid_workspace_voluntary_withdrawal_runtime_consistency",
+      "dependencies": [
+        "F-390"
+      ],
+      "rationale": "Highest source-section and assertion match: F-390 Vendor Voluntary Withdrawal."
+    },
+    {
+      "requirementId": "RG:billing_async_failure_state_runtime_consistency",
+      "dependencies": [
+        "F-126",
+        "F-500",
+        "F-501"
+      ],
+      "rationale": "Wallet top-up, billing API, and KB export own the named asynchronous failures."
+    },
+    {
+      "requirementId": "RG:billing_organization_suspended_webhook_runtime",
+      "dependencies": [
+        "F-489"
+      ],
+      "rationale": "Highest source-section and assertion match: F-489 Billing-Domain Webhook Catalog."
+    },
+    {
+      "requirementId": "RG:bridge_payload_body_pii_sweep_buyer_seller_parity",
+      "dependencies": [
+        "F-409"
+      ],
+      "rationale": "Highest source-section and assertion match: F-409 Materialization Protocol (Buyer Requirement → Seller Bid Response)."
+    },
+    {
+      "requirementId": "RG:bundle_size_budget_in_app",
+      "dependencies": [
+        "F-612",
+        "F-614"
+      ],
+      "rationale": "Performance targets and code-splitting strategy own authenticated bundle budgets."
+    },
+    {
+      "requirementId": "RG:buyer_activation_metric_canonical_consumer",
+      "dependencies": [
+        "F-637",
+        "F-752"
+      ],
+      "rationale": "The buyer funnel and canonical event registry own activation measurement."
+    },
+    {
+      "requirementId": "RG:buyer_console_role_permission_completeness",
+      "dependencies": [
+        "F-144",
+        "F-145",
+        "F-146",
+        "F-147",
+        "F-148"
+      ],
+      "rationale": "All Buyer Console role contracts must agree with endpoint permissions."
+    },
+    {
+      "requirementId": "RG:buyer_evaluation_funnel_derivation_consistency",
+      "dependencies": [
+        "F-637"
+      ],
+      "rationale": "Highest source-section and assertion match: F-637 Buyer Console Paid Path Funnel."
+    },
+    {
+      "requirementId": "RG:buyer_pulse_interactive_render_runtime",
+      "dependencies": [
+        "F-308",
+        "F-612"
+      ],
+      "rationale": "Buyer Pulse behavior and performance targets own this rendered-runtime assertion."
+    },
+    {
+      "requirementId": "RG:capability_declaration_reuse_count_consistency",
+      "dependencies": [
+        "F-206"
+      ],
+      "rationale": "Highest source-section and assertion match: F-206 Capability Declaration Reuse Tracking."
+    },
+    {
+      "requirementId": "RG:cmek_rotation_runtime_evidence",
+      "dependencies": [
+        "F-502",
+        "F-634"
+      ],
+      "rationale": "Encryption controls and the enterprise CMEK roadmap own rotation evidence."
+    },
+    {
+      "requirementId": "RG:committed_spend_console_scope_consistency",
+      "dependencies": [
+        "F-002"
+      ],
+      "rationale": "Highest source-section and assertion match: F-002 Dual-Console Data Isolation Model."
+    },
+    {
+      "requirementId": "RG:committed_spend_single_auto_renew_invariant",
+      "dependencies": [
+        "F-522"
+      ],
+      "rationale": "Highest source-section and assertion match: F-522 Volume Discount Bands (Committed Spend)."
+    },
+    {
+      "requirementId": "RG:committed_spend_single_pool_invariant",
+      "dependencies": [
+        "F-522"
+      ],
+      "rationale": "Highest source-section and assertion match: F-522 Volume Discount Bands (Committed Spend)."
+    },
+    {
+      "requirementId": "RG:console_bridge_failure_storm_runtime",
+      "dependencies": [
+        "F-400"
+      ],
+      "rationale": "Highest source-section and assertion match: F-400 Cross-Console Dual-Surface Failure Visibility."
+    },
+    {
+      "requirementId": "RG:console_bridge_no_defense_view_event_kinds",
+      "dependencies": [
+        "F-120"
+      ],
+      "rationale": "Highest source-section and assertion match: F-120 Console Bridge Event Entity."
+    },
+    {
+      "requirementId": "RG:console_isolation_violation_no_data_path_use",
+      "dependencies": [
+        "F-002"
+      ],
+      "rationale": "Highest source-section and assertion match: F-002 Dual-Console Data Isolation Model."
+    },
+    {
+      "requirementId": "RG:contest_window_db_trigger_present",
+      "dependencies": [
+        "F-541"
+      ],
+      "rationale": "Highest source-section and assertion match: F-541 Outcome Contest Window."
+    },
+    {
+      "requirementId": "RG:convex_reactivity_slo_regression",
+      "dependencies": [
+        "F-184"
+      ],
+      "rationale": "Highest source-section and assertion match: F-184 Reactivity SLO (p95 ≤ 500ms)."
+    },
+    {
+      "requirementId": "RG:core_web_vitals_in_app_lighthouse_ci",
+      "dependencies": [
+        "F-612"
+      ],
+      "rationale": "Performance Targets owns authenticated Core Web Vitals budgets."
+    },
+    {
+      "requirementId": "RG:cost_base_recalc_notice_window_trajectory_gate",
+      "dependencies": [
+        "F-524"
+      ],
+      "rationale": "Highest source-section and assertion match: F-524 Cost-Base Recalculation."
+    },
+    {
+      "requirementId": "RG:cross_console_shared_ui_preference_firewall",
+      "dependencies": [
+        "F-122"
+      ],
+      "rationale": "Highest source-section and assertion match: F-122 Cross-Console Bridge Entity Set."
+    },
+    {
+      "requirementId": "RG:cross_org_guest_sso_bypass_blocked",
+      "dependencies": [
+        "F-167"
+      ],
+      "rationale": "Highest source-section and assertion match: F-167 Guest SSO Bypass."
+    },
+    {
+      "requirementId": "RG:defense_view_engagement_event_runtime",
+      "dependencies": [
+        "F-263"
+      ],
+      "rationale": "Highest source-section and assertion match: F-263 Defense View State Machine."
+    },
+    {
+      "requirementId": "RG:defense_view_regeneration_throttle_5min",
+      "dependencies": [
+        "F-263"
+      ],
+      "rationale": "Highest source-section and assertion match: F-263 Defense View State Machine."
+    },
+    {
+      "requirementId": "RG:dns_failover_target_residency_match",
+      "dependencies": [
+        "F-012",
+        "F-603"
+      ],
+      "rationale": "Multi-region deployment and disaster recovery own DNS failover residency."
+    },
+    {
+      "requirementId": "RG:dr_failover_no_cross_residency",
+      "dependencies": [
+        "F-012",
+        "F-603"
+      ],
+      "rationale": "Multi-region deployment and disaster recovery own fail-closed regional outages."
+    },
+    {
+      "requirementId": "RG:dr_failover_residency_bound",
+      "dependencies": [
+        "F-012",
+        "F-603"
+      ],
+      "rationale": "Multi-region deployment and disaster recovery own replica topology."
+    },
+    {
+      "requirementId": "RG:dr_game_day_overdue",
+      "dependencies": [
+        "F-603"
+      ],
+      "rationale": "Disaster Recovery Targets owns quarterly game-day proof."
+    },
+    {
+      "requirementId": "RG:dr_restore_test_residency_partition",
+      "dependencies": [
+        "F-603",
+        "F-772"
+      ],
+      "rationale": "Disaster recovery and residency partitioning own regional restore tests."
+    },
+    {
+      "requirementId": "RG:dsar_30d_sla_observability",
+      "dependencies": [
+        "F-177"
+      ],
+      "rationale": "Highest source-section and assertion match: F-177 DSAR Operational SLA."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_aggregate_recompute_backstop_drift",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_aggregate_recompute_suppression_completeness",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_aggregate_recompute_synchronous",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_audit_completeness",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_bridge_payload_body_pii_sweep_completeness",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_bridge_redaction_hash_recompute",
+      "dependencies": [
+        "F-397"
+      ],
+      "rationale": "Highest source-section and assertion match: F-397 Console Bridge Entity-Level Redaction Matrix."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_partial_failure_pagerduty_sla",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_partial_failure_resume_sla_24h",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_pseudonym_epoch_consistency",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_residency_partition_isolation",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_statutory_ceiling_auto_escalation",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_erased_buyer_excluded_from_recovery_cadence",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_erased_seller_excluded_from_recovery_cadence",
+      "dependencies": [
+        "F-175"
+      ],
+      "rationale": "Highest source-section and assertion match: F-175 DSAR Cascade Across Linked Entities."
+    },
+    {
+      "requirementId": "RG:dsar_excluded_snapshot_restore_blocked",
+      "dependencies": [
+        "F-503",
+        "F-603"
+      ],
+      "rationale": "DSAR and disaster recovery jointly own excluded-snapshot restore blocking."
+    },
+    {
+      "requirementId": "RG:dsar_export_delivery_residency_bound",
+      "dependencies": [
+        "F-503",
+        "F-772"
+      ],
+      "rationale": "DSAR export and residency partitioning own delivery locality."
+    },
+    {
+      "requirementId": "RG:dsar_manifestly_unfounded_appeal_runtime",
+      "dependencies": [
+        "F-177",
+        "F-503"
+      ],
+      "rationale": "DSAR workflow and operational SLA own appeal behavior."
+    },
+    {
+      "requirementId": "RG:dsar_manifestly_unfounded_rejection_audit_emission",
+      "dependencies": [
+        "F-117",
+        "F-503"
+      ],
+      "rationale": "The DSAR workflow and AuditEvent entity own rejection evidence."
+    },
+    {
+      "requirementId": "RG:dsar_pseudonym_epoch_content_scrub_runtime",
+      "dependencies": [
+        "F-175",
+        "F-503"
+      ],
+      "rationale": "DSAR cascade and DSAR workflow own pseudonym rotation and content scrubbing."
+    },
+    {
+      "requirementId": "RG:dsar_sla_window_breached",
+      "dependencies": [
+        "F-177"
+      ],
+      "rationale": "Highest source-section and assertion match: F-177 DSAR Operational SLA."
+    },
+    {
+      "requirementId": "RG:email_bounce_complaint_suppression_runtime",
+      "dependencies": [
+        "F-597"
+      ],
+      "rationale": "Highest source-section and assertion match: F-597 Email Compliance (CASL/CAN-SPAM/GDPR)."
+    },
+    {
+      "requirementId": "RG:entitlement_matrix_non_ai_runtime_branching",
+      "dependencies": [
+        "F-531"
+      ],
+      "rationale": "Highest source-section and assertion match: F-531 Entitlement Matrix."
+    },
+    {
+      "requirementId": "RG:entitlement_matrix_registry_binding_completeness",
+      "dependencies": [
+        "F-531"
+      ],
+      "rationale": "Highest source-section and assertion match: F-531 Entitlement Matrix."
+    },
+    {
+      "requirementId": "RG:featured_placement_funnel_runtime",
+      "dependencies": [
+        "F-460"
+      ],
+      "rationale": "Highest source-section and assertion match: F-460 Featured Placements (Editorial / Paid_Commitment)."
+    },
+    {
+      "requirementId": "RG:field_encryption_plaintext_egress_guard",
+      "dependencies": [
+        "F-502",
+        "F-625"
+      ],
+      "rationale": "Encryption and privacy controls own plaintext egress prevention."
+    },
+    {
+      "requirementId": "RG:firecrawl_outage_progress_line_substitution",
+      "dependencies": [
+        "F-560"
+      ],
+      "rationale": "Highest source-section and assertion match: F-560 Progress Storytelling Bootstrap UI."
+    },
+    {
+      "requirementId": "RG:firecrawl_status_line_variant_materialization",
+      "dependencies": [
+        "F-AE-043"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-043 AE-14.8-06: Firecrawl Resolution Status Variants."
+    },
+    {
+      "requirementId": "RG:first_pass_high_stakes_band_only",
+      "dependencies": [
+        "F-353"
+      ],
+      "rationale": "Highest source-section and assertion match: F-353 First-Pass Responder Agent."
+    },
+    {
+      "requirementId": "RG:first_pass_rfp_draft_outcome_contract_isolation",
+      "dependencies": [
+        "F-353"
+      ],
+      "rationale": "Highest source-section and assertion match: F-353 First-Pass Responder Agent."
+    },
+    {
+      "requirementId": "RG:free_allowance_plan_entitlement_partitioning",
+      "dependencies": [
+        "F-530",
+        "F-531"
+      ],
+      "rationale": "Entitlement enforcement and its matrix own plan partitioning."
+    },
+    {
+      "requirementId": "RG:free_allowance_quota_decrease_guard",
+      "dependencies": [
+        "F-729"
+      ],
+      "rationale": "Highest source-section and assertion match: F-729 Free-Allowance Editor (Pricing Admin)."
+    },
+    {
+      "requirementId": "RG:ghost_ingestion_mcp_allowlist_runtime",
+      "dependencies": [
+        "F-345"
+      ],
+      "rationale": "Highest source-section and assertion match: F-345 MCP Tool — kb_entry_draft_create."
+    },
+    {
+      "requirementId": "RG:global_ban_reversal_core_runtime_consistency",
+      "dependencies": [
+        "F-407",
+        "F-447",
+        "F-627"
+      ],
+      "rationale": "Reversal, abuse, and escalation workflows own global-ban recovery."
+    },
+    {
+      "requirementId": "RG:global_ban_reversal_marketplace_restoration_runtime",
+      "dependencies": [
+        "F-429",
+        "F-447",
+        "F-627"
+      ],
+      "rationale": "Marketplace discovery and abuse recovery own post-ban restoration."
+    },
+    {
+      "requirementId": "RG:growth_loop_l1_delivery_reputation_runtime",
+      "dependencies": [
+        "F-009",
+        "F-645"
+      ],
+      "rationale": "Loops delivery and the vendor-invite loop own durable attribution."
+    },
+    {
+      "requirementId": "RG:inbox_mutation_idempotency_contract",
+      "dependencies": [
+        "F-035",
+        "F-041",
+        "F-103"
+      ],
+      "rationale": "Optimistic mutation, rollback, and inbox grouping own idempotent recovery."
+    },
+    {
+      "requirementId": "RG:integration_export_payload_allowlist",
+      "dependencies": [
+        "F-484"
+      ],
+      "rationale": "Highest source-section and assertion match: F-484 Integration Phase Export Mapping."
+    },
+    {
+      "requirementId": "RG:kb_bootstrap_allowance_compensation_completeness",
+      "dependencies": [
+        "F-354"
+      ],
+      "rationale": "Highest source-section and assertion match: F-354 KB Bootstrap Agent."
+    },
+    {
+      "requirementId": "RG:kb_bootstrap_per_org_concurrency_lock_active",
+      "dependencies": [
+        "F-354"
+      ],
+      "rationale": "The KB Bootstrap Agent owns per-Org execution locking."
+    },
+    {
+      "requirementId": "RG:kb_injection_scanner_registry_runtime_consistency",
+      "dependencies": [
+        "F-369"
+      ],
+      "rationale": "Highest source-section and assertion match: F-369 Prompt-Injection Defense (kb_injection_scanner)."
+    },
+    {
+      "requirementId": "RG:kb_mcp_webhook_alert_catalog_completeness",
+      "dependencies": [
+        "F-336"
+      ],
+      "rationale": "Highest source-section and assertion match: F-336 Sourcera KB MCP Server."
+    },
+    {
+      "requirementId": "RG:kb_state_persisting_audit_event_coverage",
+      "dependencies": [
+        "F-AE-042"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-042 AE-14.8-05: Capability Chip Audit Events."
+    },
+    {
+      "requirementId": "RG:kb_suggestion_alias_console_resolution_integrity",
+      "dependencies": [
+        "F-356"
+      ],
+      "rationale": "Highest source-section and assertion match: F-356 KB-to-Capability Suggestion Agent."
+    },
+    {
+      "requirementId": "RG:kb_suggestion_family_cardinality",
+      "dependencies": [
+        "F-356"
+      ],
+      "rationale": "Highest source-section and assertion match: F-356 KB-to-Capability Suggestion Agent."
+    },
+    {
+      "requirementId": "RG:kb_suggestion_family_outcome_contract_isolation",
+      "dependencies": [
+        "F-540"
+      ],
+      "rationale": "Highest source-section and assertion match: F-540 Outcome Resolver."
+    },
+    {
+      "requirementId": "RG:kb_value_meter_estimated_value_guard_runtime",
+      "dependencies": [
+        "F-376"
+      ],
+      "rationale": "Highest source-section and assertion match: F-376 KB Value Meter — Seller Panel."
+    },
+    {
+      "requirementId": "RG:legal_entity_residency_change_revenue_leak_test",
+      "dependencies": [
+        "F-539"
+      ],
+      "rationale": "Highest source-section and assertion match: F-539 Stripe Metering Integration."
+    },
+    {
+      "requirementId": "RG:load_test_sla_breach",
+      "dependencies": [
+        "F-615"
+      ],
+      "rationale": "Highest source-section and assertion match: F-615 Load Testing Cadence."
+    },
+    {
+      "requirementId": "RG:locale_resolution_engine_contract",
+      "dependencies": [
+        "F-570"
+      ],
+      "rationale": "Highest source-section and assertion match: F-570 Internationalization (i18n) Architecture."
+    },
+    {
+      "requirementId": "RG:m16_same_domain_enforcement_dual_point_canonical",
+      "dependencies": [
+        "F-674"
+      ],
+      "rationale": "Highest source-section and assertion match: F-674 Growth Mechanic M6: Domain-Based Auto-Join."
+    },
+    {
+      "requirementId": "RG:m3_signed_payload_anonymity_binding",
+      "dependencies": [
+        "F-483"
+      ],
+      "rationale": "Highest source-section and assertion match: F-483 Webhook Delivery System."
+    },
+    {
+      "requirementId": "RG:marketplace_match_score_snapshot_tuple_uniqueness",
+      "dependencies": [
+        "F-431"
+      ],
+      "rationale": "Highest source-section and assertion match: F-431 Marketplace Match Score."
+    },
+    {
+      "requirementId": "RG:marketplace_proactive_offer_lifecycle_state_machine",
+      "dependencies": [
+        "F-429"
+      ],
+      "rationale": "Vendor Discovery Marketplace is the nearest canonical product contract for proactive offers."
+    },
+    {
+      "requirementId": "RG:marketplace_proactive_offer_pre_acceptance_redaction",
+      "dependencies": [
+        "F-456"
+      ],
+      "rationale": "Highest source-section and assertion match: F-456 Seller Signal De-Anonymization Link."
+    },
+    {
+      "requirementId": "RG:mcp_session_token_record_entity_home",
+      "dependencies": [
+        "F-337"
+      ],
+      "rationale": "MCP Vault Auth owns MCPSessionTokenRecord."
+    },
+    {
+      "requirementId": "RG:member_role_permission_completeness",
+      "dependencies": [
+        "F-141"
+      ],
+      "rationale": "Highest source-section and assertion match: F-141 Member Role."
+    },
+    {
+      "requirementId": "RG:mobile_full_parity_closure",
+      "dependencies": [
+        "F-575"
+      ],
+      "rationale": "Highest source-section and assertion match: F-575 Mobile Feature Parity Coarse Rules."
+    },
+    {
+      "requirementId": "RG:nda_lifecycle_notification_runtime_consistency",
+      "dependencies": [
+        "F-392",
+        "F-466"
+      ],
+      "rationale": "NDA execution and the notification catalog own lifecycle delivery."
+    },
+    {
+      "requirementId": "RG:negative_network_effects_monitoring_contract",
+      "dependencies": [
+        "F-653"
+      ],
+      "rationale": "Highest source-section and assertion match: F-653 Network Effects (Sellers/Buyers/Data/SEO/Trust/Referrals Compound)."
+    },
+    {
+      "requirementId": "RG:network_effect_attribution_window_canonical_consumer",
+      "dependencies": [
+        "F-655"
+      ],
+      "rationale": "Highest source-section and assertion match: F-655 Network Effects Dashboard."
+    },
+    {
+      "requirementId": "RG:network_effects_dashboard_outage_render_contract",
+      "dependencies": [
+        "F-655"
+      ],
+      "rationale": "Highest source-section and assertion match: F-655 Network Effects Dashboard."
+    },
+    {
+      "requirementId": "RG:network_effects_residency_partition_canonical_consumer",
+      "dependencies": [
+        "F-655"
+      ],
+      "rationale": "Highest source-section and assertion match: F-655 Network Effects Dashboard."
+    },
+    {
+      "requirementId": "RG:observability_residency_routing_bound",
+      "dependencies": [
+        "F-772"
+      ],
+      "rationale": "Highest source-section and assertion match: F-772 Usage Analytics Residency Partition."
+    },
+    {
+      "requirementId": "RG:ops_console_accessibility_compliance",
+      "dependencies": [
+        "F-696"
+      ],
+      "rationale": "Highest source-section and assertion match: F-696 Sourcera Ops Console."
+    },
+    {
+      "requirementId": "RG:ops_read_audit_event_runtime_consistency",
+      "dependencies": [
+        "F-117"
+      ],
+      "rationale": "Highest source-section and assertion match: F-117 Audit Event Entity."
+    },
+    {
+      "requirementId": "RG:ops_session_notification_partial_success_runtime",
+      "dependencies": [
+        "F-708"
+      ],
+      "rationale": "Highest source-section and assertion match: F-708 Customer Notification Dispatch (Ops Session)."
+    },
+    {
+      "requirementId": "RG:ops_session_numerical_caps_single_source",
+      "dependencies": [
+        "F-364"
+      ],
+      "rationale": "Highest source-section and assertion match: F-364 Session Interruption & Steering."
+    },
+    {
+      "requirementId": "RG:org_admin_billing_read_consistency",
+      "dependencies": [
+        "F-140",
+        "F-142"
+      ],
+      "rationale": "Org Admin and Billing Admin contracts define the read-only boundary."
+    },
+    {
+      "requirementId": "RG:org_custom_residency_label_required",
+      "dependencies": [
+        "F-780"
+      ],
+      "rationale": "Highest source-section and assertion match: F-780 Required Standard PostHog Property Set."
+    },
+    {
+      "requirementId": "RG:outcome_contract_signal_subject_enum_bound",
+      "dependencies": [
+        "F-320"
+      ],
+      "rationale": "Highest source-section and assertion match: F-320 Outcome Signals & OutcomeContracts."
+    },
+    {
+      "requirementId": "RG:outcome_resolver_free_allowance_settlement_runtime",
+      "dependencies": [
+        "F-530",
+        "F-540"
+      ],
+      "rationale": "Entitlement enforcement and Outcome Resolver own free-allowance settlement."
+    },
+    {
+      "requirementId": "RG:outcome_resolver_liveness_backlog_runtime",
+      "dependencies": [
+        "F-540"
+      ],
+      "rationale": "Highest source-section and assertion match: F-540 Outcome Resolver."
+    },
+    {
+      "requirementId": "RG:pipeline_surface_compression_seller_always_compressed",
+      "dependencies": [
+        "F-075"
+      ],
+      "rationale": "Highest source-section and assertion match: F-075 Pipeline Surface Compression."
+    },
+    {
+      "requirementId": "RG:pipeline_surface_compression_soft_gate_solo_only",
+      "dependencies": [
+        "F-075"
+      ],
+      "rationale": "Highest source-section and assertion match: F-075 Pipeline Surface Compression."
+    },
+    {
+      "requirementId": "RG:policy_ingestion_buyer_console_firewall",
+      "dependencies": [
+        "F-002",
+        "F-104",
+        "F-245"
+      ],
+      "rationale": "Console isolation, Buyer entities, and policy ingestion own the firewall."
+    },
+    {
+      "requirementId": "RG:policy_ingestion_parent_child_settlement",
+      "dependencies": [
+        "F-156"
+      ],
+      "rationale": "Highest source-section and assertion match: F-156 Policy Ingestion Phase-Independence."
+    },
+    {
+      "requirementId": "RG:policy_ingestion_partial_resume_idempotency",
+      "dependencies": [
+        "F-156"
+      ],
+      "rationale": "Highest source-section and assertion match: F-156 Policy Ingestion Phase-Independence."
+    },
+    {
+      "requirementId": "RG:posthog_event_contract_runtime_consistency",
+      "dependencies": [
+        "F-779"
+      ],
+      "rationale": "Highest source-section and assertion match: F-779 PostHog Event Taxonomy."
+    },
+    {
+      "requirementId": "RG:pro_trial_day_31_contextual_cta_entitlement_fit",
+      "dependencies": [
+        "F-563"
+      ],
+      "rationale": "Highest source-section and assertion match: F-563 Buyer-Funded Pro Trial Seat Acceptance."
+    },
+    {
+      "requirementId": "RG:pro_trial_hero_moment_slo_precedence_runtime",
+      "dependencies": [
+        "F-897"
+      ],
+      "rationale": "Highest source-section and assertion match: F-897 Hero Moment Instrumentation Contract."
+    },
+    {
+      "requirementId": "RG:pro_trial_no_refund_after_vendor_notification",
+      "dependencies": [
+        "F-546"
+      ],
+      "rationale": "Highest source-section and assertion match: F-546 Pro Trial Seat Anti-Abuse Rules."
+    },
+    {
+      "requirementId": "RG:pulse_digest_summary_firewall",
+      "dependencies": [
+        "F-311"
+      ],
+      "rationale": "Highest source-section and assertion match: F-311 Pulse Digest Email."
+    },
+    {
+      "requirementId": "RG:qa_attachment_cross_console_content_scan_runtime",
+      "dependencies": [
+        "F-118"
+      ],
+      "rationale": "Highest source-section and assertion match: F-118 Attachment Entity."
+    },
+    {
+      "requirementId": "RG:qa_suggestion_cross_console_firewall_boundary",
+      "dependencies": [
+        "F-122",
+        "F-298"
+      ],
+      "rationale": "Cross-console boundaries and Buyer Q&A suggestions own this assertion."
+    },
+    {
+      "requirementId": "RG:qa_suggestion_family_cardinality",
+      "dependencies": [
+        "F-418"
+      ],
+      "rationale": "Highest source-section and assertion match: F-418 KB-to-Capability Auto-Suggestion."
+    },
+    {
+      "requirementId": "RG:qa_suggestion_family_outcome_contract_isolation",
+      "dependencies": [
+        "F-540"
+      ],
+      "rationale": "Highest source-section and assertion match: F-540 Outcome Resolver."
+    },
+    {
+      "requirementId": "RG:requirement_reopening_runtime_consistency",
+      "dependencies": [
+        "F-086",
+        "F-774"
+      ],
+      "rationale": "Requirement identity and status state machine own reopening."
+    },
+    {
+      "requirementId": "RG:responsive_conformance_suite",
+      "dependencies": [
+        "F-579"
+      ],
+      "rationale": "Highest source-section and assertion match: F-579 Responsive Conformance Test Suite."
+    },
+    {
+      "requirementId": "RG:retention_table_residency_default_runtime",
+      "dependencies": [
+        "F-593"
+      ],
+      "rationale": "Highest source-section and assertion match: F-593 Data Retention & Deletion Registry."
+    },
+    {
+      "requirementId": "RG:rtl_directionality_runtime_contract",
+      "dependencies": [
+        "F-589"
+      ],
+      "rationale": "Highest source-section and assertion match: F-589 RTL & Locale Mirror Behavior Contract."
+    },
+    {
+      "requirementId": "RG:s3_cross_region_replica_dpa_approval_required",
+      "dependencies": [
+        "F-012",
+        "F-504",
+        "F-603"
+      ],
+      "rationale": "Regional deployment, compliance, and recovery own replica approval."
+    },
+    {
+      "requirementId": "RG:s3_replication_policy_residency_bound",
+      "dependencies": [
+        "F-012",
+        "F-603"
+      ],
+      "rationale": "Regional deployment and recovery own object replication residency."
+    },
+    {
+      "requirementId": "RG:scenario_modeling_aioperation_settlement",
+      "dependencies": [
+        "F-265"
+      ],
+      "rationale": "Highest source-section and assertion match: F-265 Scenario Modeling."
+    },
+    {
+      "requirementId": "RG:selection_report_v2_watermark_grandfathering",
+      "dependencies": [
+        "F-670"
+      ],
+      "rationale": "Highest source-section and assertion match: F-670 Growth Mechanic M2: Selection Report Public Link (Watermarked)."
+    },
+    {
+      "requirementId": "RG:seller_bid_workspace_mobile_accessibility_runtime",
+      "dependencies": [
+        "F-387",
+        "F-569",
+        "F-583"
+      ],
+      "rationale": "Bid Workspace, accessibility, and mobile parity own this proof."
+    },
+    {
+      "requirementId": "RG:seller_console_phase24_firewall_state_runtime_consistency",
+      "dependencies": [
+        "F-120"
+      ],
+      "rationale": "Highest source-section and assertion match: F-120 Console Bridge Event Entity."
+    },
+    {
+      "requirementId": "RG:seller_console_phase24_mobile_accessibility_runtime",
+      "dependencies": [
+        "F-111",
+        "F-569",
+        "F-583"
+      ],
+      "rationale": "Seller Console, accessibility, and mobile parity own this proof."
+    },
+    {
+      "requirementId": "RG:seller_console_phase24_plan_authority_runtime_consistency",
+      "dependencies": [
+        "F-515",
+        "F-516",
+        "F-517",
+        "F-518",
+        "F-519",
+        "F-520",
+        "F-531"
+      ],
+      "rationale": "All Seller plans and the entitlement matrix own plan authority."
+    },
+    {
+      "requirementId": "RG:seller_console_role_permission_completeness",
+      "dependencies": [
+        "F-148"
+      ],
+      "rationale": "Highest source-section and assertion match: F-148 Guest Role with Permission Profiles."
+    },
+    {
+      "requirementId": "RG:seller_direct_signup_value_activation_runtime",
+      "dependencies": [
+        "F-559"
+      ],
+      "rationale": "Highest source-section and assertion match: F-559 Seller Onboarding Flow (Forced-Signup Hero Moment)."
+    },
+    {
+      "requirementId": "RG:seller_kb_first_entry_indexed_runtime",
+      "dependencies": [
+        "F-789"
+      ],
+      "rationale": "Highest source-section and assertion match: F-789 KB Entry State Machine."
+    },
+    {
+      "requirementId": "RG:seller_kb_v2_cutover_grandfathering",
+      "dependencies": [
+        "F-515"
+      ],
+      "rationale": "Highest source-section and assertion match: F-515 Seller Free Plan Tier."
+    },
+    {
+      "requirementId": "RG:seller_maya_billing_detail_plan_guard",
+      "dependencies": [
+        "F-500",
+        "F-515",
+        "F-516"
+      ],
+      "rationale": "Billing API and Free/Solo seller plans own billing-detail exclusion."
+    },
+    {
+      "requirementId": "RG:seller_maya_chip_list_auto_publish_state_machine",
+      "dependencies": [
+        "F-382"
+      ],
+      "rationale": "Highest source-section and assertion match: F-382 Solo/Free Capability Declaration Auto-Publish (chip list)."
+    },
+    {
+      "requirementId": "RG:seller_maya_match_score_three_label_compression",
+      "dependencies": [
+        "F-384"
+      ],
+      "rationale": "Highest source-section and assertion match: F-384 Match Score Three-Label Compression (Solo/Free)."
+    },
+    {
+      "requirementId": "RG:seller_maya_solo_free_copy_string_lint",
+      "dependencies": [
+        "F-381"
+      ],
+      "rationale": "Highest source-section and assertion match: F-381 Seller Maya Surface Abstraction."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_provider_outage_visible",
+      "dependencies": [
+        "F-687"
+      ],
+      "rationale": "Highest source-section and assertion match: F-687 Seven-Stage Seller Onboarding Flow."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_reactivation_single_source",
+      "dependencies": [
+        "F-688"
+      ],
+      "rationale": "Highest source-section and assertion match: F-688 Stage 1: Magic-Link Arrival."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_stage3_abandonment_allowance_not_debited",
+      "dependencies": [
+        "F-559"
+      ],
+      "rationale": "Highest source-section and assertion match: F-559 Seller Onboarding Flow (Forced-Signup Hero Moment)."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_staleness_window_single_source",
+      "dependencies": [
+        "F-559"
+      ],
+      "rationale": "Highest source-section and assertion match: F-559 Seller Onboarding Flow (Forced-Signup Hero Moment)."
+    },
+    {
+      "requirementId": "RG:seller_pulse_surface_engine_mapping",
+      "dependencies": [
+        "F-792"
+      ],
+      "rationale": "Highest source-section and assertion match: F-792 Surface/Engine Mapping Registry."
+    },
+    {
+      "requirementId": "RG:seller_qa_phase8_readonly_runtime",
+      "dependencies": [
+        "F-391"
+      ],
+      "rationale": "Seller Q&A owns its Phase-8 read-only transition."
+    },
+    {
+      "requirementId": "RG:seller_software_transfer_request_entity_home",
+      "dependencies": [
+        "F-330",
+        "F-423"
+      ],
+      "rationale": "SellerSoftware and its namespace migration own transfer behavior."
+    },
+    {
+      "requirementId": "RG:seller_solo_onboarding_consumption_invisibility",
+      "dependencies": [
+        "F-616"
+      ],
+      "rationale": "Highest source-section and assertion match: F-616 Solo-Tier Surface Treatment (AI Consumption Invisibility)."
+    },
+    {
+      "requirementId": "RG:seller_solo_per_bid_charge_stage_binding",
+      "dependencies": [
+        "F-521"
+      ],
+      "rationale": "Highest source-section and assertion match: F-521 Solo-Tier Per-Evaluation/Per-Bid Charge Orchestration."
+    },
+    {
+      "requirementId": "RG:seller_solo_per_bid_election_authorization_binding",
+      "dependencies": [
+        "F-516"
+      ],
+      "rationale": "Highest source-section and assertion match: F-516 Seller Solo Plan Tier."
+    },
+    {
+      "requirementId": "RG:seller_stake_reveal_outcome_targets_runtime",
+      "dependencies": [
+        "F-378"
+      ],
+      "rationale": "Highest source-section and assertion match: F-378 Stake-Reveal Moments (Three Surfaces)."
+    },
+    {
+      "requirementId": "RG:snapshot_catalog_residency_partition",
+      "dependencies": [
+        "F-603",
+        "F-772"
+      ],
+      "rationale": "Disaster recovery and residency partitioning own the snapshot catalog."
+    },
+    {
+      "requirementId": "RG:solo_absorption_cap_counter_state_contract",
+      "dependencies": [
+        "F-619",
+        "F-620"
+      ],
+      "rationale": "Solo envelope defaults and throttling own cap state."
+    },
+    {
+      "requirementId": "RG:solo_absorption_cap_enforced",
+      "dependencies": [
+        "F-619"
+      ],
+      "rationale": "Highest source-section and assertion match: F-619 Solo Margin Envelope Defaults."
+    },
+    {
+      "requirementId": "RG:solo_charge_kind_registered",
+      "dependencies": [
+        "F-AE-048"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-048 AE-14.9-02: billing_event_charge_kind Extension."
+    },
+    {
+      "requirementId": "RG:solo_deadline_countdown_renders_in_user_timezone",
+      "dependencies": [
+        "F-AE-068"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-068 AE-14.14-21: Phase Advancement Deadline-Countdown TZ."
+    },
+    {
+      "requirementId": "RG:solo_dual_console_independent_invoicing",
+      "dependencies": [
+        "F-AE-050"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-050 AE-14.9-04: Solo Per-Console Subscription Billing."
+    },
+    {
+      "requirementId": "RG:solo_engine_metering_parity",
+      "dependencies": [
+        "F-540",
+        "F-616"
+      ],
+      "rationale": "Outcome settlement and Solo surface treatment own metering parity."
+    },
+    {
+      "requirementId": "RG:solo_envelope_per_console_isolation",
+      "dependencies": [
+        "F-002",
+        "F-620"
+      ],
+      "rationale": "Console isolation and Solo throttling own independent envelope state."
+    },
+    {
+      "requirementId": "RG:solo_envelope_throttling_targets_low_priority_background_only",
+      "dependencies": [
+        "F-620",
+        "F-621"
+      ],
+      "rationale": "Solo throttling and capability classification own suppression targets."
+    },
+    {
+      "requirementId": "RG:solo_mode_chip_ribbon_suppression_buyer",
+      "dependencies": [
+        "F-076"
+      ],
+      "rationale": "Highest source-section and assertion match: F-076 Buyer Solo Four-Step Compression Contract."
+    },
+    {
+      "requirementId": "RG:solo_mode_team_to_solo_blocked_with_stakeholders",
+      "dependencies": [
+        "F-AE-025"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-025 AE-14.4-04: Team→Solo Transition Block."
+    },
+    {
+      "requirementId": "RG:solo_per_charge_dispute_disambiguation_runtime",
+      "dependencies": [
+        "F-AE-051"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-051 AE-14.9-05: Solo Per-Charge Orchestration."
+    },
+    {
+      "requirementId": "RG:solo_plan_change_console_isolation",
+      "dependencies": [
+        "F-002",
+        "F-510",
+        "F-516"
+      ],
+      "rationale": "Console isolation and both Solo plan contracts own plan changes."
+    },
+    {
+      "requirementId": "RG:solo_subscription_blocks_per_charge",
+      "dependencies": [
+        "F-AE-051"
+      ],
+      "rationale": "Highest source-section and assertion match: F-AE-051 AE-14.9-05: Solo Per-Charge Orchestration."
+    },
+    {
+      "requirementId": "RG:solo_telemetry_no_customer_routing",
+      "dependencies": [
+        "F-622"
+      ],
+      "rationale": "Highest source-section and assertion match: F-622 Solo Engine Telemetry & Webhook Catalog."
+    },
+    {
+      "requirementId": "RG:solo_telemetry_property_schema_completeness",
+      "dependencies": [
+        "F-622"
+      ],
+      "rationale": "Highest source-section and assertion match: F-622 Solo Engine Telemetry & Webhook Catalog."
+    },
+    {
+      "requirementId": "RG:solo_throttling_class_change_takes_effect_at_next_envelope_rollover",
+      "dependencies": [
+        "F-621"
+      ],
+      "rationale": "Highest source-section and assertion match: F-621 surface_throttling_class Capability-Registry Field."
+    },
+    {
+      "requirementId": "RG:solo_tier_buyer_hero_moment_slo_single_source",
+      "dependencies": [
+        "F-897"
+      ],
+      "rationale": "Highest source-section and assertion match: F-897 Hero Moment Instrumentation Contract."
+    },
+    {
+      "requirementId": "RG:solo_trial_one_per_org_lifetime",
+      "dependencies": [
+        "F-521"
+      ],
+      "rationale": "Highest source-section and assertion match: F-521 Solo-Tier Per-Evaluation/Per-Bid Charge Orchestration."
+    },
+    {
+      "requirementId": "RG:solo_upgrade_cta_threshold_3_events_30d_subscription_immediate_per_eval_bid",
+      "dependencies": [
+        "F-521"
+      ],
+      "rationale": "Highest source-section and assertion match: F-521 Solo-Tier Per-Evaluation/Per-Bid Charge Orchestration."
+    },
+    {
+      "requirementId": "RG:tap_count_probe",
+      "dependencies": [
+        "F-582"
+      ],
+      "rationale": "Highest source-section and assertion match: F-582 Tap-Count Probe Test Harness."
+    },
+    {
+      "requirementId": "RG:usage_dashboard_plan_gating_canonical_6_tier_consumer",
+      "dependencies": [
+        "F-760"
+      ],
+      "rationale": "Highest source-section and assertion match: F-760 Org-Level Usage Dashboard."
+    },
+    {
+      "requirementId": "RG:vendor_disqualification_phase_aware_reversal_runtime",
+      "dependencies": [
+        "F-121"
+      ],
+      "rationale": "Highest source-section and assertion match: F-121 Vendor Disqualification Record Entity."
+    },
+    {
+      "requirementId": "RG:vendor_opt_out_capability_layer_enforcement",
+      "dependencies": [
+        "F-443"
+      ],
+      "rationale": "Highest source-section and assertion match: F-443 Vendor Opt-Out ≤60-Second Enforcement Pipeline."
+    },
+    {
+      "requirementId": "RG:video_demo_transcript_pii_redaction",
+      "dependencies": [
+        "F-182"
+      ],
+      "rationale": "Highest source-section and assertion match: F-182 PII Handling Across Org Boundaries."
+    },
+    {
+      "requirementId": "RG:wallet_auto_topup_daily_frequency_runtime",
+      "dependencies": [
+        "F-126"
+      ],
+      "rationale": "Highest source-section and assertion match: F-126 AIWallet Auto-Topup."
+    },
+    {
+      "requirementId": "RG:wallet_auto_topup_period_cap_counter_completeness",
+      "dependencies": [
+        "F-126"
+      ],
+      "rationale": "Highest source-section and assertion match: F-126 AIWallet Auto-Topup."
+    },
+    {
+      "requirementId": "RG:wallet_autotopup_ops_override_bounds",
+      "dependencies": [
+        "F-125"
+      ],
+      "rationale": "Highest source-section and assertion match: F-125 AIWallet Entity."
+    },
+    {
+      "requirementId": "RG:wallet_free_free_additive_pool",
+      "dependencies": [
+        "F-537"
+      ],
+      "rationale": "Highest source-section and assertion match: F-537 Wallet Pooled Budget Across Consoles."
+    },
+    {
+      "requirementId": "RG:wallet_free_paid_additive_pool_solo_exception",
+      "dependencies": [
+        "F-537"
+      ],
+      "rationale": "Highest source-section and assertion match: F-537 Wallet Pooled Budget Across Consoles."
+    },
+    {
+      "requirementId": "RG:wallet_read_role_gate_scope",
+      "dependencies": [
+        "F-125",
+        "F-138",
+        "F-139",
+        "F-140",
+        "F-142"
+      ],
+      "rationale": "The wallet and RBAC role contracts own wallet-read authorization."
+    },
+    {
+      "requirementId": "RG:webhook_dlq_observability_runtime_consistency",
+      "dependencies": [
+        "F-488"
+      ],
+      "rationale": "Highest source-section and assertion match: F-488 Failed Webhook DLQ & Replay."
+    },
+    {
+      "requirementId": "RG:webhook_dlq_runtime_consistency",
+      "dependencies": [
+        "F-488"
+      ],
+      "rationale": "Highest source-section and assertion match: F-488 Failed Webhook DLQ & Replay."
+    },
+    {
+      "requirementId": "RG:webhook_endpoint_pool_runtime_consistency",
+      "dependencies": [
+        "F-486"
+      ],
+      "rationale": "Highest source-section and assertion match: F-486 Webhook Configuration & Limits."
+    },
+    {
+      "requirementId": "RG:webhook_payload_no_selection_record_body",
+      "dependencies": [
+        "F-487"
+      ],
+      "rationale": "Highest source-section and assertion match: F-487 Webhook Body-Exclusion Gates."
+    },
+    {
+      "requirementId": "RG:workos_directory_group_role_assignment_precedence",
+      "dependencies": [
+        "F-702"
+      ],
+      "rationale": "Highest source-section and assertion match: F-702 Ops Role Assignment State Machine."
+    },
+    {
+      "requirementId": "RG:workos_groups_api_membership_consistency",
+      "dependencies": [
+        "F-081"
+      ],
+      "rationale": "Highest source-section and assertion match: F-081 Organization Membership Entity."
+    },
+    {
+      "requirementId": "RG:workos_predefined_attributes_consumed",
+      "dependencies": [
+        "F-080"
+      ],
+      "rationale": "Highest source-section and assertion match: F-080 User Entity."
+    },
+    {
+      "requirementId": "RG:workos_raw_attributes_not_consumed",
+      "dependencies": [
+        "F-006"
+      ],
+      "rationale": "Highest source-section and assertion match: F-006 WorkOS Authentication Integration."
+    },
+    {
+      "requirementId": "RG:workspace_pulse_health_persistence_contract",
+      "dependencies": [
+        "F-310"
+      ],
+      "rationale": "Highest source-section and assertion match: F-310 Pulse Health Score."
+    },
+    {
+      "requirementId": "RG:workspace_template_idempotency_atomicity",
+      "dependencies": [
+        "F-306"
+      ],
+      "rationale": "Highest source-section and assertion match: F-306 Template-to-Workspace Flow."
+    }
+  ]
+}

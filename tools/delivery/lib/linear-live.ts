@@ -1,6 +1,5 @@
-import { createHash } from "node:crypto";
-
 const ENDPOINT = "https://api.linear.app/graphql";
+const DESCRIPTION_PREFIX_LENGTH = 400;
 
 const ISSUE_QUERY = `
   query DeliveryIssues($after: String) {
@@ -121,10 +120,9 @@ interface ReleaseNode {
 
 export interface LinearFingerprint {
   issues: Array<{
-    uuid: string;
     identifier: string;
     title: string;
-    descriptionHash: string;
+    descriptionFingerprint: string;
     updatedAt: string;
     estimate: number | null;
     state: string;
@@ -218,8 +216,13 @@ async function paginate<T>(
   return rows;
 }
 
-function hash(value: string | null): string {
-  return createHash("sha256").update(value ?? "").digest("hex");
+function descriptionFingerprint(value: string | null): string {
+  let hash = 0x811c9dc5;
+  for (const character of (value ?? "").slice(0, DESCRIPTION_PREFIX_LENGTH)) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0");
 }
 
 function relationKey(relation: RelationNode): string {
@@ -243,11 +246,11 @@ export async function fetchLinearFingerprint(
   ]);
   return {
     issues: issueNodes
+      .filter((issue) => issue.state.type === "backlog")
       .map((issue) => ({
-        uuid: issue.id,
         identifier: issue.identifier,
         title: issue.title,
-        descriptionHash: hash(issue.description),
+        descriptionFingerprint: descriptionFingerprint(issue.description),
         updatedAt: issue.updatedAt,
         estimate: issue.estimate,
         state: issue.state.name,

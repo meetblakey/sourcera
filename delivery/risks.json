@@ -16,10 +16,10 @@
     },
     {
       "id": "RISK-003",
-      "statement": "The Linear workspace has no release pipeline.",
+      "statement": "Linear release membership can drift from the delivery manifest.",
       "owner": "Blake Rowley",
-      "trigger": "R0 through R5 cannot be created or assigned.",
-      "response": "Create and read back one scheduled production pipeline before release writes."
+      "trigger": "A live release count or issue assignment differs from the generated release plan.",
+      "response": "Fail the drift gate, repair the assignment, and read back all affected releases."
     },
     {
       "id": "RISK-004",

@@ -139,7 +139,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
     ["PLA-1", "PLA-2"],
   );
   assert.equal(fingerprint.issues[0].relations[0], "blocks:PLA-1:PLA-2");
-  assert.equal(fingerprint.issues[0].descriptionHash.length, 64);
+  assert.equal(fingerprint.issues[0].descriptionFingerprint.length, 8);
   assert.equal(requested.every((query) => query.includes("first: 50")), true);
   assert.deepEqual(fingerprintDiff(fingerprint, fingerprint), []);
   assert.match(

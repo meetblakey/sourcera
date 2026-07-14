@@ -42,6 +42,10 @@ test("generates deterministic reports and fails on orphan work", () => {
       join(dir, "dispositions.json"),
       JSON.stringify({ overrides: [] }),
     );
+    writeFileSync(
+      join(dir, "runtime-dependencies.json"),
+      JSON.stringify({ dependencies: [] }),
+    );
     writeFileSync(join(dir, "decisions.jsonl"), "");
     writeFileSync(
       join(dir, "risks.json"),
@@ -82,6 +86,8 @@ test("generates deterministic reports and fails on orphan work", () => {
         join(dir, "release-plan.json"),
         "--dispositions",
         join(dir, "dispositions.json"),
+        "--runtime-dependencies",
+        join(dir, "runtime-dependencies.json"),
         "--decisions",
         join(dir, "decisions.jsonl"),
         "--risks",

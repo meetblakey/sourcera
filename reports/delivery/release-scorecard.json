@@ -1,0 +1,11 @@
+{
+  "categories": {
+    "planning": 20,
+    "releases": 20,
+    "ownership": 15,
+    "validation": 10,
+    "execution": 0
+  },
+  "total": 65,
+  "tenOfTen": false
+}

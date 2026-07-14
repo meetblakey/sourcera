@@ -38,6 +38,12 @@ interface ReleaseAssignment {
   rationale: string;
 }
 
+interface RuntimeGateDependency {
+  requirementId: string;
+  dependencies: string[];
+  rationale: string;
+}
+
 interface ValidationPlan {
   customerProof: string[];
   operationalProof: string[];
@@ -81,6 +87,10 @@ const dispositionsPath = path(
   "--dispositions",
   "delivery/dispositions.json",
 );
+const runtimeDependenciesPath = path(
+  "--runtime-dependencies",
+  "delivery/runtime-gate-dependencies.json",
+);
 const decisionsPath = path("--decisions", "delivery/decisions.jsonl");
 const risksPath = path("--risks", "delivery/risks.json");
 const validationPath = path(
@@ -105,6 +115,13 @@ const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
 const issues = json<{ issues: LinearIssueSnapshot[] }>(linearPath).issues;
 const overrides = json<{ overrides: DispositionOverride[] }>(dispositionsPath)
   .overrides;
+const runtimeDependencies = existsSync(runtimeDependenciesPath)
+  ? json<{ dependencies: RuntimeGateDependency[] }>(runtimeDependenciesPath)
+      .dependencies
+  : [];
+const runtimeDependenciesById = new Map(
+  runtimeDependencies.map((row) => [row.requirementId, row]),
+);
 const decisions = readFileSync(decisionsPath, "utf8")
   .split(/\r?\n/)
   .filter(Boolean)
@@ -141,6 +158,9 @@ const requirements: SourceRequirement[] = [
 ]
   .map((row) => ({
     ...row,
+    dependencies: row.requirementId.startsWith("RG:")
+      ? runtimeDependenciesById.get(row.requirementId)?.dependencies ?? []
+      : row.dependencies,
     disposition: overrideById.get(row.requirementId)?.disposition ??
       row.disposition,
   }))
@@ -201,6 +221,38 @@ const duplicateOverrides: Finding[] = overrides
     requirementId: override.requirementId,
     message: `${override.requirementId} has duplicate dispositions`,
   }));
+const runtimeDependencyFindings: Finding[] = [
+  ...requirements
+    .filter(
+      (row) =>
+        row.requirementId.startsWith("RG:") &&
+        !runtimeDependenciesById.has(row.requirementId),
+    )
+    .map((row) => ({
+      code: "runtime_dependency_missing",
+      requirementId: row.requirementId,
+      message: `${row.requirementId} lacks a behavior dependency`,
+    })),
+  ...runtimeDependencies
+    .filter(
+      (row) =>
+        !requirements.some(
+          (requirement) => requirement.requirementId === row.requirementId,
+        ),
+    )
+    .map((row) => ({
+      code: "runtime_dependency_unknown",
+      requirementId: row.requirementId,
+      message: `${row.requirementId} is not in current runtime truth`,
+    })),
+  ...runtimeDependencies
+    .filter((row) => !row.dependencies.length || !row.rationale.trim())
+    .map((row) => ({
+      code: "runtime_dependency_incomplete",
+      requirementId: row.requirementId,
+      message: `${row.requirementId} lacks dependencies or rationale`,
+    })),
+];
 const exactOpenRows = Number(
   exact.open_rows ?? exact.summary?.open_rows ?? 0,
 );
@@ -343,6 +395,7 @@ const allFindings = [
   ...sourceFindings,
   ...dispositionFindings,
   ...duplicateOverrides,
+  ...runtimeDependencyFindings,
   ...exactFindings,
   ...releasePlanFindings,
   ...duplicateIssueSources,
@@ -466,6 +519,7 @@ const reports = {
       ...sourceFindings,
       ...dispositionFindings,
       ...duplicateOverrides,
+      ...runtimeDependencyFindings,
       ...exactFindings,
       ...releasePlanFindings,
       ...duplicateIssueSources,

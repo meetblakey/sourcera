@@ -1,0 +1,5669 @@
+{
+  "assignments": [
+    {
+      "requirementId": "F-001",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-002; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-002",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-003",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-004",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-005",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-502; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-006",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-559; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-007",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-008",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-630; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-009",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-010",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-559; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-011",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-314; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-012",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-013",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-014",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-015",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-016",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-017",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-018",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-019",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-020",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-021",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-022",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-023",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-024",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-025",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-026",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-027",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-028",
+      "release": "R1",
+      "rationale": "R1: prerequisite of F-AE-025; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-029",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-030",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-031; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-031",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-032",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-033",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-034",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-035",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-036",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-037",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-038",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-039",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-040",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-041",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-042",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-043",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-044",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-045",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-046",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-047",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-048",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-049",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-050",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-051",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-052",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-053",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-054",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-055",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-056",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-057",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-058",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-059",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-060",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-061",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-062",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-063",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-064",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-065",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-066",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-067; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-067",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-068",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-069",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-070",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-071",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-072",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-073",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-074",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-075",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-076",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-077",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-078",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-079",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-081; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-080",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-081; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-081",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-082",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-083",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-084",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-085",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-086",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-087",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-088",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-089",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-090",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-091",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-023; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-092",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-093; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-093",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-094; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-094",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-023; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-095",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-096",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-097",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-098",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-099",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-100; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-100",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-101",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-102",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-103",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-104",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-105",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-106",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-107",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-108",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-109",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-110",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-111",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-112",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-113",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-114",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-115",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-116",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-117",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-118",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-119",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-120",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-121",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-122",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-123",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-128; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-124",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-125",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-126; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-126",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-127",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-136; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-128",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-129",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-730; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-130",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-131",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-522; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-132",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-133",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-134",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-135",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-136",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-137",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-142; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-138",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-139",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-140",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-141",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-142",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-143; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-143",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-144",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-145",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-146",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-147",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-148",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-149",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-150",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-151",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-152",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-153",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-154",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-155",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-156",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-157",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-158",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-159",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-160",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-161",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-164; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-162",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-163",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-164",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-165; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-165",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-166",
+      "release": "R3",
+      "rationale": "R3: prerequisite of F-674; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-167",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-168",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-169",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-170",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-171; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-171",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-172",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-173",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-175; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-174",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-175",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-176",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-AE-002; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-177",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-178",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-179",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-566; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-180",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-181",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-182",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-AE-003; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-183",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-184; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-184",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-185",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-186",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-187",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-188",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-189",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-190",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-191",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-192",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-193",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-194",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-195",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-196",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-197",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-198",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-199",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-200",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-201",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-202",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-203",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-204",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-205",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-206",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-207",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-208",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-209",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-210",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-211",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-212",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-213",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-214",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-215",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-216",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-217",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-218",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-219",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-220",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-221",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-222",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-223",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-224",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-225",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-226; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-226",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-227; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-227",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-025; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-228",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-229",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-230",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-231",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-232",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-233",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-234",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-235",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-236",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-237",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-238",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-239",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-240",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-241",
+      "release": "R1",
+      "rationale": "R1: prerequisite of F-243; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-242",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-243",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-244",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-245",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-246; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-246",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-247; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-247",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-248",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-249",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-250",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-251",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-252",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-253",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-254",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-255",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-256",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-257",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-258; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-258",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-259",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-260",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-261",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-262",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-263",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-264",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-265",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-266",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-267",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-268",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-269",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-270",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-271",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-272",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-273",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-274",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-275",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-276",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-277",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-278",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-279",
+      "release": "R3",
+      "rationale": "R3: prerequisite of F-676; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-280",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-281",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-282",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-283",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-284",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-285",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-286",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-287",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-288",
+      "release": "R1",
+      "rationale": "R1: prerequisite of F-289; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-289",
+      "release": "R1",
+      "rationale": "R1: prerequisite of F-243; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-290",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-291",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-292",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-293",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-294",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-295",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-296",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-297",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-298",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-299",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-300",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-301",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-AE-015; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-302",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-721; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-303",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-304",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-305",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-306",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-307",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-308",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-309",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-310",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-311",
+      "release": "R1",
+      "rationale": "R1: prerequisite of F-313; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-312",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-313",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-314",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-316; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-315",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-316",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-320; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-317",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-318",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-319",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-320",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-AE-021; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-321",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-559; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-322",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-323",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-352; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-324",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-334; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-325",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-326; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-326",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-330; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-327",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-330; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-328",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-329",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-790; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-330",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-049; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-331",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-332",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-685; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-333",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-334",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-354; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-335",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-685; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-336",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-338; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-337",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-338",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-353; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-339",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-340",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-341",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-342",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-343",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-344",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-353; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-345",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-354; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-346",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-347",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-348",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-349",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-350",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-351",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-352",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-353; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-353",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-560; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-354",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-560; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-355",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-356",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-357",
+      "release": "R3",
+      "rationale": "R3: prerequisite of F-683; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-358",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-359",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-360",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-361",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-362",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-363",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-364",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-365",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-366",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-367",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-368",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-369",
+      "release": "R3",
+      "rationale": "R3: prerequisite of F-662; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-370",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-371",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-372",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-373",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-374",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-375",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-376",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-377",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-378",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-379",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-380",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-381; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-381",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-AE-042; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-382",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-383",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-384",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-385",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-386",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-387",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-388",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-389",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-390",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-391",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-392",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-393",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-394",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-395",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-396",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-397",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-398",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-399",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-400",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-401",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-402",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-403",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-405; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-404",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-405",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-406",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-407",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-408",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-409",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-410",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-411",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-412",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-414; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-413",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-414",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-098; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-415",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-416",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-417",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-418",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-419",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-420",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-421",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-422",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-423",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-424",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-425",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-426",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-427",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-428",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-429",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-435; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-430",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-431",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-432",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-433",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-434",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-435",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-720; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-436",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-437",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-718; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-438",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-717; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-439",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-440",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-441",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-442",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-443",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-444",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-445",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-446",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-447",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-448",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-449",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-450",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-451",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-452",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-453",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-454",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-455",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-456",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-457",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-458",
+      "release": "R3",
+      "rationale": "R3: prerequisite of F-459; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-459",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-460",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-461",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-462",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-463",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-464",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-465",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-466",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-467",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-468",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-469",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-470",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-471",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-472",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-473",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-474",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-475",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-476",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-477",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-478",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-481; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-479",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-480",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-481",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-482",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-483",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-622; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-484",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-485",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-486",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-487",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-488",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-489",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-778; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-490",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-491",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-492",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-493",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-494",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-495",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-496",
+      "release": "R4",
+      "rationale": "R4: prerequisite of F-782; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-497",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-498",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-499",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-623; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-500",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-501",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-502",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-503",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-504",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-505",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-489; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-506",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-507",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-508",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-509",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-510",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-AE-047; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-511",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-512",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-513",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-514",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-515",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-516",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-AE-047; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-517",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-518",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-519",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-520",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-521",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-522",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-523",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-536; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-524",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-525",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-526",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-527",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-637; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-528",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-527; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-529",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-530",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-531",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-532",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-533",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-534",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-897; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-535",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-536",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-545; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-537",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-538",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-539",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-AE-052; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-540",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-616; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-541",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-542",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-543",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-544",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-545",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-559; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-546",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-547",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-548",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-549",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-550",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-551",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-552",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-553",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-554",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-555",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-556",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-557",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-558",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-559",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-560",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-561",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-562",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-563",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-564",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-565",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-566",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-567",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-568",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-569",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-572; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-570",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-571",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-572",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-573",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-574",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-575",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-576",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-577",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-578",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-579",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-580",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-581",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-582",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-583",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-575; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-584",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-585",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-586",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-587",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-588",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-589",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-590",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-591",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-592",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-595; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-593",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-594",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-595",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-596",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-597",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-598",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-599",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-600",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-601",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-602",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-603",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-604",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-605",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-606",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-644; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-607",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-608",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-609",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-610",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-611",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-612",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-613",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-614",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-615",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-616",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-617; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-617",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-618",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-619",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-620",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-621",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-622",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-623",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-624",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-625",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-626",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-627",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-628",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-629",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-630",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-631",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-632",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-633",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-634",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-635",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-636",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-637; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-637",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-638",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-639",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-640",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-641",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-642",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-643",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-644",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-714; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-645",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-646",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-647",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-648",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-649",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-650",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-651",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-652",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-653",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-654",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-655",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-656",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-657",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-658",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-667; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-659",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-660",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-661",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-662",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-663",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-721; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-664",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-665",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-666",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-667",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-741; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-668",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-748; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-669",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-670",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-671",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-672",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-673",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-674",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-675",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-676",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-677",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-678",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-679",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-680",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-681",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-682",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-683",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-684",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-685",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-897; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-686",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-695; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-687",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-688",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-689",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-690",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-691",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-692",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-693",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-694",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-695",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-696",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-697; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-697",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-698",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-699",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-700",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-701",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-702",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-703",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-704",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-705; pulled forward from R1 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-705",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-706",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-707",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-708",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-709",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-710",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-711",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-712; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-712",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-713",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-714",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-715",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-716; pulled forward from R3 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-716",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-717",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-718",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-719",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-720",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-721",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-722",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-723",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-724",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-725",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-739; pulled forward from R4 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-726",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-727",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-728",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-729",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-730",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-731",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-732",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-733",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-734",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-735",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-736",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-737",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-738",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-739",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-740",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-741",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-742",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-743",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-744",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-745",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-746",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-747",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-748",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-749",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-750",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-751",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-752",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-753",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-754",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-755",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-756",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-757",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-758",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-759",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-760",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-761",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-762",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-763",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-764",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-765",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-766",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-767",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-768",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-769",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-770",
+      "release": "R2",
+      "rationale": "R2: prerequisite of F-772; pulled forward from R5 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-771",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-772",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-773",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-774",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-775",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-776",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-777",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-778",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-779",
+      "release": "R0",
+      "rationale": "R0: prerequisite of F-780; pulled forward from R2 to preserve dependency order."
+    },
+    {
+      "requirementId": "F-780",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-781",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-782",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-783",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-784",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-785",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-786",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-787",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-788",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-789",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-790",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-791",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-792",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-793",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-794",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-796",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-797",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-798",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-799",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-800",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-801",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-802",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-803",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-809",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-810",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-811",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-814",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-815",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-816",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-817",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-818",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-822",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-828",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-831",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-832",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-835",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-837",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-859",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-860",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-861",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-862",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-863",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-864",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-865",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-866",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-867",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-868",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-869",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-870",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-871",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-872",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-873",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-874",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-875",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-876",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-877",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-878",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-879",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-880",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-881",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-882",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-883",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-884",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-885",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-886",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-897",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-898",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-001",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-002",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-003",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-004",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-005",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-006",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-007",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-008",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-009",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-010",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-011",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-012",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-013",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-014",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-015",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-017",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-018",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-019",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-020",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-021",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-022",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-023",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-024",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-025",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-AE-026",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-027",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-028",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-029",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-030",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-031",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-032",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-033",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-034",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-035",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-AE-036",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-037",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-038",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-039",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-040",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-041",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-042",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-043",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-044",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-045",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-046",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-AE-047",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-048",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-049",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-050",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "F-AE-051",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-052",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-053",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-054",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-055",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-AE-056",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-057",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-058",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-059",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-060",
+      "release": "R2",
+      "rationale": "R2: Repeatability, reporting, administration, or operating workflow."
+    },
+    {
+      "requirementId": "F-AE-061",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-062",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-063",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-064",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-AE-065",
+      "release": "R1",
+      "rationale": "R1: Team evaluation and collaboration after the single-buyer R0 path."
+    },
+    {
+      "requirementId": "F-AE-066",
+      "release": "R4",
+      "rationale": "R4: Decision intelligence, scenarios, TCO, knowledge automation, or agents."
+    },
+    {
+      "requirementId": "F-AE-067",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-AE-068",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-069",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-070",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-071",
+      "release": "R0",
+      "rationale": "R0: Core defensible-evaluation path or prerequisite."
+    },
+    {
+      "requirementId": "F-AE-072",
+      "release": "R3",
+      "rationale": "R3: Marketplace supply, discovery, matching, growth, or trust workflow."
+    },
+    {
+      "requirementId": "F-BC-001",
+      "release": "R5",
+      "rationale": "R5: Enterprise integration, compliance, globalization, residency, or scale control."
+    },
+    {
+      "requirementId": "RG:accessibility_settings_preference_contract",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-062."
+    },
+    {
+      "requirementId": "RG:agent_budget_breach",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-613, F-318."
+    },
+    {
+      "requirementId": "RG:agent_feedback_no_model_training",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-315, F-625."
+    },
+    {
+      "requirementId": "RG:ai_response_generation_billing_consistency",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-207."
+    },
+    {
+      "requirementId": "RG:ai_wallet_state_machine_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-125, F-536."
+    },
+    {
+      "requirementId": "RG:aiwallet_response_excludes_solo_envelope",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-125, F-385, F-619."
+    },
+    {
+      "requirementId": "RG:api_latency_p95_regression",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-612."
+    },
+    {
+      "requirementId": "RG:api_multistatus_schema_registration",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-498."
+    },
+    {
+      "requirementId": "RG:api_rate_limit_plan_quota_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-497."
+    },
+    {
+      "requirementId": "RG:api_standard_retry_after_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-496, F-497, F-782."
+    },
+    {
+      "requirementId": "RG:appendix_g_legacy_alias_retirement_enforced",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-754."
+    },
+    {
+      "requirementId": "RG:appendix_m_coverage_on_diff",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-796."
+    },
+    {
+      "requirementId": "RG:attachment_dsar_72h_binary_detach_sla",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-177."
+    },
+    {
+      "requirementId": "RG:audit_event_break_glass_integrity_scan_triggered",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-607."
+    },
+    {
+      "requirementId": "RG:audit_event_hash_chain_full_corpus_coverage",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-405."
+    },
+    {
+      "requirementId": "RG:audit_event_residency_partitioning_bound",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-772."
+    },
+    {
+      "requirementId": "RG:audit_events_export_ready_delivery_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-171."
+    },
+    {
+      "requirementId": "RG:audit_integrity_exemption_redaction_path_correctness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-176."
+    },
+    {
+      "requirementId": "RG:auth_audit_event_emission_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-117."
+    },
+    {
+      "requirementId": "RG:backup_dsar_repseudonymization_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175, F-603."
+    },
+    {
+      "requirementId": "RG:backup_residency_partition_isolation",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-012, F-603."
+    },
+    {
+      "requirementId": "RG:bid_disqualification_cascade_active",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-403."
+    },
+    {
+      "requirementId": "RG:bid_response_bulk_submit_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-389."
+    },
+    {
+      "requirementId": "RG:bid_response_editor_lock_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-106."
+    },
+    {
+      "requirementId": "RG:bid_workspace_buyer_purge_orphan_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-105."
+    },
+    {
+      "requirementId": "RG:bid_workspace_deal_size_band_firewall",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-105."
+    },
+    {
+      "requirementId": "RG:bid_workspace_surface_state_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-776."
+    },
+    {
+      "requirementId": "RG:bid_workspace_voluntary_withdrawal_runtime_consistency",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-390."
+    },
+    {
+      "requirementId": "RG:billing_async_failure_state_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-126, F-500, F-501."
+    },
+    {
+      "requirementId": "RG:billing_organization_suspended_webhook_runtime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-489."
+    },
+    {
+      "requirementId": "RG:bridge_payload_body_pii_sweep_buyer_seller_parity",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-409."
+    },
+    {
+      "requirementId": "RG:bundle_size_budget_in_app",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-612, F-614."
+    },
+    {
+      "requirementId": "RG:buyer_activation_metric_canonical_consumer",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-637, F-752."
+    },
+    {
+      "requirementId": "RG:buyer_console_role_permission_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-144, F-145, F-146, F-147, F-148."
+    },
+    {
+      "requirementId": "RG:buyer_evaluation_funnel_derivation_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-637."
+    },
+    {
+      "requirementId": "RG:buyer_pulse_interactive_render_runtime",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-308, F-612."
+    },
+    {
+      "requirementId": "RG:capability_declaration_reuse_count_consistency",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-206."
+    },
+    {
+      "requirementId": "RG:cmek_rotation_runtime_evidence",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-502, F-634."
+    },
+    {
+      "requirementId": "RG:committed_spend_console_scope_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-002."
+    },
+    {
+      "requirementId": "RG:committed_spend_single_auto_renew_invariant",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-522."
+    },
+    {
+      "requirementId": "RG:committed_spend_single_pool_invariant",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-522."
+    },
+    {
+      "requirementId": "RG:console_bridge_failure_storm_runtime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-400."
+    },
+    {
+      "requirementId": "RG:console_bridge_no_defense_view_event_kinds",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-120."
+    },
+    {
+      "requirementId": "RG:console_isolation_violation_no_data_path_use",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-002."
+    },
+    {
+      "requirementId": "RG:contest_window_db_trigger_present",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-541."
+    },
+    {
+      "requirementId": "RG:convex_reactivity_slo_regression",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-184."
+    },
+    {
+      "requirementId": "RG:core_web_vitals_in_app_lighthouse_ci",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-612."
+    },
+    {
+      "requirementId": "RG:cost_base_recalc_notice_window_trajectory_gate",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-524."
+    },
+    {
+      "requirementId": "RG:cross_console_shared_ui_preference_firewall",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-122."
+    },
+    {
+      "requirementId": "RG:cross_org_guest_sso_bypass_blocked",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-167."
+    },
+    {
+      "requirementId": "RG:defense_view_engagement_event_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-263."
+    },
+    {
+      "requirementId": "RG:defense_view_regeneration_throttle_5min",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-263."
+    },
+    {
+      "requirementId": "RG:dns_failover_target_residency_match",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-012, F-603."
+    },
+    {
+      "requirementId": "RG:dr_failover_no_cross_residency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-012, F-603."
+    },
+    {
+      "requirementId": "RG:dr_failover_residency_bound",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-012, F-603."
+    },
+    {
+      "requirementId": "RG:dr_game_day_overdue",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-603."
+    },
+    {
+      "requirementId": "RG:dr_restore_test_residency_partition",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-603, F-772."
+    },
+    {
+      "requirementId": "RG:dsar_30d_sla_observability",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-177."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_aggregate_recompute_backstop_drift",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_aggregate_recompute_suppression_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_aggregate_recompute_synchronous",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_audit_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_bridge_payload_body_pii_sweep_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_bridge_redaction_hash_recompute",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-397."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_partial_failure_pagerduty_sla",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_partial_failure_resume_sla_24h",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_pseudonym_epoch_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_residency_partition_isolation",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_cascade_statutory_ceiling_auto_escalation",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_erased_buyer_excluded_from_recovery_cadence",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_erased_seller_excluded_from_recovery_cadence",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-175."
+    },
+    {
+      "requirementId": "RG:dsar_excluded_snapshot_restore_blocked",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-503, F-603."
+    },
+    {
+      "requirementId": "RG:dsar_export_delivery_residency_bound",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-503, F-772."
+    },
+    {
+      "requirementId": "RG:dsar_manifestly_unfounded_appeal_runtime",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-177, F-503."
+    },
+    {
+      "requirementId": "RG:dsar_manifestly_unfounded_rejection_audit_emission",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-117, F-503."
+    },
+    {
+      "requirementId": "RG:dsar_pseudonym_epoch_content_scrub_runtime",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-175, F-503."
+    },
+    {
+      "requirementId": "RG:dsar_sla_window_breached",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-177."
+    },
+    {
+      "requirementId": "RG:email_bounce_complaint_suppression_runtime",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-597."
+    },
+    {
+      "requirementId": "RG:entitlement_matrix_non_ai_runtime_branching",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-531."
+    },
+    {
+      "requirementId": "RG:entitlement_matrix_registry_binding_completeness",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-531."
+    },
+    {
+      "requirementId": "RG:featured_placement_funnel_runtime",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-460."
+    },
+    {
+      "requirementId": "RG:field_encryption_plaintext_egress_guard",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-502, F-625."
+    },
+    {
+      "requirementId": "RG:firecrawl_outage_progress_line_substitution",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-560."
+    },
+    {
+      "requirementId": "RG:firecrawl_status_line_variant_materialization",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-AE-043."
+    },
+    {
+      "requirementId": "RG:first_pass_high_stakes_band_only",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-353."
+    },
+    {
+      "requirementId": "RG:first_pass_rfp_draft_outcome_contract_isolation",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-353."
+    },
+    {
+      "requirementId": "RG:free_allowance_plan_entitlement_partitioning",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-530, F-531."
+    },
+    {
+      "requirementId": "RG:free_allowance_quota_decrease_guard",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-729."
+    },
+    {
+      "requirementId": "RG:ghost_ingestion_mcp_allowlist_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-345."
+    },
+    {
+      "requirementId": "RG:global_ban_reversal_core_runtime_consistency",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-407, F-447, F-627."
+    },
+    {
+      "requirementId": "RG:global_ban_reversal_marketplace_restoration_runtime",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-429, F-447, F-627."
+    },
+    {
+      "requirementId": "RG:growth_loop_l1_delivery_reputation_runtime",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-009, F-645."
+    },
+    {
+      "requirementId": "RG:inbox_mutation_idempotency_contract",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-035, F-041, F-103."
+    },
+    {
+      "requirementId": "RG:integration_export_payload_allowlist",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-484."
+    },
+    {
+      "requirementId": "RG:kb_bootstrap_allowance_compensation_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-354."
+    },
+    {
+      "requirementId": "RG:kb_bootstrap_per_org_concurrency_lock_active",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-354."
+    },
+    {
+      "requirementId": "RG:kb_injection_scanner_registry_runtime_consistency",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-369."
+    },
+    {
+      "requirementId": "RG:kb_mcp_webhook_alert_catalog_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-336."
+    },
+    {
+      "requirementId": "RG:kb_state_persisting_audit_event_coverage",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-AE-042."
+    },
+    {
+      "requirementId": "RG:kb_suggestion_alias_console_resolution_integrity",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-356."
+    },
+    {
+      "requirementId": "RG:kb_suggestion_family_cardinality",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-356."
+    },
+    {
+      "requirementId": "RG:kb_suggestion_family_outcome_contract_isolation",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-540."
+    },
+    {
+      "requirementId": "RG:kb_value_meter_estimated_value_guard_runtime",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-376."
+    },
+    {
+      "requirementId": "RG:legal_entity_residency_change_revenue_leak_test",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-539."
+    },
+    {
+      "requirementId": "RG:load_test_sla_breach",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-615."
+    },
+    {
+      "requirementId": "RG:locale_resolution_engine_contract",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-570."
+    },
+    {
+      "requirementId": "RG:m3_signed_payload_anonymity_binding",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-483."
+    },
+    {
+      "requirementId": "RG:m16_same_domain_enforcement_dual_point_canonical",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-674."
+    },
+    {
+      "requirementId": "RG:marketplace_match_score_snapshot_tuple_uniqueness",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-431."
+    },
+    {
+      "requirementId": "RG:marketplace_proactive_offer_lifecycle_state_machine",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-429."
+    },
+    {
+      "requirementId": "RG:marketplace_proactive_offer_pre_acceptance_redaction",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-456."
+    },
+    {
+      "requirementId": "RG:mcp_session_token_record_entity_home",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-337."
+    },
+    {
+      "requirementId": "RG:member_role_permission_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-141."
+    },
+    {
+      "requirementId": "RG:mobile_full_parity_closure",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-575."
+    },
+    {
+      "requirementId": "RG:nda_lifecycle_notification_runtime_consistency",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-392, F-466."
+    },
+    {
+      "requirementId": "RG:negative_network_effects_monitoring_contract",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-653."
+    },
+    {
+      "requirementId": "RG:network_effect_attribution_window_canonical_consumer",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-655."
+    },
+    {
+      "requirementId": "RG:network_effects_dashboard_outage_render_contract",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-655."
+    },
+    {
+      "requirementId": "RG:network_effects_residency_partition_canonical_consumer",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-655."
+    },
+    {
+      "requirementId": "RG:observability_residency_routing_bound",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-772."
+    },
+    {
+      "requirementId": "RG:ops_console_accessibility_compliance",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-696."
+    },
+    {
+      "requirementId": "RG:ops_read_audit_event_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-117."
+    },
+    {
+      "requirementId": "RG:ops_session_notification_partial_success_runtime",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-708."
+    },
+    {
+      "requirementId": "RG:ops_session_numerical_caps_single_source",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-364."
+    },
+    {
+      "requirementId": "RG:org_admin_billing_read_consistency",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-140, F-142."
+    },
+    {
+      "requirementId": "RG:org_custom_residency_label_required",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-780."
+    },
+    {
+      "requirementId": "RG:outcome_contract_signal_subject_enum_bound",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-320."
+    },
+    {
+      "requirementId": "RG:outcome_resolver_free_allowance_settlement_runtime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-530, F-540."
+    },
+    {
+      "requirementId": "RG:outcome_resolver_liveness_backlog_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-540."
+    },
+    {
+      "requirementId": "RG:pipeline_surface_compression_seller_always_compressed",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-075."
+    },
+    {
+      "requirementId": "RG:pipeline_surface_compression_soft_gate_solo_only",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-075."
+    },
+    {
+      "requirementId": "RG:policy_ingestion_buyer_console_firewall",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-002, F-104, F-245."
+    },
+    {
+      "requirementId": "RG:policy_ingestion_parent_child_settlement",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-156."
+    },
+    {
+      "requirementId": "RG:policy_ingestion_partial_resume_idempotency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-156."
+    },
+    {
+      "requirementId": "RG:posthog_event_contract_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-779."
+    },
+    {
+      "requirementId": "RG:pro_trial_day_31_contextual_cta_entitlement_fit",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-563."
+    },
+    {
+      "requirementId": "RG:pro_trial_hero_moment_slo_precedence_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-897."
+    },
+    {
+      "requirementId": "RG:pro_trial_no_refund_after_vendor_notification",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-546."
+    },
+    {
+      "requirementId": "RG:pulse_digest_summary_firewall",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-311."
+    },
+    {
+      "requirementId": "RG:qa_attachment_cross_console_content_scan_runtime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-118."
+    },
+    {
+      "requirementId": "RG:qa_suggestion_cross_console_firewall_boundary",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-122, F-298."
+    },
+    {
+      "requirementId": "RG:qa_suggestion_family_cardinality",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-418."
+    },
+    {
+      "requirementId": "RG:qa_suggestion_family_outcome_contract_isolation",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-540."
+    },
+    {
+      "requirementId": "RG:requirement_reopening_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-086, F-774."
+    },
+    {
+      "requirementId": "RG:responsive_conformance_suite",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-579."
+    },
+    {
+      "requirementId": "RG:retention_table_residency_default_runtime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-593."
+    },
+    {
+      "requirementId": "RG:rtl_directionality_runtime_contract",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-589."
+    },
+    {
+      "requirementId": "RG:s3_cross_region_replica_dpa_approval_required",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-012, F-504, F-603."
+    },
+    {
+      "requirementId": "RG:s3_replication_policy_residency_bound",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-012, F-603."
+    },
+    {
+      "requirementId": "RG:scenario_modeling_aioperation_settlement",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-265."
+    },
+    {
+      "requirementId": "RG:selection_report_v2_watermark_grandfathering",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-670."
+    },
+    {
+      "requirementId": "RG:seller_bid_workspace_mobile_accessibility_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-387, F-569, F-583."
+    },
+    {
+      "requirementId": "RG:seller_console_phase24_firewall_state_runtime_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-120."
+    },
+    {
+      "requirementId": "RG:seller_console_phase24_mobile_accessibility_runtime",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-111, F-569, F-583."
+    },
+    {
+      "requirementId": "RG:seller_console_phase24_plan_authority_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-515, F-516, F-517, F-518, F-519, F-520, F-531."
+    },
+    {
+      "requirementId": "RG:seller_console_role_permission_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-148."
+    },
+    {
+      "requirementId": "RG:seller_direct_signup_value_activation_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-559."
+    },
+    {
+      "requirementId": "RG:seller_kb_first_entry_indexed_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-789."
+    },
+    {
+      "requirementId": "RG:seller_kb_v2_cutover_grandfathering",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-515."
+    },
+    {
+      "requirementId": "RG:seller_maya_billing_detail_plan_guard",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-500, F-515, F-516."
+    },
+    {
+      "requirementId": "RG:seller_maya_chip_list_auto_publish_state_machine",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-382."
+    },
+    {
+      "requirementId": "RG:seller_maya_match_score_three_label_compression",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-384."
+    },
+    {
+      "requirementId": "RG:seller_maya_solo_free_copy_string_lint",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-381."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_provider_outage_visible",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-687."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_reactivation_single_source",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-688."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_stage3_abandonment_allowance_not_debited",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-559."
+    },
+    {
+      "requirementId": "RG:seller_onboarding_staleness_window_single_source",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-559."
+    },
+    {
+      "requirementId": "RG:seller_pulse_surface_engine_mapping",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-792."
+    },
+    {
+      "requirementId": "RG:seller_qa_phase8_readonly_runtime",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-391."
+    },
+    {
+      "requirementId": "RG:seller_software_transfer_request_entity_home",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-330, F-423."
+    },
+    {
+      "requirementId": "RG:seller_solo_onboarding_consumption_invisibility",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-616."
+    },
+    {
+      "requirementId": "RG:seller_solo_per_bid_charge_stage_binding",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-521."
+    },
+    {
+      "requirementId": "RG:seller_solo_per_bid_election_authorization_binding",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-516."
+    },
+    {
+      "requirementId": "RG:seller_stake_reveal_outcome_targets_runtime",
+      "release": "R4",
+      "rationale": "R4: runtime proof follows F-378."
+    },
+    {
+      "requirementId": "RG:snapshot_catalog_residency_partition",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-603, F-772."
+    },
+    {
+      "requirementId": "RG:solo_absorption_cap_counter_state_contract",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-619, F-620."
+    },
+    {
+      "requirementId": "RG:solo_absorption_cap_enforced",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-619."
+    },
+    {
+      "requirementId": "RG:solo_charge_kind_registered",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-AE-048."
+    },
+    {
+      "requirementId": "RG:solo_deadline_countdown_renders_in_user_timezone",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-AE-068."
+    },
+    {
+      "requirementId": "RG:solo_dual_console_independent_invoicing",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-AE-050."
+    },
+    {
+      "requirementId": "RG:solo_engine_metering_parity",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-540, F-616."
+    },
+    {
+      "requirementId": "RG:solo_envelope_per_console_isolation",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-002, F-620."
+    },
+    {
+      "requirementId": "RG:solo_envelope_throttling_targets_low_priority_background_only",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-620, F-621."
+    },
+    {
+      "requirementId": "RG:solo_mode_chip_ribbon_suppression_buyer",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-076."
+    },
+    {
+      "requirementId": "RG:solo_mode_team_to_solo_blocked_with_stakeholders",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-AE-025."
+    },
+    {
+      "requirementId": "RG:solo_per_charge_dispute_disambiguation_runtime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-AE-051."
+    },
+    {
+      "requirementId": "RG:solo_plan_change_console_isolation",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-002, F-510, F-516."
+    },
+    {
+      "requirementId": "RG:solo_subscription_blocks_per_charge",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-AE-051."
+    },
+    {
+      "requirementId": "RG:solo_telemetry_no_customer_routing",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-622."
+    },
+    {
+      "requirementId": "RG:solo_telemetry_property_schema_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-622."
+    },
+    {
+      "requirementId": "RG:solo_throttling_class_change_takes_effect_at_next_envelope_rollover",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-621."
+    },
+    {
+      "requirementId": "RG:solo_tier_buyer_hero_moment_slo_single_source",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-897."
+    },
+    {
+      "requirementId": "RG:solo_trial_one_per_org_lifetime",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-521."
+    },
+    {
+      "requirementId": "RG:solo_upgrade_cta_threshold_3_events_30d_subscription_immediate_per_eval_bid",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-521."
+    },
+    {
+      "requirementId": "RG:tap_count_probe",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-582."
+    },
+    {
+      "requirementId": "RG:usage_dashboard_plan_gating_canonical_6_tier_consumer",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-760."
+    },
+    {
+      "requirementId": "RG:vendor_disqualification_phase_aware_reversal_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-121."
+    },
+    {
+      "requirementId": "RG:vendor_opt_out_capability_layer_enforcement",
+      "release": "R3",
+      "rationale": "R3: runtime proof follows F-443."
+    },
+    {
+      "requirementId": "RG:video_demo_transcript_pii_redaction",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-182."
+    },
+    {
+      "requirementId": "RG:wallet_auto_topup_daily_frequency_runtime",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-126."
+    },
+    {
+      "requirementId": "RG:wallet_auto_topup_period_cap_counter_completeness",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-126."
+    },
+    {
+      "requirementId": "RG:wallet_autotopup_ops_override_bounds",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-125."
+    },
+    {
+      "requirementId": "RG:wallet_free_free_additive_pool",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-537."
+    },
+    {
+      "requirementId": "RG:wallet_free_paid_additive_pool_solo_exception",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-537."
+    },
+    {
+      "requirementId": "RG:wallet_read_role_gate_scope",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-125, F-138, F-139, F-140, F-142."
+    },
+    {
+      "requirementId": "RG:webhook_dlq_observability_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-488."
+    },
+    {
+      "requirementId": "RG:webhook_dlq_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-488."
+    },
+    {
+      "requirementId": "RG:webhook_endpoint_pool_runtime_consistency",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-486."
+    },
+    {
+      "requirementId": "RG:webhook_payload_no_selection_record_body",
+      "release": "R5",
+      "rationale": "R5: runtime proof follows F-487."
+    },
+    {
+      "requirementId": "RG:workos_directory_group_role_assignment_precedence",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-702."
+    },
+    {
+      "requirementId": "RG:workos_groups_api_membership_consistency",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-081."
+    },
+    {
+      "requirementId": "RG:workos_predefined_attributes_consumed",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-080."
+    },
+    {
+      "requirementId": "RG:workos_raw_attributes_not_consumed",
+      "release": "R0",
+      "rationale": "R0: runtime proof follows F-006."
+    },
+    {
+      "requirementId": "RG:workspace_pulse_health_persistence_contract",
+      "release": "R1",
+      "rationale": "R1: runtime proof follows F-310."
+    },
+    {
+      "requirementId": "RG:workspace_template_idempotency_atomicity",
+      "release": "R2",
+      "rationale": "R2: runtime proof follows F-306."
+    }
+  ]
+}
