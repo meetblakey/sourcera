@@ -44,6 +44,25 @@ export function releasePolicyFindings(
   releases: ReleaseDefinition[],
 ): Finding[] {
   const findings: Finding[] = [];
+  if (policy.schemaVersion !== 1) {
+    findings.push({
+      code: "release_policy_schema_version",
+      message: `Release policy schemaVersion must be 1; received ${String(policy.schemaVersion)}`,
+    });
+  }
+
+  for (const assignment of [...policy.baselineAssignments]
+    .filter((candidate) => !candidate.rationale?.trim())
+    .sort((left, right) =>
+      compareIds(left.requirementId, right.requirementId),
+    )) {
+    findings.push({
+      code: "release_policy_rationale_missing",
+      requirementId: assignment.requirementId,
+      message: `${assignment.requirementId} has no baseline release rationale`,
+    });
+  }
+
   const rowCounts = counts(rows.map((row) => row.requirementId));
   const assignmentCounts = counts(
     policy.baselineAssignments.map((assignment) => assignment.requirementId),

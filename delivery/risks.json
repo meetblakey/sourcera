@@ -55,6 +55,13 @@
       "owner": "Blake Rowley",
       "trigger": "The next dependency-safe issue lacks required provider identity, credentials, or environment configuration.",
       "response": "Withhold the calendar date, report external wait separately, and do not start dependent work before provider proof passes."
+    },
+    {
+      "id": "RISK-009",
+      "statement": "Unresolved release or dependency ownership defaults can hide a required prerequisite or falsely signal readiness.",
+      "owner": "Blake Rowley",
+      "trigger": "A DEC-REL-* validation trigger fires, new source or runtime evidence changes an ownership default, or affected work is proposed as codex-ready.",
+      "response": "Block readiness, revalidate the pinned source and runtime path, update the decision, dependency graph, and release policy, then regenerate and synchronize before execution."
     }
   ]
 }

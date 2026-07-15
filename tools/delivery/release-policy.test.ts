@@ -185,6 +185,38 @@ test("missing dependencies fail", () => {
   );
 });
 
+test("rejects unsupported release policy schema versions", () => {
+  const unsupported = {
+    ...policy,
+    schemaVersion: 2,
+  } as unknown as ReleasePolicy;
+
+  assert.deepEqual(releasePolicyFindings(rows, unsupported, releases)[0], {
+    code: "release_policy_schema_version",
+    message: "Release policy schemaVersion must be 1; received 2",
+  });
+});
+
+test("rejects empty or whitespace release assignment rationales", () => {
+  const missingRationale: ReleasePolicy = {
+    ...policy,
+    baselineAssignments: policy.baselineAssignments.map((candidate) =>
+      candidate.requirementId === "F-ROOT"
+        ? { ...candidate, rationale: "  " }
+        : candidate,
+    ),
+  };
+
+  assert.deepEqual(
+    releasePolicyFindings(rows, missingRationale, releases)[0],
+    {
+      code: "release_policy_rationale_missing",
+      requirementId: "F-ROOT",
+      message: "F-ROOT has no baseline release rationale",
+    },
+  );
+});
+
 interface CliFixture {
   dir: string;
   inventory: string;
@@ -342,6 +374,40 @@ test("CLI fails closed on duplicate policy assignments", () => {
     const result = runCli(fixture);
     assert.equal(result.status, 1);
     assert.match(result.stderr, /release_policy_duplicate/);
+    assert.throws(() => readFileSync(fixture.out, "utf8"));
+  } finally {
+    rmSync(fixture.dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI rejects unsupported policy schema before writing output", () => {
+  const fixture = cliFixture({ schemaVersion: 2 });
+  try {
+    const result = runCli(fixture);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /release_policy_schema_version/);
+    assert.throws(() => readFileSync(fixture.out, "utf8"));
+  } finally {
+    rmSync(fixture.dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI rejects missing assignment rationale before writing output", () => {
+  const fixture = cliFixture({
+    baselineAssignments: [
+      { requirementId: "F-001", release: "R1", rationale: " " },
+      { requirementId: "F-002", release: "R1", rationale: "journey control" },
+      {
+        requirementId: "F-003",
+        release: "R4",
+        rationale: "intelligence capability",
+      },
+    ],
+  });
+  try {
+    const result = runCli(fixture);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /release_policy_rationale_missing/);
     assert.throws(() => readFileSync(fixture.out, "utf8"));
   } finally {
     rmSync(fixture.dir, { recursive: true, force: true });
@@ -522,4 +588,88 @@ test("canonical policy is lossless and preserves the approved release boundary",
   assert.equal(baselineById.get("F-689"), "R4");
   assert.equal(finalById.get("F-265"), "R4");
   assert.equal(finalById.get("F-273"), "R4");
+});
+
+test("canonical release decisions preserve every unresolved validation trigger", () => {
+  const expectedIds = [
+    "DEC-REL-ACCESS-CI-001",
+    "DEC-REL-ACTOR-001",
+    "DEC-REL-AE006-001",
+    "DEC-REL-AE029-001",
+    "DEC-REL-AGGREGATE-001",
+    "DEC-REL-CONSOLE-001",
+    "DEC-REL-EXPORT-001",
+    "DEC-REL-F567-001",
+    "DEC-REL-F634-001",
+    "DEC-REL-F738-001",
+    "DEC-REL-F785-001",
+    "DEC-REL-F886-001",
+    "DEC-REL-HERO-METRICS-001",
+    "DEC-REL-IDENTITY-001",
+    "DEC-REL-INVITE-001",
+    "DEC-REL-LOCKOUT-001",
+    "DEC-REL-OPS-IDENTITY-001",
+    "DEC-REL-PHASE3-001",
+    "DEC-REL-PIPELINE-001",
+    "DEC-REL-SCORING-001",
+    "DEC-REL-SELLER-MAYA-001",
+    "DEC-REL-SETUP-RECOVERY-001",
+    "DEC-REL-SOLO-001",
+    "DEC-REL-SURFACE-001",
+  ];
+  const decisions = readFileSync("delivery/decisions.jsonl", "utf8")
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map(
+      (line) =>
+        JSON.parse(line) as {
+          id: string;
+          status: string;
+          decision: string;
+          assumption: string;
+          validationTrigger: string;
+        },
+    );
+  const releaseDecisions = decisions
+    .filter((candidate) => candidate.id.startsWith("DEC-REL-"))
+    .sort((left, right) => left.id.localeCompare(right.id));
+
+  assert.deepEqual(
+    releaseDecisions.map((candidate) => candidate.id),
+    expectedIds,
+  );
+  for (const decision of releaseDecisions) {
+    assert.equal(decision.status, "active", decision.id);
+    assert.ok(decision.decision.trim(), decision.id);
+    assert.ok(decision.assumption.trim(), decision.id);
+    assert.ok(decision.validationTrigger.trim(), decision.id);
+  }
+  const exportDecision = releaseDecisions.find(
+    (candidate) => candidate.id === "DEC-REL-EXPORT-001",
+  );
+  assert.ok(exportDecision);
+  assert.match(
+    exportDecision.validationTrigger,
+    /Trace the required R0 export format/,
+  );
+  assert.match(
+    exportDecision.validationTrigger,
+    /Confirm whether the R0 Selection Report export/,
+  );
+
+  const risks = JSON.parse(readFileSync("delivery/risks.json", "utf8")) as {
+    risks: Array<{
+      id: string;
+      statement: string;
+      owner: string;
+      trigger: string;
+      response: string;
+    }>;
+  };
+  const risk = risks.risks.filter(
+    (candidate) => candidate.id === "RISK-009",
+  );
+  assert.equal(risk.length, 1);
+  assert.match(risk[0].trigger, /DEC-REL-/);
+  assert.match(risk[0].response, /Block readiness/);
 });
