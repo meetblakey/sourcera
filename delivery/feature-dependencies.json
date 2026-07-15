@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "repairs": [
+    {
+      "requirementId": "F-006",
+      "dependencies": ["F-502"],
+      "rationale": "Authentication traffic and stored identity data require the platform-wide encryption contract.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§6.1; §33.1"
+    },
+    {
+      "requirementId": "F-083",
+      "dependencies": ["F-003"],
+      "rationale": "Buyer Workspace reads and lists are console-scoped and must enforce org_id plus console query scoping.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§1.4; §4.3.1 AC 6"
+    },
+    {
+      "requirementId": "F-209",
+      "dependencies": ["F-047", "F-084", "F-160"],
+      "rationale": "Pipeline advancement requires an authorized Workspace owner or member, enforced access, and the common failure-reason-recovery contract.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.1.1–§10.1.3"
+    },
+    {
+      "requirementId": "F-214",
+      "dependencies": ["F-791"],
+      "rationale": "Vendor discovery and outreach advance Target Accounts through their canonical solicitation lifecycle.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.5; Appendix L.6"
+    },
+    {
+      "requirementId": "F-215",
+      "dependencies": ["F-397", "F-409", "F-774", "F-775"],
+      "rationale": "Opening bidding requires versioned Requirement materialization, bridge redaction, and canonical Requirement and Response transitions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.6; §25.1–§25.5; Appendix A; Appendix D"
+    },
+    {
+      "requirementId": "F-220",
+      "dependencies": ["F-260"],
+      "rationale": "Phase 10 scoring uses the canonical scoring engine and draft-to-locked lifecycle.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.10; §13.1; §13.9"
+    },
+    {
+      "requirementId": "F-225",
+      "dependencies": ["F-221"],
+      "rationale": "Selection begins only after Phase 12 entry locks the evaluation scores.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.12; §13.9.3"
+    },
+    {
+      "requirementId": "F-228",
+      "dependencies": ["F-776"],
+      "rationale": "Phase 13 closure must perform the canonical Workspace and Bid Workspace state transitions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.13; Appendix E"
+    },
+    {
+      "requirementId": "F-229",
+      "dependencies": ["F-171", "F-593", "F-607"],
+      "rationale": "The immutable closure bundle requires export-safe audit evidence, binding retention, and nightly integrity verification.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.3.24; §6.7.4–§6.7.5; §40.2; §42.6.1"
+    },
+    {
+      "requirementId": "F-630",
+      "dependencies": ["F-572", "F-600", "F-603", "F-605", "F-612", "F-628"],
+      "rationale": "The release gate requires accessibility proof, monitoring, recovery drills, observability, performance budgets, and the test pyramid before canary and rollback decisions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§46.1.1–§46.1.2; §46.3"
+    },
+    {
+      "requirementId": "F-687",
+      "dependencies": ["F-630", "F-751", "F-752", "F-753", "F-755", "F-779", "F-780"],
+      "rationale": "The seven-stage onboarding contract requires release-blocking QA plus canonical event families, envelopes, durable delivery, and product analytics properties.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§49.1.10; §51.1; Appendix G"
+    },
+    {
+      "requirementId": "F-689",
+      "dependencies": ["F-789"],
+      "rationale": "Domain Bootstrap creates KB Entries that must follow the canonical KB Entry lifecycle and indexing transitions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§22.4.1; §49.1.2; Appendix L.4"
+    }
+  ]
+}

@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import {
+  applyFeatureDependencies,
+  type FeatureDependencyRepair,
+} from "./lib/dependencies.js";
 import { validateGraph } from "./lib/graph.js";
 import type {
   Disposition,
@@ -181,6 +185,10 @@ const inventoryPath = resolve(root, argv.get("--inventory") ?? "_audit/FEATURE_I
 const stampPath = resolve(root, argv.get("--stamp") ?? "/tmp/sourcera-stamp.json");
 const dispositionsPath = resolve(root, argv.get("--dispositions") ?? "delivery/dispositions.json");
 const runtimeDependenciesPath = resolve(root, argv.get("--runtime-dependencies") ?? "delivery/runtime-gate-dependencies.json");
+const featureDependenciesPath = resolve(
+  root,
+  argv.get("--feature-dependencies") ?? "delivery/feature-dependencies.json",
+);
 const releasesPath = resolve(root, argv.get("--releases") ?? "delivery/releases.json");
 const outPath = resolve(root, argv.get("--out") ?? "delivery/release-plan.json");
 
@@ -188,16 +196,22 @@ const overrides = JSON.parse(readFileSync(dispositionsPath, "utf8")) as {
   overrides: DispositionOverride[];
 };
 const dispositionById = new Map(overrides.overrides.map((row) => [row.requirementId, row.disposition]));
+const featureDependencies = JSON.parse(
+  readFileSync(featureDependenciesPath, "utf8"),
+) as { repairs: FeatureDependencyRepair[] };
 const runtimeDependencies = JSON.parse(readFileSync(runtimeDependenciesPath, "utf8")) as {
   dependencies: RuntimeGateDependency[];
 };
 const runtimeDependenciesById = new Map(
   runtimeDependencies.dependencies.map((row) => [row.requirementId, row.dependencies]),
 );
-const inventory = parseInventory(readFileSync(inventoryPath, "utf8")).map((row) => ({
-  ...row,
-  disposition: dispositionById.get(row.requirementId) ?? row.disposition,
-}));
+const inventory = applyFeatureDependencies(
+  parseInventory(readFileSync(inventoryPath, "utf8")).map((row) => ({
+    ...row,
+    disposition: dispositionById.get(row.requirementId) ?? row.disposition,
+  })),
+  featureDependencies.repairs,
+);
 const runtime = parseRuntimeGate(readFileSync(stampPath, "utf8")).map<DetailedRequirement>((row) => ({
   ...row,
   dependencies: runtimeDependenciesById.get(row.requirementId) ?? [],

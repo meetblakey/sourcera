@@ -6,6 +6,10 @@ import {
   writeFileSync,
 } from "node:fs";
 import { resolve } from "node:path";
+import {
+  applyFeatureDependencies,
+  type FeatureDependencyRepair,
+} from "./lib/dependencies.js";
 import { driftFindings } from "./lib/drift.js";
 import {
   evidenceGroupFindings,
@@ -94,6 +98,10 @@ const runtimeDependenciesPath = path(
   "--runtime-dependencies",
   "delivery/runtime-gate-dependencies.json",
 );
+const featureDependenciesPath = path(
+  "--feature-dependencies",
+  "delivery/feature-dependencies.json",
+);
 const decisionsPath = path("--decisions", "delivery/decisions.jsonl");
 const risksPath = path("--risks", "delivery/risks.json");
 const validationPath = path(
@@ -140,6 +148,9 @@ const runtimeDependencies = existsSync(runtimeDependenciesPath)
 const runtimeDependenciesById = new Map(
   runtimeDependencies.map((row) => [row.requirementId, row]),
 );
+const featureDependencies = json<{ repairs: FeatureDependencyRepair[] }>(
+  featureDependenciesPath,
+).repairs;
 const decisions = readFileSync(decisionsPath, "utf8")
   .split(/\r?\n/)
   .filter(Boolean)
@@ -173,7 +184,10 @@ const releaseById = new Map(
   releasePlan.map((assignment) => [assignment.requirementId, assignment]),
 );
 const requirements: SourceRequirement[] = [
-  ...parseFeatureInventory(readFileSync(inventoryPath, "utf8")),
+  ...applyFeatureDependencies(
+    parseFeatureInventory(readFileSync(inventoryPath, "utf8")),
+    featureDependencies,
+  ),
   ...parseRuntimeGate(readFileSync(stampPath, "utf8")),
 ]
   .map((row) => ({
