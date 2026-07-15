@@ -1,7 +1,25 @@
 #!/usr/bin/env node
-import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { createHash, randomUUID } from "node:crypto";
+import {
+  closeSync,
+  existsSync,
+  fsyncSync,
+  lstatSync,
+  openSync,
+  readFileSync,
+  realpathSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import {
+  basename,
+  dirname,
+  isAbsolute,
+  relative,
+  resolve,
+  sep,
+} from "node:path";
 import {
   applyFeatureDependencies,
   type FeatureDependencyRepair,
@@ -83,6 +101,30 @@ const DISPOSITIONS = new Set<Disposition>([
   "retired_source",
 ]);
 
+const ARGUMENTS = new Set([
+  "--root",
+  "--inventory",
+  "--dispositions",
+  "--feature-dependencies",
+  "--runtime-dependencies",
+  "--release-plan",
+  "--linear-project-scope",
+  "--snapshot",
+  "--out",
+  "--allow-outside-root",
+]);
+
+const PIPELINE_TYPES = new Set(["continuous", "scheduled"]);
+const STAGE_TYPES = new Set(["planned", "started", "completed", "canceled"]);
+const ISSUE_STATE_TYPES = new Set([
+  "triage",
+  "backlog",
+  "unstarted",
+  "started",
+  "completed",
+  "canceled",
+]);
+
 const compare = (left: string, right: string): number =>
   left.localeCompare(right, undefined, { numeric: true });
 
@@ -91,13 +133,49 @@ function argumentsByName(): Map<string, string> {
   for (let index = 2; index < process.argv.length; index += 2) {
     const name = process.argv[index];
     const value = process.argv[index + 1];
-    if (!name?.startsWith("--") || !value) {
+    if (!name?.startsWith("--")) {
       throw new Error(`Invalid argument near ${name ?? "end"}`);
+    }
+    if (!ARGUMENTS.has(name)) throw new Error(`Unknown argument ${name}`);
+    if (!value || value.startsWith("--")) {
+      throw new Error(`Missing value for ${name}`);
     }
     if (values.has(name)) throw new Error(`Duplicate argument ${name}`);
     values.set(name, value);
   }
   return values;
+}
+
+function outputIdentity(path: string): string {
+  const parent = realpathSync(dirname(path));
+  return resolve(parent, basename(path));
+}
+
+function inside(root: string, path: string): boolean {
+  const difference = relative(root, path);
+  return difference === "" ||
+    (difference !== ".." &&
+      !difference.startsWith(`..${sep}`) &&
+      !isAbsolute(difference));
+}
+
+function atomicWrite(path: string, contents: string): void {
+  const temporary = resolve(
+    dirname(path),
+    `.${basename(path)}.tmp-${process.pid}-${randomUUID()}`,
+  );
+  let descriptor: number | null = null;
+  try {
+    descriptor = openSync(temporary, "wx", 0o600);
+    writeFileSync(descriptor, contents);
+    fsyncSync(descriptor);
+    closeSync(descriptor);
+    descriptor = null;
+    renameSync(temporary, path);
+  } finally {
+    if (descriptor !== null) closeSync(descriptor);
+    if (existsSync(temporary)) unlinkSync(temporary);
+  }
 }
 
 function unique(values: readonly string[], label: string): string[] {
@@ -138,11 +216,25 @@ function assertCompleteFingerprint(value: unknown): asserts value is LinearFinge
       throw new Error(`Complete Linear fingerprint requires ${key}`);
     }
   }
-  for (const key of ["projects", "projectMilestones"] as const) {
+  for (const key of [
+    "issues",
+    "releasePipelines",
+    "releases",
+    "projects",
+    "projectMilestones",
+  ] as const) {
     if (!candidate[key]?.length) {
       throw new Error(`Complete Linear fingerprint requires non-empty ${key}`);
     }
   }
+}
+
+function validText(value: unknown): value is string {
+  return typeof value === "string" && Boolean(value.trim());
+}
+
+function validDate(value: unknown): value is string {
+  return validText(value) && !Number.isNaN(Date.parse(value));
 }
 
 function canonicalRelation(value: string): [string, string, string] {
@@ -218,7 +310,24 @@ const paths = {
 };
 const outArg = argv.get("--out");
 if (!outArg) throw new Error("--out is required");
-const outPath = resolve(root, outArg);
+const allowOutsideRoot = argv.get("--allow-outside-root");
+if (allowOutsideRoot !== undefined && allowOutsideRoot !== "true") {
+  throw new Error("--allow-outside-root requires true");
+}
+const requestedOutPath = resolve(root, outArg);
+if (existsSync(requestedOutPath) && lstatSync(requestedOutPath).isSymbolicLink()) {
+  throw new Error("Output path cannot be a symlink");
+}
+const outPath = outputIdentity(requestedOutPath);
+const rootIdentity = realpathSync(root);
+if (allowOutsideRoot !== "true" && !inside(rootIdentity, outPath)) {
+  throw new Error("Output path must remain inside root");
+}
+for (const [name, inputPath] of Object.entries(paths)) {
+  if (realpathSync(inputPath) === outPath) {
+    throw new Error(`Output path equals input ${name}`);
+  }
+}
 
 const raw = {
   dispositions: readFileSync(paths.dispositions, "utf8"),
@@ -411,14 +520,110 @@ const projectScope = parseJson<LinearProjectScope>(
   raw.linearProjectScope,
   "Linear project scope",
 );
+const pipelineById = new Map<
+  string,
+  LinearFingerprint["releasePipelines"][number]
+>();
+const stageById = new Map<string, { pipelineId: string; type: string }>();
+for (const pipeline of snapshot.linearFingerprint.releasePipelines) {
+  if (
+    !validText(pipeline.id) ||
+    !validText(pipeline.name) ||
+    !validDate(pipeline.updatedAt) ||
+    !PIPELINE_TYPES.has(pipeline.type) ||
+    typeof pipeline.isProduction !== "boolean" ||
+    pipelineById.has(pipeline.id)
+  ) {
+    throw new Error(`Linear release pipeline ${String(pipeline.id)} is invalid or duplicated`);
+  }
+  if (
+    !Array.isArray(pipeline.teams) ||
+    !pipeline.teams.length ||
+    pipeline.teams.some((team) => !/^[A-Z][A-Z0-9]*$/.test(team)) ||
+    new Set(pipeline.teams).size !== pipeline.teams.length
+  ) {
+    throw new Error(`Linear release pipeline ${pipeline.id} has invalid teams`);
+  }
+  if (!Array.isArray(pipeline.stages) || !pipeline.stages.length) {
+    throw new Error(`Linear release pipeline ${pipeline.id} has invalid stages`);
+  }
+  const localStageIds = new Set<string>();
+  for (const stage of pipeline.stages) {
+    if (
+      !validText(stage.id) ||
+      !validText(stage.name) ||
+      !STAGE_TYPES.has(stage.type) ||
+      localStageIds.has(stage.id) ||
+      stageById.has(stage.id)
+    ) {
+      throw new Error(`Linear release pipeline ${pipeline.id} has invalid stages`);
+    }
+    localStageIds.add(stage.id);
+    stageById.set(stage.id, { pipelineId: pipeline.id, type: stage.type });
+  }
+  pipelineById.set(pipeline.id, pipeline);
+}
+
+const releaseIdByMembership = new Map<string, string>();
+const releaseIds = new Set<string>();
+for (const release of snapshot.linearFingerprint.releases) {
+  if (
+    !validText(release.id) ||
+    !validText(release.name) ||
+    !validDate(release.updatedAt) ||
+    releaseIds.has(release.id) ||
+    (release.version !== null && !validText(release.version))
+  ) {
+    throw new Error(`Linear release ${String(release.id)} is invalid or duplicated`);
+  }
+  const pipeline = pipelineById.get(release.pipeline);
+  if (!pipeline) {
+    throw new Error(`Linear release ${release.id} references unknown pipeline ${release.pipeline}`);
+  }
+  const stage = stageById.get(release.stage);
+  if (!stage || stage.pipelineId !== pipeline.id) {
+    throw new Error(`Linear release ${release.id} references unknown stage ${release.stage}`);
+  }
+  if (stage.type !== release.stageType) {
+    throw new Error(`Linear release ${release.id} stage type differs from its pipeline stage`);
+  }
+  releaseIds.add(release.id);
+  const membership = release.version ?? release.id;
+  if (releaseIdByMembership.has(membership)) {
+    throw new Error(`Linear fingerprint has duplicate release membership ${membership}`);
+  }
+  releaseIdByMembership.set(membership, release.id);
+}
+for (const release of Object.keys(RELEASE_SEQUENCE) as ReleaseId[]) {
+  if (!releaseIdByMembership.has(release)) {
+    throw new Error(`Linear fingerprint is missing canonical release ${release}`);
+  }
+}
+
+const projectById = new Map<
+  string,
+  LinearFingerprint["projects"][number]
+>();
+for (const project of snapshot.linearFingerprint.projects) {
+  if (
+    !validText(project.id) ||
+    !validText(project.name) ||
+    !validDate(project.updatedAt) ||
+    projectById.has(project.id)
+  ) {
+    throw new Error(`Linear project ${String(project.id)} is invalid or duplicated`);
+  }
+  projectById.set(project.id, project);
+}
 const trackedProjectIds = new Set(
   assertLinearProjectScope(projectScope, snapshot.linearFingerprint.projects),
 );
-const projectById = new Map(
-  snapshot.linearFingerprint.projects.map((project) => [project.id, project]),
-);
 const milestoneIds = new Set<string>();
 const milestoneNames = new Set<string>();
+const milestoneById = new Map<
+  string,
+  LinearFingerprint["projectMilestones"][number]
+>();
 for (const milestone of snapshot.linearFingerprint.projectMilestones) {
   const project = projectById.get(milestone.projectId);
   const scopedName = `${milestone.projectId}:${milestone.name}`;
@@ -437,23 +642,176 @@ for (const milestone of snapshot.linearFingerprint.projectMilestones) {
   }
   milestoneIds.add(milestone.id);
   milestoneNames.add(scopedName);
+  milestoneById.set(milestone.id, milestone);
 }
 const liveById = new Map<string, LinearFingerprint["issues"][number]>();
 const relationsByIssue = new Map<string, Set<string>>();
+const teamIdByKey = new Map<string, string>();
+const teamKeyById = new Map<string, string>();
+const assigneeNameById = new Map<string, string>();
+const projectNameById = new Map(
+  [...projectById.values()].map((project) => [project.id, project.name]),
+);
+const milestoneIdentityById = new Map(
+  [...milestoneById.values()].map((milestone) => [
+    milestone.id,
+    `${milestone.name}\u0000${milestone.projectId}\u0000${milestone.project}`,
+  ]),
+);
 for (const issue of snapshot.linearFingerprint.issues) {
-  if (!issue.identifier?.trim() || liveById.has(issue.identifier)) {
+  if (
+    !validText(issue.identifier) ||
+    !/^[A-Z][A-Z0-9]*-\d+$/.test(issue.identifier) ||
+    liveById.has(issue.identifier)
+  ) {
     throw new Error(`Linear fingerprint has duplicate or empty issue ${issue.identifier}`);
   }
-  if (!issue.updatedAt || Number.isNaN(Date.parse(issue.updatedAt))) {
+  if (!validText(issue.title)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid title`);
+  }
+  if (!/^[a-f0-9]{64}$/.test(issue.descriptionFingerprint)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid description fingerprint`);
+  }
+  if (!validDate(issue.updatedAt)) {
     throw new Error(`Linear issue ${issue.identifier} has invalid updatedAt`);
+  }
+  if (
+    issue.estimate !== null &&
+    (typeof issue.estimate !== "number" ||
+      !Number.isFinite(issue.estimate) ||
+      issue.estimate < 0)
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid estimate`);
+  }
+  if (
+    !Number.isInteger(issue.priority) ||
+    issue.priority < 0 ||
+    issue.priority > 4
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid priority`);
+  }
+  if (!validText(issue.state)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid state`);
+  }
+  if (!validText(issue.stateType) || !ISSUE_STATE_TYPES.has(issue.stateType)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid state type`);
+  }
+  if (issue.archivedAt !== null && !validDate(issue.archivedAt)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid archivedAt`);
+  }
+  if (
+    !Array.isArray(issue.labels) ||
+    issue.labels.some((label) => !validText(label)) ||
+    new Set(issue.labels).size !== issue.labels.length
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid labels`);
+  }
+  if ((issue.assignee === null) !== (issue.assigneeId === null)) {
+    throw new Error(`Linear issue ${issue.identifier} has partial assignee identity`);
+  }
+  if (
+    issue.assignee !== null &&
+    (!validText(issue.assignee) || !validText(issue.assigneeId))
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid assignee identity`);
+  }
+  if (
+    !validText(issue.team) ||
+    !/^[A-Z][A-Z0-9]*$/.test(issue.team) ||
+    !validText(issue.teamId) ||
+    issue.identifier.split("-")[0] !== issue.team
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid team identity`);
+  }
+  if ((issue.projectId === null) !== (issue.project === null)) {
+    throw new Error(`Linear issue ${issue.identifier} has partial project identity`);
+  }
+  if (
+    issue.projectId !== null &&
+    (!validText(issue.projectId) || !validText(issue.project))
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid project identity`);
+  }
+  if ((issue.milestoneId === null) !== (issue.milestone === null)) {
+    throw new Error(`Linear issue ${issue.identifier} has partial milestone identity`);
+  }
+  if (
+    issue.milestoneId !== null &&
+    (!validText(issue.milestoneId) ||
+      !validText(issue.milestone) ||
+      issue.projectId === null ||
+      issue.project === null)
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid milestone identity`);
+  }
+  if (
+    issue.parent !== null &&
+    (!validText(issue.parent) ||
+      !/^[A-Z][A-Z0-9]*-\d+$/.test(issue.parent))
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid parent`);
+  }
+  if (issue.parent === issue.identifier) {
+    throw new Error(`Linear issue ${issue.identifier} cannot parent itself`);
+  }
+  if (!Array.isArray(issue.releases)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid releases`);
+  }
+  if (!Array.isArray(issue.relations)) {
+    throw new Error(`Linear issue ${issue.identifier} has invalid relations`);
   }
   const releases = unique(issue.releases, `Linear issue ${issue.identifier} releases`);
   const relations = unique(
     issue.relations,
     `Linear issue ${issue.identifier} relations`,
   );
+
+  const priorTeamId = teamIdByKey.get(issue.team);
+  const priorTeamKey = teamKeyById.get(issue.teamId);
+  if (
+    (priorTeamId !== undefined && priorTeamId !== issue.teamId) ||
+    (priorTeamKey !== undefined && priorTeamKey !== issue.team)
+  ) {
+    throw new Error(`Linear issue ${issue.identifier} has inconsistent team identity`);
+  }
+  teamIdByKey.set(issue.team, issue.teamId);
+  teamKeyById.set(issue.teamId, issue.team);
+  if (issue.assigneeId !== null) {
+    const priorAssignee = assigneeNameById.get(issue.assigneeId);
+    if (priorAssignee !== undefined && priorAssignee !== issue.assignee) {
+      throw new Error(`Linear issue ${issue.identifier} has inconsistent assignee identity`);
+    }
+    assigneeNameById.set(issue.assigneeId, issue.assignee!);
+  }
+  if (issue.projectId !== null) {
+    const priorProject = projectNameById.get(issue.projectId);
+    if (priorProject !== undefined && priorProject !== issue.project) {
+      throw new Error(`Linear issue ${issue.identifier} has inconsistent project identity`);
+    }
+    projectNameById.set(issue.projectId, issue.project!);
+  }
+  if (issue.milestoneId !== null) {
+    const identity = `${issue.milestone}\u0000${issue.projectId}\u0000${issue.project}`;
+    const priorMilestone = milestoneIdentityById.get(issue.milestoneId);
+    if (priorMilestone !== undefined && priorMilestone !== identity) {
+      throw new Error(`Linear issue ${issue.identifier} has inconsistent milestone identity`);
+    }
+    milestoneIdentityById.set(issue.milestoneId, identity);
+  }
   liveById.set(issue.identifier, { ...issue, releases, relations });
   relationsByIssue.set(issue.identifier, new Set(relations));
+}
+for (const issue of liveById.values()) {
+  if (issue.parent !== null && !liveById.has(issue.parent)) {
+    throw new Error(`Linear issue ${issue.identifier} has uncaptured parent ${issue.parent}`);
+  }
+  for (const membership of issue.releases) {
+    if (!releaseIdByMembership.has(membership)) {
+      throw new Error(
+        `Linear issue ${issue.identifier} references uncaptured release ${membership}`,
+      );
+    }
+  }
 }
 const allRelations = new Set(
   [...relationsByIssue.values()].flatMap((relations) => [...relations]),
@@ -468,29 +826,6 @@ for (const relation of [...allRelations].sort(compare)) {
     !relationsByIssue.get(right)!.has(relation)
   ) {
     throw new Error(`Relation ${relation} is not present on both endpoints`);
-  }
-}
-
-const releaseIdByMembership = new Map<string, string>();
-const releaseIds = new Set<string>();
-for (const release of snapshot.linearFingerprint.releases) {
-  if (!release.id?.trim() || releaseIds.has(release.id)) {
-    throw new Error(`Linear fingerprint has duplicate or empty release ${release.id}`);
-  }
-  releaseIds.add(release.id);
-  const membership = release.version ?? release.id;
-  if (releaseIdByMembership.has(membership)) {
-    throw new Error(`Linear fingerprint has duplicate release membership ${membership}`);
-  }
-  releaseIdByMembership.set(membership, release.id);
-}
-for (const issue of liveById.values()) {
-  for (const membership of issue.releases) {
-    if (!releaseIdByMembership.has(membership)) {
-      throw new Error(
-        `Linear issue ${issue.identifier} references uncaptured release ${membership}`,
-      );
-    }
   }
 }
 
@@ -515,11 +850,36 @@ for (const requirementId of [...expectedSourceIds].sort(compare)) {
     throw new Error(`${kind} source ${requirementId} has no Linear mapping`);
   }
   if (rows.length > 1) {
-    throw new Error(`${kind} source ${requirementId} has duplicate Linear mappings`);
+    throw new Error(
+      `${kind} source ${requirementId} has duplicate Linear mappings: ${rows
+        .map((row) => row.id)
+        .sort(compare)
+        .join(", ")}`,
+    );
   }
   const issueId = rows[0].id;
-  if (!liveById.has(issueId)) {
+  const issue = liveById.get(issueId);
+  if (!issue) {
     throw new Error(`${kind} source ${requirementId} maps to uncaptured ${issueId}`);
+  }
+  if (issue.stateType === "canceled") {
+    throw new Error(`${kind} source ${requirementId} maps to canceled issue ${issueId}`);
+  }
+  if (issue.archivedAt !== null) {
+    throw new Error(`${kind} source ${requirementId} maps to archived issue ${issueId}`);
+  }
+  if (!issue.projectId || !trackedProjectIds.has(issue.projectId)) {
+    throw new Error(
+      `${kind} source ${requirementId} maps outside canonical project scope`,
+    );
+  }
+  const milestone = issue.milestoneId
+    ? milestoneById.get(issue.milestoneId)
+    : undefined;
+  if (!milestone || milestone.projectId !== issue.projectId) {
+    throw new Error(
+      `${kind} source ${requirementId} maps outside canonical milestone inventory`,
+    );
   }
   const priorSource = sourceByIssue.get(issueId);
   if (priorSource) {
@@ -705,5 +1065,5 @@ const plan = {
   },
 };
 
-writeFileSync(outPath, `${JSON.stringify(plan, null, 2)}\n`);
+atomicWrite(outPath, `${JSON.stringify(plan, null, 2)}\n`);
 process.stdout.write(`${JSON.stringify({ out: outPath })}\n`);

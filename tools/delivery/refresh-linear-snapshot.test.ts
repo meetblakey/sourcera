@@ -182,7 +182,16 @@ function refreshFixture(
           ? milestoneIdByProjectAndName.get(`${projectId}:${milestoneName}`) ??
             null
           : null;
+        const assignee = typeof issue.assignee === "string"
+          ? issue.assignee
+          : null;
+        const teamKey = /^([A-Z][A-Z0-9]*)-\d+$/.exec(String(issue.id))?.[1] ??
+          "PLA";
         return {
+          priority: { value: 2, name: "High" },
+          archivedAt: null,
+          assigneeId: assignee ? "person-default" : null,
+          teamId: `team-${teamKey.toLowerCase()}`,
           relations: {
             blocks: [],
             blockedBy: [],
@@ -247,6 +256,30 @@ test("refresh fails closed without live project or milestone inventories", () =>
   });
   assert.equal(missingMilestones.result.status, 1);
   assert.match(missingMilestones.result.stderr, /milestones.*required/i);
+});
+
+test("normalizes connector-omitted unassigned identity fields to null", () => {
+  const refreshed = refreshFixture([
+    {
+      id: "PLA-1",
+      title: "Unassigned issue",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      project: "Project",
+      projectMilestone: { name: "Production evidence closed" },
+      assignee: undefined,
+      assigneeId: undefined,
+    },
+  ]);
+  assert.equal(refreshed.result.status, 0, refreshed.result.stderr);
+  assert.deepEqual(
+    {
+      assignee: refreshed.updated.linearFingerprint.issues[0].assignee,
+      assigneeId: refreshed.updated.linearFingerprint.issues[0].assigneeId,
+    },
+    { assignee: null, assigneeId: null },
+  );
 });
 
 test("refresh rejects a missing or duplicated tracked project ID", () => {
@@ -425,11 +458,15 @@ test("copies the live parent and preserves planning metadata absent from connect
             description: "Authenticated session",
             updatedAt: "2026-07-15T00:00:00.000Z",
             estimate: 5,
+            priority: { value: 2, name: "High" },
+            archivedAt: null,
             status: "Backlog",
             statusType: "backlog",
             labels: [],
             assignee: "Blake Rowley",
+            assigneeId: "person-blake",
             team: "PLA",
+            teamId: "team-pla",
             projectId: "project-identity",
             project: "Identity",
             projectMilestone: {
@@ -451,11 +488,15 @@ test("copies the live parent and preserves planning metadata absent from connect
             description: "Legacy issue remains fingerprinted",
             updatedAt: "2026-07-15T00:00:00.000Z",
             estimate: 1,
+            priority: { value: 0, name: "No priority" },
+            archivedAt: "2026-07-15T00:00:00.000Z",
             status: "Canceled",
             statusType: "canceled",
             labels: [],
             assignee: null,
+            assigneeId: null,
             team: "LEG",
+            teamId: "team-legacy",
             projectId: "project-legacy",
             project: "P01 legacy",
             projectMilestone: {
@@ -529,6 +570,24 @@ test("copies the live parent and preserves planning metadata absent from connect
         (issue: { identifier: string }) => issue.identifier === "PLA-942",
       ).parent,
       "PLA-283",
+    );
+    assert.deepEqual(
+      (({ priority, archivedAt, assigneeId, teamId }) => ({
+        priority,
+        archivedAt,
+        assigneeId,
+        teamId,
+      }))(
+        updated.linearFingerprint.issues.find(
+          (issue: { identifier: string }) => issue.identifier === "PLA-942",
+        ),
+      ),
+      {
+        priority: 2,
+        archivedAt: null,
+        assigneeId: "person-blake",
+        teamId: "team-pla",
+      },
     );
     assert.deepEqual(updated.projects[0], {
       id: "project-identity",

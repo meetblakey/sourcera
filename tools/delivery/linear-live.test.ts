@@ -71,10 +71,12 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                   description: "B",
                   updatedAt: "2026-07-14T02:00:00.000Z",
                   estimate: 2,
+                  priority: 3,
+                  archivedAt: null,
                   state: { name: "In Progress", type: "started" },
                   labels: completeConnection([{ name: "platform" }]),
                   assignee: null,
-                  team: { key: "PLA" },
+                  team: { id: "team-pla", key: "PLA" },
                   project: { name: "Project" },
                   projectMilestone: null,
                   parent: null,
@@ -99,10 +101,12 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 description: "A",
                 updatedAt: "2026-07-14T01:00:00.000Z",
                 estimate: 1,
+                priority: 2,
+                archivedAt: null,
                 state: { name: "Done", type: "completed" },
                 labels: completeConnection([]),
-                assignee: { name: "Blake Rowley" },
-                team: { key: "PLA" },
+                assignee: { id: "person-blake", name: "Blake Rowley" },
+                team: { id: "team-pla", key: "PLA" },
                 project: { name: "Project" },
                 projectMilestone: { name: "Milestone" },
                 parent: { identifier: "PLA-0" },
@@ -139,13 +143,15 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 description: "C",
                 updatedAt: "2026-07-14T03:00:00.000Z",
                 estimate: 3,
+                priority: 1,
+                archivedAt: "2026-07-15T00:00:00.000Z",
                 state: { name: "Backlog", type: "backlog" },
                 labels: completeConnection([
                   { name: "buyer" },
                   { name: "feature" },
                 ]),
-                assignee: { name: "Reviewer" },
-                team: { key: "PLA" },
+                assignee: { id: "person-reviewer", name: "Reviewer" },
+                team: { id: "team-pla", key: "PLA" },
                 project: { name: "Project" },
                 projectMilestone: { name: "Milestone" },
                 parent: { identifier: "PLA-0" },
@@ -220,6 +226,24 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
     "related:PLA-1:PLA-3",
   ]);
   assert.equal(fingerprint.issues[0].descriptionFingerprint.length, 64);
+  assert.deepEqual(
+    {
+      priority: fingerprint.issues[0].priority,
+      archivedAt: fingerprint.issues[0].archivedAt,
+      assigneeId: fingerprint.issues[0].assigneeId,
+      teamId: fingerprint.issues[0].teamId,
+    },
+    {
+      priority: 2,
+      archivedAt: null,
+      assigneeId: "person-blake",
+      teamId: "team-pla",
+    },
+  );
+  const issueQuery = requested.find((query) => query.includes("DeliveryIssues"))!;
+  for (const field of ["priority", "archivedAt", "assignee { id name }", "team { id key }"]) {
+    assert.match(issueQuery, new RegExp(field.replace(/[{}]/g, "\\$&")));
+  }
   assert.equal(requested.every((query) => query.includes("first: 50")), true);
   assert.deepEqual(fingerprintDiff(fingerprint, fingerprint), []);
   assert.match(

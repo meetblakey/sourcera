@@ -17,13 +17,15 @@ const ISSUE_QUERY = `
         description
         updatedAt
         estimate
+        priority
+        archivedAt
         state { name type }
         labels(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { name }
           pageInfo { hasNextPage }
         }
-        assignee { name }
-        team { key }
+        assignee { id name }
+        team { id key }
         project { id name }
         projectMilestone { id name }
         parent { identifier }
@@ -128,10 +130,12 @@ interface IssueNode {
   description: string | null;
   updatedAt: string;
   estimate: number | null;
+  priority: number;
+  archivedAt: string | null;
   state: { name: string; type: string };
   labels: NestedConnection<{ name: string }>;
-  assignee: { name: string } | null;
-  team: { key: string };
+  assignee: { id: string; name: string } | null;
+  team: { id: string; key: string };
   project: { id: string; name: string } | null;
   projectMilestone: { id: string; name: string } | null;
   parent: { identifier: string } | null;
@@ -184,11 +188,15 @@ export interface LinearFingerprint {
     descriptionFingerprint: string;
     updatedAt: string;
     estimate: number | null;
+    priority: number;
+    archivedAt: string | null;
     state: string;
     stateType: string;
     labels: string[];
     assignee: string | null;
+    assigneeId: string | null;
     team: string;
+    teamId: string;
     projectId: string | null;
     project: string | null;
     milestoneId: string | null;
@@ -463,11 +471,15 @@ export async function fetchLinearFingerprint(
         descriptionFingerprint: descriptionFingerprint(issue.description),
         updatedAt: issue.updatedAt,
         estimate: issue.estimate,
+        priority: issue.priority,
+        archivedAt: issue.archivedAt,
         state: issue.state.name,
         stateType: issue.state.type,
         labels: issue.labels.nodes.map((label) => label.name).sort(),
         assignee: issue.assignee?.name ?? null,
+        assigneeId: issue.assignee?.id ?? null,
         team: issue.team.key,
+        teamId: issue.team.id,
         projectId: issue.project?.id ?? null,
         project: issue.project?.name ?? null,
         milestoneId: issue.projectMilestone?.id ?? null,

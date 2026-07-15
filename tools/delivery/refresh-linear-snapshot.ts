@@ -25,12 +25,16 @@ interface LiveIssue {
   description?: string | null;
   updatedAt: string;
   estimate?: { value?: number } | number | null;
+  priority?: { value?: number } | number | null;
+  archivedAt?: string | null;
   status: string;
   statusType: string;
   labels?: string[];
   assignee?: string | null;
+  assigneeId?: string | null;
   team?: string;
   teamKey?: string;
+  teamId?: string;
   projectId?: string | null;
   project?: string | null;
   projectMilestone?: { id: string; name: string } | null;
@@ -58,6 +62,11 @@ interface LiveProjectMilestone {
 }
 
 function estimateValue(value: LiveIssue["estimate"]): number | null {
+  if (typeof value === "number") return value;
+  return value?.value ?? null;
+}
+
+function priorityValue(value: LiveIssue["priority"]): number | null {
   if (typeof value === "number") return value;
   return value?.value ?? null;
 }
@@ -213,6 +222,29 @@ if (
   );
 }
 for (const issue of live.issues) {
+  const priority = priorityValue(issue.priority);
+  if (!Number.isInteger(priority) || priority! < 0 || priority! > 4) {
+    throw new Error(`Linear issue ${issue.id} priority is invalid`);
+  }
+  if (
+    issue.archivedAt === undefined ||
+    (issue.archivedAt !== null && Number.isNaN(Date.parse(issue.archivedAt)))
+  ) {
+    throw new Error(`Linear issue ${issue.id} archivedAt is invalid`);
+  }
+  const assignee = issue.assignee ?? null;
+  const assigneeId = issue.assigneeId ?? null;
+  if (
+    (assignee === null) !== (assigneeId === null) ||
+    (assignee !== null && (!assignee.trim() || !assigneeId!.trim()))
+  ) {
+    throw new Error(`Linear issue ${issue.id} assignee identity is incomplete`);
+  }
+  issue.assignee = assignee;
+  issue.assigneeId = assigneeId;
+  if (!issue.teamId?.trim()) {
+    throw new Error(`Linear issue ${issue.id} team identity is incomplete`);
+  }
   if (Boolean(issue.projectId) !== Boolean(issue.project)) {
     throw new Error(`Linear issue ${issue.id} has partial project identity`);
   }
@@ -404,11 +436,15 @@ snapshot.linearFingerprint = {
         descriptionFingerprint: descriptionFingerprint(issue.description),
         updatedAt: issue.updatedAt,
         estimate: estimateValue(issue.estimate),
+        priority: priorityValue(issue.priority),
+        archivedAt: issue.archivedAt ?? null,
         state: issue.status,
         stateType: issue.statusType,
         labels: [...(issue.labels ?? [])].sort(),
         assignee: issue.assignee ?? null,
+        assigneeId: issue.assigneeId ?? null,
         team: liveTeamKey(issue),
+        teamId: issue.teamId!,
         projectId: issue.projectId ?? null,
         project: issue.project ?? null,
         milestoneId: issue.projectMilestone?.id ?? null,

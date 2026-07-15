@@ -16,13 +16,17 @@ function issue(identifier: string, release: ReleaseId): Issue {
     descriptionFingerprint: `${identifier}-description-hash`,
     updatedAt: "2026-07-15T10:00:00.000Z",
     estimate: identifier === "PLA-1" ? 5 : null,
+    priority: 2,
     state: "Backlog",
     stateType: "backlog",
+    archivedAt: null,
     labels: identifier === "PLA-1"
       ? ["codex-ready", "feature"]
       : ["feature", "seller"],
     assignee: identifier === "PLA-1" ? "Owner" : null,
+    assigneeId: identifier === "PLA-1" ? "person-owner" : null,
     team: "PLA",
+    teamId: "team-pla",
     projectId: "project-1",
     project: "Sourcera",
     milestoneId: "milestone-1",
@@ -165,13 +169,17 @@ test("rejects every protected issue-field mutation with stable codes", () => {
   changed.title = "Changed title";
   changed.descriptionFingerprint = "changed-description-hash";
   changed.estimate = null;
+  changed.priority = 4;
   changed.assignee = "Different owner";
+  changed.assigneeId = "person-different";
   changed.team = "OTHER";
+  changed.teamId = "team-other";
   changed.project = "Different project";
   changed.parent = null;
   changed.relations = [];
   changed.state = "In Progress";
   changed.stateType = "started";
+  changed.archivedAt = "2026-07-15T10:30:00.000Z";
   changed.labels = ["codex-ready", "feature", "new-label"];
   changed.releases = ["R0"];
   changed.milestone = "Arbitrary milestone";
@@ -182,13 +190,17 @@ test("rejects every protected issue-field mutation with stable codes", () => {
       "linear_sync_title_changed",
       "linear_sync_description_changed",
       "linear_sync_estimate_changed",
+      "linear_sync_priority_changed",
       "linear_sync_owner_changed",
+      "linear_sync_owner_identity_changed",
       "linear_sync_team_changed",
+      "linear_sync_team_identity_changed",
       "linear_sync_project_changed",
       "linear_sync_parent_changed",
       "linear_sync_relations_changed",
       "linear_sync_state_changed",
       "linear_sync_state_type_changed",
+      "linear_sync_archived_changed",
       "linear_sync_labels_changed",
       "linear_sync_milestone_changed",
     ]),

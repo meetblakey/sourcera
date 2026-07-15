@@ -224,11 +224,27 @@ function compareIssue(
       code: "linear_sync_estimate_changed",
       label: "estimate",
     },
+    priority: {
+      code: "linear_sync_priority_changed",
+      label: "priority",
+    },
+    archivedAt: {
+      code: "linear_sync_archived_changed",
+      label: "archive identity",
+    },
     assignee: {
       code: "linear_sync_owner_changed",
       label: "owner",
     },
+    assigneeId: {
+      code: "linear_sync_owner_identity_changed",
+      label: "owner identity",
+    },
     team: { code: "linear_sync_team_changed", label: "team" },
+    teamId: {
+      code: "linear_sync_team_identity_changed",
+      label: "team identity",
+    },
     projectId: {
       code: "linear_sync_project_changed",
       label: "project identity",
