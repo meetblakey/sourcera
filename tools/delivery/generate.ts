@@ -8,6 +8,10 @@ import {
 import { resolve } from "node:path";
 import { driftFindings } from "./lib/drift.js";
 import { validateGraph } from "./lib/graph.js";
+import {
+  issueFamilyFindings,
+  issueFamilyForSource,
+} from "./lib/issue-family.js";
 import type {
   Disposition,
   Finding,
@@ -376,6 +380,7 @@ const riskFindings: Finding[] = risks
     code: "risk_incomplete",
     message: `${risk.id || "unknown risk"} is incomplete`,
   }));
+const familyFindings = issueFamilyFindings(issues);
 const releaseFindings = validateReleases(releases);
 const graphFindings = validateGraph(manifest, releases);
 const readiness = issues
@@ -391,7 +396,7 @@ const readyGraphFindings = graphFindings.filter(
     ),
 );
 const tracedIssues = issues.filter(
-  (issue) => issue.kind === "executable" || issue.kind === "proof_only",
+  (issue) => Boolean(issue.sourceId) || issue.kind === "executable",
 );
 const drift = driftFindings(manifest, tracedIssues);
 const releaseAssignment: Finding[] = manifest
@@ -416,6 +421,7 @@ const allFindings = [
   ...duplicateIssueSources,
   ...decisionFindings,
   ...riskFindings,
+  ...familyFindings,
   ...releaseFindings,
   ...graphFindings,
   ...readiness,
@@ -437,7 +443,8 @@ const scorecard = calculateScorecard({
     graphFindings.length === 0,
     drift.length +
         releasePlanFindings.length +
-        duplicateIssueSources.length ===
+        duplicateIssueSources.length +
+        familyFindings.length ===
       0,
     readiness.length + readyGraphFindings.length === 0,
   ],
@@ -480,6 +487,8 @@ const traceability = manifest.map((row) => {
   const issue = row.issueId
     ? issues.find((candidate) => candidate.id === row.issueId)
     : undefined;
+  const family = issueFamilyForSource(issues, row.requirementId);
+  const executableIssues = family?.executableIssues ?? [];
   return {
     requirementId: row.requirementId,
     source: {
@@ -498,6 +507,18 @@ const traceability = manifest.map((row) => {
     rollback: issue?.rollback ?? null,
     telemetry: issue?.telemetry ?? null,
     proof: issue?.proof ?? null,
+    executableIssueIds: executableIssues.map((candidate) => candidate.id),
+    executableIssues: executableIssues.map((candidate) => ({
+      issueId: candidate.id,
+      milestone: candidate.milestone,
+      dependencies: candidate.dependencies,
+      paths: candidate.paths,
+      tests: candidate.tests,
+      rollout: candidate.rollout,
+      rollback: candidate.rollback,
+      telemetry: candidate.telemetry,
+      proof: candidate.proof,
+    })),
   };
 });
 const edges = manifest
@@ -540,6 +561,7 @@ const reports = {
       ...duplicateIssueSources,
       ...decisionFindings,
       ...riskFindings,
+      ...familyFindings,
       ...drift,
       ...releaseAssignment,
     ]),

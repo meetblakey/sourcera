@@ -114,6 +114,7 @@ test("verifies regenerated reports and rejects a hand edit", () => {
         issues: [
           {
             id: "PLA-1",
+            parentId: null,
             sourceId: "F-001",
             title: "A",
             kind: "executable",
