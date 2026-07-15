@@ -27,11 +27,13 @@ const SAFE_PROCESS_ENVIRONMENT_KEYS = [
 export type VercelProductionApplication =
   (typeof EXPECTED_APPLICATIONS)[number];
 
+export type ReleaseProcessEnvironment = Record<string, string | undefined>;
+
 export interface CommandInvocation {
   arguments: string[];
   command: string;
   cwd: string;
-  environment?: NodeJS.ProcessEnv;
+  environment?: ReleaseProcessEnvironment;
 }
 
 export interface CommandResult {
@@ -109,7 +111,7 @@ export interface VercelProductionStageReceipt {
 export interface StageVercelProductionReleaseOptions {
   approvedSha: string;
   config: unknown;
-  environment?: NodeJS.ProcessEnv;
+  environment?: ReleaseProcessEnvironment;
   now?: () => Date;
   releaseRunId: string;
   repositoryRoot: string;
@@ -149,10 +151,10 @@ function canonicalizePotentialPath(value: string): string {
 }
 
 function privateProcessEnvironment(
-  sourceEnvironment: NodeJS.ProcessEnv,
+  sourceEnvironment: ReleaseProcessEnvironment,
   privateHome: string,
-): NodeJS.ProcessEnv {
-  const environment: NodeJS.ProcessEnv = {};
+): ReleaseProcessEnvironment {
+  const environment: ReleaseProcessEnvironment = {};
   for (const key of SAFE_PROCESS_ENVIRONMENT_KEYS) {
     if (sourceEnvironment[key] !== undefined) {
       environment[key] = sourceEnvironment[key];
@@ -167,9 +169,9 @@ function privateProcessEnvironment(
 }
 
 export function createVercelProductionGitEnvironment(
-  sourceEnvironment: NodeJS.ProcessEnv,
+  sourceEnvironment: ReleaseProcessEnvironment,
   privateHome: string,
-): NodeJS.ProcessEnv {
+): ReleaseProcessEnvironment {
   return privateProcessEnvironment(
     sourceEnvironment,
     canonicalizePotentialPath(privateHome),
@@ -177,9 +179,9 @@ export function createVercelProductionGitEnvironment(
 }
 
 function createVercelProductionCommandEnvironment(
-  sourceEnvironment: NodeJS.ProcessEnv,
+  sourceEnvironment: ReleaseProcessEnvironment,
   privateHome: string,
-): NodeJS.ProcessEnv {
+): ReleaseProcessEnvironment {
   const token = sourceEnvironment.VERCEL_TOKEN;
   if (typeof token !== "string" || !token || token !== token.trim()) {
     throw new Error("VERCEL_TOKEN is required for production staging");
@@ -427,7 +429,7 @@ function requirePrimaryCleanCheckout(
   run: CommandRunner,
   repositoryRoot: string,
   approvedSha: string,
-  environment: NodeJS.ProcessEnv,
+  environment: ReleaseProcessEnvironment,
 ) {
   const git = (arguments_: string[], message: string) =>
     runChecked(
@@ -497,7 +499,7 @@ function requireDetachedCleanCheckout(
   run: CommandRunner,
   worktreeRoot: string,
   approvedSha: string,
-  environment: NodeJS.ProcessEnv,
+  environment: ReleaseProcessEnvironment,
 ) {
   const git = (arguments_: string[], message: string) =>
     runChecked(
@@ -654,7 +656,7 @@ function capturePredecessor(
   run: CommandRunner,
   target: VercelProductionTarget,
   teamId: string,
-  environment: NodeJS.ProcessEnv,
+  environment: ReleaseProcessEnvironment,
   worktreeRoot: string,
 ): PredecessorReceipt {
   const output = runChecked(

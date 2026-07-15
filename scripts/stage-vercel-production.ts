@@ -16,6 +16,7 @@ import productionTargets from "../config/production-targets.json";
 import {
   type CommandInvocation,
   type CommandResult,
+  type ReleaseProcessEnvironment,
   type VercelProductionStageReceipt,
   createVercelProductionGitEnvironment,
   stageVercelProductionRelease,
@@ -29,7 +30,7 @@ const repositoryRoot = path.resolve(
 type VercelStagingSignal = "SIGHUP" | "SIGINT" | "SIGTERM";
 
 interface CleanupVercelStagingWorktreeOptions {
-  environment?: NodeJS.ProcessEnv;
+  environment?: ReleaseProcessEnvironment;
   removeDirectory?: (directory: string) => void;
   repositoryRoot: string;
   run?: (invocation: CommandInvocation) => CommandResult;
@@ -141,7 +142,7 @@ function execute(invocation: CommandInvocation): CommandResult {
   const result = spawnSync(invocation.command, invocation.arguments, {
     cwd: invocation.cwd,
     encoding: "utf8",
-    env: invocation.environment,
+    env: invocation.environment as NodeJS.ProcessEnv | undefined,
     maxBuffer: 16 * 1024 * 1024,
   });
   return {
