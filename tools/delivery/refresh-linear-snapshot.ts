@@ -79,6 +79,7 @@ snapshot.issues = snapshot.issues.map((issue: Record<string, any>) => {
   const sourceId = issue.sourceId as string | null;
   return {
     ...issue,
+    parentId: current.parentId ?? null,
     title: current.title,
     labels: [...(current.labels ?? [])].sort(),
     release: sourceId ? releaseBySource.get(sourceId) ?? issue.release : issue.release,
