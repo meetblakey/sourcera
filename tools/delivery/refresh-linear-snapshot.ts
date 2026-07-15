@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { descriptionFingerprint } from "./lib/fingerprint.js";
 
 interface LiveIssue {
   id: string;
@@ -22,15 +23,6 @@ interface LiveIssue {
 interface RuntimeDependency {
   requirementId: string;
   dependencies: string[];
-}
-
-function descriptionFingerprint(value: string | null | undefined): string {
-  let hash = 0x811c9dc5;
-  for (const character of value ?? "") {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, "0");
 }
 
 function estimateValue(value: LiveIssue["estimate"]): number | null {
@@ -65,6 +57,15 @@ for (const issue of snapshot.issues) {
   issueBySource.set(issue.sourceId, issue.id);
 }
 const liveById = new Map(live.issues.map((issue) => [issue.id, issue]));
+const missingTrackedIssueIds = snapshot.issues
+  .map((issue: Record<string, any>) => issue.id as string)
+  .filter((issueId: string) => !liveById.has(issueId))
+  .sort();
+if (missingTrackedIssueIds.length) {
+  throw new Error(
+    `Tracked Linear issues ${missingTrackedIssueIds.join(", ")} are missing from live input`,
+  );
+}
 const releaseByIssue = new Map(
   live.issues.map((issue) => {
     const releases = (issue.releases ?? [])

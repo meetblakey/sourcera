@@ -18,17 +18,22 @@ function refreshFixture(
     repositoryRelease?: string;
     priorFingerprintReleases?: string[];
     priorRelations?: string[];
+    missingTrackedIssueIds?: string[];
   } = {},
 ) {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
   const delivery = join(root, "delivery");
   mkdirSync(delivery);
   const snapshotPath = join(delivery, "linear-snapshot.json");
-  const snapshotIssues = liveIssues.map((issue, index) => ({
-    id: issue.id,
+  const trackedIssueIds = [
+    ...liveIssues.map((issue) => issue.id),
+    ...(options.missingTrackedIssueIds ?? []),
+  ];
+  const snapshotIssues = trackedIssueIds.map((id, index) => ({
+    id,
     parentId: null,
     sourceId: `F-${String(index + 1).padStart(3, "0")}`,
-    title: `Prior ${issue.id}`,
+    title: `Prior ${id}`,
     kind: "executable",
     labels: ["prior"],
     release: options.priorRelease ?? "R2",
@@ -47,35 +52,33 @@ function refreshFixture(
     sourceSection: "§1",
     outcome: "Outcome",
   }));
-  writeFileSync(
-    snapshotPath,
-    JSON.stringify({
-      generatedAt: "2026-07-14T00:00:00.000Z",
-      issues: snapshotIssues,
+  const original = JSON.stringify({
+    generatedAt: "2026-07-14T00:00:00.000Z",
+    issues: snapshotIssues,
+    releases: [],
+    linearFingerprint: {
+      issues: trackedIssueIds.map((id) => ({
+        identifier: id,
+        title: `Prior ${id}`,
+        descriptionFingerprint: "00000000",
+        updatedAt: "2026-07-14T00:00:00.000Z",
+        estimate: 1,
+        state: "Backlog",
+        stateType: "backlog",
+        labels: ["prior"],
+        assignee: "Prior owner",
+        team: "PLA",
+        project: "Prior project",
+        milestone: "Prior milestone",
+        parent: null,
+        releases: options.priorFingerprintReleases ?? ["R3"],
+        relations: options.priorRelations ?? [],
+      })),
+      releasePipelines: [],
       releases: [],
-      linearFingerprint: {
-        issues: liveIssues.map((issue) => ({
-          identifier: issue.id,
-          title: `Prior ${issue.id}`,
-          descriptionFingerprint: "00000000",
-          updatedAt: "2026-07-14T00:00:00.000Z",
-          estimate: 1,
-          state: "Backlog",
-          stateType: "backlog",
-          labels: ["prior"],
-          assignee: "Prior owner",
-          team: "PLA",
-          project: "Prior project",
-          milestone: "Prior milestone",
-          parent: null,
-          releases: options.priorFingerprintReleases ?? ["R3"],
-          relations: options.priorRelations ?? [],
-        })),
-        releasePipelines: [],
-        releases: [],
-      },
-    }),
-  );
+    },
+  });
+  writeFileSync(snapshotPath, original);
   writeFileSync(
     join(delivery, "release-plan.json"),
     JSON.stringify({
@@ -109,11 +112,12 @@ function refreshFixture(
     ],
     { cwd: process.cwd(), encoding: "utf8" },
   );
+  const contents = readFileSync(snapshotPath, "utf8");
   const updated = result.status === 0
-    ? JSON.parse(readFileSync(snapshotPath, "utf8"))
+    ? JSON.parse(contents)
     : null;
   rmSync(root, { recursive: true, force: true });
-  return { result, updated };
+  return { result, updated, original, contents };
 }
 
 test("copies the live parent relation into issue rows and fingerprints", () => {
@@ -301,6 +305,34 @@ test("refresh rejects multiple current R0-R5 releases", () => {
   assert.match(result.stderr, /multiple R0-R5 releases.*PLA-1/i);
 });
 
+test("refresh rejects a missing tracked issue before writing", () => {
+  const { result, original, contents } = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "Current title",
+        description: "Description",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        estimate: 3,
+        status: "Backlog",
+        statusType: "backlog",
+        labels: [],
+        assignee: null,
+        team: "PLA",
+        project: null,
+        projectMilestone: null,
+        parentId: null,
+        releases: [{ version: "R0" }],
+      },
+    ],
+    { missingTrackedIssueIds: ["PLA-2"] },
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /tracked.*PLA-2.*missing.*live/i);
+  assert.equal(contents, original);
+});
+
 test("refresh fingerprints the complete description deterministically", () => {
   const run = (description: string) => refreshFixture([
     {
@@ -339,10 +371,14 @@ test("refresh fingerprints the complete description deterministically", () => {
   const first = run(`${"a".repeat(400)}x`);
   const second = run(`${"a".repeat(400)}y`);
   const repeated = run(`${"a".repeat(400)}x`);
+  const grinning = run("😀");
+  const beaming = run("😁");
 
   assert.equal(first.result.status, 0, first.result.stderr);
   assert.equal(second.result.status, 0, second.result.stderr);
   assert.equal(repeated.result.status, 0, repeated.result.stderr);
+  assert.equal(grinning.result.status, 0, grinning.result.stderr);
+  assert.equal(beaming.result.status, 0, beaming.result.stderr);
   assert.deepEqual(
     first.updated.linearFingerprint.issues.map(
       (issue: Record<string, unknown>) => issue.identifier,
@@ -357,5 +393,9 @@ test("refresh fingerprints the complete description deterministically", () => {
   assert.equal(
     first.updated.linearFingerprint.issues[1].descriptionFingerprint,
     repeated.updated.linearFingerprint.issues[1].descriptionFingerprint,
+  );
+  assert.notEqual(
+    grinning.updated.linearFingerprint.issues[1].descriptionFingerprint,
+    beaming.updated.linearFingerprint.issues[1].descriptionFingerprint,
   );
 });

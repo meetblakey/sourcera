@@ -1,4 +1,7 @@
+import { descriptionFingerprint } from "./fingerprint.js";
+
 const ENDPOINT = "https://api.linear.app/graphql";
+const ISSUE_NESTED_LIMIT = 250;
 
 const ISSUE_QUERY = `
   query DeliveryIssues($after: String) {
@@ -11,18 +14,26 @@ const ISSUE_QUERY = `
         updatedAt
         estimate
         state { name type }
-        labels(first: 20) { nodes { name } }
+        labels(first: ${ISSUE_NESTED_LIMIT}) {
+          nodes { name }
+          pageInfo { hasNextPage }
+        }
         assignee { name }
         team { key }
         project { name }
         projectMilestone { name }
         parent { identifier }
-        releases(first: 10) { nodes { id version } }
-        relations(first: 20) {
-          nodes { type issue { identifier } relatedIssue { identifier } }
+        releases(first: ${ISSUE_NESTED_LIMIT}) {
+          nodes { id version }
+          pageInfo { hasNextPage }
         }
-        inverseRelations(first: 20) {
+        relations(first: ${ISSUE_NESTED_LIMIT}) {
           nodes { type issue { identifier } relatedIssue { identifier } }
+          pageInfo { hasNextPage }
+        }
+        inverseRelations(first: ${ISSUE_NESTED_LIMIT}) {
+          nodes { type issue { identifier } relatedIssue { identifier } }
+          pageInfo { hasNextPage }
         }
       }
       pageInfo { hasNextPage endCursor }
@@ -73,6 +84,11 @@ interface Connection<T> {
   pageInfo: PageInfo;
 }
 
+interface NestedConnection<T> {
+  nodes: T[];
+  pageInfo: Pick<PageInfo, "hasNextPage">;
+}
+
 interface IssueNode {
   id: string;
   identifier: string;
@@ -81,15 +97,15 @@ interface IssueNode {
   updatedAt: string;
   estimate: number | null;
   state: { name: string; type: string };
-  labels: { nodes: Array<{ name: string }> };
+  labels: NestedConnection<{ name: string }>;
   assignee: { name: string } | null;
   team: { key: string };
   project: { name: string } | null;
   projectMilestone: { name: string } | null;
   parent: { identifier: string } | null;
-  releases: { nodes: Array<{ id: string; version: string | null }> };
-  relations: { nodes: RelationNode[] };
-  inverseRelations: { nodes: RelationNode[] };
+  releases: NestedConnection<{ id: string; version: string | null }>;
+  relations: NestedConnection<RelationNode>;
+  inverseRelations: NestedConnection<RelationNode>;
 }
 
 interface RelationNode {
@@ -215,17 +231,23 @@ async function paginate<T>(
   return rows;
 }
 
-function descriptionFingerprint(value: string | null): string {
-  let hash = 0x811c9dc5;
-  for (const character of value ?? "") {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, "0");
-}
-
 function relationKey(relation: RelationNode): string {
   return `${relation.type}:${relation.issue.identifier}:${relation.relatedIssue.identifier}`;
+}
+
+function assertIssueConnectionsComplete(issue: IssueNode): void {
+  for (const field of [
+    "labels",
+    "releases",
+    "relations",
+    "inverseRelations",
+  ] as const) {
+    if (issue[field].pageInfo?.hasNextPage !== false) {
+      throw new Error(
+        `Linear issue ${issue.identifier} ${field} connection is truncated`,
+      );
+    }
+  }
 }
 
 export async function fetchLinearFingerprint(
@@ -243,6 +265,7 @@ export async function fetchLinearFingerprint(
     ),
     paginate<ReleaseNode>(fetcher, token, RELEASE_QUERY, "releases"),
   ]);
+  for (const issue of issueNodes) assertIssueConnectionsComplete(issue);
   return {
     issues: issueNodes
       .map((issue) => ({

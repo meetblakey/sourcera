@@ -15,6 +15,11 @@ const response = (body: unknown, status = 200) =>
     headers: { "content-type": "application/json" },
   });
 
+const completeConnection = <T>(nodes: T[]) => ({
+  nodes,
+  pageInfo: { hasNextPage: false, endCursor: null },
+});
+
 test("paginates Linear issues and sorts a stable fingerprint", async () => {
   const cursors: Array<string | null> = [];
   const requested: string[] = [];
@@ -39,15 +44,15 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                   updatedAt: "2026-07-14T02:00:00.000Z",
                   estimate: 2,
                   state: { name: "In Progress", type: "started" },
-                  labels: { nodes: [{ name: "platform" }] },
+                  labels: completeConnection([{ name: "platform" }]),
                   assignee: null,
                   team: { key: "PLA" },
                   project: { name: "Project" },
                   projectMilestone: null,
                   parent: null,
-                  releases: { nodes: [] },
-                  relations: { nodes: [] },
-                  inverseRelations: { nodes: [] },
+                  releases: completeConnection([]),
+                  relations: completeConnection([]),
+                  inverseRelations: completeConnection([]),
                 },
               ],
               pageInfo: { hasNextPage: true, endCursor: "next" },
@@ -67,13 +72,15 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 updatedAt: "2026-07-14T01:00:00.000Z",
                 estimate: 1,
                 state: { name: "Done", type: "completed" },
-                labels: { nodes: [] },
+                labels: completeConnection([]),
                 assignee: { name: "Blake Rowley" },
                 team: { key: "PLA" },
                 project: { name: "Project" },
                 projectMilestone: { name: "Milestone" },
                 parent: { identifier: "PLA-0" },
-                releases: { nodes: [{ id: "release-0", version: "R0" }] },
+                releases: completeConnection([
+                  { id: "release-0", version: "R0" },
+                ]),
                 relations: {
                   nodes: [
                     {
@@ -82,8 +89,9 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                       relatedIssue: { identifier: "PLA-2" },
                     },
                   ],
+                  pageInfo: { hasNextPage: false, endCursor: null },
                 },
-                inverseRelations: { nodes: [] },
+                inverseRelations: completeConnection([]),
               },
               {
                 id: "uuid-3",
@@ -93,15 +101,20 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 updatedAt: "2026-07-14T03:00:00.000Z",
                 estimate: 3,
                 state: { name: "Backlog", type: "backlog" },
-                labels: { nodes: [{ name: "buyer" }, { name: "feature" }] },
+                labels: completeConnection([
+                  { name: "buyer" },
+                  { name: "feature" },
+                ]),
                 assignee: { name: "Reviewer" },
                 team: { key: "PLA" },
                 project: { name: "Project" },
                 projectMilestone: { name: "Milestone" },
                 parent: { identifier: "PLA-0" },
-                releases: { nodes: [{ id: "release-1", version: "R1" }] },
-                relations: { nodes: [] },
-                inverseRelations: { nodes: [] },
+                releases: completeConnection([
+                  { id: "release-1", version: "R1" },
+                ]),
+                relations: completeConnection([]),
+                inverseRelations: completeConnection([]),
               },
             ],
             pageInfo: { hasNextPage: false, endCursor: null },
@@ -157,7 +170,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
     ["PLA-1", "PLA-2", "PLA-3"],
   );
   assert.equal(fingerprint.issues[0].relations[0], "blocks:PLA-1:PLA-2");
-  assert.equal(fingerprint.issues[0].descriptionFingerprint.length, 8);
+  assert.equal(fingerprint.issues[0].descriptionFingerprint.length, 64);
   assert.equal(requested.every((query) => query.includes("first: 50")), true);
   assert.deepEqual(fingerprintDiff(fingerprint, fingerprint), []);
   assert.match(
@@ -183,15 +196,15 @@ test("description changes after character 400 change the fingerprint", async () 
                   updatedAt: "2026-07-14T01:00:00.000Z",
                   estimate: 1,
                   state: { name: "Backlog", type: "backlog" },
-                  labels: { nodes: [] },
+                  labels: completeConnection([]),
                   assignee: null,
                   team: { key: "PLA" },
                   project: null,
                   projectMilestone: null,
                   parent: null,
-                  releases: { nodes: [] },
-                  relations: { nodes: [] },
-                  inverseRelations: { nodes: [] },
+                  releases: completeConnection([]),
+                  relations: completeConnection([]),
+                  inverseRelations: completeConnection([]),
                 },
               ],
               pageInfo: { hasNextPage: false, endCursor: null },
@@ -226,7 +239,88 @@ test("description changes after character 400 change the fingerprint", async () 
     await fingerprintFor(`${"a".repeat(400)}x`),
     await fingerprintFor(`${"a".repeat(400)}y`),
   );
+  assert.notEqual(
+    await fingerprintFor("😀"),
+    await fingerprintFor("😁"),
+  );
 });
+
+for (const field of [
+  "labels",
+  "releases",
+  "relations",
+  "inverseRelations",
+] as const) {
+  test(`rejects truncated nested issue ${field}`, async () => {
+    const connection = (nodes: unknown[]) => ({
+      nodes,
+      pageInfo: { hasNextPage: false, endCursor: null },
+    });
+    const issue = {
+      id: "uuid-1",
+      identifier: "PLA-1",
+      title: "First",
+      description: "Description",
+      updatedAt: "2026-07-14T01:00:00.000Z",
+      estimate: 1,
+      state: { name: "Backlog", type: "backlog" },
+      labels: connection([]),
+      assignee: null,
+      team: { key: "PLA" },
+      project: null,
+      projectMilestone: null,
+      parent: null,
+      releases: connection([]),
+      relations: connection([]),
+      inverseRelations: connection([]),
+    };
+    issue[field].pageInfo.hasNextPage = true;
+    const fetcher: typeof fetch = async (_input, init) => {
+      const body = JSON.parse(String(init?.body)) as { query: string };
+      if (body.query.includes("DeliveryIssues")) {
+        for (const nestedField of [
+          "labels",
+          "releases",
+          "relations",
+          "inverseRelations",
+        ]) {
+          assert.match(body.query, new RegExp(`${nestedField}\\(first: 250\\)`));
+        }
+        return response({
+          data: {
+            issues: {
+              nodes: [issue],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryPipelines")) {
+        return response({
+          data: {
+            releasePipelines: {
+              nodes: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        });
+      }
+      return response({
+        data: {
+          releases: {
+            nodes: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      });
+    };
+
+    await assert.rejects(
+      () => fetchLinearFingerprint(fetcher, "secret"),
+      new RegExp(`PLA-1.*${field}.*truncated`, "i"),
+    );
+  });
+}
 
 test("rejects GraphQL errors returned with HTTP 200", async () => {
   const fetcher: typeof fetch = async () =>
