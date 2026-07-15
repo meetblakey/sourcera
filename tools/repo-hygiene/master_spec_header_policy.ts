@@ -58,7 +58,6 @@ export function masterSpecHeaderPolicyFindings(masterSpec: string): string[] {
   const backlogIndexIsAuthority = header.split(/\r?\n/).some(
     (line) =>
       line.includes("_audit/V711_BACKLOG_INDEX.md") &&
-      /\b(?:current|live)\b/i.test(line) &&
       /\b(?:authority|routing|source[\s-]+of[\s-]+truth|canonical[\s-]+(?:source|record)|governs?|controls?)\b/i.test(
         line,
       ),

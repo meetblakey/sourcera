@@ -39,6 +39,8 @@ test("rejects the backlog index as active-header authority", () => {
     "`_audit/V711_BACKLOG_INDEX.md` is the current source-of-truth.",
     "`_audit/V711_BACKLOG_INDEX.md` is the live canonical source.",
     "`_audit/V711_BACKLOG_INDEX.md` is the live canonical-source.",
+    "`_audit/V711_BACKLOG_INDEX.md` is the source-of-truth.",
+    "`_audit/V711_BACKLOG_INDEX.md` is the canonical-source.",
   ];
 
   for (const authorityClaim of authorityClaims) {
