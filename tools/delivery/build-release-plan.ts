@@ -180,6 +180,11 @@ function argumentsByName(): Map<string, string> {
 }
 
 const argv = argumentsByName();
+if (argv.has("--inventory") && !argv.has("--feature-dependencies")) {
+  throw new Error(
+    "--feature-dependencies is required when --inventory is supplied",
+  );
+}
 const root = resolve(argv.get("--root") ?? ".");
 const inventoryPath = resolve(root, argv.get("--inventory") ?? "_audit/FEATURE_INVENTORY.md");
 const stampPath = resolve(root, argv.get("--stamp") ?? "/tmp/sourcera-stamp.json");
