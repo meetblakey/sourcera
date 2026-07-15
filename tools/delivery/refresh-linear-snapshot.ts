@@ -53,8 +53,6 @@ interface LiveProject {
 interface LiveProjectMilestone {
   id: string;
   name: string;
-  updatedAt: string;
-  targetDate: string | null;
   projectId: string;
   project: string;
 }
@@ -197,8 +195,8 @@ if (
     (milestone) =>
       !milestone.id?.trim() ||
       !milestone.name?.trim() ||
-      !milestone.updatedAt ||
-      Number.isNaN(Date.parse(milestone.updatedAt)) ||
+      !milestone.projectId?.trim() ||
+      !milestone.project?.trim() ||
       live.projects.find((project) => project.id === milestone.projectId)
         ?.name !== milestone.project,
   ) ||
@@ -387,9 +385,12 @@ snapshot.projects = scopedProjects
   }))
   .sort((left, right) => left.id.localeCompare(right.id));
 snapshot.milestones = scopedMilestones
-  .map((milestone) => ({
-    ...(existingMilestoneById.get(milestone.id) ?? {}),
-    ...milestone,
+  .map(({ id, name, projectId, project }) => ({
+    ...(existingMilestoneById.get(id) ?? {}),
+    id,
+    name,
+    projectId,
+    project,
   }))
   .sort((left, right) => left.id.localeCompare(right.id));
 
@@ -449,9 +450,14 @@ snapshot.linearFingerprint = {
   projects: [...scopedProjects].sort((left, right) =>
     left.id.localeCompare(right.id)
   ),
-  projectMilestones: [...scopedMilestones].sort((left, right) =>
-    left.id.localeCompare(right.id)
-  ),
+  projectMilestones: scopedMilestones
+    .map(({ id, name, projectId, project }) => ({
+      id,
+      name,
+      projectId,
+      project,
+    }))
+    .sort((left, right) => left.id.localeCompare(right.id)),
 };
 
 writeFileSync(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\n`);

@@ -255,6 +255,8 @@ test("paginates and fingerprints complete Linear project and milestone inventori
       });
     }
     if (body.query.includes("DeliveryProjectMilestones")) {
+      assert.doesNotMatch(body.query, /\bupdatedAt\b/);
+      assert.doesNotMatch(body.query, /\btargetDate\b/);
       milestoneCursors.push(body.variables.after);
       return response({
         data: {
@@ -263,8 +265,6 @@ test("paginates and fingerprints complete Linear project and milestone inventori
                 {
                   id: "milestone-1",
                   name: "Production evidence closed",
-                  updatedAt: "2026-07-15T03:00:00Z",
-                  targetDate: null,
                   project: { id: "project-1", name: "First" },
                 },
               ])
@@ -273,8 +273,6 @@ test("paginates and fingerprints complete Linear project and milestone inventori
                   {
                     id: "milestone-2",
                     name: "Production evidence closed",
-                    updatedAt: "2026-07-15T04:00:00Z",
-                    targetDate: null,
                     project: { id: "project-2", name: "Second" },
                   },
                 ],
@@ -295,14 +293,70 @@ test("paginates and fingerprints complete Linear project and milestone inventori
     "project-1",
     "project-2",
   ]);
-  assert.deepEqual(
-    fingerprint.projectMilestones.map((milestone) => milestone.id),
-    ["milestone-1", "milestone-2"],
-  );
+  assert.deepEqual(fingerprint.projectMilestones, [
+    {
+      id: "milestone-1",
+      name: "Production evidence closed",
+      projectId: "project-1",
+      project: "First",
+    },
+    {
+      id: "milestone-2",
+      name: "Production evidence closed",
+      projectId: "project-2",
+      project: "Second",
+    },
+  ]);
   assert.match(
     fingerprintDiff(fingerprint, { ...fingerprint, projectMilestones: [] })[0],
     /projectMilestones/,
   );
+});
+
+test("records the reversible connector milestone fingerprint boundary", () => {
+  const decisions = readFileSync("delivery/decisions.jsonl", "utf8")
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const decision = decisions.find(
+    (candidate) =>
+      candidate.id === "DEC-LINEAR-MILESTONE-FINGERPRINT-001",
+  );
+
+  assert.equal(decision?.status, "active");
+  assert.match(
+    decision?.decision ?? "",
+    /id, name, project ID, and project name/,
+  );
+  assert.match(decision?.assumption ?? "", /connector.*updatedAt.*targetDate/i);
+  assert.match(decision?.validationTrigger ?? "", /LINEAR_API_KEY/);
+});
+
+test("fingerprint comparison ignores unavailable legacy milestone metadata", () => {
+  const fingerprint = {
+    issues: [],
+    releasePipelines: [],
+    releases: [],
+    projects: [],
+    projectMilestones: [
+      {
+        id: "milestone-1",
+        name: "Production evidence closed",
+        projectId: "project-1",
+        project: "First",
+      },
+    ],
+  };
+  const legacy = {
+    ...fingerprint,
+    projectMilestones: fingerprint.projectMilestones.map((milestone) => ({
+      ...milestone,
+      updatedAt: "2026-07-15T03:00:00Z",
+      targetDate: "2026-08-01",
+    })),
+  };
+
+  assert.deepEqual(fingerprintDiff(fingerprint, legacy), []);
 });
 
 test("scopes project inventories by canonical IDs while preserving every issue", async () => {
@@ -352,8 +406,6 @@ test("scopes project inventories by canonical IDs while preserving every issue",
             {
               id: "milestone-tracked",
               name: "Production evidence closed",
-              updatedAt: "2026-07-15T01:00:00Z",
-              targetDate: null,
               project: {
                 id: "project-tracked",
                 name: "Sourcera Production",
@@ -362,8 +414,6 @@ test("scopes project inventories by canonical IDs while preserving every issue",
             {
               id: "milestone-legacy",
               name: "Legacy milestone",
-              updatedAt: "2026-07-15T01:00:00Z",
-              targetDate: null,
               project: { id: "project-legacy", name: "P01 legacy" },
             },
           ]),
@@ -764,7 +814,14 @@ test("CLI compares a fixture with the committed snapshot", () => {
         updatedAt: "2026-07-15T00:00:00.000Z",
       },
     ],
-    projectMilestones: [],
+    projectMilestones: [
+      {
+        id: "milestone-1",
+        name: "Production evidence closed",
+        projectId: "project-1",
+        project: "Sourcera Production",
+      },
+    ],
   };
   try {
     const snapshot = join(dir, "snapshot.json");
@@ -824,14 +881,31 @@ test("CLI capture writes the exact fingerprint and a provenance receipt", () => 
         updatedAt: "2026-07-15T00:00:00.000Z",
       },
     ],
-    projectMilestones: [],
+    projectMilestones: [
+      {
+        id: "milestone-1",
+        name: "Production evidence closed",
+        projectId: "project-1",
+        project: "Sourcera Production",
+      },
+    ],
   };
   try {
     const fixture = join(dir, "fixture.json");
     const scope = join(dir, "linear-project-scope.json");
     const out = join(dir, "fingerprint.json");
     const receipt = join(dir, "receipt.json");
-    writeFileSync(fixture, JSON.stringify(fingerprint));
+    writeFileSync(
+      fixture,
+      JSON.stringify({
+        ...fingerprint,
+        projectMilestones: fingerprint.projectMilestones.map((milestone) => ({
+          ...milestone,
+          updatedAt: "2026-07-15T03:00:00Z",
+          targetDate: "2026-08-01",
+        })),
+      }),
+    );
     writeFileSync(
       scope,
       JSON.stringify({

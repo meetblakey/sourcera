@@ -90,8 +90,6 @@ function fingerprint(): LinearFingerprint {
       {
         id: "milestone-1",
         name: "Existing milestone",
-        updatedAt: "2026-07-15T10:00:00.000Z",
-        targetDate: null,
         projectId: "project-1",
         project: "Sourcera",
       },
@@ -113,7 +111,7 @@ function expected(
   return new Map(values);
 }
 
-test("allows only an expected release, expected milestone, permitted codex-ready removal, and updatedAt changes", () => {
+test("allows only an expected release, expected milestone, permitted codex-ready removal, and available updatedAt changes", () => {
   const before = fingerprint();
   const after = clone(before);
   after.issues.reverse();
@@ -146,10 +144,6 @@ test("allows only an expected release, expected milestone, permitted codex-ready
   for (const project of after.projects) {
     project.updatedAt = "2026-07-15T11:00:00.000Z";
   }
-  for (const milestone of after.projectMilestones) {
-    milestone.updatedAt = "2026-07-15T11:00:00.000Z";
-  }
-
   assert.deepEqual(
     linearSyncPreservationFindings(before, after, expected(), {
       expectedMilestoneByIssue: new Map([
@@ -717,7 +711,7 @@ test("rejects project milestone inventory identity and topology drift", () => {
       name: "Unexpected",
     },
   ];
-  after.projectMilestones[0].targetDate = "2026-08-01";
+  after.projectMilestones[0].project = "Changed";
 
   assert.deepEqual(
     new Set(codes(linearSyncPreservationFindings(before, after, expected()))),
@@ -728,5 +722,24 @@ test("rejects project milestone inventory identity and topology drift", () => {
       "linear_sync_project_milestone_unexpected",
       "linear_sync_project_milestone_changed",
     ]),
+  );
+});
+
+test("ignores unavailable milestone scheduling metadata while preserving stable topology", () => {
+  const before = fingerprint();
+  const after = clone(fingerprint());
+  after.issues[0].releases = ["R0"];
+  (before.projectMilestones[0] as any).targetDate = null;
+  (before.projectMilestones[0] as any).updatedAt =
+    "2026-07-15T10:00:00.000Z";
+  (after.projectMilestones[0] as any).targetDate = "2026-08-01";
+  (after.projectMilestones[0] as any).updatedAt =
+    "2026-07-15T11:00:00.000Z";
+
+  assert.equal(
+    codes(linearSyncPreservationFindings(before, after, expected())).includes(
+      "linear_sync_project_milestone_changed",
+    ),
+    false,
   );
 });

@@ -425,8 +425,8 @@ for (const milestone of snapshot.linearFingerprint.projectMilestones) {
   if (
     !milestone.id?.trim() ||
     !milestone.name?.trim() ||
-    !milestone.updatedAt ||
-    Number.isNaN(Date.parse(milestone.updatedAt)) ||
+    !milestone.projectId?.trim() ||
+    !milestone.project?.trim() ||
     milestoneIds.has(milestone.id) ||
     milestoneNames.has(scopedName) ||
     !trackedProjectIds.has(milestone.projectId) ||

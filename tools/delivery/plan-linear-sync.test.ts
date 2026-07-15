@@ -167,8 +167,6 @@ function fixture(options: FixtureOptions = {}) {
           {
             id: "milestone-1",
             name: "Production evidence closed",
-            updatedAt: "2026-07-15T00:00:00.000Z",
-            targetDate: null,
             projectId: "project-1",
             project: "Production project",
           },

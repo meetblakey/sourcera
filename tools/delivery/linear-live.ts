@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
+  canonicalLinearFingerprint,
   fetchLinearFingerprint,
   fingerprintDiff,
   type LinearFingerprint,
@@ -35,7 +36,7 @@ async function main(): Promise<void> {
     readFileSync(projectScopePath, "utf8"),
   ) as LinearProjectScope;
   const fixturePath = argv.get("--fixture");
-  const actual = fixturePath
+  const captured = fixturePath
     ? (JSON.parse(
         readFileSync(resolve(fixturePath), "utf8"),
       ) as LinearFingerprint)
@@ -44,6 +45,7 @@ async function main(): Promise<void> {
         process.env.LINEAR_API_KEY ?? "",
         projectScope,
       );
+  const actual = canonicalLinearFingerprint(captured);
   assertLinearProjectScope(projectScope, actual.projects);
 
   const fingerprintJson = `${JSON.stringify(actual, null, 2)}\n`;

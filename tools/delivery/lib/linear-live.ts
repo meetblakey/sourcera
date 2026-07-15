@@ -99,8 +99,6 @@ const PROJECT_MILESTONE_QUERY = `
       nodes {
         id
         name
-        updatedAt
-        targetDate
         project { id name }
       }
       pageInfo { hasNextPage endCursor }
@@ -176,8 +174,6 @@ interface ProjectNode {
 interface ProjectMilestoneNode {
   id: string;
   name: string;
-  updatedAt: string;
-  targetDate: string | null;
   project: { id: string; name: string };
 }
 
@@ -223,8 +219,6 @@ export interface LinearFingerprint {
   projectMilestones: Array<{
     id: string;
     name: string;
-    updatedAt: string;
-    targetDate: string | null;
     projectId: string;
     project: string;
   }>;
@@ -516,12 +510,26 @@ export async function fetchLinearFingerprint(
       .map((milestone) => ({
         id: milestone.id,
         name: milestone.name,
-        updatedAt: milestone.updatedAt,
-        targetDate: milestone.targetDate,
         projectId: milestone.project.id,
         project: milestone.project.name,
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
+  };
+}
+
+export function canonicalLinearFingerprint(
+  fingerprint: LinearFingerprint,
+): LinearFingerprint {
+  return {
+    ...fingerprint,
+    projectMilestones: fingerprint.projectMilestones.map(
+      ({ id, name, projectId, project }) => ({
+        id,
+        name,
+        projectId,
+        project,
+      }),
+    ),
   };
 }
 
@@ -530,6 +538,8 @@ export function fingerprintDiff(
   actual: LinearFingerprint,
 ): string[] {
   const findings: string[] = [];
+  const canonicalExpected = canonicalLinearFingerprint(expected);
+  const canonicalActual = canonicalLinearFingerprint(actual);
   for (const key of [
     "issues",
     "releasePipelines",
@@ -537,7 +547,10 @@ export function fingerprintDiff(
     "projects",
     "projectMilestones",
   ] as const) {
-    if (JSON.stringify(expected[key]) !== JSON.stringify(actual[key])) {
+    if (
+      JSON.stringify(canonicalExpected[key]) !==
+        JSON.stringify(canonicalActual[key])
+    ) {
       findings.push(`${key} differ from the committed Linear snapshot`);
     }
   }

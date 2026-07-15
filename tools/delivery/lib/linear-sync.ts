@@ -378,7 +378,6 @@ function normalizedProjectMilestone(
   return {
     id: milestone.id,
     name: milestone.name,
-    targetDate: milestone.targetDate,
     projectId: milestone.projectId,
     project: milestone.project,
   };

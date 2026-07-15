@@ -105,8 +105,6 @@ function addLinearInventoryFingerprint(linear: any): void {
     (milestone: any) => ({
       id: milestone.id,
       name: milestone.name,
-      updatedAt: milestone.updatedAt,
-      targetDate: milestone.targetDate,
       projectId: milestone.projectId,
       project: milestone.project,
     }),
@@ -253,6 +251,13 @@ test("fails closed for every missing or inconsistent Linear milestone inventory 
         linear.linearFingerprint.projectMilestones[0].name = "Changed";
       },
       "linear_milestone_inventory_drift",
+    ],
+    [
+      "fingerprint-incomplete",
+      (linear) => {
+        delete linear.linearFingerprint.projectMilestones[0].projectId;
+      },
+      "linear_fingerprint_milestone_inventory_incomplete",
     ],
     [
       "missing-issue-ids",

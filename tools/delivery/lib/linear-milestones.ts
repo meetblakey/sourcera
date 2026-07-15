@@ -15,8 +15,15 @@ interface MilestoneRow {
   name: string;
   projectId: string;
   project: string;
-  targetDate: string | null;
-  updatedAt: string | null;
+  targetDate?: string | null;
+  updatedAt?: string | null;
+}
+
+interface FingerprintMilestoneRow {
+  id: string;
+  name: string;
+  projectId: string;
+  project: string;
 }
 
 interface FingerprintIssue {
@@ -33,7 +40,7 @@ export interface LinearMilestoneSnapshot {
   linearFingerprint?: {
     issues?: FingerprintIssue[];
     projects?: ProjectRow[];
-    projectMilestones?: MilestoneRow[];
+    projectMilestones?: FingerprintMilestoneRow[];
   };
 }
 
@@ -43,13 +50,13 @@ const compareId = <T extends { id: string }>(left: T, right: T) =>
 const projectProjection = (rows: ProjectRow[]) =>
   rows.map(({ id, name, updatedAt }) => ({ id, name, updatedAt })).sort(compareId);
 
-const milestoneProjection = (rows: MilestoneRow[]) =>
+const milestoneProjection = (
+  rows: Array<Pick<MilestoneRow, "id" | "name" | "projectId" | "project">>,
+) =>
   rows
-    .map(({ id, name, updatedAt, targetDate, projectId, project }) => ({
+    .map(({ id, name, projectId, project }) => ({
       id,
       name,
-      updatedAt,
-      targetDate,
       projectId,
       project,
     }))
@@ -132,13 +139,27 @@ export function linearMilestoneFindings(
         !milestone.name?.trim() ||
         !milestone.projectId?.trim() ||
         !milestone.project?.trim() ||
-        !milestone.updatedAt ||
-        Number.isNaN(Date.parse(milestone.updatedAt)),
+        (milestone.updatedAt != null &&
+          Number.isNaN(Date.parse(milestone.updatedAt))),
     )
   ) {
     findings.push({
       code: "linear_milestone_inventory_incomplete",
-      message: "Linear milestone inventory has missing identity, project, or update metadata",
+      message: "Linear milestone inventory has missing identity, project, or invalid update metadata",
+    });
+  }
+  if (
+    fingerprintMilestones?.some(
+      (milestone) =>
+        !milestone.id?.trim() ||
+        !milestone.name?.trim() ||
+        !milestone.projectId?.trim() ||
+        !milestone.project?.trim(),
+    )
+  ) {
+    findings.push({
+      code: "linear_fingerprint_milestone_inventory_incomplete",
+      message: "Linear milestone fingerprint has missing identity or project topology",
     });
   }
 

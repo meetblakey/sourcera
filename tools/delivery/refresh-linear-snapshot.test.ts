@@ -94,8 +94,6 @@ function refreshFixture(
     return names.map((name, index) => ({
       id: `${project.id}-milestone-${index + 1}`,
       name,
-      updatedAt: "2026-07-15T00:00:00.000Z",
-      targetDate: null,
       projectId: project.id,
       project: project.name,
     }));
@@ -312,7 +310,7 @@ test("refresh cannot shrink the independent canonical project scope", () => {
   assert.equal(result.contents, result.original);
 });
 
-test("copies the live parent relation into issue rows and fingerprints", () => {
+test("copies the live parent and preserves planning metadata absent from connector milestones", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
   try {
     const delivery = join(root, "delivery");
@@ -492,7 +490,7 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
           {
             id: "milestone-permissioned",
             name: "Permissioned journeys ready",
-            updatedAt: "2026-07-15T00:00:00.000Z",
+            updatedAt: null,
             targetDate: null,
             projectId: "project-identity",
             project: "Identity",
@@ -500,16 +498,12 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
           {
             id: "milestone-production",
             name: "Production evidence closed",
-            updatedAt: "2026-07-15T00:00:00.000Z",
-            targetDate: null,
             projectId: "project-identity",
             project: "Identity",
           },
           {
             id: "milestone-legacy",
             name: "Legacy milestone",
-            updatedAt: "2026-07-15T00:00:00.000Z",
-            targetDate: null,
             projectId: "project-legacy",
             project: "P01 legacy",
           },
@@ -548,12 +542,18 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
     assert.deepEqual(updated.milestones[0], {
       id: "milestone-permissioned",
       name: "Permissioned journeys ready",
-      updatedAt: "2026-07-15T00:00:00.000Z",
-      targetDate: null,
+      updatedAt: "2026-07-14T00:00:00.000Z",
+      targetDate: "2026-07-14",
       projectId: "project-identity",
       project: "Identity",
       description: "Keep milestone description",
       status: "next",
+    });
+    assert.deepEqual(updated.milestones[1], {
+      id: "milestone-production",
+      name: "Production evidence closed",
+      projectId: "project-identity",
+      project: "Identity",
     });
     assert.deepEqual(
       updated.milestones.map((milestone: { id: string }) => milestone.id),
@@ -571,12 +571,20 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
       ),
       ["project-identity"],
     );
-    assert.deepEqual(
-      updated.linearFingerprint.projectMilestones.map(
-        (milestone: { id: string }) => milestone.id,
-      ),
-      ["milestone-permissioned", "milestone-production"],
-    );
+    assert.deepEqual(updated.linearFingerprint.projectMilestones, [
+      {
+        id: "milestone-permissioned",
+        name: "Permissioned journeys ready",
+        projectId: "project-identity",
+        project: "Identity",
+      },
+      {
+        id: "milestone-production",
+        name: "Production evidence closed",
+        projectId: "project-identity",
+        project: "Identity",
+      },
+    ]);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
