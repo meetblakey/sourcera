@@ -117,9 +117,6 @@ const runtime = JSON.parse(
   ),
 ) as { dependencies: RuntimeDependency[] };
 
-const runtimeBySource = new Map(
-  runtime.dependencies.map((row) => [row.requirementId, row.dependencies]),
-);
 const issueBySource = new Map<string, string>();
 for (const issue of snapshot.issues) {
   if (!issue.sourceId) continue;
@@ -148,40 +145,6 @@ const releaseByIssue = new Map(
     return [issue.id, releases[0] ?? null] as const;
   }),
 );
-
-snapshot.generatedAt = new Date().toISOString();
-snapshot.issues = snapshot.issues.map((issue: Record<string, any>) => {
-  const current = liveById.get(issue.id);
-  if (!current) return issue;
-  const sourceId = issue.sourceId as string | null;
-  return {
-    ...issue,
-    parentId: current.parentId ?? null,
-    title: current.title,
-    labels: [...(current.labels ?? [])].sort(),
-    release: releaseByIssue.get(issue.id) ?? null,
-    milestone: current.projectMilestone?.name ?? null,
-    dependencies: sourceId?.startsWith("RG:")
-      ? runtimeBySource.get(sourceId) ?? []
-      : issue.dependencies,
-    owner: current.assignee ?? null,
-    estimate: estimateValue(current.estimate),
-  };
-});
-
-snapshot.releases = live.releases
-  .map((release) => ({
-    id: release.id,
-    version: release.version,
-    name: release.name,
-    pipeline: release.pipeline?.name ?? null,
-    stage: release.stage?.name ?? null,
-    startDate: release.startDate ?? null,
-    targetDate: release.targetDate ?? null,
-    updatedAt: release.updatedAt,
-  }))
-  .sort((left, right) => left.version.localeCompare(right.version));
-
 const relationsById = new Map(
   live.issues.map((issue) => [issue.id, new Set<string>()]),
 );
@@ -210,6 +173,70 @@ for (const row of runtime.dependencies) {
     relationsById.get(gate)?.add(relation);
   }
 }
+const sourceByIssue = new Map<string, string>(
+  snapshot.issues
+    .filter((issue: Record<string, any>) => issue.sourceId)
+    .map((issue: Record<string, any>) => [
+      issue.id as string,
+      issue.sourceId as string,
+    ]),
+);
+const dependenciesByIssue = new Map<string, string[]>(
+  snapshot.issues.map((issue: Record<string, any>) => {
+    if (!issue.sourceId) {
+      return [issue.id, issue.dependencies ?? []] as const;
+    }
+    const dependencies = new Set<string>();
+    for (const dependencyId of issue.dependencies ?? []) {
+      if (!issueBySource.has(dependencyId)) dependencies.add(dependencyId);
+    }
+    for (const relation of relationsById.get(issue.id) ?? []) {
+      const [type, prerequisite, dependent] = relation.split(":");
+      if (type !== "blocks" || dependent !== issue.id) continue;
+      const sourceId = sourceByIssue.get(prerequisite);
+      if (!sourceId) {
+        throw new Error(
+          `Linear source issue ${issue.id} blocker ${prerequisite} has no source mapping`,
+        );
+      }
+      dependencies.add(sourceId);
+    }
+    return [issue.id, [...dependencies].sort()] as const;
+  }),
+);
+
+snapshot.generatedAt = new Date().toISOString();
+snapshot.issues = snapshot.issues.map((issue: Record<string, any>) => {
+  const current = liveById.get(issue.id);
+  if (!current) return issue;
+  const sourceId = issue.sourceId as string | null;
+  return {
+    ...issue,
+    parentId: current.parentId ?? null,
+    title: current.title,
+    labels: [...(current.labels ?? [])].sort(),
+    release: releaseByIssue.get(issue.id) ?? null,
+    milestone: current.projectMilestone?.name ?? null,
+    dependencies: sourceId
+      ? dependenciesByIssue.get(issue.id) ?? []
+      : issue.dependencies,
+    owner: current.assignee ?? null,
+    estimate: estimateValue(current.estimate),
+  };
+});
+
+snapshot.releases = live.releases
+  .map((release) => ({
+    id: release.id,
+    version: release.version,
+    name: release.name,
+    pipeline: release.pipeline?.name ?? null,
+    stage: release.stage?.name ?? null,
+    startDate: release.startDate ?? null,
+    targetDate: release.targetDate ?? null,
+    updatedAt: release.updatedAt,
+  }))
+  .sort((left, right) => left.version.localeCompare(right.version));
 
 snapshot.linearFingerprint = {
   issues: live.issues

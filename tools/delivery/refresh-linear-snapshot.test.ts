@@ -19,7 +19,8 @@ function refreshFixture(
     priorFingerprintReleases?: string[];
     priorRelations?: string[];
     missingTrackedIssueIds?: string[];
-    sourceIds?: string[];
+    sourceIds?: Array<string | null>;
+    priorDependencies?: string[][];
     runtimeDependencies?: Array<{
       requirementId: string;
       dependencies: string[];
@@ -44,14 +45,15 @@ function refreshFixture(
   const snapshotIssues = trackedIssueIds.map((id, index) => ({
     id,
     parentId: null,
-    sourceId: options.sourceIds?.[index] ??
-      `F-${String(index + 1).padStart(3, "0")}`,
+    sourceId: options.sourceIds && index in options.sourceIds
+      ? options.sourceIds[index]
+      : `F-${String(index + 1).padStart(3, "0")}`,
     title: `Prior ${id}`,
     kind: "executable",
     labels: ["prior"],
     release: options.priorRelease ?? "R2",
     milestone: "Prior milestone",
-    dependencies: [],
+    dependencies: options.priorDependencies?.[index] ?? [],
     owner: "Prior owner",
     reviewer: "Reviewer",
     estimate: 1,
@@ -366,6 +368,129 @@ test("refresh canonicalizes and deduplicates symmetric live relations", () => {
       ["related:PLA-217:PLA-282"],
     ],
   );
+});
+
+test("refresh derives source dependencies from live blocking relations", () => {
+  const { result, updated } = refreshFixture([
+    {
+      id: "PLA-1",
+      title: "Dependent",
+      description: "Dependent outcome",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      relations: {
+        blocks: [],
+        blockedBy: [{ id: "PLA-2" }],
+        relatedTo: [],
+        duplicateOf: null,
+      },
+    },
+    {
+      id: "PLA-2",
+      title: "Prerequisite",
+      description: "Prerequisite outcome",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      relations: {
+        blocks: [{ id: "PLA-1" }],
+        blockedBy: [],
+        relatedTo: [],
+        duplicateOf: null,
+      },
+    },
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(updated.issues[0].dependencies, ["F-002"]);
+  assert.deepEqual(updated.issues[1].dependencies, []);
+});
+
+test("refresh does not let stored dependencies mask missing live blockers", () => {
+  const { result, updated } = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "Dependent",
+        description: "Dependent outcome",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+      },
+      {
+        id: "PLA-2",
+        title: "Prerequisite",
+        description: "Prerequisite outcome",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+      },
+    ],
+    { priorDependencies: [["F-002"], []] },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(updated.issues[0].dependencies, []);
+});
+
+test("refresh preserves dependencies without a Linear issue", () => {
+  const { result, updated } = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "Dependent",
+        description: "Dependent outcome",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+      },
+    ],
+    { priorDependencies: [["F-PROOF"]] },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(updated.issues[0].dependencies, ["F-PROOF"]);
+});
+
+test("refresh rejects a source issue blocker without a source mapping", () => {
+  const { result, updated } = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "Dependent",
+        description: "Dependent outcome",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        relations: {
+          blocks: [],
+          blockedBy: [{ id: "PLA-2" }],
+          relatedTo: [],
+          duplicateOf: null,
+        },
+      },
+      {
+        id: "PLA-2",
+        title: "Unmapped blocker",
+        description: "Structural outcome",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        relations: {
+          blocks: [{ id: "PLA-1" }],
+          blockedBy: [],
+          relatedTo: [],
+          duplicateOf: null,
+        },
+      },
+    ],
+    { sourceIds: ["F-001", null] },
+  );
+
+  assert.equal(updated, null);
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /blocker PLA-2 has no source mapping/);
 });
 
 test("refresh adds runtime dependencies after complete live relations", () => {
