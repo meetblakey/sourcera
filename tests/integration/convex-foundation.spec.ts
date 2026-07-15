@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -215,4 +215,143 @@ test("Vercel rejects mismatched commit metadata before Convex deploy", () => {
     execution.stderr,
     /SOURCERA_COMMIT_SHA must match VERCEL_GIT_COMMIT_SHA/,
   );
+});
+
+test("predeploy rejects timer-based Convex query polling", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_polling_violation_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nsetInterval(() => client.query(api.foundation.observeProbe, {}), 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects recursive Convex query polling", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_recursive_polling_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nasync function poll() {\n  await client.query(api.foundation.observeProbe, {});\n  setTimeout(poll, 1000);\n}\nvoid poll();\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects recursive arrow-function polling", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_arrow_polling_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nconst poll = async () => {\n  await client.query(api.foundation.observeProbe, {});\n  setTimeout(poll, 1000);\n};\nvoid poll();\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects window interval Convex polling", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_window_polling_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nwindow.setInterval(() => client.query(api.foundation.observeProbe, {}), 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});
+
+test("predeploy allows an unrelated query timer", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__non_convex_query_timer_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `const database = { query: () => null };\nsetInterval(() => database.query(), 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.equal(execution.status, 0, execution.stderr);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
 });
