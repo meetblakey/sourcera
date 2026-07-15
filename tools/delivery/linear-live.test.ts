@@ -38,7 +38,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                   description: "B",
                   updatedAt: "2026-07-14T02:00:00.000Z",
                   estimate: 2,
-                  state: { name: "Backlog", type: "backlog" },
+                  state: { name: "In Progress", type: "started" },
                   labels: { nodes: [{ name: "platform" }] },
                   assignee: null,
                   team: { key: "PLA" },
@@ -66,7 +66,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 description: "A",
                 updatedAt: "2026-07-14T01:00:00.000Z",
                 estimate: 1,
-                state: { name: "Backlog", type: "backlog" },
+                state: { name: "Done", type: "completed" },
                 labels: { nodes: [] },
                 assignee: { name: "Blake Rowley" },
                 team: { key: "PLA" },
@@ -83,6 +83,24 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                     },
                   ],
                 },
+                inverseRelations: { nodes: [] },
+              },
+              {
+                id: "uuid-3",
+                identifier: "PLA-3",
+                title: "Third",
+                description: "C",
+                updatedAt: "2026-07-14T03:00:00.000Z",
+                estimate: 3,
+                state: { name: "Backlog", type: "backlog" },
+                labels: { nodes: [{ name: "buyer" }, { name: "feature" }] },
+                assignee: { name: "Reviewer" },
+                team: { key: "PLA" },
+                project: { name: "Project" },
+                projectMilestone: { name: "Milestone" },
+                parent: { identifier: "PLA-0" },
+                releases: { nodes: [{ id: "release-1", version: "R1" }] },
+                relations: { nodes: [] },
                 inverseRelations: { nodes: [] },
               },
             ],
@@ -136,7 +154,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
   assert.deepEqual(cursors, [null, "next"]);
   assert.deepEqual(
     fingerprint.issues.map((issue) => issue.identifier),
-    ["PLA-1", "PLA-2"],
+    ["PLA-1", "PLA-2", "PLA-3"],
   );
   assert.equal(fingerprint.issues[0].relations[0], "blocks:PLA-1:PLA-2");
   assert.equal(fingerprint.issues[0].descriptionFingerprint.length, 8);
@@ -145,6 +163,68 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
   assert.match(
     fingerprintDiff(fingerprint, { ...fingerprint, releases: [] })[0],
     /releases/,
+  );
+});
+
+test("description changes after character 400 change the fingerprint", async () => {
+  const fingerprintFor = async (description: string) => {
+    const fetcher: typeof fetch = async (_input, init) => {
+      const body = JSON.parse(String(init?.body)) as { query: string };
+      if (body.query.includes("DeliveryIssues")) {
+        return response({
+          data: {
+            issues: {
+              nodes: [
+                {
+                  id: "uuid-1",
+                  identifier: "PLA-1",
+                  title: "First",
+                  description,
+                  updatedAt: "2026-07-14T01:00:00.000Z",
+                  estimate: 1,
+                  state: { name: "Backlog", type: "backlog" },
+                  labels: { nodes: [] },
+                  assignee: null,
+                  team: { key: "PLA" },
+                  project: null,
+                  projectMilestone: null,
+                  parent: null,
+                  releases: { nodes: [] },
+                  relations: { nodes: [] },
+                  inverseRelations: { nodes: [] },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryPipelines")) {
+        return response({
+          data: {
+            releasePipelines: {
+              nodes: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        });
+      }
+      return response({
+        data: {
+          releases: {
+            nodes: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      });
+    };
+    return (await fetchLinearFingerprint(fetcher, "secret")).issues[0]
+      .descriptionFingerprint;
+  };
+
+  assert.notEqual(
+    await fingerprintFor(`${"a".repeat(400)}x`),
+    await fingerprintFor(`${"a".repeat(400)}y`),
   );
 });
 

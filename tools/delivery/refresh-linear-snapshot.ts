@@ -26,7 +26,7 @@ interface RuntimeDependency {
 
 function descriptionFingerprint(value: string | null | undefined): string {
   let hash = 0x811c9dc5;
-  for (const character of (value ?? "").slice(0, 400)) {
+  for (const character of value ?? "") {
     hash ^= character.charCodeAt(0);
     hash = Math.imul(hash, 0x01000193);
   }
@@ -47,9 +47,6 @@ const live = JSON.parse(readFileSync(livePath ? resolve(livePath) : 0, "utf8")) 
   releasePipelines: Array<Record<string, any>>;
   releases: Array<Record<string, any>>;
 };
-const releasePlan = JSON.parse(
-  readFileSync(resolve(root, "delivery/release-plan.json"), "utf8"),
-) as { assignments: Array<{ requirementId: string; release: string }> };
 const runtime = JSON.parse(
   readFileSync(
     resolve(root, "delivery/runtime-gate-dependencies.json"),
@@ -57,9 +54,6 @@ const runtime = JSON.parse(
   ),
 ) as { dependencies: RuntimeDependency[] };
 
-const releaseBySource = new Map(
-  releasePlan.assignments.map((row) => [row.requirementId, row.release]),
-);
 const runtimeBySource = new Map(
   runtime.dependencies.map((row) => [row.requirementId, row.dependencies]),
 );
@@ -71,6 +65,19 @@ for (const issue of snapshot.issues) {
   issueBySource.set(issue.sourceId, issue.id);
 }
 const liveById = new Map(live.issues.map((issue) => [issue.id, issue]));
+const releaseByIssue = new Map(
+  live.issues.map((issue) => {
+    const releases = (issue.releases ?? [])
+      .map((release) => release.version)
+      .filter((version): version is string => /^R[0-5]$/.test(version ?? ""));
+    if (releases.length > 1) {
+      throw new Error(
+        `Multiple R0-R5 releases found for Linear issue ${issue.id}: ${releases.join(", ")}`,
+      );
+    }
+    return [issue.id, releases[0] ?? null] as const;
+  }),
+);
 
 snapshot.generatedAt = new Date().toISOString();
 snapshot.issues = snapshot.issues.map((issue: Record<string, any>) => {
@@ -82,7 +89,7 @@ snapshot.issues = snapshot.issues.map((issue: Record<string, any>) => {
     parentId: current.parentId ?? null,
     title: current.title,
     labels: [...(current.labels ?? [])].sort(),
-    release: sourceId ? releaseBySource.get(sourceId) ?? issue.release : issue.release,
+    release: releaseByIssue.get(issue.id) ?? null,
     milestone: current.projectMilestone?.name ?? null,
     dependencies: sourceId?.startsWith("RG:")
       ? runtimeBySource.get(sourceId) ?? []
@@ -141,10 +148,7 @@ snapshot.linearFingerprint = {
   issues: live.issues
     .map((issue) => {
       const prior = priorFingerprintById.get(issue.id) as Record<string, any> | undefined;
-      const sourceId = sourceByIssue.get(issue.id);
-      const liveReleases = (issue.releases ?? [])
-        .map((release) => release.version)
-        .filter(Boolean);
+      const liveRelease = releaseByIssue.get(issue.id) ?? null;
       return {
         identifier: issue.id,
         title: issue.title,
@@ -159,13 +163,7 @@ snapshot.linearFingerprint = {
         project: issue.project ?? null,
         milestone: issue.projectMilestone?.name ?? null,
         parent: issue.parentId ?? null,
-        releases: (liveReleases.length
-          ? liveReleases
-          : sourceId
-            ? [releaseBySource.get(sourceId)]
-            : prior?.releases ?? [])
-          .filter(Boolean)
-          .sort(),
+        releases: liveRelease ? [liveRelease] : [],
         relations: [...(relationsById.get(issue.id) ?? [])].sort(),
       };
     })

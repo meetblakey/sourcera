@@ -1,5 +1,4 @@
 const ENDPOINT = "https://api.linear.app/graphql";
-const DESCRIPTION_PREFIX_LENGTH = 400;
 
 const ISSUE_QUERY = `
   query DeliveryIssues($after: String) {
@@ -218,7 +217,7 @@ async function paginate<T>(
 
 function descriptionFingerprint(value: string | null): string {
   let hash = 0x811c9dc5;
-  for (const character of (value ?? "").slice(0, DESCRIPTION_PREFIX_LENGTH)) {
+  for (const character of value ?? "") {
     hash ^= character.charCodeAt(0);
     hash = Math.imul(hash, 0x01000193);
   }
@@ -246,7 +245,6 @@ export async function fetchLinearFingerprint(
   ]);
   return {
     issues: issueNodes
-      .filter((issue) => issue.state.type === "backlog")
       .map((issue) => ({
         identifier: issue.identifier,
         title: issue.title,
