@@ -425,6 +425,70 @@ test("rejects GraphQL errors returned with HTTP 200", async () => {
   );
 });
 
+test("rejects a GraphQL relation whose endpoint was not captured", async () => {
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as { query: string };
+    if (body.query.includes("DeliveryIssues")) {
+      return response({
+        data: {
+          issues: {
+            nodes: [
+              {
+                id: "uuid-1",
+                identifier: "PLA-1",
+                title: "First",
+                description: "First",
+                updatedAt: "2026-07-15T00:00:00.000Z",
+                estimate: 1,
+                state: { name: "Backlog", type: "backlog" },
+                labels: completeConnection([]),
+                assignee: null,
+                team: { key: "PLA" },
+                project: null,
+                projectMilestone: null,
+                parent: null,
+                releases: completeConnection([]),
+                relations: completeConnection([
+                  {
+                    type: "blocks",
+                    issue: { identifier: "PLA-1" },
+                    relatedIssue: { identifier: "PLA-2" },
+                  },
+                ]),
+                inverseRelations: completeConnection([]),
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      });
+    }
+    if (body.query.includes("DeliveryPipelines")) {
+      return response({
+        data: {
+          releasePipelines: {
+            nodes: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      });
+    }
+    return response({
+      data: {
+        releases: {
+          nodes: [],
+          pageInfo: { hasNextPage: false, endCursor: null },
+        },
+      },
+    });
+  };
+
+  await assert.rejects(
+    () => fetchLinearFingerprint(fetcher, "secret"),
+    /relation.*PLA-2.*not captured/i,
+  );
+});
+
 test("CLI compares a fixture with the committed snapshot", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-live-"));
   const empty = { issues: [], releasePipelines: [], releases: [] };

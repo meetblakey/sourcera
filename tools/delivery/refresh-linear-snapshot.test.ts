@@ -24,6 +24,7 @@ function refreshFixture(
       requirementId: string;
       dependencies: string[];
     }>;
+    omitPriorFingerprintIds?: string[];
   } = {},
 ) {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
@@ -63,23 +64,25 @@ function refreshFixture(
     issues: snapshotIssues,
     releases: [],
     linearFingerprint: {
-      issues: trackedIssueIds.map((id) => ({
-        identifier: id,
-        title: `Prior ${id}`,
-        descriptionFingerprint: "00000000",
-        updatedAt: "2026-07-14T00:00:00.000Z",
-        estimate: 1,
-        state: "Backlog",
-        stateType: "backlog",
-        labels: ["prior"],
-        assignee: "Prior owner",
-        team: "PLA",
-        project: "Prior project",
-        milestone: "Prior milestone",
-        parent: null,
-        releases: options.priorFingerprintReleases ?? ["R3"],
-        relations: options.priorRelations ?? [],
-      })),
+      issues: trackedIssueIds
+        .filter((id) => !options.omitPriorFingerprintIds?.includes(id))
+        .map((id) => ({
+          identifier: id,
+          title: `Prior ${id}`,
+          descriptionFingerprint: "00000000",
+          updatedAt: "2026-07-14T00:00:00.000Z",
+          estimate: 1,
+          state: "Backlog",
+          stateType: "backlog",
+          labels: ["prior"],
+          assignee: "Prior owner",
+          team: "PLA",
+          project: "Prior project",
+          milestone: "Prior milestone",
+          parent: null,
+          releases: options.priorFingerprintReleases ?? ["R3"],
+          relations: options.priorRelations ?? [],
+        })),
       releasePipelines: [],
       releases: [],
     },
@@ -282,10 +285,18 @@ test("refresh uses only current live release and relations", () => {
         releases: [{ version: "preview" }],
         relations: {
           blocks: [{ id: "PLA-9" }],
-          blockedBy: [{ id: "PLA-0" }],
+          blockedBy: [],
           relatedTo: [],
           duplicateOf: null,
         },
+      },
+      {
+        id: "PLA-9",
+        title: "Captured endpoint",
+        description: "Captured endpoint",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
       },
     ],
     {
@@ -303,7 +314,6 @@ test("refresh uses only current live release and relations", () => {
   assert.equal(updated.issues[0].estimate, 8);
   assert.equal(updated.issues[0].parentId, "PLA-0");
   assert.deepEqual(updated.linearFingerprint.issues[0].relations, [
-    "blocks:PLA-0:PLA-1",
     "blocks:PLA-1:PLA-9",
   ]);
 });
@@ -402,6 +412,166 @@ test("refresh adds runtime dependencies after complete live relations", () => {
       ["blocks:PLA-2:PLA-1", "related:PLA-1:PLA-2"],
     ],
   );
+});
+
+test("refresh places duplicate edges on both captured endpoints", () => {
+  const { result, updated } = refreshFixture([
+    {
+      id: "PLA-1",
+      title: "Duplicate",
+      description: "Duplicate issue",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      relations: {
+        blocks: [],
+        blockedBy: [],
+        relatedTo: [],
+        duplicateOf: { id: "PLA-2" },
+      },
+    },
+    {
+      id: "PLA-2",
+      title: "Canonical",
+      description: "Canonical issue",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+    },
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(
+    updated.linearFingerprint.issues.map(
+      (issue: { relations: string[] }) => issue.relations,
+    ),
+    [
+      ["duplicate:PLA-1:PLA-2"],
+      ["duplicate:PLA-1:PLA-2"],
+    ],
+  );
+});
+
+test("refresh rejects a live relation to an uncaptured endpoint", () => {
+  const { result, original, contents } = refreshFixture([
+    {
+      id: "PLA-1",
+      title: "Captured",
+      description: "Captured issue",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      relations: {
+        blocks: [{ id: "PLA-404" }],
+        blockedBy: [],
+        relatedTo: [],
+        duplicateOf: null,
+      },
+    },
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /relation.*PLA-404.*not captured/i);
+  assert.equal(contents, original);
+});
+
+test("refresh removes a prior relation absent from live truth", () => {
+  const { result, updated } = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "Current",
+        description: "Current issue",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+      },
+    ],
+    { priorRelations: ["blocks:PLA-9:PLA-1"] },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(updated.linearFingerprint.issues[0].relations, []);
+});
+
+test("refresh derives an unseen issue team key from its identifier", () => {
+  const { result, updated } = refreshFixture(
+    [
+      {
+        id: "BUY-99",
+        title: "New issue",
+        description: "New issue",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        team: "Buyer Experience",
+      },
+    ],
+    { omitPriorFingerprintIds: ["BUY-99"] },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(updated.linearFingerprint.issues[0].team, "BUY");
+});
+
+test("refresh requires an explicit team key when it cannot derive one", () => {
+  const missing = refreshFixture(
+    [
+      {
+        id: "external",
+        title: "New issue",
+        description: "New issue",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        team: "Platform",
+      },
+    ],
+    { omitPriorFingerprintIds: ["external"] },
+  );
+  assert.equal(missing.result.status, 1);
+  assert.match(missing.result.stderr, /external.*team key/i);
+  assert.equal(missing.contents, missing.original);
+
+  const explicit = refreshFixture(
+    [
+      {
+        id: "external",
+        title: "New issue",
+        description: "New issue",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        team: "Platform",
+        teamKey: "PLA",
+      },
+    ],
+    { omitPriorFingerprintIds: ["external"] },
+  );
+  assert.equal(explicit.result.status, 0, explicit.result.stderr);
+  assert.equal(explicit.updated.linearFingerprint.issues[0].team, "PLA");
+});
+
+test("refresh rejects a team key that conflicts with the issue identifier", () => {
+  const { result, original, contents } = refreshFixture(
+    [
+      {
+        id: "BUY-99",
+        title: "New issue",
+        description: "New issue",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        team: "Buyer Experience",
+        teamKey: "PLA",
+      },
+    ],
+    { omitPriorFingerprintIds: ["BUY-99"] },
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /BUY-99.*team key.*BUY/i);
+  assert.equal(contents, original);
 });
 
 for (const [name, relations] of [

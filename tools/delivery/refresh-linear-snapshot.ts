@@ -26,6 +26,7 @@ interface LiveIssue {
   labels?: string[];
   assignee?: string | null;
   team?: string;
+  teamKey?: string;
   project?: string | null;
   projectMilestone?: { name: string } | null;
   parentId?: string | null;
@@ -80,6 +81,24 @@ function liveRelationKeys(issue: LiveIssue): string[] {
     keys.add(canonicalLinearRelationKey("duplicateOf", issue.id, reference.id));
   }
   return [...keys].sort();
+}
+
+function liveTeamKey(issue: LiveIssue): string {
+  const derived = /^([A-Z][A-Z0-9]*)-\d+$/.exec(issue.id)?.[1];
+  const explicit = issue.teamKey?.trim();
+  if (explicit) {
+    if (!/^[A-Z][A-Z0-9]*$/.test(explicit)) {
+      throw new Error(`Linear issue ${issue.id} team key is invalid`);
+    }
+    if (derived && explicit !== derived) {
+      throw new Error(
+        `Linear issue ${issue.id} team key ${explicit} does not match ${derived}`,
+      );
+    }
+    return explicit;
+  }
+  if (derived) return derived;
+  throw new Error(`Linear issue ${issue.id} requires an explicit team key`);
 }
 
 const root = resolve(process.argv[2] ?? ".");
@@ -163,15 +182,23 @@ snapshot.releases = live.releases
   }))
   .sort((left, right) => left.version.localeCompare(right.version));
 
-const priorFingerprintById = new Map(
-  snapshot.linearFingerprint.issues.map((issue: Record<string, any>) => [
-    issue.identifier,
-    issue,
-  ]),
-);
 const relationsById = new Map(
-  live.issues.map((issue) => [issue.id, new Set(liveRelationKeys(issue))]),
+  live.issues.map((issue) => [issue.id, new Set<string>()]),
 );
+for (const issue of live.issues) {
+  for (const relation of liveRelationKeys(issue)) {
+    const [, left, right] = relation.split(":");
+    for (const endpoint of [left, right]) {
+      const endpointRelations = relationsById.get(endpoint);
+      if (!endpointRelations) {
+        throw new Error(
+          `Linear relation endpoint ${endpoint} was not captured`,
+        );
+      }
+      endpointRelations.add(relation);
+    }
+  }
+}
 for (const row of runtime.dependencies) {
   const gate = issueBySource.get(row.requirementId);
   if (!gate) throw new Error(`Missing Linear issue for ${row.requirementId}`);
@@ -187,7 +214,6 @@ for (const row of runtime.dependencies) {
 snapshot.linearFingerprint = {
   issues: live.issues
     .map((issue) => {
-      const prior = priorFingerprintById.get(issue.id) as Record<string, any> | undefined;
       const liveRelease = releaseByIssue.get(issue.id) ?? null;
       return {
         identifier: issue.id,
@@ -199,7 +225,7 @@ snapshot.linearFingerprint = {
         stateType: issue.statusType,
         labels: [...(issue.labels ?? [])].sort(),
         assignee: issue.assignee ?? null,
-        team: prior?.team ?? issue.team ?? "",
+        team: liveTeamKey(issue),
         project: issue.project ?? null,
         milestone: issue.projectMilestone?.name ?? null,
         parent: issue.parentId ?? null,

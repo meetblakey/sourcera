@@ -280,6 +280,27 @@ function assertIssueConnectionsComplete(issue: IssueNode): void {
   }
 }
 
+function assertRelationEndpointsCaptured(issues: IssueNode[]): void {
+  const captured = new Set(issues.map((issue) => issue.identifier));
+  for (const issue of issues) {
+    for (const relation of [
+      ...issue.relations.nodes,
+      ...issue.inverseRelations.nodes,
+    ]) {
+      for (const endpoint of [
+        relation.issue.identifier,
+        relation.relatedIssue.identifier,
+      ]) {
+        if (!captured.has(endpoint)) {
+          throw new Error(
+            `Linear relation endpoint ${endpoint} was not captured`,
+          );
+        }
+      }
+    }
+  }
+}
+
 function assertPipelineConnectionsComplete(pipeline: PipelineNode): void {
   for (const field of ["teams", "stages"] as const) {
     const pageInfo = pipeline[field].pageInfo;
@@ -312,6 +333,7 @@ export async function fetchLinearFingerprint(
     paginate<ReleaseNode>(fetcher, token, RELEASE_QUERY, "releases"),
   ]);
   for (const issue of issueNodes) assertIssueConnectionsComplete(issue);
+  assertRelationEndpointsCaptured(issueNodes);
   for (const pipeline of pipelineNodes) {
     assertPipelineConnectionsComplete(pipeline);
   }
