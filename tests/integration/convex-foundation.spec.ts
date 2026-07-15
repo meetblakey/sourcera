@@ -355,3 +355,87 @@ test("predeploy allows an unrelated query timer", async () => {
     await rm(fixturePath, { force: true });
   }
 });
+
+test("predeploy rejects a named Convex query interval callback", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_named_interval_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nasync function refresh() {\n  await client.query(api.foundation.observeProbe, {});\n}\nsetInterval(refresh, 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects a named arrow Convex query interval callback", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_named_arrow_interval_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nconst refresh = async () => {\n  await client.query(api.foundation.observeProbe, {});\n};\nsetInterval(refresh, 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects a function-expression Convex query interval callback", async () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_function_expression_interval_test__.ts",
+  );
+  try {
+    await writeFile(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nconst refresh = async function () {\n  await client.query(api.foundation.observeProbe, {});\n};\nsetInterval(refresh, 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    await rm(fixturePath, { force: true });
+  }
+});

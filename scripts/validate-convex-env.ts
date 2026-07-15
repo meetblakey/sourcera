@@ -94,6 +94,28 @@ function collectPollingViolations(
       true,
     );
     if (!importsConvex(sourceFile)) continue;
+    const namedCallbackBodies = new Map<string, ts.Node>();
+    const collectNamedCallbacks = (node: ts.Node) => {
+      if (ts.isFunctionDeclaration(node) && node.name && node.body) {
+        namedCallbackBodies.set(node.name.text, node.body);
+      }
+      if (
+        ts.isVariableDeclaration(node) &&
+        ts.isIdentifier(node.name) &&
+        node.initializer &&
+        (ts.isArrowFunction(node.initializer) ||
+          ts.isFunctionExpression(node.initializer))
+      ) {
+        namedCallbackBodies.set(node.name.text, node.initializer.body);
+      }
+      ts.forEachChild(node, collectNamedCallbacks);
+    };
+    collectNamedCallbacks(sourceFile);
+    const namedCallbackContainsConvexQuery = (callback: ts.Expression) => {
+      if (!ts.isIdentifier(callback)) return false;
+      const body = namedCallbackBodies.get(callback.text);
+      return body ? containsConvexQuery(body) : false;
+    };
     const visit = (node: ts.Node) => {
       if (
         ts.isFunctionDeclaration(node) &&
@@ -123,7 +145,8 @@ function collectPollingViolations(
         ts.isCallExpression(node) &&
         isNamedCall(node, "setInterval") &&
         node.arguments[0] &&
-        containsConvexQuery(node.arguments[0])
+        (containsConvexQuery(node.arguments[0]) ||
+          namedCallbackContainsConvexQuery(node.arguments[0]))
       ) {
         violations.push(
           path.relative(repositoryRoot, absolutePath).replaceAll("\\", "/"),
