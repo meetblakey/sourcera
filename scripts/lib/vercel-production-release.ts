@@ -1,8 +1,28 @@
+import { realpathSync } from "node:fs";
 import path from "node:path";
 
 const FULL_GIT_COMMIT_SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 const RELEASE_RUN_ID = /^[A-Za-z0-9_-]{8,128}$/;
 const EXPECTED_APPLICATIONS = ["marketplace", "buyer", "seller"] as const;
+const SAFE_PROCESS_ENVIRONMENT_KEYS = [
+  "CI",
+  "FORCE_COLOR",
+  "LANG",
+  "LC_ALL",
+  "LC_CTYPE",
+  "NODE_ENV",
+  "NODE_EXTRA_CA_CERTS",
+  "NO_COLOR",
+  "PATH",
+  "SHELL",
+  "SSL_CERT_DIR",
+  "SSL_CERT_FILE",
+  "TEMP",
+  "TERM",
+  "TMP",
+  "TMPDIR",
+  "TZ",
+] as const;
 
 export type VercelProductionApplication =
   (typeof EXPECTED_APPLICATIONS)[number];
@@ -25,11 +45,14 @@ export type CommandRunner = (invocation: CommandInvocation) => CommandResult;
 
 export interface VercelProductionTarget {
   application: VercelProductionApplication;
+  autoExposeSystemEnvs: true;
   cwd: string;
+  productionBranch: "main";
   productionDomain: string | null;
   projectId: string;
   projectName: string;
   rootDirectory: string | null;
+  sourceFilesOutsideRootDirectory: true;
 }
 
 export interface VercelProductionReleaseConfig {
@@ -91,6 +114,7 @@ export interface StageVercelProductionReleaseOptions {
   releaseRunId: string;
   repositoryRoot: string;
   run: CommandRunner;
+  worktreeRoot: string;
 }
 
 interface DeploymentReadback {
@@ -104,6 +128,66 @@ interface PredecessorReceipt {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function canonicalizePotentialPath(value: string): string {
+  let existingAncestor = path.resolve(value);
+  const missingSegments: string[] = [];
+  while (true) {
+    try {
+      return path.join(realpathSync(existingAncestor), ...missingSegments);
+    } catch (error) {
+      const code =
+        error instanceof Error && "code" in error ? error.code : undefined;
+      if (code !== "ENOENT") throw error;
+      const parent = path.dirname(existingAncestor);
+      if (parent === existingAncestor) throw error;
+      missingSegments.unshift(path.basename(existingAncestor));
+      existingAncestor = parent;
+    }
+  }
+}
+
+function privateProcessEnvironment(
+  sourceEnvironment: NodeJS.ProcessEnv,
+  privateHome: string,
+): NodeJS.ProcessEnv {
+  const environment: NodeJS.ProcessEnv = {};
+  for (const key of SAFE_PROCESS_ENVIRONMENT_KEYS) {
+    if (sourceEnvironment[key] !== undefined) {
+      environment[key] = sourceEnvironment[key];
+    }
+  }
+  environment.HOME = privateHome;
+  environment.XDG_CACHE_HOME = path.join(privateHome, ".cache");
+  environment.XDG_CONFIG_HOME = path.join(privateHome, ".config");
+  environment.XDG_DATA_HOME = path.join(privateHome, ".local", "share");
+  environment.XDG_STATE_HOME = path.join(privateHome, ".local", "state");
+  return environment;
+}
+
+export function createVercelProductionGitEnvironment(
+  sourceEnvironment: NodeJS.ProcessEnv,
+  privateHome: string,
+): NodeJS.ProcessEnv {
+  return privateProcessEnvironment(
+    sourceEnvironment,
+    canonicalizePotentialPath(privateHome),
+  );
+}
+
+function createVercelProductionCommandEnvironment(
+  sourceEnvironment: NodeJS.ProcessEnv,
+  privateHome: string,
+): NodeJS.ProcessEnv {
+  const token = sourceEnvironment.VERCEL_TOKEN;
+  if (typeof token !== "string" || !token || token !== token.trim()) {
+    throw new Error("VERCEL_TOKEN is required for production staging");
+  }
+  return {
+    ...createVercelProductionGitEnvironment(sourceEnvironment, privateHome),
+    VERCEL_TOKEN: token,
+  };
 }
 
 function readRecord(
@@ -201,6 +285,17 @@ function readProjectRootDirectory(
   return value;
 }
 
+function readRequiredTrue(
+  source: Record<string, unknown>,
+  key: string,
+  context: string,
+): true {
+  if (source[key] !== true) {
+    throw new Error(`${context} ${key} must be true`);
+  }
+  return true;
+}
+
 function readTarget(
   value: unknown,
   expectedApplication: VercelProductionApplication,
@@ -224,13 +319,19 @@ function readTarget(
     "cwd",
     `${application} target`,
   );
-  if (path.isAbsolute(relativeCwd)) {
-    throw new Error(`${application} cwd must be repository-relative`);
+  if (
+    relativeCwd !== "." ||
+    path.resolve(repositoryRoot, relativeCwd) !== path.resolve(repositoryRoot)
+  ) {
+    throw new Error(`${application} cwd must be the repository root (.)`);
   }
-  const absoluteCwd = path.resolve(repositoryRoot, relativeCwd);
-  const relativeToRoot = path.relative(repositoryRoot, absoluteCwd);
-  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
-    throw new Error(`${application} cwd must remain inside the repository`);
+  const productionBranch = readRequiredString(
+    value,
+    "productionBranch",
+    `${application} target`,
+  );
+  if (productionBranch !== "main") {
+    throw new Error(`${application} productionBranch must be main`);
   }
   const projectId = readRequiredString(value, "projectId", `${application} target`);
   if (!/^prj_[A-Za-z0-9]+$/.test(projectId)) {
@@ -246,7 +347,13 @@ function readTarget(
   }
   return {
     application: expectedApplication,
-    cwd: absoluteCwd,
+    autoExposeSystemEnvs: readRequiredTrue(
+      value,
+      "autoExposeSystemEnvs",
+      `${application} target`,
+    ),
+    cwd: relativeCwd,
+    productionBranch,
     productionDomain: readProductionDomain(
       value.productionDomain,
       `${application} target`,
@@ -255,6 +362,11 @@ function readTarget(
     projectName,
     rootDirectory: readProjectRootDirectory(
       value.rootDirectory,
+      `${application} target`,
+    ),
+    sourceFilesOutsideRootDirectory: readRequiredTrue(
+      value,
+      "sourceFilesOutsideRootDirectory",
       `${application} target`,
     ),
   };
@@ -332,19 +444,19 @@ function requirePrimaryCleanCheckout(
   if (head !== approvedSha) {
     throw new Error("Approved SHA must exactly match Git HEAD");
   }
-  const topLevel = path.resolve(
+  const topLevel = canonicalizePotentialPath(
     git(
       ["rev-parse", "--show-toplevel"],
       "Unable to identify the primary checkout",
     ),
   );
-  const gitDirectory = path.resolve(
+  const gitDirectory = canonicalizePotentialPath(
     git(
       ["rev-parse", "--absolute-git-dir"],
       "Unable to identify the primary checkout",
     ),
   );
-  const commonDirectory = path.resolve(
+  const commonDirectory = canonicalizePotentialPath(
     git(
       ["rev-parse", "--path-format=absolute", "--git-common-dir"],
       "Unable to identify the primary checkout",
@@ -361,6 +473,77 @@ function requirePrimaryCleanCheckout(
   ) {
     throw new Error(
       "Vercel production staging requires a clean primary checkout",
+    );
+  }
+}
+
+function requireDisjointWorktreeRoot(
+  repositoryRoot: string,
+  worktreeRoot: string,
+) {
+  const relativeToRepository = path.relative(repositoryRoot, worktreeRoot);
+  const relativeToWorktree = path.relative(worktreeRoot, repositoryRoot);
+  const isInside = (relative: string) =>
+    relative === "" ||
+    (!relative.startsWith("..") && !path.isAbsolute(relative));
+  if (isInside(relativeToRepository) || isInside(relativeToWorktree)) {
+    throw new Error(
+      "Detached staging worktree must be outside and disjoint from the primary checkout",
+    );
+  }
+}
+
+function requireDetachedCleanCheckout(
+  run: CommandRunner,
+  worktreeRoot: string,
+  approvedSha: string,
+  environment: NodeJS.ProcessEnv,
+) {
+  const git = (arguments_: string[], message: string) =>
+    runChecked(
+      run,
+      {
+        arguments: arguments_,
+        command: "git",
+        cwd: worktreeRoot,
+        environment,
+      },
+      message,
+    );
+  const head = git(
+    ["rev-parse", "HEAD"],
+    "Unable to read the detached staging worktree HEAD",
+  );
+  const topLevel = canonicalizePotentialPath(
+    git(
+      ["rev-parse", "--show-toplevel"],
+      "Unable to identify the detached staging worktree",
+    ),
+  );
+  const branch = run({
+    arguments: ["symbolic-ref", "-q", "HEAD"],
+    command: "git",
+    cwd: worktreeRoot,
+    environment,
+  });
+  const status = git(
+    ["status", "--porcelain=v1", "--untracked-files=all"],
+    "Unable to inspect the detached staging worktree",
+  );
+  if (head !== approvedSha) {
+    throw new Error(
+      "Detached staging worktree must remain at the approved SHA",
+    );
+  }
+  if (
+    topLevel !== worktreeRoot ||
+    branch.error ||
+    branch.status !== 1 ||
+    branch.stdout.trim() ||
+    status.length > 0
+  ) {
+    throw new Error(
+      "Detached staging worktree must remain detached and clean",
     );
   }
 }
@@ -472,6 +655,7 @@ function capturePredecessor(
   target: VercelProductionTarget,
   teamId: string,
   environment: NodeJS.ProcessEnv,
+  worktreeRoot: string,
 ): PredecessorReceipt {
   const output = runChecked(
     run,
@@ -484,7 +668,7 @@ function capturePredecessor(
         teamId,
       ],
       command: "vercel",
-      cwd: target.cwd,
+      cwd: worktreeRoot,
       environment,
     },
     `${target.application} production predecessor is missing`,
@@ -508,6 +692,25 @@ function capturePredecessor(
     if (liveRootDirectory !== target.rootDirectory) {
       throw new Error(
         `${target.application} project rootDirectory does not match the repo pin`,
+      );
+    }
+    if (project.autoExposeSystemEnvs !== target.autoExposeSystemEnvs) {
+      throw new Error(
+        `${target.application} project autoExposeSystemEnvs does not match the repo pin`,
+      );
+    }
+    if (
+      project.sourceFilesOutsideRootDirectory !==
+      target.sourceFilesOutsideRootDirectory
+    ) {
+      throw new Error(
+        `${target.application} project sourceFilesOutsideRootDirectory does not match the repo pin`,
+      );
+    }
+    const link = readRecord(project, "link");
+    if (link?.productionBranch !== target.productionBranch) {
+      throw new Error(
+        `${target.application} project productionBranch does not match the repo pin`,
       );
     }
     const targets = readRecord(project, "targets");
@@ -793,14 +996,6 @@ function productionDeployArguments(
   ];
 }
 
-function sanitizedDeployEnvironment(
-  environment: NodeJS.ProcessEnv,
-): NodeJS.ProcessEnv {
-  const result = { ...environment };
-  delete result.VERCEL_GIT_COMMIT_SHA;
-  return result;
-}
-
 export function stageVercelProductionRelease(
   options: StageVercelProductionReleaseOptions,
 ): VercelProductionStageReceipt {
@@ -811,12 +1006,25 @@ export function stageVercelProductionRelease(
   if (!RELEASE_RUN_ID.test(options.releaseRunId)) {
     throw new Error("Release run ID is invalid");
   }
-  const repositoryRoot = path.resolve(options.repositoryRoot);
+  const repositoryRoot = canonicalizePotentialPath(options.repositoryRoot);
+  let worktreeRoot = canonicalizePotentialPath(options.worktreeRoot);
+  requireDisjointWorktreeRoot(repositoryRoot, worktreeRoot);
   const configuration = readVercelProductionReleaseConfig(
     options.config,
     repositoryRoot,
   );
-  const environment = { ...(options.environment ?? process.env) };
+  const sourceEnvironment = { ...(options.environment ?? process.env) };
+  const privateHome = canonicalizePotentialPath(
+    path.join(path.dirname(worktreeRoot), "home"),
+  );
+  const gitEnvironment = createVercelProductionGitEnvironment(
+    sourceEnvironment,
+    privateHome,
+  );
+  const vercelEnvironment = createVercelProductionCommandEnvironment(
+    sourceEnvironment,
+    privateHome,
+  );
   const now = options.now ?? (() => new Date());
   const runStartedAt = now();
   if (Number.isNaN(runStartedAt.getTime())) {
@@ -826,132 +1034,237 @@ export function stageVercelProductionRelease(
     options.run,
     repositoryRoot,
     approvedSha,
-    environment,
+    gitEnvironment,
   );
-
-  const predecessors = new Map<
-    VercelProductionApplication,
-    PredecessorReceipt
-  >();
-  const predecessorFailures: string[] = [];
-  for (const target of configuration.targets) {
-    try {
-      predecessors.set(
-        target.application,
-        capturePredecessor(
-          options.run,
-          target,
-          configuration.teamId,
-          environment,
-        ),
-      );
-    } catch (error) {
-      predecessorFailures.push(
-        error instanceof Error
-          ? error.message
-          : `${target.application} production predecessor is invalid`,
-      );
-    }
-  }
-  if (predecessorFailures.length > 0) {
-    throw new Error(
-      `Vercel production predecessors are not ready: ${predecessorFailures.join("; ")}`,
-    );
-  }
-
   const applications: VercelProductionStagedApplication[] = [];
-  for (const target of configuration.targets) {
-    const deployOutput = runChecked(
+  let operationFailure: unknown;
+  let worktreeAttempted = false;
+  try {
+    worktreeAttempted = true;
+    runChecked(
       options.run,
       {
-        arguments: productionDeployArguments(
-          target,
-          configuration.teamId,
-          approvedSha,
-          options.releaseRunId,
-        ),
-        command: "vercel",
-        cwd: target.cwd,
-        environment: sanitizedDeployEnvironment(environment),
+        arguments: ["worktree", "add", "--detach", worktreeRoot, approvedSha],
+        command: "git",
+        cwd: repositoryRoot,
+        environment: gitEnvironment,
       },
-      `${target.application} Vercel staging failed`,
+      "Unable to create the detached Vercel staging worktree",
     );
-    const deploymentId = readDeploymentId(deployOutput, target.application);
-    const readbackOutput = runChecked(
+    worktreeRoot = canonicalizePotentialPath(worktreeRoot);
+    requireDetachedCleanCheckout(
       options.run,
-      {
-        arguments: [
-          "api",
-          `/v13/deployments/${deploymentId}`,
-          "--raw",
-          "--scope",
-          configuration.teamId,
-        ],
-        command: "vercel",
-        cwd: target.cwd,
-        environment,
-      },
-      `${target.application} authenticated readback failed`,
-    );
-    const deployment = readDeployment(
-      readbackOutput,
-      `${target.application} authenticated readback`,
-    );
-    const readback = validateStagedDeployment(
-      deployment,
-      deploymentId,
-      target,
-      configuration.teamId,
+      worktreeRoot,
       approvedSha,
-      options.releaseRunId,
-      runStartedAt.getTime(),
-      now().getTime(),
+      gitEnvironment,
     );
-    const healthOutput = runChecked(
-      options.run,
-      {
-        arguments: [
-          "curl",
-          "/api/health",
-          "--deployment",
-          deploymentId,
-          "--scope",
-          configuration.teamId,
-          "--yes",
-        ],
-        command: "vercel",
-        cwd: target.cwd,
-        environment,
-      },
-      `${target.application} health proof failed`,
-    );
-    const predecessor = predecessors.get(target.application);
-    if (!predecessor) {
-      throw new Error(`${target.application} production predecessor is missing`);
+
+    const predecessors = new Map<
+      VercelProductionApplication,
+      PredecessorReceipt
+    >();
+    const predecessorFailures: string[] = [];
+    for (const target of configuration.targets) {
+      try {
+        predecessors.set(
+          target.application,
+          capturePredecessor(
+            options.run,
+            target,
+            configuration.teamId,
+            vercelEnvironment,
+            worktreeRoot,
+          ),
+        );
+      } catch (error) {
+        predecessorFailures.push(
+          error instanceof Error
+            ? error.message
+            : `${target.application} production predecessor is invalid`,
+        );
+      }
     }
-    applications.push({
-      application: target.application,
-      createdAt: readback.createdAt,
-      deploymentId,
-      health: readHealthProof(
-        healthOutput,
-        target,
+    if (predecessorFailures.length > 0) {
+      throw new Error(
+        `Vercel production predecessors are not ready: ${predecessorFailures.join("; ")}`,
+      );
+    }
+    requireDetachedCleanCheckout(
+      options.run,
+      worktreeRoot,
+      approvedSha,
+      gitEnvironment,
+    );
+
+    for (const target of configuration.targets) {
+      requireDetachedCleanCheckout(
+        options.run,
+        worktreeRoot,
         approvedSha,
+        gitEnvironment,
+      );
+      const deployOutput = runChecked(
+        options.run,
+        {
+          arguments: productionDeployArguments(
+            target,
+            configuration.teamId,
+            approvedSha,
+            options.releaseRunId,
+          ),
+          command: "vercel",
+          cwd: worktreeRoot,
+          environment: vercelEnvironment,
+        },
+        `${target.application} Vercel staging failed`,
+      );
+      requireDetachedCleanCheckout(
+        options.run,
+        worktreeRoot,
+        approvedSha,
+        gitEnvironment,
+      );
+      const deploymentId = readDeploymentId(deployOutput, target.application);
+      const readbackOutput = runChecked(
+        options.run,
+        {
+          arguments: [
+            "api",
+            `/v13/deployments/${deploymentId}`,
+            "--raw",
+            "--scope",
+            configuration.teamId,
+          ],
+          command: "vercel",
+          cwd: worktreeRoot,
+          environment: vercelEnvironment,
+        },
+        `${target.application} authenticated readback failed`,
+      );
+      const deployment = readDeployment(
+        readbackOutput,
+        `${target.application} authenticated readback`,
+      );
+      const readback = validateStagedDeployment(
+        deployment,
+        deploymentId,
+        target,
+        configuration.teamId,
+        approvedSha,
+        options.releaseRunId,
         runStartedAt.getTime(),
         now().getTime(),
-      ),
-      predecessorDeploymentId: predecessor.deploymentId,
-      predecessorUrl: predecessor.url,
-      productionDomain: target.productionDomain,
-      projectId: target.projectId,
-      projectName: target.projectName,
-      providerGitSha: readback.providerGitSha,
-      rootDirectory: target.rootDirectory,
-      state: "READY",
-      substate: "STAGED",
-      target: "production",
-      url: readback.url,
-    });
+      );
+      const healthOutput = runChecked(
+        options.run,
+        {
+          arguments: [
+            "curl",
+            "/api/health",
+            "--deployment",
+            deploymentId,
+            "--scope",
+            configuration.teamId,
+            "--yes",
+          ],
+          command: "vercel",
+          cwd: worktreeRoot,
+          environment: vercelEnvironment,
+        },
+        `${target.application} health proof failed`,
+      );
+      const predecessor = predecessors.get(target.application);
+      if (!predecessor) {
+        throw new Error(
+          `${target.application} production predecessor is missing`,
+        );
+      }
+      applications.push({
+        application: target.application,
+        createdAt: readback.createdAt,
+        deploymentId,
+        health: readHealthProof(
+          healthOutput,
+          target,
+          approvedSha,
+          runStartedAt.getTime(),
+          now().getTime(),
+        ),
+        predecessorDeploymentId: predecessor.deploymentId,
+        predecessorUrl: predecessor.url,
+        productionDomain: target.productionDomain,
+        projectId: target.projectId,
+        projectName: target.projectName,
+        providerGitSha: readback.providerGitSha,
+        rootDirectory: target.rootDirectory,
+        state: "READY",
+        substate: "STAGED",
+        target: "production",
+        url: readback.url,
+      });
+      requireDetachedCleanCheckout(
+        options.run,
+        worktreeRoot,
+        approvedSha,
+        gitEnvironment,
+      );
+    }
+  } catch (error) {
+    operationFailure = error;
+  }
+
+  const finalizationFailures: unknown[] = [];
+  if (worktreeAttempted) {
+    for (const [arguments_, message] of [
+      [
+        ["worktree", "remove", "--force", worktreeRoot],
+        "Unable to remove the detached Vercel staging worktree",
+      ],
+      [["worktree", "prune"], "Unable to prune detached Git worktrees"],
+    ] as const) {
+      try {
+        runChecked(
+          options.run,
+          {
+            arguments: [...arguments_],
+            command: "git",
+            cwd: repositoryRoot,
+            environment: gitEnvironment,
+          },
+          message,
+        );
+      } catch (error) {
+        finalizationFailures.push(error);
+      }
+    }
+  }
+  try {
+    requirePrimaryCleanCheckout(
+      options.run,
+      repositoryRoot,
+      approvedSha,
+      gitEnvironment,
+    );
+  } catch (error) {
+    finalizationFailures.push(error);
+  }
+  if (operationFailure !== undefined) {
+    if (finalizationFailures.length > 0) {
+      throw new AggregateError(
+        [operationFailure, ...finalizationFailures],
+        "Vercel staging failed and cleanup could not be verified",
+      );
+    }
+    throw operationFailure;
+  }
+  if (finalizationFailures.length === 1) {
+    throw finalizationFailures[0];
+  }
+  if (finalizationFailures.length > 1) {
+    throw new AggregateError(
+      finalizationFailures,
+      "Vercel staging cleanup could not be verified",
+    );
   }
 
   const completedAt = now();

@@ -1,7 +1,14 @@
 import { spawnSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { existsSync, realpathSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  realpathSync,
+  rmSync,
+} from "node:fs";
 import { link, mkdir, unlink, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,6 +17,7 @@ import {
   type CommandInvocation,
   type CommandResult,
   type VercelProductionStageReceipt,
+  createVercelProductionGitEnvironment,
   stageVercelProductionRelease,
 } from "./lib/vercel-production-release";
 
@@ -18,20 +26,33 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
+type VercelStagingSignal = "SIGHUP" | "SIGINT" | "SIGTERM";
+
+interface CleanupVercelStagingWorktreeOptions {
+  environment?: NodeJS.ProcessEnv;
+  removeDirectory?: (directory: string) => void;
+  repositoryRoot: string;
+  run?: (invocation: CommandInvocation) => CommandResult;
+  temporaryRoot: string;
+  worktreeRoot: string;
+}
+
 export function readReceiptOutputPath(
   arguments_: string[],
   root: string,
-): string | undefined {
-  if (arguments_.length === 0) return undefined;
+): string {
   if (
     arguments_.length !== 2 ||
     arguments_[0] !== "--receipt-out" ||
     !arguments_[1]?.trim()
   ) {
-    throw new Error("Usage: stage-vercel-production [--receipt-out <path>]");
+    throw new Error("Usage: stage-vercel-production --receipt-out <path>");
   }
   const outputPath = canonicalizePotentialPath(path.resolve(root, arguments_[1]));
   requireOutsideRepository(outputPath, root);
+  if (existsSync(outputPath)) {
+    throw new Error(`Receipt output already exists: ${outputPath}`);
+  }
   return outputPath;
 }
 
@@ -131,24 +152,111 @@ function execute(invocation: CommandInvocation): CommandResult {
   };
 }
 
+export function cleanupVercelStagingWorktree(
+  options: CleanupVercelStagingWorktreeOptions,
+) {
+  const run = options.run ?? execute;
+  const environment = createVercelProductionGitEnvironment(
+    options.environment ?? process.env,
+    path.join(options.temporaryRoot, "home"),
+  );
+  const runGit = (arguments_: string[]) => {
+    try {
+      run({
+        arguments: arguments_,
+        command: "git",
+        cwd: options.repositoryRoot,
+        environment,
+      });
+    } catch {
+      // Signal cleanup is best effort; process termination must still complete.
+    }
+  };
+  runGit(["worktree", "remove", "--force", options.worktreeRoot]);
+  try {
+    (options.removeDirectory ?? ((directory) => {
+      rmSync(directory, { force: true, recursive: true });
+    }))(options.temporaryRoot);
+  } catch {
+    // Signal cleanup is best effort; process termination must still complete.
+  }
+  runGit(["worktree", "prune"]);
+}
+
+export function createVercelStagingSignalHandler(
+  signal: VercelStagingSignal,
+  cleanup: () => void,
+  terminate: (exitCode: number) => void = (exitCode) => process.exit(exitCode),
+): () => void {
+  const exitCodes: Record<VercelStagingSignal, number> = {
+    SIGHUP: 129,
+    SIGINT: 130,
+    SIGTERM: 143,
+  };
+  let handled = false;
+  return () => {
+    if (handled) return;
+    handled = true;
+    try {
+      cleanup();
+    } finally {
+      terminate(exitCodes[signal]);
+    }
+  };
+}
+
 export async function main(arguments_ = process.argv.slice(2)) {
   const approvedSha = process.env.SOURCERA_RELEASE_APPROVED_SHA;
   if (!approvedSha) {
     throw new Error("SOURCERA_RELEASE_APPROVED_SHA is required");
   }
   const receiptOutputPath = readReceiptOutputPath(arguments_, repositoryRoot);
-  const receipt = stageVercelProductionRelease({
-    approvedSha,
-    config: productionTargets,
-    environment: process.env,
-    releaseRunId: randomUUID(),
-    repositoryRoot,
-    run: execute,
-  });
-  if (receiptOutputPath) {
-    await writeVercelProductionStageReceipt(receiptOutputPath, receipt);
+  const temporaryRoot = realpathSync(
+    mkdtempSync(path.join(os.tmpdir(), "sourcera-vercel-stage-")),
+  );
+  const worktreeRoot = path.join(temporaryRoot, "checkout");
+  mkdirSync(path.join(temporaryRoot, "home"), { mode: 0o700 });
+  const cleanup = () =>
+    cleanupVercelStagingWorktree({
+      environment: process.env,
+      repositoryRoot,
+      temporaryRoot,
+      worktreeRoot,
+    });
+  const signals: VercelStagingSignal[] = ["SIGHUP", "SIGINT", "SIGTERM"];
+  const signalHandlers = new Map(
+    signals.map((signal) => [
+      signal,
+      createVercelStagingSignalHandler(signal, cleanup),
+    ]),
+  );
+  for (const [signal, handler] of signalHandlers) {
+    process.once(signal, handler);
   }
-  process.stdout.write(`${JSON.stringify(receipt)}\n`);
+  let stagingCompleted = false;
+  try {
+    const receipt = stageVercelProductionRelease({
+      approvedSha,
+      config: productionTargets,
+      environment: process.env,
+      releaseRunId: randomUUID(),
+      repositoryRoot,
+      run: execute,
+      worktreeRoot,
+    });
+    stagingCompleted = true;
+    await writeVercelProductionStageReceipt(receiptOutputPath, receipt);
+    process.stdout.write(`${JSON.stringify(receipt)}\n`);
+  } finally {
+    for (const [signal, handler] of signalHandlers) {
+      process.off(signal, handler);
+    }
+    if (stagingCompleted) {
+      rmSync(temporaryRoot, { force: true, recursive: true });
+    } else {
+      cleanup();
+    }
+  }
 }
 
 if (

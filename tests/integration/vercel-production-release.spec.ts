@@ -1,5 +1,13 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
+import { realpathSync } from "node:fs";
+import {
+  mkdtemp,
+  readFile,
+  realpath,
+  rm,
+  symlink,
+  writeFile,
+} from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -11,6 +19,8 @@ import {
   stageVercelProductionRelease,
 } from "../../scripts/lib/vercel-production-release";
 import {
+  cleanupVercelStagingWorktree,
+  createVercelStagingSignalHandler,
   readReceiptOutputPath,
   writeVercelProductionStageReceipt,
 } from "../../scripts/stage-vercel-production";
@@ -19,7 +29,19 @@ const approvedSha = "0123456789abcdef0123456789abcdef01234567";
 const releaseRunId = "019f6540-4c8c-7f1e-a014-cbc8f189b912";
 const startedAt = new Date("2026-07-15T15:00:00.000Z");
 const repositoryRoot = "/repo";
+const temporaryRoot = path.join(
+  realpathSync(os.tmpdir()),
+  "sourcera-vercel-stage",
+);
+const worktreeRoot = path.join(temporaryRoot, "checkout");
+const privateHome = path.join(temporaryRoot, "home");
 const teamId = "team_6nIbCLwuaHPTHviqgckfTiyn";
+const vercelToken = "vercel_test_explicit_release_credential";
+const releaseEnvironment = {
+  LANG: "en_US.UTF-8",
+  PATH: "/safe/bin",
+  VERCEL_TOKEN: vercelToken,
+};
 
 const config = {
   convexProduction: {
@@ -31,27 +53,36 @@ const config = {
     targets: [
       {
         application: "marketplace",
+        autoExposeSystemEnvs: true,
         cwd: ".",
+        productionBranch: "main",
         productionDomain: null,
         projectId: "prj_FIBSOffJX8GtY8JHTSXKixfVryBp",
         projectName: "sourcera",
         rootDirectory: null,
+        sourceFilesOutsideRootDirectory: true,
       },
       {
         application: "buyer",
+        autoExposeSystemEnvs: true,
         cwd: ".",
+        productionBranch: "main",
         productionDomain: "sourcera-buyer-meetblakeys-projects.vercel.app",
         projectId: "prj_ZbZgRUXjPzgv6Oqepe13W6yV2AyN",
         projectName: "sourcera-buyer",
         rootDirectory: "apps/buyer",
+        sourceFilesOutsideRootDirectory: true,
       },
       {
         application: "seller",
+        autoExposeSystemEnvs: true,
         cwd: ".",
+        productionBranch: "main",
         productionDomain: "sourcera-seller-meetblakeys-projects.vercel.app",
         projectId: "prj_Vd0Roi2q0XPkphCrn8rtoNxI1DkS",
         projectName: "sourcera-seller",
         rootDirectory: "apps/seller",
+        sourceFilesOutsideRootDirectory: true,
       },
     ],
   },
@@ -107,9 +138,12 @@ function projectReadback(
   assert.ok(target);
   return {
     accountId: teamId,
+    autoExposeSystemEnvs: target.autoExposeSystemEnvs,
     id: target.projectId,
+    link: { productionBranch: target.productionBranch },
     name: target.projectName,
     rootDirectory: target.rootDirectory,
+    sourceFilesOutsideRootDirectory: target.sourceFilesOutsideRootDirectory,
     targets: {
       production: {
         alias: target.productionDomain ? [target.productionDomain] : [],
@@ -147,15 +181,21 @@ function successfulRunner(
     invocations.push(invocation);
     if (invocation.command === "git") {
       const operation = invocation.arguments.join(" ");
+      if (operation.startsWith("worktree add --detach ")) return gitResult("");
+      if (operation.startsWith("worktree remove --force ")) return gitResult("");
+      if (operation === "worktree prune") return gitResult("");
       if (operation === "rev-parse HEAD") return gitResult(approvedSha);
       if (operation === "rev-parse --show-toplevel") {
-        return gitResult(repositoryRoot);
+        return gitResult(invocation.cwd);
       }
       if (operation === "rev-parse --absolute-git-dir") {
         return gitResult(`${repositoryRoot}/.git`);
       }
       if (operation === "rev-parse --path-format=absolute --git-common-dir") {
         return gitResult(`${repositoryRoot}/.git`);
+      }
+      if (operation === "symbolic-ref -q HEAD") {
+        return { status: 1, stderr: "", stdout: "" };
       }
       if (operation === "status --porcelain=v1 --untracked-files=all") {
         return gitResult("");
@@ -256,6 +296,92 @@ test("production config requires the exact Marketplace, Buyer, Seller order", ()
       ),
     /productionDomain/,
   );
+
+  for (const [field, value] of [
+    ["autoExposeSystemEnvs", false],
+    ["cwd", "apps/buyer"],
+    ["productionBranch", "release"],
+    ["sourceFilesOutsideRootDirectory", false],
+  ] as const) {
+    assert.throws(
+      () =>
+        readVercelProductionReleaseConfig(
+          {
+            ...config,
+            vercelProduction: {
+              ...config.vercelProduction,
+              targets: config.vercelProduction.targets.map((target, index) =>
+                index === 1 ? { ...target, [field]: value } : target,
+              ),
+            },
+          },
+          repositoryRoot,
+        ),
+      new RegExp(field),
+    );
+  }
+});
+
+test("canonical production targets retain the live Vercel identity contract", async () => {
+  const canonical = JSON.parse(
+    await readFile(
+      path.join(process.cwd(), "config/production-targets.json"),
+      "utf8",
+    ),
+  ) as Record<string, unknown>;
+  const parsed = readVercelProductionReleaseConfig(
+    { ...canonical, convexProduction: config.convexProduction },
+    process.cwd(),
+  );
+
+  assert.deepEqual(
+    parsed.targets.map((target) => ({
+      application: target.application,
+      autoExposeSystemEnvs: target.autoExposeSystemEnvs,
+      cwd: target.cwd,
+      productionBranch: target.productionBranch,
+      productionDomain: target.productionDomain,
+      projectId: target.projectId,
+      projectName: target.projectName,
+      rootDirectory: target.rootDirectory,
+      sourceFilesOutsideRootDirectory: target.sourceFilesOutsideRootDirectory,
+    })),
+    [
+      {
+        application: "marketplace",
+        autoExposeSystemEnvs: true,
+        cwd: ".",
+        productionBranch: "main",
+        productionDomain: null,
+        projectId: "prj_FIBSOffJX8GtY8JHTSXKixfVryBp",
+        projectName: "sourcera",
+        rootDirectory: null,
+        sourceFilesOutsideRootDirectory: true,
+      },
+      {
+        application: "buyer",
+        autoExposeSystemEnvs: true,
+        cwd: ".",
+        productionBranch: "main",
+        productionDomain: "sourcera-buyer-meetblakeys-projects.vercel.app",
+        projectId: "prj_ZbZgRUXjPzgv6Oqepe13W6yV2AyN",
+        projectName: "sourcera-buyer",
+        rootDirectory: "apps/buyer",
+        sourceFilesOutsideRootDirectory: true,
+      },
+      {
+        application: "seller",
+        autoExposeSystemEnvs: true,
+        cwd: ".",
+        productionBranch: "main",
+        productionDomain: "sourcera-seller-meetblakeys-projects.vercel.app",
+        projectId: "prj_Vd0Roi2q0XPkphCrn8rtoNxI1DkS",
+        projectName: "sourcera-seller",
+        rootDirectory: "apps/seller",
+        sourceFilesOutsideRootDirectory: true,
+      },
+    ],
+  );
 });
 
 test("an unpinned Convex target blocks before any Git or Vercel command", () => {
@@ -271,6 +397,7 @@ test("an unpinned Convex target blocks before any Git or Vercel command", () => 
             deploymentUrl: null,
           },
         },
+        environment: releaseEnvironment,
         now: () => startedAt,
         releaseRunId,
         repositoryRoot,
@@ -278,6 +405,7 @@ test("an unpinned Convex target blocks before any Git or Vercel command", () => 
           commandCount += 1;
           return { status: 1, stderr: "", stdout: "" };
         },
+        worktreeRoot,
       }),
     /Convex production target/,
   );
@@ -290,13 +418,24 @@ test("staging captures all predecessors, stages in order, and returns one receip
     approvedSha,
     config,
     environment: {
-      NODE_ENV: "test",
+      ...releaseEnvironment,
+      AWS_SESSION_TOKEN: "must-not-be-forwarded",
+      DATABASE_PASSWORD: "must-not-be-forwarded",
+      CONVEX_DEPLOY_KEY: "prod:key:must-not-be-forwarded",
+      GITHUB_AUTH: "must-not-be-forwarded",
+      HOME: "/caller/home",
+      SESSION_COOKIE: "must-not-be-forwarded",
+      SOURCERA_CONVEX_CANARY_SECRET: "must-not-be-forwarded",
+      THIRD_PARTY_CREDENTIAL: "must-not-be-forwarded",
+      UNRELATED_API_KEY: "must-not-be-forwarded",
       VERCEL_GIT_COMMIT_SHA: "must-not-be-forwarded",
+      XDG_CONFIG_HOME: "/caller/xdg",
     },
     now: () => startedAt,
     releaseRunId,
     repositoryRoot,
     run: runner.run,
+    worktreeRoot,
   });
 
   assert.equal(receipt.schemaVersion, 1);
@@ -324,6 +463,10 @@ test("staging captures all predecessors, stages in order, and returns one receip
   const vercelInvocations = runner.invocations.filter(
     (invocation) => invocation.command === "vercel",
   );
+  assert.equal(
+    vercelInvocations.every((invocation) => invocation.cwd === worktreeRoot),
+    true,
+  );
   assert.deepEqual(
     vercelInvocations.slice(0, 3).map((invocation) => invocation.arguments[1]),
     [
@@ -340,9 +483,30 @@ test("staging captures all predecessors, stages in order, and returns one receip
       ),
     config.vercelProduction.targets.map((target) => target.projectId),
   );
-  for (const invocation of vercelInvocations.filter(
-    (candidate) => candidate.arguments[0] === "deploy",
-  )) {
+  for (const invocation of vercelInvocations) {
+    assert.equal(invocation.environment?.VERCEL_TOKEN, vercelToken);
+    assert.equal(invocation.environment?.HOME, privateHome);
+    assert.equal(
+      invocation.environment?.XDG_CONFIG_HOME,
+      path.join(privateHome, ".config"),
+    );
+    assert.equal(invocation.environment?.VERCEL_GIT_COMMIT_SHA, undefined);
+    assert.equal(invocation.environment?.CONVEX_DEPLOY_KEY, undefined);
+    assert.equal(
+      invocation.environment?.SOURCERA_CONVEX_CANARY_SECRET,
+      undefined,
+    );
+    for (const key of [
+      "AWS_SESSION_TOKEN",
+      "DATABASE_PASSWORD",
+      "GITHUB_AUTH",
+      "SESSION_COOKIE",
+      "THIRD_PARTY_CREDENTIAL",
+      "UNRELATED_API_KEY",
+    ]) {
+      assert.equal(invocation.environment?.[key], undefined);
+    }
+    if (invocation.arguments[0] !== "deploy") continue;
     assert.deepEqual(invocation.arguments.slice(0, 4), [
       "deploy",
       "--prod",
@@ -366,7 +530,6 @@ test("staging captures all predecessors, stages in order, and returns one receip
       ),
       false,
     );
-    assert.equal(invocation.environment?.VERCEL_GIT_COMMIT_SHA, undefined);
   }
   assert.equal(
     vercelInvocations.filter((invocation) => invocation.arguments[0] === "api")
@@ -378,6 +541,95 @@ test("staging captures all predecessors, stages in order, and returns one receip
       .length,
     3,
   );
+  assert.deepEqual(
+    runner.invocations
+      .filter(
+        (invocation) =>
+          invocation.command === "git" &&
+          invocation.arguments[0] === "worktree",
+      )
+      .map((invocation) => invocation.arguments),
+    [
+      ["worktree", "add", "--detach", worktreeRoot, approvedSha],
+      ["worktree", "remove", "--force", worktreeRoot],
+      ["worktree", "prune"],
+    ],
+  );
+  for (const invocation of runner.invocations.filter(
+    (candidate) => candidate.command === "git",
+  )) {
+    assert.equal(invocation.environment?.VERCEL_TOKEN, undefined);
+    assert.equal(invocation.environment?.HOME, privateHome);
+    assert.equal(invocation.environment?.PATH, releaseEnvironment.PATH);
+  }
+});
+
+test("an explicit Vercel token is required before Git or Vercel is called", () => {
+  let commandCount = 0;
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: { PATH: releaseEnvironment.PATH },
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: () => {
+          commandCount += 1;
+          return gitResult("");
+        },
+        worktreeRoot,
+      }),
+    /VERCEL_TOKEN/,
+  );
+  assert.equal(commandCount, 0);
+});
+
+test("staging canonicalizes a symlinked temporary worktree before use", async () => {
+  const realParent = await mkdtemp(
+    path.join(realpathSync(os.tmpdir()), "sourcera-vercel-real-"),
+  );
+  const aliasParent = await mkdtemp(
+    path.join(realpathSync(os.tmpdir()), "sourcera-vercel-alias-"),
+  );
+  const alias = path.join(aliasParent, "linked-temp");
+  await symlink(realParent, alias, "dir");
+  const requestedWorktree = path.join(alias, "checkout");
+  const canonicalWorktree = path.join(await realpath(realParent), "checkout");
+  const runner = successfulRunner();
+
+  try {
+    stageVercelProductionRelease({
+      approvedSha,
+      config,
+      environment: releaseEnvironment,
+      now: () => startedAt,
+      releaseRunId,
+      repositoryRoot,
+      run: runner.run,
+      worktreeRoot: requestedWorktree,
+    });
+    assert.equal(
+      runner.invocations
+        .filter((invocation) => invocation.command === "vercel")
+        .every((invocation) => invocation.cwd === canonicalWorktree),
+      true,
+    );
+    assert.deepEqual(
+      runner.invocations.find(
+        (invocation) =>
+          invocation.command === "git" &&
+          invocation.arguments[0] === "worktree" &&
+          invocation.arguments[1] === "add",
+      )?.arguments,
+      ["worktree", "add", "--detach", canonicalWorktree, approvedSha],
+    );
+  } finally {
+    await rm(aliasParent, { force: true, recursive: true });
+    await rm(realParent, { force: true, recursive: true });
+  }
 });
 
 test("an unclean checkout is rejected before Vercel is called", () => {
@@ -398,10 +650,12 @@ test("an unclean checkout is rejected before Vercel is called", () => {
       stageVercelProductionRelease({
         approvedSha,
         config,
+        environment: releaseEnvironment,
         now: () => startedAt,
         releaseRunId,
         repositoryRoot,
         run: runner.run,
+        worktreeRoot,
       }),
     /clean primary checkout/,
   );
@@ -430,6 +684,7 @@ test("a linked worktree is rejected before Vercel is called", () => {
         approvedSha,
         config,
         environment: {
+          ...releaseEnvironment,
           NODE_ENV: "test",
           VERCEL_GIT_COMMIT_SHA: "must-not-be-forwarded",
         },
@@ -437,6 +692,7 @@ test("a linked worktree is rejected before Vercel is called", () => {
         releaseRunId,
         repositoryRoot,
         run: runner.run,
+        worktreeRoot,
       }),
     /clean primary checkout/,
   );
@@ -473,10 +729,12 @@ test("a missing predecessor rejects the run before the first deploy", () => {
       stageVercelProductionRelease({
         approvedSha,
         config,
+        environment: releaseEnvironment,
         now: () => startedAt,
         releaseRunId,
         repositoryRoot,
         run: runner.run,
+        worktreeRoot,
       }),
     /production predecessor/,
   );
@@ -527,10 +785,12 @@ test("a predecessor must be the READY production target of its pinned project", 
       stageVercelProductionRelease({
         approvedSha,
         config,
+        environment: releaseEnvironment,
         now: () => startedAt,
         releaseRunId,
         repositoryRoot,
         run: runner.run,
+        worktreeRoot,
       }),
     /production predecessor.*READY/,
   );
@@ -569,10 +829,12 @@ test("live Vercel rootDirectory drift blocks all staging", () => {
       stageVercelProductionRelease({
         approvedSha,
         config,
+        environment: releaseEnvironment,
         now: () => startedAt,
         releaseRunId,
         repositoryRoot,
         run: runner.run,
+        worktreeRoot,
       }),
     /rootDirectory/,
   );
@@ -581,6 +843,194 @@ test("live Vercel rootDirectory drift blocks all staging", () => {
       (invocation) => invocation.arguments[0] === "deploy",
     ),
     false,
+  );
+});
+
+test("live Vercel project policy drift blocks all staging", () => {
+  const drifts: Array<[string, Record<string, unknown>]> = [
+    ["autoExposeSystemEnvs", { autoExposeSystemEnvs: false }],
+    [
+      "sourceFilesOutsideRootDirectory",
+      { sourceFilesOutsideRootDirectory: false },
+    ],
+    ["productionBranch", { link: { productionBranch: "release" } }],
+  ];
+
+  for (const [message, drift] of drifts) {
+    const runner = successfulRunner();
+    const originalRun = runner.run;
+    runner.run = (invocation) => {
+      if (
+        invocation.command === "vercel" &&
+        invocation.arguments[0] === "api" &&
+        invocation.arguments[1].startsWith(
+          `/v9/projects/${config.vercelProduction.targets[1].projectId}`,
+        )
+      ) {
+        runner.invocations.push(invocation);
+        return gitResult(
+          JSON.stringify({ ...projectReadback("buyer"), ...drift }),
+        );
+      }
+      return originalRun(invocation);
+    };
+
+    assert.throws(
+      () =>
+        stageVercelProductionRelease({
+          approvedSha,
+          config,
+          environment: releaseEnvironment,
+          now: () => startedAt,
+          releaseRunId,
+          repositoryRoot,
+          run: runner.run,
+          worktreeRoot,
+        }),
+      new RegExp(message),
+    );
+    assert.equal(
+      runner.invocations.some(
+        (invocation) => invocation.arguments[0] === "deploy",
+      ),
+      false,
+    );
+    assert.equal(
+      runner.invocations.filter(
+        (invocation) =>
+          invocation.command === "git" &&
+          invocation.arguments.join(" ") ===
+            `worktree remove --force ${worktreeRoot}`,
+      ).length,
+      1,
+    );
+  }
+});
+
+test("a dirty detached staging worktree blocks before Vercel and is removed", () => {
+  const runner = successfulRunner();
+  const originalRun = runner.run;
+  runner.run = (invocation) => {
+    if (
+      invocation.command === "git" &&
+      invocation.cwd === worktreeRoot &&
+      invocation.arguments[0] === "status"
+    ) {
+      runner.invocations.push(invocation);
+      return gitResult("?? injected-after-checkout.txt");
+    }
+    return originalRun(invocation);
+  };
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: releaseEnvironment,
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: runner.run,
+        worktreeRoot,
+      }),
+    /detached staging worktree.*clean/i,
+  );
+  assert.equal(
+    runner.invocations.some((invocation) => invocation.command === "vercel"),
+    false,
+  );
+  assert.equal(
+    runner.invocations.filter(
+      (invocation) =>
+        invocation.command === "git" &&
+        invocation.arguments.join(" ") ===
+          `worktree remove --force ${worktreeRoot}`,
+    ).length,
+    1,
+  );
+});
+
+test("a staging failure removes the detached worktree before returning", () => {
+  const runner = successfulRunner({
+    marketplace: { readyState: "BUILDING" },
+  });
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: releaseEnvironment,
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: runner.run,
+        worktreeRoot,
+      }),
+    /READY/,
+  );
+  assert.deepEqual(
+    runner.invocations
+      .filter(
+        (invocation) =>
+          invocation.command === "git" &&
+          invocation.arguments[0] === "worktree",
+      )
+      .map((invocation) => invocation.arguments),
+    [
+      ["worktree", "add", "--detach", worktreeRoot, approvedSha],
+      ["worktree", "remove", "--force", worktreeRoot],
+      ["worktree", "prune"],
+    ],
+  );
+});
+
+test("primary checkout drift after staging prevents the receipt", () => {
+  const runner = successfulRunner();
+  const originalRun = runner.run;
+  let worktreeRemoved = false;
+  runner.run = (invocation) => {
+    if (
+      invocation.command === "git" &&
+      invocation.arguments.join(" ") ===
+        `worktree remove --force ${worktreeRoot}`
+    ) {
+      worktreeRemoved = true;
+      return originalRun(invocation);
+    }
+    if (
+      worktreeRemoved &&
+      invocation.command === "git" &&
+      invocation.cwd === repositoryRoot &&
+      invocation.arguments.join(" ") === "rev-parse HEAD"
+    ) {
+      runner.invocations.push(invocation);
+      return gitResult("a".repeat(40));
+    }
+    return originalRun(invocation);
+  };
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: releaseEnvironment,
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: runner.run,
+        worktreeRoot,
+      }),
+    /Approved SHA must exactly match Git HEAD/,
+  );
+  assert.equal(worktreeRemoved, true);
+  assert.equal(
+    runner.invocations.filter(
+      (invocation) => invocation.arguments[0] === "deploy",
+    ).length,
+    3,
   );
 });
 
@@ -641,10 +1091,12 @@ test("partial staging emits no receipt when authenticated readback is wrong", ()
         stageVercelProductionRelease({
           approvedSha,
           config,
+          environment: releaseEnvironment,
           now: () => startedAt,
           releaseRunId,
           repositoryRoot,
           run: runner.run,
+          worktreeRoot,
         }),
       new RegExp(message),
     );
@@ -686,10 +1138,12 @@ test("health proof must match commit, application, and production", () => {
         stageVercelProductionRelease({
           approvedSha,
           config,
+          environment: releaseEnvironment,
           now: () => startedAt,
           releaseRunId,
           repositoryRoot,
           run: runner.run,
+          worktreeRoot,
         }),
       /health proof/,
     );
@@ -701,16 +1155,22 @@ test("the CLI receipt writer is atomic, complete-only, and non-overwriting", asy
   const receipt = stageVercelProductionRelease({
     approvedSha,
     config,
+    environment: releaseEnvironment,
     now: () => startedAt,
     releaseRunId,
     repositoryRoot,
     run: runner.run,
+    worktreeRoot,
   });
   const temporaryDirectory = await mkdtemp(
     path.join(os.tmpdir(), "sourcera-vercel-stage-"),
   );
   const receiptPath = path.join(temporaryDirectory, "receipt.json");
   try {
+    assert.throws(
+      () => readReceiptOutputPath([], process.cwd()),
+      /--receipt-out/,
+    );
     assert.equal(
       readReceiptOutputPath(["--receipt-out", receiptPath], process.cwd()),
       path.join(await realpath(temporaryDirectory), "receipt.json"),
@@ -756,4 +1216,60 @@ test("the CLI receipt writer is atomic, complete-only, and non-overwriting", asy
   } finally {
     await rm(temporaryDirectory, { force: true, recursive: true });
   }
+});
+
+test("CLI signal cleanup removes the worktree and temporary directory once", () => {
+  const invocations: CommandInvocation[] = [];
+  const removedDirectories: string[] = [];
+  const cleanup = () =>
+    cleanupVercelStagingWorktree({
+      environment: {
+        HOME: "/caller/home",
+        UNRELATED_API_KEY: "must-not-reach-git",
+        VERCEL_TOKEN: vercelToken,
+      },
+      removeDirectory: (directory) => {
+        removedDirectories.push(directory);
+      },
+      repositoryRoot,
+      run: (invocation) => {
+        invocations.push(invocation);
+        return gitResult("");
+      },
+      temporaryRoot,
+      worktreeRoot,
+    });
+  const events: string[] = [];
+  const handler = createVercelStagingSignalHandler(
+    "SIGTERM",
+    () => {
+      events.push("cleanup");
+      cleanup();
+    },
+    (exitCode) => {
+      events.push(`exit:${exitCode}`);
+    },
+  );
+
+  handler();
+  handler();
+
+  assert.deepEqual(events, ["cleanup", "exit:143"]);
+  assert.deepEqual(
+    invocations.map((invocation) => invocation.arguments),
+    [
+      ["worktree", "remove", "--force", worktreeRoot],
+      ["worktree", "prune"],
+    ],
+  );
+  assert.equal(
+    invocations.every(
+      (invocation) =>
+        invocation.environment?.HOME === privateHome &&
+        invocation.environment.VERCEL_TOKEN === undefined &&
+        invocation.environment.UNRELATED_API_KEY === undefined,
+    ),
+    true,
+  );
+  assert.deepEqual(removedDirectories, [temporaryRoot]);
 });
