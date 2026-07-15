@@ -449,11 +449,22 @@ function assertPipelineConnectionsComplete(pipeline: PipelineNode): void {
   }
 }
 
-export async function fetchLinearFingerprint(
+export interface LinearCapture {
+  fingerprint: LinearFingerprint;
+  issueDescriptions: Array<{
+    id: string;
+    title: string;
+    description: string | null;
+    updatedAt: string;
+    labels: string[];
+  }>;
+}
+
+export async function fetchLinearCapture(
   fetcher: typeof fetch,
   token: string,
   scope?: LinearFingerprintScope,
-): Promise<LinearFingerprint> {
+): Promise<LinearCapture> {
   if (!token) throw new Error("LINEAR_API_KEY is required");
   const [
     issueNodes,
@@ -488,7 +499,7 @@ export async function fetchLinearFingerprint(
     projectMilestoneNodes,
     scope,
   );
-  return {
+  const fingerprint: LinearFingerprint = {
     issues: issueNodes
       .map((issue) => ({
         linearId: issue.id,
@@ -558,6 +569,26 @@ export async function fetchLinearFingerprint(
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
   };
+  return {
+    fingerprint,
+    issueDescriptions: issueNodes
+      .map((issue) => ({
+        id: issue.identifier,
+        title: issue.title,
+        description: issue.description,
+        updatedAt: issue.updatedAt,
+        labels: issue.labels.nodes.map((label) => label.name).sort(),
+      }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
+  };
+}
+
+export async function fetchLinearFingerprint(
+  fetcher: typeof fetch,
+  token: string,
+  scope?: LinearFingerprintScope,
+): Promise<LinearFingerprint> {
+  return (await fetchLinearCapture(fetcher, token, scope)).fingerprint;
 }
 
 export function canonicalLinearFingerprint(

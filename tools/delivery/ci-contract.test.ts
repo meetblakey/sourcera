@@ -69,7 +69,10 @@ test("Linear drift uploads its complete capture even when drift fails", () => {
   for (const required of [
     "--snapshot delivery/linear-snapshot.json",
     "--out /tmp/linear-fingerprint.json",
+    "--descriptions-out /tmp/linear-ticket-descriptions.json",
     "--receipt-out /tmp/linear-capture-receipt.json",
+    "tools/delivery/ticket-integrity.ts",
+    "--capture /tmp/linear-ticket-descriptions.json",
     "if: always()",
     "actions/upload-artifact@v4",
     "if-no-files-found: error",

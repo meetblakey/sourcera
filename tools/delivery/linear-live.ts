@@ -4,10 +4,11 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   canonicalLinearFingerprint,
-  fetchLinearFingerprint,
+  fetchLinearCapture,
   fingerprintDiff,
   type LinearFingerprint,
 } from "./lib/linear-live.js";
+import type { LinearIssueDescriptionCapture } from "./lib/ticket-integrity.js";
 import {
   assertLinearProjectScope,
   type LinearProjectScope,
@@ -36,21 +37,43 @@ async function main(): Promise<void> {
     readFileSync(projectScopePath, "utf8"),
   ) as LinearProjectScope;
   const fixturePath = argv.get("--fixture");
-  const captured = fixturePath
-    ? (JSON.parse(
-        readFileSync(resolve(fixturePath), "utf8"),
-      ) as LinearFingerprint)
-    : await fetchLinearFingerprint(
+  const fixture = fixturePath
+    ? JSON.parse(readFileSync(resolve(fixturePath), "utf8")) as
+      | LinearFingerprint
+      | {
+          fingerprint: LinearFingerprint;
+          issueDescriptions: LinearIssueDescriptionCapture[];
+        }
+    : null;
+  const liveCapture = fixture
+    ? null
+    : await fetchLinearCapture(
         fetch,
         process.env.LINEAR_API_KEY ?? "",
         projectScope,
       );
+  const captured = fixture
+    ? ("fingerprint" in fixture ? fixture.fingerprint : fixture)
+    : liveCapture!.fingerprint;
+  const issueDescriptions = fixture && "fingerprint" in fixture
+    ? fixture.issueDescriptions
+    : liveCapture?.issueDescriptions ?? null;
   const actual = canonicalLinearFingerprint(captured);
   assertLinearProjectScope(projectScope, actual.projects);
 
   const fingerprintJson = `${JSON.stringify(actual, null, 2)}\n`;
   if (outPath) {
     writeFileSync(resolve(outPath), fingerprintJson);
+  }
+  const descriptionsOutPath = argv.get("--descriptions-out");
+  if (descriptionsOutPath) {
+    if (!issueDescriptions) {
+      throw new Error("Full Linear description capture is unavailable");
+    }
+    writeFileSync(
+      resolve(descriptionsOutPath),
+      `${JSON.stringify({ schemaVersion: 1, issues: issueDescriptions }, null, 2)}\n`,
+    );
   }
   if (receiptOutPath) {
     const environmentValue = (name: string): string | null =>

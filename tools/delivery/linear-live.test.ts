@@ -6,6 +6,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   canonicalLinearRelationKey,
+  fetchLinearCapture,
   fetchLinearFingerprint,
   fingerprintDiff,
 } from "./lib/linear-live.js";
@@ -46,6 +47,63 @@ test("uses one canonical key for GraphQL and OAuth relation names", () => {
     canonicalLinearRelationKey("duplicateOf", "PLA-1", "PLA-2"),
     canonicalLinearRelationKey("duplicate", "PLA-1", "PLA-2"),
   );
+});
+
+test("captures full issue descriptions beside the canonical fingerprint", async () => {
+  const fetcher: typeof fetch = async (_input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    if (query.includes("DeliveryIssues")) {
+      return response({
+        data: {
+          issues: completeConnection([
+            {
+              id: "uuid-1",
+              identifier: "PLA-1",
+              title: "[F-005] Foundation",
+              description: "## Source\n* Requirement map: F-005",
+              updatedAt: "2026-07-15T00:00:00.000Z",
+              estimate: 3,
+              priority: 1,
+              archivedAt: null,
+              state: { name: "Backlog", type: "backlog" },
+              labels: completeConnection([{ name: "codex-ready" }]),
+              assignee: null,
+              team: { id: "team-pla", key: "PLA" },
+              project: null,
+              projectMilestone: null,
+              parent: null,
+              releases: completeConnection([]),
+              relations: completeConnection([]),
+              inverseRelations: completeConnection([]),
+            },
+          ]),
+        },
+      });
+    }
+    if (query.includes("DeliveryPipelines")) {
+      return response({ data: { releasePipelines: completeConnection([]) } });
+    }
+    return response({ data: { releases: completeConnection([]) } });
+  };
+
+  const capture = await fetchLinearCapture(
+    withEmptyProjectInventories(fetcher),
+    "secret",
+  );
+
+  assert.deepEqual(
+    capture.fingerprint.issues.map((issue) => issue.identifier),
+    ["PLA-1"],
+  );
+  assert.deepEqual(capture.issueDescriptions, [
+    {
+      id: "PLA-1",
+      title: "[F-005] Foundation",
+      description: "## Source\n* Requirement map: F-005",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      labels: ["codex-ready"],
+    },
+  ]);
 });
 
 test("paginates Linear issues and sorts a stable fingerprint", async () => {
@@ -1046,6 +1104,84 @@ test("CLI requires --out when writing a capture receipt", () => {
   );
   assert.equal(result.status, 1);
   assert.match(result.stderr, /--receipt-out requires --out/);
+});
+
+test("CLI writes a separate full description capture without changing the fingerprint", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-descriptions-"));
+  const fingerprint = {
+    issues: [
+      {
+        identifier: "PLA-1",
+        title: "[F-005] Foundation",
+        descriptionFingerprint: "a".repeat(64),
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        labels: ["codex-ready"],
+      },
+    ],
+    releasePipelines: [],
+    releases: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+      },
+    ],
+    projectMilestones: [],
+  };
+  const issueDescriptions = [
+    {
+      id: "PLA-1",
+      title: "[F-005] Foundation",
+      description: "## Source\n* Requirement map: F-005",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      labels: ["codex-ready"],
+    },
+  ];
+  try {
+    const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
+    const out = join(dir, "fingerprint.json");
+    const descriptionsOut = join(dir, "descriptions.json");
+    writeFileSync(
+      fixture,
+      JSON.stringify({ fingerprint, issueDescriptions }),
+    );
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Sourcera Production" }],
+      }),
+    );
+
+    const run = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+        "--out",
+        out,
+        "--descriptions-out",
+        descriptionsOut,
+      ],
+      { cwd: process.cwd(), encoding: "utf8" },
+    );
+
+    assert.equal(run.status, 0, run.stderr);
+    assert.deepEqual(JSON.parse(readFileSync(out, "utf8")), fingerprint);
+    assert.deepEqual(JSON.parse(readFileSync(descriptionsOut, "utf8")), {
+      schemaVersion: 1,
+      issues: issueDescriptions,
+    });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("CLI rejects a snapshot that shrinks the independent project scope", () => {

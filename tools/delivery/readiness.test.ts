@@ -57,3 +57,27 @@ test("rejects truncated or placeholder work", () => {
   const invalid = { ...ready, outcome: "TODO: finish later" };
   assert.equal(readinessFindings(invalid)[0].code, "ambiguous_or_truncated");
 });
+
+test("rejects codex-ready work when its captured ticket integrity failed", () => {
+  const findings = readinessFindings(ready, {
+    ticketIntegrityFindings: [
+      {
+        code: "ticket_description_repeated_cap",
+        issueId: ready.id,
+        message: `${ready.id} repeats a capped description clause`,
+      },
+    ],
+  });
+
+  assert.deepEqual(
+    findings.filter((finding) => finding.code === "ticket_integrity_failed"),
+    [
+      {
+        code: "ticket_integrity_failed",
+        issueId: ready.id,
+        message:
+          `${ready.id} fails ticket integrity: ticket_description_repeated_cap`,
+      },
+    ],
+  );
+});

@@ -1,7 +1,12 @@
 import type { Finding, LinearIssueSnapshot } from "./model.js";
 
+export interface ReadinessContext {
+  ticketIntegrityFindings?: Finding[];
+}
+
 export function readinessFindings(
   issue: LinearIssueSnapshot,
+  context: ReadinessContext = {},
 ): Finding[] {
   const findings: Finding[] = [];
   const add = (condition: boolean, code: string, message: string) => {
@@ -72,6 +77,18 @@ export function readinessFindings(
     serialized.includes("…") || /\b(?:TBD|TODO|placeholder)\b/i.test(serialized),
     "ambiguous_or_truncated",
     `${issue.id} contains truncated or placeholder text`,
+  );
+  const ticketIntegrityCodes = [
+    ...new Set(
+      (context.ticketIntegrityFindings ?? [])
+        .filter((finding) => finding.issueId === issue.id)
+        .map((finding) => finding.code),
+    ),
+  ].sort();
+  add(
+    ticketIntegrityCodes.length > 0,
+    "ticket_integrity_failed",
+    `${issue.id} fails ticket integrity: ${ticketIntegrityCodes.join(", ")}`,
   );
   return findings;
 }

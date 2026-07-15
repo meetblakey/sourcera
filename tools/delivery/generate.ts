@@ -510,7 +510,7 @@ const releaseFindings = validateReleases(releases);
 const graphFindings = validateGraph(manifest, releases);
 const readiness = issues
   .filter((issue) => issue.labels.includes("codex-ready"))
-  .flatMap(readinessFindings);
+  .flatMap((issue) => readinessFindings(issue));
 const readyGraphFindings = graphFindings.filter(
   (finding) =>
     finding.requirementId &&
