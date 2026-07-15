@@ -32,7 +32,13 @@ function refreshFixture(
   mkdirSync(delivery);
   const snapshotPath = join(delivery, "linear-snapshot.json");
   const trackedIssueIds = [
-    ...liveIssues.map((issue) => issue.id),
+    ...liveIssues.map((issue) => {
+      const id = issue.id;
+      if (typeof id !== "string") {
+        throw new TypeError("issue id must be a string");
+      }
+      return id;
+    }),
     ...(options.missingTrackedIssueIds ?? []),
   ];
   const snapshotIssues = trackedIssueIds.map((id, index) => ({

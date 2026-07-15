@@ -280,25 +280,33 @@ function assertIssueConnectionsComplete(issue: IssueNode): void {
   }
 }
 
-function assertRelationEndpointsCaptured(issues: IssueNode[]): void {
-  const captured = new Set(issues.map((issue) => issue.identifier));
+function canonicalRelationsByIssue(
+  issues: IssueNode[],
+): Map<string, Set<string>> {
+  const relationsByIssue = new Map(
+    issues.map((issue) => [issue.identifier, new Set<string>()]),
+  );
   for (const issue of issues) {
     for (const relation of [
       ...issue.relations.nodes,
       ...issue.inverseRelations.nodes,
     ]) {
+      const key = relationKey(relation);
       for (const endpoint of [
         relation.issue.identifier,
         relation.relatedIssue.identifier,
       ]) {
-        if (!captured.has(endpoint)) {
+        const endpointRelations = relationsByIssue.get(endpoint);
+        if (!endpointRelations) {
           throw new Error(
             `Linear relation endpoint ${endpoint} was not captured`,
           );
         }
+        endpointRelations.add(key);
       }
     }
   }
+  return relationsByIssue;
 }
 
 function assertPipelineConnectionsComplete(pipeline: PipelineNode): void {
@@ -333,7 +341,7 @@ export async function fetchLinearFingerprint(
     paginate<ReleaseNode>(fetcher, token, RELEASE_QUERY, "releases"),
   ]);
   for (const issue of issueNodes) assertIssueConnectionsComplete(issue);
-  assertRelationEndpointsCaptured(issueNodes);
+  const relationsByIssue = canonicalRelationsByIssue(issueNodes);
   for (const pipeline of pipelineNodes) {
     assertPipelineConnectionsComplete(pipeline);
   }
@@ -356,13 +364,7 @@ export async function fetchLinearFingerprint(
         releases: issue.releases.nodes
           .map((release) => release.version ?? release.id)
           .sort(),
-        relations: [
-          ...issue.relations.nodes,
-          ...issue.inverseRelations.nodes,
-        ]
-          .map(relationKey)
-          .filter((value, index, values) => values.indexOf(value) === index)
-          .sort(),
+        relations: [...(relationsByIssue.get(issue.identifier) ?? [])].sort(),
       }))
       .sort((left, right) => left.identifier.localeCompare(right.identifier)),
     releasePipelines: pipelineNodes
