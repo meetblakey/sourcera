@@ -65,7 +65,9 @@ export interface SemanticRoadmapRequirement {
 
 export interface SemanticRoadmapEdge {
   prerequisiteId: string;
+  prerequisiteSection: string;
   dependentId: string;
+  dependentSection: string;
 }
 
 export interface OptionalRoadmapPath extends SemanticRoadmapRequirement {
@@ -82,6 +84,23 @@ export interface CheckpointRequirements {
   operationalProof: string[];
 }
 
+export type CheckpointProofType =
+  | "customer"
+  | "operational"
+  | "runtime"
+  | "rollback"
+  | "approval";
+
+export interface CheckpointReceiptRequirement {
+  path: string;
+  proofType: CheckpointProofType;
+}
+
+export interface CheckpointEvidenceContext {
+  root: string;
+  expectedCommit: string;
+}
+
 export interface R0Checkpoint {
   id: R0CheckpointId;
   sequence: number;
@@ -90,8 +109,7 @@ export interface R0Checkpoint {
   scope: string[];
   status: "planned" | "active" | "complete";
   requirements: CheckpointRequirements;
-  requiredReceipts: string[];
-  receipts: string[];
+  requiredReceipts: CheckpointReceiptRequirement[];
 }
 
 export interface SemanticRoadmapContract {

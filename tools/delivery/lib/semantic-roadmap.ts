@@ -1,4 +1,9 @@
+import { existsSync, readFileSync, realpathSync } from "node:fs";
+import { resolve, sep } from "node:path";
+
 import type {
+  CheckpointEvidenceContext,
+  CheckpointReceiptRequirement,
   Finding,
   ManifestRow,
   R0CheckpointId,
@@ -31,8 +36,11 @@ const REQUIRED_SUPPORT = [
 ] as const;
 
 const REQUIRED_EDGES = [
-  ["F-224", "F-225"],
-  ["F-226", "F-228"],
+  ["F-223", "§10.11", "F-224", "§10.11"],
+  ["F-221", "§10.10", "F-225", "§10.12"],
+  ["F-224", "§10.11", "F-225", "§10.12"],
+  ["F-225", "§10.12", "F-226", "§10.12"],
+  ["F-226", "§10.12", "F-228", "§10.13"],
 ] as const;
 
 const OPTIONAL_LATER_PATHS = [
@@ -52,6 +60,65 @@ const CHECKPOINT_IDS = [
   "R0-C8",
 ] as const;
 
+const CHECKPOINT_NAMES: Record<R0CheckpointId, string> = {
+  "R0-C1": "Evidence-capable foundations",
+  "R0-C2": "Isolated identity and access",
+  "R0-C3": "Workspace and evaluation contracts",
+  "R0-C4": "Buyer setup and seller invitation",
+  "R0-C5": "Secure seller response",
+  "R0-C6": "Review, scoring, and selection",
+  "R0-C7": "Durable evaluation record",
+  "R0-C8": "Runtime release closure",
+};
+
+const CHECKPOINT_SCOPES: Record<R0CheckpointId, readonly string[]> = {
+  "R0-C1": ["local", "CI", "test", "deploy", "rollback", "evidence"],
+  "R0-C2": [
+    "auth",
+    "tenancy",
+    "console isolation",
+    "RBAC",
+    "audit",
+    "baseline security",
+  ],
+  "R0-C3": [
+    "workspace",
+    "requirements",
+    "evaluation",
+    "state-machine contracts",
+    "phases 1–3",
+  ],
+  "R0-C4": ["buyer setup", "seller invitation", "bidding entry"],
+  "R0-C5": [
+    "secure seller entry",
+    "onboarding",
+    "required NDA",
+    "authoring",
+    "submission",
+  ],
+  "R0-C6": [
+    "phases 7–13",
+    "buyer review",
+    "scoring",
+    "reports",
+    "selection",
+    "closure",
+  ],
+  "R0-C7": [
+    "immutable selection record",
+    "export",
+    "retention",
+    "recovery",
+    "access enforcement",
+  ],
+  "R0-C8": [
+    "canary",
+    "rollback",
+    "deployed receipts",
+    "runtime-gate closure",
+  ],
+};
+
 const REQUIREMENT_FIELDS = [
   "success",
   "failureRecovery",
@@ -62,7 +129,29 @@ const REQUIREMENT_FIELDS = [
   "operationalProof",
 ] as const;
 
+const EXPECTED_CONTRACT_SOURCE = {
+  sourceDoc: "Sourcera_Master_Spec.md",
+  sourceVersion: "v7.1.0a",
+  sections: ["§10.1–§10.13", "§10.16.1–§10.16.3"],
+} as const;
+
+const BASE_CHECKPOINT_PROOFS = ["customer", "operational"] as const;
+const C8_CHECKPOINT_PROOFS = ["runtime", "rollback", "approval"] as const;
+const COMMIT_SHA = /^[a-f0-9]{40}$/;
+
 const nonempty = (value: string): boolean => value.trim().length > 0;
+
+const rowHasSourcePin = (
+  row: ManifestRow,
+  sourceDoc: string,
+  section: string,
+): boolean =>
+  row.sourceDoc === sourceDoc &&
+  row.section === section &&
+  nonempty(row.sourceVersion);
+
+const isObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
 
 function requiredJourneyEdges(
   contract: SemanticRoadmapContract,
@@ -73,7 +162,9 @@ function requiredJourneyEdges(
     for (const support of contract.journey.requiredSupport) {
       edges.push({
         prerequisiteId: support.requirementId,
+        prerequisiteSection: support.sourceSection,
         dependentId: first.requirementId,
+        dependentSection: first.sourceSection,
       });
     }
   }
@@ -84,9 +175,18 @@ function requiredJourneyEdges(
   ) {
     const prerequisiteId =
       contract.journey.mandatoryPhases[index - 1].requirementId;
+    const prerequisiteSection =
+      contract.journey.mandatoryPhases[index - 1].sourceSection;
     const dependentId = contract.journey.mandatoryPhases[index].requirementId;
+    const dependentSection =
+      contract.journey.mandatoryPhases[index].sourceSection;
     if (prerequisiteId !== dependentId) {
-      edges.push({ prerequisiteId, dependentId });
+      edges.push({
+        prerequisiteId,
+        prerequisiteSection,
+        dependentId,
+        dependentSection,
+      });
     }
   }
   edges.push(...contract.journey.requiredEdges);
@@ -94,7 +194,9 @@ function requiredJourneyEdges(
   if (terminalPhase) {
     edges.push({
       prerequisiteId: terminalPhase.requirementId,
+      prerequisiteSection: terminalPhase.sourceSection,
       dependentId: contract.journey.terminalArtifact.requirementId,
+      dependentSection: contract.journey.terminalArtifact.sourceSection,
     });
   }
   const seen = new Set<string>();
@@ -112,6 +214,38 @@ export function journeyFindings(
 ): Finding[] {
   const findings: Finding[] = [];
   const byId = new Map(rows.map((row) => [row.requirementId, row]));
+  const reportedSourcePins = new Set<string>();
+  const sourcePinFinding = (requirementId: string, section: string) => {
+    const row = byId.get(requirementId);
+    if (
+      !row ||
+      reportedSourcePins.has(requirementId) ||
+      rowHasSourcePin(row, EXPECTED_CONTRACT_SOURCE.sourceDoc, section)
+    ) {
+      return;
+    }
+    reportedSourcePins.add(requirementId);
+    findings.push({
+      code: "journey_source_pin_invalid",
+      requirementId,
+      message: `${requirementId} must be pinned to ${EXPECTED_CONTRACT_SOURCE.sourceDoc} ${section}`,
+    });
+  };
+  if (
+    contract.schemaVersion !== 1 ||
+    contract.release !== "R0" ||
+    contract.source.sourceDoc !== EXPECTED_CONTRACT_SOURCE.sourceDoc ||
+    contract.source.sourceVersion !== EXPECTED_CONTRACT_SOURCE.sourceVersion ||
+    contract.source.sections.length !== EXPECTED_CONTRACT_SOURCE.sections.length ||
+    contract.source.sections.some(
+      (section, index) => section !== EXPECTED_CONTRACT_SOURCE.sections[index],
+    )
+  ) {
+    findings.push({
+      code: "journey_contract_source_invalid",
+      message: "Roadmap authority must remain Sourcera_Master_Spec.md v7.1.0a §§10.1–10.13 and §§10.16.1–10.16.3",
+    });
+  }
   const phaseCounts = new Map<number, number>();
   for (const phase of contract.journey.mandatoryPhases) {
     phaseCounts.set(phase.phase, (phaseCounts.get(phase.phase) ?? 0) + 1);
@@ -162,6 +296,7 @@ export function journeyFindings(
       });
       continue;
     }
+    sourcePinFinding(phase.requirementId, phase.sourceSection);
     if (row.release !== contract.release) {
       findings.push({
         code: "journey_phase_later_release",
@@ -193,6 +328,7 @@ export function journeyFindings(
       });
       continue;
     }
+    sourcePinFinding(requirementId, sourceSection);
     if (row.release !== contract.release) {
       findings.push({
         code: "journey_support_later_release",
@@ -211,12 +347,21 @@ export function journeyFindings(
     }
   }
 
-  for (const [prerequisiteId, dependentId] of REQUIRED_EDGES) {
+  for (
+    const [
+      prerequisiteId,
+      prerequisiteSection,
+      dependentId,
+      dependentSection,
+    ] of REQUIRED_EDGES
+  ) {
     if (
       !contract.journey.requiredEdges.some(
         (edge) =>
           edge.prerequisiteId === prerequisiteId &&
-          edge.dependentId === dependentId,
+          edge.prerequisiteSection === prerequisiteSection &&
+          edge.dependentId === dependentId &&
+          edge.dependentSection === dependentSection,
       )
     ) {
       findings.push({
@@ -238,14 +383,16 @@ export function journeyFindings(
     });
   }
 
-  const mandatoryArtifactIds = new Set([
-    ...contract.journey.requiredEdges.flatMap((edge) => [
-      edge.prerequisiteId,
-      edge.dependentId,
-    ]),
+  const mandatoryArtifactPins = new Map<string, string>();
+  for (const edge of contract.journey.requiredEdges) {
+    mandatoryArtifactPins.set(edge.prerequisiteId, edge.prerequisiteSection);
+    mandatoryArtifactPins.set(edge.dependentId, edge.dependentSection);
+  }
+  mandatoryArtifactPins.set(
     contract.journey.terminalArtifact.requirementId,
-  ]);
-  for (const requirementId of mandatoryArtifactIds) {
+    contract.journey.terminalArtifact.sourceSection,
+  );
+  for (const [requirementId, sourceSection] of mandatoryArtifactPins) {
     const row = byId.get(requirementId);
     if (!row || row.disposition !== "executable") {
       findings.push({
@@ -253,12 +400,15 @@ export function journeyFindings(
         requirementId,
         message: `Mandatory journey artifact ${requirementId} is missing`,
       });
-    } else if (row.release !== contract.release) {
-      findings.push({
-        code: "journey_artifact_later_release",
-        requirementId,
-        message: `Mandatory journey artifact ${requirementId} must be ${contract.release}, not ${row.release ?? "unassigned"}`,
-      });
+    } else {
+      sourcePinFinding(requirementId, sourceSection);
+      if (row.release !== contract.release) {
+        findings.push({
+          code: "journey_artifact_later_release",
+          requirementId,
+          message: `Mandatory journey artifact ${requirementId} must be ${contract.release}, not ${row.release ?? "unassigned"}`,
+        });
+      }
     }
   }
 
@@ -268,11 +418,17 @@ export function journeyFindings(
   for (const [requirementId, release, sourceSection] of OPTIONAL_LATER_PATHS) {
     const path = optionalById.get(requirementId);
     const row = byId.get(requirementId);
-    if (!path || path.sourceSection !== sourceSection || !row) {
+    if (
+      !path ||
+      path.sourceSection !== sourceSection ||
+      !row ||
+      row.disposition !== "executable" ||
+      !rowHasSourcePin(row, EXPECTED_CONTRACT_SOURCE.sourceDoc, sourceSection)
+    ) {
       findings.push({
-        code: "journey_optional_path_missing",
+        code: "journey_optional_path_invalid",
         requirementId,
-        message: `Optional later path ${requirementId} is missing`,
+        message: `Optional later path ${requirementId} must remain executable and source-pinned`,
       });
       continue;
     }
@@ -306,8 +462,133 @@ export function journeyFindings(
   return findings;
 }
 
+function checkpointEvidenceFinding(
+  checkpointId: R0CheckpointId,
+  requirement: CheckpointReceiptRequirement,
+  context: CheckpointEvidenceContext,
+): Finding | null {
+  const evidenceRoot = resolve(context.root, "reports/evidence");
+  const receiptPath = resolve(context.root, requirement.path);
+  if (!receiptPath.startsWith(`${evidenceRoot}${sep}`)) {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${requirement.path} is outside reports/evidence`,
+    };
+  }
+  if (!existsSync(receiptPath)) {
+    return {
+      code: "checkpoint_evidence_missing",
+      checkpointId,
+      message: `${checkpointId} cannot be complete without ${requirement.path}`,
+    };
+  }
+  try {
+    if (
+      !realpathSync(receiptPath).startsWith(
+        `${realpathSync(evidenceRoot)}${sep}`,
+      )
+    ) {
+      return {
+        code: "checkpoint_evidence_invalid",
+        checkpointId,
+        message: `${requirement.path} resolves outside reports/evidence`,
+      };
+    }
+  } catch {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${requirement.path} cannot be resolved`,
+    };
+  }
+
+  let receipt: unknown;
+  try {
+    receipt = JSON.parse(readFileSync(receiptPath, "utf8")) as unknown;
+  } catch {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${requirement.path} is not valid JSON`,
+    };
+  }
+  if (!isObject(receipt)) {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${requirement.path} is not an evidence object`,
+    };
+  }
+  if (
+    receipt.checkpoint !== checkpointId ||
+    !Array.isArray(receipt.proofTypes) ||
+    !receipt.proofTypes.includes(requirement.proofType)
+  ) {
+    return {
+      code: "checkpoint_evidence_mismatch",
+      checkpointId,
+      message: `${requirement.path} does not prove ${checkpointId} ${requirement.proofType}`,
+    };
+  }
+  if (
+    receipt.schemaVersion !== 1 ||
+    receipt.status !== "passed" ||
+    typeof receipt.observedAt !== "string" ||
+    Number.isNaN(Date.parse(receipt.observedAt)) ||
+    typeof receipt.sourceCommit !== "string" ||
+    !COMMIT_SHA.test(receipt.sourceCommit) ||
+    !Array.isArray(receipt.evidence) ||
+    receipt.evidence.length === 0 ||
+    receipt.evidence.some(
+      (value) => typeof value !== "string" || !nonempty(value),
+    )
+  ) {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${requirement.path} is not passed, commit-bound, nonempty evidence`,
+    };
+  }
+  if (receipt.sourceCommit !== context.expectedCommit) {
+    return {
+      code: "checkpoint_commit_mismatch",
+      checkpointId,
+      message: `${requirement.path} proves ${receipt.sourceCommit}, not ${context.expectedCommit}`,
+    };
+  }
+  if (requirement.proofType === "approval") {
+    const approval = receipt.approval;
+    if (
+      !isObject(approval) ||
+      typeof approval.author !== "string" ||
+      !nonempty(approval.author) ||
+      typeof approval.reviewer !== "string" ||
+      !nonempty(approval.reviewer) ||
+      typeof approval.reviewedAt !== "string" ||
+      Number.isNaN(Date.parse(approval.reviewedAt)) ||
+      approval.verdict !== "approved"
+    ) {
+      return {
+        code: "checkpoint_evidence_invalid",
+        checkpointId,
+        message: `${requirement.path} is not accepted approval evidence`,
+      };
+    }
+    if (approval.author.trim() === approval.reviewer.trim()) {
+      return {
+        code: "checkpoint_approval_not_independent",
+        checkpointId,
+        message: `${requirement.path} reviewer must differ from author`,
+      };
+    }
+  }
+  return null;
+}
+
 export function checkpointFindings(
   contract: SemanticRoadmapContract,
+  evidenceContext?: CheckpointEvidenceContext,
 ): Finding[] {
   const findings: Finding[] = [];
   const counts = new Map<R0CheckpointId, number>();
@@ -363,11 +644,16 @@ export function checkpointFindings(
       });
     }
 
-    if (!nonempty(checkpoint.name) || !checkpoint.scope.length) {
+    const expectedScope = CHECKPOINT_SCOPES[checkpoint.id];
+    if (
+      checkpoint.name !== CHECKPOINT_NAMES[checkpoint.id] ||
+      checkpoint.scope.length !== expectedScope.length ||
+      checkpoint.scope.some((value, scopeIndex) => value !== expectedScope[scopeIndex])
+    ) {
       findings.push({
-        code: "checkpoint_scope_missing",
+        code: "checkpoint_scope_invalid",
         checkpointId: checkpoint.id,
-        message: `${checkpoint.id} lacks a name or scope`,
+        message: `${checkpoint.id} name and scope must match the canonical checkpoint meaning`,
       });
     }
     for (const field of REQUIREMENT_FIELDS) {
@@ -385,9 +671,12 @@ export function checkpointFindings(
       !checkpoint.requiredReceipts.length ||
       checkpoint.requiredReceipts.some(
         (receipt) =>
-          !receipt.startsWith("reports/evidence/") ||
-          !receipt.endsWith(".json") ||
-          /\b(?:TBD|TODO|placeholder)\b/i.test(receipt),
+          !receipt.path.startsWith("reports/evidence/") ||
+          !receipt.path.endsWith(".json") ||
+          /\b(?:TBD|TODO|placeholder)\b/i.test(receipt.path) ||
+          ![...BASE_CHECKPOINT_PROOFS, ...C8_CHECKPOINT_PROOFS].includes(
+            receipt.proofType,
+          ),
       )
     ) {
       findings.push({
@@ -396,14 +685,50 @@ export function checkpointFindings(
         message: `${checkpoint.id} lacks named evidence receipts`,
       });
     }
+    const requiredProofs = checkpoint.id === "R0-C8"
+      ? [...BASE_CHECKPOINT_PROOFS, ...C8_CHECKPOINT_PROOFS]
+      : [...BASE_CHECKPOINT_PROOFS];
+    for (const proofType of requiredProofs) {
+      if (
+        !checkpoint.requiredReceipts.some(
+          (receipt) => receipt.proofType === proofType,
+        )
+      ) {
+        findings.push({
+          code: "checkpoint_required_proof_missing",
+          checkpointId: checkpoint.id,
+          message: `${checkpoint.id} requires named ${proofType} proof`,
+        });
+      }
+    }
     if (checkpoint.status === "complete") {
-      for (const receipt of checkpoint.requiredReceipts) {
-        if (!checkpoint.receipts.includes(receipt)) {
+      for (const dependency of checkpoint.dependsOn) {
+        if (byId.get(dependency)?.status !== "complete") {
           findings.push({
-            code: "checkpoint_receipt_missing",
+            code: "checkpoint_predecessor_incomplete",
             checkpointId: checkpoint.id,
-            message: `${checkpoint.id} cannot be complete without ${receipt}`,
+            message: `${checkpoint.id} cannot be complete before ${dependency}`,
           });
+        }
+      }
+      if (
+        !evidenceContext ||
+        !nonempty(evidenceContext.root) ||
+        !COMMIT_SHA.test(evidenceContext.expectedCommit)
+      ) {
+        findings.push({
+          code: "checkpoint_evidence_context_invalid",
+          checkpointId: checkpoint.id,
+          message: `${checkpoint.id} completion requires a root and full expected commit SHA`,
+        });
+      } else {
+        for (const receipt of checkpoint.requiredReceipts) {
+          const finding = checkpointEvidenceFinding(
+            checkpoint.id,
+            receipt,
+            evidenceContext,
+          );
+          if (finding) findings.push(finding);
         }
       }
     }
@@ -443,6 +768,10 @@ export function checkpointFindings(
 export function semanticRoadmapFindings(
   contract: SemanticRoadmapContract,
   rows: ManifestRow[],
+  evidenceContext?: CheckpointEvidenceContext,
 ): Finding[] {
-  return [...journeyFindings(contract, rows), ...checkpointFindings(contract)];
+  return [
+    ...journeyFindings(contract, rows),
+    ...checkpointFindings(contract, evidenceContext),
+  ];
 }

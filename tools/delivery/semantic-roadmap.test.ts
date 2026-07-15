@@ -1,6 +1,13 @@
 import { strict as assert } from "node:assert";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import {
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 
 import {
@@ -20,6 +27,65 @@ const canonical = JSON.parse(
 ) as SemanticRoadmapContract;
 
 const clone = (): SemanticRoadmapContract => structuredClone(canonical);
+const EXPECTED_COMMIT = "0123456789abcdef0123456789abcdef01234567";
+
+interface ReceiptRequirement {
+  path: string;
+  proofType: string;
+}
+
+function receiptRequirements(
+  checkpoint: SemanticRoadmapContract["checkpoints"][number],
+): ReceiptRequirement[] {
+  return (checkpoint.requiredReceipts as unknown[]).map((receipt) => {
+    if (typeof receipt !== "string") return receipt as ReceiptRequirement;
+    return {
+      path: receipt,
+      proofType: receipt.includes("customer") ? "customer" : "operational",
+    };
+  });
+}
+
+function writeReceipt(
+  root: string,
+  checkpointId: string,
+  requirement: ReceiptRequirement,
+  overrides: Record<string, unknown> = {},
+): void {
+  const path = join(root, requirement.path);
+  mkdirSync(dirname(path), { recursive: true });
+  const receipt: Record<string, unknown> = {
+    schemaVersion: 1,
+    checkpoint: checkpointId,
+    proofTypes: [requirement.proofType],
+    status: "passed",
+    observedAt: "2026-07-15T12:00:00Z",
+    sourceCommit: EXPECTED_COMMIT,
+    evidence: ["Named probe passed."],
+    ...overrides,
+  };
+  if (requirement.proofType === "approval" && !Object.hasOwn(receipt, "approval")) {
+    receipt.approval = {
+      author: "release-author@sourcera.local",
+      reviewer: "release-reviewer@sourcera.local",
+      reviewedAt: "2026-07-15T12:00:00Z",
+      verdict: "approved",
+    };
+  }
+  writeFileSync(path, `${JSON.stringify(receipt)}\n`);
+}
+
+function completeCheckpoint(
+  contract: SemanticRoadmapContract,
+  root: string,
+  index: number,
+): void {
+  const checkpoint = contract.checkpoints[index];
+  checkpoint.status = "complete";
+  for (const requirement of receiptRequirements(checkpoint)) {
+    writeReceipt(root, checkpoint.id, requirement);
+  }
+}
 
 function semanticEdges(contract: SemanticRoadmapContract): SemanticRoadmapEdge[] {
   const edges: SemanticRoadmapEdge[] = [];
@@ -28,7 +94,9 @@ function semanticEdges(contract: SemanticRoadmapContract): SemanticRoadmapEdge[]
     for (const support of contract.journey.requiredSupport) {
       edges.push({
         prerequisiteId: support.requirementId,
+        prerequisiteSection: support.sourceSection,
         dependentId: first.requirementId,
+        dependentSection: first.sourceSection,
       });
     }
   }
@@ -39,9 +107,18 @@ function semanticEdges(contract: SemanticRoadmapContract): SemanticRoadmapEdge[]
   ) {
     const prerequisiteId =
       contract.journey.mandatoryPhases[index - 1].requirementId;
+    const prerequisiteSection =
+      contract.journey.mandatoryPhases[index - 1].sourceSection;
     const dependentId = contract.journey.mandatoryPhases[index].requirementId;
+    const dependentSection =
+      contract.journey.mandatoryPhases[index].sourceSection;
     if (prerequisiteId !== dependentId) {
-      edges.push({ prerequisiteId, dependentId });
+      edges.push({
+        prerequisiteId,
+        prerequisiteSection,
+        dependentId,
+        dependentSection,
+      });
     }
   }
   edges.push(...contract.journey.requiredEdges);
@@ -49,7 +126,9 @@ function semanticEdges(contract: SemanticRoadmapContract): SemanticRoadmapEdge[]
   if (last) {
     edges.push({
       prerequisiteId: last.requirementId,
+      prerequisiteSection: last.sourceSection,
       dependentId: contract.journey.terminalArtifact.requirementId,
+      dependentSection: contract.journey.terminalArtifact.sourceSection,
     });
   }
   return edges;
@@ -95,8 +174,12 @@ function validRows(contract: SemanticRoadmapContract): ManifestRow[] {
     add(path.requirementId, path.sourceSection);
   }
   for (const edge of contract.journey.requiredEdges) {
-    add(edge.prerequisiteId);
-    add(edge.dependentId);
+    const pinned = edge as SemanticRoadmapEdge & {
+      prerequisiteSection?: string;
+      dependentSection?: string;
+    };
+    add(edge.prerequisiteId, pinned.prerequisiteSection);
+    add(edge.dependentId, pinned.dependentSection);
   }
   add(
     contract.journey.terminalArtifact.requirementId,
@@ -141,10 +224,19 @@ test("pins phases 1-13, support, artifacts, and optional later paths", () => {
     canonical.journey.requiredSupport.map((item) => item.requirementId),
     ["F-210", "F-235", "F-236", "F-237", "F-238"],
   );
-  assert.deepEqual(canonical.journey.requiredEdges, [
-    { prerequisiteId: "F-224", dependentId: "F-225" },
-    { prerequisiteId: "F-226", dependentId: "F-228" },
-  ]);
+  assert.deepEqual(
+    canonical.journey.requiredEdges.map((edge) => [
+      edge.prerequisiteId,
+      edge.dependentId,
+    ]),
+    [
+      ["F-223", "F-224"],
+      ["F-221", "F-225"],
+      ["F-224", "F-225"],
+      ["F-225", "F-226"],
+      ["F-226", "F-228"],
+    ],
+  );
   assert.equal(canonical.journey.terminalArtifact.requirementId, "F-229");
   assert.deepEqual(
     canonical.journey.optionalLaterPaths.map((path) => [
@@ -209,6 +301,63 @@ test("finds an unsupported mandatory phase mapping", () => {
   ));
 });
 
+test("rejects a changed contract authority pin", () => {
+  const contract = clone();
+  contract.source.sourceDoc = "UX_Design_of_Sourcera.md";
+  contract.source.sourceVersion = "v6.0.0";
+  contract.source.sections = ["§10.1"];
+  assert.ok(codes(journeyFindings(contract, validRows(canonical))).includes(
+    "journey_contract_source_invalid",
+  ));
+});
+
+test("rejects a semantic row with the wrong source document or section", () => {
+  const wrongDocument = validRows(canonical);
+  const phaseOne = wrongDocument.find((row) => row.requirementId === "F-211");
+  assert.ok(phaseOne);
+  phaseOne.sourceDoc = "UX_Design_of_Sourcera.md";
+  assert.ok(codes(journeyFindings(canonical, wrongDocument)).includes(
+    "journey_source_pin_invalid",
+  ));
+
+  const wrongSection = validRows(canonical);
+  const phaseTwo = wrongSection.find((row) => row.requirementId === "F-212");
+  assert.ok(phaseTwo);
+  phaseTwo.section = "§10.9";
+  assert.ok(codes(journeyFindings(canonical, wrongSection)).includes(
+    "journey_source_pin_invalid",
+  ));
+});
+
+test("accepts inventory introduction versions that differ from contract authority", () => {
+  const rows = validRows(canonical);
+  assert.ok(rows.every((row) => row.sourceVersion === "v6.0.0"));
+  assert.equal(
+    codes(journeyFindings(canonical, rows)).includes(
+      "journey_source_pin_invalid",
+    ),
+    false,
+  );
+});
+
+test("rejects an optional later path that is not executable or source-pinned", () => {
+  const nonExecutable = validRows(canonical);
+  const amendment = nonExecutable.find((row) => row.requirementId === "F-216");
+  assert.ok(amendment);
+  amendment.disposition = "narrative_context";
+  assert.ok(codes(journeyFindings(canonical, nonExecutable)).includes(
+    "journey_optional_path_invalid",
+  ));
+
+  const unpinned = validRows(canonical);
+  const approval = unpinned.find((row) => row.requirementId === "F-227");
+  assert.ok(approval);
+  approval.section = "§10.13";
+  assert.ok(codes(journeyFindings(canonical, unpinned)).includes(
+    "journey_optional_path_invalid",
+  ));
+});
+
 test("shared Phase 4 and Phase 5 mapping does not create a self-cycle", () => {
   assert.equal(
     semanticEdges(canonical).some(
@@ -249,26 +398,166 @@ test("defines ordered R0-C1 through R0-C8 with complete requirements", () => {
     assert.ok(checkpoint.requirements.telemetry.length);
     assert.ok(checkpoint.requirements.customerProof.length);
     assert.ok(checkpoint.requirements.operationalProof.length);
-    assert.ok(checkpoint.requiredReceipts.length);
+    assert.ok(receiptRequirements(checkpoint).length);
   }
   assert.deepEqual(checkpointFindings(canonical), []);
 });
 
-test("requires every named receipt before a checkpoint is complete", () => {
+test("rejects a checkpoint whose canonical scope is replaced", () => {
   const contract = clone();
-  contract.checkpoints[0].status = "complete";
-  contract.checkpoints[0].receipts = [];
+  contract.checkpoints[3].scope = ["anything"];
   assert.ok(codes(checkpointFindings(contract)).includes(
-    "checkpoint_receipt_missing",
+    "checkpoint_scope_invalid",
   ));
+});
 
-  contract.checkpoints[0].receipts = [
-    ...contract.checkpoints[0].requiredReceipts,
+test("keeps planned checkpoints valid without receipt files", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  try {
+    assert.deepEqual(
+      checkpointFindings(canonical, { root, expectedCommit: EXPECTED_COMMIT }),
+      [],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("requires every predecessor to be complete", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  try {
+    const contract = clone();
+    completeCheckpoint(contract, root, 1);
+    assert.ok(codes(checkpointFindings(contract, {
+      root,
+      expectedCommit: EXPECTED_COMMIT,
+    })).includes("checkpoint_predecessor_incomplete"));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects missing or malformed checkpoint evidence", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  try {
+    const missing = clone();
+    missing.checkpoints[0].status = "complete";
+    assert.ok(codes(checkpointFindings(missing, {
+      root,
+      expectedCommit: EXPECTED_COMMIT,
+    })).includes("checkpoint_evidence_missing"));
+
+    const malformed = clone();
+    malformed.checkpoints[0].status = "complete";
+    const first = receiptRequirements(malformed.checkpoints[0])[0];
+    const path = join(root, first.path);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, "{not-json}\n");
+    assert.ok(codes(checkpointFindings(malformed, {
+      root,
+      expectedCommit: EXPECTED_COMMIT,
+    })).includes("checkpoint_evidence_invalid"));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects evidence with wrong identity, proof type, result, commit, or body", () => {
+  const cases: Array<[string, Record<string, unknown>, string]> = [
+    ["checkpoint", { checkpoint: "R0-C8" }, "checkpoint_evidence_mismatch"],
+    ["proof", { proofTypes: ["runtime"] }, "checkpoint_evidence_mismatch"],
+    ["status", { status: "failed" }, "checkpoint_evidence_invalid"],
+    ["short-sha", { sourceCommit: "abc123" }, "checkpoint_evidence_invalid"],
+    [
+      "wrong-sha",
+      { sourceCommit: "fedcba9876543210fedcba9876543210fedcba98" },
+      "checkpoint_commit_mismatch",
+    ],
+    ["empty", { evidence: [] }, "checkpoint_evidence_invalid"],
   ];
-  assert.equal(
-    codes(checkpointFindings(contract)).includes("checkpoint_receipt_missing"),
-    false,
+  for (const [name, overrides, expectedCode] of cases) {
+    const root = mkdtempSync(join(tmpdir(), `sourcera-checkpoint-${name}-`));
+    try {
+      const contract = clone();
+      contract.checkpoints[0].status = "complete";
+      for (const requirement of receiptRequirements(contract.checkpoints[0])) {
+        writeReceipt(root, "R0-C1", requirement, overrides);
+      }
+      assert.ok(
+        codes(checkpointFindings(contract, {
+          root,
+          expectedCommit: EXPECTED_COMMIT,
+        })).includes(expectedCode),
+        name,
+      );
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("requires runtime, rollback, and approval proof for C8 closure", () => {
+  const contract = clone();
+  const checkpoint = contract.checkpoints[7];
+  const configured = receiptRequirements(checkpoint).filter(
+    (receipt) => !["runtime", "rollback", "approval"].includes(receipt.proofType),
   );
+  const rawReceipts = checkpoint.requiredReceipts as unknown[];
+  checkpoint.requiredReceipts = (typeof rawReceipts[0] === "string"
+    ? configured.map((receipt) => receipt.path)
+    : configured) as typeof checkpoint.requiredReceipts;
+  checkpoint.status = "complete";
+  for (let index = 0; index < 7; index += 1) {
+    contract.checkpoints[index].status = "complete";
+  }
+  assert.ok(codes(checkpointFindings(contract, {
+    root: process.cwd(),
+    expectedCommit: EXPECTED_COMMIT,
+  })).includes("checkpoint_required_proof_missing"));
+});
+
+test("rejects C8 approval when reviewer and author are the same", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  try {
+    const contract = clone();
+    for (let index = 0; index < contract.checkpoints.length; index += 1) {
+      completeCheckpoint(contract, root, index);
+    }
+    const approval = receiptRequirements(contract.checkpoints[7]).find(
+      (receipt) => receipt.proofType === "approval",
+    );
+    assert.ok(approval);
+    writeReceipt(root, "R0-C8", approval, {
+      approval: {
+        author: "same@sourcera.local",
+        reviewer: "same@sourcera.local",
+        reviewedAt: "2026-07-15T12:00:00Z",
+        verdict: "approved",
+      },
+    });
+    assert.ok(codes(checkpointFindings(contract, {
+      root,
+      expectedCommit: EXPECTED_COMMIT,
+    })).includes("checkpoint_approval_not_independent"));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("accepts complete checkpoints with valid commit-bound parsed evidence", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  try {
+    const contract = clone();
+    for (let index = 0; index < contract.checkpoints.length; index += 1) {
+      completeCheckpoint(contract, root, index);
+    }
+    assert.deepEqual(checkpointFindings(contract, {
+      root,
+      expectedCommit: EXPECTED_COMMIT,
+    }), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("aggregate findings include journey and checkpoint failures", () => {
@@ -276,8 +565,11 @@ test("aggregate findings include journey and checkpoint failures", () => {
   contract.journey.mandatoryPhases.splice(0, 1);
   contract.checkpoints[0].status = "complete";
   const findingCodes = codes(
-    semanticRoadmapFindings(contract, validRows(canonical)),
+    semanticRoadmapFindings(contract, validRows(canonical), {
+      root: process.cwd(),
+      expectedCommit: EXPECTED_COMMIT,
+    }),
   );
   assert.ok(findingCodes.includes("journey_phase_missing"));
-  assert.ok(findingCodes.includes("checkpoint_receipt_missing"));
+  assert.ok(findingCodes.includes("checkpoint_evidence_missing"));
 });
