@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "observedAt": "2026-07-15T10:47:35Z",
+  "policy": {
+    "laneCount": 1,
+    "wipLimit": 1,
+    "calendarDates": "withheld until provider waits and more observed batches are available",
+    "measurement": "active batch time from first implementation commit through closeout commit"
+  },
+  "observations": [
+    {
+      "issue": "PLA-220",
+      "estimate": 3,
+      "firstImplementationCommit": "9a5eee57dc1ca24b6fa458cdcf5a325fcbb258bd",
+      "startedAt": "2026-07-14T19:10:14-04:00",
+      "closeoutCommit": "c0118b7b285ba60790131b55175170f3e747d648",
+      "completedAt": "2026-07-14T19:24:12-04:00",
+      "activeSeconds": 838,
+      "reviewEvidence": "reports/evidence/r0-foundation-review.json",
+      "runtimeEvidence": "reports/evidence/r0-foundation.json"
+    },
+    {
+      "issue": "PLA-217",
+      "estimate": 5,
+      "firstImplementationCommit": "7d1156263e9f850011180bd3ee7162b4fb60f868",
+      "startedAt": "2026-07-14T19:44:54-04:00",
+      "closeoutCommit": "4c6a85960c51819740273e747e6e1e309edc9806",
+      "completedAt": "2026-07-14T19:58:01-04:00",
+      "activeSeconds": 787,
+      "reviewEvidence": "reports/evidence/r0-three-domain-foundation.json",
+      "runtimeEvidence": "reports/evidence/r0-three-domain-foundation.json"
+    }
+  ],
+  "baseline": {
+    "completedEstimate": 8,
+    "activeSeconds": 1625,
+    "pointsPerActiveHour": 17.72,
+    "confidence": "low"
+  },
+  "next": {
+    "issue": "PLA-282",
+    "estimate": 5,
+    "activeWorkMinutesAfterExternalUnblock": {
+      "lower": 15,
+      "upper": 60
+    },
+    "calendarDate": null,
+    "externalWait": "Convex Preview project identity, deploy key, and repository configuration",
+    "rule": "Do not start dependent work while the provider foundation remains unproved."
+  },
+  "recalibrationTrigger": "Recalculate after every completed reviewed batch, any result outside the forecast band, or any capacity change."
+}

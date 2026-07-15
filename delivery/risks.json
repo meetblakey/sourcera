@@ -48,6 +48,13 @@
       "owner": "Blake Rowley",
       "trigger": "A listed description contains a truncation marker or omits executable fields present only in the full issue.",
       "response": "Fetch the full issue before qualification and fail readiness when full text cannot be obtained."
+    },
+    {
+      "id": "RISK-008",
+      "statement": "External provider access can dominate calendar delivery while remaining invisible in active-work throughput.",
+      "owner": "Blake Rowley",
+      "trigger": "The next dependency-safe issue lacks required provider identity, credentials, or environment configuration.",
+      "response": "Withhold the calendar date, report external wait separately, and do not start dependent work before provider proof passes."
     }
   ]
 }

@@ -64,7 +64,9 @@
   ],
   "customerProof": [],
   "operationalProof": [],
-  "forecastProof": [],
+  "forecastProof": [
+    "reports/evidence/r0-forecast-baseline.json"
+  ],
   "executionEvidence": {
     "tests": [
       "reports/evidence/r0-foundation.json",

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "issue": "PLA-220",
+  "status": "passed",
+  "reviewedAt": "2026-07-15T10:47:35Z",
+  "reviewer": "Blake Rowley (interim under DEC-OWNER-001)",
+  "reviewType": "commit-bound source and evidence review",
+  "scope": {
+    "firstImplementationCommit": "9a5eee57dc1ca24b6fa458cdcf5a325fcbb258bd",
+    "verifiedImplementationCommit": "67ac6bab49cb4001a0c4f653151105e9bfebac3e",
+    "closeoutCommit": "c0118b7b285ba60790131b55175170f3e747d648",
+    "evidence": "reports/evidence/r0-foundation.json"
+  },
+  "reviewedControls": [
+    "fail-closed deployment identity validation",
+    "non-cacheable commit-bound health response",
+    "secret-safe structured logging",
+    "clean install, lint, typecheck, tests, and production build",
+    "protected Preview deployment",
+    "rollback and restore health proof"
+  ],
+  "findings": [],
+  "verdict": "accepted"
+}
