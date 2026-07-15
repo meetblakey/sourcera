@@ -19,11 +19,11 @@
 | feature_id | feature_name | feature_class | primary_section_anchor | secondary_section_anchors | originating_doc | introduced_in_version | one_line_summary | known_dependencies |
 |---|---|---|---|---|---|---|---|---|
 | F-001 | Three-Domain Architecture (Buyer / Seller / Marketplace) | engine_concept | §1.1 | §1.3, §1.4 | master_spec | v6.0.0 | Three-domain platform separating Buyer Console, Seller Console, and Marketplace with shared auth and unified database. | F-004 |
-| F-002 | Dual-Console Data Isolation Model | engine_concept | §1.3 | §1.4, §7.2 | master_spec | v6.0.0 | Strict logical isolation between Buyer and Seller consoles with org-scoped vs console-scoped entity rules. | F-001, F-005 |
+| F-002 | Dual-Console Data Isolation Model | engine_concept | §1.3 | §1.4, §7.2 | master_spec | v6.0.0 | Strict logical isolation between Buyer and Seller consoles with org-scoped vs console-scoped entity rules. | F-001, F-005, F-006 |
 | F-003 | Org-Scoped vs Console-Scoped Query Scoping | engine_concept | §1.4 | §1.3 | master_spec | v6.0.0 | Query parameter contract requiring org_id alone for org-scoped reads and org_id+console for console-scoped reads. | F-002 |
 | F-004 | Authoritative Technology Stack | platform_mechanic | §1.5 | — | master_spec | v6.0.0 | Canonical stack list (Next.js, Convex, WorkOS, Stripe, Anthropic, PostHog, Loops.so, Firecrawl, Vercel, Datadog, Zendesk). | — |
 | F-005 | Convex Backend & Real-Time Database | integration_surface | §1.5 | §7.5 | master_spec | v6.0.0 | Serverless Convex backend providing reactive subscriptions and ACID transactions. | — |
-| F-006 | WorkOS Authentication Integration | integration_surface | §1.5 | §6.1 | master_spec | v6.0.0 | Enterprise SSO/SAML/SCIM identity provider integration via WorkOS. | — |
+| F-006 | WorkOS Authentication Integration | integration_surface | §1.5 | §6.1 | master_spec | v6.0.0 | Enterprise SSO/SAML/SCIM identity provider integration via WorkOS. | F-001, F-005 |
 | F-007 | Stripe Billing Integration | integration_surface | §1.5 | §34, §34.10.5 | master_spec | v6.0.0 | Subscription management, invoicing, and usage metering integration via Stripe. | — |
 | F-008 | PostHog Analytics Integration | integration_surface | §1.5 | §51 | master_spec | v6.0.0 | Feature adoption, user-behavior, and event taxonomy analytics platform. | — |
 | F-009 | Loops.so Email Delivery Integration | integration_surface | §1.5 | §41 | master_spec | v6.0.0 | Transactional and marketing email delivery service. | — |

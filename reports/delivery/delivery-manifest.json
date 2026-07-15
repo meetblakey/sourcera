@@ -53,7 +53,8 @@
       "section": "§1.3",
       "dependencies": [
         "F-001",
-        "F-005"
+        "F-005",
+        "F-006"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -100,7 +101,10 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§1.5",
-      "dependencies": [],
+      "dependencies": [
+        "F-001",
+        "F-005"
+      ],
       "disposition": "executable",
       "release": "R0",
       "issueId": "PLA-283"
