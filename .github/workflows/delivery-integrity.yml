@@ -3,7 +3,6 @@ name: Delivery integrity
 on:
   pull_request:
   push:
-    branches: [main]
   schedule:
     - cron: "17 9 * * *"
 
@@ -36,14 +35,18 @@ jobs:
           set -e
           if (( stamp_status > 1 )); then exit "$stamp_status"; fi
           exit "$exact_status"
-      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json --feature-dependencies delivery/feature-dependencies.json --policy delivery/release-policy.json --release-plan delivery/release-plan.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json --feature-dependencies delivery/feature-dependencies.json --policy delivery/release-policy.json --release-plan delivery/release-plan.json --roadmap delivery/roadmap-contract.json
       - run: npm --prefix tools/spec-lint run typecheck
       - run: npm --prefix tools/spec-lint run all
       - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
       - run: tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
 
   linear-drift:
-    if: github.event_name == 'schedule'
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

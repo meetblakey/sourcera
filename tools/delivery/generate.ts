@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { spawnSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
@@ -34,11 +35,13 @@ import type {
   ReleaseAssignment,
   ReleaseDefinition,
   ReleasePolicy,
+  SemanticRoadmapContract,
   SourceRequirement,
 } from "./lib/model.js";
 import { readinessFindings } from "./lib/readiness.js";
 import { validateReleases } from "./lib/releases.js";
 import { calculateScorecard } from "./lib/scorecard.js";
+import { semanticRoadmapFindings } from "./lib/semantic-roadmap.js";
 import {
   parseFeatureInventory,
   parseRuntimeGate,
@@ -61,6 +64,23 @@ interface RuntimeGateDependency {
   requirementId: string;
   dependencies: string[];
   rationale: string;
+}
+
+interface LinearDeliverySnapshot {
+  issues: LinearIssueSnapshot[];
+  milestones?: Array<{
+    id: string;
+    name: string;
+    projectId: string;
+    project: string;
+  }>;
+  linearFingerprint?: {
+    issues: Array<{
+      identifier: string;
+      project: string | null;
+      milestone: string | null;
+    }>;
+  };
 }
 
 function argumentsByName(): Map<string, string> {
@@ -118,6 +138,7 @@ const validationPath = path(
   "delivery/validation-plan.json",
 );
 const linearPath = path("--linear", "delivery/linear-snapshot.json");
+const roadmapPath = path("--roadmap", "delivery/roadmap-contract.json");
 const outDir = path("--out", "reports/delivery");
 
 const json = <T>(file: string): T =>
@@ -148,7 +169,9 @@ const releases = json<{ releases: ReleaseDefinition[] }>(releasesPath)
 const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
   .assignments;
 const policy = json<ReleasePolicy>(policyPath);
-const issues = json<{ issues: LinearIssueSnapshot[] }>(linearPath).issues;
+const linearSnapshot = json<LinearDeliverySnapshot>(linearPath);
+const issues = linearSnapshot.issues;
+const roadmap = json<SemanticRoadmapContract>(roadmapPath);
 const overrides = json<{ overrides: DispositionOverride[] }>(dispositionsPath)
   .overrides;
 const runtimeDependencies = existsSync(runtimeDependenciesPath)
@@ -228,6 +251,52 @@ const manifest: ManifestRow[] = requirements.map((row) => {
     issueId: issue?.id ?? null,
   };
 });
+
+const hasCompleteCheckpoint = roadmap.checkpoints.some(
+  (checkpoint) => checkpoint.status === "complete",
+);
+let expectedCommit: string | null = null;
+if (hasCompleteCheckpoint) {
+  expectedCommit = argv.get("--commit") ?? null;
+  if (!expectedCommit) {
+    const head = spawnSync("git", ["-C", root, "rev-parse", "HEAD"], {
+      encoding: "utf8",
+    });
+    expectedCommit = head.status === 0 ? head.stdout.trim() : null;
+  }
+}
+const semanticFindings = semanticRoadmapFindings(
+  roadmap,
+  manifest,
+  hasCompleteCheckpoint
+    ? { root, expectedCommit: expectedCommit ?? "" }
+    : undefined,
+);
+const productionEvidenceMilestoneFindings: Finding[] = [];
+const fingerprintIssues = linearSnapshot.linearFingerprint?.issues ?? [];
+const productionEvidenceProjects = new Map<string, string>();
+for (const milestone of linearSnapshot.milestones ?? []) {
+  if (milestone.name === "Production evidence closed") {
+    productionEvidenceProjects.set(milestone.project, milestone.id);
+  }
+}
+for (const project of [...productionEvidenceProjects.keys()].sort()) {
+  const hasIssue = fingerprintIssues.some(
+    (issue) =>
+      issue.project === project &&
+      issue.milestone === "Production evidence closed",
+  );
+  if (!hasIssue) {
+    productionEvidenceMilestoneFindings.push({
+      code: "production_evidence_milestone_empty",
+      message: `${project} has an empty Production evidence closed milestone`,
+    });
+  }
+}
+const journeyReadinessFindings = [
+  ...semanticFindings,
+  ...productionEvidenceMilestoneFindings,
+];
 
 const sourceFindings = sourceReferenceFindings(requirements, root);
 const dispositionFindings: Finding[] = overrides.flatMap((override) => {
@@ -506,6 +575,7 @@ const allFindings = [
   ...readiness,
   ...drift,
   ...releaseAssignment,
+  ...journeyReadinessFindings,
 ];
 const evidencePasses = (kind: EvidenceKind) => {
   const group = evidenceGroups.find((candidate) => candidate.kind === kind);
@@ -519,7 +589,8 @@ const scorecard = calculateScorecard({
     sourceFindings.length +
         dispositionFindings.length +
         duplicateOverrides.length +
-        exactFindings.length ===
+        exactFindings.length +
+        journeyReadinessFindings.length ===
       0,
     graphFindings.length === 0,
     drift.length +
@@ -531,7 +602,7 @@ const scorecard = calculateScorecard({
   ],
   releases: [
     releaseFindings.length === 0,
-    releaseAssignment.length === 0,
+    releaseAssignment.length + journeyReadinessFindings.length === 0,
     !graphFindings.some(
       (finding) => finding.code === "cross_release_inversion",
     ),
@@ -652,6 +723,18 @@ const reports = {
     ]),
   },
   "release-scorecard.json": scorecard,
+  "journey-readiness.json": {
+    release: roadmap.release,
+    source: roadmap.source,
+    expectedCommit,
+    mandatoryPhases: roadmap.journey.mandatoryPhases,
+    requiredSupport: roadmap.journey.requiredSupport,
+    requiredEdges: roadmap.journey.requiredEdges,
+    terminalArtifact: roadmap.journey.terminalArtifact,
+    optionalLaterPaths: roadmap.journey.optionalLaterPaths,
+    checkpoints: roadmap.checkpoints,
+    findings: sortFindings(journeyReadinessFindings),
+  },
 };
 mkdirSync(outDir, { recursive: true });
 for (const [name, value] of Object.entries(reports)) {

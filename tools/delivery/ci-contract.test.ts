@@ -16,6 +16,7 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     "--feature-dependencies delivery/feature-dependencies.json",
     "--policy delivery/release-policy.json",
     "--release-plan delivery/release-plan.json",
+    "--roadmap delivery/roadmap-contract.json",
     "tools/delivery/linear-live.ts",
     "npm --prefix tools/spec-lint run typecheck",
     "npm --prefix tools/spec-lint run all",
@@ -23,7 +24,12 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     "tools/release/appendix_j_lineage.ts",
     "LINEAR_API_KEY",
     "schedule:",
+    "github.event_name == 'schedule'",
+    "github.event_name == 'push'",
+    "github.event_name == 'pull_request'",
+    "github.event.pull_request.head.repo.full_name == github.repository",
   ]) {
     assert.match(workflow, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
+  assert.doesNotMatch(workflow, /pull_request_target/);
 });

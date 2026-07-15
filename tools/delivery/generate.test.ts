@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
 import {
+  existsSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -40,6 +41,146 @@ const completeValidationPlan = () => ({
     rollback: [],
     runtime: [],
   },
+});
+
+function canonicalGenerationArgs(
+  dir: string,
+  extras: string[] = [],
+): { args: string[]; reports: string } {
+  const stamp = join(dir, "stamp.json");
+  const exact = join(dir, "exact.json");
+  const reports = join(dir, "reports");
+  const runtimeDependencies = JSON.parse(
+    readFileSync("delivery/runtime-gate-dependencies.json", "utf8"),
+  ).dependencies as Array<{ requirementId: string }>;
+  writeFileSync(
+    stamp,
+    JSON.stringify({
+      summary: {},
+      findings: runtimeDependencies.map(({ requirementId }, index) => ({
+        id: requirementId.replace(/^RG:/, ""),
+        file: "Sourcera_Master_Spec.md",
+        line: index + 1,
+        severity: "blocker",
+      })),
+    }),
+  );
+  writeFileSync(exact, JSON.stringify({ open_rows: 0 }));
+  return {
+    args: [
+      "--root",
+      process.cwd(),
+      "--stamp",
+      stamp,
+      "--exact",
+      exact,
+      ...extras,
+      "--out",
+      reports,
+    ],
+    reports,
+  };
+}
+
+function runGeneration(args: string[]) {
+  return spawnSync(
+    process.execPath,
+    [
+      "--import",
+      "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+      "tools/delivery/generate.ts",
+      ...args,
+    ],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+}
+
+test("generates semantic journey readiness and fails empty evidence milestones and relation drift", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-journey-"));
+  try {
+    const linear = JSON.parse(
+      readFileSync("delivery/linear-snapshot.json", "utf8"),
+    );
+    linear.milestones = [
+      {
+        id: "empty-production-evidence",
+        name: "Production evidence closed",
+        projectId: "empty-project",
+        project: "Empty production evidence project",
+        targetDate: null,
+        updatedAt: null,
+      },
+    ];
+    linear.issues[0].milestone = "Production evidence closed";
+    const phaseOne = linear.issues.find(
+      (issue: { sourceId: string | null }) => issue.sourceId === "F-211",
+    );
+    assert.ok(phaseOne);
+    phaseOne.dependencies = phaseOne.dependencies.filter(
+      (dependency: string) => dependency !== "F-210",
+    );
+    const linearPath = join(dir, "linear.json");
+    writeFileSync(linearPath, JSON.stringify(linear));
+    const fixture = canonicalGenerationArgs(dir, ["--linear", linearPath]);
+
+    const result = runGeneration(fixture.args);
+    assert.equal(result.status, 1);
+    const reportPath = join(fixture.reports, "journey-readiness.json");
+    assert.equal(existsSync(reportPath), true, result.stderr);
+    const report = JSON.parse(readFileSync(reportPath, "utf8"));
+    assert.equal(report.release, "R0");
+    assert.equal(report.expectedCommit, null);
+    assert.equal(report.mandatoryPhases.length, 13);
+    assert.equal(report.checkpoints.length, 8);
+    assert.ok(
+      report.findings.some(
+        (finding: { code: string; message: string }) =>
+          finding.code === "production_evidence_milestone_empty" &&
+          finding.message.includes("Empty production evidence project"),
+      ),
+    );
+    const drift = JSON.parse(
+      readFileSync(join(fixture.reports, "drift-report.json"), "utf8"),
+    );
+    assert.ok(
+      drift.findings.some(
+        (finding: { code: string; issueId?: string }) =>
+          finding.code === "dependency_drift" &&
+          finding.issueId === phaseOne.id,
+      ),
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("derives the exact HEAD only when a checkpoint claims completion", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-checkpoint-"));
+  try {
+    const roadmap = JSON.parse(
+      readFileSync("delivery/roadmap-contract.json", "utf8"),
+    );
+    roadmap.checkpoints[0].status = "complete";
+    const roadmapPath = join(dir, "roadmap.json");
+    writeFileSync(roadmapPath, JSON.stringify(roadmap));
+    const fixture = canonicalGenerationArgs(dir, ["--roadmap", roadmapPath]);
+
+    const result = runGeneration(fixture.args);
+    assert.equal(result.status, 1);
+    const reportPath = join(fixture.reports, "journey-readiness.json");
+    assert.equal(existsSync(reportPath), true, result.stderr);
+    const report = JSON.parse(readFileSync(reportPath, "utf8"));
+    assert.match(report.expectedCommit, /^[a-f0-9]{40}$/);
+    assert.ok(
+      report.findings.some(
+        (finding: { code: string; checkpointId?: string }) =>
+          finding.code === "checkpoint_evidence_missing" &&
+          finding.checkpointId === "R0-C1",
+      ),
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("requires explicit feature dependencies for a custom inventory", () => {
@@ -459,11 +600,20 @@ test("traces a source parent through its executable children", () => {
       ],
       { cwd: process.cwd(), encoding: "utf8" },
     );
-    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.status, 1, result.stderr);
     const drift = JSON.parse(
       readFileSync(join(reports, "drift-report.json"), "utf8"),
     );
     assert.deepEqual(drift.findings, []);
+    const journeyReadiness = JSON.parse(
+      readFileSync(join(reports, "journey-readiness.json"), "utf8"),
+    );
+    assert.ok(
+      journeyReadiness.findings.some(
+        (finding: { code: string }) =>
+          finding.code === "journey_phase_unsupported",
+      ),
+    );
     const traceability = JSON.parse(
       readFileSync(join(reports, "traceability-map.json"), "utf8"),
     );

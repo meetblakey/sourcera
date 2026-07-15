@@ -37,6 +37,7 @@ const names = [
   "readiness-report.json",
   "drift-report.json",
   "release-scorecard.json",
+  "journey-readiness.json",
 ];
 
 try {
@@ -82,6 +83,12 @@ try {
       .filter(([name]) => name !== "--reports" && name !== "--out")
       .flat();
     if (!argv.has("--root")) forwarded.push("--root", root);
+    if (!argv.has("--roadmap")) {
+      forwarded.push(
+        "--roadmap",
+        resolve(root, "delivery/roadmap-contract.json"),
+      );
+    }
     const result = spawnSync(
       process.execPath,
       [

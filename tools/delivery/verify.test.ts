@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
 import {
+  existsSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -219,7 +220,9 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       [...node, "tools/delivery/generate.ts", ...common, "--out", reports],
       { cwd: process.cwd(), encoding: "utf8" },
     );
-    assert.equal(generated.status, 0, generated.stderr);
+    assert.equal(generated.status, 1, generated.stderr);
+    const journeyReportPath = join(reports, "journey-readiness.json");
+    assert.equal(existsSync(journeyReportPath), true, generated.stderr);
 
     const verify = () =>
       spawnSync(
@@ -234,7 +237,8 @@ test("verifies regenerated reports and rejects a hand edit", () => {
         { cwd: process.cwd(), encoding: "utf8" },
       );
     const clean = verify();
-    assert.equal(clean.status, 0, clean.stderr);
+    assert.equal(clean.status, 1);
+    assert.match(clean.stderr, /Delivery findings remain/);
     const releasePlan = JSON.parse(
       readFileSync(join(dir, "release-plan.json"), "utf8"),
     );
@@ -251,6 +255,15 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       join(dir, "release-plan.json"),
       `${JSON.stringify(releasePlan, null, 2)}\n`,
     );
+    const journeyReport = readFileSync(journeyReportPath, "utf8");
+    writeFileSync(journeyReportPath, "{}\n");
+    const editedJourney = verify();
+    assert.equal(editedJourney.status, 1);
+    assert.match(
+      editedJourney.stderr,
+      /Generated report differs: journey-readiness\.json/,
+    );
+    writeFileSync(journeyReportPath, journeyReport);
     writeFileSync(join(reports, "release-scorecard.json"), "{}\n");
     const edited = verify();
     assert.equal(edited.status, 1);
