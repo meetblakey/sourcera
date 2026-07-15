@@ -13,6 +13,7 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     "tools/release/stamp_gate.ts --json",
     "tools/release/exact_status_scan.ts --json",
     "tools/delivery/verify.ts",
+    "--feature-dependencies delivery/feature-dependencies.json",
     "--policy delivery/release-policy.json",
     "--release-plan delivery/release-plan.json",
     "tools/delivery/linear-live.ts",
