@@ -41,6 +41,77 @@ export interface ReleasePolicy {
   baselineAssignments: ReleaseAssignment[];
 }
 
+export type R0CheckpointId =
+  | "R0-C1"
+  | "R0-C2"
+  | "R0-C3"
+  | "R0-C4"
+  | "R0-C5"
+  | "R0-C6"
+  | "R0-C7"
+  | "R0-C8";
+
+export interface SemanticRoadmapPhase {
+  phase: number;
+  stage: string;
+  requirementId: string;
+  sourceSection: string;
+}
+
+export interface SemanticRoadmapRequirement {
+  requirementId: string;
+  sourceSection: string;
+}
+
+export interface SemanticRoadmapEdge {
+  prerequisiteId: string;
+  dependentId: string;
+}
+
+export interface OptionalRoadmapPath extends SemanticRoadmapRequirement {
+  release: Exclude<ReleaseId, "R0">;
+}
+
+export interface CheckpointRequirements {
+  success: string[];
+  failureRecovery: string[];
+  rollout: string[];
+  rollback: string[];
+  telemetry: string[];
+  customerProof: string[];
+  operationalProof: string[];
+}
+
+export interface R0Checkpoint {
+  id: R0CheckpointId;
+  sequence: number;
+  name: string;
+  dependsOn: R0CheckpointId[];
+  scope: string[];
+  status: "planned" | "active" | "complete";
+  requirements: CheckpointRequirements;
+  requiredReceipts: string[];
+  receipts: string[];
+}
+
+export interface SemanticRoadmapContract {
+  schemaVersion: 1;
+  release: "R0";
+  source: {
+    sourceDoc: string;
+    sourceVersion: string;
+    sections: string[];
+  };
+  journey: {
+    mandatoryPhases: SemanticRoadmapPhase[];
+    requiredSupport: SemanticRoadmapRequirement[];
+    requiredEdges: SemanticRoadmapEdge[];
+    terminalArtifact: SemanticRoadmapRequirement;
+    optionalLaterPaths: OptionalRoadmapPath[];
+  };
+  checkpoints: R0Checkpoint[];
+}
+
 export interface LinearIssueSnapshot {
   id: string;
   parentId: string | null;
@@ -79,4 +150,5 @@ export interface Finding {
   message: string;
   requirementId?: string;
   issueId?: string;
+  checkpointId?: R0CheckpointId;
 }
