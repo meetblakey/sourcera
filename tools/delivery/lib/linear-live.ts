@@ -1,7 +1,7 @@
 import { descriptionFingerprint } from "./fingerprint.js";
 
 const ENDPOINT = "https://api.linear.app/graphql";
-const ISSUE_NESTED_LIMIT = 250;
+const NESTED_CONNECTION_LIMIT = 250;
 
 const ISSUE_QUERY = `
   query DeliveryIssues($after: String) {
@@ -14,7 +14,7 @@ const ISSUE_QUERY = `
         updatedAt
         estimate
         state { name type }
-        labels(first: ${ISSUE_NESTED_LIMIT}) {
+        labels(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { name }
           pageInfo { hasNextPage }
         }
@@ -23,15 +23,15 @@ const ISSUE_QUERY = `
         project { name }
         projectMilestone { name }
         parent { identifier }
-        releases(first: ${ISSUE_NESTED_LIMIT}) {
+        releases(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { id version }
           pageInfo { hasNextPage }
         }
-        relations(first: ${ISSUE_NESTED_LIMIT}) {
+        relations(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { type issue { identifier } relatedIssue { identifier } }
           pageInfo { hasNextPage }
         }
-        inverseRelations(first: ${ISSUE_NESTED_LIMIT}) {
+        inverseRelations(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { type issue { identifier } relatedIssue { identifier } }
           pageInfo { hasNextPage }
         }
@@ -50,8 +50,14 @@ const PIPELINE_QUERY = `
         updatedAt
         type
         isProduction
-        teams(first: 20) { nodes { key } }
-        stages(first: 20) { nodes { id name type } }
+        teams(first: ${NESTED_CONNECTION_LIMIT}) {
+          nodes { key }
+          pageInfo { hasNextPage }
+        }
+        stages(first: ${NESTED_CONNECTION_LIMIT}) {
+          nodes { id name type }
+          pageInfo { hasNextPage }
+        }
       }
       pageInfo { hasNextPage endCursor }
     }
@@ -120,8 +126,8 @@ interface PipelineNode {
   updatedAt: string;
   type: string;
   isProduction: boolean;
-  teams: { nodes: Array<{ key: string }> };
-  stages: { nodes: Array<{ id: string; name: string; type: string }> };
+  teams: NestedConnection<{ key: string }>;
+  stages: NestedConnection<{ id: string; name: string; type: string }>;
 }
 
 interface ReleaseNode {
@@ -250,6 +256,22 @@ function assertIssueConnectionsComplete(issue: IssueNode): void {
   }
 }
 
+function assertPipelineConnectionsComplete(pipeline: PipelineNode): void {
+  for (const field of ["teams", "stages"] as const) {
+    const pageInfo = pipeline[field].pageInfo;
+    if (!pageInfo) {
+      throw new Error(
+        `Linear release pipeline ${pipeline.id} ${field} connection is missing pageInfo`,
+      );
+    }
+    if (pageInfo.hasNextPage) {
+      throw new Error(
+        `Linear release pipeline ${pipeline.id} ${field} connection is truncated`,
+      );
+    }
+  }
+}
+
 export async function fetchLinearFingerprint(
   fetcher: typeof fetch,
   token: string,
@@ -266,6 +288,9 @@ export async function fetchLinearFingerprint(
     paginate<ReleaseNode>(fetcher, token, RELEASE_QUERY, "releases"),
   ]);
   for (const issue of issueNodes) assertIssueConnectionsComplete(issue);
+  for (const pipeline of pipelineNodes) {
+    assertPipelineConnectionsComplete(pipeline);
+  }
   return {
     issues: issueNodes
       .map((issue) => ({

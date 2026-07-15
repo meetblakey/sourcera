@@ -133,10 +133,10 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 updatedAt: "2026-07-14T01:00:00.000Z",
                 type: "scheduled",
                 isProduction: true,
-                teams: { nodes: [{ key: "PLA" }] },
-                stages: {
-                  nodes: [{ id: "stage-1", name: "Planned", type: "planned" }],
-                },
+                teams: completeConnection([{ key: "PLA" }]),
+                stages: completeConnection([
+                  { id: "stage-1", name: "Planned", type: "planned" },
+                ]),
               },
             ],
             pageInfo: { hasNextPage: false, endCursor: null },
@@ -320,6 +320,70 @@ for (const field of [
       new RegExp(`PLA-1.*${field}.*truncated`, "i"),
     );
   });
+}
+
+for (const field of ["teams", "stages"] as const) {
+  for (const condition of ["truncated", "missing pageInfo"] as const) {
+    test(`rejects ${condition} release pipeline ${field}`, async () => {
+      const pipeline = {
+        id: "pipeline-1",
+        name: "Sourcera Product Delivery",
+        updatedAt: "2026-07-14T01:00:00.000Z",
+        type: "scheduled",
+        isProduction: true,
+        teams: completeConnection([{ key: "PLA" }]),
+        stages: completeConnection([
+          { id: "stage-1", name: "Planned", type: "planned" },
+        ]),
+      };
+      const selected = pipeline[field] as {
+        pageInfo?: { hasNextPage: boolean; endCursor: string | null };
+      };
+      if (condition === "truncated") {
+        selected.pageInfo!.hasNextPage = true;
+      } else {
+        delete selected.pageInfo;
+      }
+      const fetcher: typeof fetch = async (_input, init) => {
+        const body = JSON.parse(String(init?.body)) as { query: string };
+        if (body.query.includes("DeliveryIssues")) {
+          return response({
+            data: {
+              issues: {
+                nodes: [],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+            },
+          });
+        }
+        if (body.query.includes("DeliveryPipelines")) {
+          assert.match(body.query, /teams\(first: 250\)/);
+          assert.match(body.query, /stages\(first: 250\)/);
+          return response({
+            data: {
+              releasePipelines: {
+                nodes: [pipeline],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+            },
+          });
+        }
+        return response({
+          data: {
+            releases: {
+              nodes: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        });
+      };
+
+      await assert.rejects(
+        () => fetchLinearFingerprint(fetcher, "secret"),
+        new RegExp(`pipeline-1.*${field}.*${condition}`, "i"),
+      );
+    });
+  }
 }
 
 test("rejects GraphQL errors returned with HTTP 200", async () => {
