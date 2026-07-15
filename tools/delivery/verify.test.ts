@@ -18,6 +18,29 @@ const releaseNames = [
   "Enterprise Integrations, Compliance, Globalization & Scale",
 ];
 
+const completeValidationPlan = () => ({
+  schemaVersion: 1,
+  releaseValidation: releaseNames.map((_, sequence) => ({
+    release: `R${sequence}`,
+    activation: "Activation is measured.",
+    completion: "Completion is measured.",
+    timeToValue: "Time to value is measured.",
+    abandonment: "Abandonment is measured.",
+    trust: "Trust is measured.",
+    reliability: "Reliability is measured.",
+    support: "Support is measured.",
+  })),
+  customerProof: [],
+  operationalProof: [],
+  forecastProof: [],
+  executionEvidence: {
+    tests: [],
+    deploy: [],
+    rollback: [],
+    runtime: [],
+  },
+});
+
 test("verifies regenerated reports and rejects a hand edit", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-verify-"));
   try {
@@ -96,17 +119,7 @@ test("verifies regenerated reports and rejects a hand edit", () => {
     );
     writeFileSync(
       join(dir, "validation.json"),
-      JSON.stringify({
-        customerProof: [],
-        operationalProof: [],
-        forecastProof: [],
-        executionEvidence: {
-          tests: [],
-          deploy: [],
-          rollback: [],
-          runtime: [],
-        },
-      }),
+      JSON.stringify(completeValidationPlan()),
     );
     writeFileSync(
       join(dir, "linear.json"),

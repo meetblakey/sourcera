@@ -34,6 +34,11 @@ import {
   parseRuntimeGate,
   sourceReferenceFindings,
 } from "./lib/sources.js";
+import {
+  validationEvidenceGroups,
+  validationPlanFindings,
+  type ValidationPlan,
+} from "./lib/validation.js";
 
 interface DispositionOverride {
   requirementId: string;
@@ -52,18 +57,6 @@ interface RuntimeGateDependency {
   requirementId: string;
   dependencies: string[];
   rationale: string;
-}
-
-interface ValidationPlan {
-  customerProof: string[];
-  operationalProof: string[];
-  forecastProof: string[];
-  executionEvidence: {
-    tests: string[];
-    deploy: string[];
-    rollback: string[];
-    runtime: string[];
-  };
 }
 
 function argumentsByName(): Map<string, string> {
@@ -170,15 +163,8 @@ const risks = json<{
   }>;
 }>(risksPath).risks;
 const validation = json<ValidationPlan>(validationPath);
-const evidenceGroups: EvidenceGroup[] = [
-  { kind: "customer", paths: validation.customerProof },
-  { kind: "operational", paths: validation.operationalProof },
-  { kind: "forecast", paths: validation.forecastProof },
-  { kind: "tests", paths: validation.executionEvidence.tests },
-  { kind: "deploy", paths: validation.executionEvidence.deploy },
-  { kind: "rollback", paths: validation.executionEvidence.rollback },
-  { kind: "runtime", paths: validation.executionEvidence.runtime },
-];
+const evidenceGroups: EvidenceGroup[] = validationEvidenceGroups(validation);
+const validationFindings = validationPlanFindings(validation, releases);
 
 const overrideById = new Map(
   overrides.map((override) => [override.requirementId, override]),
@@ -439,6 +425,7 @@ const allFindings = [
   ...duplicateIssueSources,
   ...decisionFindings,
   ...riskFindings,
+  ...validationFindings,
   ...evidenceFindings,
   ...familyFindings,
   ...releaseFindings,
@@ -490,9 +477,11 @@ const scorecard = calculateScorecard({
   ],
   validation: [
     releases.length === 6 &&
-      releases.every((release) => Boolean(release.customerHypothesis)),
+      releases.every((release) => Boolean(release.customerHypothesis)) &&
+      validationFindings.length === 0,
     releases.length === 6 &&
-      releases.every((release) => Boolean(release.operationalHypothesis)),
+      releases.every((release) => Boolean(release.operationalHypothesis)) &&
+      validationFindings.length === 0,
     evidencePasses("customer"),
     evidencePasses("operational"),
   ],
@@ -582,6 +571,7 @@ const reports = {
       ...duplicateIssueSources,
       ...decisionFindings,
       ...riskFindings,
+      ...validationFindings,
       ...evidenceFindings,
       ...familyFindings,
       ...drift,

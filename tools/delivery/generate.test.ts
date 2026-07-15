@@ -19,6 +19,29 @@ const releaseNames = [
   "Enterprise Integrations, Compliance, Globalization & Scale",
 ];
 
+const completeValidationPlan = () => ({
+  schemaVersion: 1,
+  releaseValidation: releaseNames.map((_, sequence) => ({
+    release: `R${sequence}`,
+    activation: "Activation is measured.",
+    completion: "Completion is measured.",
+    timeToValue: "Time to value is measured.",
+    abandonment: "Abandonment is measured.",
+    trust: "Trust is measured.",
+    reliability: "Reliability is measured.",
+    support: "Support is measured.",
+  })),
+  customerProof: [],
+  operationalProof: [],
+  forecastProof: [],
+  executionEvidence: {
+    tests: [],
+    deploy: [],
+    rollback: [],
+    runtime: [],
+  },
+});
+
 test("generates deterministic reports and fails on orphan work", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-"));
   try {
@@ -127,6 +150,10 @@ test("generates deterministic reports and fails on orphan work", () => {
       readFileSync(join(dir, "reports", "drift-report.json"), "utf8"),
       /evidence_receipt_invalid/,
     );
+    assert.match(
+      readFileSync(join(dir, "reports", "drift-report.json"), "utf8"),
+      /validation_plan_invalid/,
+    );
     const manifest = JSON.parse(
       readFileSync(join(dir, "reports", "delivery-manifest.json"), "utf8"),
     );
@@ -220,17 +247,7 @@ test("traces a source parent through its executable children", () => {
     );
     writeFileSync(
       join(dir, "validation.json"),
-      JSON.stringify({
-        customerProof: [],
-        operationalProof: [],
-        forecastProof: [],
-        executionEvidence: {
-          tests: [],
-          deploy: [],
-          rollback: [],
-          runtime: [],
-        },
-      }),
+      JSON.stringify(completeValidationPlan()),
     );
     const issue = (overrides: Record<string, unknown>) => ({
       id: "PLA-1",
