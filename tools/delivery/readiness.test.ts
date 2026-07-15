@@ -5,6 +5,7 @@ import type { LinearIssueSnapshot } from "./lib/model.js";
 
 const ready: LinearIssueSnapshot = {
   id: "PLA-1",
+  parentId: null,
   sourceId: "F-001",
   title: "One outcome",
   kind: "executable",

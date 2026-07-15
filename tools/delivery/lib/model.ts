@@ -31,6 +31,7 @@ export interface ReleaseDefinition {
 
 export interface LinearIssueSnapshot {
   id: string;
+  parentId: string | null;
   sourceId: string | null;
   title: string;
   kind: "executable" | "parent" | "decision" | "proof_only";
