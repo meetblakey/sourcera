@@ -62,6 +62,13 @@
       "owner": "Blake Rowley",
       "trigger": "A DEC-REL-* validation trigger fires, new source or runtime evidence changes an ownership default, or affected work is proposed as codex-ready.",
       "response": "Block readiness, revalidate the pinned source and runtime path, update the decision, dependency graph, and release policy, then regenerate and synchronize before execution."
+    },
+    {
+      "id": "RISK-010",
+      "statement": "A first production release without healthy provider predecessors and an attested known-good backend can leave no proved rollback path.",
+      "owner": "Blake Rowley",
+      "trigger": "Production staging or promotion is attempted while any DEC-PROD-001 prerequisite is absent.",
+      "response": "Fail before provider mutation, provision or separately approve the bootstrap, and prove the rollback anchor before customer traffic or domain promotion."
     }
   ]
 }
