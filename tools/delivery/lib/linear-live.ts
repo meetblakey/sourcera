@@ -237,8 +237,32 @@ async function paginate<T>(
   return rows;
 }
 
+export function canonicalLinearRelationKey(
+  type: string,
+  left: string,
+  right: string,
+): string {
+  if (!left.trim() || !right.trim()) {
+    throw new Error("Linear relation endpoints are required");
+  }
+  if (type === "blocks") return `blocks:${left}:${right}`;
+  if (type === "blockedBy") return `blocks:${right}:${left}`;
+  if (type === "related" || type === "relatedTo") {
+    const [first, second] = [left, right].sort();
+    return `related:${first}:${second}`;
+  }
+  if (type === "duplicate" || type === "duplicateOf") {
+    return `duplicate:${left}:${right}`;
+  }
+  throw new Error(`Unsupported Linear relation type ${type}`);
+}
+
 function relationKey(relation: RelationNode): string {
-  return `${relation.type}:${relation.issue.identifier}:${relation.relatedIssue.identifier}`;
+  return canonicalLinearRelationKey(
+    relation.type,
+    relation.issue.identifier,
+    relation.relatedIssue.identifier,
+  );
 }
 
 function assertIssueConnectionsComplete(issue: IssueNode): void {

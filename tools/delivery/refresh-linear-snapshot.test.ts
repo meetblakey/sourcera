@@ -19,6 +19,11 @@ function refreshFixture(
     priorFingerprintReleases?: string[];
     priorRelations?: string[];
     missingTrackedIssueIds?: string[];
+    sourceIds?: string[];
+    runtimeDependencies?: Array<{
+      requirementId: string;
+      dependencies: string[];
+    }>;
   } = {},
 ) {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
@@ -32,7 +37,8 @@ function refreshFixture(
   const snapshotIssues = trackedIssueIds.map((id, index) => ({
     id,
     parentId: null,
-    sourceId: `F-${String(index + 1).padStart(3, "0")}`,
+    sourceId: options.sourceIds?.[index] ??
+      `F-${String(index + 1).padStart(3, "0")}`,
     title: `Prior ${id}`,
     kind: "executable",
     labels: ["prior"],
@@ -90,13 +96,21 @@ function refreshFixture(
   );
   writeFileSync(
     join(delivery, "runtime-gate-dependencies.json"),
-    JSON.stringify({ dependencies: [] }),
+    JSON.stringify({ dependencies: options.runtimeDependencies ?? [] }),
   );
   const livePath = join(root, "live.json");
   writeFileSync(
     livePath,
     JSON.stringify({
-      issues: liveIssues,
+      issues: liveIssues.map((issue) => ({
+        relations: {
+          blocks: [],
+          blockedBy: [],
+          relatedTo: [],
+          duplicateOf: null,
+        },
+        ...issue,
+      })),
       releasePipelines: [],
       releases: [],
     }),
@@ -213,6 +227,12 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
             projectMilestone: { name: "Permissioned journeys ready" },
             parentId: "PLA-283",
             releases: [{ version: "R0" }],
+            relations: {
+              blocks: [],
+              blockedBy: [],
+              relatedTo: [],
+              duplicateOf: null,
+            },
           },
         ],
         releasePipelines: [],
@@ -242,7 +262,7 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
   }
 });
 
-test("refresh uses only a current live R0-R5 release", () => {
+test("refresh uses only current live release and relations", () => {
   const { result, updated } = refreshFixture(
     [
       {
@@ -260,6 +280,12 @@ test("refresh uses only a current live R0-R5 release", () => {
         projectMilestone: { name: "Current milestone" },
         parentId: "PLA-0",
         releases: [{ version: "preview" }],
+        relations: {
+          blocks: [{ id: "PLA-9" }],
+          blockedBy: [{ id: "PLA-0" }],
+          relatedTo: [],
+          duplicateOf: null,
+        },
       },
     ],
     {
@@ -278,8 +304,131 @@ test("refresh uses only a current live R0-R5 release", () => {
   assert.equal(updated.issues[0].parentId, "PLA-0");
   assert.deepEqual(updated.linearFingerprint.issues[0].relations, [
     "blocks:PLA-0:PLA-1",
+    "blocks:PLA-1:PLA-9",
   ]);
 });
+
+test("refresh canonicalizes and deduplicates symmetric live relations", () => {
+  const { result, updated } = refreshFixture([
+    {
+      id: "PLA-217",
+      title: "Shells",
+      description: "Shell foundation",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      relations: {
+        blocks: [],
+        blockedBy: [],
+        relatedTo: [{ id: "PLA-282" }, { id: "PLA-282" }],
+        duplicateOf: null,
+      },
+    },
+    {
+      id: "PLA-282",
+      title: "Convex",
+      description: "Convex foundation",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      relations: {
+        blocks: [],
+        blockedBy: [],
+        relatedTo: [{ id: "PLA-217" }],
+        duplicateOf: null,
+      },
+    },
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(
+    updated.linearFingerprint.issues.map(
+      (issue: { relations: string[] }) => issue.relations,
+    ),
+    [
+      ["related:PLA-217:PLA-282"],
+      ["related:PLA-217:PLA-282"],
+    ],
+  );
+});
+
+test("refresh adds runtime dependencies after complete live relations", () => {
+  const { result, updated } = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "Runtime gate",
+        description: "Gate",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        relations: {
+          blocks: [],
+          blockedBy: [],
+          relatedTo: [{ id: "PLA-2" }],
+          duplicateOf: null,
+        },
+      },
+      {
+        id: "PLA-2",
+        title: "Prerequisite",
+        description: "Prerequisite",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        relations: {
+          blocks: [],
+          blockedBy: [],
+          relatedTo: [{ id: "PLA-1" }],
+          duplicateOf: null,
+        },
+      },
+    ],
+    {
+      sourceIds: ["RG:R0-001", "F-001"],
+      runtimeDependencies: [
+        { requirementId: "RG:R0-001", dependencies: ["F-001"] },
+      ],
+    },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(
+    updated.linearFingerprint.issues.map(
+      (issue: { relations: string[] }) => issue.relations,
+    ),
+    [
+      ["blocks:PLA-2:PLA-1", "related:PLA-1:PLA-2"],
+      ["blocks:PLA-2:PLA-1", "related:PLA-1:PLA-2"],
+    ],
+  );
+});
+
+for (const [name, relations] of [
+  ["absent", undefined],
+  [
+    "unparseable",
+    { blocks: "PLA-2", blockedBy: [], relatedTo: [], duplicateOf: null },
+  ],
+] as const) {
+  test(`refresh rejects ${name} live relations before writing`, () => {
+    const { result, original, contents } = refreshFixture([
+      {
+        id: "PLA-1",
+        title: "Current title",
+        description: "Description",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        relations,
+      },
+    ]);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /PLA-1.*relations.*invalid/i);
+    assert.equal(contents, original);
+  });
+}
 
 test("refresh rejects multiple current R0-R5 releases", () => {
   const { result } = refreshFixture([

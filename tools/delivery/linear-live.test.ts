@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  canonicalLinearRelationKey,
   fetchLinearFingerprint,
   fingerprintDiff,
 } from "./lib/linear-live.js";
@@ -18,6 +19,21 @@ const response = (body: unknown, status = 200) =>
 const completeConnection = <T>(nodes: T[]) => ({
   nodes,
   pageInfo: { hasNextPage: false, endCursor: null },
+});
+
+test("uses one canonical key for GraphQL and OAuth relation names", () => {
+  assert.equal(
+    canonicalLinearRelationKey("related", "PLA-282", "PLA-217"),
+    canonicalLinearRelationKey("relatedTo", "PLA-217", "PLA-282"),
+  );
+  assert.equal(
+    canonicalLinearRelationKey("blockedBy", "PLA-217", "PLA-220"),
+    canonicalLinearRelationKey("blocks", "PLA-220", "PLA-217"),
+  );
+  assert.equal(
+    canonicalLinearRelationKey("duplicateOf", "PLA-1", "PLA-2"),
+    canonicalLinearRelationKey("duplicate", "PLA-1", "PLA-2"),
+  );
 });
 
 test("paginates Linear issues and sorts a stable fingerprint", async () => {
@@ -88,10 +104,21 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                       issue: { identifier: "PLA-1" },
                       relatedIssue: { identifier: "PLA-2" },
                     },
+                    {
+                      type: "related",
+                      issue: { identifier: "PLA-1" },
+                      relatedIssue: { identifier: "PLA-3" },
+                    },
                   ],
                   pageInfo: { hasNextPage: false, endCursor: null },
                 },
-                inverseRelations: completeConnection([]),
+                inverseRelations: completeConnection([
+                  {
+                    type: "related",
+                    issue: { identifier: "PLA-3" },
+                    relatedIssue: { identifier: "PLA-1" },
+                  },
+                ]),
               },
               {
                 id: "uuid-3",
@@ -169,7 +196,10 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
     fingerprint.issues.map((issue) => issue.identifier),
     ["PLA-1", "PLA-2", "PLA-3"],
   );
-  assert.equal(fingerprint.issues[0].relations[0], "blocks:PLA-1:PLA-2");
+  assert.deepEqual(fingerprint.issues[0].relations, [
+    "blocks:PLA-1:PLA-2",
+    "related:PLA-1:PLA-3",
+  ]);
   assert.equal(fingerprint.issues[0].descriptionFingerprint.length, 64);
   assert.equal(requested.every((query) => query.includes("first: 50")), true);
   assert.deepEqual(fingerprintDiff(fingerprint, fingerprint), []);

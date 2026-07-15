@@ -2,6 +2,18 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { descriptionFingerprint } from "./lib/fingerprint.js";
+import { canonicalLinearRelationKey } from "./lib/linear-live.js";
+
+interface LiveRelationReference {
+  id: string;
+}
+
+interface LiveRelations {
+  blocks: LiveRelationReference[];
+  blockedBy: LiveRelationReference[];
+  relatedTo: LiveRelationReference[];
+  duplicateOf: LiveRelationReference | null;
+}
 
 interface LiveIssue {
   id: string;
@@ -18,6 +30,7 @@ interface LiveIssue {
   projectMilestone?: { name: string } | null;
   parentId?: string | null;
   releases?: Array<{ version?: string | null }>;
+  relations?: unknown;
 }
 
 interface RuntimeDependency {
@@ -28,6 +41,45 @@ interface RuntimeDependency {
 function estimateValue(value: LiveIssue["estimate"]): number | null {
   if (typeof value === "number") return value;
   return value?.value ?? null;
+}
+
+function liveRelationKeys(issue: LiveIssue): string[] {
+  const value = issue.relations;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`Linear issue ${issue.id} relations are invalid`);
+  }
+  const relations = value as Partial<LiveRelations>;
+  const keys = new Set<string>();
+  for (const field of ["blocks", "blockedBy", "relatedTo"] as const) {
+    const references = relations[field];
+    if (!Array.isArray(references)) {
+      throw new Error(`Linear issue ${issue.id} relations are invalid`);
+    }
+    for (const reference of references) {
+      if (
+        !reference ||
+        typeof reference !== "object" ||
+        typeof reference.id !== "string" ||
+        !reference.id.trim()
+      ) {
+        throw new Error(`Linear issue ${issue.id} relations are invalid`);
+      }
+      keys.add(canonicalLinearRelationKey(field, issue.id, reference.id));
+    }
+  }
+  if (relations.duplicateOf !== null) {
+    const reference = relations.duplicateOf;
+    if (
+      !reference ||
+      typeof reference !== "object" ||
+      typeof reference.id !== "string" ||
+      !reference.id.trim()
+    ) {
+      throw new Error(`Linear issue ${issue.id} relations are invalid`);
+    }
+    keys.add(canonicalLinearRelationKey("duplicateOf", issue.id, reference.id));
+  }
+  return [...keys].sort();
 }
 
 const root = resolve(process.argv[2] ?? ".");
@@ -49,11 +101,9 @@ const runtime = JSON.parse(
 const runtimeBySource = new Map(
   runtime.dependencies.map((row) => [row.requirementId, row.dependencies]),
 );
-const sourceByIssue = new Map<string, string>();
 const issueBySource = new Map<string, string>();
 for (const issue of snapshot.issues) {
   if (!issue.sourceId) continue;
-  sourceByIssue.set(issue.id, issue.sourceId);
   issueBySource.set(issue.sourceId, issue.id);
 }
 const liveById = new Map(live.issues.map((issue) => [issue.id, issue]));
@@ -119,20 +169,9 @@ const priorFingerprintById = new Map(
     issue,
   ]),
 );
-const relationsById = new Map<string, Set<string>>();
-for (const issue of live.issues) {
-  const prior = priorFingerprintById.get(issue.id) as Record<string, any> | undefined;
-  relationsById.set(
-    issue.id,
-    new Set(
-      (prior?.relations ?? []).filter((key: string) => {
-        const [, left, right] = key.split(":");
-        return !sourceByIssue.get(left)?.startsWith("RG:") &&
-          !sourceByIssue.get(right)?.startsWith("RG:");
-      }),
-    ),
-  );
-}
+const relationsById = new Map(
+  live.issues.map((issue) => [issue.id, new Set(liveRelationKeys(issue))]),
+);
 for (const row of runtime.dependencies) {
   const gate = issueBySource.get(row.requirementId);
   if (!gate) throw new Error(`Missing Linear issue for ${row.requirementId}`);
