@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { resolve, sep } from "node:path";
 
@@ -53,6 +54,38 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 function isPassed(value: unknown): boolean {
   return typeof value === "string" && value.startsWith("passed");
+}
+
+function commitIsReachable(root: string, value: unknown): boolean {
+  if (typeof value !== "string" || !/^[a-f0-9]{40}$/.test(value)) {
+    return false;
+  }
+  return (
+    spawnSync(
+      "git",
+      ["-C", root, "merge-base", "--is-ancestor", value, "HEAD"],
+      { stdio: "ignore" },
+    ).status === 0
+  );
+}
+
+function receiptCommitsAreReachable(
+  root: string,
+  receipt: EvidenceReceipt,
+  kind: EvidenceKind,
+): boolean {
+  if (kind !== "forecast") {
+    return commitIsReachable(root, receipt.sourceCommit);
+  }
+  return (
+    Array.isArray(receipt.observations) &&
+    receipt.observations.every(
+      (observation) =>
+        isObject(observation) &&
+        commitIsReachable(root, observation.firstImplementationCommit) &&
+        commitIsReachable(root, observation.closeoutCommit),
+    )
+  );
 }
 
 function hasCompleteReleaseMetrics(value: unknown): boolean {
@@ -267,14 +300,23 @@ export function evidenceGroupFindings(
         },
       ];
     }
-    return isValidReceipt(receipt, group.kind)
-      ? []
-      : [
-          {
-            code: "evidence_receipt_invalid",
-            message: `${path} is not a passed ${group.kind} proof receipt`,
-          },
-        ];
+    if (!isValidReceipt(receipt, group.kind)) {
+      return [
+        {
+          code: "evidence_receipt_invalid",
+          message: `${path} is not a passed ${group.kind} proof receipt`,
+        },
+      ];
+    }
+    if (!receiptCommitsAreReachable(root, receipt, group.kind)) {
+      return [
+        {
+          code: "evidence_commit_invalid",
+          message: `${path} does not reference a reachable source commit`,
+        },
+      ];
+    }
+    return [];
   });
 }
 

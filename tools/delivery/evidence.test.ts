@@ -1,4 +1,5 @@
 import { strict as assert } from "node:assert";
+import { execFileSync } from "node:child_process";
 import {
   mkdtempSync,
   mkdirSync,
@@ -292,6 +293,64 @@ test("rejects pilot metrics without an observed value", () => {
 test("accepts pilot proof with every measured release metric", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
   try {
+    execFileSync("git", ["init", "-q"], { cwd: root });
+    execFileSync("git", ["config", "user.email", "test@sourcera.local"], {
+      cwd: root,
+    });
+    execFileSync("git", ["config", "user.name", "Sourcera Test"], {
+      cwd: root,
+    });
+    execFileSync("git", ["commit", "--allow-empty", "-qm", "fixture"], {
+      cwd: root,
+    });
+    const sourceCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+    const metrics = Object.fromEntries(
+      [
+        "activation",
+        "completion",
+        "timeToValue",
+        "abandonment",
+        "trust",
+        "reliability",
+        "support",
+      ].map((name) => [
+        name,
+        { target: "declared", observed: "measured", result: "passed" },
+      ]),
+    );
+    writeFileSync(
+      join(root, "reports", "evidence", "customer.json"),
+      `${JSON.stringify({
+        schemaVersion: 1,
+        status: "passed",
+        proofTypes: ["customer"],
+        observedAt: "2026-07-15T10:47:35Z",
+        sourceCommit,
+        release: "R0",
+        metrics,
+        gate: "passed",
+      })}\n`,
+    );
+
+    assert.equal(
+      evidenceGroupPasses(root, {
+        kind: "customer",
+        paths: ["reports/evidence/customer.json"],
+      }),
+      true,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects proof bound to a nonexistent commit", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  try {
     mkdirSync(join(root, "reports", "evidence"), { recursive: true });
     const metrics = Object.fromEntries(
       [
@@ -321,12 +380,38 @@ test("accepts pilot proof with every measured release metric", () => {
       })}\n`,
     );
 
-    assert.equal(
-      evidenceGroupPasses(root, {
+    assert.deepEqual(
+      evidenceGroupFindings(root, {
         kind: "customer",
         paths: ["reports/evidence/customer.json"],
-      }),
-      true,
+      }).map((finding) => finding.code),
+      ["evidence_commit_invalid"],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects forecast observations bound to nonexistent commits", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  try {
+    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as { observations: Array<{ closeoutCommit: string }> };
+    receipt.observations[0].closeoutCommit =
+      "0123456789abcdef0123456789abcdef01234567";
+    writeFileSync(
+      join(root, "reports", "evidence", "forecast.json"),
+      `${JSON.stringify(receipt)}\n`,
+    );
+
+    assert.deepEqual(
+      evidenceGroupFindings(root, {
+        kind: "forecast",
+        paths: ["reports/evidence/forecast.json"],
+      }).map((finding) => finding.code),
+      ["evidence_commit_invalid"],
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
