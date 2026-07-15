@@ -171,6 +171,16 @@ export function buildReleaseAssignments(
     addFeature(requirementId);
   }
 
+  const finalGraphFindings = validateGraph(
+    features.map((feature) => ({
+      ...feature,
+      release: finalById.get(feature.requirementId)?.release ?? null,
+      issueId: null,
+    })),
+    releases,
+  );
+  if (finalGraphFindings.length) fail(finalGraphFindings);
+
   const runtimeCounts = counts(
     runtimeGates.map((runtimeGate) => runtimeGate.requirementId),
   );

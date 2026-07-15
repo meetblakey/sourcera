@@ -127,3 +127,46 @@ test("duplicates, missing roots, cycles, and unexpected R0 fail", () => {
 test("runtime gates follow all explicit behavior owners", () => {
   assert.equal(assignment("RG:proof").release, "R2");
 });
+
+test("final release assignments reject dependency inversions", () => {
+  const inversionRows = [
+    row("F-R1", ["F-R5"]),
+    row("F-R5"),
+  ];
+  const inversionPolicy: ReleasePolicy = {
+    schemaVersion: 1,
+    r0Roots: [],
+    baselineAssignments: [
+      { requirementId: "F-R1", release: "R1", rationale: "early" },
+      { requirementId: "F-R5", release: "R5", rationale: "late" },
+    ],
+  };
+
+  assert.throws(
+    () =>
+      buildReleaseAssignments(
+        inversionRows,
+        [],
+        inversionPolicy,
+        [],
+        releases,
+      ),
+    /cross_release_inversion: F-R1 R1 depends on F-R5 R5/,
+  );
+});
+
+test("missing dependencies fail", () => {
+  const missingRows = [row("F-MISSING", ["F-UNKNOWN"])];
+  const missingPolicy: ReleasePolicy = {
+    schemaVersion: 1,
+    r0Roots: [],
+    baselineAssignments: [
+      { requirementId: "F-MISSING", release: "R1", rationale: "feature" },
+    ],
+  };
+
+  assert.deepEqual(
+    codes(releasePolicyFindings(missingRows, missingPolicy, releases)),
+    new Set(["missing_dependency"]),
+  );
+});
