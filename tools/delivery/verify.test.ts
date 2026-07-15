@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
 import {
   mkdtempSync,
+  readFileSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -74,16 +75,38 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       }),
     );
     writeFileSync(
+      join(dir, "release-policy.json"),
+      `${JSON.stringify(
+        {
+          schemaVersion: 1,
+          r0Roots: ["F-001"],
+          baselineAssignments: [
+            {
+              requirementId: "F-001",
+              release: "R0",
+              rationale: "R0 foundation",
+            },
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+    );
+    writeFileSync(
       join(dir, "release-plan.json"),
-      JSON.stringify({
-        assignments: [
-          {
-            requirementId: "F-001",
-            release: "R0",
-            rationale: "R0 foundation",
-          },
-        ],
-      }),
+      `${JSON.stringify(
+        {
+          assignments: [
+            {
+              requirementId: "F-001",
+              release: "R0",
+              rationale: "R0 foundation",
+            },
+          ],
+        },
+        null,
+        2,
+      )}\n`,
     );
     writeFileSync(
       join(dir, "dispositions.json"),
@@ -171,6 +194,8 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       join(dir, "releases.json"),
       "--release-plan",
       join(dir, "release-plan.json"),
+      "--policy",
+      join(dir, "release-policy.json"),
       "--dispositions",
       join(dir, "dispositions.json"),
       "--runtime-dependencies",
@@ -210,6 +235,22 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       );
     const clean = verify();
     assert.equal(clean.status, 0, clean.stderr);
+    const releasePlan = JSON.parse(
+      readFileSync(join(dir, "release-plan.json"), "utf8"),
+    );
+    releasePlan.assignments[0].release = "R5";
+    writeFileSync(
+      join(dir, "release-plan.json"),
+      `${JSON.stringify(releasePlan, null, 2)}\n`,
+    );
+    const editedPlan = verify();
+    assert.equal(editedPlan.status, 1);
+    assert.match(editedPlan.stderr, /release plan differs/);
+    releasePlan.assignments[0].release = "R0";
+    writeFileSync(
+      join(dir, "release-plan.json"),
+      `${JSON.stringify(releasePlan, null, 2)}\n`,
+    );
     writeFileSync(join(reports, "release-scorecard.json"), "{}\n");
     const edited = verify();
     assert.equal(edited.status, 1);

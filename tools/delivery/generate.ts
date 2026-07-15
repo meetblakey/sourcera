@@ -22,12 +22,18 @@ import {
   issueFamilyFindings,
   issueFamilyForSource,
 } from "./lib/issue-family.js";
+import {
+  buildReleaseAssignments,
+  releasePolicyFindings,
+} from "./lib/release-policy.js";
 import type {
   Disposition,
   Finding,
   LinearIssueSnapshot,
   ManifestRow,
+  ReleaseAssignment,
   ReleaseDefinition,
+  ReleasePolicy,
   SourceRequirement,
 } from "./lib/model.js";
 import { readinessFindings } from "./lib/readiness.js";
@@ -48,12 +54,6 @@ interface DispositionOverride {
   requirementId: string;
   disposition: Disposition;
   replacementId?: string;
-  rationale: string;
-}
-
-interface ReleaseAssignment {
-  requirementId: string;
-  release: ReleaseDefinition["id"];
   rationale: string;
 }
 
@@ -82,6 +82,9 @@ if (argv.has("--inventory") && !argv.has("--feature-dependencies")) {
     "--feature-dependencies is required when --inventory is supplied",
   );
 }
+if (argv.has("--inventory") && !argv.has("--policy")) {
+  throw new Error("--policy is required when --inventory is supplied");
+}
 const required = (name: string, fallback?: string) => {
   const value = argv.get(name) ?? fallback;
   if (!value) throw new Error(`Required argument ${name}`);
@@ -95,6 +98,7 @@ const stampPath = path("--stamp", "/tmp/sourcera-stamp.json");
 const exactPath = path("--exact", "/tmp/sourcera-exact.json");
 const releasesPath = path("--releases", "delivery/releases.json");
 const releasePlanPath = path("--release-plan", "delivery/release-plan.json");
+const policyPath = path("--policy", "delivery/release-policy.json");
 const dispositionsPath = path(
   "--dispositions",
   "delivery/dispositions.json",
@@ -143,6 +147,7 @@ const releases = json<{ releases: ReleaseDefinition[] }>(releasesPath)
   .releases;
 const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
   .assignments;
+const policy = json<ReleasePolicy>(policyPath);
 const issues = json<{ issues: LinearIssueSnapshot[] }>(linearPath).issues;
 const overrides = json<{ overrides: DispositionOverride[] }>(dispositionsPath)
   .overrides;
@@ -188,12 +193,18 @@ const overrideById = new Map(
 const releaseById = new Map(
   releasePlan.map((assignment) => [assignment.requirementId, assignment]),
 );
+const sourceFeatures = applyFeatureDependencies(
+  parseFeatureInventory(readFileSync(inventoryPath, "utf8")),
+  featureDependencies,
+).map((row) => ({
+  ...row,
+  disposition: overrideById.get(row.requirementId)?.disposition ??
+    row.disposition,
+}));
+const runtimeGates = parseRuntimeGate(readFileSync(stampPath, "utf8"));
 const requirements: SourceRequirement[] = [
-  ...applyFeatureDependencies(
-    parseFeatureInventory(readFileSync(inventoryPath, "utf8")),
-    featureDependencies,
-  ),
-  ...parseRuntimeGate(readFileSync(stampPath, "utf8")),
+  ...sourceFeatures,
+  ...runtimeGates,
 ]
   .map((row) => ({
     ...row,
@@ -292,6 +303,47 @@ const runtimeDependencyFindings: Finding[] = [
       message: `${row.requirementId} lacks dependencies or rationale`,
     })),
 ];
+const executableIds = new Set(
+  sourceFeatures
+    .filter((row) => row.disposition === "executable")
+    .map((row) => row.requirementId),
+);
+const executablePolicyGraph = sourceFeatures
+  .filter((row) => row.disposition === "executable")
+  .map((row) => ({
+    ...row,
+    dependencies: row.dependencies.filter((dependencyId) =>
+      executableIds.has(dependencyId),
+    ),
+  }));
+const policyFindings = releasePolicyFindings(
+  executablePolicyGraph,
+  policy,
+  releases,
+);
+const expectedAssignments = policyFindings.length
+  ? []
+  : buildReleaseAssignments(
+      executablePolicyGraph,
+      runtimeGates,
+      policy,
+      runtimeDependencies,
+      releases,
+    ).sort((left, right) =>
+      left.requirementId.localeCompare(right.requirementId, undefined, {
+        numeric: true,
+      }),
+    );
+const releasePlanPolicyFindings: Finding[] =
+  policyFindings.length === 0 &&
+    JSON.stringify(releasePlan) !== JSON.stringify(expectedAssignments)
+    ? [
+        {
+          code: "release_plan_policy_drift",
+          message: "Release plan differs from the canonical release policy",
+        },
+      ]
+    : [];
 const exactOpenRows = Number(
   exact.open_rows ?? exact.summary?.open_rows ?? 0,
 );
@@ -316,6 +368,8 @@ const duplicateReleaseAssignments: Finding[] = releasePlan
     message: `${assignment.requirementId} has duplicate release assignments`,
   }));
 const releasePlanFindings: Finding[] = [
+  ...policyFindings,
+  ...releasePlanPolicyFindings,
   ...duplicateReleaseAssignments,
   ...releasePlan
     .filter(

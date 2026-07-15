@@ -70,6 +70,41 @@ test("requires explicit feature dependencies for a custom inventory", () => {
   }
 });
 
+test("requires an explicit release policy for a custom inventory", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-policy-pair-"));
+  try {
+    const inventory = join(dir, "inventory.md");
+    const featureDependencies = join(dir, "feature-dependencies.json");
+    writeFileSync(inventory, "custom inventory\n");
+    writeFileSync(
+      featureDependencies,
+      JSON.stringify({ schemaVersion: 1, repairs: [] }),
+    );
+    const result = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/generate.ts",
+        "--root",
+        process.cwd(),
+        "--inventory",
+        inventory,
+        "--feature-dependencies",
+        featureDependencies,
+      ],
+      { cwd: process.cwd(), encoding: "utf8" },
+    );
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /--policy is required when --inventory is supplied/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("generates deterministic reports and fails on orphan work", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-"));
   try {
@@ -94,7 +129,33 @@ test("generates deterministic reports and fails on orphan work", () => {
     );
     writeFileSync(
       join(dir, "releases.json"),
-      JSON.stringify({ releases: [] }),
+      JSON.stringify({
+        releases: releaseNames.map((name, sequence) => ({
+          id: `R${sequence}`,
+          name,
+          sequence,
+          customerHypothesis: "customer",
+          operationalHypothesis: "operations",
+          pilot: "pilot",
+          metrics: ["completion"],
+          customerGate: "customer proof",
+          operationalGate: "operational proof",
+        })),
+      }),
+    );
+    writeFileSync(
+      join(dir, "release-policy.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        r0Roots: ["F-001"],
+        baselineAssignments: [
+          {
+            requirementId: "F-001",
+            release: "R0",
+            rationale: "R0 foundation dependency",
+          },
+        ],
+      }),
     );
     writeFileSync(
       join(dir, "release-plan.json"),
@@ -158,6 +219,8 @@ test("generates deterministic reports and fails on orphan work", () => {
         join(dir, "releases.json"),
         "--release-plan",
         join(dir, "release-plan.json"),
+        "--policy",
+        join(dir, "release-policy.json"),
         "--dispositions",
         join(dir, "dispositions.json"),
         "--runtime-dependencies",
@@ -233,6 +296,20 @@ test("traces a source parent through its executable children", () => {
           customerGate: "customer proof",
           operationalGate: "operational proof",
         })),
+      }),
+    );
+    writeFileSync(
+      join(dir, "release-policy.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        r0Roots: ["F-001"],
+        baselineAssignments: [
+          {
+            requirementId: "F-001",
+            release: "R0",
+            rationale: "R0 authentication foundation",
+          },
+        ],
       }),
     );
     writeFileSync(
@@ -363,6 +440,8 @@ test("traces a source parent through its executable children", () => {
         join(dir, "releases.json"),
         "--release-plan",
         join(dir, "release-plan.json"),
+        "--policy",
+        join(dir, "release-policy.json"),
         "--dispositions",
         join(dir, "dispositions.json"),
         "--runtime-dependencies",
@@ -404,5 +483,176 @@ test("traces a source parent through its executable children", () => {
     ]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+function policyFailureFixture(
+  policy: Record<string, unknown>,
+): { dir: string; args: string[]; reports: string } {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-policy-"));
+  const inventory = [
+    "| feature_id | feature_name | feature_class | primary_section_anchor | secondary_section_anchors | originating_doc | introduced_in_version | one_line_summary | known_dependencies |",
+    "|---|---|---|---|---|---|---|---|---|",
+    "| F-001 | Root | journey | §1 | — | master_spec | v7.1.0a | Root | — |",
+    "| F-002 | Later | surface | §2 | — | master_spec | v7.1.0a | Later | — |",
+    "",
+  ].join("\n");
+  writeFileSync(join(dir, "inventory.md"), inventory);
+  writeFileSync(
+    join(dir, "feature-dependencies.json"),
+    JSON.stringify({ schemaVersion: 1, repairs: [] }),
+  );
+  writeFileSync(
+    join(dir, "stamp.json"),
+    JSON.stringify({ summary: {}, findings: [] }),
+  );
+  writeFileSync(join(dir, "exact.json"), JSON.stringify({ open_rows: 0 }));
+  writeFileSync(
+    join(dir, "releases.json"),
+    JSON.stringify({
+      releases: releaseNames.map((name, sequence) => ({
+        id: `R${sequence}`,
+        name,
+        sequence,
+        customerHypothesis: "customer",
+        operationalHypothesis: "operations",
+        pilot: "pilot",
+        metrics: ["completion"],
+        customerGate: "customer proof",
+        operationalGate: "operational proof",
+      })),
+    }),
+  );
+  writeFileSync(join(dir, "release-policy.json"), JSON.stringify(policy));
+  writeFileSync(
+    join(dir, "release-plan.json"),
+    JSON.stringify({ assignments: [] }),
+  );
+  writeFileSync(
+    join(dir, "dispositions.json"),
+    JSON.stringify({ overrides: [] }),
+  );
+  writeFileSync(
+    join(dir, "runtime-dependencies.json"),
+    JSON.stringify({ dependencies: [] }),
+  );
+  writeFileSync(join(dir, "decisions.jsonl"), "");
+  writeFileSync(join(dir, "risks.json"), JSON.stringify({ risks: [] }));
+  writeFileSync(
+    join(dir, "validation.json"),
+    JSON.stringify(completeValidationPlan()),
+  );
+  writeFileSync(join(dir, "linear.json"), JSON.stringify({ issues: [] }));
+  const reports = join(dir, "reports");
+  return {
+    dir,
+    reports,
+    args: [
+      "--root",
+      process.cwd(),
+      "--inventory",
+      join(dir, "inventory.md"),
+      "--feature-dependencies",
+      join(dir, "feature-dependencies.json"),
+      "--policy",
+      join(dir, "release-policy.json"),
+      "--stamp",
+      join(dir, "stamp.json"),
+      "--exact",
+      join(dir, "exact.json"),
+      "--releases",
+      join(dir, "releases.json"),
+      "--release-plan",
+      join(dir, "release-plan.json"),
+      "--dispositions",
+      join(dir, "dispositions.json"),
+      "--runtime-dependencies",
+      join(dir, "runtime-dependencies.json"),
+      "--decisions",
+      join(dir, "decisions.jsonl"),
+      "--risks",
+      join(dir, "risks.json"),
+      "--validation",
+      join(dir, "validation.json"),
+      "--linear",
+      join(dir, "linear.json"),
+      "--out",
+      reports,
+    ],
+  };
+}
+
+function runPolicyFailureFixture(args: string[]) {
+  return spawnSync(
+    process.execPath,
+    [
+      "--import",
+      "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+      "tools/delivery/generate.ts",
+      ...args,
+    ],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+}
+
+test("generation rejects a missing policy assignment", () => {
+  const fixture = policyFailureFixture({
+    schemaVersion: 1,
+    r0Roots: ["F-001"],
+    baselineAssignments: [
+      { requirementId: "F-001", release: "R0", rationale: "R0 root" },
+    ],
+  });
+  try {
+    const result = runPolicyFailureFixture(fixture.args);
+    assert.equal(result.status, 1);
+    assert.match(
+      readFileSync(join(fixture.reports, "drift-report.json"), "utf8"),
+      /release_policy_unclassified/,
+    );
+  } finally {
+    rmSync(fixture.dir, { recursive: true, force: true });
+  }
+});
+
+test("generation rejects an R0 assignment outside the approved closure", () => {
+  const fixture = policyFailureFixture({
+    schemaVersion: 1,
+    r0Roots: ["F-001"],
+    baselineAssignments: [
+      { requirementId: "F-001", release: "R0", rationale: "R0 root" },
+      { requirementId: "F-002", release: "R0", rationale: "Not approved" },
+    ],
+  });
+  try {
+    const result = runPolicyFailureFixture(fixture.args);
+    assert.equal(result.status, 1);
+    assert.match(
+      readFileSync(join(fixture.reports, "drift-report.json"), "utf8"),
+      /release_policy_unexpected_r0/,
+    );
+  } finally {
+    rmSync(fixture.dir, { recursive: true, force: true });
+  }
+});
+
+test("generation rejects a release plan that differs from policy", () => {
+  const fixture = policyFailureFixture({
+    schemaVersion: 1,
+    r0Roots: ["F-001"],
+    baselineAssignments: [
+      { requirementId: "F-001", release: "R0", rationale: "R0 root" },
+      { requirementId: "F-002", release: "R1", rationale: "Later work" },
+    ],
+  });
+  try {
+    const result = runPolicyFailureFixture(fixture.args);
+    assert.equal(result.status, 1);
+    assert.match(
+      readFileSync(join(fixture.reports, "drift-report.json"), "utf8"),
+      /release_plan_policy_drift/,
+    );
+  } finally {
+    rmSync(fixture.dir, { recursive: true, force: true });
   }
 });

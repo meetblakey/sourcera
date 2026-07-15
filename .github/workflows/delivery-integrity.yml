@@ -36,7 +36,7 @@ jobs:
           set -e
           if (( stamp_status > 1 )); then exit "$stamp_status"; fi
           exit "$exact_status"
-      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json --policy delivery/release-policy.json --release-plan delivery/release-plan.json
       - run: npm --prefix tools/spec-lint run typecheck
       - run: npm --prefix tools/spec-lint run all
       - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
