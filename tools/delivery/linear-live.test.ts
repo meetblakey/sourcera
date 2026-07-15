@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -809,6 +809,103 @@ test("CLI compares a fixture with the committed snapshot", () => {
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("CLI capture writes the exact fingerprint and a provenance receipt", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-capture-"));
+  const fingerprint = {
+    issues: [],
+    releasePipelines: [],
+    releases: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+      },
+    ],
+    projectMilestones: [],
+  };
+  try {
+    const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
+    const out = join(dir, "fingerprint.json");
+    const receipt = join(dir, "receipt.json");
+    writeFileSync(fixture, JSON.stringify(fingerprint));
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Sourcera Production" }],
+      }),
+    );
+    const run = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+        "--out",
+        out,
+        "--receipt-out",
+        receipt,
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          GITHUB_REPOSITORY: "meetblakey/sourcera",
+          GITHUB_SHA: "0123456789abcdef0123456789abcdef01234567",
+          GITHUB_REF: "refs/heads/codex/test",
+          GITHUB_RUN_ID: "123",
+          GITHUB_RUN_ATTEMPT: "2",
+        },
+      },
+    );
+    assert.equal(run.status, 0, run.stderr);
+    assert.deepEqual(JSON.parse(readFileSync(out, "utf8")), fingerprint);
+    const captured = JSON.parse(readFileSync(receipt, "utf8")) as {
+      schemaVersion: number;
+      capturedAt: string;
+      fingerprintSha256: string;
+      source: Record<string, string | null>;
+    };
+    assert.equal(captured.schemaVersion, 1);
+    assert.ok(!Number.isNaN(Date.parse(captured.capturedAt)));
+    assert.match(captured.fingerprintSha256, /^[a-f0-9]{64}$/);
+    assert.deepEqual(captured.source, {
+      repository: "meetblakey/sourcera",
+      commit: "0123456789abcdef0123456789abcdef01234567",
+      ref: "refs/heads/codex/test",
+      runId: "123",
+      runAttempt: "2",
+    });
+    assert.equal(run.stdout, "");
+    assert.equal(run.stderr, "");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI requires --out when writing a capture receipt", () => {
+  const result = spawnSync(
+    process.execPath,
+    [
+      "--import",
+      "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+      "tools/delivery/linear-live.ts",
+      "--receipt-out",
+      "/tmp/receipt.json",
+    ],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--receipt-out requires --out/);
 });
 
 test("CLI rejects a snapshot that shrinks the independent project scope", () => {

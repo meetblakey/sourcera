@@ -3,6 +3,7 @@ name: Delivery integrity
 on:
   pull_request:
   push:
+  workflow_dispatch:
   schedule:
     - cron: "17 9 * * *"
 
@@ -11,6 +12,7 @@ permissions:
 
 jobs:
   delivery-integrity:
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,6 +42,30 @@ jobs:
       - run: npm --prefix tools/spec-lint run all
       - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
       - run: tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
+
+  linear-capture:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - name: Capture complete Linear fingerprint
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --linear-project-scope delivery/linear-project-scope.json --out /tmp/linear-fingerprint.json --receipt-out /tmp/linear-capture-receipt.json
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linear-fingerprint-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            /tmp/linear-fingerprint.json
+            /tmp/linear-capture-receipt.json
+          if-no-files-found: error
+          retention-days: 7
 
   linear-drift:
     if: >-

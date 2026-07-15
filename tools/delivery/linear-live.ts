@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   fetchLinearFingerprint,
@@ -21,12 +22,64 @@ async function main(): Promise<void> {
     }
     argv.set(name, value);
   }
-  const snapshotPath = resolve(
-    argv.get("--snapshot") ?? "delivery/linear-snapshot.json",
-  );
+  const outPath = argv.get("--out");
+  const receiptOutPath = argv.get("--receipt-out");
+  if (receiptOutPath && !outPath) {
+    throw new Error("--receipt-out requires --out");
+  }
   const projectScopePath = resolve(
     argv.get("--linear-project-scope") ??
       "delivery/linear-project-scope.json",
+  );
+  const projectScope = JSON.parse(
+    readFileSync(projectScopePath, "utf8"),
+  ) as LinearProjectScope;
+  const fixturePath = argv.get("--fixture");
+  const actual = fixturePath
+    ? (JSON.parse(
+        readFileSync(resolve(fixturePath), "utf8"),
+      ) as LinearFingerprint)
+    : await fetchLinearFingerprint(
+        fetch,
+        process.env.LINEAR_API_KEY ?? "",
+        projectScope,
+      );
+  assertLinearProjectScope(projectScope, actual.projects);
+
+  const fingerprintJson = `${JSON.stringify(actual, null, 2)}\n`;
+  if (outPath) {
+    writeFileSync(resolve(outPath), fingerprintJson);
+  }
+  if (receiptOutPath) {
+    const environmentValue = (name: string): string | null =>
+      process.env[name]?.trim() || null;
+    writeFileSync(
+      resolve(receiptOutPath),
+      `${JSON.stringify(
+        {
+          schemaVersion: 1,
+          capturedAt: new Date().toISOString(),
+          fingerprintSha256: createHash("sha256")
+            .update(fingerprintJson)
+            .digest("hex"),
+          source: {
+            repository: environmentValue("GITHUB_REPOSITORY"),
+            commit: environmentValue("GITHUB_SHA"),
+            ref: environmentValue("GITHUB_REF"),
+            runId: environmentValue("GITHUB_RUN_ID"),
+            runAttempt: environmentValue("GITHUB_RUN_ATTEMPT"),
+          },
+        },
+        null,
+        2,
+      )}\n`,
+    );
+  }
+
+  const shouldCompare = !outPath || argv.has("--snapshot");
+  if (!shouldCompare) return;
+  const snapshotPath = resolve(
+    argv.get("--snapshot") ?? "delivery/linear-snapshot.json",
   );
   const snapshot = JSON.parse(readFileSync(snapshotPath, "utf8")) as {
     projects?: Array<{ id: string }>;
@@ -38,23 +91,7 @@ async function main(): Promise<void> {
   if (!Array.isArray(snapshot.projects) || !snapshot.projects.length) {
     throw new Error("Linear snapshot lacks tracked projects");
   }
-  const projectScope = JSON.parse(
-    readFileSync(projectScopePath, "utf8"),
-  ) as LinearProjectScope;
-  assertLinearProjectScope(
-    projectScope,
-    snapshot.projects,
-  );
-  const fixturePath = argv.get("--fixture");
-  const actual = fixturePath
-    ? (JSON.parse(
-        readFileSync(resolve(fixturePath), "utf8"),
-      ) as LinearFingerprint)
-    : await fetchLinearFingerprint(
-        fetch,
-        process.env.LINEAR_API_KEY ?? "",
-        projectScope,
-      );
+  assertLinearProjectScope(projectScope, snapshot.projects);
   const differences = fingerprintDiff(snapshot.linearFingerprint, actual);
   if (differences.length) {
     for (const difference of differences) console.error(difference);
