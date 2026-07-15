@@ -59,3 +59,24 @@ test("delivery workflow exposes a read-only manual Linear capture artifact", () 
   }
   assert.doesNotMatch(workflow, /LINEAR_API_KEY[^\n]*run:/);
 });
+
+test("Linear drift uploads its complete capture even when drift fails", () => {
+  const workflow = readFileSync(
+    ".github/workflows/delivery-integrity.yml",
+    "utf8",
+  );
+  const linearDrift = workflow.slice(workflow.indexOf("  linear-drift:"));
+  for (const required of [
+    "--snapshot delivery/linear-snapshot.json",
+    "--out /tmp/linear-fingerprint.json",
+    "--receipt-out /tmp/linear-capture-receipt.json",
+    "if: always()",
+    "actions/upload-artifact@v4",
+    "if-no-files-found: error",
+  ]) {
+    assert.match(
+      linearDrift,
+      new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
+  }
+});

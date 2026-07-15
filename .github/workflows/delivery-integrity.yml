@@ -80,6 +80,15 @@ jobs:
         with:
           node-version: 22
       - run: npm ci --prefix tools/spec-lint
-      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --snapshot delivery/linear-snapshot.json --linear-project-scope delivery/linear-project-scope.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --snapshot delivery/linear-snapshot.json --linear-project-scope delivery/linear-project-scope.json --out /tmp/linear-fingerprint.json --receipt-out /tmp/linear-capture-receipt.json
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linear-drift-fingerprint-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            /tmp/linear-fingerprint.json
+            /tmp/linear-capture-receipt.json
+          if-no-files-found: error
+          retention-days: 7
