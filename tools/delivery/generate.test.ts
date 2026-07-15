@@ -42,12 +42,44 @@ const completeValidationPlan = () => ({
   },
 });
 
+test("requires explicit feature dependencies for a custom inventory", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-input-pair-"));
+  try {
+    const inventory = join(dir, "inventory.md");
+    writeFileSync(inventory, "custom inventory\n");
+    const result = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/generate.ts",
+        "--root",
+        process.cwd(),
+        "--inventory",
+        inventory,
+      ],
+      { cwd: process.cwd(), encoding: "utf8" },
+    );
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /--feature-dependencies is required when --inventory is supplied/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("generates deterministic reports and fails on orphan work", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-"));
   try {
     writeFileSync(
       join(dir, "inventory.md"),
       "| feature_id | feature_name | feature_class | primary_section_anchor | secondary_section_anchors | originating_doc | introduced_in_version | one_line_summary | known_dependencies |\n|---|---|---|---|---|---|---|---|---|\n| F-001 | A | surface | §1 | — | master_spec | v7.1.0a | A | — |\n",
+    );
+    writeFileSync(
+      join(dir, "feature-dependencies.json"),
+      JSON.stringify({ schemaVersion: 1, repairs: [] }),
     );
     writeFileSync(
       join(dir, "stamp.json"),
@@ -116,6 +148,8 @@ test("generates deterministic reports and fails on orphan work", () => {
         process.cwd(),
         "--inventory",
         join(dir, "inventory.md"),
+        "--feature-dependencies",
+        join(dir, "feature-dependencies.json"),
         "--stamp",
         join(dir, "stamp.json"),
         "--exact",
@@ -172,6 +206,10 @@ test("traces a source parent through its executable children", () => {
     writeFileSync(
       join(dir, "inventory.md"),
       "| feature_id | feature_name | feature_class | primary_section_anchor | secondary_section_anchors | originating_doc | introduced_in_version | one_line_summary | known_dependencies |\n|---|---|---|---|---|---|---|---|---|\n| F-001 | Authentication | integration_surface | §6.1 | — | master_spec | v7.1.0a | Authentication | — |\n",
+    );
+    writeFileSync(
+      join(dir, "feature-dependencies.json"),
+      JSON.stringify({ schemaVersion: 1, repairs: [] }),
     );
     writeFileSync(
       join(dir, "stamp.json"),
@@ -315,6 +353,8 @@ test("traces a source parent through its executable children", () => {
         process.cwd(),
         "--inventory",
         join(dir, "inventory.md"),
+        "--feature-dependencies",
+        join(dir, "feature-dependencies.json"),
         "--stamp",
         join(dir, "stamp.json"),
         "--exact",

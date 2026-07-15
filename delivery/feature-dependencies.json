@@ -67,11 +67,11 @@
     },
     {
       "requirementId": "F-229",
-      "dependencies": ["F-171", "F-593", "F-607"],
-      "rationale": "The immutable closure bundle requires export-safe audit evidence, binding retention, and nightly integrity verification.",
+      "dependencies": ["F-170", "F-593", "F-607"],
+      "rationale": "Creating the immutable closure bundle requires canonical append-only mutation audit logging, binding retention, and nightly integrity verification.",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v7.1.0a",
-      "sourceSection": "§4.3.24; §6.7.4–§6.7.5; §40.2; §42.6.1"
+      "sourceSection": "§4.3.24; §6.7.1; §40.2; §42.6.1"
     },
     {
       "requirementId": "F-630",

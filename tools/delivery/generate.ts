@@ -77,6 +77,11 @@ function argumentsByName(): Map<string, string> {
 }
 
 const argv = argumentsByName();
+if (argv.has("--inventory") && !argv.has("--feature-dependencies")) {
+  throw new Error(
+    "--feature-dependencies is required when --inventory is supplied",
+  );
+}
 const required = (name: string, fallback?: string) => {
   const value = argv.get(name) ?? fallback;
   if (!value) throw new Error(`Required argument ${name}`);

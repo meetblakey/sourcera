@@ -124,7 +124,7 @@ test("repaired R0 closure contains every journey root and required control", () 
   for (const id of roots) assert.equal(closure.has(id), true, id);
   for (const id of [
     "F-003", "F-006", "F-047", "F-079", "F-084", "F-138", "F-159",
-    "F-160", "F-170", "F-171", "F-221", "F-252", "F-260", "F-396",
+    "F-160", "F-170", "F-221", "F-252", "F-260", "F-396",
     "F-397", "F-409", "F-502", "F-569", "F-572", "F-593", "F-600",
     "F-603", "F-605", "F-607", "F-612", "F-628", "F-630", "F-751",
     "F-752", "F-753", "F-755", "F-774", "F-775", "F-776", "F-779",

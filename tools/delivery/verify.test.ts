@@ -49,6 +49,10 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       "| feature_id | feature_name | feature_class | primary_section_anchor | secondary_section_anchors | originating_doc | introduced_in_version | one_line_summary | known_dependencies |\n|---|---|---|---|---|---|---|---|---|\n| F-001 | A | surface | §1 | — | master_spec | v7.1.0a | A | — |\n",
     );
     writeFileSync(
+      join(dir, "feature-dependencies.json"),
+      JSON.stringify({ schemaVersion: 1, repairs: [] }),
+    );
+    writeFileSync(
       join(dir, "stamp.json"),
       JSON.stringify({ summary: {}, findings: [] }),
     );
@@ -157,6 +161,8 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       process.cwd(),
       "--inventory",
       join(dir, "inventory.md"),
+      "--feature-dependencies",
+      join(dir, "feature-dependencies.json"),
       "--stamp",
       join(dir, "stamp.json"),
       "--exact",
