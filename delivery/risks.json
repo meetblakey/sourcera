@@ -9,10 +9,10 @@
     },
     {
       "id": "RISK-002",
-      "statement": "The repository has no deployable application, staging receipt, or rollback receipt yet.",
+      "statement": "A persistence or identity slice can start before its provider foundation is verified.",
       "owner": "Blake Rowley",
-      "trigger": "Any product or runtime row is claimed ready before the R0 foundation slice proves deployment and rollback.",
-      "response": "Keep the row pending and execute the R0 foundation slice first."
+      "trigger": "A data-isolation or identity-dependent issue is made ready without its provider dependency complete.",
+      "response": "Add the dependency and execute the provider foundation first."
     },
     {
       "id": "RISK-003",

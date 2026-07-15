@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T23:21:43.685Z",
+  "generatedAt": "2026-07-15T00:04:52.343Z",
   "authority": {
     "repo": "Sourcera_Master_Spec.md",
     "runtime": [
@@ -9080,7 +9080,6 @@
       "labels": [
         "Feature",
         "backend",
-        "codex-ready",
         "platform"
       ],
       "release": "R0",
@@ -9130,7 +9129,8 @@
       "release": "R0",
       "milestone": "Platform contract ready",
       "dependencies": [
-        "F-001"
+        "F-001",
+        "F-005"
       ],
       "owner": "Blake Rowley",
       "reviewer": null,
@@ -11204,10 +11204,11 @@
     {
       "id": "PLA-282",
       "sourceId": "F-005",
-      "title": "[F-005] Convex Backend & Real-Time Database",
+      "title": "[F-005] Typed Convex Preview foundation and reactive proof",
       "kind": "executable",
       "labels": [
         "Feature",
+        "codex-ready",
         "integration",
         "platform"
       ],
@@ -11215,23 +11216,33 @@
       "milestone": "Deployable foundation ready",
       "dependencies": [],
       "owner": "Blake Rowley",
-      "reviewer": null,
-      "estimate": 3,
+      "reviewer": "Blake Rowley (interim under DEC-OWNER-001)",
+      "estimate": 5,
       "paths": [
-        "get_issue"
+        "package.json",
+        ".env.example",
+        "convex/schema.ts",
+        "convex/foundation.ts",
+        "convex/_generated/api.d.ts",
+        "packages/domain/src/convex.ts",
+        "scripts/validate-convex-env.ts",
+        "tests/integration/convex-foundation.spec.ts",
+        ".github/workflows/app-ci.yml",
+        "docs/runbooks/convex-foundation.md",
+        "reports/evidence/r0-convex-foundation.json"
       ],
       "tests": {
-        "success": null,
-        "failure": null,
-        "recovery": null
+        "success": "clean install, Convex code generation, typecheck, tests, all three production builds, a commit-bound Preview deployment, and the transactional/reactive probe pass within the §7.5.3 SLO.",
+        "failure": "a missing or malformed key or URL, production target, polling, stale generated client, or secret-bearing payload fails before deploy without exposing secrets.",
+        "recovery": "redeploy the prior verified commit to the same Preview deployment, rerun the probe, then restore and re-prove the latest verified commit."
       },
-      "rollout": null,
-      "rollback": null,
-      "telemetry": null,
-      "proof": null,
-      "sourceVersion": "v6.0.0",
+      "rollout": "named Convex Preview deployment only; no production traffic or customer data.",
+      "rollback": "redeploy the immediately prior verified Git commit to the same Preview deployment, rerun the probe, then restore the latest verified commit.",
+      "telemetry": "convex_foundation_health_result with deployment reference, commit, environment, observation latency, assertion, result, and timestamp; no key or probe payload.",
+      "proof": "reports/evidence/r0-convex-foundation.json plus commit-bound deployment, transactional/reactive probe, rollback, restore, and CI receipts.",
+      "sourceVersion": "v7.1.0a",
       "sourceSection": "§1.5",
-      "outcome": "Convex Backend & Real-Time Database"
+      "outcome": "Provision a typed Convex Preview backend used by all three app shells, with a synthetic zero-customer-data transactional and reactive health probe."
     },
     {
       "id": "PLA-283",
@@ -45554,14 +45565,13 @@
         "identifier": "PLA-217",
         "title": "[F-001] Independently deployable Buyer, Seller, and Marketplace shells",
         "descriptionFingerprint": "46ea3384",
-        "updatedAt": "2026-07-14T23:21:43.685Z",
+        "updatedAt": "2026-07-15T00:00:50.836Z",
         "estimate": 5,
-        "state": "Todo",
-        "stateType": "unstarted",
+        "state": "Done",
+        "stateType": "completed",
         "labels": [
           "Feature",
           "backend",
-          "codex-ready",
           "platform"
         ],
         "assignee": "Blake Rowley",
@@ -45581,7 +45591,7 @@
         "identifier": "PLA-218",
         "title": "[F-002] Dual-Console Data Isolation Model",
         "descriptionFingerprint": "6f0fd631",
-        "updatedAt": "2026-07-14T22:28:46.793Z",
+        "updatedAt": "2026-07-15T00:04:50.454Z",
         "estimate": 2,
         "state": "Backlog",
         "stateType": "backlog",
@@ -45610,7 +45620,8 @@
           "blocks:PLA-218:PLA-763",
           "blocks:PLA-218:PLA-765",
           "blocks:PLA-218:PLA-803",
-          "blocks:PLA-218:SEL-78"
+          "blocks:PLA-218:SEL-78",
+          "blocks:PLA-282:PLA-218"
         ]
       },
       {
@@ -47271,14 +47282,15 @@
       },
       {
         "identifier": "PLA-282",
-        "title": "[F-005] Convex Backend & Real-Time Database",
-        "descriptionFingerprint": "144da69c",
-        "updatedAt": "2026-07-14T22:31:24.993Z",
-        "estimate": 3,
-        "state": "Backlog",
-        "stateType": "backlog",
+        "title": "[F-005] Typed Convex Preview foundation and reactive proof",
+        "descriptionFingerprint": "4f1d9b4b",
+        "updatedAt": "2026-07-15T00:04:46.428Z",
+        "estimate": 5,
+        "state": "Todo",
+        "stateType": "unstarted",
         "labels": [
           "Feature",
+          "codex-ready",
           "integration",
           "platform"
         ],
@@ -47291,6 +47303,7 @@
           "R0"
         ],
         "relations": [
+          "blocks:PLA-282:PLA-218",
           "blocks:PLA-282:PLA-245",
           "blocks:PLA-282:PLA-258",
           "blocks:PLA-282:PLA-277",
