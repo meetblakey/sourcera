@@ -206,6 +206,133 @@ test("rejects customer proof without release metrics and a passed gate", () => {
   }
 });
 
+test("rejects pilot proof with only a partial metric result", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  try {
+    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+    writeFileSync(
+      join(root, "reports", "evidence", "customer.json"),
+      `${JSON.stringify({
+        schemaVersion: 1,
+        status: "passed",
+        proofTypes: ["customer"],
+        observedAt: "2026-07-15T10:47:35Z",
+        sourceCommit: "0123456789abcdef0123456789abcdef01234567",
+        release: "R0",
+        metrics: {
+          activation: { target: true, observed: true, result: "passed" },
+        },
+        gate: "passed",
+      })}\n`,
+    );
+    const group: EvidenceGroup = {
+      kind: "customer",
+      paths: ["reports/evidence/customer.json"],
+    };
+
+    assert.deepEqual(
+      evidenceGroupFindings(root, group).map((finding) => finding.code),
+      ["evidence_receipt_invalid"],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects pilot metrics without an observed value", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  try {
+    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+    const names = [
+      "activation",
+      "completion",
+      "timeToValue",
+      "abandonment",
+      "trust",
+      "reliability",
+      "support",
+    ];
+    const metrics: Record<
+      string,
+      { target: string; observed: string | null; result: string }
+    > = Object.fromEntries(
+      names.map((name) => [
+        name,
+        { target: "declared", observed: "measured", result: "passed" },
+      ]),
+    );
+    metrics.trust.observed = null;
+    writeFileSync(
+      join(root, "reports", "evidence", "operational.json"),
+      `${JSON.stringify({
+        schemaVersion: 1,
+        status: "passed",
+        proofTypes: ["operational"],
+        observedAt: "2026-07-15T10:47:35Z",
+        sourceCommit: "0123456789abcdef0123456789abcdef01234567",
+        release: "R0",
+        metrics,
+        gate: "passed",
+      })}\n`,
+    );
+    const group: EvidenceGroup = {
+      kind: "operational",
+      paths: ["reports/evidence/operational.json"],
+    };
+
+    assert.deepEqual(
+      evidenceGroupFindings(root, group).map((finding) => finding.code),
+      ["evidence_receipt_invalid"],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("accepts pilot proof with every measured release metric", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  try {
+    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+    const metrics = Object.fromEntries(
+      [
+        "activation",
+        "completion",
+        "timeToValue",
+        "abandonment",
+        "trust",
+        "reliability",
+        "support",
+      ].map((name) => [
+        name,
+        { target: "declared", observed: "measured", result: "passed" },
+      ]),
+    );
+    writeFileSync(
+      join(root, "reports", "evidence", "customer.json"),
+      `${JSON.stringify({
+        schemaVersion: 1,
+        status: "passed",
+        proofTypes: ["customer"],
+        observedAt: "2026-07-15T10:47:35Z",
+        sourceCommit: "0123456789abcdef0123456789abcdef01234567",
+        release: "R0",
+        metrics,
+        gate: "passed",
+      })}\n`,
+    );
+
+    assert.equal(
+      evidenceGroupPasses(root, {
+        kind: "customer",
+        paths: ["reports/evidence/customer.json"],
+      }),
+      true,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("rejects execution receipts that omit their named proof section", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
   try {

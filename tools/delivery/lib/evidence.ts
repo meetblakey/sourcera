@@ -17,6 +17,16 @@ export interface EvidenceGroup {
   paths: string[];
 }
 
+const RELEASE_GATE_METRICS = [
+  "activation",
+  "completion",
+  "timeToValue",
+  "abandonment",
+  "trust",
+  "reliability",
+  "support",
+] as const;
+
 interface EvidenceReceipt {
   schemaVersion?: unknown;
   status?: unknown;
@@ -43,6 +53,23 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 function isPassed(value: unknown): boolean {
   return typeof value === "string" && value.startsWith("passed");
+}
+
+function hasCompleteReleaseMetrics(value: unknown): boolean {
+  if (!isObject(value)) return false;
+  return RELEASE_GATE_METRICS.every((name) => {
+    const metric = value[name];
+    return (
+      isObject(metric) &&
+      Object.hasOwn(metric, "target") &&
+      Object.hasOwn(metric, "observed") &&
+      metric.target !== null &&
+      metric.target !== undefined &&
+      metric.observed !== null &&
+      metric.observed !== undefined &&
+      metric.result === "passed"
+    );
+  });
 }
 
 function hasPassingCommands(receipt: EvidenceReceipt): boolean {
@@ -173,8 +200,7 @@ function isValidReceipt(receipt: EvidenceReceipt, kind: EvidenceKind): boolean {
       return (
         typeof receipt.release === "string" &&
         /^R[0-5]$/.test(receipt.release) &&
-        isObject(receipt.metrics) &&
-        Object.keys(receipt.metrics).length > 0 &&
+        hasCompleteReleaseMetrics(receipt.metrics) &&
         receipt.gate === "passed"
       );
     }
