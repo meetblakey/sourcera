@@ -29,6 +29,18 @@ export interface ReleaseDefinition {
   operationalGate: string;
 }
 
+export interface ReleaseAssignment {
+  requirementId: string;
+  release: ReleaseId;
+  rationale: string;
+}
+
+export interface ReleasePolicy {
+  schemaVersion: 1;
+  r0Roots: string[];
+  baselineAssignments: ReleaseAssignment[];
+}
+
 export interface LinearIssueSnapshot {
   id: string;
   parentId: string | null;
