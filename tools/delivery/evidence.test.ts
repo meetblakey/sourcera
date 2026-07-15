@@ -550,6 +550,92 @@ test("rejects forecast evidence links that escape through a symlink", () => {
   }
 });
 
+test("rejects an empty linked runtime receipt", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const linkedRelative = `reports/evidence/empty-runtime-${suffix}.json`;
+  const forecastRelative = `reports/evidence/forecast-runtime-${suffix}.json`;
+  const linkedPath = join(process.cwd(), linkedRelative);
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    writeFileSync(linkedPath, "{}\n");
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as { observations: Array<{ runtimeEvidence: string }> };
+    receipt.observations[0].runtimeEvidence = linkedRelative;
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_reference_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+    rmSync(linkedPath, { force: true });
+  }
+});
+
+test("rejects an empty linked review receipt", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const linkedRelative = `reports/evidence/empty-review-${suffix}.json`;
+  const forecastRelative = `reports/evidence/forecast-review-${suffix}.json`;
+  const linkedPath = join(process.cwd(), linkedRelative);
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    writeFileSync(linkedPath, "{}\n");
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as { observations: Array<{ reviewEvidence: string }> };
+    receipt.observations[0].reviewEvidence = linkedRelative;
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_reference_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+    rmSync(linkedPath, { force: true });
+  }
+});
+
+test("rejects a direct review bound to a different batch", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const linkedRelative = `reports/evidence/mismatched-review-${suffix}.json`;
+  const forecastRelative = `reports/evidence/forecast-review-${suffix}.json`;
+  const linkedPath = join(process.cwd(), linkedRelative);
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    const review = JSON.parse(
+      readFileSync("reports/evidence/r0-foundation-review.json", "utf8"),
+    ) as { scope: { closeoutCommit: string } };
+    review.scope.closeoutCommit =
+      "0123456789abcdef0123456789abcdef01234567";
+    writeFileSync(linkedPath, `${JSON.stringify(review)}\n`);
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as { observations: Array<{ reviewEvidence: string }> };
+    receipt.observations[0].reviewEvidence = linkedRelative;
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_reference_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+    rmSync(linkedPath, { force: true });
+  }
+});
+
 test("rejects execution receipts that omit their named proof section", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
   try {

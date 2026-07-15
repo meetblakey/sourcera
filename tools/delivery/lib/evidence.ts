@@ -30,6 +30,7 @@ const RELEASE_GATE_METRICS = [
 
 interface EvidenceReceipt {
   schemaVersion?: unknown;
+  issue?: unknown;
   status?: unknown;
   proofTypes?: unknown;
   observedAt?: unknown;
@@ -88,6 +89,41 @@ function receiptCommitsAreReachable(
   );
 }
 
+function isAcceptedReviewReceipt(
+  value: unknown,
+  observation: Record<string, unknown>,
+): boolean {
+  if (
+    !isObject(value) ||
+    value.schemaVersion !== 1 ||
+    value.status !== "passed" ||
+    value.issue !== observation.issue
+  ) {
+    return false;
+  }
+  const directReview =
+    typeof value.reviewedAt === "string" &&
+    !Number.isNaN(Date.parse(value.reviewedAt)) &&
+    typeof value.reviewer === "string" &&
+    value.reviewer.trim().length > 0 &&
+    typeof value.reviewType === "string" &&
+    value.reviewType.trim().length > 0 &&
+    Array.isArray(value.findings) &&
+    value.findings.length === 0 &&
+    value.verdict === "accepted" &&
+    isObject(value.scope) &&
+    value.scope.firstImplementationCommit ===
+      observation.firstImplementationCommit &&
+    value.scope.closeoutCommit === observation.closeoutCommit &&
+    value.scope.evidence === observation.runtimeEvidence;
+  const embeddedReview =
+    isObject(value.review) &&
+    value.review.criticalFindings === 0 &&
+    value.review.importantFindingsRemaining === 0 &&
+    value.review.verdict === "ready-to-push";
+  return directReview || embeddedReview;
+}
+
 function forecastReferenceFinding(
   root: string,
   receipt: EvidenceReceipt,
@@ -118,6 +154,45 @@ function forecastReferenceFinding(
           code: "evidence_reference_invalid",
           message: `${value} resolves outside reports/evidence`,
         };
+      }
+      if (key === "runtimeEvidence") {
+        try {
+          const linkedReceipt = JSON.parse(
+            readFileSync(referencePath, "utf8"),
+          ) as EvidenceReceipt;
+          if (
+            !isValidReceipt(linkedReceipt, "runtime") ||
+            !receiptCommitsAreReachable(root, linkedReceipt, "runtime") ||
+            linkedReceipt.issue !== observation.issue
+          ) {
+            return {
+              code: "evidence_reference_invalid",
+              message: `${value} is not runtime proof for ${String(observation.issue)}`,
+            };
+          }
+        } catch {
+          return {
+            code: "evidence_reference_invalid",
+            message: `${value} is not valid runtime proof JSON`,
+          };
+        }
+      } else {
+        try {
+          const linkedReview = JSON.parse(
+            readFileSync(referencePath, "utf8"),
+          ) as unknown;
+          if (!isAcceptedReviewReceipt(linkedReview, observation)) {
+            return {
+              code: "evidence_reference_invalid",
+              message: `${value} is not accepted review proof for ${String(observation.issue)}`,
+            };
+          }
+        } catch {
+          return {
+            code: "evidence_reference_invalid",
+            message: `${value} is not valid review proof JSON`,
+          };
+        }
       }
     }
   }
