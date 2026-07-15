@@ -88,6 +88,42 @@ function receiptCommitsAreReachable(
   );
 }
 
+function forecastReferenceFinding(
+  root: string,
+  receipt: EvidenceReceipt,
+): Finding | null {
+  if (!Array.isArray(receipt.observations)) return null;
+  const evidenceRoot = resolve(root, "reports/evidence");
+  const realEvidenceRoot = realpathSync(evidenceRoot);
+  for (const observation of receipt.observations) {
+    if (!isObject(observation)) continue;
+    for (const key of ["reviewEvidence", "runtimeEvidence"] as const) {
+      const value = observation[key];
+      if (typeof value !== "string") continue;
+      const referencePath = resolve(root, value);
+      if (!referencePath.startsWith(`${evidenceRoot}${sep}`)) {
+        return {
+          code: "evidence_reference_invalid",
+          message: `${value} is outside reports/evidence`,
+        };
+      }
+      if (!existsSync(referencePath)) {
+        return {
+          code: "evidence_reference_missing",
+          message: `${value} does not exist`,
+        };
+      }
+      if (!realpathSync(referencePath).startsWith(`${realEvidenceRoot}${sep}`)) {
+        return {
+          code: "evidence_reference_invalid",
+          message: `${value} resolves outside reports/evidence`,
+        };
+      }
+    }
+  }
+  return null;
+}
+
 function hasCompleteReleaseMetrics(value: unknown): boolean {
   if (!isObject(value)) return false;
   return RELEASE_GATE_METRICS.every((name) => {
@@ -315,6 +351,10 @@ export function evidenceGroupFindings(
           message: `${path} does not reference a reachable source commit`,
         },
       ];
+    }
+    if (group.kind === "forecast") {
+      const referenceFinding = forecastReferenceFinding(root, receipt);
+      if (referenceFinding) return [referenceFinding];
     }
     return [];
   });

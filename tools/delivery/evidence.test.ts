@@ -418,6 +418,138 @@ test("rejects forecast observations bound to nonexistent commits", () => {
   }
 });
 
+test("rejects forecast observations with missing linked evidence", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  try {
+    execFileSync("git", ["init", "-q"], { cwd: root });
+    execFileSync("git", ["config", "user.email", "test@sourcera.local"], {
+      cwd: root,
+    });
+    execFileSync("git", ["config", "user.name", "Sourcera Test"], {
+      cwd: root,
+    });
+    execFileSync("git", ["commit", "--allow-empty", "-qm", "first"], {
+      cwd: root,
+    });
+    const firstCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    execFileSync("git", ["commit", "--allow-empty", "-qm", "second"], {
+      cwd: root,
+    });
+    const secondCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+    const observations = [
+      {
+        issue: "PLA-1",
+        estimate: 3,
+        firstImplementationCommit: firstCommit,
+        closeoutCommit: secondCommit,
+        startedAt: "2026-07-15T10:00:00Z",
+        completedAt: "2026-07-15T10:10:00Z",
+        activeSeconds: 600,
+        reviewEvidence: "reports/evidence/missing-review.json",
+        runtimeEvidence: "reports/evidence/missing-runtime.json",
+      },
+      {
+        issue: "PLA-2",
+        estimate: 5,
+        firstImplementationCommit: firstCommit,
+        closeoutCommit: secondCommit,
+        startedAt: "2026-07-15T10:20:00Z",
+        completedAt: "2026-07-15T10:30:00Z",
+        activeSeconds: 600,
+        reviewEvidence: "reports/evidence/missing-review.json",
+        runtimeEvidence: "reports/evidence/missing-runtime.json",
+      },
+    ];
+    writeFileSync(
+      join(root, "reports", "evidence", "forecast.json"),
+      `${JSON.stringify({
+        schemaVersion: 1,
+        status: "passed",
+        proofTypes: ["forecast"],
+        observedAt: "2026-07-15T10:31:00Z",
+        policy: {
+          laneCount: 1,
+          wipLimit: 1,
+          calendarDates: "withheld pending evidence",
+          measurement: "active batch time",
+        },
+        observations,
+        baseline: {
+          completedEstimate: 8,
+          activeSeconds: 1200,
+          pointsPerActiveHour: 24,
+          confidence: "low",
+        },
+        next: {
+          issue: "PLA-3",
+          estimate: 5,
+          activeWorkMinutesAfterExternalUnblock: { lower: 15, upper: 60 },
+          calendarDate: null,
+          externalWait: "provider access",
+          rule: "wait for proof",
+        },
+        recalibrationTrigger: "after every completed batch",
+      })}\n`,
+    );
+
+    assert.deepEqual(
+      evidenceGroupFindings(root, {
+        kind: "forecast",
+        paths: ["reports/evidence/forecast.json"],
+      }).map((finding) => finding.code),
+      ["evidence_reference_missing"],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects forecast evidence links that escape through a symlink", () => {
+  const outsideRoot = mkdtempSync(join(tmpdir(), "sourcera-evidence-link-"));
+  const suffix = outsideRoot.split("-").at(-1);
+  const linkedRelative = `reports/evidence/linked-${suffix}.json`;
+  const forecastRelative = `reports/evidence/forecast-${suffix}.json`;
+  const linkedPath = join(process.cwd(), linkedRelative);
+  const forecastPath = join(process.cwd(), forecastRelative);
+  const outsidePath = join(outsideRoot, "outside.json");
+  try {
+    writeFileSync(outsidePath, "{}\n");
+    symlinkSync(outsidePath, linkedPath);
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as {
+      observations: Array<{
+        reviewEvidence: string;
+        runtimeEvidence: string;
+      }>;
+    };
+    for (const observation of receipt.observations) {
+      observation.reviewEvidence = linkedRelative;
+      observation.runtimeEvidence = linkedRelative;
+    }
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_reference_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+    rmSync(linkedPath, { force: true });
+    rmSync(outsideRoot, { recursive: true, force: true });
+  }
+});
+
 test("rejects execution receipts that omit their named proof section", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
   try {
