@@ -11,6 +11,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   applyFeatureDependencies,
+  dependencyRepairFindings,
   type FeatureDependencyRepair,
 } from "./lib/dependencies.js";
 import {
@@ -487,7 +488,15 @@ test("CLI preserves proof-only source nodes without requiring feature assignment
   }
 });
 
-test("canonical policy is lossless and preserves the approved release boundary", () => {
+const approvedR0Roots = [
+  "F-083", "F-085", "F-086", "F-087", "F-088", "F-101",
+  "F-105", "F-106", "F-209", "F-214", "F-215", "F-220",
+  "F-225", "F-226", "F-228", "F-229", "F-387", "F-389",
+  "F-559", "F-560", "F-687", "F-688", "F-689", "F-690",
+  "F-691", "F-692", "F-693", "F-694",
+];
+
+function canonicalReleaseFixture() {
   const root = process.cwd();
   const canonicalPolicy = JSON.parse(
     readFileSync(join(root, "delivery/release-policy.json"), "utf8"),
@@ -509,16 +518,14 @@ test("canonical policy is lossless and preserves the approved release boundary",
       candidate.disposition,
     ]),
   );
-  const allFeatures = applyFeatureDependencies(
-    parseFeatureInventory(
-      readFileSync(join(root, "_audit/FEATURE_INVENTORY.md"), "utf8"),
-    ).map((candidate) => ({
-      ...candidate,
-      disposition:
-        dispositionById.get(candidate.requirementId) ?? candidate.disposition,
-    })),
-    repairs.repairs,
-  );
+  const sourceRows = parseFeatureInventory(
+    readFileSync(join(root, "_audit/FEATURE_INVENTORY.md"), "utf8"),
+  ).map((candidate) => ({
+    ...candidate,
+    disposition:
+      dispositionById.get(candidate.requirementId) ?? candidate.disposition,
+  }));
+  const allFeatures = applyFeatureDependencies(sourceRows, repairs.repairs);
   const executableIds = new Set(
     allFeatures
       .filter((candidate) => candidate.disposition === "executable")
@@ -537,13 +544,96 @@ test("canonical policy is lossless and preserves the approved release boundary",
       readFileSync(join(root, "delivery/releases.json"), "utf8"),
     ) as { releases: ReleaseDefinition[] }
   ).releases;
-  const approvedR0Roots = [
-    "F-083", "F-085", "F-086", "F-087", "F-088", "F-101",
-    "F-105", "F-106", "F-209", "F-214", "F-215", "F-220",
-    "F-225", "F-226", "F-228", "F-229", "F-387", "F-389",
-    "F-559", "F-560", "F-687", "F-688", "F-689", "F-690",
-    "F-691", "F-692", "F-693", "F-694",
-  ];
+  return {
+    allFeatures,
+    canonicalPolicy,
+    canonicalReleases,
+    executablePolicyGraph,
+    repairs: repairs.repairs,
+    sourceRows,
+  };
+}
+
+test("canonical R0 closure contains the complete mandatory journey without new roots", () => {
+  const {
+    canonicalPolicy,
+    canonicalReleases,
+    executablePolicyGraph,
+  } = canonicalReleaseFixture();
+  assert.deepEqual(canonicalPolicy.r0Roots, approvedR0Roots);
+  const finalById = new Map(
+    buildReleaseAssignments(
+      executablePolicyGraph,
+      [],
+      canonicalPolicy,
+      [],
+      canonicalReleases,
+    ).map((candidate) => [candidate.requirementId, candidate.release]),
+  );
+
+  for (const requirementId of [
+    "F-210", "F-211", "F-212", "F-213", "F-214", "F-215",
+    "F-217", "F-218", "F-219", "F-220", "F-221", "F-223",
+    "F-224", "F-225", "F-226", "F-228", "F-229", "F-235",
+    "F-236", "F-237", "F-238",
+  ]) {
+    assert.equal(finalById.get(requirementId), "R0", requirementId);
+  }
+});
+
+test("canonical semantic repairs introduce no cycle or release inversion", () => {
+  const {
+    canonicalPolicy,
+    canonicalReleases,
+    executablePolicyGraph,
+    repairs,
+    sourceRows,
+  } = canonicalReleaseFixture();
+  assert.deepEqual(dependencyRepairFindings(sourceRows, repairs), []);
+  assert.doesNotThrow(() =>
+    buildReleaseAssignments(
+      executablePolicyGraph,
+      [],
+      canonicalPolicy,
+      [],
+      canonicalReleases,
+    )
+  );
+});
+
+test("optional journey paths keep their R1 assignments", () => {
+  const {
+    canonicalPolicy,
+    canonicalReleases,
+    executablePolicyGraph,
+  } = canonicalReleaseFixture();
+  const baselineById = new Map(
+    canonicalPolicy.baselineAssignments.map((candidate) => [
+      candidate.requirementId,
+      candidate.release,
+    ]),
+  );
+  const finalById = new Map(
+    buildReleaseAssignments(
+      executablePolicyGraph,
+      [],
+      canonicalPolicy,
+      [],
+      canonicalReleases,
+    ).map((candidate) => [candidate.requirementId, candidate.release]),
+  );
+  for (const requirementId of ["F-216", "F-222", "F-227"]) {
+    assert.equal(baselineById.get(requirementId), "R1", requirementId);
+    assert.equal(finalById.get(requirementId), "R1", requirementId);
+  }
+});
+
+test("canonical policy is lossless and preserves the approved release boundary", () => {
+  const {
+    canonicalPolicy,
+    canonicalReleases,
+    executablePolicyGraph,
+  } = canonicalReleaseFixture();
 
   assert.deepEqual(canonicalPolicy.r0Roots, approvedR0Roots);
   assert.equal(

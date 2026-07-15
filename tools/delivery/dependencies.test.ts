@@ -1,4 +1,6 @@
 import { strict as assert } from "node:assert";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import test from "node:test";
 import {
   applyFeatureDependencies,
@@ -6,6 +8,7 @@ import {
   type FeatureDependencyRepair,
 } from "./lib/dependencies.js";
 import type { SourceRequirement } from "./lib/model.js";
+import { parseFeatureInventory } from "./lib/sources.js";
 
 const row = (id: string, dependencies: string[] = []): SourceRequirement => ({
   requirementId: id,
@@ -103,4 +106,66 @@ test("apply fails closed when a repair is invalid", () => {
       ),
     /feature_dependency_unknown/,
   );
+});
+
+function canonicalGraph() {
+  const root = process.cwd();
+  const sourceRows = parseFeatureInventory(
+    readFileSync(join(root, "_audit/FEATURE_INVENTORY.md"), "utf8"),
+  );
+  const repairs = (
+    JSON.parse(
+      readFileSync(join(root, "delivery/feature-dependencies.json"), "utf8"),
+    ) as { repairs: FeatureDependencyRepair[] }
+  ).repairs;
+  return {
+    sourceRows,
+    repairedRows: applyFeatureDependencies(sourceRows, repairs),
+  };
+}
+
+const semanticDependencies = [
+  ["F-211", ["F-209", "F-210", "F-235", "F-236", "F-237", "F-238"]],
+  ["F-212", ["F-209", "F-211"]],
+  ["F-213", ["F-209", "F-212"]],
+  ["F-214", ["F-209", "F-213", "F-791"]],
+  ["F-215", ["F-209", "F-214", "F-397", "F-409", "F-774", "F-775"]],
+  ["F-217", ["F-209", "F-215"]],
+  ["F-218", ["F-209", "F-217"]],
+  ["F-219", ["F-209", "F-218"]],
+  ["F-220", ["F-088", "F-209", "F-219", "F-260"]],
+  ["F-223", ["F-209", "F-220"]],
+  ["F-225", ["F-209", "F-221", "F-223", "F-224"]],
+  ["F-228", ["F-209", "F-225", "F-226", "F-776"]],
+] as const;
+
+for (const [requirementId, dependencies] of semanticDependencies) {
+  test(`${requirementId} has every direct semantic predecessor`, () => {
+    const { repairedRows } = canonicalGraph();
+    const repaired = repairedRows.find(
+      (candidate) => candidate.requirementId === requirementId,
+    );
+    assert.ok(repaired);
+    assert.deepEqual(repaired.dependencies, dependencies);
+  });
+}
+
+test("F-229 keeps F-228 as its terminal predecessor", () => {
+  const { repairedRows } = canonicalGraph();
+  const terminal = repairedRows.find(
+    (candidate) => candidate.requirementId === "F-229",
+  );
+  assert.ok(terminal);
+  assert.deepEqual(terminal.dependencies, ["F-170", "F-228", "F-593", "F-607"]);
+});
+
+test("dependency repairs preserve every source ID and source pin", () => {
+  const { sourceRows, repairedRows } = canonicalGraph();
+  const sourceIdentity = (candidate: SourceRequirement) => ({
+    requirementId: candidate.requirementId,
+    sourceDoc: candidate.sourceDoc,
+    sourceVersion: candidate.sourceVersion,
+    section: candidate.section,
+  });
+  assert.deepEqual(repairedRows.map(sourceIdentity), sourceRows.map(sourceIdentity));
 });
