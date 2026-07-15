@@ -2,7 +2,11 @@ import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { resolve, sep } from "node:path";
 
-import type { Finding } from "./model.js";
+import type {
+  CheckpointProofType,
+  Finding,
+  R0CheckpointId,
+} from "./model.js";
 
 export type EvidenceKind =
   | "customer"
@@ -32,6 +36,7 @@ const MAX_CLOCK_SKEW_MS = 5 * 60 * 1000;
 interface EvidenceReceipt {
   schemaVersion?: unknown;
   issue?: unknown;
+  checkpoint?: unknown;
   status?: unknown;
   proofTypes?: unknown;
   observedAt?: unknown;
@@ -42,7 +47,10 @@ interface EvidenceReceipt {
   local?: unknown;
   staging?: unknown;
   previews?: unknown;
+  preview?: unknown;
+  runtime?: unknown;
   rollback?: unknown;
+  approval?: unknown;
   policy?: unknown;
   observations?: unknown;
   baseline?: unknown;
@@ -235,6 +243,136 @@ function hasCompleteReleaseMetrics(value: unknown): boolean {
       metric.result === "passed"
     );
   });
+}
+
+function isConcreteReceiptId(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    value.trim().length >= 6 &&
+    !/\b(?:TBD|TODO|placeholder|unknown|none)\b/i.test(value)
+  );
+}
+
+const CHECKPOINT_PREVIEW_TARGETS = [
+  ["vercel", "marketplace"],
+  ["vercel", "buyer"],
+  ["vercel", "seller"],
+  ["convex", "preview"],
+] as const;
+
+function hasValidCheckpointPreview(
+  value: unknown,
+  expectedCommit: string,
+): boolean {
+  const targets = isObject(value) ? value.targets : undefined;
+  if (
+    !isObject(value) ||
+    value.targetCommit !== expectedCommit ||
+    !Array.isArray(targets) ||
+    targets.length !== CHECKPOINT_PREVIEW_TARGETS.length
+  ) {
+    return false;
+  }
+  return CHECKPOINT_PREVIEW_TARGETS.every(
+    ([provider, surface]) =>
+      targets.filter(
+        (target) =>
+          isObject(target) &&
+          target.provider === provider &&
+          target.surface === surface &&
+          isConcreteReceiptId(target.providerReceiptId) &&
+          target.healthResult === "passed",
+      ).length === 1,
+  );
+}
+
+function hasValidCheckpointRuntime(
+  value: unknown,
+  expectedCommit: string,
+): boolean {
+  if (
+    !isObject(value) ||
+    value.environment !== "production" ||
+    !Array.isArray(value.deploymentReceipts) ||
+    value.deploymentReceipts.length === 0 ||
+    !Array.isArray(value.runtimeGateReceipts) ||
+    value.runtimeGateReceipts.length === 0
+  ) {
+    return false;
+  }
+  const deploymentsValid = value.deploymentReceipts.every(
+    (receipt) =>
+      isObject(receipt) &&
+      typeof receipt.provider === "string" &&
+      receipt.provider.trim().length > 0 &&
+      isConcreteReceiptId(receipt.providerReceiptId) &&
+      receipt.sourceCommit === expectedCommit &&
+      receipt.healthResult === "passed",
+  );
+  const runtimeGatesValid = value.runtimeGateReceipts.every(
+    (receipt) =>
+      isObject(receipt) &&
+      isConcreteReceiptId(receipt.gateId) &&
+      typeof receipt.provider === "string" &&
+      receipt.provider.trim().length > 0 &&
+      isConcreteReceiptId(receipt.providerReceiptId) &&
+      receipt.sourceCommit === expectedCommit &&
+      receipt.result === "passed",
+  );
+  return deploymentsValid && runtimeGatesValid;
+}
+
+function hasValidCheckpointRollback(value: unknown): boolean {
+  if (
+    !isObject(value) ||
+    !isConcreteReceiptId(value.fromDeploymentReceiptId) ||
+    !isConcreteReceiptId(value.toDeploymentReceiptId) ||
+    value.fromDeploymentReceiptId === value.toDeploymentReceiptId ||
+    typeof value.startedAt !== "string" ||
+    Number.isNaN(Date.parse(value.startedAt)) ||
+    typeof value.completedAt !== "string" ||
+    Number.isNaN(Date.parse(value.completedAt)) ||
+    typeof value.durationMs !== "number" ||
+    !Number.isFinite(value.durationMs) ||
+    value.durationMs <= 0 ||
+    !isObject(value.recoveryHealth) ||
+    !isConcreteReceiptId(value.recoveryHealth.providerReceiptId) ||
+    value.recoveryHealth.result !== "passed"
+  ) {
+    return false;
+  }
+  const measuredDuration =
+    Date.parse(value.completedAt) - Date.parse(value.startedAt);
+  return measuredDuration > 0 && value.durationMs === measuredDuration;
+}
+
+function checkpointApprovalFindingCode(
+  value: unknown,
+): "checkpoint_evidence_invalid" | "checkpoint_approval_not_independent" | null {
+  if (
+    !isObject(value) ||
+    !["linear", "github"].includes(String(value.provider)) ||
+    !isConcreteReceiptId(value.providerReceiptId) ||
+    typeof value.authorId !== "string" ||
+    value.authorId.trim().length === 0 ||
+    typeof value.reviewerId !== "string" ||
+    value.reviewerId.trim().length === 0 ||
+    typeof value.reviewerKind !== "string" ||
+    typeof value.reviewedAt !== "string" ||
+    Number.isNaN(Date.parse(value.reviewedAt)) ||
+    !Array.isArray(value.findings) ||
+    value.findings.length !== 0 ||
+    value.verdict !== "approved"
+  ) {
+    return "checkpoint_evidence_invalid";
+  }
+  if (
+    value.reviewerKind !== "human" ||
+    value.authorId.trim() === value.reviewerId.trim()
+  ) {
+    return "checkpoint_approval_not_independent";
+  }
+  return null;
 }
 
 function hasPassingCommands(receipt: EvidenceReceipt): boolean {
@@ -484,4 +622,147 @@ export function evidenceGroupPasses(
   return (
     group.paths.length > 0 && evidenceGroupFindings(root, group).length === 0
   );
+}
+
+export interface CheckpointReceiptFindingRequest {
+  root: string;
+  path: string;
+  checkpointId: R0CheckpointId;
+  proofType: CheckpointProofType;
+  expectedCommit: string;
+}
+
+export function checkpointReceiptFinding({
+  root,
+  path,
+  checkpointId,
+  proofType,
+  expectedCommit,
+}: CheckpointReceiptFindingRequest): Finding | null {
+  const evidenceRoot = resolve(root, "reports/evidence");
+  const receiptPath = resolve(root, path);
+  if (!receiptPath.startsWith(`${evidenceRoot}${sep}`)) {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${path} is outside reports/evidence`,
+    };
+  }
+  if (!existsSync(receiptPath)) {
+    return {
+      code: "checkpoint_evidence_missing",
+      checkpointId,
+      message: `${checkpointId} cannot be complete without ${path}`,
+    };
+  }
+  try {
+    if (
+      !realpathSync(receiptPath).startsWith(
+        `${realpathSync(evidenceRoot)}${sep}`,
+      )
+    ) {
+      return {
+        code: "checkpoint_evidence_invalid",
+        checkpointId,
+        message: `${path} resolves outside reports/evidence`,
+      };
+    }
+  } catch {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${path} cannot be resolved`,
+    };
+  }
+
+  let receipt: EvidenceReceipt;
+  try {
+    receipt = JSON.parse(readFileSync(receiptPath, "utf8")) as EvidenceReceipt;
+  } catch {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${path} is not valid JSON`,
+    };
+  }
+  if (
+    !isObject(receipt) ||
+    receipt.checkpoint !== checkpointId ||
+    !Array.isArray(receipt.proofTypes) ||
+    !receipt.proofTypes.includes(proofType)
+  ) {
+    return {
+      code: "checkpoint_evidence_mismatch",
+      checkpointId,
+      message: `${path} does not prove ${checkpointId} ${proofType}`,
+    };
+  }
+  if (
+    receipt.schemaVersion !== 1 ||
+    receipt.status !== "passed" ||
+    typeof receipt.observedAt !== "string" ||
+    Number.isNaN(Date.parse(receipt.observedAt)) ||
+    Date.parse(receipt.observedAt) > Date.now() + MAX_CLOCK_SKEW_MS ||
+    typeof receipt.sourceCommit !== "string" ||
+    !/^[a-f0-9]{40}$/.test(receipt.sourceCommit) ||
+    !/^[a-f0-9]{40}$/.test(expectedCommit)
+  ) {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${path} is not passed, dated, full-SHA evidence`,
+    };
+  }
+  if (receipt.sourceCommit !== expectedCommit) {
+    return {
+      code: "checkpoint_commit_mismatch",
+      checkpointId,
+      message: `${path} proves ${receipt.sourceCommit}, not ${expectedCommit}`,
+    };
+  }
+  if (!commitIsReachable(root, receipt.sourceCommit)) {
+    return {
+      code: "checkpoint_commit_unreachable",
+      checkpointId,
+      message: `${path} references an unreachable source commit`,
+    };
+  }
+
+  let proofValid = false;
+  if (proofType === "customer" || proofType === "operational") {
+    proofValid =
+      receipt.release === "R0" &&
+      hasCompleteReleaseMetrics(receipt.metrics) &&
+      receipt.gate === "passed";
+  } else if (proofType === "preview") {
+    proofValid = hasValidCheckpointPreview(receipt.preview, expectedCommit);
+  } else if (proofType === "runtime") {
+    proofValid = hasValidCheckpointRuntime(receipt.runtime, expectedCommit);
+  } else if (proofType === "rollback") {
+    proofValid = hasValidCheckpointRollback(receipt.rollback);
+  } else {
+    const approvalFindingCode = checkpointApprovalFindingCode(receipt.approval);
+    if (approvalFindingCode) {
+      return {
+        code: approvalFindingCode,
+        checkpointId,
+        message:
+          approvalFindingCode === "checkpoint_approval_not_independent"
+            ? `${path} requires a distinct human reviewer`
+            : `${path} is not approved Linear or GitHub evidence`,
+      };
+    }
+    proofValid = true;
+  }
+  if (!proofValid) {
+    return {
+      code: "checkpoint_evidence_invalid",
+      checkpointId,
+      message: `${path} lacks complete ${proofType} proof`,
+    };
+  }
+
+  // This validates local receipt structure and Git reachability only.
+  // Provider readback remains an external release step.
+  return null;
 }

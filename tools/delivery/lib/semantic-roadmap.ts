@@ -1,15 +1,12 @@
-import { existsSync, readFileSync, realpathSync } from "node:fs";
-import { resolve, sep } from "node:path";
-
 import type {
   CheckpointEvidenceContext,
-  CheckpointReceiptRequirement,
   Finding,
   ManifestRow,
   R0CheckpointId,
   SemanticRoadmapContract,
   SemanticRoadmapEdge,
 } from "./model.js";
+import { checkpointReceiptFinding } from "./evidence.js";
 
 const EXPECTED_PHASES = [
   [1, "phase_1_stakeholder_alignment", "F-211", "§10.2"],
@@ -132,11 +129,17 @@ const REQUIREMENT_FIELDS = [
 const EXPECTED_CONTRACT_SOURCE = {
   sourceDoc: "Sourcera_Master_Spec.md",
   sourceVersion: "v7.1.0a",
+  featureIntroductionVersion: "v6.0.0",
   sections: ["§10.1–§10.13", "§10.16.1–§10.16.3"],
 } as const;
 
 const BASE_CHECKPOINT_PROOFS = ["customer", "operational"] as const;
-const C8_CHECKPOINT_PROOFS = ["runtime", "rollback", "approval"] as const;
+const C8_CHECKPOINT_PROOFS = [
+  "preview",
+  "runtime",
+  "rollback",
+  "approval",
+] as const;
 const COMMIT_SHA = /^[a-f0-9]{40}$/;
 
 const nonempty = (value: string): boolean => value.trim().length > 0;
@@ -148,10 +151,7 @@ const rowHasSourcePin = (
 ): boolean =>
   row.sourceDoc === sourceDoc &&
   row.section === section &&
-  nonempty(row.sourceVersion);
-
-const isObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
+  row.sourceVersion === EXPECTED_CONTRACT_SOURCE.featureIntroductionVersion;
 
 function requiredJourneyEdges(
   contract: SemanticRoadmapContract,
@@ -228,7 +228,7 @@ export function journeyFindings(
     findings.push({
       code: "journey_source_pin_invalid",
       requirementId,
-      message: `${requirementId} must be pinned to ${EXPECTED_CONTRACT_SOURCE.sourceDoc} ${section}`,
+      message: `${requirementId} must be pinned to ${EXPECTED_CONTRACT_SOURCE.sourceDoc} ${EXPECTED_CONTRACT_SOURCE.featureIntroductionVersion} ${section}`,
     });
   };
   if (
@@ -236,6 +236,8 @@ export function journeyFindings(
     contract.release !== "R0" ||
     contract.source.sourceDoc !== EXPECTED_CONTRACT_SOURCE.sourceDoc ||
     contract.source.sourceVersion !== EXPECTED_CONTRACT_SOURCE.sourceVersion ||
+    contract.source.featureIntroductionVersion !==
+      EXPECTED_CONTRACT_SOURCE.featureIntroductionVersion ||
     contract.source.sections.length !== EXPECTED_CONTRACT_SOURCE.sections.length ||
     contract.source.sections.some(
       (section, index) => section !== EXPECTED_CONTRACT_SOURCE.sections[index],
@@ -243,7 +245,7 @@ export function journeyFindings(
   ) {
     findings.push({
       code: "journey_contract_source_invalid",
-      message: "Roadmap authority must remain Sourcera_Master_Spec.md v7.1.0a §§10.1–10.13 and §§10.16.1–10.16.3",
+      message: "Roadmap authority must remain Sourcera_Master_Spec.md v7.1.0a with v6.0.0 feature introductions",
     });
   }
   const phaseCounts = new Map<number, number>();
@@ -462,130 +464,6 @@ export function journeyFindings(
   return findings;
 }
 
-function checkpointEvidenceFinding(
-  checkpointId: R0CheckpointId,
-  requirement: CheckpointReceiptRequirement,
-  context: CheckpointEvidenceContext,
-): Finding | null {
-  const evidenceRoot = resolve(context.root, "reports/evidence");
-  const receiptPath = resolve(context.root, requirement.path);
-  if (!receiptPath.startsWith(`${evidenceRoot}${sep}`)) {
-    return {
-      code: "checkpoint_evidence_invalid",
-      checkpointId,
-      message: `${requirement.path} is outside reports/evidence`,
-    };
-  }
-  if (!existsSync(receiptPath)) {
-    return {
-      code: "checkpoint_evidence_missing",
-      checkpointId,
-      message: `${checkpointId} cannot be complete without ${requirement.path}`,
-    };
-  }
-  try {
-    if (
-      !realpathSync(receiptPath).startsWith(
-        `${realpathSync(evidenceRoot)}${sep}`,
-      )
-    ) {
-      return {
-        code: "checkpoint_evidence_invalid",
-        checkpointId,
-        message: `${requirement.path} resolves outside reports/evidence`,
-      };
-    }
-  } catch {
-    return {
-      code: "checkpoint_evidence_invalid",
-      checkpointId,
-      message: `${requirement.path} cannot be resolved`,
-    };
-  }
-
-  let receipt: unknown;
-  try {
-    receipt = JSON.parse(readFileSync(receiptPath, "utf8")) as unknown;
-  } catch {
-    return {
-      code: "checkpoint_evidence_invalid",
-      checkpointId,
-      message: `${requirement.path} is not valid JSON`,
-    };
-  }
-  if (!isObject(receipt)) {
-    return {
-      code: "checkpoint_evidence_invalid",
-      checkpointId,
-      message: `${requirement.path} is not an evidence object`,
-    };
-  }
-  if (
-    receipt.checkpoint !== checkpointId ||
-    !Array.isArray(receipt.proofTypes) ||
-    !receipt.proofTypes.includes(requirement.proofType)
-  ) {
-    return {
-      code: "checkpoint_evidence_mismatch",
-      checkpointId,
-      message: `${requirement.path} does not prove ${checkpointId} ${requirement.proofType}`,
-    };
-  }
-  if (
-    receipt.schemaVersion !== 1 ||
-    receipt.status !== "passed" ||
-    typeof receipt.observedAt !== "string" ||
-    Number.isNaN(Date.parse(receipt.observedAt)) ||
-    typeof receipt.sourceCommit !== "string" ||
-    !COMMIT_SHA.test(receipt.sourceCommit) ||
-    !Array.isArray(receipt.evidence) ||
-    receipt.evidence.length === 0 ||
-    receipt.evidence.some(
-      (value) => typeof value !== "string" || !nonempty(value),
-    )
-  ) {
-    return {
-      code: "checkpoint_evidence_invalid",
-      checkpointId,
-      message: `${requirement.path} is not passed, commit-bound, nonempty evidence`,
-    };
-  }
-  if (receipt.sourceCommit !== context.expectedCommit) {
-    return {
-      code: "checkpoint_commit_mismatch",
-      checkpointId,
-      message: `${requirement.path} proves ${receipt.sourceCommit}, not ${context.expectedCommit}`,
-    };
-  }
-  if (requirement.proofType === "approval") {
-    const approval = receipt.approval;
-    if (
-      !isObject(approval) ||
-      typeof approval.author !== "string" ||
-      !nonempty(approval.author) ||
-      typeof approval.reviewer !== "string" ||
-      !nonempty(approval.reviewer) ||
-      typeof approval.reviewedAt !== "string" ||
-      Number.isNaN(Date.parse(approval.reviewedAt)) ||
-      approval.verdict !== "approved"
-    ) {
-      return {
-        code: "checkpoint_evidence_invalid",
-        checkpointId,
-        message: `${requirement.path} is not accepted approval evidence`,
-      };
-    }
-    if (approval.author.trim() === approval.reviewer.trim()) {
-      return {
-        code: "checkpoint_approval_not_independent",
-        checkpointId,
-        message: `${requirement.path} reviewer must differ from author`,
-      };
-    }
-  }
-  return null;
-}
-
 export function checkpointFindings(
   contract: SemanticRoadmapContract,
   evidenceContext?: CheckpointEvidenceContext,
@@ -723,11 +601,13 @@ export function checkpointFindings(
         });
       } else {
         for (const receipt of checkpoint.requiredReceipts) {
-          const finding = checkpointEvidenceFinding(
-            checkpoint.id,
-            receipt,
-            evidenceContext,
-          );
+          const finding = checkpointReceiptFinding({
+            root: evidenceContext.root,
+            path: receipt.path,
+            checkpointId: checkpoint.id,
+            proofType: receipt.proofType,
+            expectedCommit: evidenceContext.expectedCommit,
+          });
           if (finding) findings.push(finding);
         }
       }

@@ -87,6 +87,7 @@ export interface CheckpointRequirements {
 export type CheckpointProofType =
   | "customer"
   | "operational"
+  | "preview"
   | "runtime"
   | "rollback"
   | "approval";
@@ -118,6 +119,7 @@ export interface SemanticRoadmapContract {
   source: {
     sourceDoc: string;
     sourceVersion: string;
+    featureIntroductionVersion: string;
     sections: string[];
   };
   journey: {

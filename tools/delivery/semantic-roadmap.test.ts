@@ -1,4 +1,5 @@
 import { strict as assert } from "node:assert";
+import { execFileSync } from "node:child_process";
 import {
   mkdtempSync,
   mkdirSync,
@@ -28,6 +29,15 @@ const canonical = JSON.parse(
 
 const clone = (): SemanticRoadmapContract => structuredClone(canonical);
 const EXPECTED_COMMIT = "0123456789abcdef0123456789abcdef01234567";
+const RELEASE_METRICS = [
+  "activation",
+  "completion",
+  "timeToValue",
+  "abandonment",
+  "trust",
+  "reliability",
+  "support",
+] as const;
 
 interface ReceiptRequirement {
   path: string;
@@ -50,6 +60,7 @@ function writeReceipt(
   root: string,
   checkpointId: string,
   requirement: ReceiptRequirement,
+  sourceCommit: string,
   overrides: Record<string, unknown> = {},
 ): void {
   const path = join(root, requirement.path);
@@ -60,30 +71,129 @@ function writeReceipt(
     proofTypes: [requirement.proofType],
     status: "passed",
     observedAt: "2026-07-15T12:00:00Z",
-    sourceCommit: EXPECTED_COMMIT,
-    evidence: ["Named probe passed."],
-    ...overrides,
+    sourceCommit,
   };
-  if (requirement.proofType === "approval" && !Object.hasOwn(receipt, "approval")) {
+  if (["customer", "operational"].includes(requirement.proofType)) {
+    receipt.release = "R0";
+    receipt.metrics = Object.fromEntries(
+      RELEASE_METRICS.map((metric) => [
+        metric,
+        { target: "declared", observed: "measured", result: "passed" },
+      ]),
+    );
+    receipt.gate = "passed";
+  }
+  if (requirement.proofType === "preview") {
+    receipt.preview = {
+      targetCommit: sourceCommit,
+      targets: [
+        {
+          provider: "vercel",
+          surface: "marketplace",
+          providerReceiptId: "dpl_marketplace_preview",
+          healthResult: "passed",
+        },
+        {
+          provider: "vercel",
+          surface: "buyer",
+          providerReceiptId: "dpl_buyer_preview",
+          healthResult: "passed",
+        },
+        {
+          provider: "vercel",
+          surface: "seller",
+          providerReceiptId: "dpl_seller_preview",
+          healthResult: "passed",
+        },
+        {
+          provider: "convex",
+          surface: "preview",
+          providerReceiptId: "convex_preview_receipt",
+          healthResult: "passed",
+        },
+      ],
+    };
+  }
+  if (requirement.proofType === "runtime") {
+    receipt.runtime = {
+      environment: "production",
+      deploymentReceipts: [
+        {
+          provider: "vercel",
+          providerReceiptId: "dpl_production_receipt",
+          sourceCommit,
+          healthResult: "passed",
+        },
+      ],
+      runtimeGateReceipts: [
+        {
+          gateId: "RG:production-closure",
+          provider: "github",
+          providerReceiptId: "check_run_production_gate",
+          sourceCommit,
+          result: "passed",
+        },
+      ],
+    };
+  }
+  if (requirement.proofType === "rollback") {
+    receipt.rollback = {
+      fromDeploymentReceiptId: "dpl_candidate_deployment",
+      toDeploymentReceiptId: "dpl_known_good_deployment",
+      startedAt: "2026-07-15T12:00:00Z",
+      completedAt: "2026-07-15T12:01:00Z",
+      durationMs: 60_000,
+      recoveryHealth: {
+        providerReceiptId: "health_check_rollback",
+        result: "passed",
+      },
+    };
+  }
+  if (requirement.proofType === "approval") {
     receipt.approval = {
-      author: "release-author@sourcera.local",
-      reviewer: "release-reviewer@sourcera.local",
+      provider: "github",
+      providerReceiptId: "github_review_receipt",
+      authorId: "release-author-id",
+      reviewerId: "release-reviewer-id",
+      reviewerKind: "human",
       reviewedAt: "2026-07-15T12:00:00Z",
+      findings: [],
       verdict: "approved",
     };
   }
+  Object.assign(receipt, overrides);
   writeFileSync(path, `${JSON.stringify(receipt)}\n`);
+}
+
+function createGitRoot(): { root: string; expectedCommit: string } {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  execFileSync("git", ["init", "-q"], { cwd: root });
+  execFileSync("git", ["config", "user.email", "test@sourcera.local"], {
+    cwd: root,
+  });
+  execFileSync("git", ["config", "user.name", "Sourcera Test"], {
+    cwd: root,
+  });
+  execFileSync("git", ["commit", "--allow-empty", "-qm", "fixture"], {
+    cwd: root,
+  });
+  const expectedCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: root,
+    encoding: "utf8",
+  }).trim();
+  return { root, expectedCommit };
 }
 
 function completeCheckpoint(
   contract: SemanticRoadmapContract,
   root: string,
   index: number,
+  sourceCommit: string,
 ): void {
   const checkpoint = contract.checkpoints[index];
   checkpoint.status = "complete";
   for (const requirement of receiptRequirements(checkpoint)) {
-    writeReceipt(root, checkpoint.id, requirement);
+    writeReceipt(root, checkpoint.id, requirement, sourceCommit);
   }
 }
 
@@ -329,7 +439,14 @@ test("rejects a semantic row with the wrong source document or section", () => {
   ));
 });
 
-test("accepts inventory introduction versions that differ from contract authority", () => {
+test("pins feature introduction version separately from current authority", () => {
+  assert.equal(canonical.source.sourceVersion, "v7.1.0a");
+  assert.equal(
+    (canonical.source as typeof canonical.source & {
+      featureIntroductionVersion?: string;
+    }).featureIntroductionVersion,
+    "v6.0.0",
+  );
   const rows = validRows(canonical);
   assert.ok(rows.every((row) => row.sourceVersion === "v6.0.0"));
   assert.equal(
@@ -338,6 +455,21 @@ test("accepts inventory introduction versions that differ from contract authorit
     ),
     false,
   );
+});
+
+test("rejects a semantic row with the wrong feature introduction version", () => {
+  for (const [requirementId, expectedCode] of [
+    ["F-211", "journey_source_pin_invalid"],
+    ["F-235", "journey_source_pin_invalid"],
+    ["F-224", "journey_source_pin_invalid"],
+    ["F-216", "journey_optional_path_invalid"],
+  ] as const) {
+    const rows = validRows(canonical);
+    const row = rows.find((candidate) => candidate.requirementId === requirementId);
+    assert.ok(row);
+    row.sourceVersion = "v7.1.0a";
+    assert.ok(codes(journeyFindings(canonical, rows)).includes(expectedCode));
+  }
 });
 
 test("rejects an optional later path that is not executable or source-pinned", () => {
@@ -400,6 +532,12 @@ test("defines ordered R0-C1 through R0-C8 with complete requirements", () => {
     assert.ok(checkpoint.requirements.operationalProof.length);
     assert.ok(receiptRequirements(checkpoint).length);
   }
+  assert.deepEqual(
+    receiptRequirements(canonical.checkpoints[7]).map(
+      (receipt) => receipt.proofType,
+    ),
+    ["customer", "operational", "preview", "runtime", "rollback", "approval"],
+  );
   assert.deepEqual(checkpointFindings(canonical), []);
 });
 
@@ -424,13 +562,13 @@ test("keeps planned checkpoints valid without receipt files", () => {
 });
 
 test("requires every predecessor to be complete", () => {
-  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  const { root, expectedCommit } = createGitRoot();
   try {
     const contract = clone();
-    completeCheckpoint(contract, root, 1);
+    completeCheckpoint(contract, root, 1, expectedCommit);
     assert.ok(codes(checkpointFindings(contract, {
       root,
-      expectedCommit: EXPECTED_COMMIT,
+      expectedCommit,
     })).includes("checkpoint_predecessor_incomplete"));
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -473,20 +611,24 @@ test("rejects evidence with wrong identity, proof type, result, commit, or body"
       { sourceCommit: "fedcba9876543210fedcba9876543210fedcba98" },
       "checkpoint_commit_mismatch",
     ],
-    ["empty", { evidence: [] }, "checkpoint_evidence_invalid"],
+    [
+      "generic-only",
+      { metrics: undefined, gate: undefined, evidence: ["generic string"] },
+      "checkpoint_evidence_invalid",
+    ],
   ];
   for (const [name, overrides, expectedCode] of cases) {
-    const root = mkdtempSync(join(tmpdir(), `sourcera-checkpoint-${name}-`));
+    const { root, expectedCommit } = createGitRoot();
     try {
       const contract = clone();
       contract.checkpoints[0].status = "complete";
       for (const requirement of receiptRequirements(contract.checkpoints[0])) {
-        writeReceipt(root, "R0-C1", requirement, overrides);
+        writeReceipt(root, "R0-C1", requirement, expectedCommit, overrides);
       }
       assert.ok(
         codes(checkpointFindings(contract, {
           root,
-          expectedCommit: EXPECTED_COMMIT,
+          expectedCommit,
         })).includes(expectedCode),
         name,
       );
@@ -496,11 +638,14 @@ test("rejects evidence with wrong identity, proof type, result, commit, or body"
   }
 });
 
-test("requires runtime, rollback, and approval proof for C8 closure", () => {
+test("requires preview, runtime, rollback, and approval proof for C8 closure", () => {
   const contract = clone();
   const checkpoint = contract.checkpoints[7];
   const configured = receiptRequirements(checkpoint).filter(
-    (receipt) => !["runtime", "rollback", "approval"].includes(receipt.proofType),
+    (receipt) =>
+      !["preview", "runtime", "rollback", "approval"].includes(
+        receipt.proofType,
+      ),
   );
   const rawReceipts = checkpoint.requiredReceipts as unknown[];
   checkpoint.requiredReceipts = (typeof rawReceipts[0] === "string"
@@ -516,28 +661,47 @@ test("requires runtime, rollback, and approval proof for C8 closure", () => {
   })).includes("checkpoint_required_proof_missing"));
 });
 
+test("rejects C8 closure when only the preview receipt is omitted", () => {
+  const contract = clone();
+  contract.checkpoints[7].requiredReceipts =
+    contract.checkpoints[7].requiredReceipts.filter(
+      (receipt) => receipt.proofType !== "preview",
+    );
+  const finding = checkpointFindings(contract).find(
+    (candidate) =>
+      candidate.code === "checkpoint_required_proof_missing" &&
+      candidate.checkpointId === "R0-C8",
+  );
+  assert.ok(finding);
+  assert.match(finding.message, /preview/);
+});
+
 test("rejects C8 approval when reviewer and author are the same", () => {
-  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  const { root, expectedCommit } = createGitRoot();
   try {
     const contract = clone();
     for (let index = 0; index < contract.checkpoints.length; index += 1) {
-      completeCheckpoint(contract, root, index);
+      completeCheckpoint(contract, root, index, expectedCommit);
     }
     const approval = receiptRequirements(contract.checkpoints[7]).find(
       (receipt) => receipt.proofType === "approval",
     );
     assert.ok(approval);
-    writeReceipt(root, "R0-C8", approval, {
+    writeReceipt(root, "R0-C8", approval, expectedCommit, {
       approval: {
-        author: "same@sourcera.local",
-        reviewer: "same@sourcera.local",
+        provider: "linear",
+        providerReceiptId: "linear_approval_receipt",
+        authorId: "same-id",
+        reviewerId: "same-id",
+        reviewerKind: "human",
         reviewedAt: "2026-07-15T12:00:00Z",
+        findings: [],
         verdict: "approved",
       },
     });
     assert.ok(codes(checkpointFindings(contract, {
       root,
-      expectedCommit: EXPECTED_COMMIT,
+      expectedCommit,
     })).includes("checkpoint_approval_not_independent"));
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -545,15 +709,15 @@ test("rejects C8 approval when reviewer and author are the same", () => {
 });
 
 test("accepts complete checkpoints with valid commit-bound parsed evidence", () => {
-  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  const { root, expectedCommit } = createGitRoot();
   try {
     const contract = clone();
     for (let index = 0; index < contract.checkpoints.length; index += 1) {
-      completeCheckpoint(contract, root, index);
+      completeCheckpoint(contract, root, index, expectedCommit);
     }
     assert.deepEqual(checkpointFindings(contract, {
       root,
-      expectedCommit: EXPECTED_COMMIT,
+      expectedCommit,
     }), []);
   } finally {
     rmSync(root, { recursive: true, force: true });

@@ -4,6 +4,7 @@
   "source": {
     "sourceDoc": "Sourcera_Master_Spec.md",
     "sourceVersion": "v7.1.0a",
+    "featureIntroductionVersion": "v6.0.0",
     "sections": ["§10.1–§10.13", "§10.16.1–§10.16.3"]
   },
   "journey": {
@@ -315,6 +316,7 @@
       "requiredReceipts": [
         { "path": "reports/evidence/r0-c8-customer.json", "proofType": "customer" },
         { "path": "reports/evidence/r0-c8-operational.json", "proofType": "operational" },
+        { "path": "reports/evidence/r0-c8-preview.json", "proofType": "preview" },
         { "path": "reports/evidence/r0-c8-runtime.json", "proofType": "runtime" },
         { "path": "reports/evidence/r0-c8-rollback.json", "proofType": "rollback" },
         { "path": "reports/evidence/r0-c8-approval.json", "proofType": "approval" }

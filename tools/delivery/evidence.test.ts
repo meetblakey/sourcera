@@ -13,10 +13,12 @@ import { join } from "node:path";
 import test from "node:test";
 
 import {
+  checkpointReceiptFinding,
   evidenceGroupFindings,
   evidenceGroupPasses,
   type EvidenceGroup,
 } from "./lib/evidence.js";
+import type { CheckpointProofType } from "./lib/model.js";
 
 test("rejects an existing but empty proof receipt", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
@@ -905,5 +907,316 @@ test("rejects evidence symlinks that escape the repository", () => {
   } finally {
     rmSync(root, { recursive: true, force: true });
     rmSync(outsideRoot, { recursive: true, force: true });
+  }
+});
+
+const CHECKPOINT_METRICS = [
+  "activation",
+  "completion",
+  "timeToValue",
+  "abandonment",
+  "trust",
+  "reliability",
+  "support",
+] as const;
+
+function createCheckpointRoot(): { root: string; expectedCommit: string } {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-evidence-"));
+  execFileSync("git", ["init", "-q"], { cwd: root });
+  execFileSync("git", ["config", "user.email", "test@sourcera.local"], {
+    cwd: root,
+  });
+  execFileSync("git", ["config", "user.name", "Sourcera Test"], {
+    cwd: root,
+  });
+  execFileSync("git", ["commit", "--allow-empty", "-qm", "fixture"], {
+    cwd: root,
+  });
+  const expectedCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: root,
+    encoding: "utf8",
+  }).trim();
+  mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+  return { root, expectedCommit };
+}
+
+function validCheckpointReceipt(
+  proofType: CheckpointProofType,
+  sourceCommit: string,
+): Record<string, unknown> {
+  const receipt: Record<string, unknown> = {
+    schemaVersion: 1,
+    checkpoint: "R0-C8",
+    status: "passed",
+    proofTypes: [proofType],
+    observedAt: "2026-07-15T10:00:00Z",
+    sourceCommit,
+  };
+  if (proofType === "customer" || proofType === "operational") {
+    receipt.release = "R0";
+    receipt.metrics = Object.fromEntries(
+      CHECKPOINT_METRICS.map((metric) => [
+        metric,
+        { target: "declared", observed: "measured", result: "passed" },
+      ]),
+    );
+    receipt.gate = "passed";
+  } else if (proofType === "preview") {
+    receipt.preview = {
+      targetCommit: sourceCommit,
+      targets: [
+        {
+          provider: "vercel",
+          surface: "marketplace",
+          providerReceiptId: "dpl_marketplace_preview",
+          healthResult: "passed",
+        },
+        {
+          provider: "vercel",
+          surface: "buyer",
+          providerReceiptId: "dpl_buyer_preview",
+          healthResult: "passed",
+        },
+        {
+          provider: "vercel",
+          surface: "seller",
+          providerReceiptId: "dpl_seller_preview",
+          healthResult: "passed",
+        },
+        {
+          provider: "convex",
+          surface: "preview",
+          providerReceiptId: "convex_preview_receipt",
+          healthResult: "passed",
+        },
+      ],
+    };
+  } else if (proofType === "runtime") {
+    receipt.runtime = {
+      environment: "production",
+      deploymentReceipts: [
+        {
+          provider: "vercel",
+          providerReceiptId: "dpl_production_receipt",
+          sourceCommit,
+          healthResult: "passed",
+        },
+      ],
+      runtimeGateReceipts: [
+        {
+          gateId: "RG:production-closure",
+          provider: "github",
+          providerReceiptId: "check_run_production_gate",
+          sourceCommit,
+          result: "passed",
+        },
+      ],
+    };
+  } else if (proofType === "rollback") {
+    receipt.rollback = {
+      fromDeploymentReceiptId: "dpl_candidate_deployment",
+      toDeploymentReceiptId: "dpl_known_good_deployment",
+      startedAt: "2026-07-15T10:00:00Z",
+      completedAt: "2026-07-15T10:01:00Z",
+      durationMs: 60_000,
+      recoveryHealth: {
+        providerReceiptId: "health_check_rollback",
+        result: "passed",
+      },
+    };
+  } else {
+    receipt.approval = {
+      provider: "github",
+      providerReceiptId: "github_review_receipt",
+      authorId: "release-author-id",
+      reviewerId: "release-reviewer-id",
+      reviewerKind: "human",
+      reviewedAt: "2026-07-15T10:00:00Z",
+      findings: [],
+      verdict: "approved",
+    };
+  }
+  return receipt;
+}
+
+function validateCheckpointReceipt(
+  root: string,
+  expectedCommit: string,
+  proofType: CheckpointProofType,
+  receipt: Record<string, unknown>,
+): { code: string } | null {
+  const path = "reports/evidence/checkpoint.json";
+  writeFileSync(join(root, path), `${JSON.stringify(receipt)}\n`);
+  return checkpointReceiptFinding({
+    root,
+    path,
+    checkpointId: "R0-C8",
+    proofType,
+    expectedCommit,
+  });
+}
+
+test("checkpoint completion rejects generic string evidence", () => {
+  const { root, expectedCommit } = createCheckpointRoot();
+  try {
+    const receipt = {
+      schemaVersion: 1,
+      checkpoint: "R0-C8",
+      status: "passed",
+      proofTypes: ["customer"],
+      observedAt: "2026-07-15T10:00:00Z",
+      sourceCommit: expectedCommit,
+      evidence: ["generic string"],
+    };
+    assert.equal(
+      validateCheckpointReceipt(root, expectedCommit, "customer", receipt)
+        ?.code,
+      "checkpoint_evidence_invalid",
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("checkpoint preview requires all three Vercel surfaces and Convex", () => {
+  const { root, expectedCommit } = createCheckpointRoot();
+  try {
+    const receipt = validCheckpointReceipt("preview", expectedCommit);
+    const preview = receipt.preview as { targets: unknown[] };
+    preview.targets.pop();
+    assert.equal(
+      validateCheckpointReceipt(root, expectedCommit, "preview", receipt)
+        ?.code,
+      "checkpoint_evidence_invalid",
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("checkpoint runtime rejects preview-only deployment proof", () => {
+  const { root, expectedCommit } = createCheckpointRoot();
+  try {
+    const receipt = validCheckpointReceipt("runtime", expectedCommit);
+    (receipt.runtime as { environment: string }).environment = "preview";
+    assert.equal(
+      validateCheckpointReceipt(root, expectedCommit, "runtime", receipt)
+        ?.code,
+      "checkpoint_evidence_invalid",
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("checkpoint rollback rejects health-only proof without named deployments and timing", () => {
+  const { root, expectedCommit } = createCheckpointRoot();
+  try {
+    const receipt = validCheckpointReceipt("rollback", expectedCommit);
+    receipt.rollback = { healthResult: "passed" };
+    assert.equal(
+      validateCheckpointReceipt(root, expectedCommit, "rollback", receipt)
+        ?.code,
+      "checkpoint_evidence_invalid",
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("checkpoint approval rejects self-review and agent review", () => {
+  for (const [name, approval] of [
+    [
+      "self",
+      {
+        provider: "linear",
+        providerReceiptId: "linear_approval_receipt",
+        authorId: "same-id",
+        reviewerId: "same-id",
+        reviewerKind: "human",
+        reviewedAt: "2026-07-15T10:00:00Z",
+        findings: [],
+        verdict: "approved",
+      },
+    ],
+    [
+      "agent",
+      {
+        provider: "github",
+        providerReceiptId: "github_approval_receipt",
+        authorId: "author-id",
+        reviewerId: "reviewer-id",
+        reviewerKind: "agent",
+        reviewedAt: "2026-07-15T10:00:00Z",
+        findings: [],
+        verdict: "approved",
+      },
+    ],
+  ] as const) {
+    const { root, expectedCommit } = createCheckpointRoot();
+    try {
+      const receipt = validCheckpointReceipt("approval", expectedCommit);
+      receipt.approval = approval;
+      assert.equal(
+        validateCheckpointReceipt(root, expectedCommit, "approval", receipt)
+          ?.code,
+        "checkpoint_approval_not_independent",
+        name,
+      );
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("checkpoint proof rejects wrong and unreachable commits", () => {
+  const unreachable = "0123456789abcdef0123456789abcdef01234567";
+  const { root, expectedCommit } = createCheckpointRoot();
+  try {
+    const wrong = validCheckpointReceipt("customer", expectedCommit);
+    assert.equal(
+      validateCheckpointReceipt(root, unreachable, "customer", wrong)?.code,
+      "checkpoint_commit_mismatch",
+    );
+
+    const unreachableReceipt = validCheckpointReceipt("customer", unreachable);
+    assert.equal(
+      validateCheckpointReceipt(
+        root,
+        unreachable,
+        "customer",
+        unreachableReceipt,
+      )?.code,
+      "checkpoint_commit_unreachable",
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("accepts the full proof-specific checkpoint receipt set", () => {
+  const { root, expectedCommit } = createCheckpointRoot();
+  try {
+    for (const proofType of [
+      "customer",
+      "operational",
+      "preview",
+      "runtime",
+      "rollback",
+      "approval",
+    ] as const) {
+      assert.equal(
+        validateCheckpointReceipt(
+          root,
+          expectedCommit,
+          proofType,
+          validCheckpointReceipt(proofType, expectedCommit),
+        ),
+        null,
+        proofType,
+      );
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });
