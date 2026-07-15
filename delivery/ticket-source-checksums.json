@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "sourceId": "F-725",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 50.12 Pricing Admin Surface {#50.12-pricing-admin-surface}",
+      "endHeading": "## 50.13 Baseline Assumption Manager {#50.13-baseline-assumption-manager}",
+      "sha256": "96e8c92084dcf94d997e9ee9ab9f240d60e1f0c7b99833119337f3be743f4598"
+    },
+    {
+      "sourceId": "F-864",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "startHeading": "## 2.6 Motion & Transitions",
+      "endHeading": "## 2.7 Iconography",
+      "sha256": "d2560966f544b990e3607b33c293f01fb352a32d162c5fbd163802916f1ee927"
+    }
+  ]
+}

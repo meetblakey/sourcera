@@ -152,6 +152,33 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v7.1.0a",
       "sourceSection": "§22.4.1; §49.1.2; Appendix L.4"
+    },
+    {
+      "requirementId": "F-725",
+      "dependencies": [
+        "F-008",
+        "F-117",
+        "F-119",
+        "F-123",
+        "F-124",
+        "F-160",
+        "F-483",
+        "F-499",
+        "F-600",
+        "F-697",
+        "F-701",
+        "F-726",
+        "F-727",
+        "F-728",
+        "F-729",
+        "F-730",
+        "F-779",
+        "F-780"
+      ],
+      "rationale": "The end-to-end Pricing Admin publish surface composes the Ops security boundary, proposal, simulation, communications, rate-card, cost-base, free-allowance, public-cache, audit, telemetry, webhook, monitoring, and recovery contracts; none can be deferred without violating §50.12 acceptance criteria.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.12.1–§50.12.14; §4.8.9; §28"
     }
   ]
 }
