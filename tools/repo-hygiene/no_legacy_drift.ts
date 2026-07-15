@@ -2,6 +2,8 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
+import { masterSpecHeaderPolicyFindings } from "./master_spec_header_policy.js";
+
 const root = execFileSync("git", ["rev-parse", "--show-toplevel"], {
   encoding: "utf8",
 }).trim();
@@ -92,6 +94,12 @@ for (const path of stateFreeFiles) {
   const text = readFileSync(repoPath(path), "utf8");
   if (copiedState.test(text)) failures.push(`copied live count found in routing file: ${path}`);
 }
+
+failures.push(
+  ...masterSpecHeaderPolicyFindings(
+    readFileSync(repoPath("Sourcera_Master_Spec.md"), "utf8"),
+  ),
+);
 
 if (failures.length > 0) {
   console.error("Repository hygiene failed:");

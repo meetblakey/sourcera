@@ -5,7 +5,19 @@
 ---
 
 **Version:** 7.1.0a
-**Last Updated:** 2026-07-13 — v7.1.1 M02.3 advisory-guard completion. Full spec-lint and ledger taxonomy audit PASS; the live exact-status scanner reports 0 open P0, 0 open P1, 0 blocked P1, 0 open P2, and 0 open P3. The stamp gate parses 547 runtime rows, 333 `runtime_active`, and 212 product/runtime blockers: 144 M11.3, 39 M21.3, 17 M02.3, and 12 M24.3. Human-ratification blockers are zero. Thirteen pending M02.3 rows now have local guards while their external evidence remains pending; one row has a partial local chain. `_audit/V711_BACKLOG_INDEX.md §2` is the current count-routing authority; dated verification counts remain historical pass boundaries. Current blocker inventory: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.md`.
+**Last Updated:** 2026-07-15 — Read live release status at use time. Run:
+
+- `tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json`
+- `tools/spec-lint/node_modules/.bin/tsx tools/release/exact_status_scan.ts --json`
+
+**Current blocker routing:**
+
+- `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.md`
+- `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.csv`
+- `_audit/V711_PRODUCTION_GRADE_RUNTIME_CLOSURE_PLAN_2026-07-13.md`
+- `_audit/V711_PRODUCTION_GRADE_RUNTIME_EXECUTION_MATRIX_2026-07-13.csv`
+
+Dated changelog and verification counts below are historical evidence only. They never override live scanner output.
 **Prior Version:** 7.1.0
 **Status:** P0 hot-patch
 

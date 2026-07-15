@@ -16,4 +16,5 @@ jobs:
           cache: npm
           cache-dependency-path: tools/spec-lint/package-lock.json
       - run: npm ci --prefix tools/spec-lint
+      - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/repo-hygiene/*.test.ts
       - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
