@@ -160,7 +160,9 @@ Parents, decisions, blocked work, and proof-only rows never receive `codex-ready
 
 The current reversible default is one active implementation lane and WIP limit 1. Linear's agent account is not a human owner or reviewer.
 
-Blake Rowley is the interim accountable owner and reviewer for the control-plane batch because no second human workspace member exists. The validation trigger is the addition of another active human member; at that point owner and reviewer must be separated before further product issues earn readiness.
+Maintain five to ten genuinely `codex-ready` issues; this queue bound is separate from WIP. `Urgent` is reserved for non-terminal R0 work in that active queue or a direct blocker of it. Estimates are calibrated only on the active queue.
+
+Blake Rowley is the interim accountable owner and named release or checkpoint approver because the only other workspace user is the Linear app. Required CI and a separate Codex reviewer provide independent change review first. When another active human joins, a distinct human reviewer becomes mandatory, owner and reviewer must be separated, and capacity must be recalibrated before more work earns readiness.
 
 Dates and velocity forecasts remain unset until at least two completed, reviewed batches provide observed throughput. Estimates express relative change size, not calendar promises.
 

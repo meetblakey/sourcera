@@ -26,7 +26,12 @@ import {
   linearMilestoneFindings,
   type LinearMilestoneSnapshot,
 } from "./lib/linear-milestones.js";
+import type { LinearFingerprint } from "./lib/linear-live.js";
 import type { LinearProjectScope } from "./lib/linear-project-scope.js";
+import {
+  operatingModelFindings,
+  type OperatingModel,
+} from "./lib/operating-model.js";
 import {
   buildReleaseAssignments,
   releasePolicyFindings,
@@ -72,6 +77,7 @@ interface RuntimeGateDependency {
 
 interface LinearDeliverySnapshot extends LinearMilestoneSnapshot {
   issues: LinearIssueSnapshot[];
+  linearFingerprint: LinearFingerprint;
 }
 
 function argumentsByName(): Map<string, string> {
@@ -129,6 +135,10 @@ const validationPath = path(
   "delivery/validation-plan.json",
 );
 const linearPath = path("--linear", "delivery/linear-snapshot.json");
+const operatingModelPath = path(
+  "--operating-model",
+  "delivery/operating-model.json",
+);
 const linearProjectScopePath = path(
   "--linear-project-scope",
   "delivery/linear-project-scope.json",
@@ -165,6 +175,7 @@ const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
   .assignments;
 const policy = json<ReleasePolicy>(policyPath);
 const linearSnapshot = json<LinearDeliverySnapshot>(linearPath);
+const operatingModel = json<OperatingModel>(operatingModelPath);
 const linearProjectScope = json<LinearProjectScope>(linearProjectScopePath);
 const issues = linearSnapshot.issues;
 const roadmap = json<SemanticRoadmapContract>(roadmapPath);
@@ -485,6 +496,12 @@ const riskFindings: Finding[] = risks
     code: "risk_incomplete",
     message: `${risk.id || "unknown risk"} is incomplete`,
   }));
+const operatingFindings = operatingModelFindings(
+  operatingModel,
+  issues,
+  linearSnapshot.linearFingerprint,
+  decisions,
+);
 const evidenceFindings = evidenceGroups.flatMap((group) =>
   evidenceGroupFindings(root, group),
 );
@@ -529,6 +546,7 @@ const allFindings = [
   ...duplicateIssueSources,
   ...decisionFindings,
   ...riskFindings,
+  ...operatingFindings,
   ...validationFindings,
   ...evidenceFindings,
   ...familyFindings,
@@ -572,13 +590,15 @@ const scorecard = calculateScorecard({
   ],
   ownership: [
     readyIssues.length > 0 &&
-      readyIssues.every((issue) => Boolean(issue.owner && issue.reviewer)),
+      readyIssues.every((issue) => Boolean(issue.owner && issue.reviewer)) &&
+      operatingFindings.length === 0,
     readyIssues.length > 0 &&
-      readyIssues.every((issue) => Boolean(issue.estimate)),
+      readyIssues.every((issue) => Boolean(issue.estimate)) &&
+      operatingFindings.length === 0,
     decisions.some(
       (decision) =>
         decision.id === "DEC-WIP-001" && decision.status === "active",
-    ),
+    ) && operatingFindings.length === 0,
     evidencePasses("forecast"),
   ],
   validation: [
@@ -664,7 +684,11 @@ const reports = {
     findings: sortFindings(graphFindings),
   },
   "readiness-report.json": {
-    findings: sortFindings([...readiness, ...readyGraphFindings]),
+    findings: sortFindings([
+      ...readiness,
+      ...readyGraphFindings,
+      ...operatingFindings,
+    ]),
   },
   "drift-report.json": {
     findings: sortFindings([
@@ -677,6 +701,7 @@ const reports = {
       ...duplicateIssueSources,
       ...decisionFindings,
       ...riskFindings,
+      ...operatingFindings,
       ...validationFindings,
       ...evidenceFindings,
       ...familyFindings,

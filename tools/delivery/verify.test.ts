@@ -119,7 +119,13 @@ test("verifies regenerated reports and rejects a hand edit", () => {
     );
     writeFileSync(
       join(dir, "decisions.jsonl"),
-      ["DEC-REPO-001", "DEC-WIP-001", "DEC-OWNER-001", "DEC-HEADER-001"]
+      [
+        "DEC-REPO-001",
+        "DEC-WIP-001",
+        "DEC-OWNER-001",
+        "DEC-HEADER-001",
+        "DEC-PRIORITY-001",
+      ]
         .map((id) =>
           JSON.stringify({
             id,

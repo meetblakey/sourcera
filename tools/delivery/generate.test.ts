@@ -128,6 +128,82 @@ function addLinearInventoryFingerprint(linear: any): void {
   }
 }
 
+test("reports live WIP and started-without-readiness violations", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-operating-model-"));
+  try {
+    const linear = JSON.parse(
+      readFileSync("delivery/linear-snapshot.json", "utf8"),
+    );
+    const unready = linear.issues.find(
+      (issue: any) => !issue.labels.includes("codex-ready"),
+    );
+    const live = linear.linearFingerprint.issues.find(
+      (issue: any) => issue.identifier === unready.id,
+    );
+    assert.ok(live);
+    live.state = "In Progress";
+    live.stateType = "started";
+    live.labels = live.labels.filter((label: string) => label !== "codex-ready");
+    const linearPath = join(dir, "linear.json");
+    writeFileSync(linearPath, JSON.stringify(linear));
+    const operatingModelPath = join(dir, "operating-model.json");
+    writeFileSync(
+      operatingModelPath,
+      JSON.stringify({
+        schemaVersion: 1,
+        activeRelease: "R0",
+        lanes: [
+          { id: "implementation", owner: "Blake Rowley", wipLimit: 1 },
+        ],
+        readyQueue: { minimum: 1, maximum: 10 },
+        wipDecisionId: "DEC-WIP-001",
+        reviewerPolicy: {
+          interimDecisionId: "DEC-OWNER-001",
+          interimReviewer: "Blake Rowley (interim under DEC-OWNER-001)",
+        },
+        independentReview: {
+          checks: ["required-ci", "codex-independent-review"],
+          humanApprover: "Blake Rowley",
+          approvalGate:
+            "Independent CI and Codex review, then named Blake Rowley release or checkpoint approval",
+          capacityValidationTrigger:
+            "A second active human joins; require a distinct human reviewer and recalibrate capacity",
+        },
+        priorityPolicy: {
+          urgent: 1,
+          decisionId: "DEC-PRIORITY-001",
+        },
+      }),
+    );
+    const fixture = canonicalGenerationArgs(dir, [
+      "--linear",
+      linearPath,
+      "--operating-model",
+      operatingModelPath,
+    ]);
+
+    const result = runGeneration(fixture.args);
+    assert.equal(result.status, 1);
+    const report = JSON.parse(
+      readFileSync(join(fixture.reports, "drift-report.json"), "utf8"),
+    );
+    assert.equal(
+      report.findings.some(
+        (finding: any) => finding.code === "wip_limit_exceeded",
+      ),
+      true,
+    );
+    assert.equal(
+      report.findings.some(
+        (finding: any) => finding.code === "started_issue_not_ready",
+      ),
+      true,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("generates semantic journey readiness and fails empty evidence milestones and relation drift", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-journey-"));
   try {
@@ -741,7 +817,13 @@ test("traces a source parent through its executable children", () => {
     );
     writeFileSync(
       join(dir, "decisions.jsonl"),
-      ["DEC-REPO-001", "DEC-WIP-001", "DEC-OWNER-001", "DEC-HEADER-001"]
+      [
+        "DEC-REPO-001",
+        "DEC-WIP-001",
+        "DEC-OWNER-001",
+        "DEC-HEADER-001",
+        "DEC-PRIORITY-001",
+      ]
         .map((id) =>
           JSON.stringify({
             id,
@@ -795,35 +877,54 @@ test("traces a source parent through its executable children", () => {
       outcome: "Issue outcome",
       ...overrides,
     });
+    const linearIssues = [
+      issue({
+        id: "PLA-203",
+        kind: "parent",
+        outcome: "Identity group",
+      }),
+      issue({
+        id: "PLA-283",
+        parentId: "PLA-203",
+        sourceId: "F-001",
+        kind: "parent",
+        paths: [],
+        tests: { success: null, failure: null, recovery: null },
+        rollout: null,
+        rollback: null,
+        telemetry: null,
+        proof: null,
+        outcome: "Authentication parent",
+      }),
+      issue({
+        id: "PLA-942",
+        parentId: "PLA-283",
+        labels: ["codex-ready"],
+        paths: ["convex/auth.ts"],
+        outcome: "Authenticated session",
+      }),
+    ];
     writeFileSync(
       join(dir, "linear.json"),
       JSON.stringify({
-        issues: [
-          issue({
-            id: "PLA-203",
-            kind: "parent",
-            outcome: "Identity group",
-          }),
-          issue({
-            id: "PLA-283",
-            parentId: "PLA-203",
-            sourceId: "F-001",
-            kind: "parent",
-            paths: [],
-            tests: { success: null, failure: null, recovery: null },
-            rollout: null,
-            rollback: null,
-            telemetry: null,
-            proof: null,
-            outcome: "Authentication parent",
-          }),
-          issue({
-            id: "PLA-942",
-            parentId: "PLA-283",
-            paths: ["convex/auth.ts"],
-            outcome: "Authenticated session",
-          }),
-        ],
+        issues: linearIssues,
+        linearFingerprint: {
+          issues: linearIssues.map((candidate) => ({
+            identifier: candidate.id,
+            labels: candidate.labels,
+            state: "Backlog",
+            stateType: "backlog",
+            priority: 2,
+            assignee: candidate.owner,
+            estimate: candidate.estimate,
+            milestone: candidate.milestone,
+            releases: candidate.release ? [candidate.release] : [],
+          })),
+          releasePipelines: [],
+          releases: [],
+          projects: [],
+          projectMilestones: [],
+        },
       }),
     );
     const reports = join(dir, "reports");
@@ -870,7 +971,10 @@ test("traces a source parent through its executable children", () => {
     const drift = JSON.parse(
       readFileSync(join(reports, "drift-report.json"), "utf8"),
     );
-    assert.deepEqual(drift.findings, []);
+    assert.deepEqual(
+      drift.findings.map((finding: { code: string }) => finding.code),
+      ["ready_queue_under_minimum"],
+    );
     const journeyReadiness = JSON.parse(
       readFileSync(join(reports, "journey-readiness.json"), "utf8"),
     );

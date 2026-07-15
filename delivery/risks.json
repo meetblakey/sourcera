@@ -23,10 +23,10 @@
     },
     {
       "id": "RISK-004",
-      "statement": "The same person is the interim owner and reviewer.",
+      "statement": "Only one human member is available for ownership and approval.",
       "owner": "Blake Rowley",
       "trigger": "A second active human workspace member becomes available.",
-      "response": "Split owner and reviewer before qualifying another product issue."
+      "response": "Until then, require CI and a separate Codex review before named Blake Rowley release or checkpoint approval; when another human joins, require a distinct human reviewer, split issue owner and reviewer, and recalibrate capacity."
     },
     {
       "id": "RISK-005",
