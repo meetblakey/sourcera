@@ -23,6 +23,9 @@
 ## File map
 
 - Create delivery/release-policy.json: reviewed roots and one baseline assignment per feature.
+- Create delivery/feature-dependencies.json: additive, source-pinned dependency repairs.
+- Create tools/delivery/lib/dependencies.ts: validate and apply dependency repairs.
+- Create tools/delivery/dependencies.test.ts: reject missing, duplicate, self, and circular repairs.
 - Create tools/delivery/lib/release-policy.ts: validation, closure, and final assignment derivation.
 - Create tools/delivery/release-policy.test.ts: lossless coverage and closure tests.
 - Modify tools/delivery/build-release-plan.ts: delete text classification and consume explicit policy.
@@ -147,7 +150,107 @@ git add tools/delivery/lib/model.ts tools/delivery/lib/release-policy.ts tools/d
 git commit -m "feat: add lossless release policy kernel"
 ~~~
 
-### Task 2: Replace heuristic classification with reviewed policy data
+### Task 2: Repair the R0 dependency closure from source truth
+
+**Files:**
+- Create: delivery/feature-dependencies.json
+- Create: tools/delivery/lib/dependencies.ts
+- Create: tools/delivery/dependencies.test.ts
+- Modify: tools/delivery/build-release-plan.ts
+- Modify: tools/delivery/generate.ts
+- Modify: tools/delivery/graph.test.ts
+
+**Interfaces:**
+- Consumes: parsed feature inventory plus additive rows containing requirementId, dependencies, rationale, sourceDoc, sourceVersion, and sourceSection.
+- Produces: a normalized feature graph used identically by release planning and report generation.
+
+- [ ] **Step 1: Write failing tests**
+
+Prove additive repairs are deterministic and fail closed:
+
+~~~ts
+assert.deepEqual(applyFeatureDependencies(rows, repairs).find(row => row.requirementId === "F-ROOT")?.dependencies, ["F-CONTROL"]);
+assert.equal(dependencyRepairFindings(rows, duplicateRepairs)[0].code, "feature_dependency_duplicate");
+assert.equal(dependencyRepairFindings(rows, unknownRepair)[0].code, "feature_dependency_unknown");
+assert.equal(dependencyRepairFindings(rows, selfRepair)[0].code, "feature_dependency_self");
+assert.equal(validateGraph(manifestWithRepairedCycle, releases)[0].code, "dependency_cycle");
+~~~
+
+- [ ] **Step 2: Run RED**
+
+~~~bash
+node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/dependencies.test.ts
+~~~
+
+Expected: dependency repair module missing.
+
+- [ ] **Step 3: Implement the normalized graph**
+
+Export:
+
+~~~ts
+export interface FeatureDependencyRepair {
+  requirementId: string;
+  dependencies: string[];
+  rationale: string;
+  sourceDoc: string;
+  sourceVersion: string;
+  sourceSection: string;
+}
+
+export function dependencyRepairFindings(
+  rows: SourceRequirement[],
+  repairs: FeatureDependencyRepair[],
+): Finding[];
+
+export function applyFeatureDependencies(
+  rows: SourceRequirement[],
+  repairs: FeatureDependencyRepair[],
+): SourceRequirement[];
+~~~
+
+Repairs are additive only. Reject unknown IDs, duplicate repair rows, self-dependencies, empty rationale/source pins, and any repaired cycle. Sort and de-duplicate each final dependency list.
+
+- [ ] **Step 4: Record only source-proved missing edges**
+
+Use the Master Spec first and UX only where silent. Do not hand-edit _audit/FEATURE_INVENTORY.md. Create delivery/feature-dependencies.json with only confirmed additive edges and exact source pins. The repaired R0 closure must include the controls needed for:
+
+- auth, tenancy, owner membership, console query scoping, RBAC matrix, and enforcement;
+- buyer-to-seller materialization, bridge redaction, and response return flow;
+- requirement, response, workspace, target-account, pipeline, scoring, and score-lock state contracts;
+- append-only audit, immutable record integrity, export, retention, and recovery;
+- encryption, common failure recovery, accessibility, testing, monitoring, observability, performance, canary, and rollback;
+- canonical telemetry families, envelopes, delivery, and product metrics;
+- the required KB lifecycle for the seven-stage AI seller journey.
+
+Every added edge must point from an R0 journey/root or existing closure member to its prerequisite. Do not promote a feature merely because it is broadly useful.
+
+- [ ] **Step 5: Prove closure completeness and no loss**
+
+Add named assertions for representative required controls and all journey roots:
+
+~~~ts
+for (const id of [
+  "F-003", "F-084", "F-138", "F-159", "F-160", "F-170",
+  "F-221", "F-252", "F-260", "F-396", "F-397", "F-409",
+  "F-502", "F-569", "F-603", "F-605", "F-607", "F-628",
+  "F-630", "F-751", "F-753", "F-755", "F-774", "F-775",
+  "F-776", "F-789", "F-791"
+]) assert.equal(closure.has(id), true, id);
+assert.equal(normalizedRows.length, originalRows.length);
+assert.deepEqual(normalizedRows.map(row => row.requirementId), originalRows.map(row => row.requirementId));
+~~~
+
+- [ ] **Step 6: Run GREEN and commit**
+
+~~~bash
+node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/dependencies.test.ts tools/delivery/graph.test.ts tools/delivery/release-policy.test.ts
+tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
+git add delivery/feature-dependencies.json tools/delivery/lib/dependencies.ts tools/delivery/dependencies.test.ts tools/delivery/build-release-plan.ts tools/delivery/generate.ts tools/delivery/graph.test.ts
+git commit -m "fix: repair R0 dependency closure"
+~~~
+
+### Task 3: Replace heuristic classification with reviewed policy data
 
 **Files:**
 - Create: delivery/release-policy.json
@@ -235,7 +338,7 @@ git add delivery/release-policy.json tools/delivery/build-release-plan.ts tools/
 git commit -m "feat: make release placement explicit"
 ~~~
 
-### Task 3: Make generation and CI reject policy drift
+### Task 4: Make generation and CI reject policy drift
 
 **Files:**
 - Modify: tools/delivery/generate.ts
@@ -293,7 +396,7 @@ git add tools/delivery/generate.ts tools/delivery/verify.ts tools/delivery/verif
 git commit -m "fix: fail CI on release policy drift"
 ~~~
 
-### Task 4: Make Linear readback complete and non-masking
+### Task 5: Make Linear readback complete and non-masking
 
 **Files:**
 - Modify: tools/delivery/lib/linear-live.ts
@@ -349,7 +452,7 @@ git add tools/delivery/lib/linear-live.ts tools/delivery/linear-live.test.ts too
 git commit -m "fix: preserve live Linear release truth"
 ~~~
 
-### Task 5: Add lossless Linear synchronization proof
+### Task 6: Add lossless Linear synchronization proof
 
 **Files:**
 - Create: tools/delivery/lib/linear-sync.ts
@@ -403,7 +506,7 @@ git add tools/delivery/lib/linear-sync.ts tools/delivery/linear-sync.test.ts
 git commit -m "feat: verify lossless Linear release sync"
 ~~~
 
-### Task 6: Regenerate, synchronize Linear, and prove readback
+### Task 7: Regenerate, synchronize Linear, and prove readback
 
 **Files:**
 - Modify: delivery/release-plan.json
@@ -455,7 +558,7 @@ git add delivery/release-plan.json delivery/linear-snapshot.json reports/deliver
 git commit -m "chore: align Linear to the lossless R0 policy"
 ~~~
 
-### Task 7: Run every final gate
+### Task 8: Run every final gate
 
 - [ ] **Step 1: Repository gates**
 
