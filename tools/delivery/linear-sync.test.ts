@@ -345,6 +345,167 @@ test("allows an expected null milestone only when both ID and name clear", () =>
   );
 });
 
+test("allows exact complete expected relation sets with release and milestone changes", () => {
+  const before = fingerprint();
+  const after = clone(before);
+  const relation = "blocks:PLA-1:PLA-2";
+  const first = after.issues[0];
+  const second = after.issues[1];
+  first.releases = ["R0"];
+  first.milestoneId = "milestone-required";
+  first.milestone = "Required R0 milestone";
+  first.relations = [relation, ...first.relations].reverse();
+  second.relations = [...second.relations, relation].reverse();
+
+  assert.deepEqual(
+    linearSyncPreservationFindings(before, after, expected(), {
+      expectedMilestoneByIssue: new Map([
+        [
+          "PLA-1",
+          { id: "milestone-required", name: "Required R0 milestone" },
+        ],
+      ]),
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [...before.issues[0].relations, relation].reverse()],
+        ["PLA-2", [relation, ...before.issues[1].relations]],
+      ]),
+    }),
+    [],
+  );
+});
+
+test("rejects missing, extra, or wrongly oriented planned relations", () => {
+  const existing = fingerprint().issues[0].relations;
+  const planned = "blocks:PLA-1:PLA-2";
+  const cases: Array<{
+    name: string;
+    expectedRelations: string[];
+    afterRelations: string[];
+  }> = [
+    {
+      name: "missing",
+      expectedRelations: [...existing, planned],
+      afterRelations: [...existing],
+    },
+    {
+      name: "extra",
+      expectedRelations: [...existing],
+      afterRelations: [...existing, planned],
+    },
+    {
+      name: "wrong orientation",
+      expectedRelations: [...existing, planned],
+      afterRelations: [...existing, "blocks:PLA-2:PLA-1"],
+    },
+  ];
+
+  for (const candidate of cases) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    after.issues[0].relations = candidate.afterRelations;
+    assert.deepEqual(
+      codes(linearSyncPreservationFindings(before, after, expected(), {
+        expectedRelationsByIssue: new Map([
+          ["PLA-1", candidate.expectedRelations],
+        ]),
+      })),
+      ["linear_sync_relations_changed"],
+      candidate.name,
+    );
+  }
+});
+
+test("rejects duplicate and noncanonical expected relation sets", () => {
+  const before = fingerprint();
+  const after = clone(before);
+  after.issues[0].releases = ["R0"];
+  const canonical = before.issues[0].relations;
+
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), {
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [...canonical, canonical[0]]],
+      ]),
+    })),
+    ["linear_sync_expected_relations_duplicate"],
+  );
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), {
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [canonical[0], "related:PLA-8:PLA-1"]],
+      ]),
+    })),
+    ["linear_sync_expected_relations_noncanonical"],
+  );
+});
+
+test("does not allow a planned relation set to remove an existing relation", () => {
+  const before = fingerprint();
+  const after = clone(before);
+  after.issues[0].releases = ["R0"];
+  after.issues[0].relations = [before.issues[0].relations[0]];
+
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), {
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [...after.issues[0].relations]],
+      ]),
+    })),
+    ["linear_sync_expected_relations_remove_existing"],
+  );
+});
+
+test("allows only new canonical blocks relations", () => {
+  const before = fingerprint();
+  const after = clone(before);
+  const unexpected = "related:PLA-1:PLA-2";
+  after.issues[0].releases = ["R0"];
+  after.issues[0].relations.push(unexpected);
+
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), {
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [...before.issues[0].relations, unexpected]],
+      ]),
+    })),
+    ["linear_sync_expected_relation_type_invalid"],
+  );
+});
+
+test("requires relation allowance issue IDs in both complete captures", () => {
+  for (const missingFrom of ["before", "after"] as const) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    if (missingFrom === "before") {
+      after.issues.push(issue("PLA-3", "R2"));
+    } else {
+      after.issues = after.issues.filter(
+        (candidate) => candidate.identifier !== "PLA-2",
+      );
+    }
+    const identifier = missingFrom === "before" ? "PLA-3" : "PLA-2";
+    assert.ok(
+      codes(linearSyncPreservationFindings(before, after, expected(), {
+        expectedRelationsByIssue: new Map([[identifier, []]]),
+      })).includes("linear_sync_expected_issue_missing"),
+      missingFrom,
+    );
+  }
+});
+
+test("rejects relation changes for an unmapped issue", () => {
+  const before = fingerprint();
+  const after = clone(before);
+  after.issues[0].releases = ["R0"];
+  after.issues[1].relations.push("blocks:PLA-2:PLA-1");
+
+  const findings = linearSyncPreservationFindings(before, after, expected());
+  assert.deepEqual(codes(findings), ["linear_sync_relations_changed"]);
+  assert.equal(findings[0].issueId, "PLA-2");
+});
+
 test("does not honor arbitrary extra allowance fields", () => {
   const before = fingerprint();
   const after = clone(before);

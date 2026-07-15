@@ -1,4 +1,7 @@
-import type { LinearFingerprint } from "./linear-live.js";
+import {
+  canonicalLinearRelationKey,
+  type LinearFingerprint,
+} from "./linear-live.js";
 import type { Finding, ReleaseId } from "./model.js";
 
 type LinearIssue = LinearFingerprint["issues"][number];
@@ -27,6 +30,7 @@ export interface LinearSyncAllowances {
     string,
     LinearMilestoneIdentity | null
   >;
+  expectedRelationsByIssue?: ReadonlyMap<string, readonly string[]>;
   readinessFailedIssueIds?: ReadonlySet<string>;
 }
 
@@ -61,6 +65,73 @@ function add(
   findings.push({ code, message, ...(issueId ? { issueId } : {}) });
 }
 
+function expectedRelationSet(
+  findings: Finding[],
+  issueId: string,
+  beforeRelations: readonly string[],
+  expectedRelations: readonly string[] | undefined,
+): string[] {
+  const normalized: string[] = [];
+  let noncanonical = !Array.isArray(expectedRelations);
+  for (const relation of expectedRelations ?? []) {
+    const parts = relation.split(":");
+    if (parts.length !== 3) {
+      noncanonical = true;
+      continue;
+    }
+    try {
+      const canonical = canonicalLinearRelationKey(
+        parts[0],
+        parts[1],
+        parts[2],
+      );
+      if (canonical !== relation) noncanonical = true;
+      normalized.push(canonical);
+    } catch {
+      noncanonical = true;
+    }
+  }
+  if (noncanonical) {
+    add(
+      findings,
+      "linear_sync_expected_relations_noncanonical",
+      `${issueId} expected relations are not a complete canonical set`,
+      issueId,
+    );
+  }
+  if (new Set(normalized).size !== normalized.length) {
+    add(
+      findings,
+      "linear_sync_expected_relations_duplicate",
+      `${issueId} expected relations contain duplicates`,
+      issueId,
+    );
+  }
+  const relations = sorted([...new Set(normalized)]);
+  const beforeSet = new Set(beforeRelations);
+  if (beforeRelations.some((relation) => !relations.includes(relation))) {
+    add(
+      findings,
+      "linear_sync_expected_relations_remove_existing",
+      `${issueId} expected relations remove an existing relation`,
+      issueId,
+    );
+  }
+  if (
+    relations.some(
+      (relation) => !beforeSet.has(relation) && !relation.startsWith("blocks:"),
+    )
+  ) {
+    add(
+      findings,
+      "linear_sync_expected_relation_type_invalid",
+      `${issueId} expected relations add a relation other than blocks`,
+      issueId,
+    );
+  }
+  return relations;
+}
+
 function compareIssue(
   findings: Finding[],
   before: LinearIssue,
@@ -68,6 +139,8 @@ function compareIssue(
   expectedRelease: ReleaseId | undefined,
   hasExpectedMilestone: boolean,
   expectedMilestone: LinearMilestoneIdentity | null | undefined,
+  hasExpectedRelations: boolean,
+  expectedRelations: readonly string[] | undefined,
   readinessFailed: boolean,
 ): void {
   const protectedFields: Record<
@@ -138,11 +211,21 @@ function compareIssue(
     );
   }
 
-  if (!equal(sorted(before.relations), sorted(after.relations))) {
+  const requiredRelations = hasExpectedRelations
+    ? expectedRelationSet(
+        findings,
+        before.identifier,
+        before.relations,
+        expectedRelations,
+      )
+    : sorted(before.relations);
+  if (!equal(sorted(after.relations), requiredRelations)) {
     add(
       findings,
       "linear_sync_relations_changed",
-      `${before.identifier} relations changed during Linear release sync`,
+      hasExpectedRelations
+        ? `${before.identifier} relations are not exactly the planned complete set`
+        : `${before.identifier} relations changed during Linear release sync`,
       before.identifier,
     );
   }
@@ -308,6 +391,8 @@ export function linearSyncPreservationFindings(
       expectedReleaseByIssue.get(identifier),
       allowances.expectedMilestoneByIssue?.has(identifier) ?? false,
       allowances.expectedMilestoneByIssue?.get(identifier),
+      allowances.expectedRelationsByIssue?.has(identifier) ?? false,
+      allowances.expectedRelationsByIssue?.get(identifier),
       allowances.readinessFailedIssueIds?.has(identifier) ?? false,
     );
   }
@@ -324,6 +409,7 @@ export function linearSyncPreservationFindings(
   const expectedIssueIds = new Set([
     ...expectedReleaseByIssue.keys(),
     ...(allowances.expectedMilestoneByIssue?.keys() ?? []),
+    ...(allowances.expectedRelationsByIssue?.keys() ?? []),
     ...(allowances.readinessFailedIssueIds?.values() ?? []),
   ]);
   for (const identifier of sorted([...expectedIssueIds])) {
