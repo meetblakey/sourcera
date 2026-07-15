@@ -734,17 +734,41 @@ test("canonical release decisions preserve every unresolved validation trigger",
     assert.ok(decision.assumption.trim(), decision.id);
     assert.ok(decision.validationTrigger.trim(), decision.id);
   }
+
+  const canonicalPlan = JSON.parse(
+    readFileSync("delivery/release-plan.json", "utf8"),
+  ) as {
+    assignments: Array<{ requirementId: string; release: string }>;
+  };
+  const plannedReleaseByRequirement = new Map(
+    canonicalPlan.assignments.map((assignment) => [
+      assignment.requirementId,
+      assignment.release,
+    ]),
+  );
+  for (const decision of releaseDecisions) {
+    const pinnedReleaseClaims = decision.decision.matchAll(
+      /Keep (F-(?:AE-)?\d+) at (?:its audited )?(R[0-5])/g,
+    );
+    for (const claim of pinnedReleaseClaims) {
+      assert.equal(
+        plannedReleaseByRequirement.get(claim[1]),
+        claim[2],
+        `${decision.id} contradicts the canonical release plan for ${claim[1]}`,
+      );
+    }
+  }
   const exportDecision = releaseDecisions.find(
     (candidate) => candidate.id === "DEC-REL-EXPORT-001",
   );
   assert.ok(exportDecision);
   assert.match(
-    exportDecision.validationTrigger,
-    /Trace the required R0 export format/,
+    exportDecision.decision,
+    /F-226 as the narrow R0 Selection Report owner/,
   );
   assert.match(
     exportDecision.validationTrigger,
-    /Confirm whether the R0 Selection Report export/,
+    /§40\.1 owner only if F-226 does not fully supply/,
   );
 
   const risks = JSON.parse(readFileSync("delivery/risks.json", "utf8")) as {
