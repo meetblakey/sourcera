@@ -54,14 +54,15 @@ const PIPELINE_QUERY = `
         id
         name
         updatedAt
+        archivedAt
         type
         isProduction
         teams(first: ${NESTED_CONNECTION_LIMIT}) {
-          nodes { key }
+          nodes { id key }
           pageInfo { hasNextPage }
         }
         stages(first: ${NESTED_CONNECTION_LIMIT}) {
-          nodes { id name type }
+          nodes { id name type archivedAt position frozen }
           pageInfo { hasNextPage }
         }
       }
@@ -78,6 +79,7 @@ const RELEASE_QUERY = `
         name
         version
         updatedAt
+        archivedAt
         pipeline { id }
         stage { id type }
       }
@@ -89,7 +91,7 @@ const RELEASE_QUERY = `
 const PROJECT_QUERY = `
   query DeliveryProjects($after: String) {
     projects(first: 50, after: $after, includeArchived: true) {
-      nodes { id name updatedAt }
+      nodes { id name updatedAt archivedAt }
       pageInfo { hasNextPage endCursor }
     }
   }
@@ -101,6 +103,7 @@ const PROJECT_MILESTONE_QUERY = `
       nodes {
         id
         name
+        archivedAt
         project { id name }
       }
       pageInfo { hasNextPage endCursor }
@@ -154,10 +157,18 @@ interface PipelineNode {
   id: string;
   name: string;
   updatedAt: string;
+  archivedAt: string | null;
   type: string;
   isProduction: boolean;
-  teams: NestedConnection<{ key: string }>;
-  stages: NestedConnection<{ id: string; name: string; type: string }>;
+  teams: NestedConnection<{ id: string; key: string }>;
+  stages: NestedConnection<{
+    id: string;
+    name: string;
+    type: string;
+    archivedAt: string | null;
+    position: number;
+    frozen: boolean;
+  }>;
 }
 
 interface ReleaseNode {
@@ -165,6 +176,7 @@ interface ReleaseNode {
   name: string;
   version: string | null;
   updatedAt: string;
+  archivedAt: string | null;
   pipeline: { id: string };
   stage: { id: string; type: string };
 }
@@ -173,16 +185,19 @@ interface ProjectNode {
   id: string;
   name: string;
   updatedAt: string;
+  archivedAt: string | null;
 }
 
 interface ProjectMilestoneNode {
   id: string;
   name: string;
+  archivedAt: string | null;
   project: { id: string; name: string };
 }
 
 export interface LinearFingerprint {
   issues: Array<{
+    linearId: string | null;
     identifier: string;
     title: string;
     descriptionFingerprint: string;
@@ -209,16 +224,25 @@ export interface LinearFingerprint {
     id: string;
     name: string;
     updatedAt: string;
+    archivedAt: string | null;
     type: string;
     isProduction: boolean;
-    teams: string[];
-    stages: Array<{ id: string; name: string; type: string }>;
+    teams: Array<{ id: string; key: string }>;
+    stages: Array<{
+      id: string;
+      name: string;
+      type: string;
+      archivedAt: string | null;
+      position: number;
+      frozen: boolean;
+    }>;
   }>;
   releases: Array<{
     id: string;
     name: string;
     version: string | null;
     updatedAt: string;
+    archivedAt: string | null;
     pipeline: string;
     stage: string;
     stageType: string;
@@ -229,6 +253,7 @@ export interface LinearFingerprint {
     name: string;
     projectId: string;
     project: string;
+    archivedAt: string | null;
   }>;
 }
 
@@ -466,6 +491,7 @@ export async function fetchLinearFingerprint(
   return {
     issues: issueNodes
       .map((issue) => ({
+        linearId: issue.id,
         identifier: issue.identifier,
         title: issue.title,
         descriptionFingerprint: descriptionFingerprint(issue.description),
@@ -496,9 +522,12 @@ export async function fetchLinearFingerprint(
         id: pipeline.id,
         name: pipeline.name,
         updatedAt: pipeline.updatedAt,
+        archivedAt: pipeline.archivedAt,
         type: pipeline.type,
         isProduction: pipeline.isProduction,
-        teams: pipeline.teams.nodes.map((team) => team.key).sort(),
+        teams: pipeline.teams.nodes
+          .map((team) => ({ id: team.id, key: team.key }))
+          .sort((left, right) => left.id.localeCompare(right.id)),
         stages: pipeline.stages.nodes
           .map((stage) => ({ ...stage }))
           .sort((left, right) => left.id.localeCompare(right.id)),
@@ -510,6 +539,7 @@ export async function fetchLinearFingerprint(
         name: release.name,
         version: release.version,
         updatedAt: release.updatedAt,
+        archivedAt: release.archivedAt,
         pipeline: release.pipeline.id,
         stage: release.stage.id,
         stageType: release.stage.type,
@@ -524,6 +554,7 @@ export async function fetchLinearFingerprint(
         name: milestone.name,
         projectId: milestone.project.id,
         project: milestone.project.name,
+        archivedAt: milestone.archivedAt,
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
   };
@@ -535,11 +566,12 @@ export function canonicalLinearFingerprint(
   return {
     ...fingerprint,
     projectMilestones: fingerprint.projectMilestones.map(
-      ({ id, name, projectId, project }) => ({
+      ({ id, name, projectId, project, archivedAt }) => ({
         id,
         name,
         projectId,
         project,
+        archivedAt,
       }),
     ),
   };

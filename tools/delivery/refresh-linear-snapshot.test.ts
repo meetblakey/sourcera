@@ -275,11 +275,39 @@ test("normalizes connector-omitted unassigned identity fields to null", () => {
   assert.equal(refreshed.result.status, 0, refreshed.result.stderr);
   assert.deepEqual(
     {
+      linearId: refreshed.updated.linearFingerprint.issues[0].linearId,
       assignee: refreshed.updated.linearFingerprint.issues[0].assignee,
       assigneeId: refreshed.updated.linearFingerprint.issues[0].assigneeId,
+      projectArchivedAt:
+        refreshed.updated.linearFingerprint.projects[0].archivedAt,
+      milestoneArchivedAt:
+        refreshed.updated.linearFingerprint.projectMilestones[0].archivedAt,
     },
-    { assignee: null, assigneeId: null },
+    {
+      linearId: null,
+      assignee: null,
+      assigneeId: null,
+      projectArchivedAt: "unavailable",
+      milestoneArchivedAt: "unavailable",
+    },
   );
+});
+
+test("refresh requires strict UTC timestamps from connector input", () => {
+  const result = refreshFixture([
+    {
+      id: "PLA-1",
+      title: "Offset timestamp",
+      updatedAt: "2026-07-15T01:00:00.000+01:00",
+      status: "Backlog",
+      statusType: "backlog",
+      project: "Project",
+      projectMilestone: { name: "Production evidence closed" },
+    },
+  ]);
+  assert.equal(result.result.status, 1);
+  assert.match(result.result.stderr, /updatedAt is invalid/);
+  assert.equal(result.contents, result.original);
 });
 
 test("refresh rejects a missing or duplicated tracked project ID", () => {
@@ -513,8 +541,35 @@ test("copies the live parent and preserves planning metadata absent from connect
             },
           },
         ],
-        releasePipelines: [],
-        releases: [],
+        releasePipelines: [
+          {
+            id: "pipeline-1",
+            name: "Sourcera Product Delivery",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            type: "scheduled",
+            isProduction: true,
+            teams: [{ id: "team-pla", key: "PLA" }],
+            stages: [
+              {
+                id: "stage-planned",
+                name: "Planned",
+                type: "planned",
+                position: 0,
+                frozen: false,
+              },
+            ],
+          },
+        ],
+        releases: [
+          {
+            id: "release-r0",
+            name: "First Defensible Evaluation",
+            version: "R0",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            pipeline: { id: "pipeline-1", name: "Sourcera Product Delivery" },
+            stage: { id: "stage-planned", name: "Planned", type: "planned" },
+          },
+        ],
         projects: [
           {
             id: "project-identity",
@@ -572,7 +627,8 @@ test("copies the live parent and preserves planning metadata absent from connect
       "PLA-283",
     );
     assert.deepEqual(
-      (({ priority, archivedAt, assigneeId, teamId }) => ({
+      (({ linearId, priority, archivedAt, assigneeId, teamId }) => ({
+        linearId,
         priority,
         archivedAt,
         assigneeId,
@@ -583,6 +639,7 @@ test("copies the live parent and preserves planning metadata absent from connect
         ),
       ),
       {
+        linearId: null,
         priority: 2,
         archivedAt: null,
         assigneeId: "person-blake",
@@ -626,9 +683,12 @@ test("copies the live parent and preserves planning metadata absent from connect
     );
     assert.deepEqual(
       updated.linearFingerprint.projects.map(
-        (project: { id: string }) => project.id,
+        (project: { id: string; archivedAt: string }) => ({
+          id: project.id,
+          archivedAt: project.archivedAt,
+        }),
       ),
-      ["project-identity"],
+      [{ id: "project-identity", archivedAt: "unavailable" }],
     );
     assert.deepEqual(updated.linearFingerprint.projectMilestones, [
       {
@@ -636,14 +696,38 @@ test("copies the live parent and preserves planning metadata absent from connect
         name: "Permissioned journeys ready",
         projectId: "project-identity",
         project: "Identity",
+        archivedAt: "unavailable",
       },
       {
         id: "milestone-production",
         name: "Production evidence closed",
         projectId: "project-identity",
         project: "Identity",
+        archivedAt: "unavailable",
       },
     ]);
+    assert.deepEqual(updated.linearFingerprint.releasePipelines, [
+      {
+        id: "pipeline-1",
+        name: "Sourcera Product Delivery",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: "unavailable",
+        type: "scheduled",
+        isProduction: true,
+        teams: [{ id: "team-pla", key: "PLA" }],
+        stages: [
+          {
+            id: "stage-planned",
+            name: "Planned",
+            type: "planned",
+            archivedAt: "unavailable",
+            position: 0,
+            frozen: false,
+          },
+        ],
+      },
+    ]);
+    assert.equal(updated.linearFingerprint.releases[0].archivedAt, "unavailable");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

@@ -176,11 +176,19 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 id: "pipeline-1",
                 name: "Sourcera Product Delivery",
                 updatedAt: "2026-07-14T01:00:00.000Z",
+                archivedAt: null,
                 type: "scheduled",
                 isProduction: true,
-                teams: completeConnection([{ key: "PLA" }]),
+                teams: completeConnection([{ id: "team-pla", key: "PLA" }]),
                 stages: completeConnection([
-                  { id: "stage-1", name: "Planned", type: "planned" },
+                  {
+                    id: "stage-1",
+                    name: "Planned",
+                    type: "planned",
+                    archivedAt: null,
+                    position: 0,
+                    frozen: false,
+                  },
                 ]),
               },
             ],
@@ -198,6 +206,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
               name: "First Defensible Evaluation",
               version: "R0",
               updatedAt: "2026-07-14T01:00:00.000Z",
+              archivedAt: null,
               pipeline: { id: "pipeline-1" },
               stage: { id: "stage-1", type: "planned" },
             },
@@ -229,12 +238,14 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
   assert.deepEqual(
     {
       priority: fingerprint.issues[0].priority,
+      linearId: fingerprint.issues[0].linearId,
       archivedAt: fingerprint.issues[0].archivedAt,
       assigneeId: fingerprint.issues[0].assigneeId,
       teamId: fingerprint.issues[0].teamId,
     },
     {
       priority: 2,
+      linearId: "uuid-1",
       archivedAt: null,
       assigneeId: "person-blake",
       teamId: "team-pla",
@@ -243,6 +254,31 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
   const issueQuery = requested.find((query) => query.includes("DeliveryIssues"))!;
   for (const field of ["priority", "archivedAt", "assignee { id name }", "team { id key }"]) {
     assert.match(issueQuery, new RegExp(field.replace(/[{}]/g, "\\$&")));
+  }
+  assert.deepEqual(fingerprint.releasePipelines[0], {
+    id: "pipeline-1",
+    name: "Sourcera Product Delivery",
+    updatedAt: "2026-07-14T01:00:00.000Z",
+    archivedAt: null,
+    type: "scheduled",
+    isProduction: true,
+    teams: [{ id: "team-pla", key: "PLA" }],
+    stages: [{
+      id: "stage-1",
+      name: "Planned",
+      type: "planned",
+      archivedAt: null,
+      position: 0,
+      frozen: false,
+    }],
+  });
+  assert.equal(fingerprint.releases[0].archivedAt, null);
+  for (const queryName of [
+    "DeliveryPipelines",
+    "DeliveryReleases",
+  ]) {
+    const query = requested.find((candidate) => candidate.includes(queryName))!;
+    assert.match(query, /archivedAt/);
   }
   assert.equal(requested.every((query) => query.includes("first: 50")), true);
   assert.deepEqual(fingerprintDiff(fingerprint, fingerprint), []);
@@ -262,16 +298,17 @@ test("paginates and fingerprints complete Linear project and milestone inventori
     };
     const empty = { nodes: [], pageInfo: { hasNextPage: false, endCursor: null } };
     if (body.query.includes("DeliveryProjects")) {
+      assert.match(body.query, /\barchivedAt\b/);
       projectCursors.push(body.variables.after);
       return response({
         data: {
           projects: body.variables.after
             ? completeConnection([
-                { id: "project-1", name: "First", updatedAt: "2026-07-15T01:00:00Z" },
+                { id: "project-1", name: "First", updatedAt: "2026-07-15T01:00:00Z", archivedAt: null },
               ])
             : {
                 nodes: [
-                  { id: "project-2", name: "Second", updatedAt: "2026-07-15T02:00:00Z" },
+                  { id: "project-2", name: "Second", updatedAt: "2026-07-15T02:00:00Z", archivedAt: null },
                 ],
                 pageInfo: { hasNextPage: true, endCursor: "projects-next" },
               },
@@ -279,8 +316,8 @@ test("paginates and fingerprints complete Linear project and milestone inventori
       });
     }
     if (body.query.includes("DeliveryProjectMilestones")) {
-      assert.doesNotMatch(body.query, /\bupdatedAt\b/);
       assert.doesNotMatch(body.query, /\btargetDate\b/);
+      assert.match(body.query, /\barchivedAt\b/);
       milestoneCursors.push(body.variables.after);
       return response({
         data: {
@@ -289,6 +326,7 @@ test("paginates and fingerprints complete Linear project and milestone inventori
                 {
                   id: "milestone-1",
                   name: "Production evidence closed",
+                  archivedAt: null,
                   project: { id: "project-1", name: "First" },
                 },
               ])
@@ -297,6 +335,7 @@ test("paginates and fingerprints complete Linear project and milestone inventori
                   {
                     id: "milestone-2",
                     name: "Production evidence closed",
+                    archivedAt: null,
                     project: { id: "project-2", name: "Second" },
                   },
                 ],
@@ -323,12 +362,14 @@ test("paginates and fingerprints complete Linear project and milestone inventori
       name: "Production evidence closed",
       projectId: "project-1",
       project: "First",
+      archivedAt: null,
     },
     {
       id: "milestone-2",
       name: "Production evidence closed",
       projectId: "project-2",
       project: "Second",
+      archivedAt: null,
     },
   ]);
   assert.match(
@@ -368,6 +409,7 @@ test("fingerprint comparison ignores unavailable legacy milestone metadata", () 
         name: "Production evidence closed",
         projectId: "project-1",
         project: "First",
+        archivedAt: null,
       },
     ],
   };

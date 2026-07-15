@@ -21,6 +21,7 @@ interface LiveRelations {
 
 interface LiveIssue {
   id: string;
+  linearId?: string | null;
   title: string;
   description?: string | null;
   updatedAt: string;
@@ -52,6 +53,7 @@ interface LiveProject {
   id: string;
   name: string;
   updatedAt: string;
+  archivedAt?: string | null;
 }
 
 interface LiveProjectMilestone {
@@ -59,6 +61,25 @@ interface LiveProjectMilestone {
   name: string;
   projectId: string;
   project: string;
+  archivedAt?: string | null;
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+function strictUtcTimestamp(value: unknown): value is string {
+  if (typeof value !== "string" || !ISO_UTC.test(value)) return false;
+  try {
+    return new Date(value).toISOString() === value;
+  } catch {
+    return false;
+  }
+}
+
+function archiveState(value: unknown, label: string): string | null {
+  if (value === undefined) return "unavailable";
+  if (value === null || strictUtcTimestamp(value)) return value;
+  throw new Error(`${label} archivedAt is invalid`);
 }
 
 function estimateValue(value: LiveIssue["estimate"]): number | null {
@@ -187,8 +208,10 @@ if (
     (project) =>
       !project.id?.trim() ||
       !project.name?.trim() ||
-      !project.updatedAt ||
-      Number.isNaN(Date.parse(project.updatedAt)),
+      !strictUtcTimestamp(project.updatedAt) ||
+      (project.archivedAt !== undefined &&
+        project.archivedAt !== null &&
+        !strictUtcTimestamp(project.archivedAt)),
   )
 ) {
   throw new Error("Live Linear projects inventory is incomplete or duplicate");
@@ -222,16 +245,21 @@ if (
   );
 }
 for (const issue of live.issues) {
+  if (!strictUtcTimestamp(issue.updatedAt)) {
+    throw new Error(`Linear issue ${issue.id} updatedAt is invalid`);
+  }
+  if (
+    issue.linearId !== undefined &&
+    issue.linearId !== null &&
+    !UUID.test(issue.linearId)
+  ) {
+    throw new Error(`Linear issue ${issue.id} stable Linear ID is invalid`);
+  }
   const priority = priorityValue(issue.priority);
   if (!Number.isInteger(priority) || priority! < 0 || priority! > 4) {
     throw new Error(`Linear issue ${issue.id} priority is invalid`);
   }
-  if (
-    issue.archivedAt === undefined ||
-    (issue.archivedAt !== null && Number.isNaN(Date.parse(issue.archivedAt)))
-  ) {
-    throw new Error(`Linear issue ${issue.id} archivedAt is invalid`);
-  }
+  archiveState(issue.archivedAt, `Linear issue ${issue.id}`);
   const assignee = issue.assignee ?? null;
   const assigneeId = issue.assigneeId ?? null;
   if (
@@ -431,13 +459,14 @@ snapshot.linearFingerprint = {
     .map((issue) => {
       const liveRelease = releaseByIssue.get(issue.id) ?? null;
       return {
+        linearId: issue.linearId ?? null,
         identifier: issue.id,
         title: issue.title,
         descriptionFingerprint: descriptionFingerprint(issue.description),
         updatedAt: issue.updatedAt,
         estimate: estimateValue(issue.estimate),
         priority: priorityValue(issue.priority),
-        archivedAt: issue.archivedAt ?? null,
+        archivedAt: archiveState(issue.archivedAt, `Linear issue ${issue.id}`),
         state: issue.status,
         stateType: issue.statusType,
         labels: [...(issue.labels ?? [])].sort(),
@@ -456,42 +485,93 @@ snapshot.linearFingerprint = {
     })
     .sort((left, right) => left.identifier.localeCompare(right.identifier)),
   releasePipelines: live.releasePipelines
-    .map((pipeline) => ({
-      id: pipeline.id,
-      name: pipeline.name,
-      updatedAt: pipeline.updatedAt,
-      type: pipeline.type,
-      isProduction: pipeline.isProduction,
-      teams: (pipeline.teams ?? []).map((team: any) => team.key).sort(),
-      stages: (pipeline.stages ?? [])
-        .map((stage: any) => ({
+    .map((pipeline) => {
+      if (!strictUtcTimestamp(pipeline.updatedAt)) {
+        throw new Error(`Linear release pipeline ${pipeline.id} updatedAt is invalid`);
+      }
+      const teams = (pipeline.teams ?? []).map((team: any) => {
+        if (!team?.id?.trim() || !team?.key?.trim()) {
+          throw new Error(`Linear release pipeline ${pipeline.id} team identity is incomplete`);
+        }
+        return { id: team.id, key: team.key };
+      }).sort((left: any, right: any) => left.id.localeCompare(right.id));
+      const stages = (pipeline.stages ?? []).map((stage: any) => {
+        if (
+          !stage?.id?.trim() ||
+          !stage?.name?.trim() ||
+          !stage?.type?.trim() ||
+          typeof stage.position !== "number" ||
+          !Number.isFinite(stage.position) ||
+          typeof stage.frozen !== "boolean"
+        ) {
+          throw new Error(`Linear release pipeline ${pipeline.id} stage is incomplete`);
+        }
+        return {
           id: stage.id,
           name: stage.name,
           type: stage.type,
-        }))
-        .sort((left: any, right: any) => left.id.localeCompare(right.id)),
-    }))
+          archivedAt: archiveState(
+            stage.archivedAt,
+            `Linear release stage ${stage.id}`,
+          ),
+          position: stage.position,
+          frozen: stage.frozen,
+        };
+      }).sort((left: any, right: any) => left.id.localeCompare(right.id));
+      return {
+        id: pipeline.id,
+        name: pipeline.name,
+        updatedAt: pipeline.updatedAt,
+        archivedAt: archiveState(
+          pipeline.archivedAt,
+          `Linear release pipeline ${pipeline.id}`,
+        ),
+        type: pipeline.type,
+        isProduction: pipeline.isProduction,
+        teams,
+        stages,
+      };
+    })
     .sort((left, right) => left.id.localeCompare(right.id)),
   releases: live.releases
-    .map((release) => ({
-      id: release.id,
-      name: release.name,
-      version: release.version,
-      updatedAt: release.updatedAt,
-      pipeline: release.pipeline.id,
-      stage: release.stage.id,
-      stageType: release.stage.type,
+    .map((release) => {
+      if (!strictUtcTimestamp(release.updatedAt)) {
+        throw new Error(`Linear release ${release.id} updatedAt is invalid`);
+      }
+      return {
+        id: release.id,
+        name: release.name,
+        version: release.version,
+        updatedAt: release.updatedAt,
+        archivedAt: archiveState(
+          release.archivedAt,
+          `Linear release ${release.id}`,
+        ),
+        pipeline: release.pipeline.id,
+        stage: release.stage.id,
+        stageType: release.stage.type,
+      };
+    })
+    .sort((left, right) => left.id.localeCompare(right.id)),
+  projects: scopedProjects
+    .map((project) => ({
+      ...project,
+      archivedAt: archiveState(
+        project.archivedAt,
+        `Linear project ${project.id}`,
+      ),
     }))
     .sort((left, right) => left.id.localeCompare(right.id)),
-  projects: [...scopedProjects].sort((left, right) =>
-    left.id.localeCompare(right.id)
-  ),
   projectMilestones: scopedMilestones
-    .map(({ id, name, projectId, project }) => ({
+    .map(({ id, name, projectId, project, archivedAt }) => ({
       id,
       name,
       projectId,
       project,
+      archivedAt: archiveState(
+        archivedAt,
+        `Linear project milestone ${id}`,
+      ),
     }))
     .sort((left, right) => left.id.localeCompare(right.id)),
 };

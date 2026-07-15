@@ -42,6 +42,23 @@ function equal(left: unknown, right: unknown): boolean {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+function stableIdentityAvailable(value: unknown): value is string {
+  return typeof value === "string" && UUID.test(value);
+}
+
+function archiveCapabilityAvailable(value: unknown): value is string | null {
+  if (value === null) return true;
+  if (typeof value !== "string" || !ISO_UTC.test(value)) return false;
+  try {
+    return new Date(value).toISOString() === value;
+  } catch {
+    return false;
+  }
+}
+
 function indexById<T>(
   values: readonly T[],
   id: (value: T) => string,
@@ -215,6 +232,10 @@ function compareIssue(
     ProtectedIssueField,
     { code: string; label: string }
   > = {
+    linearId: {
+      code: "linear_sync_issue_identity_changed",
+      label: "stable Linear identity",
+    },
     title: { code: "linear_sync_title_changed", label: "title" },
     descriptionFingerprint: {
       code: "linear_sync_description_changed",
@@ -364,12 +385,22 @@ function normalizedPipeline(pipeline: ReleasePipeline): unknown {
   return {
     id: pipeline.id,
     name: pipeline.name,
+    archivedAt: pipeline.archivedAt,
     type: pipeline.type,
     isProduction: pipeline.isProduction,
-    teams: sorted(pipeline.teams),
-    stages: [...pipeline.stages].sort((left, right) =>
-      left.id.localeCompare(right.id)
-    ),
+    teams: [...pipeline.teams]
+      .map(({ id, key }) => ({ id, key }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    stages: [...pipeline.stages]
+      .map(({ id, name, type, archivedAt, position, frozen }) => ({
+        id,
+        name,
+        type,
+        archivedAt,
+        position,
+        frozen,
+      }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
   };
 }
 
@@ -378,6 +409,7 @@ function normalizedRelease(release: LinearRelease): unknown {
     id: release.id,
     name: release.name,
     version: release.version,
+    archivedAt: release.archivedAt,
     pipeline: release.pipeline,
     stage: release.stage,
     stageType: release.stageType,
@@ -385,7 +417,7 @@ function normalizedRelease(release: LinearRelease): unknown {
 }
 
 function normalizedProject(project: LinearProject): unknown {
-  return { id: project.id, name: project.name };
+  return { id: project.id, name: project.name, archivedAt: project.archivedAt };
 }
 
 function normalizedProjectMilestone(
@@ -396,7 +428,178 @@ function normalizedProjectMilestone(
     name: milestone.name,
     projectId: milestone.projectId,
     project: milestone.project,
+    archivedAt: milestone.archivedAt,
   };
+}
+
+function addCapabilityFindings(
+  findings: Finding[],
+  before: LinearFingerprint,
+  after: LinearFingerprint,
+): void {
+  const captures = [before, after];
+  const unavailableIssueIds = new Set<string>();
+  const unavailableIssueArchiveIds = new Set<string>();
+  const unavailablePipelineArchiveIds = new Set<string>();
+  const unavailableStageArchiveIds = new Set<string>();
+  const unavailableReleaseArchiveIds = new Set<string>();
+  const unavailableProjectArchiveIds = new Set<string>();
+  const unavailableMilestoneArchiveIds = new Set<string>();
+  for (const capture of captures) {
+    for (const issue of capture.issues) {
+      if (!stableIdentityAvailable(issue.linearId)) {
+        unavailableIssueIds.add(issue.identifier);
+      }
+      if (!archiveCapabilityAvailable(issue.archivedAt)) {
+        unavailableIssueArchiveIds.add(issue.identifier);
+      }
+    }
+    for (const pipeline of capture.releasePipelines) {
+      if (!archiveCapabilityAvailable(pipeline.archivedAt)) {
+        unavailablePipelineArchiveIds.add(pipeline.id);
+      }
+      for (const stage of pipeline.stages) {
+        if (!archiveCapabilityAvailable(stage.archivedAt)) {
+          unavailableStageArchiveIds.add(stage.id);
+        }
+      }
+    }
+    for (const release of capture.releases) {
+      if (!archiveCapabilityAvailable(release.archivedAt)) {
+        unavailableReleaseArchiveIds.add(release.id);
+      }
+    }
+    for (const project of capture.projects) {
+      if (!archiveCapabilityAvailable(project.archivedAt)) {
+        unavailableProjectArchiveIds.add(project.id);
+      }
+    }
+    for (const milestone of capture.projectMilestones) {
+      if (!archiveCapabilityAvailable(milestone.archivedAt)) {
+        unavailableMilestoneArchiveIds.add(milestone.id);
+      }
+    }
+  }
+  for (const identifier of sorted([...unavailableIssueIds])) {
+    add(
+      findings,
+      "linear_sync_issue_identity_unavailable",
+      `${identifier} stable Linear identity is unavailable`,
+      identifier,
+    );
+  }
+  for (const identifier of sorted([...unavailableIssueArchiveIds])) {
+    add(
+      findings,
+      "linear_sync_issue_archive_capability_unavailable",
+      `${identifier} archive state is unavailable`,
+      identifier,
+    );
+  }
+  const topologyCapabilities: Array<[Set<string>, string, string]> = [
+    [
+      unavailablePipelineArchiveIds,
+      "linear_sync_release_pipeline_archive_capability_unavailable",
+      "Release pipeline",
+    ],
+    [
+      unavailableStageArchiveIds,
+      "linear_sync_release_stage_archive_capability_unavailable",
+      "Release stage",
+    ],
+    [
+      unavailableReleaseArchiveIds,
+      "linear_sync_release_archive_capability_unavailable",
+      "Release",
+    ],
+    [
+      unavailableProjectArchiveIds,
+      "linear_sync_project_archive_capability_unavailable",
+      "Project",
+    ],
+    [
+      unavailableMilestoneArchiveIds,
+      "linear_sync_project_milestone_archive_capability_unavailable",
+      "Project milestone",
+    ],
+  ];
+  for (const [ids, code, label] of topologyCapabilities) {
+    for (const id of sorted([...ids])) {
+      add(findings, code, `${label} ${id} archive state is unavailable`);
+    }
+  }
+}
+
+function validateExpectedMilestones(
+  findings: Finding[],
+  afterIssues: ReadonlyMap<string, LinearIssue>,
+  after: LinearFingerprint,
+  expectedMilestoneByIssue:
+    | ReadonlyMap<string, LinearMilestoneIdentity | null>
+    | undefined,
+): void {
+  if (!expectedMilestoneByIssue) return;
+  const milestoneById = indexById(after.projectMilestones, (row) => row.id).rows;
+  const projectById = indexById(after.projects, (row) => row.id).rows;
+  for (const [issueId, expectedMilestone] of expectedMilestoneByIssue) {
+    if (expectedMilestone === null) continue;
+    const issue = afterIssues.get(issueId);
+    if (!issue) continue;
+    const milestone = milestoneById.get(expectedMilestone.id);
+    if (!milestone) {
+      add(
+        findings,
+        "linear_sync_expected_milestone_missing",
+        `${issueId} planned milestone ${expectedMilestone.id} is absent from after-state inventory`,
+        issueId,
+      );
+      continue;
+    }
+    if (milestone.name !== expectedMilestone.name) {
+      add(
+        findings,
+        "linear_sync_expected_milestone_name_mismatch",
+        `${issueId} planned milestone ${expectedMilestone.id} name differs from after-state inventory`,
+        issueId,
+      );
+    }
+    if (milestone.archivedAt !== null) {
+      add(
+        findings,
+        "linear_sync_expected_milestone_archived",
+        `${issueId} planned milestone ${expectedMilestone.id} is not active`,
+        issueId,
+      );
+    }
+    if (
+      milestone.projectId !== issue.projectId ||
+      milestone.project !== issue.project
+    ) {
+      add(
+        findings,
+        "linear_sync_expected_milestone_project_mismatch",
+        `${issueId} planned milestone ${expectedMilestone.id} belongs to another project`,
+        issueId,
+      );
+      continue;
+    }
+    const project = projectById.get(milestone.projectId);
+    if (!project || project.name !== milestone.project) {
+      add(
+        findings,
+        "linear_sync_expected_milestone_project_missing",
+        `${issueId} planned milestone project is absent from after-state inventory`,
+        issueId,
+      );
+    } else if (project.archivedAt !== null) {
+      add(
+        findings,
+        "linear_sync_expected_milestone_project_archived",
+        `${issueId} planned milestone project is not active`,
+        issueId,
+      );
+    }
+  }
 }
 
 function compareTopology<T>(
@@ -453,6 +656,7 @@ export function linearSyncPreservationFindings(
   allowances: LinearSyncAllowances = {},
 ): Finding[] {
   const findings: Finding[] = [];
+  addCapabilityFindings(findings, before, after);
   const beforeIssues = indexById(before.issues, (issue) => issue.identifier);
   const afterIssues = indexById(after.issues, (issue) => issue.identifier);
 
@@ -476,6 +680,12 @@ export function linearSyncPreservationFindings(
     findings,
     beforeIssues.rows,
     allowances.expectedRelationsByIssue,
+  );
+  validateExpectedMilestones(
+    findings,
+    afterIssues.rows,
+    after,
+    allowances.expectedMilestoneByIssue,
   );
   for (const identifier of sorted([...beforeIssues.rows.keys()])) {
     const afterIssue = afterIssues.rows.get(identifier);

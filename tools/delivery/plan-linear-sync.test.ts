@@ -1,11 +1,13 @@
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
 import {
+  linkSync,
   mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
   rmSync,
+  statSync,
   symlinkSync,
   writeFileSync,
 } from "node:fs";
@@ -42,6 +44,40 @@ interface FixtureOptions {
   fingerprintReleases?: Array<Record<string, unknown>>;
 }
 
+const RELEASE_NAMES = {
+  R0: "First Defensible Evaluation",
+  R1: "Team Evaluation & Collaboration",
+  R2: "Repeatability, Reporting & Operations",
+  R3: "Marketplace Supply, Discovery, Matching & Trust",
+  R4: "Intelligence, Scenarios, TCO & Agents",
+  R5: "Enterprise Integrations, Compliance, Globalization & Scale",
+} as const;
+const PIPELINE_ID = "10000000-0000-4000-8000-000000000001";
+const TEAM_PLA_ID = "30000000-0000-4000-8000-000000000001";
+const STAGE_IDS = {
+  planned: "20000000-0000-4000-8000-000000000001",
+  started: "20000000-0000-4000-8000-000000000002",
+  completed: "20000000-0000-4000-8000-000000000003",
+  canceled: "20000000-0000-4000-8000-000000000004",
+} as const;
+const RELEASE_IDS = {
+  R0: "40000000-0000-4000-8000-000000000000",
+  R1: "40000000-0000-4000-8000-000000000001",
+  R2: "40000000-0000-4000-8000-000000000002",
+  R3: "40000000-0000-4000-8000-000000000003",
+  R4: "40000000-0000-4000-8000-000000000004",
+  R5: "40000000-0000-4000-8000-000000000005",
+} as const;
+
+function stableIssueId(identifier: string): string {
+  const suffix = [...identifier]
+    .map((character) => character.charCodeAt(0).toString(16).padStart(2, "0"))
+    .join("")
+    .padStart(12, "0")
+    .slice(-12);
+  return `00000000-0000-4000-8000-${suffix}`;
+}
+
 function liveIssue(
   identifier: string,
   releases: string[] = [],
@@ -49,6 +85,7 @@ function liveIssue(
 ): Record<string, unknown> {
   const team = identifier.split("-")[0];
   return {
+    linearId: stableIssueId(identifier),
     identifier,
     title: identifier,
     descriptionFingerprint: "0".repeat(64),
@@ -62,7 +99,7 @@ function liveIssue(
     assignee: null,
     assigneeId: null,
     team,
-    teamId: `team-${team.toLowerCase()}`,
+    teamId: team === "PLA" ? TEAM_PLA_ID : `team-${team.toLowerCase()}`,
     projectId: "project-1",
     project: "Production project",
     milestoneId: "milestone-1",
@@ -80,8 +117,10 @@ function fixture(options: FixtureOptions = {}) {
   const featureDependencies = join(dir, "feature-dependencies.json");
   const runtimeDependencies = join(dir, "runtime-dependencies.json");
   const releasePlan = join(dir, "release-plan.json");
+  const releaseCatalog = join(dir, "releases.json");
   const snapshot = join(dir, "linear-snapshot.json");
   const linearProjectScope = join(dir, "linear-project-scope.json");
+  const linearReleaseScope = join(dir, "linear-release-scope.json");
   const out = join(dir, "plan.json");
 
   writeFileSync(
@@ -133,6 +172,44 @@ function fixture(options: FixtureOptions = {}) {
       projects: [{ id: "project-1", name: "Production project" }],
     }),
   );
+  writeFileSync(
+    releaseCatalog,
+    JSON.stringify({
+      releases: Object.entries(RELEASE_NAMES).map(([id, name], sequence) => ({
+        id,
+        name,
+        sequence,
+        customerHypothesis: "customer",
+        operationalHypothesis: "operational",
+        pilot: "pilot",
+        metrics: ["metric"],
+        customerGate: "customer gate",
+        operationalGate: "operational gate",
+      })),
+    }),
+  );
+  writeFileSync(
+    linearReleaseScope,
+    JSON.stringify({
+      schemaVersion: 1,
+      evidence: {
+        capturedAt: "2026-07-15T00:00:00.000Z",
+        source: "live Linear capture",
+        validationTrigger: "recapture through GraphQL before mutation",
+      },
+      pipeline: {
+        id: PIPELINE_ID,
+        name: "Sourcera delivery",
+        type: "scheduled",
+        plannedStage: { id: STAGE_IDS.planned, name: "Planned", position: 0 },
+        teams: [{ id: TEAM_PLA_ID, key: "PLA" }],
+      },
+      releases: Object.keys(RELEASE_NAMES).map((version) => ({
+        id: RELEASE_IDS[version as keyof typeof RELEASE_IDS],
+        version,
+      })),
+    }),
+  );
 
   const related = "related:PLA-1:PLA-4";
   writeFileSync(
@@ -152,24 +229,59 @@ function fixture(options: FixtureOptions = {}) {
         ],
         releasePipelines: options.fingerprintPipelines ?? [
           {
-            id: "pipeline",
+            id: PIPELINE_ID,
             name: "Sourcera delivery",
             updatedAt: "2026-07-15T00:00:00.000Z",
+            archivedAt: null,
             type: "scheduled",
             isProduction: true,
-            teams: ["PLA"],
-            stages: [{ id: "stage", name: "Planned", type: "planned" }],
+            teams: [{ id: TEAM_PLA_ID, key: "PLA" }],
+            stages: [
+              {
+                id: STAGE_IDS.planned,
+                name: "Planned",
+                type: "planned",
+                archivedAt: null,
+                position: 0,
+                frozen: false,
+              },
+              {
+                id: STAGE_IDS.started,
+                name: "In Progress",
+                type: "started",
+                archivedAt: null,
+                position: 1,
+                frozen: false,
+              },
+              {
+                id: STAGE_IDS.completed,
+                name: "Released",
+                type: "completed",
+                archivedAt: null,
+                position: 2,
+                frozen: false,
+              },
+              {
+                id: STAGE_IDS.canceled,
+                name: "Canceled",
+                type: "canceled",
+                archivedAt: null,
+                position: 3,
+                frozen: false,
+              },
+            ],
           },
         ],
         releases: options.fingerprintReleases ?? [
           ...["R0", "R1", "R2", "R3", "R4", "R5"].map(
             (version) => ({
-              id: `release-${version.toLowerCase()}`,
-              name: version,
+              id: RELEASE_IDS[version as keyof typeof RELEASE_IDS],
+              name: RELEASE_NAMES[version as keyof typeof RELEASE_NAMES],
               version,
               updatedAt: "2026-07-15T00:00:00.000Z",
-              pipeline: "pipeline",
-              stage: "stage",
+              archivedAt: null,
+              pipeline: PIPELINE_ID,
+              stage: STAGE_IDS.planned,
               stageType: "planned",
             }),
           ),
@@ -180,6 +292,7 @@ function fixture(options: FixtureOptions = {}) {
             id: "project-1",
             name: "Production project",
             updatedAt: "2026-07-15T00:00:00.000Z",
+            archivedAt: null,
           },
         ],
         projectMilestones: options.fingerprintMilestones ?? [
@@ -188,6 +301,7 @@ function fixture(options: FixtureOptions = {}) {
             name: "Production evidence closed",
             projectId: "project-1",
             project: "Production project",
+            archivedAt: null,
           },
         ],
       },
@@ -201,8 +315,10 @@ function fixture(options: FixtureOptions = {}) {
     featureDependencies,
     runtimeDependencies,
     releasePlan,
+    releaseCatalog,
     snapshot,
     linearProjectScope,
+    linearReleaseScope,
     out,
   };
 }
@@ -230,8 +346,12 @@ function run(
       value.runtimeDependencies,
       "--release-plan",
       value.releasePlan,
+      "--release-catalog",
+      value.releaseCatalog,
       "--linear-project-scope",
       value.linearProjectScope,
+      "--linear-release-scope",
+      value.linearReleaseScope,
       "--snapshot",
       value.snapshot,
       "--out",
@@ -251,6 +371,15 @@ function mutateSnapshot(
   writeFileSync(value.snapshot, JSON.stringify(snapshot));
 }
 
+function mutateJson(
+  path: string,
+  mutate: (value: Record<string, any>) => void,
+): void {
+  const value = JSON.parse(readFileSync(path, "utf8"));
+  mutate(value);
+  writeFileSync(path, JSON.stringify(value));
+}
+
 test("plans only release drift and missing canonical blocks with exact rollback", () => {
   const value = fixture();
   try {
@@ -264,8 +393,8 @@ test("plans only release drift and missing canonical blocks with exact rollback"
         sourceId: "F-001",
         before: ["R1"],
         after: ["R0"],
-        beforeReleaseIds: ["release-r1"],
-        afterReleaseIds: ["release-r0"],
+        beforeReleaseIds: [RELEASE_IDS.R1],
+        afterReleaseIds: [RELEASE_IDS.R0],
       },
     ]);
     assert.deepEqual(plan.blockAdditions, [
@@ -298,9 +427,24 @@ test("plans only release drift and missing canonical blocks with exact rollback"
     ]);
     assert.deepEqual(plan.guards, {
       issues: [
-        { issueId: "PLA-1", updatedAt: "2026-07-15T00:00:05.000Z" },
-        { issueId: "PLA-2", updatedAt: "2026-07-15T00:00:05.000Z" },
-        { issueId: "PLA-3", updatedAt: "2026-07-15T00:00:05.000Z" },
+        {
+          issueId: "PLA-1",
+          linearId: stableIssueId("PLA-1"),
+          teamId: TEAM_PLA_ID,
+          updatedAt: "2026-07-15T00:00:05.000Z",
+        },
+        {
+          issueId: "PLA-2",
+          linearId: stableIssueId("PLA-2"),
+          teamId: TEAM_PLA_ID,
+          updatedAt: "2026-07-15T00:00:05.000Z",
+        },
+        {
+          issueId: "PLA-3",
+          linearId: stableIssueId("PLA-3"),
+          teamId: TEAM_PLA_ID,
+          updatedAt: "2026-07-15T00:00:05.000Z",
+        },
       ],
     });
     assert.deepEqual(plan.rollback.releaseChanges, [
@@ -309,8 +453,8 @@ test("plans only release drift and missing canonical blocks with exact rollback"
         sourceId: "F-001",
         before: ["R0"],
         after: ["R1"],
-        beforeReleaseIds: ["release-r0"],
-        afterReleaseIds: ["release-r1"],
+        beforeReleaseIds: [RELEASE_IDS.R0],
+        afterReleaseIds: [RELEASE_IDS.R1],
       },
     ]);
     assert.deepEqual(plan.rollback.blockRemovals, plan.blockAdditions);
@@ -324,6 +468,8 @@ test("plans only release drift and missing canonical blocks with exact rollback"
       "featureDependencies",
       "inventory",
       "linearProjectScope",
+      "linearReleaseScope",
+      "releaseCatalog",
       "releasePlan",
       "runtimeDependencies",
       "snapshot",
@@ -610,6 +756,7 @@ test("requires fingerprint projects to exactly match independent scope", () => {
         id: "project-other",
         name: "Other project",
         updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
       },
     ],
   });
@@ -633,8 +780,9 @@ test("fails closed rather than dropping an ungoverned release membership", () =>
         name: "Partner beta",
         version: "partner-beta",
         updatedAt: "2026-07-15T00:00:00.000Z",
-        pipeline: "pipeline",
-        stage: "stage",
+        archivedAt: null,
+        pipeline: PIPELINE_ID,
+        stage: STAGE_IDS.planned,
         stageType: "planned",
       },
     ],
@@ -702,7 +850,7 @@ test("keeps planner output inside root unless the exact override is present", ()
   }
 });
 
-test("never overwrites an input or follows an output symlink", () => {
+test("never overwrites an input or follows an output symlink", (context) => {
   const value = fixture();
   try {
     const inventoryBefore = readFileSync(value.inventory, "utf8");
@@ -719,6 +867,79 @@ test("never overwrites an input or follows an output symlink", () => {
     assert.equal(linked.status, 1);
     assert.match(linked.stderr, /Output path cannot be a symlink/);
     assert.equal(readFileSync(target, "utf8"), "sentinel\n");
+
+    const dangling = join(value.dir, "dangling-plan.json");
+    symlinkSync(join(value.dir, "missing-target.json"), dangling);
+    const danglingResult = run(value, dangling);
+    assert.equal(danglingResult.status, 1);
+    assert.match(danglingResult.stderr, /Output path cannot be a symlink/);
+
+    const directory = join(value.dir, "directory-plan.json");
+    mkdirSync(directory);
+    const directoryResult = run(value, directory);
+    assert.equal(directoryResult.status, 1);
+    assert.match(directoryResult.stderr, /Output path must be a regular file/);
+
+    const fifo = join(value.dir, "fifo-plan.json");
+    const fifoCreation = spawnSync("mkfifo", [fifo], { encoding: "utf8" });
+    if (fifoCreation.status === 0) {
+      const fifoResult = run(value, fifo);
+      assert.equal(fifoResult.status, 1);
+      assert.match(fifoResult.stderr, /Output path must be a regular file/);
+    } else {
+      context.diagnostic("mkfifo unavailable; special-node assertion skipped");
+    }
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("rejects a case-variant output alias on a case-insensitive filesystem", (context) => {
+  const value = fixture();
+  try {
+    const before = readFileSync(value.dispositions, "utf8");
+    const alias = join(value.dir, "Dispositions.json");
+    try {
+      const inputIdentity = statSync(value.dispositions, { bigint: true });
+      const aliasIdentity = statSync(alias, { bigint: true });
+      if (
+        inputIdentity.dev !== aliasIdentity.dev ||
+        inputIdentity.ino !== aliasIdentity.ino
+      ) {
+        context.skip("filesystem is case-sensitive");
+        return;
+      }
+    } catch {
+      context.skip("filesystem is case-sensitive");
+      return;
+    }
+    const result = run(value, alias);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Output path equals input dispositions/);
+    assert.equal(readFileSync(value.dispositions, "utf8"), before);
+    assert.deepEqual(
+      readdirSync(value.dir).filter((name) => name.includes(".tmp-")),
+      [],
+    );
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("rejects a hardlink output alias of an input", () => {
+  const value = fixture();
+  try {
+    const alias = join(value.dir, "dispositions-hardlink.json");
+    const before = readFileSync(value.dispositions, "utf8");
+    linkSync(value.dispositions, alias);
+    const result = run(value, alias);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Output path equals input dispositions/);
+    assert.equal(readFileSync(value.dispositions, "utf8"), before);
+    assert.deepEqual(
+      readdirSync(value.dir).filter((name) => name.includes(".tmp-")),
+      [],
+    );
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
   }
@@ -746,14 +967,17 @@ test("strictly validates every captured issue identity and preservation field", 
     (issue: Record<string, any>) => void,
     RegExp,
   ]> = [
+    ["stable ID", (issue) => { issue.linearId = null; }, /stable Linear ID/],
     ["title", (issue) => { issue.title = ""; }, /invalid title/],
     ["description", (issue) => { issue.descriptionFingerprint = "short"; }, /invalid description fingerprint/],
     ["updatedAt", (issue) => { issue.updatedAt = "not-a-date"; }, /invalid updatedAt/],
+    ["updatedAt offset", (issue) => { issue.updatedAt = "2026-07-15T01:00:00.000+01:00"; }, /invalid updatedAt/],
     ["estimate", (issue) => { issue.estimate = "five"; }, /invalid estimate/],
     ["priority", (issue) => { issue.priority = 9; }, /invalid priority/],
     ["state", (issue) => { issue.state = ""; }, /invalid state/],
     ["state type", (issue) => { issue.stateType = ""; }, /invalid state type/],
     ["archivedAt", (issue) => { issue.archivedAt = "not-a-date"; }, /invalid archivedAt/],
+    ["archive capability", (issue) => { issue.archivedAt = "unavailable"; }, /invalid archivedAt/],
     ["labels", (issue) => { issue.labels = ["feature", "feature"]; }, /invalid labels/],
     ["assignee", (issue) => { issue.assigneeId = "person-1"; }, /partial assignee identity/],
     ["assignee ID", (issue) => { issue.assignee = "Owner"; issue.assigneeId = null; }, /partial assignee identity/],
@@ -789,15 +1013,20 @@ test("strictly validates non-empty release topology and canonical memberships", 
     ["pipelines", (value) => { value.releasePipelines = []; }, /requires non-empty releasePipelines/],
     ["releases", (value) => { value.releases = []; }, /requires non-empty releases/],
     ["pipeline stages", (value) => { value.releasePipelines[0].stages = []; }, /invalid stages/],
-    ["pipeline teams", (value) => { value.releasePipelines[0].teams = ["PLA", "PLA"]; }, /invalid teams/],
+    ["pipeline teams", (value) => { value.releasePipelines[0].teams.push(value.releasePipelines[0].teams[0]); }, /invalid teams/],
     ["pipeline name", (value) => { value.releasePipelines[0].name = ""; }, /invalid or duplicated/],
     ["pipeline updatedAt", (value) => { value.releasePipelines[0].updatedAt = "invalid"; }, /invalid or duplicated/],
     ["pipeline production", (value) => { value.releasePipelines[0].isProduction = "yes"; }, /invalid or duplicated/],
     ["pipeline enum", (value) => { value.releasePipelines[0].type = "manual"; }, /invalid or duplicated/],
-    ["global stage IDs", (value) => { value.releasePipelines.push({ ...value.releasePipelines[0], id: "pipeline-2", stages: [{ id: "stage", name: "Planned", type: "planned" }] }); }, /invalid stages/],
+    ["pipeline archive", (value) => { value.releasePipelines[0].archivedAt = "unavailable"; }, /invalid archivedAt/],
+    ["stage archive", (value) => { value.releasePipelines[0].stages[0].archivedAt = "unavailable"; }, /invalid stages/],
+    ["stage position", (value) => { value.releasePipelines[0].stages[0].position = "first"; }, /invalid stages/],
+    ["stage frozen", (value) => { value.releasePipelines[0].stages[0].frozen = "no"; }, /invalid stages/],
+    ["global stage IDs", (value) => { value.releasePipelines.push({ ...value.releasePipelines[0], id: "pipeline-2", stages: [{ ...value.releasePipelines[0].stages[0] }] }); }, /invalid stages/],
     ["release pipeline", (value) => { value.releases[0].pipeline = "missing"; }, /unknown pipeline/],
     ["release stage", (value) => { value.releases[0].stage = "missing"; }, /unknown stage/],
     ["release stage type", (value) => { value.releases[0].stageType = "released"; }, /stage type differs/],
+    ["release archive", (value) => { value.releases[0].archivedAt = "unavailable"; }, /invalid archivedAt/],
     ["canonical releases", (value) => { value.releases.pop(); }, /missing canonical release R5/],
   ];
   for (const [name, mutate, expected] of cases) {
@@ -819,10 +1048,79 @@ test("accepts the live continuous release pipeline enum", () => {
     mutateSnapshot(value, (snapshot) => {
       snapshot.linearFingerprint.releasePipelines[0].type = "continuous";
     });
+    mutateJson(value.linearReleaseScope, (scope) => {
+      scope.pipeline.type = "continuous";
+    });
     const result = run(value);
     assert.equal(result.status, 0, result.stderr);
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("pins canonical release identities, catalog names, and active production topology", () => {
+  const cases: Array<[
+    string,
+    (value: ReturnType<typeof fixture>) => void,
+    RegExp,
+  ]> = [
+    ["production pipeline", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].isProduction = false;
+    }), /canonical release pipeline must be production/i],
+    ["pipeline archived", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].archivedAt = "2026-07-15T01:00:00.000Z";
+    }), /canonical release pipeline is archived/i],
+    ["team identity", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].teams[0].id = "wrong-team";
+    }), /canonical pipeline teams differ/i],
+    ["release ID", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releases[0].id = "self-attested-release";
+    }), /canonical R0 release identity differs/i],
+    ["release name", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releases[0].name = "Self-attested name";
+    }), /canonical R0 release name differs/i],
+    ["release archived", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releases[0].archivedAt = "2026-07-15T01:00:00.000Z";
+    }), /canonical R0 release is archived/i],
+    ["release canceled", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releases[0].stage = STAGE_IDS.canceled;
+      snapshot.linearFingerprint.releases[0].stageType = "canceled";
+    }), /canonical R0 release is not in the pinned planned stage/i],
+    ["planned stage archived", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].stages[0].archivedAt = "2026-07-15T01:00:00.000Z";
+    }), /canonical planned stage is archived/i],
+    ["planned stage frozen", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].stages[0].frozen = true;
+    }), /canonical planned stage is frozen/i],
+    ["planned stage ID", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].stages[0].id =
+        "20000000-0000-4000-8000-000000000099";
+      for (const release of snapshot.linearFingerprint.releases) {
+        release.stage = "20000000-0000-4000-8000-000000000099";
+      }
+    }), /canonical planned stage identity differs/i],
+    ["planned stage name", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].stages[0].name = "Ready";
+    }), /canonical planned stage name differs/i],
+    ["planned stage position", (value) => mutateSnapshot(value, (snapshot) => {
+      snapshot.linearFingerprint.releasePipelines[0].stages[0].position = 99;
+    }), /canonical planned stage position differs/i],
+    ["mapped team outside pipeline", (value) => mutateSnapshot(value, (snapshot) => {
+      for (const issue of snapshot.linearFingerprint.issues) {
+        issue.teamId = "team-other";
+      }
+    }), /mapped issue team PLA:team-other is absent from canonical pipeline/i],
+  ];
+  for (const [name, mutate, expected] of cases) {
+    const value = fixture();
+    try {
+      mutate(value);
+      const result = run(value);
+      assert.equal(result.status, 1, name);
+      assert.match(result.stderr, expected, name);
+    } finally {
+      rmSync(value.dir, { recursive: true, force: true });
+    }
   }
 });
 
@@ -832,6 +1130,9 @@ test("rejects conflicting stable issue identities without requiring unique displ
     (fingerprint: Record<string, any>) => void,
     RegExp,
   ]> = [
+    ["issue", (value) => {
+      value.issues[1].linearId = value.issues[0].linearId;
+    }, /duplicate stable Linear ID/],
     ["team", (value) => { value.issues[1].teamId = "team-other"; }, /inconsistent team identity/],
     ["assignee", (value) => {
       value.issues[0].assignee = "Owner A";
@@ -869,6 +1170,47 @@ test("rejects conflicting stable issue identities without requiring unique displ
   }
 });
 
+test("strictly validates independent release catalog and Linear release scope", () => {
+  const cases: Array<[
+    string,
+    (value: ReturnType<typeof fixture>) => void,
+    RegExp,
+  ]> = [
+    ["catalog missing", (value) => mutateJson(value.releaseCatalog, (catalog) => {
+      catalog.releases.pop();
+    }), /Release catalog must contain exact R0-R5 sequence/],
+    ["catalog duplicate", (value) => mutateJson(value.releaseCatalog, (catalog) => {
+      catalog.releases.push({ ...catalog.releases[0] });
+    }), /Release catalog must contain exact R0-R5 sequence/],
+    ["catalog malformed", (value) => mutateJson(value.releaseCatalog, (catalog) => {
+      catalog.releases[1].sequence = 8;
+    }), /Release catalog must contain exact R0-R5 sequence/],
+    ["scope missing", (value) => mutateJson(value.linearReleaseScope, (scope) => {
+      scope.releases.pop();
+    }), /Linear release scope must contain exact R0-R5 identities/],
+    ["scope duplicate", (value) => mutateJson(value.linearReleaseScope, (scope) => {
+      scope.releases.push({ ...scope.releases[0] });
+    }), /Linear release scope must contain exact R0-R5 identities/],
+    ["scope malformed", (value) => mutateJson(value.linearReleaseScope, (scope) => {
+      scope.releases[1].version = "R9";
+    }), /Linear release scope must contain exact R0-R5 identities/],
+    ["scope unstable identity", (value) => mutateJson(value.linearReleaseScope, (scope) => {
+      scope.releases[0].id = "release-r0";
+    }), /Linear release scope must contain exact R0-R5 identities/],
+  ];
+  for (const [name, mutate, expected] of cases) {
+    const value = fixture();
+    try {
+      mutate(value);
+      const result = run(value);
+      assert.equal(result.status, 1, name);
+      assert.match(result.stderr, expected, name);
+    } finally {
+      rmSync(value.dir, { recursive: true, force: true });
+    }
+  }
+});
+
 test("requires mapped work to be active and in canonical project topology", () => {
   const cases: Array<[
     string,
@@ -886,6 +1228,28 @@ test("requires mapped work to be active and in canonical project topology", () =
     const value = fixture();
     try {
       mutateSnapshot(value, (snapshot) => mutate(snapshot.linearFingerprint.issues[0]));
+      const result = run(value);
+      assert.equal(result.status, 1, name);
+      assert.match(result.stderr, expected, name);
+    } finally {
+      rmSync(value.dir, { recursive: true, force: true });
+    }
+  }
+});
+
+test("requires mapped project and milestone inventory entries to be active", () => {
+  const cases: Array<[string, (fingerprint: Record<string, any>) => void, RegExp]> = [
+    ["project", (fingerprint) => {
+      fingerprint.projects[0].archivedAt = "2026-07-15T00:00:00.000Z";
+    }, /maps to archived project/],
+    ["milestone", (fingerprint) => {
+      fingerprint.projectMilestones[0].archivedAt = "2026-07-15T00:00:00.000Z";
+    }, /maps to archived milestone/],
+  ];
+  for (const [name, mutate, expected] of cases) {
+    const value = fixture();
+    try {
+      mutateSnapshot(value, (snapshot) => mutate(snapshot.linearFingerprint));
       const result = run(value);
       assert.equal(result.status, 1, name);
       assert.match(result.stderr, expected, name);

@@ -9,6 +9,7 @@ import {
   readFileSync,
   realpathSync,
   renameSync,
+  statSync,
   unlinkSync,
   writeFileSync,
 } from "node:fs";
@@ -37,6 +38,7 @@ import type {
   Disposition,
   ManifestRow,
   ReleaseAssignment,
+  ReleaseDefinition,
   ReleaseId,
   SourceRequirement,
 } from "./lib/model.js";
@@ -84,6 +86,27 @@ interface RelationExpectation {
   relations: string[];
 }
 
+interface LinearReleaseScope {
+  schemaVersion: 1;
+  evidence: {
+    capturedAt: string;
+    source: string;
+    validationTrigger: string;
+  };
+  pipeline: {
+    id: string;
+    name: string;
+    type: string;
+    plannedStage: {
+      id: string;
+      name: string;
+      position: number;
+    };
+    teams: Array<{ id: string; key: string }>;
+  };
+  releases: Array<{ id: string; version: ReleaseId }>;
+}
+
 const RELEASE_SEQUENCE: Record<ReleaseId, number> = {
   R0: 0,
   R1: 1,
@@ -108,7 +131,9 @@ const ARGUMENTS = new Set([
   "--feature-dependencies",
   "--runtime-dependencies",
   "--release-plan",
+  "--release-catalog",
   "--linear-project-scope",
+  "--linear-release-scope",
   "--snapshot",
   "--out",
   "--allow-outside-root",
@@ -149,6 +174,23 @@ function argumentsByName(): Map<string, string> {
 function outputIdentity(path: string): string {
   const parent = realpathSync(dirname(path));
   return resolve(parent, basename(path));
+}
+
+function existingOutputNode(path: string): ReturnType<typeof lstatSync> | null {
+  try {
+    return lstatSync(path);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+function sameFilesystemObject(left: string, right: string): boolean {
+  if (!existsSync(left) || !existsSync(right)) return false;
+  const leftIdentity = statSync(left, { bigint: true });
+  const rightIdentity = statSync(right, { bigint: true });
+  return leftIdentity.dev === rightIdentity.dev &&
+    leftIdentity.ino === rightIdentity.ino;
 }
 
 function inside(root: string, path: string): boolean {
@@ -233,8 +275,107 @@ function validText(value: unknown): value is string {
   return typeof value === "string" && Boolean(value.trim());
 }
 
-function validDate(value: unknown): value is string {
-  return validText(value) && !Number.isNaN(Date.parse(value));
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+function validUtcTimestamp(value: unknown): value is string {
+  if (typeof value !== "string" || !ISO_UTC.test(value)) return false;
+  try {
+    return new Date(value).toISOString() === value;
+  } catch {
+    return false;
+  }
+}
+
+function assertReleaseCatalog(value: unknown): ReleaseDefinition[] {
+  const releases = (value as { releases?: unknown })?.releases;
+  const expected = Object.keys(RELEASE_SEQUENCE) as ReleaseId[];
+  if (
+    !Array.isArray(releases) ||
+    releases.length !== expected.length ||
+    releases.some((row, index) => {
+      const candidate = row as Partial<ReleaseDefinition> | null;
+      return !candidate ||
+        candidate.id !== expected[index] ||
+        candidate.sequence !== index;
+    })
+  ) {
+    throw new Error("Release catalog must contain exact R0-R5 sequence");
+  }
+  for (const row of releases as ReleaseDefinition[]) {
+    if (
+      !validText(row.name) ||
+      !validText(row.customerHypothesis) ||
+      !validText(row.operationalHypothesis) ||
+      !validText(row.pilot) ||
+      !Array.isArray(row.metrics) ||
+      !row.metrics.length ||
+      row.metrics.some((metric) => !validText(metric)) ||
+      new Set(row.metrics).size !== row.metrics.length ||
+      !validText(row.customerGate) ||
+      !validText(row.operationalGate)
+    ) {
+      throw new Error(`Release catalog ${row.id} is incomplete`);
+    }
+  }
+  return releases as ReleaseDefinition[];
+}
+
+function assertLinearReleaseScope(value: unknown): LinearReleaseScope {
+  const scope = value as Partial<LinearReleaseScope> | null;
+  if (
+    !scope ||
+    scope.schemaVersion !== 1 ||
+    !scope.evidence ||
+    !validUtcTimestamp(scope.evidence.capturedAt) ||
+    !validText(scope.evidence.source) ||
+    !validText(scope.evidence.validationTrigger) ||
+    !scope.pipeline ||
+    !validText(scope.pipeline.id) ||
+    !UUID.test(scope.pipeline.id) ||
+    !validText(scope.pipeline.name) ||
+    !PIPELINE_TYPES.has(scope.pipeline.type) ||
+    !scope.pipeline.plannedStage ||
+    !validText(scope.pipeline.plannedStage.id) ||
+    !UUID.test(scope.pipeline.plannedStage.id) ||
+    !validText(scope.pipeline.plannedStage.name) ||
+    typeof scope.pipeline.plannedStage.position !== "number" ||
+    !Number.isFinite(scope.pipeline.plannedStage.position)
+  ) {
+    throw new Error("Linear release scope is incomplete or invalid");
+  }
+  const teams = scope.pipeline.teams;
+  if (
+    !Array.isArray(teams) ||
+    !teams.length ||
+    teams.some(
+      (team) =>
+        !validText(team?.id) ||
+        !UUID.test(team.id) ||
+        !validText(team?.key) ||
+        !/^[A-Z][A-Z0-9]*$/.test(team.key),
+    ) ||
+    new Set(teams.map((team) => team.id)).size !== teams.length ||
+    new Set(teams.map((team) => team.key)).size !== teams.length
+  ) {
+    throw new Error("Linear release scope teams are incomplete or duplicated");
+  }
+  const expected = Object.keys(RELEASE_SEQUENCE) as ReleaseId[];
+  if (
+    !Array.isArray(scope.releases) ||
+    scope.releases.length !== expected.length ||
+    scope.releases.some(
+      (release, index) =>
+        !validText(release?.id) ||
+        !UUID.test(release.id) ||
+        release.version !== expected[index],
+    ) ||
+    new Set(scope.releases.map((release) => release.id)).size !==
+      scope.releases.length
+  ) {
+    throw new Error("Linear release scope must contain exact R0-R5 identities");
+  }
+  return scope as LinearReleaseScope;
 }
 
 function canonicalRelation(value: string): [string, string, string] {
@@ -294,6 +435,15 @@ const paths = {
     argv.get("--linear-project-scope") ??
       "delivery/linear-project-scope.json",
   ),
+  linearReleaseScope: resolve(
+    root,
+    argv.get("--linear-release-scope") ??
+      "delivery/linear-release-scope.json",
+  ),
+  releaseCatalog: resolve(
+    root,
+    argv.get("--release-catalog") ?? "delivery/releases.json",
+  ),
   releasePlan: resolve(
     root,
     argv.get("--release-plan") ?? "delivery/release-plan.json",
@@ -315,8 +465,12 @@ if (allowOutsideRoot !== undefined && allowOutsideRoot !== "true") {
   throw new Error("--allow-outside-root requires true");
 }
 const requestedOutPath = resolve(root, outArg);
-if (existsSync(requestedOutPath) && lstatSync(requestedOutPath).isSymbolicLink()) {
+const outputNode = existingOutputNode(requestedOutPath);
+if (outputNode?.isSymbolicLink()) {
   throw new Error("Output path cannot be a symlink");
+}
+if (outputNode && !outputNode.isFile()) {
+  throw new Error("Output path must be a regular file");
 }
 const outPath = outputIdentity(requestedOutPath);
 const rootIdentity = realpathSync(root);
@@ -324,7 +478,10 @@ if (allowOutsideRoot !== "true" && !inside(rootIdentity, outPath)) {
   throw new Error("Output path must remain inside root");
 }
 for (const [name, inputPath] of Object.entries(paths)) {
-  if (realpathSync(inputPath) === outPath) {
+  if (
+    realpathSync(inputPath) === outPath ||
+    sameFilesystemObject(outPath, inputPath)
+  ) {
     throw new Error(`Output path equals input ${name}`);
   }
 }
@@ -334,10 +491,22 @@ const raw = {
   featureDependencies: readFileSync(paths.featureDependencies, "utf8"),
   inventory: readFileSync(paths.inventory, "utf8"),
   linearProjectScope: readFileSync(paths.linearProjectScope, "utf8"),
+  linearReleaseScope: readFileSync(paths.linearReleaseScope, "utf8"),
+  releaseCatalog: readFileSync(paths.releaseCatalog, "utf8"),
   releasePlan: readFileSync(paths.releasePlan, "utf8"),
   runtimeDependencies: readFileSync(paths.runtimeDependencies, "utf8"),
   snapshot: readFileSync(paths.snapshot, "utf8"),
 };
+
+const releaseCatalog = assertReleaseCatalog(
+  parseJson<unknown>(raw.releaseCatalog, "Release catalog"),
+);
+const releaseCatalogById = new Map(
+  releaseCatalog.map((release) => [release.id, release]),
+);
+const linearReleaseScope = assertLinearReleaseScope(
+  parseJson<unknown>(raw.linearReleaseScope, "Linear release scope"),
+);
 
 const dispositionInput = parseJson<{ overrides: DispositionOverride[] }>(
   raw.dispositions,
@@ -524,12 +693,18 @@ const pipelineById = new Map<
   string,
   LinearFingerprint["releasePipelines"][number]
 >();
-const stageById = new Map<string, { pipelineId: string; type: string }>();
+const stageById = new Map<
+  string,
+  {
+    pipelineId: string;
+    stage: LinearFingerprint["releasePipelines"][number]["stages"][number];
+  }
+>();
 for (const pipeline of snapshot.linearFingerprint.releasePipelines) {
   if (
     !validText(pipeline.id) ||
     !validText(pipeline.name) ||
-    !validDate(pipeline.updatedAt) ||
+    !validUtcTimestamp(pipeline.updatedAt) ||
     !PIPELINE_TYPES.has(pipeline.type) ||
     typeof pipeline.isProduction !== "boolean" ||
     pipelineById.has(pipeline.id)
@@ -537,10 +712,24 @@ for (const pipeline of snapshot.linearFingerprint.releasePipelines) {
     throw new Error(`Linear release pipeline ${String(pipeline.id)} is invalid or duplicated`);
   }
   if (
+    pipeline.archivedAt !== null &&
+    !validUtcTimestamp(pipeline.archivedAt)
+  ) {
+    throw new Error(`Linear release pipeline ${pipeline.id} has invalid archivedAt`);
+  }
+  if (
     !Array.isArray(pipeline.teams) ||
     !pipeline.teams.length ||
-    pipeline.teams.some((team) => !/^[A-Z][A-Z0-9]*$/.test(team)) ||
-    new Set(pipeline.teams).size !== pipeline.teams.length
+    pipeline.teams.some(
+      (team) =>
+        !validText(team?.id) ||
+        !validText(team?.key) ||
+        !/^[A-Z][A-Z0-9]*$/.test(team.key),
+    ) ||
+    new Set(pipeline.teams.map((team) => team.id)).size !==
+      pipeline.teams.length ||
+    new Set(pipeline.teams.map((team) => team.key)).size !==
+      pipeline.teams.length
   ) {
     throw new Error(`Linear release pipeline ${pipeline.id} has invalid teams`);
   }
@@ -553,13 +742,17 @@ for (const pipeline of snapshot.linearFingerprint.releasePipelines) {
       !validText(stage.id) ||
       !validText(stage.name) ||
       !STAGE_TYPES.has(stage.type) ||
+      (stage.archivedAt !== null && !validUtcTimestamp(stage.archivedAt)) ||
+      typeof stage.position !== "number" ||
+      !Number.isFinite(stage.position) ||
+      typeof stage.frozen !== "boolean" ||
       localStageIds.has(stage.id) ||
       stageById.has(stage.id)
     ) {
       throw new Error(`Linear release pipeline ${pipeline.id} has invalid stages`);
     }
     localStageIds.add(stage.id);
-    stageById.set(stage.id, { pipelineId: pipeline.id, type: stage.type });
+    stageById.set(stage.id, { pipelineId: pipeline.id, stage });
   }
   pipelineById.set(pipeline.id, pipeline);
 }
@@ -570,11 +763,17 @@ for (const release of snapshot.linearFingerprint.releases) {
   if (
     !validText(release.id) ||
     !validText(release.name) ||
-    !validDate(release.updatedAt) ||
+    !validUtcTimestamp(release.updatedAt) ||
     releaseIds.has(release.id) ||
     (release.version !== null && !validText(release.version))
   ) {
     throw new Error(`Linear release ${String(release.id)} is invalid or duplicated`);
+  }
+  if (
+    release.archivedAt !== null &&
+    !validUtcTimestamp(release.archivedAt)
+  ) {
+    throw new Error(`Linear release ${release.id} has invalid archivedAt`);
   }
   const pipeline = pipelineById.get(release.pipeline);
   if (!pipeline) {
@@ -584,7 +783,7 @@ for (const release of snapshot.linearFingerprint.releases) {
   if (!stage || stage.pipelineId !== pipeline.id) {
     throw new Error(`Linear release ${release.id} references unknown stage ${release.stage}`);
   }
-  if (stage.type !== release.stageType) {
+  if (stage.stage.type !== release.stageType) {
     throw new Error(`Linear release ${release.id} stage type differs from its pipeline stage`);
   }
   releaseIds.add(release.id);
@@ -600,6 +799,82 @@ for (const release of Object.keys(RELEASE_SEQUENCE) as ReleaseId[]) {
   }
 }
 
+const canonicalPipeline = pipelineById.get(linearReleaseScope.pipeline.id);
+if (!canonicalPipeline) {
+  throw new Error("Canonical release pipeline identity differs from pinned scope");
+}
+if (canonicalPipeline.name !== linearReleaseScope.pipeline.name) {
+  throw new Error("Canonical release pipeline name differs from pinned scope");
+}
+if (canonicalPipeline.type !== linearReleaseScope.pipeline.type) {
+  throw new Error("Canonical release pipeline type differs from pinned scope");
+}
+if (!canonicalPipeline.isProduction) {
+  throw new Error("Canonical release pipeline must be production");
+}
+if (canonicalPipeline.archivedAt !== null) {
+  throw new Error("Canonical release pipeline is archived");
+}
+const normalizedTeams = (teams: Array<{ id: string; key: string }>) =>
+  [...teams]
+    .map(({ id, key }) => ({ id, key }))
+    .sort((left, right) =>
+      left.id.localeCompare(right.id) || left.key.localeCompare(right.key)
+    );
+if (
+  JSON.stringify(normalizedTeams(canonicalPipeline.teams)) !==
+    JSON.stringify(normalizedTeams(linearReleaseScope.pipeline.teams))
+) {
+  throw new Error("Canonical pipeline teams differ from pinned scope");
+}
+const plannedStage = canonicalPipeline.stages.find(
+  (stage) => stage.id === linearReleaseScope.pipeline.plannedStage.id,
+);
+if (!plannedStage || plannedStage.type !== "planned") {
+  throw new Error("Canonical planned stage identity differs from pinned scope");
+}
+if (plannedStage.name !== linearReleaseScope.pipeline.plannedStage.name) {
+  throw new Error("Canonical planned stage name differs from pinned scope");
+}
+if (plannedStage.position !== linearReleaseScope.pipeline.plannedStage.position) {
+  throw new Error("Canonical planned stage position differs from pinned scope");
+}
+if (plannedStage.archivedAt !== null) {
+  throw new Error("Canonical planned stage is archived");
+}
+if (plannedStage.frozen) {
+  throw new Error("Canonical planned stage is frozen");
+}
+for (const scopedRelease of linearReleaseScope.releases) {
+  const catalogRelease = releaseCatalogById.get(scopedRelease.version)!;
+  const liveRelease = snapshot.linearFingerprint.releases.find(
+    (release) => release.id === scopedRelease.id,
+  );
+  if (!liveRelease || liveRelease.version !== scopedRelease.version) {
+    throw new Error(
+      `Canonical ${scopedRelease.version} release identity differs from pinned scope`,
+    );
+  }
+  if (liveRelease.name !== catalogRelease.name) {
+    throw new Error(
+      `Canonical ${scopedRelease.version} release name differs from release catalog`,
+    );
+  }
+  if (liveRelease.archivedAt !== null) {
+    throw new Error(`Canonical ${scopedRelease.version} release is archived`);
+  }
+  if (
+    liveRelease.pipeline !== canonicalPipeline.id ||
+    liveRelease.stage !== plannedStage.id ||
+    liveRelease.stageType !== "planned"
+  ) {
+    throw new Error(
+      `Canonical ${scopedRelease.version} release is not in the pinned planned stage`,
+    );
+  }
+  releaseIdByMembership.set(scopedRelease.version, scopedRelease.id);
+}
+
 const projectById = new Map<
   string,
   LinearFingerprint["projects"][number]
@@ -608,10 +883,16 @@ for (const project of snapshot.linearFingerprint.projects) {
   if (
     !validText(project.id) ||
     !validText(project.name) ||
-    !validDate(project.updatedAt) ||
+    !validUtcTimestamp(project.updatedAt) ||
     projectById.has(project.id)
   ) {
     throw new Error(`Linear project ${String(project.id)} is invalid or duplicated`);
+  }
+  if (
+    project.archivedAt !== null &&
+    !validUtcTimestamp(project.archivedAt)
+  ) {
+    throw new Error(`Linear project ${project.id} has invalid archivedAt`);
   }
   projectById.set(project.id, project);
 }
@@ -634,6 +915,8 @@ for (const milestone of snapshot.linearFingerprint.projectMilestones) {
     !milestone.project?.trim() ||
     milestoneIds.has(milestone.id) ||
     milestoneNames.has(scopedName) ||
+    (milestone.archivedAt !== null &&
+      !validUtcTimestamp(milestone.archivedAt)) ||
     !trackedProjectIds.has(milestone.projectId) ||
     !project ||
     project.name !== milestone.project
@@ -658,6 +941,7 @@ const milestoneIdentityById = new Map(
     `${milestone.name}\u0000${milestone.projectId}\u0000${milestone.project}`,
   ]),
 );
+const stableIssueIds = new Set<string>();
 for (const issue of snapshot.linearFingerprint.issues) {
   if (
     !validText(issue.identifier) ||
@@ -666,13 +950,20 @@ for (const issue of snapshot.linearFingerprint.issues) {
   ) {
     throw new Error(`Linear fingerprint has duplicate or empty issue ${issue.identifier}`);
   }
+  if (typeof issue.linearId !== "string" || !UUID.test(issue.linearId)) {
+    throw new Error(`Linear issue ${issue.identifier} has no valid stable Linear ID`);
+  }
+  if (stableIssueIds.has(issue.linearId)) {
+    throw new Error(`Linear fingerprint has duplicate stable Linear ID ${issue.linearId}`);
+  }
+  stableIssueIds.add(issue.linearId);
   if (!validText(issue.title)) {
     throw new Error(`Linear issue ${issue.identifier} has invalid title`);
   }
   if (!/^[a-f0-9]{64}$/.test(issue.descriptionFingerprint)) {
     throw new Error(`Linear issue ${issue.identifier} has invalid description fingerprint`);
   }
-  if (!validDate(issue.updatedAt)) {
+  if (!validUtcTimestamp(issue.updatedAt)) {
     throw new Error(`Linear issue ${issue.identifier} has invalid updatedAt`);
   }
   if (
@@ -696,7 +987,10 @@ for (const issue of snapshot.linearFingerprint.issues) {
   if (!validText(issue.stateType) || !ISSUE_STATE_TYPES.has(issue.stateType)) {
     throw new Error(`Linear issue ${issue.identifier} has invalid state type`);
   }
-  if (issue.archivedAt !== null && !validDate(issue.archivedAt)) {
+  if (
+    issue.archivedAt !== null &&
+    !validUtcTimestamp(issue.archivedAt)
+  ) {
     throw new Error(`Linear issue ${issue.identifier} has invalid archivedAt`);
   }
   if (
@@ -843,6 +1137,9 @@ for (const mapping of snapshot.issues) {
 }
 const issueBySource = new Map<string, string>();
 const sourceByIssue = new Map<string, string>();
+const canonicalTeamIdentities = new Set(
+  linearReleaseScope.pipeline.teams.map((team) => `${team.key}:${team.id}`),
+);
 for (const requirementId of [...expectedSourceIds].sort(compare)) {
   const rows = mappingRowsBySource.get(requirementId) ?? [];
   const kind = requirementId.startsWith("RG:") ? "Runtime" : "Executable";
@@ -868,10 +1165,19 @@ for (const requirementId of [...expectedSourceIds].sort(compare)) {
   if (issue.archivedAt !== null) {
     throw new Error(`${kind} source ${requirementId} maps to archived issue ${issueId}`);
   }
+  if (!canonicalTeamIdentities.has(`${issue.team}:${issue.teamId}`)) {
+    throw new Error(
+      `Mapped issue team ${issue.team}:${issue.teamId} is absent from canonical pipeline`,
+    );
+  }
   if (!issue.projectId || !trackedProjectIds.has(issue.projectId)) {
     throw new Error(
       `${kind} source ${requirementId} maps outside canonical project scope`,
     );
+  }
+  const project = projectById.get(issue.projectId);
+  if (project?.archivedAt !== null) {
+    throw new Error(`${kind} source ${requirementId} maps to archived project`);
   }
   const milestone = issue.milestoneId
     ? milestoneById.get(issue.milestoneId)
@@ -880,6 +1186,9 @@ for (const requirementId of [...expectedSourceIds].sort(compare)) {
     throw new Error(
       `${kind} source ${requirementId} maps outside canonical milestone inventory`,
     );
+  }
+  if (milestone.archivedAt !== null) {
+    throw new Error(`${kind} source ${requirementId} maps to archived milestone`);
   }
   const priorSource = sourceByIssue.get(issueId);
   if (priorSource) {
@@ -1038,6 +1347,8 @@ const plan = {
     featureDependencies: sha256(raw.featureDependencies),
     inventory: sha256(raw.inventory),
     linearProjectScope: sha256(raw.linearProjectScope),
+    linearReleaseScope: sha256(raw.linearReleaseScope),
+    releaseCatalog: sha256(raw.releaseCatalog),
     releasePlan: sha256(raw.releasePlan),
     runtimeDependencies: sha256(raw.runtimeDependencies),
     snapshot: sha256(raw.snapshot),
@@ -1045,6 +1356,8 @@ const plan = {
   guards: {
     issues: [...guardedIssueIds].sort(compare).map((issueId) => ({
       issueId,
+      linearId: liveById.get(issueId)!.linearId,
+      teamId: liveById.get(issueId)!.teamId,
       updatedAt: liveById.get(issueId)!.updatedAt,
     })),
   },

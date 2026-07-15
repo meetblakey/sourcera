@@ -4,13 +4,26 @@ import type { LinearFingerprint } from "./lib/linear-live.js";
 import {
   linearSyncPreservationFindings,
 } from "./lib/linear-sync.js";
-import type { LinearSyncAllowances } from "./lib/linear-sync.js";
+import type {
+  LinearMilestoneIdentity,
+  LinearSyncAllowances,
+} from "./lib/linear-sync.js";
 import type { Finding, ReleaseId } from "./lib/model.js";
 
 type Issue = LinearFingerprint["issues"][number];
 
+function stableIssueId(identifier: string): string {
+  const suffix = [...identifier]
+    .map((character) => character.charCodeAt(0).toString(16).padStart(2, "0"))
+    .join("")
+    .padStart(12, "0")
+    .slice(-12);
+  return `00000000-0000-4000-8000-${suffix}`;
+}
+
 function issue(identifier: string, release: ReleaseId): Issue {
   return {
+    linearId: stableIssueId(identifier),
     identifier,
     title: `${identifier} title`,
     descriptionFingerprint: `${identifier}-description-hash`,
@@ -45,22 +58,48 @@ function fingerprint(): LinearFingerprint {
         id: "pipeline-1",
         name: "Sourcera Product Delivery",
         updatedAt: "2026-07-15T10:00:00.000Z",
+        archivedAt: null,
         type: "scheduled",
         isProduction: true,
-        teams: ["OPS", "PLA"],
+        teams: [
+          { id: "team-ops", key: "OPS" },
+          { id: "team-pla", key: "PLA" },
+        ],
         stages: [
-          { id: "stage-1", name: "Planned", type: "planned" },
-          { id: "stage-2", name: "Released", type: "released" },
+          {
+            id: "stage-1",
+            name: "Planned",
+            type: "planned",
+            archivedAt: null,
+            position: 0,
+            frozen: false,
+          },
+          {
+            id: "stage-2",
+            name: "Released",
+            type: "completed",
+            archivedAt: null,
+            position: 1,
+            frozen: false,
+          },
         ],
       },
       {
         id: "pipeline-2",
         name: "Archive",
         updatedAt: "2026-07-15T10:00:00.000Z",
-        type: "manual",
+        archivedAt: null,
+        type: "scheduled",
         isProduction: false,
-        teams: ["PLA"],
-        stages: [{ id: "stage-3", name: "Archived", type: "canceled" }],
+        teams: [{ id: "team-pla", key: "PLA" }],
+        stages: [{
+          id: "stage-3",
+          name: "Archived",
+          type: "canceled",
+          archivedAt: null,
+          position: 0,
+          frozen: false,
+        }],
       },
     ],
     releases: [
@@ -69,6 +108,7 @@ function fingerprint(): LinearFingerprint {
         name: "First Defensible Evaluation",
         version: "R0",
         updatedAt: "2026-07-15T10:00:00.000Z",
+        archivedAt: null,
         pipeline: "pipeline-1",
         stage: "stage-1",
         stageType: "planned",
@@ -78,6 +118,7 @@ function fingerprint(): LinearFingerprint {
         name: "Team Evaluation & Collaboration",
         version: "R1",
         updatedAt: "2026-07-15T10:00:00.000Z",
+        archivedAt: null,
         pipeline: "pipeline-1",
         stage: "stage-1",
         stageType: "planned",
@@ -88,6 +129,7 @@ function fingerprint(): LinearFingerprint {
         id: "project-1",
         name: "Sourcera",
         updatedAt: "2026-07-15T10:00:00.000Z",
+        archivedAt: null,
       },
     ],
     projectMilestones: [
@@ -96,6 +138,14 @@ function fingerprint(): LinearFingerprint {
         name: "Existing milestone",
         projectId: "project-1",
         project: "Sourcera",
+        archivedAt: null,
+      },
+      {
+        id: "milestone-required",
+        name: "Required R0 milestone",
+        projectId: "project-1",
+        project: "Sourcera",
+        archivedAt: null,
       },
     ],
   };
@@ -167,6 +217,7 @@ test("rejects every protected issue-field mutation with stable codes", () => {
   const after = clone(before);
   const changed = after.issues[0];
   changed.title = "Changed title";
+  changed.linearId = stableIssueId("PLA-99");
   changed.descriptionFingerprint = "changed-description-hash";
   changed.estimate = null;
   changed.priority = 4;
@@ -188,6 +239,7 @@ test("rejects every protected issue-field mutation with stable codes", () => {
     new Set(codes(linearSyncPreservationFindings(before, after, expected()))),
     new Set([
       "linear_sync_title_changed",
+      "linear_sync_issue_identity_changed",
       "linear_sync_description_changed",
       "linear_sync_estimate_changed",
       "linear_sync_priority_changed",
@@ -205,6 +257,55 @@ test("rejects every protected issue-field mutation with stable codes", () => {
       "linear_sync_milestone_changed",
     ]),
   );
+});
+
+test("fails closed when stable issue identity or archive capability is unavailable", () => {
+  const cases: Array<[
+    string,
+    (before: LinearFingerprint, after: LinearFingerprint) => void,
+    string,
+  ]> = [
+    ["issue identity", (before, after) => {
+      before.issues[0].linearId = null;
+      after.issues[0].linearId = null;
+    }, "linear_sync_issue_identity_unavailable"],
+    ["issue archive", (before, after) => {
+      before.issues[0].archivedAt = "unavailable";
+      after.issues[0].archivedAt = "unavailable";
+    }, "linear_sync_issue_archive_capability_unavailable"],
+    ["pipeline archive", (before, after) => {
+      before.releasePipelines[0].archivedAt = "unavailable";
+      after.releasePipelines[0].archivedAt = "unavailable";
+    }, "linear_sync_release_pipeline_archive_capability_unavailable"],
+    ["stage archive", (before, after) => {
+      before.releasePipelines[0].stages[0].archivedAt = "unavailable";
+      after.releasePipelines[0].stages[0].archivedAt = "unavailable";
+    }, "linear_sync_release_stage_archive_capability_unavailable"],
+    ["release archive", (before, after) => {
+      before.releases[0].archivedAt = "unavailable";
+      after.releases[0].archivedAt = "unavailable";
+    }, "linear_sync_release_archive_capability_unavailable"],
+    ["project archive", (before, after) => {
+      before.projects[0].archivedAt = "unavailable";
+      after.projects[0].archivedAt = "unavailable";
+    }, "linear_sync_project_archive_capability_unavailable"],
+    ["milestone archive", (before, after) => {
+      before.projectMilestones[0].archivedAt = "unavailable";
+      after.projectMilestones[0].archivedAt = "unavailable";
+    }, "linear_sync_project_milestone_archive_capability_unavailable"],
+  ];
+  for (const [name, mutate, expectedCode] of cases) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    mutate(before, after);
+    assert.ok(
+      codes(linearSyncPreservationFindings(before, after, expected())).includes(
+        expectedCode,
+      ),
+      name,
+    );
+  }
 });
 
 test("preserves numeric and null estimates in both directions", () => {
@@ -329,6 +430,69 @@ test("rejects a planned milestone name paired with the stale ID", () => {
     })),
     ["linear_sync_milestone_changed"],
   );
+});
+
+test("validates planned milestone identity against active after-state inventory and project", () => {
+  const cases: Array<[
+    string,
+    (before: LinearFingerprint, after: LinearFingerprint) => LinearMilestoneIdentity,
+    string,
+  ]> = [
+    ["unknown", (_before, after) => {
+      after.issues[0].milestoneId = "milestone-unknown";
+      after.issues[0].milestone = "Unknown";
+      return { id: "milestone-unknown", name: "Unknown" };
+    }, "linear_sync_expected_milestone_missing"],
+    ["name mismatch", (_before, after) => {
+      after.issues[0].milestoneId = "milestone-required";
+      after.issues[0].milestone = "Wrong name";
+      return { id: "milestone-required", name: "Wrong name" };
+    }, "linear_sync_expected_milestone_name_mismatch"],
+    ["cross project", (before, after) => {
+      const secondProject = {
+        id: "project-2",
+        name: "Other",
+        updatedAt: "2026-07-15T10:00:00.000Z",
+        archivedAt: null,
+      };
+      const secondMilestone = {
+        id: "milestone-other",
+        name: "Other milestone",
+        projectId: "project-2",
+        project: "Other",
+        archivedAt: null,
+      };
+      before.projects.push(secondProject);
+      after.projects.push(structuredClone(secondProject));
+      before.projectMilestones.push(secondMilestone);
+      after.projectMilestones.push(structuredClone(secondMilestone));
+      after.issues[0].milestoneId = secondMilestone.id;
+      after.issues[0].milestone = secondMilestone.name;
+      return { id: secondMilestone.id, name: secondMilestone.name };
+    }, "linear_sync_expected_milestone_project_mismatch"],
+    ["archived", (before, after) => {
+      const archivedAt = "2026-07-15T11:00:00.000Z";
+      before.projectMilestones.find((row) => row.id === "milestone-required")!
+        .archivedAt = archivedAt;
+      after.projectMilestones.find((row) => row.id === "milestone-required")!
+        .archivedAt = archivedAt;
+      after.issues[0].milestoneId = "milestone-required";
+      after.issues[0].milestone = "Required R0 milestone";
+      return { id: "milestone-required", name: "Required R0 milestone" };
+    }, "linear_sync_expected_milestone_archived"],
+  ];
+  for (const [name, mutate, expectedCode] of cases) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    const milestone = mutate(before, after);
+    assert.ok(
+      codes(linearSyncPreservationFindings(before, after, expected(), {
+        expectedMilestoneByIssue: new Map([["PLA-1", milestone]]),
+      })).includes(expectedCode),
+      name,
+    );
+  }
 });
 
 test("allows an expected null milestone only when both ID and name clear", () => {
@@ -645,6 +809,30 @@ test("rejects release-pipeline identity and topology drift", () => {
       "linear_sync_release_pipeline_changed",
     ]),
   );
+});
+
+test("rejects release-stage archive, position, and frozen drift", () => {
+  for (const mutate of [
+    (stage: LinearFingerprint["releasePipelines"][number]["stages"][number]) => {
+      stage.archivedAt = "2026-07-15T11:00:00.000Z";
+    },
+    (stage: LinearFingerprint["releasePipelines"][number]["stages"][number]) => {
+      stage.position = 99;
+    },
+    (stage: LinearFingerprint["releasePipelines"][number]["stages"][number]) => {
+      stage.frozen = true;
+    },
+  ]) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    mutate(after.releasePipelines[0].stages[0]);
+    assert.ok(
+      codes(linearSyncPreservationFindings(before, after, expected())).includes(
+        "linear_sync_release_pipeline_changed",
+      ),
+    );
+  }
 });
 
 test("rejects release identity and topology drift", () => {
