@@ -9,10 +9,11 @@
     "typecheck": "tsc --noEmit",
     "validate:boundaries": "tsx ../../scripts/validate-domain-boundaries.ts",
     "validate:deploy": "tsx ../../scripts/validate-deploy-env.ts --domain seller",
-    "vercel-build": "npm run validate:deploy && npm run validate:boundaries && npm run build"
+    "vercel-build": "npm run validate:deploy && npm run validate:boundaries && tsx ../../scripts/run-convex-vercel-build.ts --workspace @sourcera/seller"
   },
   "dependencies": {
     "@sourcera/domain": "0.1.0",
+    "convex": "1.42.2",
     "geist": "1.7.2",
     "next": "16.2.10",
     "pino": "10.3.1",

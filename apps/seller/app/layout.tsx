@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
+import { SourceraConvexProvider } from "./providers";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,7 +20,7 @@ export default function RootLayout({
       lang="en"
     >
       <body className="bg-background text-foreground antialiased">
-        {children}
+        <SourceraConvexProvider>{children}</SourceraConvexProvider>
       </body>
     </html>
   );

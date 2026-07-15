@@ -48,7 +48,7 @@ test("buyer and seller are independent Next.js applications", async () => {
     );
     assert.equal(
       scripts["vercel-build"],
-      "npm run validate:deploy && npm run validate:boundaries && npm run build",
+      `npm run validate:deploy && npm run validate:boundaries && tsx ../../scripts/run-convex-vercel-build.ts --workspace @sourcera/${domain}`,
     );
 
     await access(path.join(repositoryRoot, `apps/${domain}/app/page.tsx`));

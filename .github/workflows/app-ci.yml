@@ -22,6 +22,15 @@ jobs:
           cache: npm
           node-version: 24
       - run: npm ci
+      - name: Generate Convex clients locally and reject drift before cloud deploy
+        env:
+          CONVEX_AGENT_MODE: anonymous
+          CONVEX_DEPLOY_KEY: ""
+        run: |
+          set -e
+          trap 'rm -f .env.local' EXIT
+          npx convex dev --once
+          git diff --exit-code -- convex/_generated
       - name: Validate Marketplace deployment
         run: npm run validate:deploy
         env:
@@ -35,3 +44,40 @@ jobs:
         env:
           SOURCERA_DOMAIN: seller
       - run: npm run verify
+
+  convex-preview:
+    if: github.event_name == 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_PREVIEW_DEPLOY_KEY }}
+      CONVEX_EXPECTED_PROJECT: ${{ vars.CONVEX_EXPECTED_PROJECT }}
+      CONVEX_PREVIEW_NAME: sourcera-pr-${{ github.event.pull_request.number }}-${{ github.sha }}
+      SOURCERA_COMMIT_SHA: ${{ github.sha }}
+      SOURCERA_ENV: preview
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 24
+      - run: npm ci
+      - name: Validate Preview target
+        run: npm run convex:validate:predeploy
+      - name: Deploy Convex Preview and build all applications
+        run: >-
+          npx convex deploy
+          --preview-name "$CONVEX_PREVIEW_NAME"
+          --cmd "npm run convex:build"
+          --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL
+          --message "$SOURCERA_COMMIT_SHA"
+      - name: Prove transactional reactivity
+        run: |
+          set -o pipefail
+          npm run convex:probe | tee "$RUNNER_TEMP/convex-foundation.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: convex-foundation-${{ github.sha }}
+          path: ${{ runner.temp }}/convex-foundation.json
