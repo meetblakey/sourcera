@@ -16,6 +16,7 @@
     "clean:generated": "tsx scripts/clean-generated-output.ts",
     "convex:build": "tsx scripts/validate-convex-env.ts --phase full --write-github-env && npm run build:all",
     "convex:codegen": "convex codegen",
+    "convex:deploy:production": "tsx scripts/deploy-convex-production.ts",
     "convex:probe": "tsx scripts/run-convex-foundation-probe.ts",
     "convex:validate:predeploy": "tsx scripts/validate-convex-env.ts --phase predeploy",
     "dev": "next dev",
@@ -29,6 +30,7 @@
     "validate:convex-client": "tsx scripts/validate-convex-env.ts --phase client",
     "validate:deploy": "tsx scripts/validate-deploy-env.ts --domain marketplace",
     "vercel-build": "npm run validate:deploy && npm run validate:boundaries && tsx scripts/run-convex-vercel-build.ts",
+    "vercel:stage:production": "tsx scripts/stage-vercel-production.ts",
     "verify": "npm run lint && npm run validate:boundaries && npm run typecheck:all && npm test && npm run build:all"
   },
   "dependencies": {

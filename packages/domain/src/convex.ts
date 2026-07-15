@@ -3,6 +3,8 @@ export type ConvexEnvironment = Record<string, string | undefined>;
 const FULL_GIT_COMMIT_SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 const PREVIEW_DEPLOY_KEY =
   /^preview:([a-z0-9](?:[a-z0-9-]{0,62})):([a-z0-9](?:[a-z0-9-]{0,62}))\|(.+)$/;
+const PRODUCTION_DEPLOY_KEY =
+  /^prod:([a-z0-9](?:[a-z0-9-]{0,62}))\|(.+)$/;
 const PREVIEW_NAME = /^[a-z0-9](?:[a-z0-9-]{0,62})$/;
 const PREVIEW_ENVIRONMENTS = new Set(["ci", "preview", "staging", "test"]);
 
@@ -23,6 +25,60 @@ export interface ConvexPreviewClientIdentity {
 export interface ConvexPreviewIdentity
   extends ConvexPreviewKeyIdentity,
     ConvexPreviewClientIdentity {
+}
+
+export interface ConvexProductionKeyIdentity {
+  commitSha: string;
+  deploymentName: string;
+  deploymentUrl: string;
+  environment: "production";
+}
+
+export interface ConvexProductionClientIdentity {
+  commitSha: string;
+  deploymentName: string;
+  deploymentUrl: string;
+  environment: "production";
+}
+
+export interface ConvexProductionIdentity
+  extends ConvexProductionKeyIdentity,
+    ConvexProductionClientIdentity {
+}
+
+export type ConvexDeploymentIdentity =
+  | ConvexPreviewIdentity
+  | ConvexProductionIdentity;
+
+export interface ConvexProductionTarget {
+  deploymentName: string;
+  deploymentUrl: string;
+}
+
+export type ConvexProductionProbeOperation = "clear" | "observe" | "record";
+
+export function createConvexProductionProbePayload(
+  operation: ConvexProductionProbeOperation,
+  args: {
+    commitSha: string;
+    deploymentName: string;
+    environment: string;
+    issuedAt: number;
+    nonceHash: string;
+    releaseApprovedSha: string;
+    sample: number;
+  },
+): string {
+  return [
+    operation,
+    args.commitSha,
+    args.deploymentName,
+    args.environment,
+    String(args.issuedAt),
+    args.nonceHash,
+    args.releaseApprovedSha,
+    String(args.sample),
+  ].join("\n");
 }
 
 export interface ConvexFoundationHealthResult {
@@ -54,6 +110,17 @@ function validateCommitBoundPreviewName(
 ) {
   if (!previewName.endsWith(`-${commitSha.toLowerCase()}`)) {
     throw new Error("CONVEX_PREVIEW_NAME must match SOURCERA_COMMIT_SHA");
+  }
+}
+
+function validateProductionReleaseApproval(
+  environment: ConvexEnvironment,
+  commitSha: string,
+) {
+  if (environment.SOURCERA_RELEASE_APPROVED_SHA !== commitSha) {
+    throw new Error(
+      "SOURCERA_RELEASE_APPROVED_SHA must match SOURCERA_COMMIT_SHA",
+    );
   }
 }
 
@@ -112,6 +179,25 @@ export function readConvexDeploymentUrl(value: string): string {
   }
 
   return url.toString().replace(/\/$/, "");
+}
+
+export function readConvexProductionTarget(
+  deploymentName: string,
+  deploymentUrl: string,
+): ConvexProductionTarget {
+  if (!PREVIEW_NAME.test(deploymentName)) {
+    throw new Error("Pinned Convex production deployment name is invalid");
+  }
+  const normalizedUrl = readConvexDeploymentUrl(deploymentUrl);
+  const hostname = new URL(normalizedUrl).hostname;
+  const escapedName = deploymentName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const productionHostname = new RegExp(
+    `^${escapedName}(?:\\.[a-z]{2}(?:-[a-z0-9]+)+-[0-9]+)?\\.convex\\.cloud$`,
+  );
+  if (!productionHostname.test(hostname)) {
+    throw new Error("Pinned Convex production URL must exactly name its deployment");
+  }
+  return { deploymentName, deploymentUrl: normalizedUrl };
 }
 
 export function readRequiredConvexPreviewKeyIdentity(
@@ -226,6 +312,170 @@ export function readRequiredConvexPreviewClientIdentity(
   };
 }
 
+export function readRequiredConvexProductionKeyIdentity(
+  environment: ConvexEnvironment,
+  target: ConvexProductionTarget,
+): ConvexProductionKeyIdentity {
+  if (environment.CONVEX_DEPLOYMENT) {
+    throw new Error(
+      "CONVEX_DEPLOYMENT is forbidden for production delivery; use the pinned production deploy key",
+    );
+  }
+  if (environment.CONVEX_PREVIEW_NAME) {
+    throw new Error("CONVEX_PREVIEW_NAME is forbidden for production delivery");
+  }
+
+  const commitSha = deploymentCommit(environment);
+  const runtimeEnvironment = deploymentEnvironment(environment);
+  const missing = [
+    !environment.CONVEX_DEPLOY_KEY && "CONVEX_DEPLOY_KEY",
+    !commitSha && "SOURCERA_COMMIT_SHA",
+    !runtimeEnvironment && "SOURCERA_ENV",
+    !environment.SOURCERA_RELEASE_APPROVED_SHA &&
+      "SOURCERA_RELEASE_APPROVED_SHA",
+  ].filter(Boolean);
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required Convex production keys: ${missing.join(", ")}`,
+    );
+  }
+
+  const keyMatch = PRODUCTION_DEPLOY_KEY.exec(environment.CONVEX_DEPLOY_KEY!);
+  if (!keyMatch || keyMatch[2].length < 8) {
+    throw new Error("CONVEX_DEPLOY_KEY must be a Convex production deploy key");
+  }
+  const validatedTarget = readConvexProductionTarget(
+    target.deploymentName,
+    target.deploymentUrl,
+  );
+  if (validatedTarget.deploymentName !== keyMatch[1]) {
+    throw new Error("CONVEX_DEPLOY_KEY does not match the pinned production target");
+  }
+  if (!FULL_GIT_COMMIT_SHA.test(commitSha!)) {
+    throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
+  }
+  if (runtimeEnvironment !== "production") {
+    throw new Error("SOURCERA_ENV must be production for a production deploy key");
+  }
+  validateProductionReleaseApproval(environment, commitSha!);
+
+  return {
+    commitSha: commitSha!,
+    deploymentName: keyMatch[1],
+    deploymentUrl: validatedTarget.deploymentUrl,
+    environment: "production",
+  };
+}
+
+export function readRequiredConvexProductionClientIdentity(
+  environment: ConvexEnvironment,
+  target: ConvexProductionTarget,
+): ConvexProductionClientIdentity {
+  if (environment.CONVEX_DEPLOYMENT) {
+    throw new Error(
+      "CONVEX_DEPLOYMENT is forbidden for production delivery; use the URL supplied by Convex deploy",
+    );
+  }
+  if (environment.CONVEX_PREVIEW_NAME) {
+    throw new Error("CONVEX_PREVIEW_NAME is forbidden for production delivery");
+  }
+
+  const commitSha = deploymentCommit(environment);
+  const runtimeEnvironment = deploymentEnvironment(environment);
+  const missing = [
+    !environment.NEXT_PUBLIC_CONVEX_URL && "NEXT_PUBLIC_CONVEX_URL",
+    !commitSha && "SOURCERA_COMMIT_SHA",
+    !runtimeEnvironment && "SOURCERA_ENV",
+    !environment.SOURCERA_RELEASE_APPROVED_SHA &&
+      "SOURCERA_RELEASE_APPROVED_SHA",
+  ].filter(Boolean);
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required Convex production keys: ${missing.join(", ")}`,
+    );
+  }
+  const validatedTarget = readConvexProductionTarget(
+    target.deploymentName,
+    target.deploymentUrl,
+  );
+  if (!FULL_GIT_COMMIT_SHA.test(commitSha!)) {
+    throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
+  }
+  if (runtimeEnvironment !== "production") {
+    throw new Error("SOURCERA_ENV must be production for a production deploy key");
+  }
+  validateProductionReleaseApproval(environment, commitSha!);
+
+  const deploymentUrl = readConvexDeploymentUrl(
+    environment.NEXT_PUBLIC_CONVEX_URL!,
+  );
+  if (deploymentUrl !== validatedTarget.deploymentUrl) {
+    throw new Error("NEXT_PUBLIC_CONVEX_URL does not match the pinned production target");
+  }
+
+  return {
+    commitSha: commitSha!,
+    deploymentName: validatedTarget.deploymentName,
+    deploymentUrl,
+    environment: "production",
+  };
+}
+
+export function readRequiredConvexProductionIdentity(
+  environment: ConvexEnvironment,
+  target: ConvexProductionTarget,
+): ConvexProductionIdentity {
+  const keyIdentity = readRequiredConvexProductionKeyIdentity(environment, target);
+  const clientIdentity = readRequiredConvexProductionClientIdentity(
+    environment,
+    target,
+  );
+  return { ...clientIdentity, ...keyIdentity };
+}
+
+function usesProductionConvexLane(environment: ConvexEnvironment): boolean {
+  return deploymentEnvironment(environment) === "production";
+}
+
+export function readRequiredConvexDeploymentKeyIdentity(
+  environment: ConvexEnvironment,
+  productionTarget?: ConvexProductionTarget,
+): ConvexPreviewKeyIdentity | ConvexProductionKeyIdentity {
+  if (!usesProductionConvexLane(environment)) {
+    return readRequiredConvexPreviewKeyIdentity(environment);
+  }
+  if (!productionTarget) {
+    throw new Error("Convex production target is not repo-pinned");
+  }
+  return readRequiredConvexProductionKeyIdentity(environment, productionTarget);
+}
+
+export function readRequiredConvexDeploymentClientIdentity(
+  environment: ConvexEnvironment,
+  productionTarget?: ConvexProductionTarget,
+): ConvexPreviewClientIdentity | ConvexProductionClientIdentity {
+  if (!usesProductionConvexLane(environment)) {
+    return readRequiredConvexPreviewClientIdentity(environment);
+  }
+  if (!productionTarget) {
+    throw new Error("Convex production target is not repo-pinned");
+  }
+  return readRequiredConvexProductionClientIdentity(environment, productionTarget);
+}
+
+export function readRequiredConvexDeploymentIdentity(
+  environment: ConvexEnvironment,
+  productionTarget?: ConvexProductionTarget,
+): ConvexDeploymentIdentity {
+  if (!usesProductionConvexLane(environment)) {
+    return readRequiredConvexPreviewIdentity(environment);
+  }
+  if (!productionTarget) {
+    throw new Error("Convex production target is not repo-pinned");
+  }
+  return readRequiredConvexProductionIdentity(environment, productionTarget);
+}
+
 export function createConvexFoundationHealthResult(
   environment: ConvexEnvironment,
   result: Pick<
@@ -233,17 +483,22 @@ export function createConvexFoundationHealthResult(
     "assertion" | "observationLatencyMs" | "result"
   >,
   checkedAt = new Date(),
+  productionTarget?: ConvexProductionTarget,
 ): ConvexFoundationHealthResult {
   if (!Number.isFinite(result.observationLatencyMs) || result.observationLatencyMs < 0) {
     throw new Error("observationLatencyMs must be a non-negative number");
   }
-  const identity = readRequiredConvexPreviewIdentity(environment);
+  const identity = readRequiredConvexDeploymentClientIdentity(
+    environment,
+    productionTarget,
+  );
 
   return {
     assertion: result.assertion,
     checkedAt: checkedAt.toISOString(),
     commitSha: identity.commitSha,
-    deployment: identity.previewName,
+    deployment:
+      "previewName" in identity ? identity.previewName : identity.deploymentName,
     environment: identity.environment,
     event: "convex_foundation_health_result",
     observationLatencyMs: result.observationLatencyMs,

@@ -1,0 +1,44 @@
+{
+  "convexProduction": {
+    "deploymentName": null,
+    "deploymentUrl": null
+  },
+  "vercelProduction": {
+    "teamId": "team_6nIbCLwuaHPTHviqgckfTiyn",
+    "targets": [
+      {
+        "application": "marketplace",
+        "autoExposeSystemEnvs": true,
+        "cwd": ".",
+        "productionDomain": null,
+        "productionBranch": "main",
+        "projectId": "prj_FIBSOffJX8GtY8JHTSXKixfVryBp",
+        "projectName": "sourcera",
+        "rootDirectory": null,
+        "sourceFilesOutsideRootDirectory": true
+      },
+      {
+        "application": "buyer",
+        "autoExposeSystemEnvs": true,
+        "cwd": ".",
+        "productionDomain": "sourcera-buyer-meetblakeys-projects.vercel.app",
+        "productionBranch": "main",
+        "projectId": "prj_ZbZgRUXjPzgv6Oqepe13W6yV2AyN",
+        "projectName": "sourcera-buyer",
+        "rootDirectory": "apps/buyer",
+        "sourceFilesOutsideRootDirectory": true
+      },
+      {
+        "application": "seller",
+        "autoExposeSystemEnvs": true,
+        "cwd": ".",
+        "productionDomain": "sourcera-seller-meetblakeys-projects.vercel.app",
+        "productionBranch": "main",
+        "projectId": "prj_Vd0Roi2q0XPkphCrn8rtoNxI1DkS",
+        "projectName": "sourcera-seller",
+        "rootDirectory": "apps/seller",
+        "sourceFilesOutsideRootDirectory": true
+      }
+    ]
+  }
+}

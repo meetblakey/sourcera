@@ -31,3 +31,7 @@ Open `/api/health`. The returned commit must equal `commit_sha`.
 4. Record the deployment URL, commit, result, and time in the evidence receipt.
 
 Do not send customer traffic until health and rollback checks pass.
+
+## Production
+
+Use [Convex and Vercel production release](./convex-production.md). Never promote a Preview-bound app artifact or use a Preview key against Production.

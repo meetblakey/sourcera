@@ -7,11 +7,13 @@ import {
 import path from "node:path";
 import ts from "typescript";
 
+import productionTargets from "../config/production-targets.json";
 import {
-  readRequiredConvexPreviewClientIdentity,
-  readRequiredConvexPreviewIdentity,
-  readRequiredConvexPreviewKeyIdentity,
+  readRequiredConvexDeploymentClientIdentity,
+  readRequiredConvexDeploymentIdentity,
+  readRequiredConvexDeploymentKeyIdentity,
 } from "@sourcera/domain/convex";
+import { readPinnedConvexProductionTarget } from "./lib/convex-production-target";
 
 const ignoredDirectories = new Set([".next", "node_modules"]);
 const queryFunctions = new Set(["fetchQuery", "preloadQuery", "runQuery"]);
@@ -178,13 +180,21 @@ if (!phase || !["client", "full", "predeploy"].includes(phase)) {
   throw new Error("--phase must be client, full, or predeploy");
 }
 rejectConvexPollingWatchers(path.resolve(__dirname, ".."));
+const runtimeEnvironment =
+  process.env.SOURCERA_ENV ??
+  process.env.VERCEL_TARGET_ENV ??
+  process.env.VERCEL_ENV;
+const productionTarget =
+  runtimeEnvironment === "production"
+    ? readPinnedConvexProductionTarget(productionTargets)
+    : undefined;
 
 const identity =
   phase === "predeploy"
-    ? readRequiredConvexPreviewKeyIdentity(process.env)
+    ? readRequiredConvexDeploymentKeyIdentity(process.env, productionTarget)
     : phase === "client"
-      ? readRequiredConvexPreviewClientIdentity(process.env)
-      : readRequiredConvexPreviewIdentity(process.env);
+      ? readRequiredConvexDeploymentClientIdentity(process.env, productionTarget)
+      : readRequiredConvexDeploymentIdentity(process.env, productionTarget);
 
 if (process.argv.includes("--write-github-env")) {
   if (phase === "predeploy" || !("deploymentUrl" in identity)) {
@@ -205,7 +215,9 @@ process.stdout.write(
     commitSha: identity.commitSha,
     environment: identity.environment,
     phase,
-    previewName: identity.previewName,
     result: "passed",
+    ...("previewName" in identity
+      ? { previewName: identity.previewName }
+      : { deploymentName: identity.deploymentName }),
   })}\n`,
 );
