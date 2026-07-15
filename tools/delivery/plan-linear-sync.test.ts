@@ -616,6 +616,76 @@ test("rejects a cycle closed by a planned block among mapped source issues", () 
   }
 });
 
+test("rejects a cycle closed through an active unmapped captured issue", () => {
+  const first = "blocks:PLA-1:PLA-4";
+  const second = "blocks:PLA-4:PLA-2";
+  const value = fixture({
+    fingerprintIssues: [
+      liveIssue("PLA-1", ["R1"], [first]),
+      liveIssue("PLA-2", ["R0"], [second]),
+      liveIssue("PLA-3", ["R0"]),
+      liveIssue("PLA-4", [], [first, second]),
+    ],
+  });
+  try {
+    const result = run(value);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Planned Linear blocks create a cycle/);
+    assert.throws(() => readFileSync(value.out, "utf8"));
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("continues to reject a pre-existing active mapped Linear cycle", () => {
+  const foundationToJourney = "blocks:PLA-2:PLA-1";
+  const journeyToProof = "blocks:PLA-1:PLA-3";
+  const proofToFoundation = "blocks:PLA-3:PLA-2";
+  const value = fixture({
+    fingerprintIssues: [
+      liveIssue("PLA-1", ["R0"], [foundationToJourney, journeyToProof]),
+      liveIssue("PLA-2", ["R0"], [foundationToJourney, proofToFoundation]),
+      liveIssue("PLA-3", ["R0"], [journeyToProof, proofToFoundation]),
+    ],
+  });
+  try {
+    const result = run(value);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Planned Linear blocks create a cycle/);
+    assert.throws(() => readFileSync(value.out, "utf8"));
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("does not route cycle detection through canceled or archived intermediaries", () => {
+  for (const disposition of ["canceled", "archived"] as const) {
+    const first = "blocks:PLA-1:PLA-4";
+    const second = "blocks:PLA-4:PLA-2";
+    const intermediary = liveIssue("PLA-4", [], [first, second]);
+    if (disposition === "canceled") {
+      intermediary.state = "Canceled";
+      intermediary.stateType = "canceled";
+    } else {
+      intermediary.archivedAt = "2026-07-15T01:00:00.000Z";
+    }
+    const value = fixture({
+      fingerprintIssues: [
+        liveIssue("PLA-1", ["R1"], [first]),
+        liveIssue("PLA-2", ["R0"], [second]),
+        liveIssue("PLA-3", ["R0"]),
+        intermediary,
+      ],
+    });
+    try {
+      const result = run(value);
+      assert.equal(result.status, 0, `${disposition}: ${result.stderr}`);
+    } finally {
+      rmSync(value.dir, { recursive: true, force: true });
+    }
+  }
+});
+
 test("rejects an existing active mapped block that inverts planned releases", () => {
   const inverted = "blocks:PLA-1:PLA-2";
   const value = fixture({

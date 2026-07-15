@@ -414,6 +414,25 @@ function findCycle(adjacency: Map<string, Set<string>>): string[] | null {
   return null;
 }
 
+function findPath(
+  adjacency: ReadonlyMap<string, ReadonlySet<string>>,
+  start: string,
+  target: string,
+): string[] | null {
+  const visited = new Set<string>();
+  const visit = (node: string, path: string[]): string[] | null => {
+    if (node === target) return path;
+    if (visited.has(node)) return null;
+    visited.add(node);
+    for (const dependent of [...(adjacency.get(node) ?? [])].sort(compare)) {
+      const result = visit(dependent, [...path, dependent]);
+      if (result) return result;
+    }
+    return null;
+  };
+  return visit(start, [start]);
+}
+
 const argv = argumentsByName();
 const root = resolve(argv.get("--root") ?? ".");
 const paths = {
@@ -1248,7 +1267,7 @@ const blockAdditions = [...desiredBlocks.values()]
   )
   .sort((left, right) => compare(left.relation, right.relation));
 
-const linearAdjacency = new Map<string, Set<string>>(
+const mappedLinearAdjacency = new Map<string, Set<string>>(
   [...activeIssueIds].map((issueId) => [issueId, new Set<string>()]),
 );
 for (const relation of allRelations) {
@@ -1258,17 +1277,49 @@ for (const relation of allRelations) {
     activeIssueIds.has(prerequisite) &&
     activeIssueIds.has(dependent)
   ) {
+    mappedLinearAdjacency.get(prerequisite)!.add(dependent);
+  }
+}
+const existingMappedCycle = findCycle(mappedLinearAdjacency);
+if (existingMappedCycle) {
+  throw new Error(
+    `Planned Linear blocks create a cycle: ${existingMappedCycle.join(" -> ")}`,
+  );
+}
+
+const activeCapturedIssueIds = new Set(
+  [...liveById.values()]
+    .filter((issue) => issue.stateType !== "canceled" && issue.archivedAt === null)
+    .map((issue) => issue.identifier),
+);
+const linearAdjacency = new Map<string, Set<string>>(
+  [...activeCapturedIssueIds].map((issueId) => [issueId, new Set<string>()]),
+);
+for (const relation of allRelations) {
+  const [type, prerequisite, dependent] = relation.split(":");
+  if (
+    type === "blocks" &&
+    activeCapturedIssueIds.has(prerequisite) &&
+    activeCapturedIssueIds.has(dependent)
+  ) {
     linearAdjacency.get(prerequisite)!.add(dependent);
   }
 }
 for (const change of blockAdditions) {
-  linearAdjacency.get(change.prerequisiteIssueId)!.add(change.dependentIssueId);
-}
-const linearCycle = findCycle(linearAdjacency);
-if (linearCycle) {
-  throw new Error(
-    `Planned Linear blocks create a cycle: ${linearCycle.join(" -> ")}`,
+  const returnPath = findPath(
+    linearAdjacency,
+    change.dependentIssueId,
+    change.prerequisiteIssueId,
   );
+  if (returnPath) {
+    throw new Error(
+      `Planned Linear blocks create a cycle: ${[
+        change.prerequisiteIssueId,
+        ...returnPath,
+      ].join(" -> ")}`,
+    );
+  }
+  linearAdjacency.get(change.prerequisiteIssueId)!.add(change.dependentIssueId);
 }
 
 const releaseChanges: ReleaseChange[] = [];
