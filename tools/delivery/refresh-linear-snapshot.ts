@@ -27,8 +27,9 @@ interface LiveIssue {
   assignee?: string | null;
   team?: string;
   teamKey?: string;
+  projectId?: string | null;
   project?: string | null;
-  projectMilestone?: { name: string } | null;
+  projectMilestone?: { id: string; name: string } | null;
   parentId?: string | null;
   releases?: Array<{ version?: string | null }>;
   relations?: unknown;
@@ -37,6 +38,21 @@ interface LiveIssue {
 interface RuntimeDependency {
   requirementId: string;
   dependencies: string[];
+}
+
+interface LiveProject {
+  id: string;
+  name: string;
+  updatedAt: string;
+}
+
+interface LiveProjectMilestone {
+  id: string;
+  name: string;
+  updatedAt: string;
+  targetDate: string | null;
+  projectId: string;
+  project: string;
 }
 
 function estimateValue(value: LiveIssue["estimate"]): number | null {
@@ -109,7 +125,106 @@ const live = JSON.parse(readFileSync(livePath ? resolve(livePath) : 0, "utf8")) 
   issues: LiveIssue[];
   releasePipelines: Array<Record<string, any>>;
   releases: Array<Record<string, any>>;
+  projects: LiveProject[];
+  projectMilestones: LiveProjectMilestone[];
 };
+if (!Array.isArray(live.projects) || live.projects.length === 0) {
+  throw new Error("Live Linear projects inventory is required");
+}
+if (!Array.isArray(live.projectMilestones) || !live.projectMilestones.length) {
+  throw new Error("Live Linear project milestones inventory is required");
+}
+const trackedProjects = Array.isArray(snapshot.projects)
+  ? snapshot.projects as Array<Record<string, unknown>>
+  : [];
+const trackedProjectIds = trackedProjects.map((project) => project.id);
+if (
+  !trackedProjectIds.length ||
+  trackedProjectIds.some(
+    (projectId) => typeof projectId !== "string" || !projectId.trim(),
+  ) ||
+  new Set(trackedProjectIds).size !== trackedProjectIds.length
+) {
+  throw new Error("Linear snapshot tracked project IDs are incomplete or duplicate");
+}
+const trackedProjectIdSet = new Set(trackedProjectIds as string[]);
+for (const projectId of [...trackedProjectIdSet].sort()) {
+  const count = live.projects.filter((project) => project.id === projectId).length;
+  if (count === 0) {
+    throw new Error(`Tracked Linear project ${projectId} is missing`);
+  }
+  if (count > 1) {
+    throw new Error(`Tracked Linear project ${projectId} is duplicated`);
+  }
+}
+const scopedProjects = live.projects.filter((project) =>
+  trackedProjectIdSet.has(project.id)
+);
+const allProjectById = new Map(
+  live.projects.map((project) => [project.id, project]),
+);
+if (
+  live.projects.some(
+    (project) =>
+      !project.id?.trim() ||
+      !project.name?.trim() ||
+      !project.updatedAt ||
+      Number.isNaN(Date.parse(project.updatedAt)),
+  )
+) {
+  throw new Error("Live Linear projects inventory is incomplete or duplicate");
+}
+const scopedMilestones = live.projectMilestones.filter((milestone) =>
+  trackedProjectIdSet.has(milestone.projectId)
+);
+const allMilestoneById = new Map(
+  live.projectMilestones.map((milestone) => [milestone.id, milestone]),
+);
+if (
+  live.projectMilestones.some(
+    (milestone) =>
+      !milestone.id?.trim() ||
+      !milestone.name?.trim() ||
+      !milestone.updatedAt ||
+      Number.isNaN(Date.parse(milestone.updatedAt)) ||
+      live.projects.find((project) => project.id === milestone.projectId)
+        ?.name !== milestone.project,
+  ) ||
+  new Set(scopedMilestones.map((milestone) => milestone.id)).size !==
+    scopedMilestones.length ||
+  new Set(
+      scopedMilestones.map((milestone) =>
+        `${milestone.projectId}:${milestone.name}`
+      ),
+    ).size !== scopedMilestones.length
+) {
+  throw new Error(
+    "Live Linear project milestones inventory is incomplete or duplicate",
+  );
+}
+for (const issue of live.issues) {
+  if (Boolean(issue.projectId) !== Boolean(issue.project)) {
+    throw new Error(`Linear issue ${issue.id} has partial project identity`);
+  }
+  if (issue.projectId) {
+    const project = allProjectById.get(issue.projectId);
+    if (!project || project.name !== issue.project) {
+      throw new Error(`Linear issue ${issue.id} references an unknown project`);
+    }
+  }
+  if (issue.projectMilestone) {
+    const milestone = allMilestoneById.get(issue.projectMilestone.id);
+    if (
+      !issue.projectId ||
+      !milestone ||
+      milestone.name !== issue.projectMilestone.name ||
+      milestone.projectId !== issue.projectId ||
+      milestone.project !== issue.project
+    ) {
+      throw new Error(`Linear issue ${issue.id} references an unknown milestone`);
+    }
+  }
+}
 const runtime = JSON.parse(
   readFileSync(
     resolve(root, "delivery/runtime-gate-dependencies.json"),
@@ -238,6 +353,34 @@ snapshot.releases = live.releases
   }))
   .sort((left, right) => left.version.localeCompare(right.version));
 
+const existingProjectById = new Map<string, Record<string, unknown>>(
+  (Array.isArray(snapshot.projects) ? snapshot.projects : [])
+    .filter((project: Record<string, unknown>) => typeof project.id === "string")
+    .map((project: Record<string, unknown>) => [project.id as string, project]),
+);
+const existingMilestoneById = new Map<string, Record<string, unknown>>(
+  (Array.isArray(snapshot.milestones) ? snapshot.milestones : [])
+    .filter(
+      (milestone: Record<string, unknown>) => typeof milestone.id === "string",
+    )
+    .map((milestone: Record<string, unknown>) => [
+      milestone.id as string,
+      milestone,
+    ]),
+);
+snapshot.projects = scopedProjects
+  .map((project) => ({
+    ...(existingProjectById.get(project.id) ?? {}),
+    ...project,
+  }))
+  .sort((left, right) => left.id.localeCompare(right.id));
+snapshot.milestones = scopedMilestones
+  .map((milestone) => ({
+    ...(existingMilestoneById.get(milestone.id) ?? {}),
+    ...milestone,
+  }))
+  .sort((left, right) => left.id.localeCompare(right.id));
+
 snapshot.linearFingerprint = {
   issues: live.issues
     .map((issue) => {
@@ -253,7 +396,9 @@ snapshot.linearFingerprint = {
         labels: [...(issue.labels ?? [])].sort(),
         assignee: issue.assignee ?? null,
         team: liveTeamKey(issue),
+        projectId: issue.projectId ?? null,
         project: issue.project ?? null,
+        milestoneId: issue.projectMilestone?.id ?? null,
         milestone: issue.projectMilestone?.name ?? null,
         parent: issue.parentId ?? null,
         releases: liveRelease ? [liveRelease] : [],
@@ -289,6 +434,12 @@ snapshot.linearFingerprint = {
       stageType: release.stage.type,
     }))
     .sort((left, right) => left.id.localeCompare(right.id)),
+  projects: [...scopedProjects].sort((left, right) =>
+    left.id.localeCompare(right.id)
+  ),
+  projectMilestones: [...scopedMilestones].sort((left, right) =>
+    left.id.localeCompare(right.id)
+  ),
 };
 
 writeFileSync(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\n`);

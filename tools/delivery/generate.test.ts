@@ -1,5 +1,5 @@
 import { strict as assert } from "node:assert";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import {
   existsSync,
   mkdtempSync,
@@ -95,12 +95,54 @@ function runGeneration(args: string[]) {
   );
 }
 
+function addLinearInventoryFingerprint(linear: any): void {
+  linear.linearFingerprint.projects = linear.projects.map((project: any) => ({
+    id: project.id,
+    name: project.name,
+    updatedAt: project.updatedAt,
+  }));
+  linear.linearFingerprint.projectMilestones = linear.milestones.map(
+    (milestone: any) => ({
+      id: milestone.id,
+      name: milestone.name,
+      updatedAt: milestone.updatedAt,
+      targetDate: milestone.targetDate,
+      projectId: milestone.projectId,
+      project: milestone.project,
+    }),
+  );
+  const projectIdByName = new Map(
+    linear.projects.map((project: any) => [project.name, project.id]),
+  );
+  const milestoneIdByPair = new Map(
+    linear.milestones.map((milestone: any) => [
+      `${milestone.projectId}:${milestone.name}`,
+      milestone.id,
+    ]),
+  );
+  for (const issue of linear.linearFingerprint.issues) {
+    issue.projectId = issue.project
+      ? projectIdByName.get(issue.project) ?? null
+      : null;
+    issue.milestoneId = issue.projectId && issue.milestone
+      ? milestoneIdByPair.get(`${issue.projectId}:${issue.milestone}`) ?? null
+      : null;
+  }
+}
+
 test("generates semantic journey readiness and fails empty evidence milestones and relation drift", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-journey-"));
   try {
     const linear = JSON.parse(
       readFileSync("delivery/linear-snapshot.json", "utf8"),
     );
+    linear.projects = [
+      {
+        id: "empty-project",
+        name: "Empty production evidence project",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+      },
+    ];
     linear.milestones = [
       {
         id: "empty-production-evidence",
@@ -108,10 +150,11 @@ test("generates semantic journey readiness and fails empty evidence milestones a
         projectId: "empty-project",
         project: "Empty production evidence project",
         targetDate: null,
-        updatedAt: null,
+        updatedAt: "2026-07-15T00:00:00.000Z",
       },
     ];
     linear.issues[0].milestone = "Production evidence closed";
+    addLinearInventoryFingerprint(linear);
     const phaseOne = linear.issues.find(
       (issue: { sourceId: string | null }) => issue.sourceId === "F-211",
     );
@@ -129,7 +172,7 @@ test("generates semantic journey readiness and fails empty evidence milestones a
     assert.equal(existsSync(reportPath), true, result.stderr);
     const report = JSON.parse(readFileSync(reportPath, "utf8"));
     assert.equal(report.release, "R0");
-    assert.equal(report.expectedCommit, null);
+    assert.equal(Object.hasOwn(report, "expectedCommit"), false);
     assert.equal(report.mandatoryPhases.length, 13);
     assert.equal(report.checkpoints.length, 8);
     assert.ok(
@@ -154,23 +197,156 @@ test("generates semantic journey readiness and fails empty evidence milestones a
   }
 });
 
-test("derives the exact HEAD only when a checkpoint claims completion", () => {
+test("fails closed for every missing or inconsistent Linear milestone inventory path", () => {
+  const base = JSON.parse(
+    readFileSync("delivery/linear-snapshot.json", "utf8"),
+  );
+  addLinearInventoryFingerprint(base);
+  const cases: Array<[string, (linear: any) => void, string]> = [
+    ["projects", (linear) => delete linear.projects, "linear_project_inventory_missing"],
+    ["milestones", (linear) => delete linear.milestones, "linear_milestone_inventory_missing"],
+    ["fingerprint-projects", (linear) => delete linear.linearFingerprint.projects, "linear_fingerprint_projects_missing"],
+    ["fingerprint-milestones", (linear) => delete linear.linearFingerprint.projectMilestones, "linear_fingerprint_milestones_missing"],
+    [
+      "duplicate-production",
+      (linear) => {
+        const existing = linear.milestones.find(
+          (milestone: any) => milestone.name === "Production evidence closed",
+        );
+        const duplicate = { ...existing, id: "duplicate-production" };
+        linear.milestones.push(duplicate);
+        linear.linearFingerprint.projectMilestones.push(duplicate);
+      },
+      "production_evidence_milestone_duplicate",
+    ],
+    [
+      "duplicate-non-production-pair",
+      (linear) => {
+        const existing = linear.milestones.find(
+          (milestone: any) => milestone.name !== "Production evidence closed",
+        );
+        const duplicate = { ...existing, id: "duplicate-non-production" };
+        linear.milestones.push(duplicate);
+        linear.linearFingerprint.projectMilestones.push(duplicate);
+      },
+      "linear_milestone_inventory_duplicate",
+    ],
+    [
+      "missing-production",
+      (linear) => {
+        const existing = linear.milestones.find(
+          (milestone: any) => milestone.name === "Production evidence closed",
+        );
+        linear.milestones = linear.milestones.filter(
+          (milestone: any) => milestone.id !== existing.id,
+        );
+        linear.linearFingerprint.projectMilestones =
+          linear.linearFingerprint.projectMilestones.filter(
+            (milestone: any) => milestone.id !== existing.id,
+          );
+      },
+      "production_evidence_milestone_missing",
+    ],
+    [
+      "fingerprint-drift",
+      (linear) => {
+        linear.linearFingerprint.projectMilestones[0].name = "Changed";
+      },
+      "linear_milestone_inventory_drift",
+    ],
+    [
+      "missing-issue-ids",
+      (linear) => {
+        const issue = linear.linearFingerprint.issues.find(
+          (candidate: any) =>
+            candidate.milestone === "Production evidence closed",
+        );
+        for (const candidate of linear.linearFingerprint.issues) {
+          if (
+            candidate.project === issue.project &&
+            candidate.milestone === "Production evidence closed"
+          ) {
+            candidate.projectId = null;
+            candidate.milestoneId = null;
+          }
+        }
+      },
+      "production_evidence_milestone_empty",
+    ],
+    [
+      "inconsistent-issue-ids",
+      (linear) => {
+        const issue = linear.linearFingerprint.issues.find(
+          (candidate: any) =>
+            candidate.milestone === "Production evidence closed",
+        );
+        issue.project = "Wrong project name";
+      },
+      "linear_issue_project_milestone_metadata_inconsistent",
+    ],
+  ];
+  for (const [name, mutate, code] of cases) {
+    const dir = mkdtempSync(join(tmpdir(), `sourcera-linear-${name}-`));
+    try {
+      const linear = structuredClone(base);
+      mutate(linear);
+      const linearPath = join(dir, "linear.json");
+      writeFileSync(linearPath, JSON.stringify(linear));
+      const fixture = canonicalGenerationArgs(dir, ["--linear", linearPath]);
+      const result = runGeneration(fixture.args);
+      assert.equal(result.status, 1);
+      const report = JSON.parse(
+        readFileSync(join(fixture.reports, "journey-readiness.json"), "utf8"),
+      );
+      assert.ok(
+        report.findings.some((finding: { code: string }) => finding.code === code),
+        `${name} must report ${code}`,
+      );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+});
+
+test("keeps a completed checkpoint report pinned to evidence commit A at closeout B", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-checkpoint-"));
   try {
     const roadmap = JSON.parse(
       readFileSync("delivery/roadmap-contract.json", "utf8"),
     );
     roadmap.checkpoints[0].status = "complete";
+    roadmap.checkpoints[0].evidenceCommit = execFileSync(
+      "git",
+      ["rev-parse", "HEAD^"],
+      { encoding: "utf8" },
+    ).trim();
     const roadmapPath = join(dir, "roadmap.json");
     writeFileSync(roadmapPath, JSON.stringify(roadmap));
-    const fixture = canonicalGenerationArgs(dir, ["--roadmap", roadmapPath]);
+    const fixture = canonicalGenerationArgs(dir, [
+      "--roadmap",
+      roadmapPath,
+      "--commit",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    ]);
 
     const result = runGeneration(fixture.args);
     assert.equal(result.status, 1);
     const reportPath = join(fixture.reports, "journey-readiness.json");
     assert.equal(existsSync(reportPath), true, result.stderr);
-    const report = JSON.parse(readFileSync(reportPath, "utf8"));
-    assert.match(report.expectedCommit, /^[a-f0-9]{40}$/);
+    const first = readFileSync(reportPath, "utf8");
+    const secondFixture = canonicalGenerationArgs(dir, [
+      "--roadmap",
+      roadmapPath,
+      "--commit",
+      "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    ]);
+    const secondResult = runGeneration(secondFixture.args);
+    assert.equal(secondResult.status, 1);
+    const second = readFileSync(reportPath, "utf8");
+    assert.equal(second, first);
+    const report = JSON.parse(second);
+    assert.equal(Object.hasOwn(report, "expectedCommit"), false);
+    assert.match(report.checkpoints[0].evidenceCommit, /^[a-f0-9]{40}$/);
     assert.ok(
       report.findings.some(
         (finding: { code: string; checkpointId?: string }) =>

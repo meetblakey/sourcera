@@ -26,6 +26,10 @@ function refreshFixture(
       dependencies: string[];
     }>;
     omitPriorFingerprintIds?: string[];
+    omitLiveProjects?: boolean;
+    omitLiveMilestones?: boolean;
+    omitLiveProjectId?: string;
+    duplicateLiveProjectId?: string;
   } = {},
 ) {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
@@ -67,10 +71,56 @@ function refreshFixture(
     sourceSection: "§1",
     outcome: "Outcome",
   }));
+  const projectNames = [
+    ...new Set(
+      liveIssues
+        .map((issue) => issue.project)
+        .filter((project): project is string => typeof project === "string"),
+    ),
+  ];
+  if (!projectNames.length) projectNames.push("Project");
+  const liveProjects = projectNames.map((name, index) => ({
+    id: `project-${index + 1}`,
+    name,
+    updatedAt: "2026-07-15T00:00:00.000Z",
+  }));
+  const liveMilestones = liveProjects.flatMap((project) => {
+    const named = liveIssues
+      .filter((issue) => issue.project === project.name)
+      .map((issue) => (issue.projectMilestone as { name?: string } | null)?.name)
+      .filter((name): name is string => typeof name === "string");
+    const names = [...new Set(["Production evidence closed", ...named])];
+    return names.map((name, index) => ({
+      id: `${project.id}-milestone-${index + 1}`,
+      name,
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      targetDate: null,
+      projectId: project.id,
+      project: project.name,
+    }));
+  });
+  const projectIdByName = new Map(
+    liveProjects.map((project) => [project.name, project.id]),
+  );
+  const milestoneIdByProjectAndName = new Map(
+    liveMilestones.map((milestone) => [
+      `${milestone.projectId}:${milestone.name}`,
+      milestone.id,
+    ]),
+  );
+  const emittedProjects = liveProjects
+    .filter((project) => project.id !== options.omitLiveProjectId)
+    .flatMap((project) =>
+      project.id === options.duplicateLiveProjectId
+        ? [project, { ...project }]
+        : [project]
+    );
   const original = JSON.stringify({
     generatedAt: "2026-07-14T00:00:00.000Z",
     issues: snapshotIssues,
     releases: [],
+    projects: liveProjects,
+    milestones: liveMilestones,
     linearFingerprint: {
       issues: trackedIssueIds
         .filter((id) => !options.omitPriorFingerprintIds?.includes(id))
@@ -113,17 +163,42 @@ function refreshFixture(
   writeFileSync(
     livePath,
     JSON.stringify({
-      issues: liveIssues.map((issue) => ({
-        relations: {
-          blocks: [],
-          blockedBy: [],
-          relatedTo: [],
-          duplicateOf: null,
-        },
-        ...issue,
-      })),
+      issues: liveIssues.map((issue) => {
+        const projectId = typeof issue.project === "string"
+          ? projectIdByName.get(issue.project) ?? null
+          : null;
+        const milestoneName =
+          (issue.projectMilestone as { name?: string } | null)?.name ?? null;
+        const milestoneId = projectId && milestoneName
+          ? milestoneIdByProjectAndName.get(`${projectId}:${milestoneName}`) ??
+            null
+          : null;
+        return {
+          relations: {
+            blocks: [],
+            blockedBy: [],
+            relatedTo: [],
+            duplicateOf: null,
+          },
+          ...issue,
+          projectId,
+          projectMilestone: milestoneName && milestoneId
+            ? { id: milestoneId, name: milestoneName }
+            : null,
+        };
+      }),
       releasePipelines: [],
       releases: [],
+      ...(options.omitLiveProjects
+        ? {}
+        : {
+            projects: emittedProjects,
+          }),
+      ...(options.omitLiveMilestones
+        ? {}
+        : {
+            projectMilestones: liveMilestones,
+          }),
     }),
   );
   const result = spawnSync(
@@ -144,6 +219,60 @@ function refreshFixture(
   rmSync(root, { recursive: true, force: true });
   return { result, updated, original, contents };
 }
+
+test("refresh fails closed without live project or milestone inventories", () => {
+  const issue = {
+    id: "PLA-1",
+    title: "Issue",
+    updatedAt: "2026-07-15T00:00:00.000Z",
+    status: "Backlog",
+    statusType: "backlog",
+    project: "Project",
+    projectMilestone: { name: "Production evidence closed" },
+  };
+  const missingProjects = refreshFixture([issue], { omitLiveProjects: true });
+  assert.equal(missingProjects.result.status, 1);
+  assert.match(missingProjects.result.stderr, /projects.*required/i);
+  const missingMilestones = refreshFixture([issue], {
+    omitLiveMilestones: true,
+  });
+  assert.equal(missingMilestones.result.status, 1);
+  assert.match(missingMilestones.result.stderr, /milestones.*required/i);
+});
+
+test("refresh rejects a missing or duplicated tracked project ID", () => {
+  const issues = [
+    {
+      id: "PLA-1",
+      title: "First",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      project: "First project",
+    },
+    {
+      id: "PLA-2",
+      title: "Second",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      status: "Backlog",
+      statusType: "backlog",
+      project: "Second project",
+    },
+  ];
+  const missing = refreshFixture(issues, {
+    omitLiveProjectId: "project-1",
+  });
+  assert.equal(missing.result.status, 1);
+  assert.match(missing.result.stderr, /Tracked Linear project project-1 is missing/);
+  const duplicated = refreshFixture(issues, {
+    duplicateLiveProjectId: "project-1",
+  });
+  assert.equal(duplicated.result.status, 1);
+  assert.match(
+    duplicated.result.stderr,
+    /Tracked Linear project project-1 is duplicated/,
+  );
+});
 
 test("copies the live parent relation into issue rows and fingerprints", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
@@ -185,6 +314,28 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
           },
         ],
         releases: [],
+        projects: [
+          {
+            id: "project-identity",
+            name: "Old identity name",
+            updatedAt: "2026-07-14T00:00:00.000Z",
+            state: "active",
+            priority: 1,
+            lead: "Keep project lead",
+          },
+        ],
+        milestones: [
+          {
+            id: "milestone-permissioned",
+            name: "Old milestone name",
+            updatedAt: "2026-07-14T00:00:00.000Z",
+            targetDate: "2026-07-14",
+            projectId: "project-identity",
+            project: "Old identity name",
+            description: "Keep milestone description",
+            status: "next",
+          },
+        ],
         linearFingerprint: {
           issues: [
             {
@@ -198,7 +349,9 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
               labels: [],
               assignee: "Blake Rowley",
               team: "PLA",
+              projectId: "project-identity",
               project: "Identity",
+              milestoneId: "milestone-permissioned",
               milestone: "Permissioned journeys ready",
               parent: null,
               releases: ["R0"],
@@ -234,10 +387,40 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
             labels: [],
             assignee: "Blake Rowley",
             team: "PLA",
+            projectId: "project-identity",
             project: "Identity",
-            projectMilestone: { name: "Permissioned journeys ready" },
+            projectMilestone: {
+              id: "milestone-permissioned",
+              name: "Permissioned journeys ready",
+            },
             parentId: "PLA-283",
             releases: [{ version: "R0" }],
+            relations: {
+              blocks: [],
+              blockedBy: [],
+              relatedTo: [],
+              duplicateOf: null,
+            },
+          },
+          {
+            id: "LEG-1",
+            title: "Legacy issue",
+            description: "Legacy issue remains fingerprinted",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            estimate: 1,
+            status: "Canceled",
+            statusType: "canceled",
+            labels: [],
+            assignee: null,
+            team: "LEG",
+            projectId: "project-legacy",
+            project: "P01 legacy",
+            projectMilestone: {
+              id: "milestone-legacy",
+              name: "Legacy milestone",
+            },
+            parentId: null,
+            releases: [],
             relations: {
               blocks: [],
               blockedBy: [],
@@ -248,6 +431,44 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
         ],
         releasePipelines: [],
         releases: [],
+        projects: [
+          {
+            id: "project-identity",
+            name: "Identity",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+          },
+          {
+            id: "project-legacy",
+            name: "P01 legacy",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+          },
+        ],
+        projectMilestones: [
+          {
+            id: "milestone-permissioned",
+            name: "Permissioned journeys ready",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            targetDate: null,
+            projectId: "project-identity",
+            project: "Identity",
+          },
+          {
+            id: "milestone-production",
+            name: "Production evidence closed",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            targetDate: null,
+            projectId: "project-identity",
+            project: "Identity",
+          },
+          {
+            id: "milestone-legacy",
+            name: "Legacy milestone",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            targetDate: null,
+            projectId: "project-legacy",
+            project: "P01 legacy",
+          },
+        ],
       }),
     );
     const result = spawnSync(
@@ -265,8 +486,51 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
     const updated = JSON.parse(readFileSync(snapshotPath, "utf8"));
     assert.equal(updated.issues[0].parentId, "PLA-283");
     assert.equal(
-      updated.linearFingerprint.issues[0].parent,
+      updated.linearFingerprint.issues.find(
+        (issue: { identifier: string }) => issue.identifier === "PLA-942",
+      ).parent,
       "PLA-283",
+    );
+    assert.deepEqual(updated.projects[0], {
+      id: "project-identity",
+      name: "Identity",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      state: "active",
+      priority: 1,
+      lead: "Keep project lead",
+    });
+    assert.equal(updated.projects.length, 1);
+    assert.deepEqual(updated.milestones[0], {
+      id: "milestone-permissioned",
+      name: "Permissioned journeys ready",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+      targetDate: null,
+      projectId: "project-identity",
+      project: "Identity",
+      description: "Keep milestone description",
+      status: "next",
+    });
+    assert.deepEqual(
+      updated.milestones.map((milestone: { id: string }) => milestone.id),
+      ["milestone-permissioned", "milestone-production"],
+    );
+    assert.deepEqual(
+      updated.linearFingerprint.issues.map(
+        (issue: { identifier: string }) => issue.identifier,
+      ),
+      ["LEG-1", "PLA-942"],
+    );
+    assert.deepEqual(
+      updated.linearFingerprint.projects.map(
+        (project: { id: string }) => project.id,
+      ),
+      ["project-identity"],
+    );
+    assert.deepEqual(
+      updated.linearFingerprint.projectMilestones.map(
+        (milestone: { id: string }) => milestone.id,
+      ),
+      ["milestone-permissioned", "milestone-production"],
     );
   } finally {
     rmSync(root, { recursive: true, force: true });

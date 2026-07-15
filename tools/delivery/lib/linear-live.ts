@@ -20,8 +20,8 @@ const ISSUE_QUERY = `
         }
         assignee { name }
         team { key }
-        project { name }
-        projectMilestone { name }
+        project { id name }
+        projectMilestone { id name }
         parent { identifier }
         releases(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { id version }
@@ -80,6 +80,30 @@ const RELEASE_QUERY = `
   }
 `;
 
+const PROJECT_QUERY = `
+  query DeliveryProjects($after: String) {
+    projects(first: 50, after: $after, includeArchived: true) {
+      nodes { id name updatedAt }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+`;
+
+const PROJECT_MILESTONE_QUERY = `
+  query DeliveryProjectMilestones($after: String) {
+    projectMilestones(first: 50, after: $after, includeArchived: true) {
+      nodes {
+        id
+        name
+        updatedAt
+        targetDate
+        project { id name }
+      }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+`;
+
 interface PageInfo {
   hasNextPage: boolean;
   endCursor: string | null;
@@ -106,8 +130,8 @@ interface IssueNode {
   labels: NestedConnection<{ name: string }>;
   assignee: { name: string } | null;
   team: { key: string };
-  project: { name: string } | null;
-  projectMilestone: { name: string } | null;
+  project: { id: string; name: string } | null;
+  projectMilestone: { id: string; name: string } | null;
   parent: { identifier: string } | null;
   releases: NestedConnection<{ id: string; version: string | null }>;
   relations: NestedConnection<RelationNode>;
@@ -139,6 +163,20 @@ interface ReleaseNode {
   stage: { id: string; type: string };
 }
 
+interface ProjectNode {
+  id: string;
+  name: string;
+  updatedAt: string;
+}
+
+interface ProjectMilestoneNode {
+  id: string;
+  name: string;
+  updatedAt: string;
+  targetDate: string | null;
+  project: { id: string; name: string };
+}
+
 export interface LinearFingerprint {
   issues: Array<{
     identifier: string;
@@ -151,7 +189,9 @@ export interface LinearFingerprint {
     labels: string[];
     assignee: string | null;
     team: string;
+    projectId: string | null;
     project: string | null;
+    milestoneId: string | null;
     milestone: string | null;
     parent: string | null;
     releases: string[];
@@ -175,6 +215,69 @@ export interface LinearFingerprint {
     stage: string;
     stageType: string;
   }>;
+  projects: ProjectNode[];
+  projectMilestones: Array<{
+    id: string;
+    name: string;
+    updatedAt: string;
+    targetDate: string | null;
+    projectId: string;
+    project: string;
+  }>;
+}
+
+export interface LinearFingerprintScope {
+  projectIds: readonly string[];
+}
+
+function scopedProjectInventory(
+  projects: ProjectNode[],
+  milestones: ProjectMilestoneNode[],
+  scope?: LinearFingerprintScope,
+): { projects: ProjectNode[]; milestones: ProjectMilestoneNode[] } {
+  if (!scope) return { projects, milestones };
+  if (!scope.projectIds.length) {
+    throw new Error("Tracked Linear project IDs are required");
+  }
+  const trackedIds = new Set(scope.projectIds);
+  if (
+    trackedIds.size !== scope.projectIds.length ||
+    scope.projectIds.some((id) => !id.trim())
+  ) {
+    throw new Error("Tracked Linear project IDs are incomplete or duplicated");
+  }
+  for (const projectId of [...trackedIds].sort()) {
+    const count = projects.filter((project) => project.id === projectId).length;
+    if (count === 0) {
+      throw new Error(`Tracked Linear project ${projectId} is missing`);
+    }
+    if (count > 1) {
+      throw new Error(`Tracked Linear project ${projectId} is duplicated`);
+    }
+  }
+  const scopedProjects = projects.filter((project) => trackedIds.has(project.id));
+  const projectNameById = new Map(
+    scopedProjects.map((project) => [project.id, project.name]),
+  );
+  const scopedMilestones = milestones.filter((milestone) =>
+    trackedIds.has(milestone.project.id)
+  );
+  if (
+    new Set(scopedMilestones.map((milestone) => milestone.id)).size !==
+      scopedMilestones.length ||
+    new Set(
+        scopedMilestones.map((milestone) =>
+          `${milestone.project.id}:${milestone.name}`
+        ),
+      ).size !== scopedMilestones.length ||
+    scopedMilestones.some(
+      (milestone) =>
+        projectNameById.get(milestone.project.id) !== milestone.project.name,
+    )
+  ) {
+    throw new Error("Tracked Linear project milestone inventory is inconsistent or duplicated");
+  }
+  return { projects: scopedProjects, milestones: scopedMilestones };
 }
 
 async function request<T>(
@@ -328,9 +431,16 @@ function assertPipelineConnectionsComplete(pipeline: PipelineNode): void {
 export async function fetchLinearFingerprint(
   fetcher: typeof fetch,
   token: string,
+  scope?: LinearFingerprintScope,
 ): Promise<LinearFingerprint> {
   if (!token) throw new Error("LINEAR_API_KEY is required");
-  const [issueNodes, pipelineNodes, releaseNodes] = await Promise.all([
+  const [
+    issueNodes,
+    pipelineNodes,
+    releaseNodes,
+    projectNodes,
+    projectMilestoneNodes,
+  ] = await Promise.all([
     paginate<IssueNode>(fetcher, token, ISSUE_QUERY, "issues"),
     paginate<PipelineNode>(
       fetcher,
@@ -339,12 +449,24 @@ export async function fetchLinearFingerprint(
       "releasePipelines",
     ),
     paginate<ReleaseNode>(fetcher, token, RELEASE_QUERY, "releases"),
+    paginate<ProjectNode>(fetcher, token, PROJECT_QUERY, "projects"),
+    paginate<ProjectMilestoneNode>(
+      fetcher,
+      token,
+      PROJECT_MILESTONE_QUERY,
+      "projectMilestones",
+    ),
   ]);
   for (const issue of issueNodes) assertIssueConnectionsComplete(issue);
   const relationsByIssue = canonicalRelationsByIssue(issueNodes);
   for (const pipeline of pipelineNodes) {
     assertPipelineConnectionsComplete(pipeline);
   }
+  const scopedInventory = scopedProjectInventory(
+    projectNodes,
+    projectMilestoneNodes,
+    scope,
+  );
   return {
     issues: issueNodes
       .map((issue) => ({
@@ -358,7 +480,9 @@ export async function fetchLinearFingerprint(
         labels: issue.labels.nodes.map((label) => label.name).sort(),
         assignee: issue.assignee?.name ?? null,
         team: issue.team.key,
+        projectId: issue.project?.id ?? null,
         project: issue.project?.name ?? null,
+        milestoneId: issue.projectMilestone?.id ?? null,
         milestone: issue.projectMilestone?.name ?? null,
         parent: issue.parent?.identifier ?? null,
         releases: issue.releases.nodes
@@ -391,6 +515,19 @@ export async function fetchLinearFingerprint(
         stageType: release.stage.type,
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
+    projects: scopedInventory.projects
+      .map((project) => ({ ...project }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    projectMilestones: scopedInventory.milestones
+      .map((milestone) => ({
+        id: milestone.id,
+        name: milestone.name,
+        updatedAt: milestone.updatedAt,
+        targetDate: milestone.targetDate,
+        projectId: milestone.project.id,
+        project: milestone.project.name,
+      }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
   };
 }
 
@@ -403,6 +540,8 @@ export function fingerprintDiff(
     "issues",
     "releasePipelines",
     "releases",
+    "projects",
+    "projectMilestones",
   ] as const) {
     if (JSON.stringify(expected[key]) !== JSON.stringify(actual[key])) {
       findings.push(`${key} differ from the committed Linear snapshot`);

@@ -21,6 +21,18 @@ const completeConnection = <T>(nodes: T[]) => ({
   pageInfo: { hasNextPage: false, endCursor: null },
 });
 
+const withEmptyProjectInventories = (fetcher: typeof fetch): typeof fetch =>
+  async (input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    if (query.includes("DeliveryProjects")) {
+      return response({ data: { projects: completeConnection([]) } });
+    }
+    if (query.includes("DeliveryProjectMilestones")) {
+      return response({ data: { projectMilestones: completeConnection([]) } });
+    }
+    return fetcher(input, init);
+  };
+
 test("uses one canonical key for GraphQL and OAuth relation names", () => {
   assert.equal(
     canonicalLinearRelationKey("related", "PLA-282", "PLA-217"),
@@ -190,7 +202,10 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
     });
   };
 
-  const fingerprint = await fetchLinearFingerprint(fetcher, "secret");
+  const fingerprint = await fetchLinearFingerprint(
+    withEmptyProjectInventories(fetcher),
+    "secret",
+  );
   assert.deepEqual(cursors, [null, "next"]);
   assert.deepEqual(
     fingerprint.issues.map((issue) => issue.identifier),
@@ -210,6 +225,229 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
   assert.match(
     fingerprintDiff(fingerprint, { ...fingerprint, releases: [] })[0],
     /releases/,
+  );
+});
+
+test("paginates and fingerprints complete Linear project and milestone inventories", async () => {
+  const projectCursors: Array<string | null> = [];
+  const milestoneCursors: Array<string | null> = [];
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as {
+      query: string;
+      variables: { after: string | null };
+    };
+    const empty = { nodes: [], pageInfo: { hasNextPage: false, endCursor: null } };
+    if (body.query.includes("DeliveryProjects")) {
+      projectCursors.push(body.variables.after);
+      return response({
+        data: {
+          projects: body.variables.after
+            ? completeConnection([
+                { id: "project-1", name: "First", updatedAt: "2026-07-15T01:00:00Z" },
+              ])
+            : {
+                nodes: [
+                  { id: "project-2", name: "Second", updatedAt: "2026-07-15T02:00:00Z" },
+                ],
+                pageInfo: { hasNextPage: true, endCursor: "projects-next" },
+              },
+        },
+      });
+    }
+    if (body.query.includes("DeliveryProjectMilestones")) {
+      milestoneCursors.push(body.variables.after);
+      return response({
+        data: {
+          projectMilestones: body.variables.after
+            ? completeConnection([
+                {
+                  id: "milestone-1",
+                  name: "Production evidence closed",
+                  updatedAt: "2026-07-15T03:00:00Z",
+                  targetDate: null,
+                  project: { id: "project-1", name: "First" },
+                },
+              ])
+            : {
+                nodes: [
+                  {
+                    id: "milestone-2",
+                    name: "Production evidence closed",
+                    updatedAt: "2026-07-15T04:00:00Z",
+                    targetDate: null,
+                    project: { id: "project-2", name: "Second" },
+                  },
+                ],
+                pageInfo: { hasNextPage: true, endCursor: "milestones-next" },
+              },
+        },
+      });
+    }
+    if (body.query.includes("DeliveryIssues")) return response({ data: { issues: empty } });
+    if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: empty } });
+    return response({ data: { releases: empty } });
+  };
+
+  const fingerprint = await fetchLinearFingerprint(fetcher, "secret");
+  assert.deepEqual(projectCursors, [null, "projects-next"]);
+  assert.deepEqual(milestoneCursors, [null, "milestones-next"]);
+  assert.deepEqual(fingerprint.projects.map((project) => project.id), [
+    "project-1",
+    "project-2",
+  ]);
+  assert.deepEqual(
+    fingerprint.projectMilestones.map((milestone) => milestone.id),
+    ["milestone-1", "milestone-2"],
+  );
+  assert.match(
+    fingerprintDiff(fingerprint, { ...fingerprint, projectMilestones: [] })[0],
+    /projectMilestones/,
+  );
+});
+
+test("scopes project inventories by canonical IDs while preserving every issue", async () => {
+  let projectRows = [
+    {
+      id: "project-tracked",
+      name: "Sourcera Production",
+      updatedAt: "2026-07-15T01:00:00Z",
+    },
+    {
+      id: "project-legacy",
+      name: "P01 legacy",
+      updatedAt: "2026-07-15T01:00:00Z",
+    },
+  ];
+  const issue = (
+    identifier: string,
+    project: { id: string; name: string },
+    milestone: { id: string; name: string },
+  ) => ({
+    id: `uuid-${identifier}`,
+    identifier,
+    title: identifier,
+    description: identifier,
+    updatedAt: "2026-07-15T01:00:00Z",
+    estimate: null,
+    state: { name: "Backlog", type: "backlog" },
+    labels: completeConnection([]),
+    assignee: null,
+    team: { key: "PLA" },
+    project,
+    projectMilestone: milestone,
+    parent: null,
+    releases: completeConnection([]),
+    relations: completeConnection([]),
+    inverseRelations: completeConnection([]),
+  });
+  const fetcher: typeof fetch = async (_input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    if (query.includes("DeliveryProjects")) {
+      return response({ data: { projects: completeConnection(projectRows) } });
+    }
+    if (query.includes("DeliveryProjectMilestones")) {
+      return response({
+        data: {
+          projectMilestones: completeConnection([
+            {
+              id: "milestone-tracked",
+              name: "Production evidence closed",
+              updatedAt: "2026-07-15T01:00:00Z",
+              targetDate: null,
+              project: {
+                id: "project-tracked",
+                name: "Sourcera Production",
+              },
+            },
+            {
+              id: "milestone-legacy",
+              name: "Legacy milestone",
+              updatedAt: "2026-07-15T01:00:00Z",
+              targetDate: null,
+              project: { id: "project-legacy", name: "P01 legacy" },
+            },
+          ]),
+        },
+      });
+    }
+    if (query.includes("DeliveryIssues")) {
+      return response({
+        data: {
+          issues: completeConnection([
+            issue(
+              "PLA-1",
+              { id: "project-tracked", name: "Sourcera Production" },
+              { id: "milestone-tracked", name: "Production evidence closed" },
+            ),
+            issue(
+              "PLA-2",
+              { id: "project-legacy", name: "P01 legacy" },
+              { id: "milestone-legacy", name: "Legacy milestone" },
+            ),
+          ]),
+        },
+      });
+    }
+    if (query.includes("DeliveryPipelines")) {
+      return response({ data: { releasePipelines: completeConnection([]) } });
+    }
+    return response({ data: { releases: completeConnection([]) } });
+  };
+
+  const fingerprint = await fetchLinearFingerprint(fetcher, "secret", {
+    projectIds: ["project-tracked"],
+  });
+  assert.deepEqual(
+    fingerprint.issues.map((candidate) => candidate.identifier),
+    ["PLA-1", "PLA-2"],
+  );
+  assert.deepEqual(
+    fingerprint.projects.map((project) => project.id),
+    ["project-tracked"],
+  );
+  assert.deepEqual(
+    fingerprint.projectMilestones.map((milestone) => milestone.id),
+    ["milestone-tracked"],
+  );
+  await assert.rejects(
+    () =>
+      fetchLinearFingerprint(fetcher, "secret", {
+        projectIds: ["project-missing"],
+      }),
+    /Tracked Linear project project-missing is missing/,
+  );
+  projectRows = [projectRows[0], projectRows[0], projectRows[1]];
+  await assert.rejects(
+    () =>
+      fetchLinearFingerprint(fetcher, "secret", {
+        projectIds: ["project-tracked"],
+      }),
+    /Tracked Linear project project-tracked is duplicated/,
+  );
+});
+
+test("rejects truncated project milestone pagination", async () => {
+  const fetcher: typeof fetch = async (_input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    const empty = completeConnection([]);
+    if (query.includes("DeliveryProjectMilestones")) {
+      return response({
+        data: {
+          projectMilestones: {
+            nodes: [],
+            pageInfo: { hasNextPage: true, endCursor: null },
+          },
+        },
+      });
+    }
+    if (query.includes("DeliveryProjects")) return response({ data: { projects: empty } });
+    if (query.includes("DeliveryIssues")) return response({ data: { issues: empty } });
+    if (query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: empty } });
+    return response({ data: { releases: empty } });
+  };
+  await assert.rejects(
+    () => fetchLinearFingerprint(fetcher, "secret"),
+    /projectMilestones pagination cursor missing/,
   );
 });
 
@@ -265,7 +503,10 @@ test("description changes after character 400 change the fingerprint", async () 
         },
       });
     };
-    return (await fetchLinearFingerprint(fetcher, "secret")).issues[0]
+    return (await fetchLinearFingerprint(
+      withEmptyProjectInventories(fetcher),
+      "secret",
+    )).issues[0]
       .descriptionFingerprint;
   };
 
@@ -350,7 +591,7 @@ for (const field of [
     };
 
     await assert.rejects(
-      () => fetchLinearFingerprint(fetcher, "secret"),
+      () => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"),
       new RegExp(`PLA-1.*${field}.*truncated`, "i"),
     );
   });
@@ -413,7 +654,7 @@ for (const field of ["teams", "stages"] as const) {
       };
 
       await assert.rejects(
-        () => fetchLinearFingerprint(fetcher, "secret"),
+        () => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"),
         new RegExp(`pipeline-1.*${field}.*${condition}`, "i"),
       );
     });
@@ -424,7 +665,7 @@ test("rejects GraphQL errors returned with HTTP 200", async () => {
   const fetcher: typeof fetch = async () =>
     response({ errors: [{ message: "not authorized" }] });
   await assert.rejects(
-    () => fetchLinearFingerprint(fetcher, "secret"),
+    () => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"),
     /not authorized/,
   );
 });
@@ -488,18 +729,33 @@ test("rejects a GraphQL relation whose endpoint was not captured", async () => {
   };
 
   await assert.rejects(
-    () => fetchLinearFingerprint(fetcher, "secret"),
+    () => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"),
     /relation.*PLA-2.*not captured/i,
   );
 });
 
 test("CLI compares a fixture with the committed snapshot", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-live-"));
-  const empty = { issues: [], releasePipelines: [], releases: [] };
+  const empty = {
+    issues: [],
+    releasePipelines: [],
+    releases: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+      },
+    ],
+    projectMilestones: [],
+  };
   try {
     const snapshot = join(dir, "snapshot.json");
     const fixture = join(dir, "fixture.json");
-    writeFileSync(snapshot, JSON.stringify({ linearFingerprint: empty }));
+    writeFileSync(
+      snapshot,
+      JSON.stringify({ projects: empty.projects, linearFingerprint: empty }),
+    );
     writeFileSync(fixture, JSON.stringify(empty));
     const run = () =>
       spawnSync(

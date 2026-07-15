@@ -157,6 +157,7 @@
       "dependsOn": [],
       "scope": ["local", "CI", "test", "deploy", "rollback", "evidence"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["The exact commit passes local and CI tests and produces deploy evidence."],
         "failureRecovery": ["A failed build or deploy preserves diagnostics and has a proved recovery path."],
@@ -178,6 +179,7 @@
       "dependsOn": ["R0-C1"],
       "scope": ["auth", "tenancy", "console isolation", "RBAC", "audit", "baseline security"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["Authorized buyer and seller identities access only their tenant, console, and role."],
         "failureRecovery": ["Denied, stale, and revoked sessions fail closed and recover through re-authentication."],
@@ -199,6 +201,7 @@
       "dependsOn": ["R0-C2"],
       "scope": ["workspace", "requirements", "evaluation", "state-machine contracts", "phases 1–3"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["A buyer creates a workspace and completes phases 1 through 3 in order."],
         "failureRecovery": ["Invalid gates, stale writes, and failed transitions preserve the last valid state and explain recovery."],
@@ -220,6 +223,7 @@
       "dependsOn": ["R0-C3"],
       "scope": ["buyer setup", "seller invitation", "bidding entry"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["A buyer discovers, invites, confirms, and opens bidding for at least one seller."],
         "failureRecovery": ["Invitation, confirmation, and bidding-entry failures remain retryable and auditable."],
@@ -241,6 +245,7 @@
       "dependsOn": ["R0-C4"],
       "scope": ["secure seller entry", "onboarding", "required NDA", "authoring", "submission"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["An invited seller enters securely, completes onboarding and NDA, authors, and submits a response."],
         "failureRecovery": ["Expired links, NDA failure, save conflict, and submission failure preserve safe recovery."],
@@ -262,6 +267,7 @@
       "dependsOn": ["R0-C5"],
       "scope": ["phases 7–13", "buyer review", "scoring", "reports", "selection", "closure"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["The buyer completes phases 7 through 13, reviews, scores, selects, reports, and closes."],
         "failureRecovery": ["Review, scoring, report, selection, and closure failures preserve the last valid phase and recovery action."],
@@ -283,6 +289,7 @@
       "dependsOn": ["R0-C6"],
       "scope": ["immutable selection record", "export", "retention", "recovery", "access enforcement"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["Closure creates an immutable, exportable, retained, recoverable, access-controlled selection record."],
         "failureRecovery": ["Export, retention, restore, and access failures fail closed without corrupting the record."],
@@ -304,6 +311,7 @@
       "dependsOn": ["R0-C7"],
       "scope": ["canary", "rollback", "deployed receipts", "runtime-gate closure"],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": ["The exact commit passes canary, deployed health, and every required runtime gate."],
         "failureRecovery": ["Canary or runtime failure stops promotion, preserves evidence, and triggers proved recovery."],

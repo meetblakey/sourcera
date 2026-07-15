@@ -99,7 +99,6 @@ export interface CheckpointReceiptRequirement {
 
 export interface CheckpointEvidenceContext {
   root: string;
-  expectedCommit: string;
 }
 
 export interface R0Checkpoint {
@@ -109,6 +108,7 @@ export interface R0Checkpoint {
   dependsOn: R0CheckpointId[];
   scope: string[];
   status: "planned" | "active" | "complete";
+  evidenceCommit: string | null;
   requirements: CheckpointRequirements;
   requiredReceipts: CheckpointReceiptRequirement[];
 }

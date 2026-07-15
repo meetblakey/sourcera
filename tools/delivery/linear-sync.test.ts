@@ -23,7 +23,9 @@ function issue(identifier: string, release: ReleaseId): Issue {
       : ["feature", "seller"],
     assignee: identifier === "PLA-1" ? "Owner" : null,
     team: "PLA",
+    projectId: "project-1",
     project: "Sourcera",
+    milestoneId: "milestone-1",
     milestone: "Existing milestone",
     parent: "PLA-0",
     releases: [release],
@@ -75,6 +77,23 @@ function fingerprint(): LinearFingerprint {
         pipeline: "pipeline-1",
         stage: "stage-1",
         stageType: "planned",
+      },
+    ],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera",
+        updatedAt: "2026-07-15T10:00:00.000Z",
+      },
+    ],
+    projectMilestones: [
+      {
+        id: "milestone-1",
+        name: "Existing milestone",
+        updatedAt: "2026-07-15T10:00:00.000Z",
+        targetDate: null,
+        projectId: "project-1",
+        project: "Sourcera",
       },
     ],
   };

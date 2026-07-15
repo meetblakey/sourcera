@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import type {
   CheckpointEvidenceContext,
   Finding,
@@ -141,6 +142,13 @@ const C8_CHECKPOINT_PROOFS = [
   "approval",
 ] as const;
 const COMMIT_SHA = /^[a-f0-9]{40}$/;
+
+const commitIsReachable = (root: string, commit: string): boolean =>
+  spawnSync(
+    "git",
+    ["-C", root, "merge-base", "--is-ancestor", commit, "HEAD"],
+    { stdio: "ignore" },
+  ).status === 0;
 
 const nonempty = (value: string): boolean => value.trim().length > 0;
 
@@ -579,6 +587,13 @@ export function checkpointFindings(
         });
       }
     }
+    if (checkpoint.status !== "complete" && checkpoint.evidenceCommit !== null) {
+      findings.push({
+        code: "checkpoint_evidence_commit_unexpected",
+        checkpointId: checkpoint.id,
+        message: `${checkpoint.id} cannot declare evidenceCommit before completion`,
+      });
+    }
     if (checkpoint.status === "complete") {
       for (const dependency of checkpoint.dependsOn) {
         if (byId.get(dependency)?.status !== "complete") {
@@ -591,13 +606,29 @@ export function checkpointFindings(
       }
       if (
         !evidenceContext ||
-        !nonempty(evidenceContext.root) ||
-        !COMMIT_SHA.test(evidenceContext.expectedCommit)
+        !nonempty(evidenceContext.root)
       ) {
         findings.push({
           code: "checkpoint_evidence_context_invalid",
           checkpointId: checkpoint.id,
-          message: `${checkpoint.id} completion requires a root and full expected commit SHA`,
+          message: `${checkpoint.id} completion requires a repository root`,
+        });
+      } else if (
+        !checkpoint.evidenceCommit ||
+        !COMMIT_SHA.test(checkpoint.evidenceCommit)
+      ) {
+        findings.push({
+          code: "checkpoint_evidence_commit_missing",
+          checkpointId: checkpoint.id,
+          message: `${checkpoint.id} completion requires its own full evidence commit SHA`,
+        });
+      } else if (
+        !commitIsReachable(evidenceContext.root, checkpoint.evidenceCommit)
+      ) {
+        findings.push({
+          code: "checkpoint_evidence_commit_unreachable",
+          checkpointId: checkpoint.id,
+          message: `${checkpoint.id} evidence commit is not reachable`,
         });
       } else {
         for (const receipt of checkpoint.requiredReceipts) {
@@ -606,7 +637,7 @@ export function checkpointFindings(
             path: receipt.path,
             checkpointId: checkpoint.id,
             proofType: receipt.proofType,
-            expectedCommit: evidenceContext.expectedCommit,
+            expectedCommit: checkpoint.evidenceCommit,
           });
           if (finding) findings.push(finding);
         }

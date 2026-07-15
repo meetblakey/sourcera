@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
@@ -23,6 +22,10 @@ import {
   issueFamilyFindings,
   issueFamilyForSource,
 } from "./lib/issue-family.js";
+import {
+  linearMilestoneFindings,
+  type LinearMilestoneSnapshot,
+} from "./lib/linear-milestones.js";
 import {
   buildReleaseAssignments,
   releasePolicyFindings,
@@ -66,21 +69,8 @@ interface RuntimeGateDependency {
   rationale: string;
 }
 
-interface LinearDeliverySnapshot {
+interface LinearDeliverySnapshot extends LinearMilestoneSnapshot {
   issues: LinearIssueSnapshot[];
-  milestones?: Array<{
-    id: string;
-    name: string;
-    projectId: string;
-    project: string;
-  }>;
-  linearFingerprint?: {
-    issues: Array<{
-      identifier: string;
-      project: string | null;
-      milestone: string | null;
-    }>;
-  };
 }
 
 function argumentsByName(): Map<string, string> {
@@ -252,47 +242,13 @@ const manifest: ManifestRow[] = requirements.map((row) => {
   };
 });
 
-const hasCompleteCheckpoint = roadmap.checkpoints.some(
-  (checkpoint) => checkpoint.status === "complete",
-);
-let expectedCommit: string | null = null;
-if (hasCompleteCheckpoint) {
-  expectedCommit = argv.get("--commit") ?? null;
-  if (!expectedCommit) {
-    const head = spawnSync("git", ["-C", root, "rev-parse", "HEAD"], {
-      encoding: "utf8",
-    });
-    expectedCommit = head.status === 0 ? head.stdout.trim() : null;
-  }
-}
 const semanticFindings = semanticRoadmapFindings(
   roadmap,
   manifest,
-  hasCompleteCheckpoint
-    ? { root, expectedCommit: expectedCommit ?? "" }
-    : undefined,
+  { root },
 );
-const productionEvidenceMilestoneFindings: Finding[] = [];
-const fingerprintIssues = linearSnapshot.linearFingerprint?.issues ?? [];
-const productionEvidenceProjects = new Map<string, string>();
-for (const milestone of linearSnapshot.milestones ?? []) {
-  if (milestone.name === "Production evidence closed") {
-    productionEvidenceProjects.set(milestone.project, milestone.id);
-  }
-}
-for (const project of [...productionEvidenceProjects.keys()].sort()) {
-  const hasIssue = fingerprintIssues.some(
-    (issue) =>
-      issue.project === project &&
-      issue.milestone === "Production evidence closed",
-  );
-  if (!hasIssue) {
-    productionEvidenceMilestoneFindings.push({
-      code: "production_evidence_milestone_empty",
-      message: `${project} has an empty Production evidence closed milestone`,
-    });
-  }
-}
+const productionEvidenceMilestoneFindings =
+  linearMilestoneFindings(linearSnapshot);
 const journeyReadinessFindings = [
   ...semanticFindings,
   ...productionEvidenceMilestoneFindings,
@@ -726,7 +682,6 @@ const reports = {
   "journey-readiness.json": {
     release: roadmap.release,
     source: roadmap.source,
-    expectedCommit,
     mandatoryPhases: roadmap.journey.mandatoryPhases,
     requiredSupport: roadmap.journey.requiredSupport,
     requiredEdges: roadmap.journey.requiredEdges,

@@ -28,7 +28,6 @@ const canonical = JSON.parse(
 ) as SemanticRoadmapContract;
 
 const clone = (): SemanticRoadmapContract => structuredClone(canonical);
-const EXPECTED_COMMIT = "0123456789abcdef0123456789abcdef01234567";
 const RELEASE_METRICS = [
   "activation",
   "completion",
@@ -192,6 +191,8 @@ function completeCheckpoint(
 ): void {
   const checkpoint = contract.checkpoints[index];
   checkpoint.status = "complete";
+  (checkpoint as unknown as { evidenceCommit: string | null }).evidenceCommit =
+    sourceCommit;
   for (const requirement of receiptRequirements(checkpoint)) {
     writeReceipt(root, checkpoint.id, requirement, sourceCommit);
   }
@@ -523,6 +524,11 @@ test("defines ordered R0-C1 through R0-C8 with complete requirements", () => {
     ["R0-C1", "R0-C2", "R0-C3", "R0-C4", "R0-C5", "R0-C6", "R0-C7", "R0-C8"],
   );
   for (const checkpoint of canonical.checkpoints) {
+    assert.equal(
+      (checkpoint as unknown as { evidenceCommit?: string | null })
+        .evidenceCommit,
+      null,
+    );
     assert.ok(checkpoint.requirements.success.length);
     assert.ok(checkpoint.requirements.failureRecovery.length);
     assert.ok(checkpoint.requirements.rollout.length);
@@ -541,6 +547,35 @@ test("defines ordered R0-C1 through R0-C8 with complete requirements", () => {
   assert.deepEqual(checkpointFindings(canonical), []);
 });
 
+test("closes checkpoint proof at commit A from later closeout commit B", () => {
+  const { root, expectedCommit: evidenceCommit } = createGitRoot();
+  try {
+    const contract = clone();
+    completeCheckpoint(contract, root, 0, evidenceCommit);
+    execFileSync("git", ["commit", "--allow-empty", "-qm", "closeout"], {
+      cwd: root,
+    });
+    const closeoutCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    assert.notEqual(closeoutCommit, evidenceCommit);
+    assert.deepEqual(checkpointFindings(contract, { root }), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects complete checkpoint without its own declared commit", () => {
+  const contract = clone();
+  contract.checkpoints[0].status = "complete";
+  assert.ok(
+    codes(checkpointFindings(contract, { root: process.cwd() })).includes(
+      "checkpoint_evidence_commit_missing",
+    ),
+  );
+});
+
 test("rejects a checkpoint whose canonical scope is replaced", () => {
   const contract = clone();
   contract.checkpoints[3].scope = ["anything"];
@@ -553,7 +588,7 @@ test("keeps planned checkpoints valid without receipt files", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
   try {
     assert.deepEqual(
-      checkpointFindings(canonical, { root, expectedCommit: EXPECTED_COMMIT }),
+      checkpointFindings(canonical, { root }),
       [],
     );
   } finally {
@@ -566,35 +601,34 @@ test("requires every predecessor to be complete", () => {
   try {
     const contract = clone();
     completeCheckpoint(contract, root, 1, expectedCommit);
-    assert.ok(codes(checkpointFindings(contract, {
-      root,
-      expectedCommit,
-    })).includes("checkpoint_predecessor_incomplete"));
+    assert.ok(codes(checkpointFindings(contract, { root })).includes(
+      "checkpoint_predecessor_incomplete",
+    ));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 });
 
 test("rejects missing or malformed checkpoint evidence", () => {
-  const root = mkdtempSync(join(tmpdir(), "sourcera-checkpoint-"));
+  const { root, expectedCommit } = createGitRoot();
   try {
     const missing = clone();
     missing.checkpoints[0].status = "complete";
-    assert.ok(codes(checkpointFindings(missing, {
-      root,
-      expectedCommit: EXPECTED_COMMIT,
-    })).includes("checkpoint_evidence_missing"));
+    missing.checkpoints[0].evidenceCommit = expectedCommit;
+    assert.ok(codes(checkpointFindings(missing, { root })).includes(
+      "checkpoint_evidence_missing",
+    ));
 
     const malformed = clone();
     malformed.checkpoints[0].status = "complete";
+    malformed.checkpoints[0].evidenceCommit = expectedCommit;
     const first = receiptRequirements(malformed.checkpoints[0])[0];
     const path = join(root, first.path);
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, "{not-json}\n");
-    assert.ok(codes(checkpointFindings(malformed, {
-      root,
-      expectedCommit: EXPECTED_COMMIT,
-    })).includes("checkpoint_evidence_invalid"));
+    assert.ok(codes(checkpointFindings(malformed, { root })).includes(
+      "checkpoint_evidence_invalid",
+    ));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -622,14 +656,12 @@ test("rejects evidence with wrong identity, proof type, result, commit, or body"
     try {
       const contract = clone();
       contract.checkpoints[0].status = "complete";
+      contract.checkpoints[0].evidenceCommit = expectedCommit;
       for (const requirement of receiptRequirements(contract.checkpoints[0])) {
         writeReceipt(root, "R0-C1", requirement, expectedCommit, overrides);
       }
       assert.ok(
-        codes(checkpointFindings(contract, {
-          root,
-          expectedCommit,
-        })).includes(expectedCode),
+        codes(checkpointFindings(contract, { root })).includes(expectedCode),
         name,
       );
     } finally {
@@ -639,26 +671,29 @@ test("rejects evidence with wrong identity, proof type, result, commit, or body"
 });
 
 test("requires preview, runtime, rollback, and approval proof for C8 closure", () => {
-  const contract = clone();
-  const checkpoint = contract.checkpoints[7];
-  const configured = receiptRequirements(checkpoint).filter(
-    (receipt) =>
-      !["preview", "runtime", "rollback", "approval"].includes(
-        receipt.proofType,
-      ),
-  );
-  const rawReceipts = checkpoint.requiredReceipts as unknown[];
-  checkpoint.requiredReceipts = (typeof rawReceipts[0] === "string"
-    ? configured.map((receipt) => receipt.path)
-    : configured) as typeof checkpoint.requiredReceipts;
-  checkpoint.status = "complete";
-  for (let index = 0; index < 7; index += 1) {
-    contract.checkpoints[index].status = "complete";
+  const { root, expectedCommit } = createGitRoot();
+  try {
+    const contract = clone();
+    const checkpoint = contract.checkpoints[7];
+    const configured = receiptRequirements(checkpoint).filter(
+      (receipt) =>
+        !["preview", "runtime", "rollback", "approval"].includes(
+          receipt.proofType,
+        ),
+    );
+    checkpoint.requiredReceipts =
+      configured as typeof checkpoint.requiredReceipts;
+    for (let index = 0; index < 7; index += 1) {
+      completeCheckpoint(contract, root, index, expectedCommit);
+    }
+    checkpoint.status = "complete";
+    checkpoint.evidenceCommit = expectedCommit;
+    assert.ok(codes(checkpointFindings(contract, { root })).includes(
+      "checkpoint_required_proof_missing",
+    ));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
-  assert.ok(codes(checkpointFindings(contract, {
-    root: process.cwd(),
-    expectedCommit: EXPECTED_COMMIT,
-  })).includes("checkpoint_required_proof_missing"));
 });
 
 test("rejects C8 closure when only the preview receipt is omitted", () => {
@@ -699,10 +734,9 @@ test("rejects C8 approval when reviewer and author are the same", () => {
         verdict: "approved",
       },
     });
-    assert.ok(codes(checkpointFindings(contract, {
-      root,
-      expectedCommit,
-    })).includes("checkpoint_approval_not_independent"));
+    assert.ok(codes(checkpointFindings(contract, { root })).includes(
+      "checkpoint_approval_not_independent",
+    ));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -715,10 +749,7 @@ test("accepts complete checkpoints with valid commit-bound parsed evidence", () 
     for (let index = 0; index < contract.checkpoints.length; index += 1) {
       completeCheckpoint(contract, root, index, expectedCommit);
     }
-    assert.deepEqual(checkpointFindings(contract, {
-      root,
-      expectedCommit,
-    }), []);
+    assert.deepEqual(checkpointFindings(contract, { root }), []);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -728,10 +759,14 @@ test("aggregate findings include journey and checkpoint failures", () => {
   const contract = clone();
   contract.journey.mandatoryPhases.splice(0, 1);
   contract.checkpoints[0].status = "complete";
+  contract.checkpoints[0].evidenceCommit = execFileSync(
+    "git",
+    ["rev-parse", "HEAD"],
+    { encoding: "utf8" },
+  ).trim();
   const findingCodes = codes(
     semanticRoadmapFindings(contract, validRows(canonical), {
       root: process.cwd(),
-      expectedCommit: EXPECTED_COMMIT,
     }),
   );
   assert.ok(findingCodes.includes("journey_phase_missing"));

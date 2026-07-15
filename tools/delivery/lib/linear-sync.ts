@@ -77,9 +77,17 @@ function compareIssue(
       label: "owner",
     },
     team: { code: "linear_sync_team_changed", label: "team" },
+    projectId: {
+      code: "linear_sync_project_changed",
+      label: "project identity",
+    },
     project: {
       code: "linear_sync_project_changed",
       label: "project",
+    },
+    milestoneId: {
+      code: "linear_sync_milestone_changed",
+      label: "milestone identity",
     },
     parent: {
       code: "linear_sync_parent_changed",

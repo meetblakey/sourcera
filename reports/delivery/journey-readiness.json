@@ -9,7 +9,6 @@
       "§10.16.1–§10.16.3"
     ]
   },
-  "expectedCommit": null,
   "mandatoryPhases": [
     {
       "phase": 1,
@@ -180,6 +179,7 @@
         "evidence"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "The exact commit passes local and CI tests and produces deploy evidence."
@@ -230,6 +230,7 @@
         "baseline security"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "Authorized buyer and seller identities access only their tenant, console, and role."
@@ -279,6 +280,7 @@
         "phases 1–3"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "A buyer creates a workspace and completes phases 1 through 3 in order."
@@ -326,6 +328,7 @@
         "bidding entry"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "A buyer discovers, invites, confirms, and opens bidding for at least one seller."
@@ -375,6 +378,7 @@
         "submission"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "An invited seller enters securely, completes onboarding and NDA, authors, and submits a response."
@@ -425,6 +429,7 @@
         "closure"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "The buyer completes phases 7 through 13, reviews, scores, selects, reports, and closes."
@@ -474,6 +479,7 @@
         "access enforcement"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "Closure creates an immutable, exportable, retained, recoverable, access-controlled selection record."
@@ -522,6 +528,7 @@
         "runtime-gate closure"
       ],
       "status": "planned",
+      "evidenceCommit": null,
       "requirements": {
         "success": [
           "The exact commit passes canary, deployed health, and every required runtime gate."
@@ -577,7 +584,7 @@
     {
       "code": "journey_artifact_later_release",
       "requirementId": "F-223",
-      "message": "Mandatory journey artifact F-223 must be R0, not R1"
+      "message": "Mandatory journey artifact F-223 must be R0, not R2"
     },
     {
       "code": "journey_artifact_later_release",
@@ -585,14 +592,19 @@
       "message": "Mandatory journey artifact F-224 must be R0, not R2"
     },
     {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-211",
-      "message": "Phase 1 F-211 must be R0, not R1"
+      "code": "journey_optional_release_changed",
+      "requirementId": "F-222",
+      "message": "Optional path F-222 must remain R1"
+    },
+    {
+      "code": "journey_optional_release_changed",
+      "requirementId": "F-227",
+      "message": "Optional path F-227 must remain R1"
     },
     {
       "code": "journey_phase_later_release",
-      "requirementId": "F-212",
-      "message": "Phase 2 F-212 must be R0, not R1"
+      "requirementId": "F-211",
+      "message": "Phase 1 F-211 must be R0, not R3"
     },
     {
       "code": "journey_phase_later_release",
@@ -601,48 +613,43 @@
     },
     {
       "code": "journey_phase_later_release",
+      "requirementId": "F-214",
+      "message": "Phase 4 F-214 must be R0, not R3"
+    },
+    {
+      "code": "journey_phase_later_release",
+      "requirementId": "F-214",
+      "message": "Phase 5 F-214 must be R0, not R3"
+    },
+    {
+      "code": "journey_phase_later_release",
       "requirementId": "F-217",
       "message": "Phase 7 F-217 must be R0, not R1"
     },
     {
       "code": "journey_phase_later_release",
-      "requirementId": "F-218",
-      "message": "Phase 8 F-218 must be R0, not R1"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-219",
-      "message": "Phase 9 F-219 must be R0, not R1"
-    },
-    {
-      "code": "journey_phase_later_release",
       "requirementId": "F-223",
-      "message": "Phase 11 F-223 must be R0, not R1"
+      "message": "Phase 11 F-223 must be R0, not R2"
     },
     {
-      "code": "journey_support_later_release",
-      "requirementId": "F-210",
-      "message": "Mandatory journey support F-210 must be R0, not R1"
+      "code": "linear_fingerprint_milestones_missing",
+      "message": "Linear fingerprint lacks the project milestone inventory"
     },
     {
-      "code": "journey_support_later_release",
-      "requirementId": "F-235",
-      "message": "Mandatory journey support F-235 must be R0, not R1"
+      "code": "linear_fingerprint_projects_missing",
+      "message": "Linear fingerprint lacks the tracked project inventory"
     },
     {
-      "code": "journey_support_later_release",
-      "requirementId": "F-236",
-      "message": "Mandatory journey support F-236 must be R0, not R1"
+      "code": "linear_issue_project_milestone_metadata_incomplete",
+      "message": "Linear issue fingerprint has partial project or milestone identity"
     },
     {
-      "code": "journey_support_later_release",
-      "requirementId": "F-237",
-      "message": "Mandatory journey support F-237 must be R0, not R2"
+      "code": "linear_milestone_inventory_incomplete",
+      "message": "Linear milestone inventory has missing identity, project, or update metadata"
     },
     {
-      "code": "journey_support_later_release",
-      "requirementId": "F-238",
-      "message": "Mandatory journey support F-238 must be R0, not R1"
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Accessibility, Localization & Responsive UX has an empty Production evidence closed milestone"
     },
     {
       "code": "production_evidence_milestone_empty",
@@ -650,7 +657,55 @@
     },
     {
       "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Billing, Pricing & Entitlements has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Buyer Collaboration, Inbox & Reporting has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Buyer Workspaces & Evaluation Pipeline has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
       "message": "Sourcera Production — Data Portability, Retention & Migration has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Data, Audit & Cross-Console Foundations has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Design System & Application Shell has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Identity, Organizations & Permissions has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Integrations, API, Webhooks & MCP has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Marketplace Discovery, Matching & Trust has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Marketplace Seller Supply & Promotions has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Notifications & Email has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Observability, Reliability & Performance has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Operations & Support Console has an empty Production evidence closed milestone"
     },
     {
       "code": "production_evidence_milestone_empty",
@@ -658,7 +713,39 @@
     },
     {
       "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Product Analytics, Growth & Network Effects has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — QA, Release, Deployment & Launch has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
       "message": "Sourcera Production — Realtime, Search & Collaboration Infrastructure has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Requirements, Policies & Templates has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Scoring, Scenarios & TCO has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Security, Privacy, Compliance & Residency has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Seller Bids, Responses, Q&A & NDA has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Seller Console & Onboarding has an empty Production evidence closed milestone"
+    },
+    {
+      "code": "production_evidence_milestone_empty",
+      "message": "Sourcera Production — Seller Knowledge, Profile & Capabilities has an empty Production evidence closed milestone"
     },
     {
       "code": "production_evidence_milestone_empty",
