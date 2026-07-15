@@ -13,9 +13,14 @@ const COPIED_COUNT_PATTERNS = [
   ),
   new RegExp(String.raw`\b${COUNT}\s+runtime rows?\b`, "i"),
   new RegExp(
+    String.raw`\b${COUNT}(?:\s+[\w/.-]+){0,3}\s+rows?\b`,
+    "i",
+  ),
+  new RegExp(
     String.raw`\bruntime rows?${COUNT_JOIN}${COUNT}\b`,
     "i",
   ),
+  new RegExp(String.raw`\brows?${COUNT_JOIN}${COUNT}\b`, "i"),
   new RegExp(String.raw`\b${COUNT}\s+runtime_active\b`, "i"),
   new RegExp(
     String.raw`\bruntime_active${COUNT_JOIN}${COUNT}\b`,
@@ -54,7 +59,7 @@ export function masterSpecHeaderPolicyFindings(masterSpec: string): string[] {
     (line) =>
       line.includes("_audit/V711_BACKLOG_INDEX.md") &&
       /\b(?:current|live)\b/i.test(line) &&
-      /\b(?:authority|routing|source\s+of\s+truth|canonical\s+(?:source|record)|governs?|controls?)\b/i.test(
+      /\b(?:authority|routing|source[\s-]+of[\s-]+truth|canonical[\s-]+(?:source|record)|governs?|controls?)\b/i.test(
         line,
       ),
   );

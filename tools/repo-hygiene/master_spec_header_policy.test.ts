@@ -18,6 +18,7 @@ test("rejects copied live-count families in the active header", () => {
     "Product/runtime blockers remain at zero.",
     "The blocker count is 212.",
     "Thirteen pending M02.3 rows still require external evidence.",
+    "One row has a partial local chain.",
   ];
 
   for (const copiedCount of copiedCounts) {
@@ -35,7 +36,9 @@ test("rejects the backlog index as active-header authority", () => {
   const authorityClaims = [
     "`_audit/V711_BACKLOG_INDEX.md` is the current count-routing authority.",
     "`_audit/V711_BACKLOG_INDEX.md` is the current source of truth.",
+    "`_audit/V711_BACKLOG_INDEX.md` is the current source-of-truth.",
     "`_audit/V711_BACKLOG_INDEX.md` is the live canonical source.",
+    "`_audit/V711_BACKLOG_INDEX.md` is the live canonical-source.",
   ];
 
   for (const authorityClaim of authorityClaims) {
