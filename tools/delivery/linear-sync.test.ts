@@ -376,16 +376,21 @@ test("allows exact complete expected relation sets with release and milestone ch
 
 test("rejects missing, extra, or wrongly oriented planned relations", () => {
   const existing = fingerprint().issues[0].relations;
+  const secondExisting = fingerprint().issues[1].relations;
   const planned = "blocks:PLA-1:PLA-2";
   const cases: Array<{
     name: string;
     expectedRelations: string[];
     afterRelations: string[];
+    expectedSecondRelations?: string[];
+    afterSecondRelations?: string[];
   }> = [
     {
       name: "missing",
       expectedRelations: [...existing, planned],
       afterRelations: [...existing],
+      expectedSecondRelations: [...secondExisting, planned],
+      afterSecondRelations: [...secondExisting, planned],
     },
     {
       name: "extra",
@@ -396,6 +401,8 @@ test("rejects missing, extra, or wrongly oriented planned relations", () => {
       name: "wrong orientation",
       expectedRelations: [...existing, planned],
       afterRelations: [...existing, "blocks:PLA-2:PLA-1"],
+      expectedSecondRelations: [...secondExisting, planned],
+      afterSecondRelations: [...secondExisting, planned],
     },
   ];
 
@@ -404,16 +411,83 @@ test("rejects missing, extra, or wrongly oriented planned relations", () => {
     const after = clone(before);
     after.issues[0].releases = ["R0"];
     after.issues[0].relations = candidate.afterRelations;
+    if (candidate.afterSecondRelations) {
+      after.issues[1].relations = candidate.afterSecondRelations;
+    }
+    const expectedRelationsByIssue = new Map([
+      ["PLA-1", candidate.expectedRelations],
+    ]);
+    if (candidate.expectedSecondRelations) {
+      expectedRelationsByIssue.set(
+        "PLA-2",
+        candidate.expectedSecondRelations,
+      );
+    }
     assert.deepEqual(
       codes(linearSyncPreservationFindings(before, after, expected(), {
-        expectedRelationsByIssue: new Map([
-          ["PLA-1", candidate.expectedRelations],
-        ]),
+        expectedRelationsByIssue,
       })),
       ["linear_sync_relations_changed"],
       candidate.name,
     );
   }
+});
+
+test("rejects an expected relation that does not contain its mapped issue", () => {
+  const before = fingerprint();
+  before.issues.push(issue("PLA-3", "R2"));
+  const after = clone(before);
+  const unrelated = "blocks:PLA-2:PLA-3";
+  after.issues[0].releases = ["R0"];
+  after.issues[0].relations.push(unrelated);
+
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), {
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [...before.issues[0].relations, unrelated]],
+      ]),
+    })),
+    ["linear_sync_expected_relation_issue_mismatch"],
+  );
+});
+
+test("requires both endpoint plans for every new blocks relation", () => {
+  const planned = "blocks:PLA-1:PLA-2";
+  for (const includeSecondPlan of [false, true]) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    after.issues[0].relations.push(planned);
+    const expectedRelationsByIssue = new Map([
+      ["PLA-1", [...before.issues[0].relations, planned]],
+    ]);
+    if (includeSecondPlan) {
+      expectedRelationsByIssue.set("PLA-2", before.issues[1].relations);
+    }
+
+    assert.deepEqual(
+      codes(linearSyncPreservationFindings(before, after, expected(), {
+        expectedRelationsByIssue,
+      })),
+      ["linear_sync_expected_relation_endpoint_incomplete"],
+      includeSecondPlan ? "second endpoint omits relation" : "second endpoint unmapped",
+    );
+  }
+});
+
+test("rejects duplicate relation entries in before and after captures", () => {
+  const before = fingerprint();
+  before.issues[0].relations.push(before.issues[0].relations[0]);
+  const after = clone(before);
+  after.issues[0].releases = ["R0"];
+
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected())),
+    [
+      "linear_sync_relations_duplicate_after",
+      "linear_sync_relations_duplicate_before",
+    ],
+  );
 });
 
 test("rejects duplicate and noncanonical expected relation sets", () => {

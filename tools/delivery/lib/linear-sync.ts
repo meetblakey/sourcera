@@ -72,6 +72,7 @@ function expectedRelationSet(
   expectedRelations: readonly string[] | undefined,
 ): string[] {
   const normalized: string[] = [];
+  const issueMismatches = new Set<string>();
   let noncanonical = !Array.isArray(expectedRelations);
   for (const relation of expectedRelations ?? []) {
     const parts = relation.split(":");
@@ -86,6 +87,13 @@ function expectedRelationSet(
         parts[2],
       );
       if (canonical !== relation) noncanonical = true;
+      if (
+        canonical === relation &&
+        parts[1] !== issueId &&
+        parts[2] !== issueId
+      ) {
+        issueMismatches.add(relation);
+      }
       normalized.push(canonical);
     } catch {
       noncanonical = true;
@@ -104,6 +112,14 @@ function expectedRelationSet(
       findings,
       "linear_sync_expected_relations_duplicate",
       `${issueId} expected relations contain duplicates`,
+      issueId,
+    );
+  }
+  for (const relation of sorted([...issueMismatches])) {
+    add(
+      findings,
+      "linear_sync_expected_relation_issue_mismatch",
+      `${issueId} expected relation ${relation} does not contain the mapped issue`,
       issueId,
     );
   }
@@ -130,6 +146,58 @@ function expectedRelationSet(
     );
   }
   return relations;
+}
+
+function validateExpectedRelationEndpoints(
+  findings: Finding[],
+  beforeIssues: ReadonlyMap<string, LinearIssue>,
+  expectedRelationsByIssue:
+    | ReadonlyMap<string, readonly string[]>
+    | undefined,
+): void {
+  if (!expectedRelationsByIssue) return;
+  const incomplete = new Set<string>();
+  for (const [issueId, expectedRelations] of expectedRelationsByIssue) {
+    const beforeIssue = beforeIssues.get(issueId);
+    if (!beforeIssue || !Array.isArray(expectedRelations)) continue;
+    const beforeRelations = new Set(beforeIssue.relations);
+    for (const relation of expectedRelations) {
+      const parts = relation.split(":");
+      if (
+        parts.length !== 3 ||
+        parts[0] !== "blocks" ||
+        beforeRelations.has(relation) ||
+        (parts[1] !== issueId && parts[2] !== issueId)
+      ) {
+        continue;
+      }
+      try {
+        if (
+          canonicalLinearRelationKey(parts[0], parts[1], parts[2]) !== relation
+        ) {
+          continue;
+        }
+      } catch {
+        continue;
+      }
+      if (
+        [parts[1], parts[2]].some((endpoint) =>
+          !expectedRelationsByIssue.get(endpoint)?.includes(relation)
+        )
+      ) {
+        incomplete.add(relation);
+      }
+    }
+  }
+  for (const relation of sorted([...incomplete])) {
+    const [, issueId] = relation.split(":");
+    add(
+      findings,
+      "linear_sync_expected_relation_endpoint_incomplete",
+      `${relation} is not declared in complete expected relation sets for both endpoints`,
+      issueId,
+    );
+  }
 }
 
 function compareIssue(
@@ -219,6 +287,22 @@ function compareIssue(
         expectedRelations,
       )
     : sorted(before.relations);
+  if (new Set(before.relations).size !== before.relations.length) {
+    add(
+      findings,
+      "linear_sync_relations_duplicate_before",
+      `${before.identifier} before-state relations contain duplicates`,
+      before.identifier,
+    );
+  }
+  if (new Set(after.relations).size !== after.relations.length) {
+    add(
+      findings,
+      "linear_sync_relations_duplicate_after",
+      `${before.identifier} after-state relations contain duplicates`,
+      before.identifier,
+    );
+  }
   if (!equal(sorted(after.relations), requiredRelations)) {
     add(
       findings,
@@ -373,6 +457,11 @@ export function linearSyncPreservationFindings(
       duplicate,
     );
   }
+  validateExpectedRelationEndpoints(
+    findings,
+    beforeIssues.rows,
+    allowances.expectedRelationsByIssue,
+  );
   for (const identifier of sorted([...beforeIssues.rows.keys()])) {
     const afterIssue = afterIssues.rows.get(identifier);
     if (!afterIssue) {
