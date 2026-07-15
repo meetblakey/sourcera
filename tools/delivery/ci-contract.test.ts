@@ -83,3 +83,33 @@ test("Linear drift uploads its complete capture even when drift fails", () => {
     );
   }
 });
+
+test("release-critical paths have the named repository owner", () => {
+  const codeowners = readFileSync(".github/CODEOWNERS", "utf8");
+  const entries = new Map(
+    codeowners
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith("#"))
+      .map((line) => {
+        const [pattern, ...owners] = line.split(/\s+/);
+        return [pattern, owners] as const;
+      }),
+  );
+
+  for (const pattern of [
+    "*",
+    "/.github/",
+    "/delivery/",
+    "/tools/delivery/",
+    "/tools/release/",
+    "/scripts/",
+    "/convex/",
+    "/apps/",
+    "/packages/",
+    "/Sourcera_Master_Spec.md",
+    "/UX_Design_of_Sourcera.md",
+  ]) {
+    assert.deepEqual(entries.get(pattern), ["@meetblakey"]);
+  }
+});

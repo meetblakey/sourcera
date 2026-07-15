@@ -1,0 +1,15 @@
+# One current human owns review and release approval under DEC-OWNER-001.
+* @meetblakey
+
+# Make release-sensitive ownership explicit. A distinct reviewer becomes
+# mandatory when a second active human joins under the operating model.
+/.github/ @meetblakey
+/delivery/ @meetblakey
+/tools/delivery/ @meetblakey
+/tools/release/ @meetblakey
+/scripts/ @meetblakey
+/convex/ @meetblakey
+/apps/ @meetblakey
+/packages/ @meetblakey
+/Sourcera_Master_Spec.md @meetblakey
+/UX_Design_of_Sourcera.md @meetblakey
