@@ -1,4 +1,8 @@
 import { descriptionFingerprint } from "./fingerprint.js";
+import {
+  assertLinearProjectScope,
+  type LinearProjectScope,
+} from "./linear-project-scope.js";
 
 const ENDPOINT = "https://api.linear.app/graphql";
 const NESTED_CONNECTION_LIMIT = 250;
@@ -226,9 +230,7 @@ export interface LinearFingerprint {
   }>;
 }
 
-export interface LinearFingerprintScope {
-  projectIds: readonly string[];
-}
+export type LinearFingerprintScope = LinearProjectScope;
 
 function scopedProjectInventory(
   projects: ProjectNode[],
@@ -236,16 +238,7 @@ function scopedProjectInventory(
   scope?: LinearFingerprintScope,
 ): { projects: ProjectNode[]; milestones: ProjectMilestoneNode[] } {
   if (!scope) return { projects, milestones };
-  if (!scope.projectIds.length) {
-    throw new Error("Tracked Linear project IDs are required");
-  }
-  const trackedIds = new Set(scope.projectIds);
-  if (
-    trackedIds.size !== scope.projectIds.length ||
-    scope.projectIds.some((id) => !id.trim())
-  ) {
-    throw new Error("Tracked Linear project IDs are incomplete or duplicated");
-  }
+  const trackedIds = new Set(assertLinearProjectScope(scope, scope.projects));
   for (const projectId of [...trackedIds].sort()) {
     const count = projects.filter((project) => project.id === projectId).length;
     if (count === 0) {
@@ -256,6 +249,7 @@ function scopedProjectInventory(
     }
   }
   const scopedProjects = projects.filter((project) => trackedIds.has(project.id));
+  assertLinearProjectScope(scope, scopedProjects);
   const projectNameById = new Map(
     scopedProjects.map((project) => [project.id, project.name]),
   );

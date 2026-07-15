@@ -395,7 +395,8 @@ test("scopes project inventories by canonical IDs while preserving every issue",
   };
 
   const fingerprint = await fetchLinearFingerprint(fetcher, "secret", {
-    projectIds: ["project-tracked"],
+    schemaVersion: 1,
+    projects: [{ id: "project-tracked", name: "Sourcera Production" }],
   });
   assert.deepEqual(
     fingerprint.issues.map((candidate) => candidate.identifier),
@@ -412,15 +413,31 @@ test("scopes project inventories by canonical IDs while preserving every issue",
   await assert.rejects(
     () =>
       fetchLinearFingerprint(fetcher, "secret", {
-        projectIds: ["project-missing"],
+        schemaVersion: 1,
+        projects: [{ id: "project-missing", name: "Missing" }],
       }),
     /Tracked Linear project project-missing is missing/,
   );
+  projectRows[0] = { ...projectRows[0], name: "Renamed" };
+  await assert.rejects(
+    () =>
+      fetchLinearFingerprint(fetcher, "secret", {
+        schemaVersion: 1,
+        projects: [
+          { id: "project-tracked", name: "Sourcera Production" },
+        ],
+      }),
+    /name differs from canonical scope/,
+  );
+  projectRows[0] = { ...projectRows[0], name: "Sourcera Production" };
   projectRows = [projectRows[0], projectRows[0], projectRows[1]];
   await assert.rejects(
     () =>
       fetchLinearFingerprint(fetcher, "secret", {
-        projectIds: ["project-tracked"],
+        schemaVersion: 1,
+        projects: [
+          { id: "project-tracked", name: "Sourcera Production" },
+        ],
       }),
     /Tracked Linear project project-tracked is duplicated/,
   );
@@ -752,11 +769,19 @@ test("CLI compares a fixture with the committed snapshot", () => {
   try {
     const snapshot = join(dir, "snapshot.json");
     const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
     writeFileSync(
       snapshot,
       JSON.stringify({ projects: empty.projects, linearFingerprint: empty }),
     );
     writeFileSync(fixture, JSON.stringify(empty));
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Sourcera Production" }],
+      }),
+    );
     const run = () =>
       spawnSync(
         process.execPath,
@@ -768,6 +793,8 @@ test("CLI compares a fixture with the committed snapshot", () => {
           snapshot,
           "--fixture",
           fixture,
+          "--linear-project-scope",
+          scope,
         ],
         { cwd: process.cwd(), encoding: "utf8" },
       );
@@ -779,6 +806,61 @@ test("CLI compares a fixture with the committed snapshot", () => {
     const changed = run();
     assert.equal(changed.status, 1);
     assert.match(changed.stderr, /releases differ/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI rejects a snapshot that shrinks the independent project scope", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-scope-"));
+  try {
+    const project = {
+      id: "project-1",
+      name: "First",
+      updatedAt: "2026-07-15T00:00:00.000Z",
+    };
+    const fingerprint = {
+      issues: [],
+      releasePipelines: [],
+      releases: [],
+      projects: [project],
+      projectMilestones: [],
+    };
+    const snapshot = join(dir, "snapshot.json");
+    const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
+    writeFileSync(
+      snapshot,
+      JSON.stringify({ projects: [project], linearFingerprint: fingerprint }),
+    );
+    writeFileSync(fixture, JSON.stringify(fingerprint));
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [
+          { id: "project-1", name: "First" },
+          { id: "project-2", name: "Second" },
+        ],
+      }),
+    );
+    const result = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--snapshot",
+        snapshot,
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+      ],
+      { cwd: process.cwd(), encoding: "utf8" },
+    );
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /project scope.*project-2.*missing/i);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

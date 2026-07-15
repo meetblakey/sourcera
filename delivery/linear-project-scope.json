@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "projects": [
+    {
+      "id": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
+      "name": "Sourcera Production — Data Portability, Retention & Migration"
+    },
+    {
+      "id": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
+      "name": "Sourcera Production — Seller Bids, Responses, Q&A & NDA"
+    },
+    {
+      "id": "32d9c20f-fe88-40e3-8a86-53712a91db58",
+      "name": "Sourcera Production — Marketplace Discovery, Matching & Trust"
+    },
+    {
+      "id": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
+      "name": "Sourcera Production — Marketplace Seller Supply & Promotions"
+    },
+    {
+      "id": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+      "name": "Sourcera Production — Identity, Organizations & Permissions"
+    },
+    {
+      "id": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
+      "name": "Sourcera Production — Billing, Pricing & Entitlements"
+    },
+    {
+      "id": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
+      "name": "Sourcera Production — Accessibility, Localization & Responsive UX"
+    },
+    {
+      "id": "532e0956-047a-4f09-b811-2971892f62ee",
+      "name": "Sourcera Production — Platform & Delivery Foundations"
+    },
+    {
+      "id": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
+      "name": "Sourcera Production — Design System & Application Shell"
+    },
+    {
+      "id": "609d8e2e-4543-4cdb-89b4-281986f93a85",
+      "name": "Sourcera Production — Security, Privacy, Compliance & Residency"
+    },
+    {
+      "id": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
+      "name": "Sourcera Production — Buyer Workspaces & Evaluation Pipeline"
+    },
+    {
+      "id": "6fe48bc4-c830-4e10-8a44-390facb9063f",
+      "name": "Sourcera Production — Integrations, API, Webhooks & MCP"
+    },
+    {
+      "id": "848dee0f-1121-4ad0-a877-e08629f5b99c",
+      "name": "Sourcera Production — Scoring, Scenarios & TCO"
+    },
+    {
+      "id": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "name": "Sourcera Production — QA, Release, Deployment & Launch"
+    },
+    {
+      "id": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
+      "name": "Sourcera Production — Notifications & Email"
+    },
+    {
+      "id": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+      "name": "Sourcera Production — Product Analytics, Growth & Network Effects"
+    },
+    {
+      "id": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
+      "name": "Sourcera Production — Operations & Support Console"
+    },
+    {
+      "id": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
+      "name": "Sourcera Production — Seller Knowledge, Profile & Capabilities"
+    },
+    {
+      "id": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
+      "name": "Sourcera Production — Seller Console & Onboarding"
+    },
+    {
+      "id": "cd7ce280-06f2-4ace-bce6-101141f7d098",
+      "name": "Sourcera Production — Buyer Collaboration, Inbox & Reporting"
+    },
+    {
+      "id": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
+      "name": "Sourcera Production — Requirements, Policies & Templates"
+    },
+    {
+      "id": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
+      "name": "Sourcera Production — Data, Audit & Cross-Console Foundations"
+    },
+    {
+      "id": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
+      "name": "Sourcera Production — Vendors, Invitations & NDA"
+    },
+    {
+      "id": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
+      "name": "Sourcera Production — Observability, Reliability & Performance"
+    },
+    {
+      "id": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
+      "name": "Sourcera Production — Realtime, Search & Collaboration Infrastructure"
+    },
+    {
+      "id": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
+      "name": "Sourcera Production — Agent & Intelligence Capabilities"
+    }
+  ]
+}

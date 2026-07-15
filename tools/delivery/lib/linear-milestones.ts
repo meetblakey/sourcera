@@ -1,4 +1,8 @@
 import type { Finding } from "./model.js";
+import {
+  linearProjectScopeFindings,
+  type LinearProjectScope,
+} from "./linear-project-scope.js";
 
 interface ProjectRow {
   id: string;
@@ -53,6 +57,7 @@ const milestoneProjection = (rows: MilestoneRow[]) =>
 
 export function linearMilestoneFindings(
   snapshot: LinearMilestoneSnapshot,
+  projectScope: LinearProjectScope,
 ): Finding[] {
   const findings: Finding[] = [];
   const projects = Array.isArray(snapshot.projects) ? snapshot.projects : null;
@@ -69,6 +74,10 @@ export function linearMilestoneFindings(
   const fingerprintMilestones = Array.isArray(fingerprint?.projectMilestones)
     ? fingerprint.projectMilestones
     : null;
+
+  findings.push(
+    ...linearProjectScopeFindings(projectScope, projects ?? []),
+  );
 
   if (!projects?.length) {
     findings.push({

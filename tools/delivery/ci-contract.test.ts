@@ -17,6 +17,7 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     "--policy delivery/release-policy.json",
     "--release-plan delivery/release-plan.json",
     "--roadmap delivery/roadmap-contract.json",
+    "--linear-project-scope delivery/linear-project-scope.json",
     "tools/delivery/linear-live.ts",
     "npm --prefix tools/spec-lint run typecheck",
     "npm --prefix tools/spec-lint run all",

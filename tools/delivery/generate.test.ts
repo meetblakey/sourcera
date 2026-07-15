@@ -308,6 +308,91 @@ test("fails closed for every missing or inconsistent Linear milestone inventory 
   }
 });
 
+test("requires the snapshot project IDs to exactly match an independent scope", () => {
+  const base = JSON.parse(
+    readFileSync("delivery/linear-snapshot.json", "utf8"),
+  );
+  addLinearInventoryFingerprint(base);
+  const scope = {
+    schemaVersion: 1,
+    projects: base.projects.map((project: any) => ({
+      id: project.id,
+      name: project.name,
+    })),
+  };
+  const cases: Array<[
+    string,
+    (linear: any, candidateScope: any) => void,
+    string,
+  ]> = [
+    [
+      "missing",
+      (linear) => linear.projects.pop(),
+      "linear_project_scope_missing",
+    ],
+    [
+      "unexpected",
+      (linear) =>
+        linear.projects.push({
+          id: "unexpected-project",
+          name: "Unexpected",
+          updatedAt: "2026-07-15T00:00:00.000Z",
+        }),
+      "linear_project_scope_unexpected",
+    ],
+    [
+      "duplicate",
+      (linear) => linear.projects.push({ ...linear.projects[0] }),
+      "linear_project_scope_duplicate",
+    ],
+    [
+      "renamed",
+      (linear) => {
+        linear.projects[0].name = "Renamed";
+      },
+      "linear_project_scope_name_changed",
+    ],
+    [
+      "scope-name-missing",
+      (_linear, candidateScope) => {
+        delete candidateScope.projects[0].name;
+      },
+      "linear_project_scope_invalid",
+    ],
+  ];
+  for (const [name, mutate, expectedCode] of cases) {
+    const dir = mkdtempSync(join(tmpdir(), `sourcera-project-scope-${name}-`));
+    try {
+      const linear = structuredClone(base);
+      const candidateScope = structuredClone(scope);
+      mutate(linear, candidateScope);
+      const linearPath = join(dir, "linear.json");
+      const scopePath = join(dir, "linear-project-scope.json");
+      writeFileSync(linearPath, JSON.stringify(linear));
+      writeFileSync(scopePath, JSON.stringify(candidateScope));
+      const fixture = canonicalGenerationArgs(dir, [
+        "--linear",
+        linearPath,
+        "--linear-project-scope",
+        scopePath,
+      ]);
+      const result = runGeneration(fixture.args);
+      assert.equal(result.status, 1);
+      const report = JSON.parse(
+        readFileSync(join(fixture.reports, "journey-readiness.json"), "utf8"),
+      );
+      assert.ok(
+        report.findings.some(
+          (finding: { code: string }) => finding.code === expectedCode,
+        ),
+        `${name} must report ${expectedCode}`,
+      );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+});
+
 test("keeps a completed checkpoint report pinned to evidence commit A at closeout B", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-checkpoint-"));
   try {

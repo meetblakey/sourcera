@@ -26,6 +26,7 @@ import {
   linearMilestoneFindings,
   type LinearMilestoneSnapshot,
 } from "./lib/linear-milestones.js";
+import type { LinearProjectScope } from "./lib/linear-project-scope.js";
 import {
   buildReleaseAssignments,
   releasePolicyFindings,
@@ -128,6 +129,10 @@ const validationPath = path(
   "delivery/validation-plan.json",
 );
 const linearPath = path("--linear", "delivery/linear-snapshot.json");
+const linearProjectScopePath = path(
+  "--linear-project-scope",
+  "delivery/linear-project-scope.json",
+);
 const roadmapPath = path("--roadmap", "delivery/roadmap-contract.json");
 const outDir = path("--out", "reports/delivery");
 
@@ -160,6 +165,7 @@ const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
   .assignments;
 const policy = json<ReleasePolicy>(policyPath);
 const linearSnapshot = json<LinearDeliverySnapshot>(linearPath);
+const linearProjectScope = json<LinearProjectScope>(linearProjectScopePath);
 const issues = linearSnapshot.issues;
 const roadmap = json<SemanticRoadmapContract>(roadmapPath);
 const overrides = json<{ overrides: DispositionOverride[] }>(dispositionsPath)
@@ -248,7 +254,7 @@ const semanticFindings = semanticRoadmapFindings(
   { root },
 );
 const productionEvidenceMilestoneFindings =
-  linearMilestoneFindings(linearSnapshot);
+  linearMilestoneFindings(linearSnapshot, linearProjectScope);
 const journeyReadinessFindings = [
   ...semanticFindings,
   ...productionEvidenceMilestoneFindings,

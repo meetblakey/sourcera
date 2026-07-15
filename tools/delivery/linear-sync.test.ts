@@ -119,9 +119,12 @@ test("allows only an expected release, expected milestone, permitted codex-ready
   after.issues.reverse();
   after.releasePipelines.reverse();
   after.releases.reverse();
+  after.projects.reverse();
+  after.projectMilestones.reverse();
 
   const mapped = after.issues.find((candidate) => candidate.identifier === "PLA-1")!;
   mapped.releases = ["R0"];
+  mapped.milestoneId = "milestone-required";
   mapped.milestone = "Required R0 milestone";
   mapped.labels = ["feature"];
   mapped.relations.reverse();
@@ -140,11 +143,20 @@ test("allows only an expected release, expected milestone, permitted codex-ready
   for (const release of after.releases) {
     release.updatedAt = "2026-07-15T11:00:00.000Z";
   }
+  for (const project of after.projects) {
+    project.updatedAt = "2026-07-15T11:00:00.000Z";
+  }
+  for (const milestone of after.projectMilestones) {
+    milestone.updatedAt = "2026-07-15T11:00:00.000Z";
+  }
 
   assert.deepEqual(
     linearSyncPreservationFindings(before, after, expected(), {
       expectedMilestoneByIssue: new Map([
-        ["PLA-1", "Required R0 milestone"],
+        [
+          "PLA-1",
+          { id: "milestone-required", name: "Required R0 milestone" },
+        ],
       ]),
       readinessFailedIssueIds: new Set(["PLA-1"]),
     }),
@@ -274,18 +286,61 @@ test("keeps milestones unchanged because the release-only contract cannot derive
   );
 });
 
-test("rejects a milestone that is not the exact planned milestone", () => {
+test("without an expected milestone, preserves both milestone ID and name", () => {
+  for (const mutate of [
+    (candidate: Issue) => {
+      candidate.milestoneId = "different-id";
+    },
+    (candidate: Issue) => {
+      candidate.milestone = "Different name";
+    },
+  ]) {
+    const before = fingerprint();
+    const after = clone(before);
+    after.issues[0].releases = ["R0"];
+    mutate(after.issues[0]);
+    assert.deepEqual(
+      codes(linearSyncPreservationFindings(before, after, expected())),
+      ["linear_sync_milestone_changed"],
+    );
+  }
+});
+
+test("rejects a planned milestone name paired with the stale ID", () => {
   const before = fingerprint();
   const after = clone(before);
   after.issues[0].releases = ["R0"];
-  after.issues[0].milestone = "Arbitrary milestone";
+  after.issues[0].milestone = "Required R0 milestone";
 
   assert.deepEqual(
     codes(linearSyncPreservationFindings(before, after, expected(), {
       expectedMilestoneByIssue: new Map([
-        ["PLA-1", "Required R0 milestone"],
+        [
+          "PLA-1",
+          { id: "milestone-required", name: "Required R0 milestone" },
+        ],
       ]),
     })),
+    ["linear_sync_milestone_changed"],
+  );
+});
+
+test("allows an expected null milestone only when both ID and name clear", () => {
+  const before = fingerprint();
+  const after = clone(before);
+  after.issues[0].releases = ["R0"];
+  after.issues[0].milestoneId = null;
+  after.issues[0].milestone = null;
+  const allowances = {
+    expectedMilestoneByIssue: new Map([["PLA-1", null]]),
+  };
+  assert.deepEqual(
+    linearSyncPreservationFindings(before, after, expected(), allowances),
+    [],
+  );
+  after.issues[0].milestoneId = "milestone-1";
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), allowances)),
     ["linear_sync_milestone_changed"],
   );
 });
@@ -314,7 +369,9 @@ test("rejects planned milestone or readiness changes for an uncaptured issue", (
 
   assert.deepEqual(
     codes(linearSyncPreservationFindings(before, after, expected(), {
-      expectedMilestoneByIssue: new Map([["PLA-4", "Required milestone"]]),
+      expectedMilestoneByIssue: new Map([
+        ["PLA-4", { id: "milestone-required", name: "Required milestone" }],
+      ]),
       readinessFailedIssueIds: new Set(["PLA-4"]),
     })),
     ["linear_sync_expected_issue_missing"],
@@ -373,6 +430,68 @@ test("rejects release identity and topology drift", () => {
       "linear_sync_release_missing",
       "linear_sync_release_unexpected",
       "linear_sync_release_changed",
+    ]),
+  );
+});
+
+test("rejects project inventory identity and topology drift", () => {
+  const before = fingerprint();
+  before.projects.push(clone(before).projects[0]);
+  before.projects.push({
+    ...clone(before).projects[0],
+    id: "project-missing",
+    name: "Missing",
+  });
+  const after = clone(fingerprint());
+  after.issues[0].releases = ["R0"];
+  after.projects = [
+    after.projects[0],
+    after.projects[0],
+    { ...after.projects[0], id: "project-unexpected", name: "Unexpected" },
+  ];
+  after.projects[0].name = "Changed";
+
+  assert.deepEqual(
+    new Set(codes(linearSyncPreservationFindings(before, after, expected()))),
+    new Set([
+      "linear_sync_project_duplicate_before",
+      "linear_sync_project_duplicate_after",
+      "linear_sync_project_missing",
+      "linear_sync_project_unexpected",
+      "linear_sync_project_changed",
+    ]),
+  );
+});
+
+test("rejects project milestone inventory identity and topology drift", () => {
+  const before = fingerprint();
+  before.projectMilestones.push(clone(before).projectMilestones[0]);
+  before.projectMilestones.push({
+    ...clone(before).projectMilestones[0],
+    id: "milestone-missing",
+    name: "Missing",
+  });
+  const after = clone(fingerprint());
+  after.issues[0].releases = ["R0"];
+  after.projectMilestones = [
+    after.projectMilestones[0],
+    after.projectMilestones[0],
+    {
+      ...after.projectMilestones[0],
+      id: "milestone-unexpected",
+      name: "Unexpected",
+    },
+  ];
+  after.projectMilestones[0].targetDate = "2026-08-01";
+
+  assert.deepEqual(
+    new Set(codes(linearSyncPreservationFindings(before, after, expected()))),
+    new Set([
+      "linear_sync_project_milestone_duplicate_before",
+      "linear_sync_project_milestone_duplicate_after",
+      "linear_sync_project_milestone_missing",
+      "linear_sync_project_milestone_unexpected",
+      "linear_sync_project_milestone_changed",
     ]),
   );
 });

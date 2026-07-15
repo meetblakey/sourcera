@@ -30,6 +30,7 @@ function refreshFixture(
     omitLiveMilestones?: boolean;
     omitLiveProjectId?: string;
     duplicateLiveProjectId?: string;
+    omitSnapshotProjectId?: string;
   } = {},
 ) {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
@@ -115,11 +116,14 @@ function refreshFixture(
         ? [project, { ...project }]
         : [project]
     );
+  const snapshotProjects = liveProjects.filter(
+    (project) => project.id !== options.omitSnapshotProjectId,
+  );
   const original = JSON.stringify({
     generatedAt: "2026-07-14T00:00:00.000Z",
     issues: snapshotIssues,
     releases: [],
-    projects: liveProjects,
+    projects: snapshotProjects,
     milestones: liveMilestones,
     linearFingerprint: {
       issues: trackedIssueIds
@@ -146,6 +150,13 @@ function refreshFixture(
     },
   });
   writeFileSync(snapshotPath, original);
+  writeFileSync(
+    join(delivery, "linear-project-scope.json"),
+    JSON.stringify({
+      schemaVersion: 1,
+      projects: liveProjects.map(({ id, name }) => ({ id, name })),
+    }),
+  );
   writeFileSync(
     join(delivery, "release-plan.json"),
     JSON.stringify({
@@ -274,6 +285,33 @@ test("refresh rejects a missing or duplicated tracked project ID", () => {
   );
 });
 
+test("refresh cannot shrink the independent canonical project scope", () => {
+  const result = refreshFixture(
+    [
+      {
+        id: "PLA-1",
+        title: "First",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        project: "First project",
+      },
+      {
+        id: "PLA-2",
+        title: "Second",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        status: "Backlog",
+        statusType: "backlog",
+        project: "Second project",
+      },
+    ],
+    { omitSnapshotProjectId: "project-2" },
+  );
+  assert.equal(result.result.status, 1);
+  assert.match(result.result.stderr, /project scope.*project-2.*missing/i);
+  assert.equal(result.contents, result.original);
+});
+
 test("copies the live parent relation into issue rows and fingerprints", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-linear-refresh-"));
   try {
@@ -317,7 +355,7 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
         projects: [
           {
             id: "project-identity",
-            name: "Old identity name",
+            name: "Identity",
             updatedAt: "2026-07-14T00:00:00.000Z",
             state: "active",
             priority: 1,
@@ -361,6 +399,13 @@ test("copies the live parent relation into issue rows and fingerprints", () => {
           releasePipelines: [],
           releases: [],
         },
+      }),
+    );
+    writeFileSync(
+      join(delivery, "linear-project-scope.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-identity", name: "Identity" }],
       }),
     );
     writeFileSync(

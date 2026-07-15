@@ -6,6 +6,10 @@ import {
   fingerprintDiff,
   type LinearFingerprint,
 } from "./lib/linear-live.js";
+import {
+  assertLinearProjectScope,
+  type LinearProjectScope,
+} from "./lib/linear-project-scope.js";
 
 async function main(): Promise<void> {
   const argv = new Map<string, string>();
@@ -20,6 +24,10 @@ async function main(): Promise<void> {
   const snapshotPath = resolve(
     argv.get("--snapshot") ?? "delivery/linear-snapshot.json",
   );
+  const projectScopePath = resolve(
+    argv.get("--linear-project-scope") ??
+      "delivery/linear-project-scope.json",
+  );
   const snapshot = JSON.parse(readFileSync(snapshotPath, "utf8")) as {
     projects?: Array<{ id: string }>;
     linearFingerprint: LinearFingerprint;
@@ -30,15 +38,23 @@ async function main(): Promise<void> {
   if (!Array.isArray(snapshot.projects) || !snapshot.projects.length) {
     throw new Error("Linear snapshot lacks tracked projects");
   }
-  const projectIds = snapshot.projects.map((project) => project.id);
+  const projectScope = JSON.parse(
+    readFileSync(projectScopePath, "utf8"),
+  ) as LinearProjectScope;
+  assertLinearProjectScope(
+    projectScope,
+    snapshot.projects,
+  );
   const fixturePath = argv.get("--fixture");
   const actual = fixturePath
     ? (JSON.parse(
         readFileSync(resolve(fixturePath), "utf8"),
       ) as LinearFingerprint)
-    : await fetchLinearFingerprint(fetch, process.env.LINEAR_API_KEY ?? "", {
-        projectIds,
-      });
+    : await fetchLinearFingerprint(
+        fetch,
+        process.env.LINEAR_API_KEY ?? "",
+        projectScope,
+      );
   const differences = fingerprintDiff(snapshot.linearFingerprint, actual);
   if (differences.length) {
     for (const difference of differences) console.error(difference);

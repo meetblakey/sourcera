@@ -11,6 +11,9 @@ Status: DONE
 - New project and milestone inventory arrays are scoped only by canonical snapshot project IDs. Missing or duplicate tracked IDs fail; unrelated legacy projects are ignored; full issue fingerprint coverage remains intact.
 - Snapshot refresh requires live IDs, preserves unrelated project and milestone planning fields, and rebuilds matching fingerprint arrays.
 - Generation fails closed for missing, duplicate, partial, mismatched, drifting, or empty tracked milestone metadata, including duplicate `(projectId,name)` pairs.
+- `delivery/linear-project-scope.json` now independently pins all 26 canonical project IDs and names. Generation, live readback, and snapshot refresh reject missing, extra, duplicate, renamed, or malformed scope rows instead of deriving scope from the mutable snapshot.
+- Linear sync preservation now compares fingerprint projects and project milestones exactly, with stable missing, added, changed, and duplicate findings.
+- Expected milestone changes are atomic `{id,name}` pairs (or `null`); a new name with a stale ID fails, while unmapped issues preserve both fields.
 
 No Linear mutation was made. Existing dirty snapshot, release-plan, and unrelated generated-report changes were preserved.
 
@@ -20,8 +23,8 @@ RED covered checkpoint A-to-B stability, missing checkpoint pins, project and mi
 
 GREEN:
 
-- focused semantic/generation/Linear/refresh suite: 87/87
-- full delivery suite: 184/184
+- focused generation/Linear/sync/refresh/verify/CI suite: 70/70
+- full delivery suite: 191/191
 - spec-lint TypeScript: passed
 - delivery TypeScript: passed
 - `git diff --check`: passed
@@ -31,7 +34,7 @@ GREEN:
 
 ## Clean reproducibility
 
-Generation used base `HEAD` `5034e3dee6d99419c3f53036c5f474fdbc1e275b`, with `delivery/linear-snapshot.json` and `delivery/release-plan.json` copied from that commit by `git show`, plus the new roadmap and fresh stamp/exact scanner output. A post-commit regeneration from committed inputs also matched the report byte-for-byte.
+Generation used base `HEAD` `b1b0013b390048b790e5ee549e49e1050c12a6b1`, with `delivery/linear-snapshot.json` and `delivery/release-plan.json` extracted from that commit, the independent canonical project scope, and fresh stamp/exact scanner output. A post-commit regeneration from committed inputs also matched the report byte-for-byte.
 
 - stamp scanner: exit 1, current blockers preserved
 - exact-status scanner: exit 0

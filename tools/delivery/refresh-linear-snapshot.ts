@@ -3,6 +3,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { descriptionFingerprint } from "./lib/fingerprint.js";
 import { canonicalLinearRelationKey } from "./lib/linear-live.js";
+import {
+  assertLinearProjectScope,
+  type LinearProjectScope,
+} from "./lib/linear-project-scope.js";
 
 interface LiveRelationReference {
   id: string;
@@ -119,8 +123,21 @@ function liveTeamKey(issue: LiveIssue): string {
 
 const root = resolve(process.argv[2] ?? ".");
 const livePath = process.argv[3];
+const projectScopeFlagIndex = process.argv.indexOf("--linear-project-scope");
+if (
+  projectScopeFlagIndex >= 0 &&
+  !process.argv[projectScopeFlagIndex + 1]
+) {
+  throw new Error("--linear-project-scope requires a path");
+}
+const projectScopePath = projectScopeFlagIndex >= 0
+  ? resolve(process.argv[projectScopeFlagIndex + 1])
+  : resolve(root, "delivery/linear-project-scope.json");
 const snapshotPath = resolve(root, "delivery/linear-snapshot.json");
 const snapshot = JSON.parse(readFileSync(snapshotPath, "utf8"));
+const projectScope = JSON.parse(
+  readFileSync(projectScopePath, "utf8"),
+) as LinearProjectScope;
 const live = JSON.parse(readFileSync(livePath ? resolve(livePath) : 0, "utf8")) as {
   issues: LiveIssue[];
   releasePipelines: Array<Record<string, any>>;
@@ -137,17 +154,11 @@ if (!Array.isArray(live.projectMilestones) || !live.projectMilestones.length) {
 const trackedProjects = Array.isArray(snapshot.projects)
   ? snapshot.projects as Array<Record<string, unknown>>
   : [];
-const trackedProjectIds = trackedProjects.map((project) => project.id);
-if (
-  !trackedProjectIds.length ||
-  trackedProjectIds.some(
-    (projectId) => typeof projectId !== "string" || !projectId.trim(),
-  ) ||
-  new Set(trackedProjectIds).size !== trackedProjectIds.length
-) {
-  throw new Error("Linear snapshot tracked project IDs are incomplete or duplicate");
-}
-const trackedProjectIdSet = new Set(trackedProjectIds as string[]);
+const trackedProjectIds = assertLinearProjectScope(
+  projectScope,
+  trackedProjects as Array<{ id: string }>,
+);
+const trackedProjectIdSet = new Set(trackedProjectIds);
 for (const projectId of [...trackedProjectIdSet].sort()) {
   const count = live.projects.filter((project) => project.id === projectId).length;
   if (count === 0) {
@@ -160,6 +171,7 @@ for (const projectId of [...trackedProjectIdSet].sort()) {
 const scopedProjects = live.projects.filter((project) =>
   trackedProjectIdSet.has(project.id)
 );
+assertLinearProjectScope(projectScope, scopedProjects);
 const allProjectById = new Map(
   live.projects.map((project) => [project.id, project]),
 );

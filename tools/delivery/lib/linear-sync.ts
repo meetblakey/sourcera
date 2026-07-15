@@ -4,18 +4,29 @@ import type { Finding, ReleaseId } from "./model.js";
 type LinearIssue = LinearFingerprint["issues"][number];
 type ReleasePipeline = LinearFingerprint["releasePipelines"][number];
 type LinearRelease = LinearFingerprint["releases"][number];
+type LinearProject = LinearFingerprint["projects"][number];
+type LinearProjectMilestone = LinearFingerprint["projectMilestones"][number];
 type ProtectedIssueField = Exclude<
   keyof LinearIssue,
   | "identifier"
   | "updatedAt"
+  | "milestoneId"
   | "milestone"
   | "relations"
   | "labels"
   | "releases"
 >;
 
+export interface LinearMilestoneIdentity {
+  id: string;
+  name: string;
+}
+
 export interface LinearSyncAllowances {
-  expectedMilestoneByIssue?: ReadonlyMap<string, string | null>;
+  expectedMilestoneByIssue?: ReadonlyMap<
+    string,
+    LinearMilestoneIdentity | null
+  >;
   readinessFailedIssueIds?: ReadonlySet<string>;
 }
 
@@ -56,7 +67,7 @@ function compareIssue(
   after: LinearIssue,
   expectedRelease: ReleaseId | undefined,
   hasExpectedMilestone: boolean,
-  expectedMilestone: string | null | undefined,
+  expectedMilestone: LinearMilestoneIdentity | null | undefined,
   readinessFailed: boolean,
 ): void {
   const protectedFields: Record<
@@ -85,10 +96,6 @@ function compareIssue(
       code: "linear_sync_project_changed",
       label: "project",
     },
-    milestoneId: {
-      code: "linear_sync_milestone_changed",
-      label: "milestone identity",
-    },
     parent: {
       code: "linear_sync_parent_changed",
       label: "parent",
@@ -111,10 +118,16 @@ function compareIssue(
     }
   }
 
-  const requiredMilestone = hasExpectedMilestone
-    ? expectedMilestone
+  const requiredMilestoneId = hasExpectedMilestone
+    ? expectedMilestone?.id ?? null
+    : before.milestoneId;
+  const requiredMilestoneName = hasExpectedMilestone
+    ? expectedMilestone?.name ?? null
     : before.milestone;
-  if (!equal(after.milestone, requiredMilestone)) {
+  if (
+    !equal(after.milestoneId, requiredMilestoneId) ||
+    !equal(after.milestone, requiredMilestoneName)
+  ) {
     add(
       findings,
       "linear_sync_milestone_changed",
@@ -188,13 +201,33 @@ function normalizedRelease(release: LinearRelease): unknown {
   };
 }
 
+function normalizedProject(project: LinearProject): unknown {
+  return { id: project.id, name: project.name };
+}
+
+function normalizedProjectMilestone(
+  milestone: LinearProjectMilestone,
+): unknown {
+  return {
+    id: milestone.id,
+    name: milestone.name,
+    targetDate: milestone.targetDate,
+    projectId: milestone.projectId,
+    project: milestone.project,
+  };
+}
+
 function compareTopology<T>(
   findings: Finding[],
   beforeValues: readonly T[],
   afterValues: readonly T[],
   id: (value: T) => string,
   normalized: (value: T) => unknown,
-  prefix: "linear_sync_release_pipeline" | "linear_sync_release",
+  prefix:
+    | "linear_sync_release_pipeline"
+    | "linear_sync_release"
+    | "linear_sync_project"
+    | "linear_sync_project_milestone",
   label: string,
 ): void {
   const before = indexById(beforeValues, id);
@@ -324,6 +357,24 @@ export function linearSyncPreservationFindings(
     normalizedRelease,
     "linear_sync_release",
     "release",
+  );
+  compareTopology(
+    findings,
+    before.projects,
+    after.projects,
+    (project) => project.id,
+    normalizedProject,
+    "linear_sync_project",
+    "project",
+  );
+  compareTopology(
+    findings,
+    before.projectMilestones,
+    after.projectMilestones,
+    (milestone) => milestone.id,
+    normalizedProjectMilestone,
+    "linear_sync_project_milestone",
+    "project milestone",
   );
 
   return findings.sort((left, right) =>

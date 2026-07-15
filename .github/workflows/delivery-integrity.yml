@@ -35,7 +35,7 @@ jobs:
           set -e
           if (( stamp_status > 1 )); then exit "$stamp_status"; fi
           exit "$exact_status"
-      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json --feature-dependencies delivery/feature-dependencies.json --policy delivery/release-policy.json --release-plan delivery/release-plan.json --roadmap delivery/roadmap-contract.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json --feature-dependencies delivery/feature-dependencies.json --policy delivery/release-policy.json --release-plan delivery/release-plan.json --roadmap delivery/roadmap-contract.json --linear-project-scope delivery/linear-project-scope.json
       - run: npm --prefix tools/spec-lint run typecheck
       - run: npm --prefix tools/spec-lint run all
       - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
@@ -54,6 +54,6 @@ jobs:
         with:
           node-version: 22
       - run: npm ci --prefix tools/spec-lint
-      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --snapshot delivery/linear-snapshot.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --snapshot delivery/linear-snapshot.json --linear-project-scope delivery/linear-project-scope.json
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}

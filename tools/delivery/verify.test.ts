@@ -179,6 +179,13 @@ test("verifies regenerated reports and rejects a hand edit", () => {
         ],
       }),
     );
+    writeFileSync(
+      join(dir, "linear-project-scope.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Project" }],
+      }),
+    );
 
     const common = [
       "--root",
@@ -209,6 +216,8 @@ test("verifies regenerated reports and rejects a hand edit", () => {
       join(dir, "validation.json"),
       "--linear",
       join(dir, "linear.json"),
+      "--linear-project-scope",
+      join(dir, "linear-project-scope.json"),
     ];
     const node = [
       "--import",
