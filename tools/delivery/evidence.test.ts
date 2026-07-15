@@ -636,6 +636,150 @@ test("rejects a direct review bound to a different batch", () => {
   }
 });
 
+test("rejects a forecast batch completed before it started", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const forecastRelative = `reports/evidence/forecast-time-${suffix}.json`;
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as {
+      observations: Array<{ startedAt: string; completedAt: string }>;
+    };
+    receipt.observations[0].completedAt = "2026-07-14T19:00:00-04:00";
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_receipt_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+  }
+});
+
+test("rejects active batch time longer than elapsed time", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const forecastRelative = `reports/evidence/forecast-duration-${suffix}.json`;
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as {
+      observations: Array<{ estimate: number; activeSeconds: number }>;
+      baseline: {
+        activeSeconds: number;
+        pointsPerActiveHour: number;
+      };
+    };
+    receipt.observations[0].activeSeconds = 900;
+    const activeSeconds = receipt.observations.reduce(
+      (sum, observation) => sum + observation.activeSeconds,
+      0,
+    );
+    const completedEstimate = receipt.observations.reduce(
+      (sum, observation) => sum + observation.estimate,
+      0,
+    );
+    receipt.baseline.activeSeconds = activeSeconds;
+    receipt.baseline.pointsPerActiveHour = Number(
+      (completedEstimate / (activeSeconds / 3600)).toFixed(2),
+    );
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_receipt_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+  }
+});
+
+test("rejects a closeout commit that predates implementation", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const forecastRelative = `reports/evidence/forecast-commits-${suffix}.json`;
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as {
+      observations: Array<{
+        firstImplementationCommit: string;
+        closeoutCommit: string;
+      }>;
+    };
+    const observation = receipt.observations[1];
+    [observation.firstImplementationCommit, observation.closeoutCommit] = [
+      observation.closeoutCommit,
+      observation.firstImplementationCommit,
+    ];
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_commit_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+  }
+});
+
+test("rejects forecast proof observed before batch completion", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const forecastRelative = `reports/evidence/forecast-observed-${suffix}.json`;
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as { observedAt: string };
+    receipt.observedAt = "2026-07-14T19:00:00-04:00";
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_receipt_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+  }
+});
+
+test("rejects proof receipts dated in the future", () => {
+  const suffix = `${process.pid}-${Date.now()}`;
+  const forecastRelative = `reports/evidence/forecast-future-${suffix}.json`;
+  const forecastPath = join(process.cwd(), forecastRelative);
+  try {
+    const receipt = JSON.parse(
+      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
+    ) as { observedAt: string };
+    receipt.observedAt = "2999-01-01T00:00:00Z";
+    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+
+    assert.deepEqual(
+      evidenceGroupFindings(process.cwd(), {
+        kind: "forecast",
+        paths: [forecastRelative],
+      }).map((finding) => finding.code),
+      ["evidence_receipt_invalid"],
+    );
+  } finally {
+    rmSync(forecastPath, { force: true });
+  }
+});
+
 test("rejects execution receipts that omit their named proof section", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
   try {

@@ -27,6 +27,7 @@ const RELEASE_GATE_METRICS = [
   "reliability",
   "support",
 ] as const;
+const MAX_CLOCK_SKEW_MS = 5 * 60 * 1000;
 
 interface EvidenceReceipt {
   schemaVersion?: unknown;
@@ -70,6 +71,21 @@ function commitIsReachable(root: string, value: unknown): boolean {
   );
 }
 
+function commitPrecedes(
+  root: string,
+  first: unknown,
+  closeout: unknown,
+): boolean {
+  if (typeof first !== "string" || typeof closeout !== "string") return false;
+  return (
+    spawnSync(
+      "git",
+      ["-C", root, "merge-base", "--is-ancestor", first, closeout],
+      { stdio: "ignore" },
+    ).status === 0
+  );
+}
+
 function receiptCommitsAreReachable(
   root: string,
   receipt: EvidenceReceipt,
@@ -84,7 +100,12 @@ function receiptCommitsAreReachable(
       (observation) =>
         isObject(observation) &&
         commitIsReachable(root, observation.firstImplementationCommit) &&
-        commitIsReachable(root, observation.closeoutCommit),
+        commitIsReachable(root, observation.closeoutCommit) &&
+        commitPrecedes(
+          root,
+          observation.firstImplementationCommit,
+          observation.closeoutCommit,
+        ),
     )
   );
 }
@@ -261,8 +282,11 @@ function isMeasuredObservation(value: unknown): boolean {
     !Number.isNaN(Date.parse(value.startedAt)) &&
     typeof value.completedAt === "string" &&
     !Number.isNaN(Date.parse(value.completedAt)) &&
+    Date.parse(value.completedAt) > Date.parse(value.startedAt) &&
     typeof value.activeSeconds === "number" &&
     value.activeSeconds > 0 &&
+    value.activeSeconds <=
+      (Date.parse(value.completedAt) - Date.parse(value.startedAt)) / 1000 &&
     typeof value.reviewEvidence === "string" &&
     value.reviewEvidence.startsWith("reports/evidence/") &&
     typeof value.runtimeEvidence === "string" &&
@@ -326,6 +350,22 @@ function hasReconciledForecast(receipt: EvidenceReceipt): boolean {
   );
 }
 
+function forecastObservedAfterCompletion(receipt: EvidenceReceipt): boolean {
+  if (
+    typeof receipt.observedAt !== "string" ||
+    !Array.isArray(receipt.observations)
+  ) {
+    return false;
+  }
+  const observedAt = Date.parse(receipt.observedAt);
+  return receipt.observations.every(
+    (observation) =>
+      isObject(observation) &&
+      typeof observation.completedAt === "string" &&
+      Date.parse(observation.completedAt) <= observedAt,
+  );
+}
+
 function isValidReceipt(receipt: EvidenceReceipt, kind: EvidenceKind): boolean {
   const commonValid =
     receipt.schemaVersion === 1 &&
@@ -333,7 +373,8 @@ function isValidReceipt(receipt: EvidenceReceipt, kind: EvidenceKind): boolean {
     Array.isArray(receipt.proofTypes) &&
     receipt.proofTypes.includes(kind) &&
     typeof receipt.observedAt === "string" &&
-    !Number.isNaN(Date.parse(receipt.observedAt));
+    !Number.isNaN(Date.parse(receipt.observedAt)) &&
+    Date.parse(receipt.observedAt) <= Date.now() + MAX_CLOCK_SKEW_MS;
   if (!commonValid) return false;
   if (kind !== "forecast") {
     const commitBound =
@@ -359,6 +400,7 @@ function isValidReceipt(receipt: EvidenceReceipt, kind: EvidenceKind): boolean {
     Array.isArray(receipt.observations) &&
     receipt.observations.length >= 2 &&
     receipt.observations.every(isMeasuredObservation) &&
+    forecastObservedAfterCompletion(receipt) &&
     hasReconciledForecast(receipt) &&
     typeof receipt.recalibrationTrigger === "string" &&
     receipt.recalibrationTrigger.trim().length > 0
