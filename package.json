@@ -13,6 +13,7 @@
   "scripts": {
     "build": "next build",
     "build:all": "npm run build && npm run build --workspace @sourcera/buyer && npm run build --workspace @sourcera/seller",
+    "clean:generated": "tsx scripts/clean-generated-output.ts",
     "convex:build": "tsx scripts/validate-convex-env.ts --phase full --write-github-env && npm run build:all",
     "convex:codegen": "convex codegen",
     "convex:probe": "tsx scripts/run-convex-foundation-probe.ts",
@@ -21,6 +22,7 @@
     "lint": "eslint . --max-warnings=0",
     "start": "next start",
     "test": "tsx --test tests/**/*.spec.ts",
+    "pretypecheck": "npm run clean:generated",
     "typecheck": "tsc --noEmit",
     "typecheck:all": "npm run typecheck && npm run typecheck --workspace @sourcera/buyer && npm run typecheck --workspace @sourcera/seller",
     "validate:boundaries": "tsx scripts/validate-domain-boundaries.ts",
