@@ -7,10 +7,17 @@ import { masterSpecHeaderPolicyFindings } from "./master_spec_header_policy.js";
 test("rejects copied live-count families in the active header", () => {
   const copiedCounts = [
     "The live scanner reports 0 open P0.",
+    "The live scanner reports no open P0.",
+    "The live scanner reports none open P0.",
+    "Open P0 is zero.",
     "The stamp gate parses 547 runtime rows.",
     "The stamp gate parses 333 `runtime_active` rows.",
     "There are 212 product/runtime blockers.",
+    "There are zero product/runtime blockers.",
+    "Human-ratification blockers are zero.",
+    "Product/runtime blockers remain at zero.",
     "The blocker count is 212.",
+    "Thirteen pending M02.3 rows still require external evidence.",
   ];
 
   for (const copiedCount of copiedCounts) {
@@ -25,20 +32,29 @@ test("rejects copied live-count families in the active header", () => {
 });
 
 test("rejects the backlog index as active-header authority", () => {
-  assert.deepEqual(
-    masterSpecHeaderPolicyFindings(
+  const authorityClaims = [
+    "`_audit/V711_BACKLOG_INDEX.md` is the current count-routing authority.",
+    "`_audit/V711_BACKLOG_INDEX.md` is the current source of truth.",
+    "`_audit/V711_BACKLOG_INDEX.md` is the live canonical source.",
+  ];
+
+  for (const authorityClaim of authorityClaims) {
+    assert.deepEqual(
+      masterSpecHeaderPolicyFindings(
+        [
+          "# Sourcera",
+          "",
+          authorityClaim,
+          "",
+          "# Changelog {#changelog}",
+        ].join("\n"),
+      ),
       [
-        "# Sourcera",
-        "",
-        "`_audit/V711_BACKLOG_INDEX.md` is the current count-routing authority.",
-        "",
-        "# Changelog {#changelog}",
-      ].join("\n"),
-    ),
-    [
-      "Master Spec active header treats _audit/V711_BACKLOG_INDEX.md as current authority",
-    ],
-  );
+        "Master Spec active header treats _audit/V711_BACKLOG_INDEX.md as current authority",
+      ],
+      authorityClaim,
+    );
+  }
 });
 
 test("allows dated counts and backlog-index history after the changelog", () => {
