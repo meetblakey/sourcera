@@ -34,6 +34,8 @@ interface FixtureOptions {
   mappings?: Array<{ id: string; sourceId: string | null }>;
   fingerprintIssues?: Array<Record<string, unknown>>;
   extraReleases?: Array<Record<string, unknown>>;
+  fingerprintProjects?: Array<Record<string, unknown>>;
+  fingerprintMilestones?: Array<Record<string, unknown>>;
 }
 
 function liveIssue(
@@ -70,6 +72,7 @@ function fixture(options: FixtureOptions = {}) {
   const runtimeDependencies = join(dir, "runtime-dependencies.json");
   const releasePlan = join(dir, "release-plan.json");
   const snapshot = join(dir, "linear-snapshot.json");
+  const linearProjectScope = join(dir, "linear-project-scope.json");
   const out = join(dir, "plan.json");
 
   writeFileSync(
@@ -114,6 +117,13 @@ function fixture(options: FixtureOptions = {}) {
       ],
     }),
   );
+  writeFileSync(
+    linearProjectScope,
+    JSON.stringify({
+      schemaVersion: 1,
+      projects: [{ id: "project-1", name: "Production project" }],
+    }),
+  );
 
   const related = "related:PLA-1:PLA-X";
   writeFileSync(
@@ -146,8 +156,23 @@ function fixture(options: FixtureOptions = {}) {
           ),
           ...(options.extraReleases ?? []),
         ],
-        projects: [],
-        projectMilestones: [],
+        projects: options.fingerprintProjects ?? [
+          {
+            id: "project-1",
+            name: "Production project",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+          },
+        ],
+        projectMilestones: options.fingerprintMilestones ?? [
+          {
+            id: "milestone-1",
+            name: "Production evidence closed",
+            updatedAt: "2026-07-15T00:00:00.000Z",
+            targetDate: null,
+            projectId: "project-1",
+            project: "Production project",
+          },
+        ],
       },
     }),
   );
@@ -160,6 +185,7 @@ function fixture(options: FixtureOptions = {}) {
     runtimeDependencies,
     releasePlan,
     snapshot,
+    linearProjectScope,
     out,
   };
 }
@@ -184,6 +210,8 @@ function run(
       value.runtimeDependencies,
       "--release-plan",
       value.releasePlan,
+      "--linear-project-scope",
+      value.linearProjectScope,
       "--snapshot",
       value.snapshot,
       "--out",
@@ -265,6 +293,7 @@ test("plans only release drift and missing canonical blocks with exact rollback"
       "dispositions",
       "featureDependencies",
       "inventory",
+      "linearProjectScope",
       "releasePlan",
       "runtimeDependencies",
       "snapshot",
@@ -410,6 +439,67 @@ test("rejects a cycle closed by a planned block among mapped source issues", () 
   }
 });
 
+test("rejects an existing active mapped block that inverts planned releases", () => {
+  const inverted = "blocks:PLA-1:PLA-2";
+  const value = fixture({
+    assignments: [
+      { requirementId: "F-001", release: "R1", rationale: "journey" },
+      { requirementId: "F-002", release: "R0", rationale: "foundation" },
+      {
+        requirementId: "RG:journey-proof",
+        release: "R1",
+        rationale: "runtime",
+      },
+    ],
+    fingerprintIssues: [
+      liveIssue("PLA-1", ["R1"], [inverted]),
+      liveIssue("PLA-2", ["R0"], [inverted]),
+      liveIssue("PLA-3", ["R1"]),
+    ],
+  });
+  try {
+    const result = run(value);
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /Active mapped block blocks:PLA-1:PLA-2 inverts releases: F-001 R1 blocks F-002 R0/,
+    );
+    assert.throws(() => readFileSync(value.out, "utf8"));
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("preserves an acyclic same-release active block outside the source graph", () => {
+  const extra = "blocks:PLA-2:PLA-3";
+  const value = fixture({
+    fingerprintIssues: [
+      liveIssue("PLA-1", ["R1"]),
+      liveIssue("PLA-2", ["R0"], [extra]),
+      liveIssue("PLA-3", ["R0"], [extra]),
+    ],
+  });
+  try {
+    const result = run(value);
+    assert.equal(result.status, 0, result.stderr);
+    const plan = JSON.parse(readFileSync(value.out, "utf8"));
+    assert.deepEqual(
+      plan.expectedRelationsByIssue.find(
+        (row: { issueId: string }) => row.issueId === "PLA-2",
+      ).relations,
+      ["blocks:PLA-2:PLA-1", "blocks:PLA-2:PLA-3"],
+    );
+    assert.equal(
+      plan.blockAdditions.some(
+        (change: { relation: string }) => change.relation === extra,
+      ),
+      false,
+    );
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
 test("ignores historical cycles outside the mapped executable and runtime graph", () => {
   const first = "blocks:LEG-1:LEG-2";
   const second = "blocks:LEG-2:LEG-1";
@@ -444,6 +534,52 @@ test("rejects an asymmetric relation fingerprint as incomplete", () => {
     const result = run(value);
     assert.equal(result.status, 1);
     assert.match(result.stderr, /Relation related:PLA-1:PLA-X is not present on both endpoints/);
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("requires non-empty project and milestone inventories", () => {
+  const cases: Array<[FixtureOptions, RegExp]> = [
+    [
+      { fingerprintProjects: [] },
+      /Complete Linear fingerprint requires non-empty projects/,
+    ],
+    [
+      { fingerprintMilestones: [] },
+      /Complete Linear fingerprint requires non-empty projectMilestones/,
+    ],
+  ];
+  for (const [options, expected] of cases) {
+    const value = fixture(options);
+    try {
+      const result = run(value);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, expected);
+      assert.throws(() => readFileSync(value.out, "utf8"));
+    } finally {
+      rmSync(value.dir, { recursive: true, force: true });
+    }
+  }
+});
+
+test("requires fingerprint projects to exactly match independent scope", () => {
+  const value = fixture({
+    fingerprintProjects: [
+      {
+        id: "project-other",
+        name: "Other project",
+        updatedAt: "2026-07-15T00:00:00.000Z",
+      },
+    ],
+  });
+  try {
+    const result = run(value);
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /Linear snapshot project scope project-1 is missing/,
+    );
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
   }

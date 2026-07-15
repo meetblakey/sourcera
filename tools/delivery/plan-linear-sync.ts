@@ -11,6 +11,10 @@ import {
   canonicalLinearRelationKey,
   type LinearFingerprint,
 } from "./lib/linear-live.js";
+import {
+  assertLinearProjectScope,
+  type LinearProjectScope,
+} from "./lib/linear-project-scope.js";
 import type {
   Disposition,
   ManifestRow,
@@ -134,6 +138,11 @@ function assertCompleteFingerprint(value: unknown): asserts value is LinearFinge
       throw new Error(`Complete Linear fingerprint requires ${key}`);
     }
   }
+  for (const key of ["projects", "projectMilestones"] as const) {
+    if (!candidate[key]?.length) {
+      throw new Error(`Complete Linear fingerprint requires non-empty ${key}`);
+    }
+  }
 }
 
 function canonicalRelation(value: string): [string, string, string] {
@@ -188,6 +197,11 @@ const paths = {
     root,
     argv.get("--inventory") ?? "_audit/FEATURE_INVENTORY.md",
   ),
+  linearProjectScope: resolve(
+    root,
+    argv.get("--linear-project-scope") ??
+      "delivery/linear-project-scope.json",
+  ),
   releasePlan: resolve(
     root,
     argv.get("--release-plan") ?? "delivery/release-plan.json",
@@ -210,6 +224,7 @@ const raw = {
   dispositions: readFileSync(paths.dispositions, "utf8"),
   featureDependencies: readFileSync(paths.featureDependencies, "utf8"),
   inventory: readFileSync(paths.inventory, "utf8"),
+  linearProjectScope: readFileSync(paths.linearProjectScope, "utf8"),
   releasePlan: readFileSync(paths.releasePlan, "utf8"),
   runtimeDependencies: readFileSync(paths.runtimeDependencies, "utf8"),
   snapshot: readFileSync(paths.snapshot, "utf8"),
@@ -392,6 +407,37 @@ if (!Array.isArray(snapshot.issues)) {
   throw new Error("Linear snapshot requires issue mappings");
 }
 assertCompleteFingerprint(snapshot.linearFingerprint);
+const projectScope = parseJson<LinearProjectScope>(
+  raw.linearProjectScope,
+  "Linear project scope",
+);
+const trackedProjectIds = new Set(
+  assertLinearProjectScope(projectScope, snapshot.linearFingerprint.projects),
+);
+const projectById = new Map(
+  snapshot.linearFingerprint.projects.map((project) => [project.id, project]),
+);
+const milestoneIds = new Set<string>();
+const milestoneNames = new Set<string>();
+for (const milestone of snapshot.linearFingerprint.projectMilestones) {
+  const project = projectById.get(milestone.projectId);
+  const scopedName = `${milestone.projectId}:${milestone.name}`;
+  if (
+    !milestone.id?.trim() ||
+    !milestone.name?.trim() ||
+    !milestone.updatedAt ||
+    Number.isNaN(Date.parse(milestone.updatedAt)) ||
+    milestoneIds.has(milestone.id) ||
+    milestoneNames.has(scopedName) ||
+    !trackedProjectIds.has(milestone.projectId) ||
+    !project ||
+    project.name !== milestone.project
+  ) {
+    throw new Error("Linear project milestone fingerprint is incomplete or inconsistent");
+  }
+  milestoneIds.add(milestone.id);
+  milestoneNames.add(scopedName);
+}
 const liveById = new Map<string, LinearFingerprint["issues"][number]>();
 const relationsByIssue = new Map<string, Set<string>>();
 for (const issue of snapshot.linearFingerprint.issues) {
@@ -483,6 +529,30 @@ for (const requirementId of [...expectedSourceIds].sort(compare)) {
   sourceByIssue.set(issueId, requirementId);
 }
 
+const activeIssueIds = new Set(issueBySource.values());
+for (const relation of [...allRelations].sort(compare)) {
+  const [type, prerequisiteIssueId, dependentIssueId] = relation.split(":");
+  if (
+    type !== "blocks" ||
+    !activeIssueIds.has(prerequisiteIssueId) ||
+    !activeIssueIds.has(dependentIssueId)
+  ) {
+    continue;
+  }
+  const prerequisiteSourceId = sourceByIssue.get(prerequisiteIssueId)!;
+  const dependentSourceId = sourceByIssue.get(dependentIssueId)!;
+  const prerequisiteRelease = assignmentById.get(prerequisiteSourceId)!.release;
+  const dependentRelease = assignmentById.get(dependentSourceId)!.release;
+  if (
+    RELEASE_SEQUENCE[prerequisiteRelease] >
+      RELEASE_SEQUENCE[dependentRelease]
+  ) {
+    throw new Error(
+      `Active mapped block ${relation} inverts releases: ${prerequisiteSourceId} ${prerequisiteRelease} blocks ${dependentSourceId} ${dependentRelease}`,
+    );
+  }
+}
+
 const desiredBlocks = new Map<string, BlockChange>();
 for (const row of sourceGraph) {
   for (const dependencyId of row.dependencies) {
@@ -509,7 +579,6 @@ const blockAdditions = [...desiredBlocks.values()]
   )
   .sort((left, right) => compare(left.relation, right.relation));
 
-const activeIssueIds = new Set(issueBySource.values());
 const linearAdjacency = new Map<string, Set<string>>(
   [...activeIssueIds].map((issueId) => [issueId, new Set<string>()]),
 );
@@ -608,6 +677,7 @@ const plan = {
     dispositions: sha256(raw.dispositions),
     featureDependencies: sha256(raw.featureDependencies),
     inventory: sha256(raw.inventory),
+    linearProjectScope: sha256(raw.linearProjectScope),
     releasePlan: sha256(raw.releasePlan),
     runtimeDependencies: sha256(raw.runtimeDependencies),
     snapshot: sha256(raw.snapshot),
