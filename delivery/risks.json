@@ -34,6 +34,20 @@
       "owner": "Blake Rowley",
       "trigger": "The scheduled workflow runs without LINEAR_API_KEY.",
       "response": "Fail closed and configure the read-only key before treating scheduled drift as operational."
+    },
+    {
+      "id": "RISK-006",
+      "statement": "Default-to-R0 classification can pull later-release behavior and its dependency chain into the first release.",
+      "owner": "Blake Rowley",
+      "trigger": "R0 contains behavior that is not required for the defined one-buyer, one-seller defensible-evaluation journey.",
+      "response": "Use an explicit R0 journey allowlist and keep enhanced behavior in its owning later release unless a smaller source-bound R0 slice exists."
+    },
+    {
+      "id": "RISK-007",
+      "statement": "Truncated Linear list responses can make incomplete issue text look authoritative in the delivery snapshot.",
+      "owner": "Blake Rowley",
+      "trigger": "A listed description contains a truncation marker or omits executable fields present only in the full issue.",
+      "response": "Fetch the full issue before qualification and fail readiness when full text cannot be obtained."
     }
   ]
 }
