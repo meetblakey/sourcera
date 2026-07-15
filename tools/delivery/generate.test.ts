@@ -71,7 +71,9 @@ test("generates deterministic reports and fails on orphan work", () => {
       JSON.stringify({
         customerProof: [],
         operationalProof: [],
-        forecastProof: [],
+        forecastProof: [
+          "reports/evidence/r0-foundation-review.json",
+        ],
         executionEvidence: {
           tests: [],
           deploy: [],
@@ -120,6 +122,10 @@ test("generates deterministic reports and fails on orphan work", () => {
     assert.match(
       readFileSync(join(dir, "reports", "drift-report.json"), "utf8"),
       /orphan_requirement/,
+    );
+    assert.match(
+      readFileSync(join(dir, "reports", "drift-report.json"), "utf8"),
+      /evidence_receipt_invalid/,
     );
     const manifest = JSON.parse(
       readFileSync(join(dir, "reports", "delivery-manifest.json"), "utf8"),

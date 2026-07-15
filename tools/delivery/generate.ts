@@ -7,6 +7,12 @@ import {
 } from "node:fs";
 import { resolve } from "node:path";
 import { driftFindings } from "./lib/drift.js";
+import {
+  evidenceGroupFindings,
+  evidenceGroupPasses,
+  type EvidenceGroup,
+  type EvidenceKind,
+} from "./lib/evidence.js";
 import { validateGraph } from "./lib/graph.js";
 import {
   issueFamilyFindings,
@@ -164,6 +170,15 @@ const risks = json<{
   }>;
 }>(risksPath).risks;
 const validation = json<ValidationPlan>(validationPath);
+const evidenceGroups: EvidenceGroup[] = [
+  { kind: "customer", paths: validation.customerProof },
+  { kind: "operational", paths: validation.operationalProof },
+  { kind: "forecast", paths: validation.forecastProof },
+  { kind: "tests", paths: validation.executionEvidence.tests },
+  { kind: "deploy", paths: validation.executionEvidence.deploy },
+  { kind: "rollback", paths: validation.executionEvidence.rollback },
+  { kind: "runtime", paths: validation.executionEvidence.runtime },
+];
 
 const overrideById = new Map(
   overrides.map((override) => [override.requirementId, override]),
@@ -380,6 +395,9 @@ const riskFindings: Finding[] = risks
     code: "risk_incomplete",
     message: `${risk.id || "unknown risk"} is incomplete`,
   }));
+const evidenceFindings = evidenceGroups.flatMap((group) =>
+  evidenceGroupFindings(root, group),
+);
 const familyFindings = issueFamilyFindings(issues);
 const releaseFindings = validateReleases(releases);
 const graphFindings = validateGraph(manifest, releases);
@@ -421,6 +439,7 @@ const allFindings = [
   ...duplicateIssueSources,
   ...decisionFindings,
   ...riskFindings,
+  ...evidenceFindings,
   ...familyFindings,
   ...releaseFindings,
   ...graphFindings,
@@ -428,8 +447,10 @@ const allFindings = [
   ...drift,
   ...releaseAssignment,
 ];
-const evidenceExists = (paths: string[]) =>
-  paths.length > 0 && paths.every((item) => existsSync(resolve(root, item)));
+const evidencePasses = (kind: EvidenceKind) => {
+  const group = evidenceGroups.find((candidate) => candidate.kind === kind);
+  return Boolean(group && evidenceGroupPasses(root, group));
+};
 const readyIssues = issues.filter((issue) =>
   issue.labels.includes("codex-ready"),
 );
@@ -465,21 +486,21 @@ const scorecard = calculateScorecard({
       (decision) =>
         decision.id === "DEC-WIP-001" && decision.status === "active",
     ),
-    evidenceExists(validation.forecastProof),
+    evidencePasses("forecast"),
   ],
   validation: [
     releases.length === 6 &&
       releases.every((release) => Boolean(release.customerHypothesis)),
     releases.length === 6 &&
       releases.every((release) => Boolean(release.operationalHypothesis)),
-    evidenceExists(validation.customerProof),
-    evidenceExists(validation.operationalProof),
+    evidencePasses("customer"),
+    evidencePasses("operational"),
   ],
   execution: [
-    evidenceExists(validation.executionEvidence.tests),
-    evidenceExists(validation.executionEvidence.deploy),
-    evidenceExists(validation.executionEvidence.rollback),
-    evidenceExists(validation.executionEvidence.runtime),
+    evidencePasses("tests"),
+    evidencePasses("deploy"),
+    evidencePasses("rollback"),
+    evidencePasses("runtime"),
   ],
 });
 
@@ -561,6 +582,7 @@ const reports = {
       ...duplicateIssueSources,
       ...decisionFindings,
       ...riskFindings,
+      ...evidenceFindings,
       ...familyFindings,
       ...drift,
       ...releaseAssignment,

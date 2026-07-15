@@ -1,6 +1,14 @@
 {
+  "schemaVersion": 1,
+  "proofTypes": [
+    "tests",
+    "deploy",
+    "rollback",
+    "runtime"
+  ],
   "issue": "PLA-217",
   "status": "passed",
+  "observedAt": "2026-07-14T23:51:53.000Z",
   "sourceCommit": "cc8592bd330c1abe4b1f4491f5eff68d7c5a5553",
   "local": {
     "verifiedAt": "2026-07-14T23:51:53.000Z",
