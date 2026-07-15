@@ -82,6 +82,11 @@ function archiveState(value: unknown, label: string): string | null {
   throw new Error(`${label} archivedAt is invalid`);
 }
 
+function issueArchiveState(issue: LiveIssue): string | null {
+  const state = archiveState(issue.archivedAt, `Linear issue ${issue.id}`);
+  return state === null && issue.linearId == null ? "unavailable" : state;
+}
+
 function estimateValue(value: LiveIssue["estimate"]): number | null {
   if (typeof value === "number") return value;
   return value?.value ?? null;
@@ -259,7 +264,7 @@ for (const issue of live.issues) {
   if (!Number.isInteger(priority) || priority! < 0 || priority! > 4) {
     throw new Error(`Linear issue ${issue.id} priority is invalid`);
   }
-  archiveState(issue.archivedAt, `Linear issue ${issue.id}`);
+  issueArchiveState(issue);
   const assignee = issue.assignee ?? null;
   const assigneeId = issue.assigneeId ?? null;
   if (
@@ -466,7 +471,7 @@ snapshot.linearFingerprint = {
         updatedAt: issue.updatedAt,
         estimate: estimateValue(issue.estimate),
         priority: priorityValue(issue.priority),
-        archivedAt: archiveState(issue.archivedAt, `Linear issue ${issue.id}`),
+        archivedAt: issueArchiveState(issue),
         state: issue.status,
         stateType: issue.statusType,
         labels: [...(issue.labels ?? [])].sort(),

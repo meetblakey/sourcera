@@ -271,6 +271,57 @@ function assertCompleteFingerprint(value: unknown): asserts value is LinearFinge
   }
 }
 
+function assertMutationCapabilities(fingerprint: LinearFingerprint): void {
+  const unavailable: string[] = [];
+  if (fingerprint.issues.some((issue) => issue.linearId == null)) {
+    unavailable.push("stable issue IDs");
+  }
+  if (fingerprint.issues.some((issue) => issue.archivedAt === "unavailable")) {
+    unavailable.push("issue archive state");
+  }
+  if (
+    fingerprint.releasePipelines.some(
+      (pipeline) => pipeline.archivedAt === "unavailable",
+    )
+  ) {
+    unavailable.push("release pipeline archive state");
+  }
+  if (
+    fingerprint.releasePipelines.some((pipeline) =>
+      pipeline.stages.some((stage) => stage.archivedAt === "unavailable")
+    )
+  ) {
+    unavailable.push("release stage archive state");
+  }
+  if (
+    fingerprint.releases.some(
+      (release) => release.archivedAt === "unavailable",
+    )
+  ) {
+    unavailable.push("release archive state");
+  }
+  if (
+    fingerprint.projects.some(
+      (project) => project.archivedAt === "unavailable",
+    )
+  ) {
+    unavailable.push("project archive state");
+  }
+  if (
+    fingerprint.projectMilestones.some(
+      (milestone) => milestone.archivedAt === "unavailable",
+    )
+  ) {
+    unavailable.push("project milestone archive state");
+  }
+  if (unavailable.length) {
+    throw new Error(
+      `Linear mutation capability unavailable: ${unavailable.join(", ")}. ` +
+        "Exact Linear GraphQL capture with LINEAR_API_KEY is required.",
+    );
+  }
+}
+
 function validText(value: unknown): value is string {
   return typeof value === "string" && Boolean(value.trim());
 }
@@ -704,6 +755,7 @@ if (!Array.isArray(snapshot.issues)) {
   throw new Error("Linear snapshot requires issue mappings");
 }
 assertCompleteFingerprint(snapshot.linearFingerprint);
+assertMutationCapabilities(snapshot.linearFingerprint);
 const projectScope = parseJson<LinearProjectScope>(
   raw.linearProjectScope,
   "Linear project scope",

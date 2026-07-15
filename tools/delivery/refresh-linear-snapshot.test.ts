@@ -276,6 +276,8 @@ test("normalizes connector-omitted unassigned identity fields to null", () => {
   assert.deepEqual(
     {
       linearId: refreshed.updated.linearFingerprint.issues[0].linearId,
+      issueArchivedAt:
+        refreshed.updated.linearFingerprint.issues[0].archivedAt,
       assignee: refreshed.updated.linearFingerprint.issues[0].assignee,
       assigneeId: refreshed.updated.linearFingerprint.issues[0].assigneeId,
       projectArchivedAt:
@@ -285,6 +287,7 @@ test("normalizes connector-omitted unassigned identity fields to null", () => {
     },
     {
       linearId: null,
+      issueArchivedAt: "unavailable",
       assignee: null,
       assigneeId: null,
       projectArchivedAt: "unavailable",
@@ -641,7 +644,7 @@ test("copies the live parent and preserves planning metadata absent from connect
       {
         linearId: null,
         priority: 2,
-        archivedAt: null,
+        archivedAt: "unavailable",
         assigneeId: "person-blake",
         teamId: "team-pla",
       },

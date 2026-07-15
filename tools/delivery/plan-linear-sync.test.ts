@@ -819,6 +819,40 @@ test("requires non-empty project and milestone inventories", () => {
   }
 });
 
+test("reports every connector capability that requires exact GraphQL before planning mutations", () => {
+  const value = fixture();
+  try {
+    mutateSnapshot(value, (snapshot) => {
+      for (const issue of snapshot.linearFingerprint.issues) {
+        issue.linearId = null;
+        issue.archivedAt = "unavailable";
+      }
+      for (const pipeline of snapshot.linearFingerprint.releasePipelines) {
+        pipeline.archivedAt = "unavailable";
+        for (const stage of pipeline.stages) stage.archivedAt = "unavailable";
+      }
+      for (const release of snapshot.linearFingerprint.releases) {
+        release.archivedAt = "unavailable";
+      }
+      for (const project of snapshot.linearFingerprint.projects) {
+        project.archivedAt = "unavailable";
+      }
+      for (const milestone of snapshot.linearFingerprint.projectMilestones) {
+        milestone.archivedAt = "unavailable";
+      }
+    });
+    const result = run(value);
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /Linear mutation capability unavailable: stable issue IDs, issue archive state, release pipeline archive state, release stage archive state, release archive state, project archive state, project milestone archive state\. Exact Linear GraphQL capture with LINEAR_API_KEY is required\./,
+    );
+    assert.throws(() => readFileSync(value.out, "utf8"));
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
 test("requires fingerprint projects to exactly match independent scope", () => {
   const value = fixture({
     fingerprintProjects: [
@@ -1037,7 +1071,7 @@ test("strictly validates every captured issue identity and preservation field", 
     (issue: Record<string, any>) => void,
     RegExp,
   ]> = [
-    ["stable ID", (issue) => { issue.linearId = null; }, /stable Linear ID/],
+    ["stable ID", (issue) => { issue.linearId = null; }, /stable issue IDs/],
     ["title", (issue) => { issue.title = ""; }, /invalid title/],
     ["description", (issue) => { issue.descriptionFingerprint = "short"; }, /invalid description fingerprint/],
     ["updatedAt", (issue) => { issue.updatedAt = "not-a-date"; }, /invalid updatedAt/],
@@ -1047,7 +1081,7 @@ test("strictly validates every captured issue identity and preservation field", 
     ["state", (issue) => { issue.state = ""; }, /invalid state/],
     ["state type", (issue) => { issue.stateType = ""; }, /invalid state type/],
     ["archivedAt", (issue) => { issue.archivedAt = "not-a-date"; }, /invalid archivedAt/],
-    ["archive capability", (issue) => { issue.archivedAt = "unavailable"; }, /invalid archivedAt/],
+    ["archive capability", (issue) => { issue.archivedAt = "unavailable"; }, /issue archive state/],
     ["labels", (issue) => { issue.labels = ["feature", "feature"]; }, /invalid labels/],
     ["assignee", (issue) => { issue.assigneeId = "person-1"; }, /partial assignee identity/],
     ["assignee ID", (issue) => { issue.assignee = "Owner"; issue.assigneeId = null; }, /partial assignee identity/],
@@ -1088,15 +1122,15 @@ test("strictly validates non-empty release topology and canonical memberships", 
     ["pipeline updatedAt", (value) => { value.releasePipelines[0].updatedAt = "invalid"; }, /invalid or duplicated/],
     ["pipeline production", (value) => { value.releasePipelines[0].isProduction = "yes"; }, /invalid or duplicated/],
     ["pipeline enum", (value) => { value.releasePipelines[0].type = "manual"; }, /invalid or duplicated/],
-    ["pipeline archive", (value) => { value.releasePipelines[0].archivedAt = "unavailable"; }, /invalid archivedAt/],
-    ["stage archive", (value) => { value.releasePipelines[0].stages[0].archivedAt = "unavailable"; }, /invalid stages/],
+    ["pipeline archive", (value) => { value.releasePipelines[0].archivedAt = "unavailable"; }, /release pipeline archive state/],
+    ["stage archive", (value) => { value.releasePipelines[0].stages[0].archivedAt = "unavailable"; }, /release stage archive state/],
     ["stage position", (value) => { value.releasePipelines[0].stages[0].position = "first"; }, /invalid stages/],
     ["stage frozen", (value) => { value.releasePipelines[0].stages[0].frozen = "no"; }, /invalid stages/],
     ["global stage IDs", (value) => { value.releasePipelines.push({ ...value.releasePipelines[0], id: "pipeline-2", stages: [{ ...value.releasePipelines[0].stages[0] }] }); }, /invalid stages/],
     ["release pipeline", (value) => { value.releases[0].pipeline = "missing"; }, /unknown pipeline/],
     ["release stage", (value) => { value.releases[0].stage = "missing"; }, /unknown stage/],
     ["release stage type", (value) => { value.releases[0].stageType = "released"; }, /stage type differs/],
-    ["release archive", (value) => { value.releases[0].archivedAt = "unavailable"; }, /invalid archivedAt/],
+    ["release archive", (value) => { value.releases[0].archivedAt = "unavailable"; }, /release archive state/],
     ["canonical releases", (value) => { value.releases.pop(); }, /missing canonical release R5/],
   ];
   for (const [name, mutate, expected] of cases) {
