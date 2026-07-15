@@ -48,6 +48,15 @@ function deploymentEnvironment(environment: ConvexEnvironment) {
   );
 }
 
+function validateCommitBoundPreviewName(
+  previewName: string,
+  commitSha: string,
+) {
+  if (!previewName.endsWith(`-${commitSha.toLowerCase()}`)) {
+    throw new Error("CONVEX_PREVIEW_NAME must match SOURCERA_COMMIT_SHA");
+  }
+}
+
 export function createConvexPreviewName(source: string): string {
   const name = source
     .toLowerCase()
@@ -145,6 +154,7 @@ export function readRequiredConvexPreviewKeyIdentity(
   if (!FULL_GIT_COMMIT_SHA.test(commitSha!)) {
     throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
   }
+  validateCommitBoundPreviewName(environment.CONVEX_PREVIEW_NAME!, commitSha!);
 
   if (!PREVIEW_ENVIRONMENTS.has(runtimeEnvironment!)) {
     throw new Error("SOURCERA_ENV must be a non-production Preview environment");
@@ -201,6 +211,7 @@ export function readRequiredConvexPreviewClientIdentity(
   if (!FULL_GIT_COMMIT_SHA.test(commitSha!)) {
     throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
   }
+  validateCommitBoundPreviewName(environment.CONVEX_PREVIEW_NAME!, commitSha!);
   if (!PREVIEW_ENVIRONMENTS.has(runtimeEnvironment!)) {
     throw new Error("SOURCERA_ENV must be a non-production Preview environment");
   }

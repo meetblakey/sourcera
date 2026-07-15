@@ -9,6 +9,7 @@ import {
   createCommitBoundConvexPreviewName,
   createConvexFoundationHealthResult,
   createConvexPreviewName,
+  readRequiredConvexPreviewClientIdentity,
   readRequiredConvexPreviewIdentity,
 } from "../../packages/domain/src/convex";
 
@@ -68,6 +69,10 @@ test("Convex deployment validation fails closed without leaking secrets", () => 
     { ...previewEnvironment, CONVEX_DEPLOYMENT: "prod" },
     { ...previewEnvironment, NEXT_PUBLIC_CONVEX_URL: "http://localhost:3210" },
     { ...previewEnvironment, SOURCERA_COMMIT_SHA: "main" },
+    {
+      ...previewEnvironment,
+      CONVEX_PREVIEW_NAME: `sourcera-pr-1-${"a".repeat(40)}`,
+    },
     { ...previewEnvironment, SOURCERA_ENV: "production" },
   ];
 
@@ -81,6 +86,17 @@ test("Convex deployment validation fails closed without leaking secrets", () => 
       },
     );
   }
+});
+
+test("Convex client validation rejects a Preview name for another commit", () => {
+  assert.throws(
+    () =>
+      readRequiredConvexPreviewClientIdentity({
+        ...previewEnvironment,
+        CONVEX_PREVIEW_NAME: `sourcera-pr-1-${"a".repeat(40)}`,
+      }),
+    /CONVEX_PREVIEW_NAME must match SOURCERA_COMMIT_SHA/,
+  );
 });
 
 test("Convex health telemetry contains safe proof metadata only", () => {
