@@ -10869,7 +10869,7 @@ Every stage-transition MUST emit a PostHog event with `seller_org_id`, `bid_id`,
 | `hero_image_url` | String | Valid HTTPS URL | Hero/banner image; stored in residency-matching object storage |
 | `pricing_model` | Enum | Appendix J `seller_software_pricing_model` | Pricing type |
 | `pricing_description` | String | 0–1000 chars | Pricing details |
-| `min_price_cents_monthly` | BigInt | Nullable; >= 0 | Minimum monthly price in integer cents; null if custom/TBD |
+| `min_price_cents_monthly` | BigInt | Nullable; >= 0 | Minimum monthly price in integer cents. It may be `null` while `status=draft` or when `pricing_model=custom`; every other publish transition requires a non-null value. |
 | `max_price_cents_monthly` | BigInt | Nullable; >= `min_price_cents_monthly` when both non-null | Maximum monthly price in integer cents |
 | `currency_code` | Enum | Appendix J `billing_currency`; default `usd` | Currency for the listed price range. Customer billing remains governed by §34 / §4.8 |
 | `status` | Enum | Appendix J `marketplace_listing_status` | Listing lifecycle; see State Machine below |

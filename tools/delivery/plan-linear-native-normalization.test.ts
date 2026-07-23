@@ -42,6 +42,7 @@ interface Plan {
   schemaVersion: number;
   summary: {
     inputIssues: number;
+    selectedIssues: number;
     plannedUpdates: number;
     plannedDeletions: number;
     genericTemplates: number;
@@ -69,9 +70,11 @@ function runPlanner(
   issues: unknown,
   extraArguments: string[] = [],
   sourceMapOverride?: unknown,
+  targetIds?: string[],
 ) {
   const directory = mkdtempSync(join(tmpdir(), "sourcera-native-normalization-"));
   const output = join(directory, "plan.json");
+  const targets = join(directory, "targets.json");
   const sourceMapDirectory = sourceMapOverride === undefined
     ? null
     : mkdtempSync(join(process.cwd(), "reports/delivery/.normalization-source-map-test-"));
@@ -82,6 +85,7 @@ function runPlanner(
   if (sourceMapOverride !== undefined) {
     writeFileSync(sourceMap, JSON.stringify(sourceMapOverride));
   }
+  if (targetIds !== undefined) writeFileSync(targets, JSON.stringify(targetIds));
   const result = spawnSync(
     process.execPath,
     [
@@ -91,6 +95,7 @@ function runPlanner(
       "--out",
       output,
       ...sourceMapArguments,
+      ...(targetIds === undefined ? [] : ["--targets", targets]),
       ...extraArguments,
     ],
     {
@@ -242,6 +247,7 @@ test("plans native, self-contained normalization for every issue class", () => {
   assert.equal(plan.schemaVersion, 1);
   assert.deepEqual(plan.summary, {
     inputIssues: 4,
+    selectedIssues: 4,
     plannedUpdates: 4,
     plannedDeletions: 0,
     genericTemplates: 3,
@@ -319,6 +325,117 @@ test("keeps Evaluation Scenario on the current scoring and TCO contract", () => 
   assert.match(description, /does not accept operational-capacity parameters/i);
   assert.doesNotMatch(description, /`user_count`|`concurrent_users`|`transactions_per_day`/i);
   assert.doesNotMatch(description, /retired in v4|stale v6 draft|closure of p0/i);
+});
+
+test("uses full issue context while planning only an explicit target allowlist", () => {
+  const relatedTitle = "Publish Immutable Pricing Versions and Reproducible Rate Cards";
+  const { result, plan } = runPlanner(
+    [
+      {
+        id: "target-linear-id",
+        identifier: "PLA-3100",
+        title: "Enforce pricing publication ordering",
+        description: `${relatedTitle} (PLA-3101) must land first.`,
+        relations: { blockedBy: [{ identifier: "PLA-3101" }] },
+      },
+      {
+        id: "context-linear-id",
+        identifier: "PLA-3101",
+        title: relatedTitle,
+        description: "Publish immutable pricing data.",
+      },
+    ],
+    [],
+    undefined,
+    ["PLA-3100"],
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(plan);
+  assert.equal(plan.summary.inputIssues, 2);
+  assert.equal(plan.summary.selectedIssues, 1);
+  assert.deepEqual(plan.updates.map(({ issueId }) => issueId), ["PLA-3100"]);
+  assert.doesNotMatch(plan.updates[0].after.description, /PLA-3101/);
+  assert.doesNotMatch(plan.updates[0].after.description, new RegExp(relatedTitle));
+  assert.match(plan.updates[0].after.description, /native blocked-by relation/);
+});
+
+test("fails closed when a target is absent from the full issue input", () => {
+  const { result, plan } = runPlanner(
+    [{
+      id: "target-linear-id",
+      identifier: "PLA-3100",
+      title: "Enforce pricing publication ordering",
+      description: "Enforce one bounded publication result.",
+    }],
+    [],
+    undefined,
+    ["PLA-3999"],
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.equal(plan, null);
+  assert.match(result.stderr, /targets are absent from stdin: PLA-3999/);
+});
+
+test("preserves short domain terms that are also native relation titles", () => {
+  const { result, plan } = runPlanner(
+    [
+      {
+        id: "target-linear-id",
+        identifier: "PLA-3100",
+        title: "Enforce workspace routing",
+        description: "Bid Workspace (PLA-3101) is the bounded routing destination.",
+        relations: { relatedTo: [{ identifier: "PLA-3101" }] },
+      },
+      {
+        id: "context-linear-id",
+        identifier: "PLA-3101",
+        title: "Bid Workspace",
+        description: "Create the bounded workspace.",
+      },
+    ],
+    [],
+    undefined,
+    ["PLA-3100"],
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(plan);
+  assert.match(plan.updates[0].after.description, /Bid Workspace/);
+  assert.doesNotMatch(plan.updates[0].after.description, /PLA-3101/);
+});
+
+test("fails closed when a selected native relation endpoint is absent from full input", () => {
+  const { result, plan } = runPlanner(
+    [{
+      id: "target-linear-id",
+      identifier: "PLA-3100",
+      title: "Enforce pricing publication ordering",
+      description: "Publish Immutable Pricing Versions and Reproducible Rate Cards must land first.",
+      relations: { blockedBy: [{ identifier: "PLA-3999" }] },
+    }],
+    [],
+    undefined,
+    ["PLA-3100"],
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.equal(plan, null);
+  assert.match(result.stderr, /selected native relation endpoints are absent from stdin: PLA-3100->PLA-3999/);
+});
+
+test("fails closed when a normalized body retains an unresolved marker", () => {
+  const { result, plan } = runPlanner([{
+    id: "unresolved-linear-id",
+    identifier: "PLA-3100",
+    title: "Enforce pricing publication ordering",
+    description: "TODO: decide the publication ordering.",
+  }]);
+
+  assert.notEqual(result.status, 0);
+  assert.equal(plan, null);
+  assert.match(result.stderr, /unresolved marker/i);
 });
 
 test("scopes Capability Chip Audit Events to its five registered actions", () => {
@@ -590,7 +707,7 @@ test("extracts a bounded canonical source section for a generic feature", () => 
   assert.doesNotMatch(update.after.description, /\bPLA-\d+\b|\bF-\d+\b/);
   assert.match(
     update.after.description,
-    /Canonical source bundle checksum: `sha256:d6c42011d64e3dd77b2a2bf950e205bf0f693ed97c163f3701062478ad2759ba`/,
+    /Canonical source checksum: `sha256:c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c`/,
   );
 });
 
@@ -1587,10 +1704,13 @@ test("replaces manual issue references with functional labels and removes depend
   assert.equal(result.status, 0, result.stderr);
   assert.ok(plan);
   const description = plan.updates.find((update) => update.issueId === "PLA-271")?.after.description ?? "";
-  assert.match(description, /Organization Schema, Domain Contract & Indexes/);
-  assert.match(description, /Organization Projection Registry Repair/);
-  assert.match(description, /Organization Membership Entity consumes Organization Schema/);
-  assert.doesNotMatch(description, /\b(?:PLA|BUY|SEL|INT)-\d+\b|\bF-079|\bSR-F079|This repair blocks|can earn readiness/i);
+  assert.match(description, /native blocked-by relation/);
+  assert.match(description, /native related relation/);
+  assert.match(description, /Organization Membership Entity consumes/);
+  assert.doesNotMatch(
+    description,
+    /Organization Schema, Domain Contract & Indexes|Organization Projection Registry Repair|\b(?:PLA|BUY|SEL|INT)-\d+\b|\bF-079|\bSR-F079|This repair blocks|can earn readiness/i,
+  );
   assert.equal(description.split(/\r?\n/).some((line) => /^\|\s*\|/.test(line)), false);
 });
 
