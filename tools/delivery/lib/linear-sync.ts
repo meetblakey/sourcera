@@ -255,9 +255,17 @@ function compareIssue(
       code: "linear_sync_priority_changed",
       label: "priority",
     },
+    dueDate: {
+      code: "linear_sync_due_date_changed",
+      label: "due date",
+    },
     archivedAt: {
       code: "linear_sync_archived_changed",
       label: "archive identity",
+    },
+    stateId: {
+      code: "linear_sync_state_identity_changed",
+      label: "state identity",
     },
     assignee: {
       code: "linear_sync_owner_changed",
@@ -272,6 +280,18 @@ function compareIssue(
       code: "linear_sync_team_identity_changed",
       label: "team identity",
     },
+    cycleId: {
+      code: "linear_sync_cycle_identity_changed",
+      label: "cycle identity",
+    },
+    cycleNumber: {
+      code: "linear_sync_cycle_number_changed",
+      label: "cycle number",
+    },
+    cycle: {
+      code: "linear_sync_cycle_changed",
+      label: "cycle",
+    },
     projectId: {
       code: "linear_sync_project_changed",
       label: "project identity",
@@ -283,6 +303,10 @@ function compareIssue(
     parent: {
       code: "linear_sync_parent_changed",
       label: "parent",
+    },
+    parentLinearId: {
+      code: "linear_sync_parent_identity_changed",
+      label: "parent identity",
     },
     state: { code: "linear_sync_state_changed", label: "state" },
     stateType: {

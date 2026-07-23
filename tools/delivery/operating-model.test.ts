@@ -73,7 +73,9 @@ const liveIssue = (
   updatedAt: "2026-07-15T00:00:00.000Z",
   estimate: candidate.estimate,
   priority: 2,
+  dueDate: null,
   archivedAt: null,
+  stateId: "state-in-progress",
   state: "In Progress",
   stateType: "started",
   labels: candidate.labels,
@@ -81,10 +83,14 @@ const liveIssue = (
   assigneeId: "person-blake",
   team: "PLA",
   teamId: "team-pla",
+  cycleId: null,
+  cycleNumber: null,
+  cycle: null,
   projectId: "project-platform",
   project: "Platform",
   milestoneId: "milestone-foundation",
   milestone: candidate.milestone,
+  parentLinearId: null,
   parent: candidate.parentId,
   releases: candidate.release ? [candidate.release] : [],
   relations: [],
@@ -99,6 +105,7 @@ const fingerprint = (
   releases: [],
   projects: [],
   projectMilestones: [],
+  cycles: [],
 });
 
 const decisions = [

@@ -86,6 +86,16 @@ test("bounded consistency capture rejects fingerprint drift explicitly", async (
       descriptionFingerprint: "a".repeat(64),
       updatedAt: "2026-07-23T00:00:00.000Z",
       archivedAt: null,
+      statusId: "status-planned",
+      status: "Planned",
+      statusType: "planned",
+      priority: 2,
+      lead: null,
+      leadId: null,
+      startDate: null,
+      startDateResolution: null,
+      targetDate: null,
+      targetDateResolution: null,
     },
   ];
   let calls = 0;
