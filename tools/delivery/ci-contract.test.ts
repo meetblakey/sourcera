@@ -147,6 +147,9 @@ test("delivery workflow exposes a read-only manual Linear capture artifact", () 
     "linear-runtime-stamp.json",
     "linear-exact-status.json",
     "linear-ticket-integrity.json",
+    "Upload safe Linear ticket diagnostics",
+    "linear-ticket-diagnostics-",
+    "Fail invalid live ticket contracts",
     "linear-publication:",
     "needs: linear-capture",
     "tools/delivery/prepare-linear-publication.ts",
@@ -198,12 +201,24 @@ test("delivery workflow exposes a read-only manual Linear capture artifact", () 
       manualCapture.indexOf("tools/delivery/linear-fingerprint-overlay.ts"),
   );
   assert.ok(
+    manualCapture.indexOf("name: Remove raw Linear descriptions") <
+      manualCapture.indexOf("name: Upload safe Linear ticket diagnostics"),
+  );
+  assert.ok(
+    manualCapture.indexOf("name: Upload safe Linear ticket diagnostics") <
+      manualCapture.indexOf("name: Fail invalid live ticket contracts"),
+  );
+  assert.match(
+    captureJob,
+    /if: steps\.ticket-integrity\.outputs\.status != '0'/,
+  );
+  assert.ok(
     manualCapture.indexOf("tools/delivery/validate-linear-candidate.ts") <
       manualCapture.indexOf("tools/delivery/promote-linear-candidate.ts"),
   );
   assert.ok(
     manualCapture.indexOf("tools/delivery/promote-linear-candidate.ts") <
-      manualCapture.indexOf(officialUploadArtifact),
+      manualCapture.indexOf("linear-snapshot-validation-handoff-"),
   );
   assert.match(workflow, /^permissions:\s+contents: read$/m);
   assert.doesNotMatch(manualCapture, /git (?:add|commit|push)|contents: write/);

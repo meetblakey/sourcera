@@ -42,7 +42,9 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
   const handoffIndex = manualCapture.indexOf(
     "install -m 0600 delivery/linear-snapshot.json /tmp/linear-snapshot-handoff.json",
   );
-  const uploadIndex = manualCapture.indexOf(uploadArtifact);
+  const uploadIndex = manualCapture.indexOf(
+    "linear-snapshot-validation-handoff-",
+  );
   assert.ok(overlayIndex >= 0);
   assert.ok(validationIndex > overlayIndex);
   assert.ok(promotionIndex > validationIndex);
@@ -91,7 +93,7 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
     .slice(1)
     .map((block) => `      - ${block}`)
     .filter((block) => block.includes(`uses: ${uploadArtifact}`));
-  assert.equal(uploadBlocks.length, 3);
+  assert.equal(uploadBlocks.length, 4);
   const allowed = new Set([
     "/tmp/linear-fingerprint.json",
     "/tmp/linear-capture-receipt.json",
@@ -111,12 +113,23 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
     assert.ok(uploadedPaths.length);
     for (const path of uploadedPaths) assert.ok(allowed.has(path), path);
   }
-  assert.match(uploadBlocks[0], /\/tmp\/linear-snapshot-handoff\.json/);
-  assert.match(uploadBlocks[0], /\/tmp\/linear-candidate-receipt\.json/);
-  assert.match(uploadBlocks[0], /\/tmp\/linear-runtime-stamp\.json/);
-  assert.match(uploadBlocks[0], /\/tmp\/linear-exact-status\.json/);
-  assert.match(uploadBlocks[0], /\/tmp\/linear-ticket-integrity\.json/);
-  assert.doesNotMatch(uploadBlocks[0], /\/tmp\/linear-snapshot-candidate\.json/);
+  const diagnosticsUpload = uploadBlocks.find((block) =>
+    block.includes("linear-ticket-diagnostics-"),
+  );
+  const handoffUpload = uploadBlocks.find((block) =>
+    block.includes("linear-snapshot-validation-handoff-"),
+  );
+  assert.ok(diagnosticsUpload);
+  assert.ok(handoffUpload);
+  assert.match(diagnosticsUpload, /if: steps\.ticket-integrity\.outputs\.status != '0'/);
+  assert.match(diagnosticsUpload, /\/tmp\/linear-ticket-integrity\.json/);
+  assert.doesNotMatch(diagnosticsUpload, /linear-ticket-descriptions\.json/);
+  assert.match(handoffUpload, /\/tmp\/linear-snapshot-handoff\.json/);
+  assert.match(handoffUpload, /\/tmp\/linear-candidate-receipt\.json/);
+  assert.match(handoffUpload, /\/tmp\/linear-runtime-stamp\.json/);
+  assert.match(handoffUpload, /\/tmp\/linear-exact-status\.json/);
+  assert.match(handoffUpload, /\/tmp\/linear-ticket-integrity\.json/);
+  assert.doesNotMatch(handoffUpload, /\/tmp\/linear-snapshot-candidate\.json/);
 });
 
 test("publishes a receipt-bound review package from the downloaded handoff", () => {

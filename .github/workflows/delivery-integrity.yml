@@ -136,22 +136,45 @@ jobs:
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
       - name: Validate current live ticket contracts
-        run: >-
-          tools/spec-lint/node_modules/.bin/tsx tools/delivery/current-linear-ticket-integrity.ts
-          --snapshot delivery/linear-snapshot.json
-          --fingerprint /tmp/linear-fingerprint.json
-          --capture /tmp/linear-ticket-descriptions.json
-          --linear-project-scope delivery/linear-project-scope.json
-          --source-policy delivery/linear-source-policy.json
-          --inventory _audit/FEATURE_INVENTORY.md
-          --source-checksums delivery/ticket-source-checksums.json
-          --dispositions delivery/dispositions.json
-          --stamp /tmp/linear-runtime-stamp.json
-          --runtime-dependencies delivery/runtime-gate-dependencies.json
-          --out /tmp/linear-ticket-integrity.json
+        id: ticket-integrity
+        shell: bash
+        run: |
+          set +e
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/current-linear-ticket-integrity.ts \
+            --snapshot delivery/linear-snapshot.json \
+            --fingerprint /tmp/linear-fingerprint.json \
+            --capture /tmp/linear-ticket-descriptions.json \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --source-policy delivery/linear-source-policy.json \
+            --inventory _audit/FEATURE_INVENTORY.md \
+            --source-checksums delivery/ticket-source-checksums.json \
+            --dispositions delivery/dispositions.json \
+            --stamp /tmp/linear-runtime-stamp.json \
+            --runtime-dependencies delivery/runtime-gate-dependencies.json \
+            --out /tmp/linear-ticket-integrity.json
+          ticket_status=$?
+          set -e
+          echo "status=$ticket_status" >> "$GITHUB_OUTPUT"
       - if: always()
         name: Remove raw Linear descriptions
         run: rm -f /tmp/linear-ticket-descriptions.json
+      - if: steps.ticket-integrity.outputs.status != '0'
+        name: Upload safe Linear ticket diagnostics
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-ticket-diagnostics-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            /tmp/linear-fingerprint.json
+            /tmp/linear-capture-receipt.json
+            /tmp/linear-runtime-stamp.json
+            /tmp/linear-exact-status.json
+            /tmp/linear-ticket-integrity.json
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 7
+      - if: steps.ticket-integrity.outputs.status != '0'
+        name: Fail invalid live ticket contracts
+        run: exit 1
       - name: Build receipt-bound Linear snapshot candidate
         run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-fingerprint-overlay.ts --snapshot delivery/linear-snapshot.json --fingerprint /tmp/linear-fingerprint.json --receipt /tmp/linear-capture-receipt.json --ticket-integrity /tmp/linear-ticket-integrity.json --linear-project-scope delivery/linear-project-scope.json --dispositions delivery/dispositions.json --stamp /tmp/linear-runtime-stamp.json --runtime-dependencies delivery/runtime-gate-dependencies.json --releases delivery/releases.json --out /tmp/linear-snapshot-candidate.json --candidate-receipt-out /tmp/linear-candidate-receipt.json
       - name: Validate Linear snapshot candidate semantics
