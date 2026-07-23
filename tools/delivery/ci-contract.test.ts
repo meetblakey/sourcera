@@ -146,6 +146,7 @@ test("delivery workflow exposes a read-only manual Linear capture artifact", () 
   for (const job of [captureJob, publicationJob]) {
     assert.match(job, /github\.event_name == 'workflow_dispatch'/);
     assert.match(job, /github\.ref == 'refs\/heads\/main'/);
+    assert.match(job, /fetch-depth: 0/);
   }
   for (const requiredGate of [
     "npm --prefix tools/spec-lint run typecheck",
