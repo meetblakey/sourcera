@@ -87,9 +87,9 @@
     {
       "requirementId": "RG:appendix_m_coverage_on_diff",
       "dependencies": [
-        "F-796"
+        "F-792"
       ],
-      "rationale": "Highest source-section and assertion match: F-796 @appendix-m-internal-only Override Annotation."
+      "rationale": "The replacement runtime gate inherits F-795's canonical dependency on F-792 Surface/Engine Mapping Registry."
     },
     {
       "requirementId": "RG:attachment_dsar_72h_binary_detach_sla",

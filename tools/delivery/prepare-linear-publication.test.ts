@@ -42,6 +42,8 @@ function requiredArguments(root: string, captureReceipt: string): string[] {
     captureReceipt,
     "--candidate-receipt",
     snapshot,
+    "--ticket-integrity",
+    snapshot,
     "--linear-project-scope",
     snapshot,
     "--linear-program-scope",
@@ -118,12 +120,15 @@ test("publication enumerates only regular files and rejects symlinks", () => {
   }
 });
 
-test("publication re-verifies the exact repository-shaped 15-file bundle", () => {
+test("publication re-verifies the exact repository-shaped 16-file bundle", () => {
   const source = readFileSync(script, "utf8");
   assert.match(source, /tools\/delivery\/verify\.ts/);
   assert.match(source, /Publication bundle verification/);
+  assert.match(source, /assertPublicationIntegrityReport/);
+  assert.match(source, /candidate\.linearTicketIntegrity/);
   for (const required of [
     "attestation/linear-publication-receipt.json",
+    "attestation/linear-ticket-integrity.json",
     "delivery/linear-snapshot.json",
     "delivery/release-plan.json",
     "delivery-manifest.json",

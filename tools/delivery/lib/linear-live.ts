@@ -17,6 +17,7 @@ const ISSUE_PAGE_LIMIT = 10;
 const PIPELINE_PAGE_LIMIT = 10;
 const PROJECT_PAGE_LIMIT = 10;
 const INITIATIVE_PAGE_LIMIT = 10;
+const CYCLE_PAGE_LIMIT = 50;
 const NESTED_CONNECTION_LIMIT = 100;
 
 const ISSUE_QUERY = `
@@ -30,17 +31,19 @@ const ISSUE_QUERY = `
         updatedAt
         estimate
         priority
+        dueDate
         archivedAt
-        state { name type }
+        state { id name type }
         labels(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { name }
           pageInfo { hasNextPage }
         }
         assignee { id name }
         team { id key }
+        cycle { id number name }
         project { id name }
         projectMilestone { id name }
-        parent { identifier }
+        parent { id identifier }
         releases(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { id version }
           pageInfo { hasNextPage }
@@ -89,7 +92,11 @@ const RELEASE_QUERY = `
       nodes {
         id
         name
+        description
         version
+        commitSha
+        startDate
+        targetDate
         updatedAt
         archivedAt
         pipeline { id }
@@ -109,6 +116,13 @@ const PROJECT_QUERY = `
         content
         updatedAt
         archivedAt
+        status { id name type }
+        priority
+        lead { id name }
+        startDate
+        startDateResolution
+        targetDate
+        targetDateResolution
         initiatives(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { id name }
           pageInfo { hasNextPage }
@@ -127,10 +141,14 @@ const INITIATIVE_QUERY = `
         name
         updatedAt
         archivedAt
-        parentInitiatives(first: ${NESTED_CONNECTION_LIMIT}) {
-          nodes { id name }
-          pageInfo { hasNextPage }
-        }
+        owner { id name }
+        status
+        priority
+        health
+        healthUpdatedAt
+        targetDate
+        targetDateResolution
+        parentInitiative { id name }
       }
       pageInfo { hasNextPage endCursor }
     }
@@ -163,8 +181,32 @@ const PROJECT_MILESTONE_QUERY = `
         id
         name
         description
+        updatedAt
         archivedAt
+        targetDate
+        status
         project { id name }
+      }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+`;
+
+const CYCLE_QUERY = `
+  query DeliveryCycles($after: String) {
+    cycles(first: ${CYCLE_PAGE_LIMIT}, after: $after, includeArchived: true) {
+      nodes {
+        id
+        number
+        name
+        description
+        updatedAt
+        archivedAt
+        startsAt
+        endsAt
+        completedAt
+        team { id key }
+        inheritedFrom { id }
       }
       pageInfo { hasNextPage endCursor }
     }
@@ -194,14 +236,16 @@ interface IssueNode {
   updatedAt: string;
   estimate: number | null;
   priority: number;
+  dueDate: string | null;
   archivedAt: string | null;
-  state: { name: string; type: string };
+  state: { id: string; name: string; type: string };
   labels: NestedConnection<{ name: string }>;
   assignee: { id: string; name: string } | null;
   team: { id: string; key: string };
+  cycle: { id: string; number: number; name: string | null } | null;
   project: { id: string; name: string } | null;
   projectMilestone: { id: string; name: string } | null;
-  parent: { identifier: string } | null;
+  parent: { id: string; identifier: string } | null;
   releases: NestedConnection<{ id: string; version: string | null }>;
   relations: NestedConnection<RelationNode>;
   inverseRelations: NestedConnection<RelationNode>;
@@ -234,7 +278,11 @@ interface PipelineNode {
 interface ReleaseNode {
   id: string;
   name: string;
+  description: string | null;
   version: string | null;
+  commitSha: string | null;
+  startDate: string | null;
+  targetDate: string | null;
   updatedAt: string;
   archivedAt: string | null;
   pipeline: { id: string };
@@ -247,6 +295,13 @@ interface ProjectNode {
   content: string | null;
   updatedAt: string;
   archivedAt: string | null;
+  status: { id: string; name: string; type: string };
+  priority: number;
+  lead: { id: string; name: string } | null;
+  startDate: string | null;
+  startDateResolution: string | null;
+  targetDate: string | null;
+  targetDateResolution: string | null;
   initiatives?: NestedConnection<{ id: string; name: string }>;
 }
 
@@ -255,7 +310,14 @@ interface InitiativeNode {
   name: string;
   updatedAt: string;
   archivedAt: string | null;
-  parentInitiatives: NestedConnection<{ id: string; name: string }>;
+  owner: { id: string; name: string } | null;
+  status: string;
+  priority: number;
+  health: string | null;
+  healthUpdatedAt: string | null;
+  targetDate: string | null;
+  targetDateResolution: string | null;
+  parentInitiative: { id: string; name: string } | null;
 }
 
 interface DocumentNode {
@@ -274,8 +336,25 @@ interface ProjectMilestoneNode {
   id: string;
   name: string;
   description: string | null;
+  updatedAt: string;
   archivedAt: string | null;
+  targetDate: string | null;
+  status: string;
   project: { id: string; name: string };
+}
+
+interface CycleNode {
+  id: string;
+  number: number;
+  name: string | null;
+  description: string | null;
+  updatedAt: string;
+  archivedAt: string | null;
+  startsAt: string;
+  endsAt: string;
+  completedAt: string | null;
+  team: { id: string; key: string };
+  inheritedFrom: { id: string } | null;
 }
 
 export interface LinearFingerprint {
@@ -296,7 +375,9 @@ export interface LinearFingerprint {
     updatedAt: string;
     estimate: number | null;
     priority: number;
+    dueDate: string | null;
     archivedAt: string | null;
+    stateId: string;
     state: string;
     stateType: string;
     labels: string[];
@@ -304,10 +385,14 @@ export interface LinearFingerprint {
     assigneeId: string | null;
     team: string;
     teamId: string;
+    cycleId: string | null;
+    cycleNumber: number | null;
+    cycle: string | null;
     projectId: string | null;
     project: string | null;
     milestoneId: string | null;
     milestone: string | null;
+    parentLinearId: string | null;
     parent: string | null;
     releases: string[];
     relations: string[];
@@ -332,7 +417,11 @@ export interface LinearFingerprint {
   releases: Array<{
     id: string;
     name: string;
+    descriptionFingerprint: string;
     version: string | null;
+    commitSha: string | null;
+    startDate: string | null;
+    targetDate: string | null;
     updatedAt: string;
     archivedAt: string | null;
     pipeline: string;
@@ -345,6 +434,16 @@ export interface LinearFingerprint {
     descriptionFingerprint: string;
     updatedAt: string;
     archivedAt: string | null;
+    statusId: string;
+    status: string;
+    statusType: string;
+    priority: number;
+    lead: string | null;
+    leadId: string | null;
+    startDate: string | null;
+    startDateResolution: string | null;
+    targetDate: string | null;
+    targetDateResolution: string | null;
   }>;
   projectMilestones: Array<{
     id: string;
@@ -352,7 +451,24 @@ export interface LinearFingerprint {
     descriptionFingerprint: string;
     projectId: string;
     project: string;
+    updatedAt: string;
     archivedAt: string | null;
+    targetDate: string | null;
+    status: string;
+  }>;
+  cycles: Array<{
+    id: string;
+    number: number;
+    name: string | null;
+    descriptionFingerprint: string;
+    updatedAt: string;
+    archivedAt: string | null;
+    startsAt: string;
+    endsAt: string;
+    completedAt: string | null;
+    team: string;
+    teamId: string;
+    inheritedFromId: string | null;
   }>;
   program?: LinearProgramFingerprint;
 }
@@ -375,6 +491,20 @@ export function assertLinearPlanningDescriptionFingerprints(
     if (!SHA256.test(milestone.descriptionFingerprint ?? "")) {
       throw new Error(
         `Linear project milestone ${milestone.id} description fingerprint is invalid`,
+      );
+    }
+  }
+  for (const release of fingerprint.releases) {
+    if (!SHA256.test(release.descriptionFingerprint ?? "")) {
+      throw new Error(
+        `Linear release ${release.id} description fingerprint is invalid`,
+      );
+    }
+  }
+  for (const cycle of fingerprint.cycles) {
+    if (!SHA256.test(cycle.descriptionFingerprint ?? "")) {
+      throw new Error(
+        `Linear cycle ${cycle.id} description fingerprint is invalid`,
       );
     }
   }
@@ -623,6 +753,10 @@ export function canonicalLinearRelationKey(
     const [first, second] = [left, right].sort();
     return `related:${first}:${second}`;
   }
+  if (type === "similar") {
+    const [first, second] = [left, right].sort();
+    return `similar:${first}:${second}`;
+  }
   if (type === "duplicate" || type === "duplicateOf") {
     return `duplicate:${left}:${right}`;
   }
@@ -721,6 +855,7 @@ export async function fetchLinearCapture(
     releaseNodes,
     projectNodes,
     projectMilestoneNodes,
+    cycleNodes,
     initiativeNodes,
     documentNodes,
   ] = await Promise.all([
@@ -739,6 +874,7 @@ export async function fetchLinearCapture(
       PROJECT_MILESTONE_QUERY,
       "projectMilestones",
     ),
+    paginate<CycleNode>(fetcher, token, CYCLE_QUERY, "cycles"),
     programScope
       ? paginate<InitiativeNode>(fetcher, token, INITIATIVE_QUERY, "initiatives")
       : Promise.resolve([]),
@@ -754,13 +890,6 @@ export async function fetchLinearCapture(
   for (const project of projectNodes) {
     if (project.initiatives?.pageInfo?.hasNextPage) {
       throw new Error(`Linear project ${project.id} initiatives connection is truncated`);
-    }
-  }
-  for (const initiative of initiativeNodes) {
-    if (initiative.parentInitiatives?.pageInfo?.hasNextPage) {
-      throw new Error(
-        `Linear initiative ${initiative.id} parentInitiatives connection is truncated`,
-      );
     }
   }
   const scopedInventory = scopedProjectInventory(
@@ -782,9 +911,16 @@ export async function fetchLinearCapture(
             name: initiative.name,
             updatedAt: initiative.updatedAt,
             archivedAt: initiative.archivedAt,
-            parentInitiativeIds: initiative.parentInitiatives.nodes
-              .map((parent) => parent.id)
-              .sort(),
+            owner: initiative.owner?.name ?? null,
+            ownerId: initiative.owner?.id ?? null,
+            status: initiative.status,
+            priority: initiative.priority,
+            health: initiative.health,
+            healthUpdatedAt: initiative.healthUpdatedAt,
+            targetDate: initiative.targetDate,
+            targetDateResolution: initiative.targetDateResolution,
+            parentInitiativeId: initiative.parentInitiative?.id ?? null,
+            parentInitiative: initiative.parentInitiative?.name ?? null,
           }))
           .sort((left, right) => left.id.localeCompare(right.id)),
         documents: documentNodes
@@ -826,7 +962,9 @@ export async function fetchLinearCapture(
         updatedAt: issue.updatedAt,
         estimate: issue.estimate,
         priority: issue.priority,
+        dueDate: issue.dueDate,
         archivedAt: issue.archivedAt,
+        stateId: issue.state.id,
         state: issue.state.name,
         stateType: issue.state.type,
         labels: issue.labels.nodes.map((label) => label.name).sort(),
@@ -834,10 +972,14 @@ export async function fetchLinearCapture(
         assigneeId: issue.assignee?.id ?? null,
         team: issue.team.key,
         teamId: issue.team.id,
+        cycleId: issue.cycle?.id ?? null,
+        cycleNumber: issue.cycle?.number ?? null,
+        cycle: issue.cycle?.name ?? null,
         projectId: issue.project?.id ?? null,
         project: issue.project?.name ?? null,
         milestoneId: issue.projectMilestone?.id ?? null,
         milestone: issue.projectMilestone?.name ?? null,
+        parentLinearId: issue.parent?.id ?? null,
         parent: issue.parent?.identifier ?? null,
         releases: issue.releases.nodes
           .map((release) => release.version ?? release.id)
@@ -865,7 +1007,11 @@ export async function fetchLinearCapture(
       .map((release) => ({
         id: release.id,
         name: release.name,
+        descriptionFingerprint: descriptionFingerprint(release.description),
         version: release.version,
+        commitSha: release.commitSha,
+        startDate: release.startDate,
+        targetDate: release.targetDate,
         updatedAt: release.updatedAt,
         archivedAt: release.archivedAt,
         pipeline: release.pipeline.id,
@@ -880,6 +1026,16 @@ export async function fetchLinearCapture(
         descriptionFingerprint: descriptionFingerprint(project.content),
         updatedAt: project.updatedAt,
         archivedAt: project.archivedAt,
+        statusId: project.status.id,
+        status: project.status.name,
+        statusType: project.status.type,
+        priority: project.priority,
+        lead: project.lead?.name ?? null,
+        leadId: project.lead?.id ?? null,
+        startDate: project.startDate,
+        startDateResolution: project.startDateResolution,
+        targetDate: project.targetDate,
+        targetDateResolution: project.targetDateResolution,
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
     projectMilestones: scopedInventory.milestones
@@ -889,7 +1045,26 @@ export async function fetchLinearCapture(
         descriptionFingerprint: descriptionFingerprint(milestone.description),
         projectId: milestone.project.id,
         project: milestone.project.name,
+        updatedAt: milestone.updatedAt,
         archivedAt: milestone.archivedAt,
+        targetDate: milestone.targetDate,
+        status: milestone.status,
+      }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    cycles: cycleNodes
+      .map((cycle) => ({
+        id: cycle.id,
+        number: cycle.number,
+        name: cycle.name,
+        descriptionFingerprint: descriptionFingerprint(cycle.description),
+        updatedAt: cycle.updatedAt,
+        archivedAt: cycle.archivedAt,
+        startsAt: cycle.startsAt,
+        endsAt: cycle.endsAt,
+        completedAt: cycle.completedAt,
+        team: cycle.team.key,
+        teamId: cycle.team.id,
+        inheritedFromId: cycle.inheritedFrom?.id ?? null,
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
     ...(program ? { program } : {}),
@@ -972,14 +1147,30 @@ export function canonicalLinearFingerprint(
   return {
     ...fingerprint,
     projectMilestones: fingerprint.projectMilestones.map(
-      ({ id, name, descriptionFingerprint, projectId, project, archivedAt }) => ({
+      ({
         id,
         name,
         descriptionFingerprint,
         projectId,
         project,
+        updatedAt,
         archivedAt,
+        targetDate,
+        status,
+      }) => ({
+        id,
+        name,
+        descriptionFingerprint,
+        projectId,
+        project,
+        updatedAt,
+        archivedAt,
+        targetDate,
+        status,
       }),
+    ).sort((left, right) => left.id.localeCompare(right.id)),
+    cycles: [...fingerprint.cycles].sort((left, right) =>
+      left.id.localeCompare(right.id)
     ),
     ...(fingerprint.program
       ? {
@@ -1015,6 +1206,7 @@ export function fingerprintDiff(
     "releases",
     "projects",
     "projectMilestones",
+    "cycles",
     "program",
   ] as const) {
     if (

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { descriptionFingerprint } from "./fingerprint.js";
 import type { Finding, LinearIssueSnapshot } from "./model.js";
 import { readinessFindings } from "./readiness.js";
@@ -21,6 +22,7 @@ export interface TicketIntegritySnapshot {
       descriptionFingerprint: string;
       updatedAt: string;
       labels: string[];
+      relations?: string[];
     }>;
   };
 }
@@ -45,6 +47,61 @@ export interface TicketIntegrityReport {
   passed: boolean;
 }
 
+export interface BoundTicketIntegrityReport extends TicketIntegrityReport {
+  fingerprintSha256: string;
+  descriptionCaptureSha256: string;
+  checkedIssueCount: number;
+}
+
+const SHA256 = /^[a-f0-9]{64}$/;
+
+function sha256(value: string): string {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+export function bindTicketIntegrityReport(
+  report: TicketIntegrityReport,
+  fingerprintJson: string,
+  captureJson: string,
+  checkedIssueCount: number,
+): BoundTicketIntegrityReport {
+  return {
+    ...report,
+    fingerprintSha256: sha256(fingerprintJson),
+    descriptionCaptureSha256: sha256(captureJson),
+    checkedIssueCount,
+  };
+}
+
+export function assertBoundTicketIntegrityReport(
+  value: unknown,
+  fingerprintJson: string,
+  expectedIssueCount?: number,
+): BoundTicketIntegrityReport {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Linear ticket-integrity report is invalid");
+  }
+  const report = value as Partial<BoundTicketIntegrityReport>;
+  if (
+    report.schemaVersion !== 1 ||
+    report.passed !== true ||
+    !Array.isArray(report.findings) ||
+    report.findings.length !== 0 ||
+    !Array.isArray(report.readinessFindings) ||
+    report.readinessFindings.length !== 0 ||
+    report.fingerprintSha256 !== sha256(fingerprintJson) ||
+    typeof report.descriptionCaptureSha256 !== "string" ||
+    !SHA256.test(report.descriptionCaptureSha256) ||
+    !Number.isInteger(report.checkedIssueCount) ||
+    report.checkedIssueCount! < 1 ||
+    (expectedIssueCount !== undefined &&
+      report.checkedIssueCount !== expectedIssueCount)
+  ) {
+    throw new Error("Linear ticket-integrity report does not match its fingerprint");
+  }
+  return report as BoundTicketIntegrityReport;
+}
+
 function normalizedClause(line: string): string {
   return line
     .replace(/^\s*(?:[-*+]\s+\[[ xX]\]\s+|[-*+]\s+)/, "")
@@ -65,6 +122,7 @@ function descriptionFindings(
   ready: boolean,
   checksumSourceId: string | null,
   expectedSourceChecksum: string | null,
+  nativeRelatedTitles: string[],
 ): Finding[] {
   const issueId = issue.id;
   const description = captured.description ?? "";
@@ -148,6 +206,23 @@ function descriptionFindings(
           .join(", "),
     });
   }
+  const duplicatedRelatedTitles = nativeRelatedTitles.flatMap((title) => {
+    const lineIndex = rawLines.findIndex((line) =>
+      line.toLocaleLowerCase().includes(title.toLocaleLowerCase())
+    );
+    return lineIndex >= 0 ? [{ title, lineNumber: lineIndex + 1 }] : [];
+  });
+  if (duplicatedRelatedTitles.length > 0) {
+    findings.push({
+      code: "ticket_native_related_title_duplicated",
+      issueId,
+      message:
+        `${issueId} hardcodes natively related issue titles: ` +
+        duplicatedRelatedTitles
+          .map(({ title, lineNumber }) => `${JSON.stringify(title)} line ${lineNumber}`)
+          .join(", "),
+    });
+  }
   const duplicatedNativeFields = rawLines.flatMap((line, index) => {
     const match = /^\s*(?:[-*+]\s+)?(?:\[[ xX]\]\s+)?(?:\*\*)?(Release(?: version)?|Linear release|Team|Project|Milestone|Parent|Owner|Assignee|Estimate|Priority|Labels|Status|State|Cycle|Due date|Source family)(?:\*\*)?\s*:/i.exec(
       line,
@@ -196,7 +271,28 @@ function descriptionFindings(
       issueId,
       message:
         `${issueId} repeats its native Linear title as a description heading ` +
-        `on line ${duplicatedTitle + 1}`,
+      `on line ${duplicatedTitle + 1}`,
+    });
+  }
+  const unresolvedMarkers = rawLines.flatMap((line, index) => {
+    const matches = [
+      ...line.matchAll(/\b(?:TBD|TODO|FIXME|REPLACE_WITH_[A-Z0-9_]+)\b/g),
+      ...line.matchAll(/[<\[]placeholder[>\]]/gi),
+    ];
+    return matches.map((match) => ({
+      marker: match[0],
+      lineNumber: index + 1,
+    }));
+  });
+  if (unresolvedMarkers.length > 0) {
+    findings.push({
+      code: "ticket_description_unresolved_marker",
+      issueId,
+      message:
+        `${issueId} contains unresolved description markers: ` +
+        unresolvedMarkers
+          .map(({ marker, lineNumber }) => `${marker} line ${lineNumber}`)
+          .join(", "),
     });
   }
   const sourceDeferral = [
@@ -228,24 +324,51 @@ function descriptionFindings(
     });
   }
   if (issue.kind === "executable" || issue.kind === "proof_only") {
-    const sectionMarkers = description
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter((line) =>
-        /^(?:#{2,6}\s+.+|\*\*[^*]+\*\*:?|[A-Za-z][A-Za-z /&-]{1,60}:)$/.test(
-          line,
-        ),
-      )
-      .map((line) =>
-        line
-          .replace(/^#{2,6}\s+/, "")
+    const sectionMarkers = rawLines.flatMap((rawLine, index) => {
+      const line = rawLine.trim();
+      const markdown = /^(#{2,6})\s+(.+)$/.exec(line);
+      const supported =
+        markdown ||
+        /^(?:\*\*[^*]+\*\*:?|[A-Za-z][A-Za-z /&-]{1,60}:)$/.test(line);
+      if (!supported) return [];
+      return [{
+        index,
+        level: markdown ? markdown[1].length : 2,
+        marker: (markdown?.[2] ?? line)
           .replace(/^\*\*|\*\*:?$/g, "")
           .replace(/:$/, "")
           .trim()
           .toLowerCase(),
-      );
+      }];
+    });
     const hasSection = (pattern: RegExp) =>
-      sectionMarkers.some((marker) => pattern.test(marker));
+      sectionMarkers.some(({ marker }) => pattern.test(marker));
+    const hasSubstantiveSection = (pattern: RegExp) =>
+      sectionMarkers.some((section) => {
+        if (!pattern.test(section.marker)) return false;
+        const next = sectionMarkers.find(
+          (candidate) =>
+            candidate.index > section.index &&
+            candidate.level <= section.level,
+        );
+        const nestedHeadingLines = new Set(
+          sectionMarkers
+            .filter(
+              (candidate) =>
+                candidate.index > section.index &&
+                candidate.index < (next?.index ?? rawLines.length),
+            )
+            .map((candidate) => candidate.index),
+        );
+        const body = rawLines
+          .slice(section.index + 1, next?.index ?? rawLines.length)
+          .filter((_, offset) =>
+            !nestedHeadingLines.has(section.index + 1 + offset)
+          )
+          .join("\n")
+          .trim();
+        return /[\p{L}\p{N}]/u.test(body);
+      });
     const requiredSections = [
       ["outcome", /^outcome$/],
       ["complete behavior and rules", /(?:complete\s+)?behavior.*rules|rules.*behavior/],
@@ -274,6 +397,20 @@ function descriptionFindings(
         message:
           `${issueId} executable body lacks required sections: ` +
           missingSections.join(", "),
+      });
+    }
+    const emptySections = requiredSections
+      .filter(([, pattern]) =>
+        hasSection(pattern) && !hasSubstantiveSection(pattern)
+      )
+      .map(([name]) => name);
+    if (emptySections.length > 0) {
+      findings.push({
+        code: "ticket_contract_sections_empty",
+        issueId,
+        message:
+          `${issueId} executable body has empty required sections: ` +
+          emptySections.join(", "),
       });
     }
   }
@@ -463,12 +600,21 @@ export function scanTicketIntegrity(
         checksumSourceId
           ? checksumBySource.get(checksumSourceId) ?? null
           : null,
+        (fingerprint.relations ?? [])
+          .flatMap((relation) => {
+            const [, left, right] = relation.split(":");
+            if (left === issue.id) return [right];
+            if (right === issue.id) return [left];
+            return [];
+          })
+          .map((identifier) => fingerprintById.get(identifier)?.title ?? "")
+          .filter((title) => title.trim().length >= 32),
       ),
     );
   }
 
   findings.sort(findingOrder);
-  const readiness = snapshot.issues
+  const descriptionReadiness = snapshot.issues
     .filter((issue) => {
       const liveLabels = capturesById.get(issue.id)?.[0]?.labels ?? [];
       return [...issue.labels, ...liveLabels].some(
@@ -476,7 +622,10 @@ export function scanTicketIntegrity(
       );
     })
     .flatMap((issue) =>
-      readinessFindings(issue, { ticketIntegrityFindings: findings }).filter(
+      readinessFindings(issue, {
+        ticketIntegrityFindings: findings,
+        descriptionContractVerified: true,
+      }).filter(
         (finding) => finding.code === "ticket_integrity_failed",
       ),
     )
@@ -485,7 +634,7 @@ export function scanTicketIntegrity(
   return {
     schemaVersion: 1,
     findings,
-    readinessFindings: readiness,
-    passed: readiness.length === 0 && findings.length === 0,
+    readinessFindings: descriptionReadiness,
+    passed: descriptionReadiness.length === 0 && findings.length === 0,
   };
 }

@@ -57,6 +57,10 @@ import {
 import type { ReleaseDefinition } from "./lib/model.js";
 import { parseFeatureInventory } from "./lib/sources.js";
 import type { SourceChecksumContract } from "./lib/source-checksums.js";
+import {
+  assertBoundTicketIntegrityReport,
+  type BoundTicketIntegrityReport,
+} from "./lib/ticket-integrity.js";
 
 interface CaptureReceipt {
   schemaVersion: 1;
@@ -69,6 +73,7 @@ interface PromotableCandidate extends LinearSnapshotCandidate {
   generatedAt: string;
   linearCapture: CaptureReceipt;
   linearFingerprint: LinearFingerprint;
+  linearTicketIntegrity: BoundTicketIntegrityReport;
   issues: Array<LinearSnapshotCandidate["issues"][number] & {
     sourceFamilyId?: string | null;
     kind?: string;
@@ -85,6 +90,7 @@ const ALLOWED = new Set([
   "--candidate",
   "--fingerprint",
   "--capture-receipt",
+  "--ticket-integrity",
   "--candidate-receipt",
   "--linear-project-scope",
   "--linear-program-scope",
@@ -270,6 +276,7 @@ export function main(): void {
     candidate: required(values, "--candidate"),
     fingerprint: required(values, "--fingerprint"),
     captureReceipt: required(values, "--capture-receipt"),
+    ticketIntegrity: required(values, "--ticket-integrity"),
     candidateReceipt: required(values, "--candidate-receipt"),
     projectScope: required(values, "--linear-project-scope"),
     programScope: required(values, "--linear-program-scope"),
@@ -314,6 +321,7 @@ export function main(): void {
   const candidateJson = readFileSync(paths.candidate, "utf8");
   const fingerprintJson = readFileSync(paths.fingerprint, "utf8");
   const captureReceiptJson = readFileSync(paths.captureReceipt, "utf8");
+  const ticketIntegrityJson = readFileSync(paths.ticketIntegrity, "utf8");
   const projectScopeJson = readFileSync(paths.projectScope, "utf8");
   const programScopeJson = readFileSync(paths.programScope, "utf8");
   const sourcePolicyJson = readFileSync(paths.sourcePolicy, "utf8");
@@ -345,6 +353,7 @@ export function main(): void {
       baselineSnapshotJson: snapshotJson,
       fingerprintJson,
       captureReceiptJson,
+      ticketIntegrityJson,
       projectScopeJson,
       programScopeJson,
       sourcePolicyJson,
@@ -360,10 +369,17 @@ export function main(): void {
   );
   const candidate = JSON.parse(candidateJson) as PromotableCandidate;
   const fingerprint = JSON.parse(fingerprintJson) as LinearFingerprint;
+  const ticketIntegrity = assertBoundTicketIntegrityReport(
+    JSON.parse(ticketIntegrityJson),
+    fingerprintJson,
+    candidate.issues.length,
+  );
   if (
     candidate.generatedAt !== captureReceipt.capturedAt ||
     JSON.stringify(candidate.linearCapture) !== JSON.stringify(captureReceipt) ||
-    JSON.stringify(candidate.linearFingerprint) !== JSON.stringify(fingerprint)
+    JSON.stringify(candidate.linearFingerprint) !== JSON.stringify(fingerprint) ||
+    JSON.stringify(candidate.linearTicketIntegrity) !==
+      JSON.stringify(ticketIntegrity)
   ) {
     throw new Error("Linear candidate is not bound to its captured readback");
   }

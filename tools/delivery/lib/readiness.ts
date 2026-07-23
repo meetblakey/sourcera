@@ -2,6 +2,7 @@ import type { Finding, LinearIssueSnapshot } from "./model.js";
 
 export interface ReadinessContext {
   ticketIntegrityFindings?: Finding[];
+  descriptionContractVerified?: boolean;
 }
 
 export function readinessFindings(
@@ -9,6 +10,8 @@ export function readinessFindings(
   context: ReadinessContext = {},
 ): Finding[] {
   const findings: Finding[] = [];
+  const descriptionContractVerified =
+    context.descriptionContractVerified === true;
   const add = (condition: boolean, code: string, message: string) => {
     if (condition) findings.push({ code, issueId: issue.id, message });
   };
@@ -19,12 +22,13 @@ export function readinessFindings(
     `${issue.id} is not executable work`,
   );
   add(
-    !issue.outcome?.trim(),
+    !descriptionContractVerified && !issue.outcome?.trim(),
     "outcome_missing",
     `${issue.id} lacks one outcome`,
   );
   add(
-    !issue.sourceVersion || !issue.sourceSection,
+    !descriptionContractVerified &&
+      (!issue.sourceVersion || !issue.sourceSection),
     "source_not_pinned",
     `${issue.id} source is not pinned`,
   );
@@ -34,7 +38,7 @@ export function readinessFindings(
     `${issue.id} lacks release or milestone`,
   );
   add(
-    !issue.owner || !issue.reviewer,
+    !issue.owner || (!descriptionContractVerified && !issue.reviewer),
     "owner_or_reviewer_missing",
     `${issue.id} lacks owner or reviewer`,
   );
@@ -44,37 +48,51 @@ export function readinessFindings(
     `${issue.id} estimate must be 1–5`,
   );
   add(
-    !issue.paths.length ||
-      issue.paths.some((path) => path.includes("*") || path.endsWith("/")),
+    !descriptionContractVerified &&
+      (!issue.paths.length ||
+        issue.paths.some((path) => path.includes("*") || path.endsWith("/"))),
     "path_not_concrete",
     `${issue.id} paths are not concrete`,
   );
   add(
-    !issue.tests.success,
+    !descriptionContractVerified && !issue.tests.success,
     "success_test_missing",
     `${issue.id} lacks success test`,
   );
   add(
-    !issue.tests.failure,
+    !descriptionContractVerified && !issue.tests.failure,
     "failure_test_missing",
     `${issue.id} lacks failure test`,
   );
   add(
-    !issue.tests.recovery,
+    !descriptionContractVerified && !issue.tests.recovery,
     "recovery_test_missing",
     `${issue.id} lacks recovery test`,
   );
-  add(!issue.rollout, "rollout_missing", `${issue.id} lacks rollout`);
-  add(!issue.rollback, "rollback_missing", `${issue.id} lacks rollback`);
   add(
-    !issue.telemetry,
+    !descriptionContractVerified && !issue.rollout,
+    "rollout_missing",
+    `${issue.id} lacks rollout`,
+  );
+  add(
+    !descriptionContractVerified && !issue.rollback,
+    "rollback_missing",
+    `${issue.id} lacks rollback`,
+  );
+  add(
+    !descriptionContractVerified && !issue.telemetry,
     "telemetry_missing",
     `${issue.id} lacks telemetry or rationale`,
   );
-  add(!issue.proof, "proof_missing", `${issue.id} lacks named proof`);
+  add(
+    !descriptionContractVerified && !issue.proof,
+    "proof_missing",
+    `${issue.id} lacks named proof`,
+  );
   const serialized = JSON.stringify(issue);
   add(
-    serialized.includes("…") || /\b(?:TBD|TODO|placeholder)\b/i.test(serialized),
+    !descriptionContractVerified &&
+      (serialized.includes("…") || /\b(?:TBD|TODO|placeholder)\b/i.test(serialized)),
     "ambiguous_or_truncated",
     `${issue.id} contains truncated or placeholder text`,
   );

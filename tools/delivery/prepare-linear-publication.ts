@@ -41,6 +41,11 @@ import {
   type LinearProjectScope,
 } from "./lib/linear-project-scope.js";
 import type { ReleaseDefinition } from "./lib/model.js";
+import { assertPublicationIntegrityReport } from "./lib/publication-integrity.js";
+import {
+  assertBoundTicketIntegrityReport,
+  type BoundTicketIntegrityReport,
+} from "./lib/ticket-integrity.js";
 import { assertCompleteLinearFingerprint } from "./linear-fingerprint-overlay.js";
 
 interface CaptureReceipt {
@@ -54,6 +59,7 @@ interface PublicationCandidate extends LinearSnapshotCandidate {
   generatedAt: string;
   linearCapture: CaptureReceipt;
   linearFingerprint: LinearFingerprint;
+  linearTicketIntegrity: BoundTicketIntegrityReport;
 }
 
 const REPORTS = [
@@ -72,6 +78,7 @@ const ALLOWED = new Set([
   "--fingerprint",
   "--capture-receipt",
   "--candidate-receipt",
+  "--ticket-integrity",
   "--linear-project-scope",
   "--linear-program-scope",
   "--source-policy",
@@ -165,6 +172,7 @@ export function main(): void {
     fingerprint: required(values, "--fingerprint"),
     captureReceipt: required(values, "--capture-receipt"),
     candidateReceipt: required(values, "--candidate-receipt"),
+    ticketIntegrity: required(values, "--ticket-integrity"),
     projectScope: required(values, "--linear-project-scope"),
     programScope: required(values, "--linear-program-scope"),
     sourcePolicy: required(values, "--source-policy"),
@@ -220,6 +228,7 @@ export function main(): void {
   const fingerprintJson = readFileSync(paths.fingerprint, "utf8");
   const captureReceiptJson = readFileSync(paths.captureReceipt, "utf8");
   const candidateReceiptJson = readFileSync(paths.candidateReceipt, "utf8");
+  const ticketIntegrityJson = readFileSync(paths.ticketIntegrity, "utf8");
   const projectScopeJson = readFileSync(paths.projectScope, "utf8");
   const programScopeJson = readFileSync(paths.programScope, "utf8");
   const sourcePolicyJson = readFileSync(paths.sourcePolicy, "utf8");
@@ -248,6 +257,7 @@ export function main(): void {
     baselineSnapshotJson: snapshotJson,
     fingerprintJson,
     captureReceiptJson,
+    ticketIntegrityJson,
     projectScopeJson,
     programScopeJson,
     sourcePolicyJson,
@@ -263,10 +273,17 @@ export function main(): void {
 
   const candidate = JSON.parse(candidateJson) as PublicationCandidate;
   const fingerprint = JSON.parse(fingerprintJson) as LinearFingerprint;
+  const ticketIntegrity = assertBoundTicketIntegrityReport(
+    JSON.parse(ticketIntegrityJson),
+    fingerprintJson,
+    candidate.issues.length,
+  );
   if (
     candidate.generatedAt !== captureReceipt.capturedAt ||
     JSON.stringify(candidate.linearCapture) !== JSON.stringify(captureReceipt) ||
-    JSON.stringify(candidate.linearFingerprint) !== JSON.stringify(fingerprint)
+    JSON.stringify(candidate.linearFingerprint) !== JSON.stringify(fingerprint) ||
+    JSON.stringify(candidate.linearTicketIntegrity) !==
+      JSON.stringify(ticketIntegrity)
   ) {
     throw new Error("Linear handoff is not bound to its current capture");
   }
@@ -376,6 +393,9 @@ export function main(): void {
     reportsOut,
   ]);
   for (const report of REPORTS) regularFile(join(reportsOut, report), report);
+  assertPublicationIntegrityReport(
+    JSON.parse(readFileSync(join(reportsOut, "drift-report.json"), "utf8")),
+  );
   runTool(repositoryRoot, "Publication bundle verification", [
     join(repositoryRoot, "tools/delivery/verify.ts"),
     "--root",
@@ -412,6 +432,7 @@ export function main(): void {
 
   copyAttestation(paths.captureReceipt, join(attestationOut, "linear-capture-receipt.json"));
   copyAttestation(paths.candidateReceipt, join(attestationOut, "linear-candidate-receipt.json"));
+  copyAttestation(paths.ticketIntegrity, join(attestationOut, "linear-ticket-integrity.json"));
   copyAttestation(paths.fingerprint, join(attestationOut, "linear-fingerprint.json"));
   copyAttestation(paths.stamp, join(attestationOut, "linear-runtime-stamp.json"));
   copyAttestation(paths.exact, join(attestationOut, "linear-exact-status.json"));
@@ -423,6 +444,7 @@ export function main(): void {
     githubArtifactSha256: artifactDigest,
     handoffSha256: sha256(candidateJson),
     candidateReceiptSha256: sha256(candidateReceiptJson),
+    ticketIntegritySha256: sha256(ticketIntegrityJson),
     captureReceiptSha256: sha256(captureReceiptJson),
     fingerprintSha256: sha256(fingerprintJson),
     runtimeStampSha256: sha256(runtimeStampJson),
@@ -448,6 +470,7 @@ export function main(): void {
     "attestation/linear-fingerprint.json",
     "attestation/linear-publication-receipt.json",
     "attestation/linear-runtime-stamp.json",
+    "attestation/linear-ticket-integrity.json",
     "delivery/linear-snapshot.json",
     "delivery/release-plan.json",
     ...REPORTS.map((report) => `reports/delivery/${report}`),

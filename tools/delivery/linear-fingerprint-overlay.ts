@@ -43,6 +43,10 @@ import { parseFeatureInventory } from "./lib/sources.js";
 import type { SourceChecksumContract } from "./lib/source-checksums.js";
 import type { SourceRequirement } from "./lib/model.js";
 import {
+  assertBoundTicketIntegrityReport,
+  type BoundTicketIntegrityReport,
+} from "./lib/ticket-integrity.js";
+import {
   assertLinearPlanningSourceFingerprints,
   assertLinearProgramScope,
   type LinearProgramScope,
@@ -76,7 +80,10 @@ interface Snapshot extends Record<string, unknown> {
   projects: Array<Record<string, unknown> & { id: string }>;
   milestones: Array<Record<string, unknown> & { id: string }>;
   releases: Array<Record<string, unknown> & { id: string }>;
+  initiatives?: Array<Record<string, unknown> & { id: string }>;
+  cycles?: Array<Record<string, unknown> & { id: string }>;
   linearFingerprint: LinearFingerprint;
+  linearTicketIntegrity?: BoundTicketIntegrityReport;
 }
 
 const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
@@ -90,9 +97,39 @@ const ISSUE_STATE_TYPES = new Set([
   "started",
   "completed",
   "canceled",
+  "duplicate",
 ]);
 const PIPELINE_TYPES = new Set(["continuous", "scheduled"]);
 const STAGE_TYPES = new Set(["planned", "started", "completed", "canceled"]);
+const PROJECT_STATUS_TYPES = new Set([
+  "backlog",
+  "planned",
+  "started",
+  "paused",
+  "completed",
+  "canceled",
+]);
+const MILESTONE_STATUS_TYPES = new Set([
+  "unstarted",
+  "next",
+  "overdue",
+  "done",
+]);
+const INITIATIVE_STATUS_TYPES = new Set([
+  "Proposed",
+  "Planned",
+  "Active",
+  "Completed",
+  "Canceled",
+]);
+const HEALTH_TYPES = new Set(["onTrack", "atRisk", "offTrack"]);
+const DATE_RESOLUTION_TYPES = new Set([
+  "month",
+  "quarter",
+  "halfYear",
+  "year",
+]);
+const TIMELESS_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function strictUtcTimestamp(value: unknown): value is string {
   if (typeof value !== "string" || !ISO_UTC.test(value)) return false;
@@ -103,11 +140,25 @@ function strictUtcTimestamp(value: unknown): value is string {
   }
 }
 
+function timelessDate(value: unknown): value is string | null {
+  if (value === null) return true;
+  if (typeof value !== "string" || !TIMELESS_DATE.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.valueOf()) &&
+    parsed.toISOString().slice(0, 10) === value;
+}
+
+function dateResolution(value: unknown): value is string | null {
+  return value === null ||
+    (typeof value === "string" && DATE_RESOLUTION_TYPES.has(value));
+}
+
 function argumentsByName(): Map<string, string> {
   const allowed = new Set([
     "--snapshot",
     "--fingerprint",
     "--receipt",
+    "--ticket-integrity",
     "--linear-project-scope",
     "--linear-program-scope",
     "--source-policy",
@@ -272,10 +323,12 @@ function assertIssueIdentity(issue: LinearFingerprint["issues"][number]): void {
     !issue.title?.trim() ||
     !SHA256.test(issue.descriptionFingerprint) ||
     !strictUtcTimestamp(issue.updatedAt) ||
+    !timelessDate(issue.dueDate) ||
     (issue.estimate !== null &&
       (typeof issue.estimate !== "number" ||
         !Number.isFinite(issue.estimate) ||
         issue.estimate < 0)) ||
+    !UUID.test(issue.stateId) ||
     !issue.state?.trim() ||
     !issue.stateType?.trim()
   ) {
@@ -330,6 +383,19 @@ function assertIssueIdentity(issue: LinearFingerprint["issues"][number]): void {
     );
   }
   if (
+    (issue.cycleId === null) !== (issue.cycleNumber === null) ||
+    (issue.cycleId === null && issue.cycle !== null) ||
+    (issue.cycleId !== null &&
+      (!UUID.test(issue.cycleId) ||
+        !Number.isInteger(issue.cycleNumber) ||
+        (issue.cycleNumber ?? 0) < 1 ||
+        (issue.cycle !== null && !issue.cycle.trim())))
+  ) {
+    throw new Error(
+      `Linear issue ${issue.identifier} cycle identity is incomplete`,
+    );
+  }
+  if (
     (issue.milestoneId === null) !== (issue.milestone === null) ||
     (issue.milestoneId !== null &&
       (!UUID.test(issue.milestoneId) ||
@@ -341,8 +407,11 @@ function assertIssueIdentity(issue: LinearFingerprint["issues"][number]): void {
     );
   }
   if (
+    (issue.parentLinearId === null) !== (issue.parent === null) ||
     (issue.parent !== null &&
-      (typeof issue.parent !== "string" || !issue.parent.trim())) ||
+      (!UUID.test(issue.parentLinearId ?? "") ||
+        typeof issue.parent !== "string" ||
+        !issue.parent.trim())) ||
     !Array.isArray(issue.releases) ||
     !Array.isArray(issue.relations)
   ) {
@@ -454,6 +523,7 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
       "releases",
       "projects",
       "projectMilestones",
+      "cycles",
       ...(fingerprint.program ? ["program"] : []),
     ],
     "Linear fingerprint",
@@ -470,7 +540,9 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
         "updatedAt",
         "estimate",
         "priority",
+        "dueDate",
         "archivedAt",
+        "stateId",
         "state",
         "stateType",
         "labels",
@@ -478,10 +550,14 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
         "assigneeId",
         "team",
         "teamId",
+        "cycleId",
+        "cycleNumber",
+        "cycle",
         "projectId",
         "project",
         "milestoneId",
         "milestone",
+        "parentLinearId",
         "parent",
         "releases",
         "relations",
@@ -548,7 +624,11 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
       [
         "id",
         "name",
+        "descriptionFingerprint",
         "version",
+        "commitSha",
+        "startDate",
+        "targetDate",
         "updatedAt",
         "archivedAt",
         "pipeline",
@@ -561,7 +641,23 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
   for (const project of fingerprint.projects) {
     assertExactKeys(
       project,
-      ["id", "name", "descriptionFingerprint", "updatedAt", "archivedAt"],
+      [
+        "id",
+        "name",
+        "descriptionFingerprint",
+        "updatedAt",
+        "archivedAt",
+        "statusId",
+        "status",
+        "statusType",
+        "priority",
+        "lead",
+        "leadId",
+        "startDate",
+        "startDateResolution",
+        "targetDate",
+        "targetDateResolution",
+      ],
       `Linear project ${project.id ?? "unknown"}`,
     );
   }
@@ -574,9 +670,32 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
         "descriptionFingerprint",
         "projectId",
         "project",
+        "updatedAt",
         "archivedAt",
+        "targetDate",
+        "status",
       ],
       `Linear project milestone ${milestone.id ?? "unknown"}`,
+    );
+  }
+  for (const cycle of fingerprint.cycles) {
+    assertExactKeys(
+      cycle,
+      [
+        "id",
+        "number",
+        "name",
+        "descriptionFingerprint",
+        "updatedAt",
+        "archivedAt",
+        "startsAt",
+        "endsAt",
+        "completedAt",
+        "team",
+        "teamId",
+        "inheritedFromId",
+      ],
+      `Linear cycle ${cycle.id ?? "unknown"}`,
     );
   }
   if (fingerprint.program) {
@@ -588,7 +707,22 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
     for (const initiative of fingerprint.program.initiatives) {
       assertExactKeys(
         initiative,
-        ["id", "name", "updatedAt", "archivedAt", "parentInitiativeIds"],
+        [
+          "id",
+          "name",
+          "updatedAt",
+          "archivedAt",
+          "owner",
+          "ownerId",
+          "status",
+          "priority",
+          "health",
+          "healthUpdatedAt",
+          "targetDate",
+          "targetDateResolution",
+          "parentInitiativeId",
+          "parentInitiative",
+        ],
         `Linear initiative ${initiative.id ?? "unknown"}`,
       );
     }
@@ -656,15 +790,27 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
     (milestone) => `${milestone.projectId}:${milestone.name}`,
     "Linear project milestone project/name",
   );
+  assertUnique(fingerprint.cycles, (cycle) => cycle.id, "Linear cycle");
+  assertUnique(
+    fingerprint.cycles,
+    (cycle) => `${cycle.teamId}:${cycle.number}`,
+    "Linear cycle team/number",
+  );
 
   const issueById = new Map(
     fingerprint.issues.map((issue) => [issue.identifier, issue]),
+  );
+  const issueByLinearId = new Map(
+    fingerprint.issues.map((issue) => [issue.linearId, issue]),
   );
   const projectById = new Map(
     fingerprint.projects.map((project) => [project.id, project]),
   );
   const milestoneById = new Map(
     fingerprint.projectMilestones.map((milestone) => [milestone.id, milestone]),
+  );
+  const cycleById = new Map(
+    fingerprint.cycles.map((cycle) => [cycle.id, cycle]),
   );
   const releaseKeys = new Set(
     fingerprint.releases.map((release) => release.version ?? release.id),
@@ -673,6 +819,7 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
   const teamIdByKey = new Map<string, string>();
   const teamKeyById = new Map<string, string>();
   const assigneeNameById = new Map<string, string>();
+  const stateById = new Map<string, string>();
   for (const issue of fingerprint.issues) {
     const priorTeamId = teamIdByKey.get(issue.team);
     const priorTeamKey = teamKeyById.get(issue.teamId);
@@ -686,6 +833,14 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
     }
     teamIdByKey.set(issue.team, issue.teamId);
     teamKeyById.set(issue.teamId, issue.team);
+    const stateIdentity = `${issue.stateType}:${issue.state}`;
+    const priorState = stateById.get(issue.stateId);
+    if (priorState !== undefined && priorState !== stateIdentity) {
+      throw new Error(
+        `Linear issue ${issue.identifier} has inconsistent state identity`,
+      );
+    }
+    stateById.set(issue.stateId, stateIdentity);
     if (issue.assigneeId !== null) {
       const priorAssignee = assigneeNameById.get(issue.assigneeId);
       if (priorAssignee !== undefined && priorAssignee !== issue.assignee) {
@@ -696,9 +851,29 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
       assigneeNameById.set(issue.assigneeId, issue.assignee!);
     }
     if (issue.parent !== null) {
-      if (issue.parent === issue.identifier || !issueById.has(issue.parent)) {
+      const parent = issueById.get(issue.parent);
+      if (
+        issue.parent === issue.identifier ||
+        !parent ||
+        parent.linearId !== issue.parentLinearId ||
+        issueByLinearId.get(issue.parentLinearId) !== parent
+      ) {
         throw new Error(
           `Linear issue ${issue.identifier} parent is missing or orphaned`,
+        );
+      }
+    }
+    if (issue.cycleId !== null) {
+      const cycle = cycleById.get(issue.cycleId);
+      if (
+        !cycle ||
+        cycle.number !== issue.cycleNumber ||
+        cycle.name !== issue.cycle ||
+        cycle.teamId !== issue.teamId ||
+        cycle.team !== issue.team
+      ) {
+        throw new Error(
+          `Linear issue ${issue.identifier} cycle is unknown or orphaned`,
         );
       }
     }
@@ -786,7 +961,20 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
       !UUID.test(project.id) ||
       !project.name?.trim() ||
       !strictUtcTimestamp(project.updatedAt) ||
-      !validArchiveState(project.archivedAt)
+      !validArchiveState(project.archivedAt) ||
+      !UUID.test(project.statusId) ||
+      !project.status?.trim() ||
+      !PROJECT_STATUS_TYPES.has(project.statusType) ||
+      !Number.isInteger(project.priority) ||
+      project.priority < 0 ||
+      project.priority > 4 ||
+      (project.lead === null) !== (project.leadId === null) ||
+      (project.lead !== null &&
+        (!project.lead.trim() || !UUID.test(project.leadId ?? ""))) ||
+      !timelessDate(project.startDate) ||
+      !dateResolution(project.startDateResolution) ||
+      !timelessDate(project.targetDate) ||
+      !dateResolution(project.targetDateResolution)
     ) {
       throw new Error(
         `Linear project ${project.id} identity or archivedAt is invalid`,
@@ -800,11 +988,38 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
       !milestone.name?.trim() ||
       !project ||
       project.name !== milestone.project ||
-      !validArchiveState(milestone.archivedAt)
+      !strictUtcTimestamp(milestone.updatedAt) ||
+      !validArchiveState(milestone.archivedAt) ||
+      !timelessDate(milestone.targetDate) ||
+      !MILESTONE_STATUS_TYPES.has(milestone.status)
     ) {
       throw new Error(
         `Linear project milestone ${milestone.id} is orphaned or invalid`,
       );
+    }
+  }
+
+  for (const cycle of fingerprint.cycles) {
+    if (
+      !UUID.test(cycle.id) ||
+      !Number.isInteger(cycle.number) ||
+      cycle.number < 1 ||
+      (cycle.name !== null && !cycle.name.trim()) ||
+      !strictUtcTimestamp(cycle.updatedAt) ||
+      !validArchiveState(cycle.archivedAt) ||
+      !strictUtcTimestamp(cycle.startsAt) ||
+      !strictUtcTimestamp(cycle.endsAt) ||
+      (cycle.completedAt !== null &&
+        !strictUtcTimestamp(cycle.completedAt)) ||
+      new Date(cycle.startsAt).valueOf() >= new Date(cycle.endsAt).valueOf() ||
+      !/^[A-Z][A-Z0-9]*$/.test(cycle.team) ||
+      !UUID.test(cycle.teamId) ||
+      (cycle.inheritedFromId !== null &&
+        (!UUID.test(cycle.inheritedFromId) ||
+          cycle.inheritedFromId === cycle.id ||
+          !cycleById.has(cycle.inheritedFromId)))
+    ) {
+      throw new Error(`Linear cycle ${cycle.id} is orphaned or invalid`);
     }
   }
 
@@ -882,6 +1097,9 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
       !UUID.test(release.id) ||
       !release.name?.trim() ||
       (release.version !== null && !release.version.trim()) ||
+      (release.commitSha !== null && !/^[a-f0-9]{7,64}$/i.test(release.commitSha)) ||
+      !timelessDate(release.startDate) ||
+      !timelessDate(release.targetDate) ||
       !strictUtcTimestamp(release.updatedAt) ||
       !validArchiveState(release.archivedAt) ||
       !pipeline ||
@@ -907,15 +1125,40 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
       (project) => project.projectId,
       "Linear project initiative membership",
     );
+    const initiativeById = new Map(
+      fingerprint.program.initiatives.map((initiative) => [
+        initiative.id,
+        initiative,
+      ]),
+    );
     for (const initiative of fingerprint.program.initiatives) {
+      const parent = initiative.parentInitiativeId === null
+        ? null
+        : initiativeById.get(initiative.parentInitiativeId);
       if (
         !UUID.test(initiative.id) ||
         !initiative.name.trim() ||
         !strictUtcTimestamp(initiative.updatedAt) ||
         !validArchiveState(initiative.archivedAt) ||
-        new Set(initiative.parentInitiativeIds).size !==
-          initiative.parentInitiativeIds.length ||
-        initiative.parentInitiativeIds.some((id) => !UUID.test(id))
+        (initiative.owner === null) !== (initiative.ownerId === null) ||
+        (initiative.owner !== null &&
+          (!initiative.owner.trim() || !UUID.test(initiative.ownerId ?? ""))) ||
+        !INITIATIVE_STATUS_TYPES.has(initiative.status) ||
+        !Number.isInteger(initiative.priority) ||
+        initiative.priority < 0 ||
+        initiative.priority > 4 ||
+        (initiative.health !== null && !HEALTH_TYPES.has(initiative.health)) ||
+        (initiative.healthUpdatedAt !== null &&
+          !strictUtcTimestamp(initiative.healthUpdatedAt)) ||
+        !timelessDate(initiative.targetDate) ||
+        !dateResolution(initiative.targetDateResolution) ||
+        (initiative.parentInitiativeId === null) !==
+          (initiative.parentInitiative === null) ||
+        (initiative.parentInitiativeId !== null &&
+          (!UUID.test(initiative.parentInitiativeId) ||
+            initiative.parentInitiativeId === initiative.id ||
+            !parent ||
+            parent.name !== initiative.parentInitiative))
       ) {
         throw new Error(`Linear initiative ${initiative.id} is invalid`);
       }
@@ -952,7 +1195,9 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
         !projectIds.has(project.projectId) ||
         project.initiativeIds.length === 0 ||
         new Set(project.initiativeIds).size !== project.initiativeIds.length ||
-        project.initiativeIds.some((id) => !UUID.test(id))
+        project.initiativeIds.some(
+          (id) => !UUID.test(id) || !initiativeById.has(id),
+        )
       ) {
         throw new Error(
           `Linear project ${project.projectId} initiative membership is invalid`,
@@ -991,6 +1236,7 @@ function buildCandidate(
   sourceRequirements?: SourceRequirement[],
   repositoryRoot?: string,
   sourceChecksumContract?: SourceChecksumContract,
+  ticketIntegrity?: BoundTicketIntegrityReport,
 ): Snapshot & { linearCapture: CaptureReceipt } {
   assertNoRawLinearDescriptions(fingerprint);
   assertNoRawLinearDescriptions(snapshot, "snapshot");
@@ -1099,31 +1345,37 @@ function buildCandidate(
       .sort();
     return {
       ...planned,
+      linearId: live.linearId,
+      parentLinearId: live.parentLinearId,
       parentId: live.parent,
       title: live.title,
       labels: [...live.labels],
       release: liveRelease,
+      priority: live.priority,
+      dueDate: live.dueDate,
+      stateId: live.stateId,
+      state: live.state,
+      stateType: live.stateType,
+      teamId: live.teamId,
+      team: live.team,
+      cycleId: live.cycleId,
+      cycleNumber: live.cycleNumber,
+      cycle: live.cycle,
+      projectId: live.projectId,
+      project: live.project,
+      milestoneId: live.milestoneId,
       milestone: live.milestone,
       dependencies: [...new Set(dependencies)],
       owner: live.assignee,
+      ownerId: live.assigneeId,
       estimate: live.estimate,
     };
   });
 
-  const existingProjects = indexById(snapshot.projects, "Snapshot project");
-  const projects = fingerprint.projects.map((project) => ({
-    ...(existingProjects.get(project.id) ?? {}),
-    ...project,
-  }));
-  const existingMilestones = indexById(
-    snapshot.milestones,
-    "Snapshot milestone",
-  );
+  const projects = fingerprint.projects.map((project) => ({ ...project }));
   const milestones = fingerprint.projectMilestones.map((milestone) => ({
-    ...(existingMilestones.get(milestone.id) ?? {}),
     ...milestone,
   }));
-  const existingReleases = indexById(snapshot.releases, "Snapshot release");
   const pipelineById = new Map(
     fingerprint.releasePipelines.map((pipeline) => [pipeline.id, pipeline]),
   );
@@ -1138,24 +1390,40 @@ function buildCandidate(
       );
     }
     return {
-      ...(existingReleases.get(release.id) ?? {}),
       id: release.id,
       version: release.version,
       name: release.name,
+      descriptionFingerprint: release.descriptionFingerprint,
+      commitSha: release.commitSha,
+      pipelineId: release.pipeline,
       pipeline: pipeline.name,
+      stageId: release.stage,
       stage: stage.name,
+      stageType: release.stageType,
+      startDate: release.startDate,
+      targetDate: release.targetDate,
       updatedAt: release.updatedAt,
       archivedAt: release.archivedAt,
     };
   });
+  let initiatives: Array<Record<string, unknown> & { id: string }> | undefined;
+  if (fingerprint.program) {
+    initiatives = fingerprint.program.initiatives.map((initiative) => ({
+      ...initiative,
+    }));
+  }
+  const cycles = fingerprint.cycles.map((cycle) => ({ ...cycle }));
   return {
     ...snapshot,
     generatedAt: receipt.capturedAt,
     linearCapture: receipt,
+    ...(ticketIntegrity ? { linearTicketIntegrity: ticketIntegrity } : {}),
     issues,
     releases,
     projects,
     milestones,
+    ...(initiatives ? { initiatives } : {}),
+    cycles,
     linearFingerprint: fingerprint,
   };
 }
@@ -1220,6 +1488,10 @@ function main(): void {
   const fingerprintJson = readFileSync(fingerprintPath, "utf8");
   const snapshotJson = readFileSync(snapshotPath, "utf8");
   const receiptJson = readFileSync(receiptPath, "utf8");
+  const ticketIntegrityPath = arguments_.get("--ticket-integrity");
+  const ticketIntegrityJson = ticketIntegrityPath
+    ? readFileSync(resolve(ticketIntegrityPath), "utf8")
+    : null;
   const scopeJson = readFileSync(scopePath, "utf8");
   const programScopeJson = existsSync(programScopePath)
     ? readFileSync(programScopePath, "utf8")
@@ -1284,6 +1556,12 @@ function main(): void {
       )
     : sourceRequirements;
   const fingerprint = JSON.parse(fingerprintJson) as LinearFingerprint;
+  const ticketIntegrity = ticketIntegrityJson
+    ? assertBoundTicketIntegrityReport(
+        JSON.parse(ticketIntegrityJson),
+        fingerprintJson,
+      )
+    : undefined;
   const receipt = assertReceipt(
     JSON.parse(receiptJson),
     fingerprintJson,
@@ -1305,7 +1583,16 @@ function main(): void {
     sourceChecksumContractJson
       ? JSON.parse(sourceChecksumContractJson) as SourceChecksumContract
       : undefined,
+    ticketIntegrity,
   );
+  if (
+    ticketIntegrity &&
+    ticketIntegrity.checkedIssueCount !== candidate.issues.length
+  ) {
+    throw new Error(
+      "Linear ticket-integrity report does not cover the planned issue set",
+    );
+  }
   if (programScopeJson) {
     if (!candidate.linearFingerprint.program) {
       throw new Error("Linear candidate lacks program topology");
@@ -1362,6 +1649,7 @@ function main(): void {
       baselineSnapshotJson: snapshotJson,
       fingerprintJson,
       captureReceiptJson: receiptJson,
+      ticketIntegrityJson,
       projectScopeJson: scopeJson,
       programScopeJson,
       sourcePolicyJson,

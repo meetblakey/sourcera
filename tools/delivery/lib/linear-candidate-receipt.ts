@@ -9,12 +9,13 @@ export interface LinearRunSource {
 }
 
 export interface LinearCandidateReceipt {
-  schemaVersion: 4;
+  schemaVersion: 5;
   createdAt: string;
   candidateSha256: string;
   baselineSnapshotSha256: string;
   fingerprintSha256: string;
   captureReceiptSha256: string;
+  ticketIntegritySha256: string | null;
   projectScopeSha256: string;
   programScopeSha256: string | null;
   sourcePolicySha256: string | null;
@@ -32,6 +33,7 @@ export interface LinearCandidateReceiptInputs {
   baselineSnapshotJson: string;
   fingerprintJson: string;
   captureReceiptJson: string;
+  ticketIntegrityJson: string | null;
   projectScopeJson: string;
   programScopeJson: string | null;
   sourcePolicyJson: string | null;
@@ -82,12 +84,15 @@ export function buildLinearCandidateReceipt(
   inputs: LinearCandidateReceiptInputs,
 ): LinearCandidateReceipt {
   return {
-    schemaVersion: 4,
+    schemaVersion: 5,
     createdAt: inputs.createdAt,
     candidateSha256: sha256(inputs.candidateJson),
     baselineSnapshotSha256: sha256(inputs.baselineSnapshotJson),
     fingerprintSha256: sha256(inputs.fingerprintJson),
     captureReceiptSha256: sha256(inputs.captureReceiptJson),
+    ticketIntegritySha256: inputs.ticketIntegrityJson === null
+      ? null
+      : sha256(inputs.ticketIntegrityJson),
     projectScopeSha256: sha256(inputs.projectScopeJson),
     programScopeSha256: inputs.programScopeJson === null
       ? null
@@ -131,7 +136,7 @@ export function assertLinearCandidateReceipt(
   }
   if (
     !exactLinearRunSource(receipt.source, expected.source) ||
-    receipt.schemaVersion !== 4 ||
+    receipt.schemaVersion !== 5 ||
     typeof receipt.createdAt !== "string" ||
     !ISO_UTC.test(receipt.createdAt) ||
     expectedKeys.some(
@@ -147,6 +152,7 @@ export function assertLinearCandidateReceipt(
     receipt.baselineSnapshotSha256,
     receipt.fingerprintSha256,
     receipt.captureReceiptSha256,
+    receipt.ticketIntegritySha256,
     receipt.projectScopeSha256,
     receipt.programScopeSha256,
     receipt.sourcePolicySha256,

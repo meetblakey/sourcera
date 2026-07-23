@@ -4,6 +4,46 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { assertPublicationIntegrityReport } from "./lib/publication-integrity.js";
+
+test("verification accepts only a passing publication-integrity summary", () => {
+  assert.deepEqual(
+    assertPublicationIntegrityReport({
+      publicationIntegrity: {
+        schemaVersion: 1,
+        passed: true,
+        blockingFindingCount: 0,
+      },
+    }),
+    {
+      schemaVersion: 1,
+      passed: true,
+      blockingFindingCount: 0,
+    },
+  );
+  assert.throws(
+    () =>
+      assertPublicationIntegrityReport({
+        publicationIntegrity: {
+          schemaVersion: 1,
+          passed: false,
+          blockingFindingCount: 2,
+        },
+      }),
+    /2 blocking findings/,
+  );
+  assert.throws(
+    () =>
+      assertPublicationIntegrityReport({
+        publicationIntegrity: {
+          schemaVersion: 1,
+          passed: true,
+          blockingFindingCount: 1,
+        },
+      }),
+    /invalid/,
+  );
+});
 
 test("verification fails closed before reports when the promoted Linear capture is incomplete", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-verify-"));
@@ -57,4 +97,5 @@ test("verification still byte-compares every generated delivery report", () => {
     assert.match(source, new RegExp(report.replace(".", "\\.")));
   }
   assert.match(source, /Generated report differs/);
+  assert.match(source, /assertPublicationIntegrityReport/);
 });

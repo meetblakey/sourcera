@@ -36,6 +36,9 @@ const withEmptyProjectInventories = (fetcher: typeof fetch): typeof fetch =>
     if (query.includes("DeliveryProjectMilestones")) {
       return response({ data: { projectMilestones: completeConnection([]) } });
     }
+    if (query.includes("DeliveryCycles")) {
+      return response({ data: { cycles: completeConnection([]) } });
+    }
     return fetcher(input, init);
   };
 
@@ -46,6 +49,7 @@ function consistencyCapture(marker: string): LinearCapture {
     releases: [],
     projects: [],
     projectMilestones: [],
+    cycles: [],
   };
   return {
     fingerprint,
@@ -134,6 +138,10 @@ test("uses one canonical key for GraphQL and OAuth relation names", () => {
   assert.equal(
     canonicalLinearRelationKey("duplicateOf", "PLA-1", "PLA-2"),
     canonicalLinearRelationKey("duplicate", "PLA-1", "PLA-2"),
+  );
+  assert.equal(
+    canonicalLinearRelationKey("similar", "PLA-2", "PLA-1"),
+    "similar:PLA-1:PLA-2",
   );
 });
 
@@ -237,6 +245,9 @@ test("captures full issue descriptions beside the canonical fingerprint", async 
     }
     if (query.includes("DeliveryPipelines")) {
       return response({ data: { releasePipelines: completeConnection([]) } });
+    }
+    if (query.includes("DeliveryCycles")) {
+      return response({ data: { cycles: completeConnection([]) } });
     }
     return response({ data: { releases: completeConnection([]) } });
   };
@@ -417,7 +428,11 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
             {
               id: "release-0",
               name: "First Defensible Evaluation",
+              description: "Release contract",
               version: "R0",
+              commitSha: "0123456789abcdef0123456789abcdef01234567",
+              startDate: "2026-07-01",
+              targetDate: "2026-07-31",
               updatedAt: "2026-07-14T01:00:00.000Z",
               archivedAt: null,
               pipeline: { id: "pipeline-1" },
@@ -486,12 +501,34 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
     }],
   });
   assert.equal(fingerprint.releases[0].archivedAt, null);
+  assert.deepEqual(
+    {
+      descriptionFingerprint: fingerprint.releases[0].descriptionFingerprint,
+      commitSha: fingerprint.releases[0].commitSha,
+      startDate: fingerprint.releases[0].startDate,
+      targetDate: fingerprint.releases[0].targetDate,
+    },
+    {
+      descriptionFingerprint: createHash("sha256")
+        .update("Release contract")
+        .digest("hex"),
+      commitSha: "0123456789abcdef0123456789abcdef01234567",
+      startDate: "2026-07-01",
+      targetDate: "2026-07-31",
+    },
+  );
   for (const queryName of [
     "DeliveryPipelines",
     "DeliveryReleases",
   ]) {
     const query = requested.find((candidate) => candidate.includes(queryName))!;
     assert.match(query, /archivedAt/);
+  }
+  const releaseQuery = requested.find((query) =>
+    query.includes("DeliveryReleases")
+  )!;
+  for (const field of ["description", "commitSha", "startDate", "targetDate"]) {
+    assert.match(releaseQuery, new RegExp(`\\b${field}\\b`));
   }
   assert.match(issueQuery, /issues\(first: 10/);
   assert.match(
@@ -522,16 +559,19 @@ test("paginates and fingerprints complete Linear project and milestone inventori
       assert.match(body.query, /projects\(first: 10/);
       assert.match(body.query, /\barchivedAt\b/);
       assert.match(body.query, /\bcontent\b/);
+      for (const field of ["status { id name type }", "priority", "lead { id name }", "startDate", "targetDate"]) {
+        assert.match(body.query, new RegExp(field.replace(/[{}]/g, "\\$&")));
+      }
       projectCursors.push(body.variables.after);
       return response({
         data: {
           projects: body.variables.after
             ? completeConnection([
-                { id: "project-1", name: "First", content: "First project", updatedAt: "2026-07-15T01:00:00Z", archivedAt: null },
+                { id: "project-1", name: "First", content: "First project", updatedAt: "2026-07-15T01:00:00Z", archivedAt: null, status: { id: "status-1", name: "Planned", type: "planned" }, priority: 2, lead: null, startDate: "2026-07-01", startDateResolution: null, targetDate: "2026-08-01", targetDateResolution: null },
               ])
             : {
                 nodes: [
-                  { id: "project-2", name: "Second", content: "Second project", updatedAt: "2026-07-15T02:00:00Z", archivedAt: null },
+                  { id: "project-2", name: "Second", content: "Second project", updatedAt: "2026-07-15T02:00:00Z", archivedAt: null, status: { id: "status-2", name: "In Progress", type: "started" }, priority: 1, lead: { id: "user-1", name: "Blake" }, startDate: "2026-07-02", startDateResolution: null, targetDate: "2026-08-02", targetDateResolution: null },
                 ],
                 pageInfo: { hasNextPage: true, endCursor: "projects-next" },
               },
@@ -540,7 +580,9 @@ test("paginates and fingerprints complete Linear project and milestone inventori
     }
     if (body.query.includes("DeliveryProjectMilestones")) {
       assert.match(body.query, /projectMilestones\(first: 50/);
-      assert.doesNotMatch(body.query, /\btargetDate\b/);
+      assert.match(body.query, /\btargetDate\b/);
+      assert.match(body.query, /\bstatus\b/);
+      assert.match(body.query, /\bupdatedAt\b/);
       assert.match(body.query, /\barchivedAt\b/);
       assert.match(body.query, /\bdescription\b/);
       milestoneCursors.push(body.variables.after);
@@ -552,7 +594,10 @@ test("paginates and fingerprints complete Linear project and milestone inventori
                   id: "milestone-1",
                   name: "Production evidence closed",
                   description: "First evidence",
+                  updatedAt: "2026-07-15T03:00:00.000Z",
                   archivedAt: null,
+                  targetDate: "2026-08-10",
+                  status: "next",
                   project: { id: "project-1", name: "First" },
                 },
               ])
@@ -562,7 +607,10 @@ test("paginates and fingerprints complete Linear project and milestone inventori
                     id: "milestone-2",
                     name: "Production evidence closed",
                     description: "Second evidence",
+                    updatedAt: "2026-07-15T04:00:00.000Z",
                     archivedAt: null,
+                    targetDate: null,
+                    status: "unstarted",
                     project: { id: "project-2", name: "Second" },
                   },
                 ],
@@ -573,6 +621,7 @@ test("paginates and fingerprints complete Linear project and milestone inventori
     }
     if (body.query.includes("DeliveryIssues")) return response({ data: { issues: empty } });
     if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: empty } });
+    if (body.query.includes("DeliveryCycles")) return response({ data: { cycles: empty } });
     return response({ data: { releases: empty } });
   };
 
@@ -599,7 +648,10 @@ test("paginates and fingerprints complete Linear project and milestone inventori
         .digest("hex"),
       projectId: "project-1",
       project: "First",
+      updatedAt: "2026-07-15T03:00:00.000Z",
       archivedAt: null,
+      targetDate: "2026-08-10",
+      status: "next",
     },
     {
       id: "milestone-2",
@@ -609,13 +661,148 @@ test("paginates and fingerprints complete Linear project and milestone inventori
         .digest("hex"),
       projectId: "project-2",
       project: "Second",
+      updatedAt: "2026-07-15T04:00:00.000Z",
       archivedAt: null,
+      targetDate: null,
+      status: "unstarted",
     },
   ]);
   assert.match(
     fingerprintDiff(fingerprint, { ...fingerprint, projectMilestones: [] })[0],
     /projectMilestones/,
   );
+});
+
+test("paginates native cycles and binds issue due dates to stable cycle IDs", async () => {
+  const cycleCursors: Array<string | null> = [];
+  const cycleOne = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+  const cycleTwo = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+  const teamId = "11111111-1111-4111-8111-111111111111";
+  const empty = completeConnection([]);
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as {
+      query: string;
+      variables: { after: string | null };
+    };
+    if (body.query.includes("DeliveryIssues")) {
+      for (const field of [
+        "dueDate",
+        "state { id name type }",
+        "cycle { id number name }",
+        "parent { id identifier }",
+      ]) {
+        assert.match(body.query, new RegExp(field.replace(/[{}]/g, "\\$&")));
+      }
+      return response({
+        data: {
+          issues: completeConnection([{
+            id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            identifier: "PLA-1",
+            title: "Cycle-bound issue",
+            description: "Description",
+            updatedAt: "2026-07-23T00:00:00.000Z",
+            estimate: 3,
+            priority: 2,
+            dueDate: "2026-08-01",
+            archivedAt: null,
+            state: {
+              id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+              name: "In Progress",
+              type: "started",
+            },
+            labels: empty,
+            assignee: null,
+            team: { id: teamId, key: "PLA" },
+            cycle: { id: cycleOne, number: 1, name: "Foundation" },
+            project: null,
+            projectMilestone: null,
+            parent: null,
+            releases: empty,
+            relations: empty,
+            inverseRelations: empty,
+          }]),
+        },
+      });
+    }
+    if (body.query.includes("DeliveryCycles")) {
+      assert.match(body.query, /cycles\(first: 50, after: \$after, includeArchived: true\)/);
+      cycleCursors.push(body.variables.after);
+      const base = {
+        description: null,
+        archivedAt: null,
+        completedAt: null,
+        team: { id: teamId, key: "PLA" },
+      };
+      return response({
+        data: {
+          cycles: body.variables.after
+            ? completeConnection([{
+                ...base,
+                id: cycleOne,
+                number: 1,
+                name: "Foundation",
+                description: "First cycle",
+                updatedAt: "2026-07-23T00:00:00.000Z",
+                startsAt: "2026-07-20T00:00:00.000Z",
+                endsAt: "2026-08-03T00:00:00.000Z",
+                inheritedFrom: null,
+              }])
+            : {
+                nodes: [{
+                  ...base,
+                  id: cycleTwo,
+                  number: 2,
+                  name: null,
+                  updatedAt: "2026-07-23T00:00:00.000Z",
+                  startsAt: "2026-08-03T00:00:00.000Z",
+                  endsAt: "2026-08-17T00:00:00.000Z",
+                  inheritedFrom: { id: cycleOne },
+                }],
+                pageInfo: { hasNextPage: true, endCursor: "cycles-next" },
+              },
+        },
+      });
+    }
+    if (body.query.includes("DeliveryPipelines")) {
+      return response({ data: { releasePipelines: empty } });
+    }
+    if (body.query.includes("DeliveryProjects")) {
+      return response({ data: { projects: empty } });
+    }
+    if (body.query.includes("DeliveryProjectMilestones")) {
+      return response({ data: { projectMilestones: empty } });
+    }
+    return response({ data: { releases: empty } });
+  };
+
+  const fingerprint = await fetchLinearFingerprint(fetcher, "secret");
+  assert.deepEqual(cycleCursors, [null, "cycles-next"]);
+  assert.deepEqual(
+    {
+      dueDate: fingerprint.issues[0].dueDate,
+      stateId: fingerprint.issues[0].stateId,
+      cycleId: fingerprint.issues[0].cycleId,
+      cycleNumber: fingerprint.issues[0].cycleNumber,
+      cycle: fingerprint.issues[0].cycle,
+    },
+    {
+      dueDate: "2026-08-01",
+      stateId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      cycleId: cycleOne,
+      cycleNumber: 1,
+      cycle: "Foundation",
+    },
+  );
+  assert.deepEqual(fingerprint.cycles.map((cycle) => cycle.id), [
+    cycleOne,
+    cycleTwo,
+  ]);
+  assert.equal(fingerprint.cycles[1].inheritedFromId, cycleOne);
+  const changed = structuredClone(fingerprint);
+  changed.cycles[0].endsAt = "2026-08-04T00:00:00.000Z";
+  assert.deepEqual(fingerprintDiff(fingerprint, changed), [
+    "cycles differ from the committed Linear snapshot",
+  ]);
 });
 
 test("fingerprints the complete canonical planning document contract", async () => {
@@ -680,6 +867,13 @@ Completion.
             content: "Project body",
             updatedAt: "2026-07-23T00:00:00.000Z",
             archivedAt: null,
+            status: { id: "status-1", name: "Planned", type: "planned" },
+            priority: 2,
+            lead: null,
+            startDate: null,
+            startDateResolution: null,
+            targetDate: null,
+            targetDateResolution: null,
             initiatives: completeConnection([
               { id: parentId, name: "Program" },
               outcomes[0],
@@ -701,7 +895,14 @@ Completion.
             ...initiative,
             updatedAt: "2026-07-23T00:00:00.000Z",
             archivedAt: null,
-            parentInitiatives: completeConnection([]),
+            owner: null,
+            status: "Planned",
+            priority: 2,
+            health: null,
+            healthUpdatedAt: null,
+            targetDate: null,
+            targetDateResolution: null,
+            parentInitiative: null,
           }))),
         },
       });
@@ -738,6 +939,9 @@ Completion.
     if (query.includes("DeliveryPipelines")) {
       return response({ data: { releasePipelines: empty } });
     }
+    if (query.includes("DeliveryCycles")) {
+      return response({ data: { cycles: empty } });
+    }
     return response({ data: { releases: empty } });
   };
 
@@ -768,6 +972,27 @@ Completion.
       uxDesignSha256: "b".repeat(64),
     },
   }]);
+  assert.deepEqual(
+    fingerprint.program?.initiatives.find((initiative) =>
+      initiative.id === parentId
+    ),
+    {
+      id: parentId,
+      name: "Program",
+      updatedAt: "2026-07-23T00:00:00.000Z",
+      archivedAt: null,
+      owner: null,
+      ownerId: null,
+      status: "Planned",
+      priority: 2,
+      health: null,
+      healthUpdatedAt: null,
+      targetDate: null,
+      targetDateResolution: null,
+      parentInitiativeId: null,
+      parentInitiative: null,
+    },
+  );
 });
 
 test("records the reversible connector milestone fingerprint boundary", () => {
@@ -789,7 +1014,7 @@ test("records the reversible connector milestone fingerprint boundary", () => {
   assert.match(decision?.validationTrigger ?? "", /LINEAR_API_KEY/);
 });
 
-test("fingerprint comparison ignores unavailable legacy milestone metadata", () => {
+test("fingerprint comparison detects native milestone schedule drift", () => {
   const fingerprint = {
     issues: [],
     releasePipelines: [],
@@ -802,20 +1027,26 @@ test("fingerprint comparison ignores unavailable legacy milestone metadata", () 
         descriptionFingerprint: "a".repeat(64),
         projectId: "project-1",
         project: "First",
+        updatedAt: "2026-07-15T03:00:00.000Z",
         archivedAt: null,
+        targetDate: null,
+        status: "unstarted",
       },
     ],
+    cycles: [],
   };
   const legacy = {
     ...fingerprint,
     projectMilestones: fingerprint.projectMilestones.map((milestone) => ({
       ...milestone,
-      updatedAt: "2026-07-15T03:00:00Z",
+      updatedAt: "2026-07-15T03:00:00.000Z",
       targetDate: "2026-08-01",
     })),
   };
 
-  assert.deepEqual(fingerprintDiff(fingerprint, legacy), []);
+  assert.deepEqual(fingerprintDiff(fingerprint, legacy), [
+    "projectMilestones differ from the committed Linear snapshot",
+  ]);
 });
 
 test("scopes project inventories by canonical IDs while preserving every issue", async () => {
@@ -824,11 +1055,25 @@ test("scopes project inventories by canonical IDs while preserving every issue",
       id: "project-tracked",
       name: "Sourcera Production",
       updatedAt: "2026-07-15T01:00:00Z",
+      status: { id: "status-tracked", name: "Planned", type: "planned" },
+      priority: 2,
+      lead: null,
+      startDate: null,
+      startDateResolution: null,
+      targetDate: null,
+      targetDateResolution: null,
     },
     {
       id: "project-legacy",
       name: "P01 legacy",
       updatedAt: "2026-07-15T01:00:00Z",
+      status: { id: "status-legacy", name: "Canceled", type: "canceled" },
+      priority: 0,
+      lead: null,
+      startDate: null,
+      startDateResolution: null,
+      targetDate: null,
+      targetDateResolution: null,
     },
   ];
   const issue = (
@@ -899,6 +1144,9 @@ test("scopes project inventories by canonical IDs while preserving every issue",
     }
     if (query.includes("DeliveryPipelines")) {
       return response({ data: { releasePipelines: completeConnection([]) } });
+    }
+    if (query.includes("DeliveryCycles")) {
+      return response({ data: { cycles: completeConnection([]) } });
     }
     return response({ data: { releases: completeConnection([]) } });
   };
@@ -1297,8 +1545,13 @@ test("CLI compares a fixture with the committed snapshot", () => {
         name: "Production evidence closed",
         projectId: "project-1",
         project: "Sourcera Production",
+        updatedAt: "2026-07-15T03:00:00.000Z",
+        archivedAt: null,
+        targetDate: "2026-08-01",
+        status: "unstarted",
       },
     ],
+    cycles: [],
   };
   try {
     const snapshot = join(dir, "snapshot.json");
@@ -1366,6 +1619,7 @@ test("CLI capture writes the exact fingerprint and a provenance receipt", () => 
         project: "Sourcera Production",
       },
     ],
+    cycles: [],
   };
   try {
     const fixture = join(dir, "fixture.json");
@@ -1374,14 +1628,7 @@ test("CLI capture writes the exact fingerprint and a provenance receipt", () => 
     const receipt = join(dir, "receipt.json");
     writeFileSync(
       fixture,
-      JSON.stringify({
-        ...fingerprint,
-        projectMilestones: fingerprint.projectMilestones.map((milestone) => ({
-          ...milestone,
-          updatedAt: "2026-07-15T03:00:00Z",
-          targetDate: "2026-08-01",
-        })),
-      }),
+      JSON.stringify(fingerprint),
     );
     writeFileSync(
       scope,
@@ -1481,6 +1728,7 @@ test("CLI writes a separate full description capture without changing the finger
       },
     ],
     projectMilestones: [],
+    cycles: [],
   };
   const issueDescriptions = [
     {
@@ -1551,6 +1799,7 @@ test("CLI rejects a snapshot that shrinks the independent project scope", () => 
       releases: [],
       projects: [project],
       projectMilestones: [],
+      cycles: [],
     };
     const snapshot = join(dir, "snapshot.json");
     const fixture = join(dir, "fixture.json");

@@ -101,6 +101,7 @@ function snapshotFor(captured: ReturnType<typeof issue>) {
           descriptionFingerprint: fingerprint(captured.description),
           updatedAt: captured.updatedAt,
           labels: captured.labels,
+          relations: [] as string[],
         },
       ],
     },
@@ -186,6 +187,91 @@ test("fails readiness for repeated 240-character clauses ending mid-token", () =
     ["ticket_integrity_failed"],
   );
   assert.equal(report.passed, false);
+});
+
+test("rejects unresolved implementation markers", () => {
+  const captured = issue(
+    [
+      "## Source",
+      "* Canonical authority: current source bundle.",
+      "## Implementation Notes",
+      "* TODO wire the final handler.",
+    ].join("\n"),
+  );
+
+  const { result, report } = runScanner(snapshotFor(captured), {
+    schemaVersion: 1,
+    issues: [captured],
+  });
+
+  assert.equal(result.status, 1, result.stderr);
+  assert.deepEqual(
+    report.findings.map((finding: { code: string }) => finding.code),
+    ["ticket_description_unresolved_marker"],
+  );
+  assert.deepEqual(
+    report.readinessFindings.map(
+      (finding: { code: string }) => finding.code,
+    ),
+    ["ticket_integrity_failed"],
+  );
+});
+
+test("rejects a required contract heading with no substantive body", () => {
+  const captured = issue(
+    "## Source\n* Canonical authority: current source bundle.",
+  );
+  captured.description = captured.description.replace(
+    "## Outcome\nShip one bounded result.\n## Complete behavior and rules",
+    "## Outcome\n## Complete behavior and rules",
+  );
+
+  const { result, report } = runScanner(snapshotFor(captured), {
+    schemaVersion: 1,
+    issues: [captured],
+  });
+
+  assert.equal(result.status, 1, result.stderr);
+  assert.ok(
+    report.findings.some(
+      (finding: { code: string; message: string }) =>
+        finding.code === "ticket_contract_sections_empty" &&
+        finding.message.includes("outcome"),
+    ),
+  );
+});
+
+test("rejects an exact title copied from a native issue relation", () => {
+  const relatedTitle =
+    "Publish Immutable Pricing Versions and Reproducible Rate Cards";
+  const captured = issue(
+    "## Source\n* Canonical authority: current source bundle.",
+  );
+  captured.description = captured.description.replace(
+    "Ship one bounded result.",
+    `${relatedTitle} must land first.`,
+  );
+  const snapshot = snapshotFor(captured);
+  snapshot.linearFingerprint.issues[0].relations = [
+    "blocks:PLA-1:PLA-2",
+  ];
+  snapshot.linearFingerprint.issues.push({
+    identifier: "PLA-2",
+    title: relatedTitle,
+    descriptionFingerprint: "a".repeat(64),
+    updatedAt: captured.updatedAt,
+    labels: [],
+    relations: ["blocks:PLA-1:PLA-2"],
+  });
+  const { result, report } = runScanner(snapshot, {
+    schemaVersion: 1,
+    issues: [captured],
+  });
+  assert.equal(result.status, 1, result.stderr);
+  assert.deepEqual(
+    report.findings.map((finding: { code: string }) => finding.code),
+    ["ticket_native_related_title_duplicated"],
+  );
 });
 
 test("fails readiness for manual title/body references and wildcard body paths", () => {

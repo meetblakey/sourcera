@@ -34,7 +34,16 @@ export interface LinearProgramFingerprint {
     name: string;
     updatedAt: string;
     archivedAt: string | null;
-    parentInitiativeIds: string[];
+    owner: string | null;
+    ownerId: string | null;
+    status: string;
+    priority: number;
+    health: string | null;
+    healthUpdatedAt: string | null;
+    targetDate: string | null;
+    targetDateResolution: string | null;
+    parentInitiativeId: string | null;
+    parentInitiative: string | null;
   }>;
   documents: Array<{
     id: string;
@@ -286,7 +295,7 @@ export function linearProgramScopeFindings(
       !live ||
       live.name !== expected.name ||
       live.archivedAt !== null ||
-      live.parentInitiativeIds.length !== 0
+      live.parentInitiativeId !== null
     ) {
       add(
         findings,

@@ -7,7 +7,9 @@
     "BUY-189",
     "BUY-190",
     "BUY-191",
+    "BUY-414",
     "INT-47",
+    "INT-57",
     "PLA-202",
     "PLA-203",
     "PLA-204",
@@ -24,6 +26,9 @@
     "PLA-215",
     "PLA-216",
     "PLA-283",
+    "PLA-1045",
+    "PLA-1046",
+    "PLA-1047",
     "SEL-67",
     "SEL-68",
     "SEL-69",
@@ -109,6 +114,12 @@
       "rationale": "The source contract is delivered through query registry, runtime binding, and proof slices under one primary issue."
     },
     {
+      "sourceId": "F-005",
+      "primaryIssueId": "PLA-282",
+      "executableIssueIds": ["PLA-1049"],
+      "rationale": "The Convex foundation keeps one implementation owner and one bounded release-candidate serverless-function, ACID-transaction, and real-time-subscription proof slice."
+    },
+    {
       "sourceId": "F-006",
       "primaryIssueId": "PLA-942",
       "executableIssueIds": ["PLA-943"],
@@ -133,6 +144,12 @@
       "rationale": "The Buyer Use Case entity keeps one primary owner and a bounded delete-and-restore atomicity slice."
     },
     {
+      "sourceId": "F-183",
+      "primaryIssueId": "PLA-355",
+      "executableIssueIds": ["PLA-1050"],
+      "rationale": "The reactive subscription source keeps one implementation owner and one bounded release-candidate isolation, push-update, no-polling, optimistic-reconciliation, and resynchronization proof slice."
+    },
+    {
       "sourceId": "F-226",
       "primaryIssueId": "BUY-243",
       "executableIssueIds": ["BUY-410"],
@@ -143,6 +160,18 @@
       "primaryIssueId": "BUY-284",
       "executableIssueIds": ["BUY-409"],
       "rationale": "Scenario scoring keeps one primary owner and a bounded canonical Evaluation Scenario consistency slice."
+    },
+    {
+      "sourceId": "F-315",
+      "primaryIssueId": "INT-50",
+      "executableIssueIds": ["INT-58"],
+      "rationale": "The governed AI response source keeps one implementation owner and one bounded release-candidate confidence, labeling, feedback, no-training, and prohibited-output proof slice."
+    },
+    {
+      "sourceId": "F-392",
+      "primaryIssueId": "SEL-152",
+      "executableIssueIds": ["BUY-415"],
+      "rationale": "The cross-console NDA source keeps one implementation owner and one bounded release-candidate state, version, signature, idempotency, gating, and recovery proof slice."
     },
     {
       "sourceId": "F-430",
@@ -167,6 +196,12 @@
       "primaryIssueId": "PLA-471",
       "executableIssueIds": ["PLA-978", "PLA-979", "PLA-980"],
       "rationale": "The Buyer trial source is split into paid conversion, free downgrade, and expiry-notice slices."
+    },
+    {
+      "sourceId": "F-593",
+      "primaryIssueId": "PLA-522",
+      "executableIssueIds": ["PLA-1048"],
+      "rationale": "The retention registry source keeps one compiler owner and one bounded release-candidate retention, deletion, legal-hold, DSAR, residency, and fail-closed proof slice."
     },
     {
       "sourceId": "F-599",

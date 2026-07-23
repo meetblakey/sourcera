@@ -21,6 +21,7 @@ const inputs: LinearCandidateReceiptInputs = {
   baselineSnapshotJson: "baseline",
   fingerprintJson: "fingerprint",
   captureReceiptJson: "capture",
+  ticketIntegrityJson: "ticket-integrity",
   projectScopeJson: "projects",
   programScopeJson: "program",
   sourcePolicyJson: "policy",
@@ -81,6 +82,19 @@ test("receipt-binds the exact runtime stamp and dependency inventory", () => {
       assertLinearCandidateReceipt(receipt, {
         ...inputs,
         runtimeDependencyContractJson: "changed-runtime-dependencies",
+      }),
+    /does not match/,
+  );
+});
+
+test("receipt-binds the current live ticket-integrity proof", () => {
+  const receipt = buildLinearCandidateReceipt(inputs);
+  assert.match(receipt.ticketIntegritySha256!, /^[a-f0-9]{64}$/);
+  assert.throws(
+    () =>
+      assertLinearCandidateReceipt(receipt, {
+        ...inputs,
+        ticketIntegrityJson: "changed-ticket-integrity",
       }),
     /does not match/,
   );

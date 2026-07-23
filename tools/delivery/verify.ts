@@ -8,6 +8,7 @@ import {
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
+import { assertPublicationIntegrityReport } from "./lib/publication-integrity.js";
 
 const pairs: Array<[string, string]> = [];
 for (let index = 2; index < process.argv.length; index += 2) {
@@ -104,6 +105,18 @@ try {
       ],
       { cwd: root, encoding: "utf8" },
     );
+    let publicationIntegrityPassed = false;
+    const regeneratedDriftReport = join(temporary, "drift-report.json");
+    if (existsSync(regeneratedDriftReport)) {
+      try {
+        assertPublicationIntegrityReport(
+          JSON.parse(readFileSync(regeneratedDriftReport, "utf8")),
+        );
+        publicationIntegrityPassed = true;
+      } catch (error) {
+        console.error(error instanceof Error ? error.message : String(error));
+      }
+    }
     let different = false;
     for (const name of names) {
       const actualPath = join(temporary, name);
@@ -124,7 +137,8 @@ try {
     if (result.status !== 0) {
       console.error(result.stderr || "Delivery findings remain");
     }
-    process.exitCode = result.status === 0 && !different ? 0 : 1;
+    process.exitCode =
+      result.status === 0 && publicationIntegrityPassed && !different ? 0 : 1;
   }
 } finally {
   rmSync(temporary, { recursive: true, force: true });

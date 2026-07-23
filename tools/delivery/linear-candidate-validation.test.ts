@@ -62,6 +62,7 @@ function candidate(): LinearSnapshotCandidate {
           milestoneId: "33333333-3333-4333-8333-333333333333",
           milestone: "Production evidence closed",
           releases: ["R0"],
+          relations: ["blocks:PLA-1:PLA-2"],
         },
         {
           identifier: "PLA-2",
@@ -70,6 +71,7 @@ function candidate(): LinearSnapshotCandidate {
           milestoneId: "33333333-3333-4333-8333-333333333333",
           milestone: "Production evidence closed",
           releases: ["R1"],
+          relations: ["blocks:PLA-1:PLA-2"],
         },
       ],
     },
@@ -82,7 +84,8 @@ test("accepts a mapped candidate with an acyclic release-ordered graph", () => {
 
 test("rejects a mapped candidate dependency cycle", () => {
   const value = candidate();
-  value.issues[0].dependencies = ["F-002"];
+  value.linearFingerprint.issues[0].relations!.push("blocks:PLA-2:PLA-1");
+  value.linearFingerprint.issues[1].relations!.push("blocks:PLA-2:PLA-1");
   assert.ok(
     linearCandidateFindings(value, releases).some(
       (finding) => finding.code === "dependency_cycle",
@@ -92,8 +95,8 @@ test("rejects a mapped candidate dependency cycle", () => {
 
 test("rejects a mapped candidate cross-release inversion", () => {
   const value = candidate();
-  value.issues[0].dependencies = ["F-002"];
-  value.issues[1].dependencies = [];
+  value.linearFingerprint.issues[0].relations = ["blocks:PLA-2:PLA-1"];
+  value.linearFingerprint.issues[1].relations = ["blocks:PLA-2:PLA-1"];
   assert.ok(
     linearCandidateFindings(value, releases).some(
       (finding) => finding.code === "cross_release_inversion",
@@ -141,6 +144,7 @@ test("requires source-split executable children to retain native project and mil
     milestoneId: "33333333-3333-4333-8333-333333333333",
     milestone: "Production evidence closed",
     releases: ["R1"],
+    relations: [],
   });
   assert.deepEqual(linearCandidateFindings(value, releases), []);
 
@@ -156,7 +160,7 @@ test("requires source-split executable children to retain native project and mil
   );
 });
 
-test("includes split-child dependencies in source-family graph validation", () => {
+test("validates split-source dependencies at native issue level", () => {
   const value = candidate();
   value.issues.push({
     id: "PLA-3",
@@ -164,7 +168,7 @@ test("includes split-child dependencies in source-family graph validation", () =
     sourceFamilyId: "F-001",
     kind: "executable",
     dependencies: ["F-002"],
-    release: "R0",
+    release: "R1",
     milestone: "Production evidence closed",
   });
   value.linearFingerprint.issues.push({
@@ -173,13 +177,15 @@ test("includes split-child dependencies in source-family graph validation", () =
     project: "Sourcera Production",
     milestoneId: "33333333-3333-4333-8333-333333333333",
     milestone: "Production evidence closed",
-    releases: ["R0"],
+    releases: ["R1"],
+    relations: ["blocks:PLA-2:PLA-3"],
   });
-  const codes = new Set(
-    linearCandidateFindings(value, releases).map((finding) => finding.code),
-  );
-  assert.ok(codes.has("dependency_cycle"));
-  assert.ok(codes.has("cross_release_inversion"));
+  value.linearFingerprint.issues[0].relations = ["blocks:PLA-1:PLA-2"];
+  value.linearFingerprint.issues[1].relations = [
+    "blocks:PLA-1:PLA-2",
+    "blocks:PLA-2:PLA-3",
+  ];
+  assert.deepEqual(linearCandidateFindings(value, releases), []);
 });
 
 for (const field of ["project", "milestone"] as const) {
@@ -209,7 +215,8 @@ test("candidate validator CLI fails closed on semantic findings", () => {
   const releasesPath = join(directory, "releases.json");
   try {
     const value = candidate();
-    value.issues[0].dependencies = ["F-002"];
+    value.linearFingerprint.issues[0].relations = ["blocks:PLA-2:PLA-1"];
+    value.linearFingerprint.issues[1].relations = ["blocks:PLA-2:PLA-1"];
     writeFileSync(candidatePath, JSON.stringify(value));
     writeFileSync(releasesPath, JSON.stringify({ releases }));
     const result = spawnSync(

@@ -95,6 +95,11 @@ test("keeps every executable split in its explicit source family", () => {
   );
 });
 
+test("accepts a native split child under its executable family owner", () => {
+  const nestedSplit = { ...split, parentId: direct.id };
+  assert.deepEqual(issueFamilyFindings([group, direct, nestedSplit]), []);
+});
+
 test("rejects empty parents, missing parents, and source-less top-level work", () => {
   const emptyParent = issue({
     id: "PLA-300",

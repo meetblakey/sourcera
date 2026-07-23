@@ -94,7 +94,14 @@ export function issueFamilyFindings(
       });
       continue;
     }
-    if (parent && parent.kind !== "parent") {
+    const parentSourceFamilyId = parent
+      ? parent.sourceFamilyId ?? parent.sourceId
+      : null;
+    const nativeSplitParent =
+      parent?.kind === "executable" &&
+      sourceFamilyId !== null &&
+      parentSourceFamilyId === sourceFamilyId;
+    if (parent && parent.kind !== "parent" && !nativeSplitParent) {
       findings.push({
         code: "child_parent_invalid",
         issueId: issue.id,

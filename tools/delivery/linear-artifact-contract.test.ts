@@ -20,7 +20,7 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
   );
   assert.match(
     workflow,
-    /tools\/delivery\/linear-fingerprint-overlay\.ts --snapshot delivery\/linear-snapshot\.json --fingerprint \/tmp\/linear-fingerprint\.json --receipt \/tmp\/linear-capture-receipt\.json --linear-project-scope delivery\/linear-project-scope\.json --dispositions delivery\/dispositions\.json --stamp \/tmp\/linear-runtime-stamp\.json --runtime-dependencies delivery\/runtime-gate-dependencies\.json --releases delivery\/releases\.json --out \/tmp\/linear-snapshot-candidate\.json --candidate-receipt-out \/tmp\/linear-candidate-receipt\.json/,
+    /tools\/delivery\/linear-fingerprint-overlay\.ts --snapshot delivery\/linear-snapshot\.json --fingerprint \/tmp\/linear-fingerprint\.json --receipt \/tmp\/linear-capture-receipt\.json --ticket-integrity \/tmp\/linear-ticket-integrity\.json --linear-project-scope delivery\/linear-project-scope\.json --dispositions delivery\/dispositions\.json --stamp \/tmp\/linear-runtime-stamp\.json --runtime-dependencies delivery\/runtime-gate-dependencies\.json --releases delivery\/releases\.json --out \/tmp\/linear-snapshot-candidate\.json --candidate-receipt-out \/tmp\/linear-candidate-receipt\.json/,
   );
   assert.match(
     workflow,
@@ -51,6 +51,7 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
   for (const required of [
     "--snapshot delivery/linear-snapshot.json",
     "--candidate /tmp/linear-snapshot-candidate.json",
+    "--ticket-integrity /tmp/linear-ticket-integrity.json",
     "--fingerprint /tmp/linear-fingerprint.json",
     "--capture-receipt /tmp/linear-capture-receipt.json",
     "--candidate-receipt /tmp/linear-candidate-receipt.json",
@@ -114,6 +115,7 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
   assert.match(uploadBlocks[0], /\/tmp\/linear-candidate-receipt\.json/);
   assert.match(uploadBlocks[0], /\/tmp\/linear-runtime-stamp\.json/);
   assert.match(uploadBlocks[0], /\/tmp\/linear-exact-status\.json/);
+  assert.match(uploadBlocks[0], /\/tmp\/linear-ticket-integrity\.json/);
   assert.doesNotMatch(uploadBlocks[0], /\/tmp\/linear-snapshot-candidate\.json/);
 });
 
@@ -128,6 +130,7 @@ test("publishes a receipt-bound review package from the downloaded handoff", () 
     "linear-snapshot-validation-handoff-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}",
     "tools/delivery/prepare-linear-publication.ts",
     "--exact /tmp/linear-handoff/linear-exact-status.json",
+    "--ticket-integrity /tmp/linear-handoff/linear-ticket-integrity.json",
     "LINEAR_HANDOFF_ARTIFACT_DIGEST: ${{ needs.linear-capture.outputs.artifact-digest }}",
     "linear-reviewable-publication-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}",
     "/tmp/linear-publication",

@@ -15,6 +15,10 @@ import {
   completeValidationPlanFixture,
   F007_JOURNEY_TARGET,
 } from "./validation-test-fixtures.js";
+import {
+  publicationIntegrityFindings,
+  publicationIntegritySummary,
+} from "./lib/publication-integrity.js";
 
 const releaseNames = [
   "First Defensible Evaluation",
@@ -27,6 +31,53 @@ const releaseNames = [
 
 const completeValidationPlan = () =>
   completeValidationPlanFixture(releaseNames);
+
+test("publication integrity separates planning defects from execution readiness", () => {
+  const finding = (code: string, message = code) => ({ code, message });
+  const blockers = publicationIntegrityFindings({
+    planningFindings: [finding("source_reference_invalid")],
+    graphFindings: [finding("dependency_cycle")],
+    codexReadyFindings: [finding("path_not_concrete")],
+    validationFindings: [
+      finding("validation_plan_invalid", "F-007 approval is pending"),
+      finding("validation_plan_invalid", "R0 is missing activation"),
+    ],
+    operatingFindings: [
+      finding("ready_queue_under_minimum"),
+      finding("wip_limit_exceeded"),
+      finding("started_issue_not_ready"),
+      finding("ready_release_drift"),
+    ],
+    journeyFindings: [
+      finding("production_evidence_milestone_empty"),
+      finding("checkpoint_evidence_missing"),
+      finding("linear_milestone_inventory_drift"),
+    ],
+  });
+
+  assert.deepEqual(
+    blockers.map(({ code, message }) => `${code}:${message}`),
+    [
+      "source_reference_invalid:source_reference_invalid",
+      "dependency_cycle:dependency_cycle",
+      "path_not_concrete:path_not_concrete",
+      "validation_plan_invalid:R0 is missing activation",
+      "ready_release_drift:ready_release_drift",
+      "production_evidence_milestone_empty:production_evidence_milestone_empty",
+      "linear_milestone_inventory_drift:linear_milestone_inventory_drift",
+    ],
+  );
+  assert.deepEqual(publicationIntegritySummary(blockers), {
+    schemaVersion: 1,
+    passed: false,
+    blockingFindingCount: 7,
+  });
+  assert.deepEqual(publicationIntegritySummary([]), {
+    schemaVersion: 1,
+    passed: true,
+    blockingFindingCount: 0,
+  });
+});
 
 function canonicalGenerationArgs(
   dir: string,
@@ -88,11 +139,19 @@ test("publishes the exact canonical journey target with a deterministic hash", (
     const first = readFileSync(join(reports, "release-scorecard.json"), "utf8");
     const scorecard = JSON.parse(first);
     const resolved = scorecard.journeyTargets?.R2?.["F-007"];
+    const drift = JSON.parse(
+      readFileSync(join(reports, "drift-report.json"), "utf8"),
+    );
 
     assert.deepEqual(resolved?.target, F007_JOURNEY_TARGET);
     assert.equal(
       resolved?.sha256,
       "74bc245b18b55975ef5b1cbbd9a4506c765ae7d77055fda2d758c7004347b980",
+    );
+    assert.equal(drift.publicationIntegrity?.schemaVersion, 1);
+    assert.equal(
+      drift.publicationIntegrity?.passed,
+      drift.publicationIntegrity?.blockingFindingCount === 0,
     );
 
     runGeneration(args);
@@ -230,8 +289,7 @@ test("reports live WIP and started-without-readiness violations", () => {
       operatingModelPath,
     ]);
 
-    const result = runGeneration(fixture.args);
-    assert.equal(result.status, 1);
+    runGeneration(fixture.args);
     const report = JSON.parse(
       readFileSync(join(fixture.reports, "drift-report.json"), "utf8"),
     );
@@ -324,7 +382,7 @@ test("fails closed for every missing or inconsistent Linear milestone inventory 
     readFileSync("delivery/linear-snapshot.json", "utf8"),
   );
   addLinearInventoryFingerprint(base);
-  const cases: Array<[string, (linear: any) => void, string]> = [
+  const cases: Array<[string, (linear: any) => void, string, boolean?]> = [
     ["projects", (linear) => delete linear.projects, "linear_project_inventory_missing"],
     ["milestones", (linear) => delete linear.milestones, "linear_milestone_inventory_missing"],
     ["fingerprint-projects", (linear) => delete linear.linearFingerprint.projects, "linear_fingerprint_projects_missing"],
@@ -414,7 +472,7 @@ test("fails closed for every missing or inconsistent Linear milestone inventory 
       "linear_issue_project_milestone_metadata_inconsistent",
     ],
   ];
-  for (const [name, mutate, code] of cases) {
+  for (const [name, mutate, code, blocksPublication = true] of cases) {
     const dir = mkdtempSync(join(tmpdir(), `sourcera-linear-${name}-`));
     try {
       const linear = structuredClone(base);
@@ -423,7 +481,7 @@ test("fails closed for every missing or inconsistent Linear milestone inventory 
       writeFileSync(linearPath, JSON.stringify(linear));
       const fixture = canonicalGenerationArgs(dir, ["--linear", linearPath]);
       const result = runGeneration(fixture.args);
-      assert.equal(result.status, 1);
+      if (blocksPublication) assert.equal(result.status, 1);
       const report = JSON.parse(
         readFileSync(join(fixture.reports, "journey-readiness.json"), "utf8"),
       );
@@ -544,7 +602,6 @@ test("keeps a completed checkpoint report pinned to evidence commit A at closeou
     ]);
 
     const result = runGeneration(fixture.args);
-    assert.equal(result.status, 1);
     const reportPath = join(fixture.reports, "journey-readiness.json");
     assert.equal(existsSync(reportPath), true, result.stderr);
     const first = readFileSync(reportPath, "utf8");
@@ -554,8 +611,7 @@ test("keeps a completed checkpoint report pinned to evidence commit A at closeou
       "--commit",
       "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     ]);
-    const secondResult = runGeneration(secondFixture.args);
-    assert.equal(secondResult.status, 1);
+    runGeneration(secondFixture.args);
     const second = readFileSync(reportPath, "utf8");
     assert.equal(second, first);
     const report = JSON.parse(second);

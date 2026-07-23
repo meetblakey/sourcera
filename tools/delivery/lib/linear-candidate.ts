@@ -23,6 +23,7 @@ interface CandidateFingerprintIssue {
   milestoneId: string | null;
   milestone: string | null;
   releases?: string[];
+  relations?: string[];
 }
 
 export interface LinearSnapshotCandidate {
@@ -70,16 +71,6 @@ export function linearCandidateFindings(
 
   const sourceOwners = new Map<string, string>();
   const executableFamilies: Array<{ issueId: string; sourceFamilyId: string }> = [];
-  const dependenciesByFamily = new Map<string, Set<string>>();
-  for (const issue of candidate.issues) {
-    const sourceFamilyId = issue.sourceFamilyId ?? issue.sourceId;
-    if (!nonempty(sourceFamilyId) || !Array.isArray(issue.dependencies)) continue;
-    const dependencies = dependenciesByFamily.get(sourceFamilyId) ?? new Set<string>();
-    for (const dependency of issue.dependencies) {
-      if (dependency !== sourceFamilyId) dependencies.add(dependency);
-    }
-    dependenciesByFamily.set(sourceFamilyId, dependencies);
-  }
   const graphRows: ManifestRow[] = [];
   for (const issue of candidate.issues) {
     const executable =
@@ -162,17 +153,6 @@ export function linearCandidateFindings(
     }
     sourceOwners.set(issue.sourceId, issue.id);
 
-    graphRows.push({
-      requirementId: issue.sourceId,
-      outcome: issue.id,
-      sourceDoc: "Linear snapshot candidate",
-      sourceVersion: "live",
-      section: issue.id,
-      dependencies: [...(dependenciesByFamily.get(issue.sourceId) ?? [])].sort(),
-      disposition: "executable",
-      release: issue.release,
-      issueId: issue.id,
-    });
   }
 
   for (const family of executableFamilies) {
@@ -183,6 +163,40 @@ export function linearCandidateFindings(
         message: `${family.issueId} source family ${family.sourceFamilyId} has no primary owner`,
       });
     }
+  }
+
+  const plannedIssueIds = new Set(candidate.issues.map((issue) => issue.id));
+  for (const issue of candidate.issues) {
+    const live = liveByIssue.get(issue.id);
+    if (!live || !Array.isArray(live.relations)) {
+      findings.push({
+        code: "linear_candidate_live_relations_missing",
+        issueId: issue.id,
+        message: `${issue.id || "unknown"} lacks native relation readback`,
+      });
+      continue;
+    }
+    const dependencies = live.relations
+      .flatMap((relation) => {
+        const [type, prerequisite, dependent] = relation.split(":");
+        return type === "blocks" &&
+          dependent === issue.id &&
+          plannedIssueIds.has(prerequisite)
+          ? [prerequisite]
+          : [];
+      })
+      .sort();
+    graphRows.push({
+      requirementId: issue.id,
+      outcome: issue.id,
+      sourceDoc: "Linear snapshot candidate",
+      sourceVersion: "live",
+      section: issue.id,
+      dependencies: [...new Set(dependencies)],
+      disposition: "executable",
+      release: issue.release,
+      issueId: issue.id,
+    });
   }
 
   findings.push(...validateGraph(graphRows, releases));

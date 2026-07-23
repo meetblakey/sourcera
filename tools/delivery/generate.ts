@@ -33,6 +33,10 @@ import {
   type OperatingModel,
 } from "./lib/operating-model.js";
 import {
+  publicationIntegrityFindings,
+  publicationIntegritySummary,
+} from "./lib/publication-integrity.js";
+import {
   releasePolicyFindings,
 } from "./lib/release-policy.js";
 import type {
@@ -47,6 +51,10 @@ import type {
   SourceRequirement,
 } from "./lib/model.js";
 import { readinessFindings } from "./lib/readiness.js";
+import {
+  assertBoundTicketIntegrityReport,
+  type BoundTicketIntegrityReport,
+} from "./lib/ticket-integrity.js";
 import { validateReleases } from "./lib/releases.js";
 import { calculateScorecard } from "./lib/scorecard.js";
 import { semanticRoadmapFindings } from "./lib/semantic-roadmap.js";
@@ -78,6 +86,7 @@ interface RuntimeGateDependency {
 interface LinearDeliverySnapshot extends LinearMilestoneSnapshot {
   issues: LinearIssueSnapshot[];
   linearFingerprint: LinearFingerprint;
+  linearTicketIntegrity?: BoundTicketIntegrityReport;
 }
 
 function argumentsByName(): Map<string, string> {
@@ -175,6 +184,15 @@ const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
   .assignments;
 const policy = json<ReleasePolicy>(policyPath);
 const linearSnapshot = json<LinearDeliverySnapshot>(linearPath);
+const descriptionContractVerified = linearSnapshot.linearTicketIntegrity
+  ? Boolean(
+      assertBoundTicketIntegrityReport(
+        linearSnapshot.linearTicketIntegrity,
+        `${JSON.stringify(linearSnapshot.linearFingerprint, null, 2)}\n`,
+        linearSnapshot.issues.length,
+      ),
+    )
+  : false;
 const operatingModel = json<OperatingModel>(operatingModelPath);
 const linearProjectScope = json<LinearProjectScope>(linearProjectScopePath);
 const issues = linearSnapshot.issues;
@@ -491,7 +509,9 @@ const releaseFindings = validateReleases(releases);
 const graphFindings = validateGraph(manifest, releases);
 const readiness = issues
   .filter((issue) => issue.labels.includes("codex-ready"))
-  .flatMap((issue) => readinessFindings(issue));
+  .flatMap((issue) =>
+    readinessFindings(issue, { descriptionContractVerified }),
+  );
 const readyGraphFindings = graphFindings.filter(
   (finding) =>
     finding.requirementId &&
@@ -501,10 +521,34 @@ const readyGraphFindings = graphFindings.filter(
         issue.labels.includes("codex-ready"),
     ),
 );
-const tracedIssues = issues.filter(
-  (issue) => Boolean(issue.sourceId) || issue.kind === "executable",
+const replacementById = new Map(
+  overrides.flatMap((override) =>
+    override.replacementId
+      ? [[override.requirementId, override.replacementId] as const]
+      : [],
+  ),
 );
-const drift = driftFindings(manifest, tracedIssues);
+const canonicalDependency = (sourceId: string): string => {
+  const seen = new Set<string>();
+  let current = sourceId;
+  while (replacementById.has(current)) {
+    if (seen.has(current)) throw new Error(`Disposition replacement cycle at ${current}`);
+    seen.add(current);
+    current = replacementById.get(current)!;
+  }
+  return current;
+};
+const canonicalDependencyManifest = manifest.map((row) => ({
+  ...row,
+  dependencies: [
+    ...new Set(row.dependencies.map(canonicalDependency)),
+  ].filter((dependency) => dependency !== row.requirementId).sort(),
+}));
+const drift = driftFindings(
+  canonicalDependencyManifest,
+  issues,
+  linearSnapshot.linearFingerprint,
+);
 const releaseAssignment: Finding[] = manifest
   .filter(
     (row) =>
@@ -517,27 +561,30 @@ const releaseAssignment: Finding[] = manifest
     requirementId: row.requirementId,
     message: `${row.requirementId} has no release`,
   }));
-const allFindings = [
-  ...sourceFindings,
-  ...dispositionFindings,
-  ...duplicateOverrides,
-  ...runtimeDependencyFindings,
-  ...exactFindings,
-  ...releasePlanFindings,
-  ...duplicateIssueSources,
-  ...decisionFindings,
-  ...riskFindings,
-  ...operatingFindings,
-  ...validationFindings,
-  ...evidenceFindings,
-  ...familyFindings,
-  ...releaseFindings,
-  ...graphFindings,
-  ...readiness,
-  ...drift,
-  ...releaseAssignment,
-  ...journeyReadinessFindings,
-];
+const publicationBlockingFindings = publicationIntegrityFindings({
+  planningFindings: [
+    ...sourceFindings,
+    ...dispositionFindings,
+    ...duplicateOverrides,
+    ...runtimeDependencyFindings,
+    ...releasePlanFindings,
+    ...duplicateIssueSources,
+    ...decisionFindings,
+    ...riskFindings,
+    ...familyFindings,
+    ...releaseFindings,
+    ...drift,
+    ...releaseAssignment,
+  ],
+  graphFindings,
+  codexReadyFindings: readiness,
+  validationFindings,
+  operatingFindings,
+  journeyFindings: journeyReadinessFindings,
+});
+const publicationIntegrity = publicationIntegritySummary(
+  publicationBlockingFindings,
+);
 const evidencePasses = (kind: EvidenceKind) => {
   const group = evidenceGroups.find((candidate) => candidate.kind === kind);
   return Boolean(group && evidenceGroupPasses(root, group));
@@ -676,6 +723,7 @@ const reports = {
     ]),
   },
   "drift-report.json": {
+    publicationIntegrity,
     findings: sortFindings([
       ...sourceFindings,
       ...dispositionFindings,
@@ -690,6 +738,7 @@ const reports = {
       ...validationFindings,
       ...evidenceFindings,
       ...familyFindings,
+      ...releaseFindings,
       ...drift,
       ...releaseAssignment,
     ]),
@@ -711,4 +760,4 @@ mkdirSync(outDir, { recursive: true });
 for (const [name, value] of Object.entries(reports)) {
   writeFileSync(resolve(outDir, name), `${JSON.stringify(value, null, 2)}\n`);
 }
-process.exitCode = allFindings.length ? 1 : 0;
+process.exitCode = publicationIntegrity.passed ? 0 : 1;

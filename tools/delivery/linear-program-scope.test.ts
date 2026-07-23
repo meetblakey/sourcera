@@ -147,7 +147,16 @@ test("rejects missing planning body coverage and attachment drift", () => {
     ...initiative,
     updatedAt: "2026-07-23T00:00:00.000Z",
     archivedAt: null,
-    parentInitiativeIds: [],
+    owner: null,
+    ownerId: null,
+    status: "Planned",
+    priority: 2,
+    health: null,
+    healthUpdatedAt: null,
+    targetDate: null,
+    targetDateResolution: null,
+    parentInitiativeId: null,
+    parentInitiative: null,
   }));
   programFingerprint.projectInitiatives = programScope.projectInitiatives;
 
@@ -191,6 +200,8 @@ test("rejects missing planning body coverage and attachment drift", () => {
       projectId: "22222222-2222-4222-8222-222222222222",
       descriptionFingerprint: "e".repeat(64),
     }],
+    releases: [],
+    cycles: [],
   } as any;
   assert.doesNotThrow(() =>
     assertLinearPlanningContractFingerprints(programScope, exactDescriptions)
