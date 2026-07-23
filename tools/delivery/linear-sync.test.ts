@@ -49,7 +49,7 @@ function issue(identifier: string, release: ReleaseId): Issue {
     project: "Sourcera",
     milestoneId: "milestone-1",
     milestone: "Existing milestone",
-    parentLinearId: null,
+    parentLinearId: stableIssueId("PLA-0"),
     parent: "PLA-0",
     releases: [release],
     relations: [`blocks:${identifier}:PLA-9`, `related:${identifier}:PLA-8`],
@@ -255,11 +255,17 @@ test("rejects every protected issue-field mutation with stable codes", () => {
   changed.descriptionFingerprint = "changed-description-hash";
   changed.estimate = null;
   changed.priority = 4;
+  changed.dueDate = "2026-08-01";
+  changed.stateId = "state-in-progress";
   changed.assignee = "Different owner";
   changed.assigneeId = "person-different";
   changed.team = "OTHER";
   changed.teamId = "team-other";
+  changed.cycleId = "cycle-1";
+  changed.cycleNumber = 1;
+  changed.cycle = "Cycle 1";
   changed.project = "Different project";
+  changed.parentLinearId = stableIssueId("PLA-3");
   changed.parent = null;
   changed.relations = [];
   changed.state = "In Progress";
@@ -277,11 +283,17 @@ test("rejects every protected issue-field mutation with stable codes", () => {
       "linear_sync_description_changed",
       "linear_sync_estimate_changed",
       "linear_sync_priority_changed",
+      "linear_sync_due_date_changed",
+      "linear_sync_state_identity_changed",
       "linear_sync_owner_changed",
       "linear_sync_owner_identity_changed",
       "linear_sync_team_changed",
       "linear_sync_team_identity_changed",
+      "linear_sync_cycle_identity_changed",
+      "linear_sync_cycle_number_changed",
+      "linear_sync_cycle_changed",
       "linear_sync_project_changed",
+      "linear_sync_parent_identity_changed",
       "linear_sync_parent_changed",
       "linear_sync_relations_changed",
       "linear_sync_state_changed",
