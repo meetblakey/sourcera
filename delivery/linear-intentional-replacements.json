@@ -1,0 +1,1528 @@
+{
+  "schemaVersion": 1,
+  "kind": "linear_intentional_baseline_replacements",
+  "baselineCaptureSha256": "45b358b59784ee487f156f3ed43d742f71b5856785855a44c982864f0f2c912e",
+  "sourceDocument": "Sourcera_Master_Spec.md",
+  "sourceSha256": "2747c8b78e49ecc8ad824658deb7a67a5508907362096f37baf7c744af08a8cb",
+  "issues": [
+    {
+      "issueId": "BUY-409",
+      "baselineDescriptionSha256": "c94f59a92ff0e73499eead220e456dfd74ce7445c434a48f8e076e2289509442",
+      "candidateDescriptionSha256": "44eaee94ca73dd7e4e64ac9f623331cad1c73360466c322218324a119f31c1c6",
+      "dispositions": [
+        {
+          "disposition": "planned_path_replaced",
+          "evidence": [
+            "Current Named proof replaces the former phase-coded proof path"
+          ],
+          "kind": "path",
+          "replacement": "reports/delivery/evaluation-scenario-contract.json",
+          "value": "reports/evidence/r4-phase3-scenario-score-contract.json"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current source checksum and delivery-control registration"
+          ],
+          "kind": "token",
+          "replacement": "delivery/ticket-source-checksums.json",
+          "value": "authored-extension"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current optimistic-concurrency request and conflict contract"
+          ],
+          "kind": "token",
+          "replacement": "expected_version",
+          "value": "compare-and-set"
+        },
+        {
+          "disposition": "nativeized",
+          "evidence": [
+            "Parent placement is preserved only in Linear native metadata"
+          ],
+          "kind": "token",
+          "replacement": "Linear.parent",
+          "value": "deleted-parent"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current commit-bound Evaluation Scenario proof report"
+          ],
+          "kind": "token",
+          "replacement": "reports/delivery/evaluation-scenario-contract.json",
+          "value": "deployed-proof"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current canonical compute snapshot and derived-score contract"
+          ],
+          "kind": "token",
+          "replacement": "results",
+          "value": "derived-result"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current executable denial and zero-side-effect tests"
+          ],
+          "kind": "token",
+          "replacement": "fails closed",
+          "value": "fail-closed"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current independent runtime-readiness review requirement"
+          ],
+          "kind": "token",
+          "replacement": "independently prove",
+          "value": "independent-review"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current immutable result-history and rollback contract"
+          ],
+          "kind": "token",
+          "replacement": "historical result snapshots",
+          "value": "mutable-history"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current singleton Evaluation Scenario entity contract"
+          ],
+          "kind": "token",
+          "replacement": "EvaluationScenario",
+          "value": "non-canonical"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current row-free base-workspace scoring projection"
+          ],
+          "kind": "token",
+          "replacement": "Original Scoring",
+          "value": "non-scenario"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Superseded release-phase label is not product behavior"
+          ],
+          "kind": "token",
+          "value": "phase-3"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current protected delivery policy test"
+          ],
+          "kind": "token",
+          "replacement": "tools/delivery/release-policy.test.ts",
+          "value": "protected-ci"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current guarded source-to-runtime enablement sequence"
+          ],
+          "kind": "token",
+          "replacement": "source approval",
+          "value": "re-enabling"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current same-key recovery and proof rerun behavior"
+          ],
+          "kind": "token",
+          "replacement": "rerun",
+          "value": "re-run"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current rollback injection and retained-evidence contract"
+          ],
+          "kind": "token",
+          "replacement": "rollback",
+          "value": "rollback-smoke"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current singleton Evaluation Scenario entity contract"
+          ],
+          "kind": "token",
+          "replacement": "EvaluationScenario",
+          "value": "scenario-enabled"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current row-free base-workspace scoring projection"
+          ],
+          "kind": "token",
+          "replacement": "Original Scoring",
+          "value": "scenario-free"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current canonical compute snapshot and derived-score contract"
+          ],
+          "kind": "token",
+          "replacement": "results",
+          "value": "scenario-snapshot"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current canonical compute snapshot and derived-score contract"
+          ],
+          "kind": "token",
+          "replacement": "results",
+          "value": "scenario-to-score"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current optimistic-concurrency request and conflict contract"
+          ],
+          "kind": "token",
+          "replacement": "expected_version",
+          "value": "scenario-version"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current singleton Evaluation Scenario entity contract"
+          ],
+          "kind": "token",
+          "replacement": "EvaluationScenario",
+          "value": "scoring-scenario"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current optimistic-concurrency request and conflict contract"
+          ],
+          "kind": "token",
+          "replacement": "expected_version",
+          "value": "stale-version"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current rollback injection and retained-evidence contract"
+          ],
+          "kind": "token",
+          "replacement": "rollback",
+          "value": "terminal-lock"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current persisted and preview sensitivity behavior"
+          ],
+          "kind": "token",
+          "replacement": "sensitivity",
+          "value": "what-if"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current row-free base-workspace scoring projection"
+          ],
+          "kind": "token",
+          "replacement": "Original Scoring",
+          "value": "zero-scenario"
+        }
+      ],
+      "lostTokens": [
+        "authored-extension",
+        "compare-and-set",
+        "deleted-parent",
+        "deployed-proof",
+        "derived-result",
+        "fail-closed",
+        "independent-review",
+        "mutable-history",
+        "non-canonical",
+        "non-scenario",
+        "phase-3",
+        "protected-ci",
+        "re-enabling",
+        "re-run",
+        "rollback-smoke",
+        "scenario-enabled",
+        "scenario-free",
+        "scenario-snapshot",
+        "scenario-to-score",
+        "scenario-version",
+        "scoring-scenario",
+        "stale-version",
+        "terminal-lock",
+        "what-if",
+        "zero-scenario"
+      ],
+      "lostTokensSha256": "8733900837835df224cf5261835aa64896f2a7bf5f247d388e7cc1c3700507b3",
+      "lostPaths": [
+        "reports/evidence/r4-phase3-scenario-score-contract.json"
+      ],
+      "lostPathsSha256": "193bd1b7325712a7ce11a292bc4c1845eae71808260df1fa9d7fb0130b80de8b",
+      "rationale": "The residual set is the superseded outcome-parent collision vocabulary, release labels, prior source digest, and prior proof path. The candidate replaces it with one current EvaluationScenario entity/contract, explicit lifecycle and recovery, current delivery control-plane readback, and the new canonical proof report.",
+      "authorityEvidence": [
+        "Sourcera_Master_Spec.md#4.3.8 Evaluation Scenario",
+        "Sourcera_Master_Spec.md#14 Scenario Modeling",
+        "delivery/feature-dependencies.json and delivery/release-policy.json at the bound source SHA"
+      ],
+      "replacementMap": [
+        {
+          "evidence": [
+            "Current Named proof replaces the former phase-coded proof path"
+          ],
+          "from": "reports/evidence/r4-phase3-scenario-score-contract.json",
+          "to": "reports/delivery/evaluation-scenario-contract.json"
+        }
+      ]
+    },
+    {
+      "issueId": "BUY-410",
+      "baselineDescriptionSha256": "e761434eca418947fb7fad8e622d0f7228861d9c06c8be84aa42c079a9069b56",
+      "candidateDescriptionSha256": "947c0eff24cc21ed97faddcf1820029c37abe9f11b1bc065c9a730aa3cd2b3f9",
+      "dispositions": [
+        {
+          "disposition": "planned_path_replaced",
+          "evidence": [
+            "Current Named proof replaces the former release-coded proof path"
+          ],
+          "kind": "path",
+          "replacement": "reports/delivery/selection-report-finalization-contract.json",
+          "value": "reports/evidence/r0-selection-report-finalization-contract.json"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact vendor-status and seller-projection map"
+          ],
+          "kind": "token",
+          "replacement": "evaluated vendor",
+          "value": "all-vendor"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact read scope and token authority contract"
+          ],
+          "kind": "token",
+          "replacement": "read:workspaces",
+          "value": "api-token"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current source checksum and delivery-control registration"
+          ],
+          "kind": "token",
+          "replacement": "delivery/ticket-source-checksums.json",
+          "value": "authored-extension"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current closed create request and server-owned field contract"
+          ],
+          "kind": "token",
+          "replacement": "server derives",
+          "value": "client-derived"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact read scope and token authority contract"
+          ],
+          "kind": "token",
+          "replacement": "read:workspaces",
+          "value": "console_scope"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current delivery release policy is native control-plane data"
+          ],
+          "kind": "token",
+          "replacement": "delivery/release-policy.json",
+          "value": "control-plane"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current finalized-draft identity and one-active-report contract"
+          ],
+          "kind": "token",
+          "replacement": "selection_report_draft_id",
+          "value": "current-draft"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current commit-bound finalization proof report"
+          ],
+          "kind": "token",
+          "replacement": "reports/delivery/selection-report-finalization-contract.json",
+          "value": "deployed-proof"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current finalized-draft identity and one-active-report contract"
+          ],
+          "kind": "token",
+          "replacement": "selection_report_draft_id",
+          "value": "draft-final"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current finalized-draft identity and one-active-report contract"
+          ],
+          "kind": "token",
+          "replacement": "selection_report_draft_id",
+          "value": "draft-lock"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Retired Evaluation Lead role is replaced by canonical Workspace roles"
+          ],
+          "kind": "token",
+          "value": "evaluation-lead"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact implementation and proof path contract"
+          ],
+          "kind": "token",
+          "replacement": "planned outputs",
+          "value": "exact-path"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact stale-client concurrency contract"
+          ],
+          "kind": "token",
+          "replacement": "expected_workspace_version",
+          "value": "expected-draft-version"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current independent source and runtime readiness review"
+          ],
+          "kind": "token",
+          "replacement": "independent reviewer",
+          "value": "independent-review"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current self-contained contract replaces issue-local planning vocabulary"
+          ],
+          "kind": "token",
+          "replacement": "complete behavior and rules",
+          "value": "issue-local"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact non-disclosure response contract"
+          ],
+          "kind": "token",
+          "replacement": "firewall_non_leak",
+          "value": "non-leaking"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current non-overlapping operation authority matrix"
+          ],
+          "kind": "token",
+          "replacement": "workspace_owner or workspace_admin",
+          "value": "non-overlapping"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact non-disclosure response contract"
+          ],
+          "kind": "token",
+          "replacement": "firewall_non_leak",
+          "value": "non-visible"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current non-overlapping operation authority matrix"
+          ],
+          "kind": "token",
+          "replacement": "workspace_owner or workspace_admin",
+          "value": "operation-by-role"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current per-vendor outcome delivery and retry contract"
+          ],
+          "kind": "token",
+          "replacement": "durable seller-safe outcome intent",
+          "value": "outcome-delivery"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current atomic final-close and zero-partial-state contract"
+          ],
+          "kind": "token",
+          "replacement": "must never be visible",
+          "value": "partial-failure"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current Selection and Recommendation behavior"
+          ],
+          "kind": "token",
+          "replacement": "Phase 12",
+          "value": "phase-12"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current split Phase 13 entry and final closure contract"
+          ],
+          "kind": "token",
+          "replacement": "Phase 13",
+          "value": "phase-13"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact non-disclosure response contract"
+          ],
+          "kind": "token",
+          "replacement": "firewall_non_leak",
+          "value": "private-body"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current staged rollout and production evidence contract"
+          ],
+          "kind": "token",
+          "replacement": "production evidence",
+          "value": "production-shaped"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current protected delivery policy test"
+          ],
+          "kind": "token",
+          "replacement": "tools/delivery/release-policy.test.ts",
+          "value": "protected-ci"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact read scope and token authority contract"
+          ],
+          "kind": "token",
+          "replacement": "read:workspaces",
+          "value": "read-only"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current mandatory ranking-override reason contract"
+          ],
+          "kind": "token",
+          "replacement": "reason of 1–1,000 characters",
+          "value": "reason-presence"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact report-create route request contract"
+          ],
+          "kind": "token",
+          "replacement": "SelectionReportCreateRequest",
+          "value": "report-route"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current rollback, quarantine, and re-drive proof contract"
+          ],
+          "kind": "token",
+          "replacement": "rollback injection",
+          "value": "rollback-smoke"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact stale-client concurrency contract"
+          ],
+          "kind": "token",
+          "replacement": "expected_workspace_version",
+          "value": "stale-client"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact vendor-status and seller-projection map"
+          ],
+          "kind": "token",
+          "replacement": "evaluated vendor",
+          "value": "vendor-outcome"
+        }
+      ],
+      "lostTokens": [
+        "all-vendor",
+        "api-token",
+        "authored-extension",
+        "client-derived",
+        "console_scope",
+        "control-plane",
+        "current-draft",
+        "deployed-proof",
+        "draft-final",
+        "draft-lock",
+        "evaluation-lead",
+        "exact-path",
+        "expected-draft-version",
+        "independent-review",
+        "issue-local",
+        "non-leaking",
+        "non-overlapping",
+        "non-visible",
+        "operation-by-role",
+        "outcome-delivery",
+        "partial-failure",
+        "phase-12",
+        "phase-13",
+        "private-body",
+        "production-shaped",
+        "protected-ci",
+        "read-only",
+        "reason-presence",
+        "report-route",
+        "rollback-smoke",
+        "stale-client",
+        "vendor-outcome"
+      ],
+      "lostTokensSha256": "a090325c3c3df2511c4beebea63840677f7564f97153757d6479f4e662c0ece6",
+      "lostPaths": [
+        "reports/evidence/r0-selection-report-finalization-contract.json"
+      ],
+      "lostPathsSha256": "3155ed2e505ea57aaeb70589b50230a392a1405fdd0d204c5f651a4b8a9248ff",
+      "rationale": "The residual set is superseded outcome-parent vocabulary, a retired role label, prior source digest, and prior proof path. The candidate now closes the request, ranking override, signature, approval, vendor-outcome, firewall, Phase 13, recovery, control-plane, and proof contracts without restoring that stale planning language.",
+      "authorityEvidence": [
+        "Sourcera_Master_Spec.md#4.3.23 Selection Report",
+        "Sourcera_Master_Spec.md#10.12 Phase 12 Selection and Recommendation",
+        "Sourcera_Master_Spec.md#32.10.9 Core buyer endpoint contract"
+      ],
+      "replacementMap": [
+        {
+          "evidence": [
+            "Current Named proof replaces the former release-coded proof path"
+          ],
+          "from": "reports/evidence/r0-selection-report-finalization-contract.json",
+          "to": "reports/delivery/selection-report-finalization-contract.json"
+        }
+      ]
+    },
+    {
+      "issueId": "PLA-1002",
+      "baselineDescriptionSha256": "4057e03358d7467a25526e61d169ac338479ae0e4d11246429344239a64d1914",
+      "candidateDescriptionSha256": "6d7d4b8655194e80c031162af4706246b784f91a3dcd6627dfb4602ed9ae11ab",
+      "dispositions": [
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current invite token is stored and compared only as a hash"
+          ],
+          "kind": "token",
+          "replacement": "token_hash",
+          "value": "at-rest"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current marketplace-link source contract replaces the prior buyer-invite name"
+          ],
+          "kind": "token",
+          "replacement": "marketplace invite link",
+          "value": "buyer-invite"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Retired invitation-source literals are forbidden in current Linear prose"
+          ],
+          "kind": "token",
+          "value": "buyer-outreach"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current concurrent acceptance and idempotent replay contract"
+          ],
+          "kind": "token",
+          "replacement": "concurrent tabs return the same session",
+          "value": "concurrent-click"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current console, Organization, Workspace, and residency isolation contract"
+          ],
+          "kind": "token",
+          "replacement": "same Organization",
+          "value": "cross-console"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current console, Organization, Workspace, and residency isolation contract"
+          ],
+          "kind": "token",
+          "replacement": "same Organization",
+          "value": "cross-org"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current console, Organization, Workspace, and residency isolation contract"
+          ],
+          "kind": "token",
+          "replacement": "same Organization",
+          "value": "cross-tenant"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current console, Organization, Workspace, and residency isolation contract"
+          ],
+          "kind": "token",
+          "replacement": "same Organization",
+          "value": "cross-workspace"
+        },
+        {
+          "disposition": "nativeized",
+          "evidence": [
+            "Parent placement is preserved only in Linear native metadata"
+          ],
+          "kind": "token",
+          "replacement": "Linear.parent",
+          "value": "deleted-parent"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current commit-bound marketplace invite proof report"
+          ],
+          "kind": "token",
+          "replacement": "reports/delivery/marketplace-invite-link-contract.json",
+          "value": "deployed-proof"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact implementation and proof path contract"
+          ],
+          "kind": "token",
+          "replacement": "planned implementation/proof paths",
+          "value": "exact-path"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current invalid-link, identity, lineage, and dependency denial contract"
+          ],
+          "kind": "token",
+          "replacement": "fails closed",
+          "value": "fail-closed"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current Console Bridge event and seller handoff contract"
+          ],
+          "kind": "token",
+          "replacement": "workspace_invitation_propagated",
+          "value": "invitation-bridge"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Retired invitation-source literals are forbidden in current Linear prose"
+          ],
+          "kind": "token",
+          "value": "invite_source=buyer_invite"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact invitation origin and migration-lineage checks"
+          ],
+          "kind": "token",
+          "replacement": "source lineage",
+          "value": "invite-source"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current self-contained issue replaces later-release planning deferral"
+          ],
+          "kind": "token",
+          "replacement": "current source contract",
+          "value": "later-release"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current active-link uniqueness and terminal-state contract"
+          ],
+          "kind": "token",
+          "replacement": "unique active recipient/Workspace link",
+          "value": "one-active-link"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current exact safe-reuse migration predicate"
+          ],
+          "kind": "token",
+          "replacement": "source lineage",
+          "value": "same-domain"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current post-acceptance seller-decline transition contract"
+          ],
+          "kind": "token",
+          "replacement": "seller_declined_bid",
+          "value": "seller-decline"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current stale-version denial and unchanged-state contract"
+          ],
+          "kind": "token",
+          "replacement": "stale version",
+          "value": "stale-version"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current non-disclosing recipient and token mismatch denial"
+          ],
+          "kind": "token",
+          "replacement": "wrong recipient",
+          "value": "wrong-recipient"
+        }
+      ],
+      "lostTokens": [
+        "at-rest",
+        "buyer-invite",
+        "buyer-outreach",
+        "concurrent-click",
+        "cross-console",
+        "cross-org",
+        "cross-tenant",
+        "cross-workspace",
+        "deleted-parent",
+        "deployed-proof",
+        "exact-path",
+        "fail-closed",
+        "invitation-bridge",
+        "invite-source",
+        "invite_source=buyer_invite",
+        "later-release",
+        "one-active-link",
+        "same-domain",
+        "seller-decline",
+        "stale-version",
+        "wrong-recipient"
+      ],
+      "lostTokensSha256": "ae7c7be9d7d99747551aaafac1ef1c0cd1057f34886a08bf28fcd1387fccf228",
+      "lostPaths": [],
+      "lostPathsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "rationale": "The residual set is former coordination/service naming, release/proof language, an old source digest, and compound tokens whose current behavior is explicit in the candidate. The candidate preserves exact validity predicates, one-link idempotency, token-at-rest safety, concurrency, migration disposition, already-created row handling, seller decline, isolation, rollback, and current control-plane paths.",
+      "authorityEvidence": [
+        "Sourcera_Master_Spec.md#4.4.22 SellerOnboardingSession",
+        "Sourcera_Master_Spec.md#4.3.20 Target Account",
+        "Sourcera_Master_Spec.md#4.7.1 Console Bridge Event"
+      ],
+      "replacementMap": []
+    },
+    {
+      "issueId": "PLA-1003",
+      "baselineDescriptionSha256": "4abfd0a4c094a7ebdd1a68b7ee25256389b368b9629ebb6b0623a08c1858109a",
+      "candidateDescriptionSha256": "5718df4cf0a674215376ab5d864ae75e46aef7ea897fda2f2af9dbcc155f9a88",
+      "dispositions": [
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current issue contains exact positive, negative, and recovery assertions"
+          ],
+          "kind": "token",
+          "replacement": "Acceptance tests",
+          "value": "acceptance-criteria"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Retired implementation literal is forbidden by current authority"
+          ],
+          "kind": "token",
+          "value": "admin_audit_log"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current dependency graph is native delivery control-plane data"
+          ],
+          "kind": "token",
+          "replacement": "delivery/feature-dependencies.json",
+          "value": "control-plane"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current cross-release policy is native delivery control-plane data"
+          ],
+          "kind": "token",
+          "replacement": "delivery/release-policy.json",
+          "value": "cross-release"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current privacy boundary excludes customer and secret data from repair proof"
+          ],
+          "kind": "token",
+          "replacement": "customer data",
+          "value": "customer-data"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current exact-status live scanner path and command contract"
+          ],
+          "kind": "token",
+          "replacement": "tools/release/exact_status_scan.ts",
+          "value": "exact_status_scan.ts --json"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current owner migration preserves exact access capability boundaries"
+          ],
+          "kind": "token",
+          "replacement": "current Ops owner",
+          "value": "feature-access"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current append-only source decision and provenance control"
+          ],
+          "kind": "token",
+          "replacement": "delivery/decisions.jsonl",
+          "value": "historical-provenance"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Retired implementation literal is forbidden by current authority"
+          ],
+          "kind": "token",
+          "value": "is_staff"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current fragment and ordered-bundle checks replace line-addressed evidence"
+          ],
+          "kind": "token",
+          "replacement": "source-fragment",
+          "value": "line-addressed"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current generated readbacks never override canonical inputs"
+          ],
+          "kind": "token",
+          "replacement": "generated reports",
+          "value": "non-authoritative"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current privacy boundary excludes customer and secret data from repair proof"
+          ],
+          "kind": "token",
+          "replacement": "customer data",
+          "value": "non-customer"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current repair gate blocks enablement until all live scans pass"
+          ],
+          "kind": "token",
+          "replacement": "fail-closed source gate",
+          "value": "re-enabling"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current cross-release policy is native delivery control-plane data"
+          ],
+          "kind": "token",
+          "replacement": "delivery/release-policy.json",
+          "value": "release-policy"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current authority replaces retired-source content with one stable pointer"
+          ],
+          "kind": "token",
+          "replacement": "pointer-only",
+          "value": "retired-source"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current registered fragment and ticket checksum control"
+          ],
+          "kind": "token",
+          "replacement": "delivery/ticket-source-checksums.json",
+          "value": "source-checksum"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current append-only source decision and provenance control"
+          ],
+          "kind": "token",
+          "replacement": "delivery/decisions.jsonl",
+          "value": "source-control"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current stamp-gate live scanner path and command contract"
+          ],
+          "kind": "token",
+          "replacement": "tools/release/stamp_gate.ts",
+          "value": "stamp_gate.ts --json"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current complete occurrence inventory and full-file lock"
+          ],
+          "kind": "token",
+          "replacement": "delivery/section43-reference-repair-occurrences.md",
+          "value": "surface-index"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current registered fragment and ticket checksum control"
+          ],
+          "kind": "token",
+          "replacement": "delivery/ticket-source-checksums.json",
+          "value": "ticket-integrity"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current complete occurrence inventory and full-file lock"
+          ],
+          "kind": "token",
+          "replacement": "delivery/section43-reference-repair-occurrences.md",
+          "value": "whole-file"
+        }
+      ],
+      "lostTokens": [
+        "acceptance-criteria",
+        "admin_audit_log",
+        "control-plane",
+        "cross-release",
+        "customer-data",
+        "exact_status_scan.ts --json",
+        "feature-access",
+        "historical-provenance",
+        "is_staff",
+        "line-addressed",
+        "non-authoritative",
+        "non-customer",
+        "re-enabling",
+        "release-policy",
+        "retired-source",
+        "source-checksum",
+        "source-control",
+        "stamp_gate.ts --json",
+        "surface-index",
+        "ticket-integrity",
+        "whole-file"
+      ],
+      "lostTokensSha256": "a35eb3c2b3d09bff606f91bcb63725b92344bb8d422eeeb1dd4570c779d63581",
+      "lostPaths": [],
+      "lostPathsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "rationale": "The residual set is the two prohibited retired implementation literals plus superseded preservation and outcome-parent vocabulary. Current authority requires zero active literals, a pointer-only compatibility anchor, exact owner migration, registered fragment checksums, generated delivery reports, and live release scans; restoring the former terms would recreate the defect.",
+      "authorityEvidence": [
+        "Sourcera_Master_Spec.md current Ops Console authority at the bound source SHA",
+        "delivery/section43-reference-repair-occurrences.md complete current occurrence inventory",
+        "AGENTS.md delivery control-plane and live release truth rules"
+      ],
+      "replacementMap": []
+    },
+    {
+      "issueId": "PLA-958",
+      "baselineDescriptionSha256": "c28a636ec99a75d1158a7910c0992e414d792d063800d5cc2e8a0cf582f85ce7",
+      "candidateDescriptionSha256": "2c35ed14551936f82e1322a66046f0cfd6ea002a92cf9c1be212e003aba37f1d",
+      "dispositions": [
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current route registry and parity gate cover every normalized public operation"
+          ],
+          "kind": "token",
+          "replacement": "public version-one API operation",
+          "value": "all-endpoint"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current route registry and parity gate cover every normalized public operation"
+          ],
+          "kind": "token",
+          "replacement": "public version-one API operation",
+          "value": "all-response"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current generated registry and evidence are content-bound"
+          ],
+          "kind": "token",
+          "replacement": "source_sha256",
+          "value": "content-addressed"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current cross-release enforcement is a native release workflow hook"
+          ],
+          "kind": "token",
+          "replacement": ".github/workflows/production-release.yml",
+          "value": "cross-release"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current operation row carries its exact implementation owner"
+          ],
+          "kind": "token",
+          "replacement": "owner",
+          "value": "endpoint-owner"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current route registry and parity gate cover every normalized public operation"
+          ],
+          "kind": "token",
+          "replacement": "public version-one API operation",
+          "value": "endpoint-specific"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current route registry and OpenAPI artifacts are generated deterministically"
+          ],
+          "kind": "token",
+          "replacement": "generated",
+          "value": "hand-maintained"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current staged canary and production-equivalent proof sequence"
+          ],
+          "kind": "token",
+          "replacement": "staging",
+          "value": "lower-environment"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current route registry and OpenAPI artifacts are generated deterministically"
+          ],
+          "kind": "token",
+          "replacement": "generated",
+          "value": "non-deterministic"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current parity contract validates exact non-disclosing error bodies"
+          ],
+          "kind": "token",
+          "replacement": "non-leaking",
+          "value": "non-leak"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Former release-family proof label is not current path or behavior"
+          ],
+          "kind": "token",
+          "value": "r5-public-api-all-endpoint-parity-release-gate"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Former release-family proof label is not current path or behavior"
+          ],
+          "kind": "token",
+          "value": "r5-public-api-safe-staging-production-receipt-pack"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Former release-family proof label is not current path or behavior"
+          ],
+          "kind": "token",
+          "value": "r5-public-api-whole-manifest-failure-recovery-and-rollback-proof"
+        },
+        {
+          "disposition": "control_plane_only",
+          "evidence": [
+            "Current planned safe production smoke proof path"
+          ],
+          "kind": "token",
+          "replacement": "tests/e2e/public-api-safe-smoke.spec.ts",
+          "value": "safe-smoke"
+        }
+      ],
+      "lostTokens": [
+        "all-endpoint",
+        "all-response",
+        "content-addressed",
+        "cross-release",
+        "endpoint-owner",
+        "endpoint-specific",
+        "hand-maintained",
+        "lower-environment",
+        "non-deterministic",
+        "non-leak",
+        "r5-public-api-all-endpoint-parity-release-gate",
+        "r5-public-api-safe-staging-production-receipt-pack",
+        "r5-public-api-whole-manifest-failure-recovery-and-rollback-proof",
+        "safe-smoke"
+      ],
+      "lostTokensSha256": "c5d45eb32c9cae3603e6d03acda121fe448ebe33a256705b9d957086daacd514",
+      "lostPaths": [],
+      "lostPathsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "rationale": "The residual token set consists of former release-family labels, old proof labels, and superseded path vocabulary. Every former unmaterialized path is mapped one-to-one in the candidate to the current public-api path set, and only the current paths may be built or cited as proof.",
+      "authorityEvidence": [
+        "Sourcera_Master_Spec.md#32 API endpoint and error contracts",
+        ".github/workflows/production-release.yml and scripts/production-release-preflight.ts at the bound source SHA",
+        "The candidate Exact paths section contains the complete one-to-one replacement table"
+      ],
+      "replacementMap": [
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "delivery/api-endpoint-owners.json",
+          "to": "delivery/public-api-route-registry.json"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "docs/runbooks/api-release.md",
+          "to": "docs/runbooks/public-api-release.md"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "reports/delivery/api-endpoint-parity.json",
+          "to": "reports/delivery/public-api-parity.json"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "tests/e2e/api-all-endpoint-safe-smoke.spec.ts",
+          "to": "tests/e2e/public-api-safe-smoke.spec.ts"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "tests/integration/api-all-endpoint-contract.spec.ts",
+          "to": "tests/integration/public-api-contract.spec.ts"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "tests/openapi/all-endpoint-parity.spec.ts",
+          "to": "tests/openapi/public-api-parity.spec.ts"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "tools/openapi/build-endpoint-owner-manifest.ts",
+          "to": "tools/openapi/build-public-api.ts"
+        },
+        {
+          "evidence": [
+            "Exact one-to-one path replacement table in the candidate"
+          ],
+          "from": "tools/openapi/verify-all-endpoints.ts",
+          "to": "tools/openapi/verify-public-api-parity.ts"
+        }
+      ]
+    },
+    {
+      "issueId": "PLA-972",
+      "baselineDescriptionSha256": "a33f75ccd8ff460432d81ce0465cd9cb7ff6e9580e3c6a9ef39807ba2eb7b71e",
+      "candidateDescriptionSha256": "142bd20fe300936038ce8db968d77f42eef2fc01ff86bacd102ae76e72f895cf",
+      "dispositions": [
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current five-phase binding writes active tuple and history as one transaction"
+          ],
+          "kind": "token",
+          "replacement": "atomically",
+          "value": "all-or-nothing"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current provider failure and no-partial-success contract"
+          ],
+          "kind": "token",
+          "replacement": "failed bind leaves the current active binding unchanged",
+          "value": "bind-failure"
+        },
+        {
+          "disposition": "nativeized",
+          "evidence": [
+            "Blocking is carried only by the prepared Linear native relation delta"
+          ],
+          "kind": "token",
+          "replacement": "Linear.blocks",
+          "value": "blocked-by"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current active Customer binding and provider readback contract"
+          ],
+          "kind": "token",
+          "replacement": "provider Customer ID",
+          "value": "bound-customer"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current five-phase binding writes active tuple and history as one transaction"
+          ],
+          "kind": "token",
+          "replacement": "atomically",
+          "value": "commit-bound"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current closed one-to-one residency and legal-entity mapping"
+          ],
+          "kind": "token",
+          "replacement": "custom -> sourcera_custom",
+          "value": "custom"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current source-authoring permission contract replaces customer-authored planning wording"
+          ],
+          "kind": "token",
+          "replacement": "human source-approval group",
+          "value": "customer-authored"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current source issue grants no executable runtime authority"
+          ],
+          "kind": "token",
+          "replacement": "runtime gates remain disabled",
+          "value": "non-executable"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current genesis and residency-change binding contract"
+          ],
+          "kind": "token",
+          "replacement": "Organization genesis",
+          "value": "organization-creation"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current source-only approval state replaces production-ownership wording"
+          ],
+          "kind": "token",
+          "replacement": "approved_source",
+          "value": "production-owned"
+        },
+        {
+          "disposition": "superseded_by_approved_source",
+          "evidence": [
+            "Current source-only approval state replaces production-ownership wording"
+          ],
+          "kind": "token",
+          "replacement": "approved_source",
+          "value": "production-proof"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current provider outage, compensation, and retry behavior"
+          ],
+          "kind": "token",
+          "replacement": "provider outage",
+          "value": "provider-outage"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current active Customer binding and provider readback contract"
+          ],
+          "kind": "token",
+          "replacement": "provider Customer ID",
+          "value": "provider-reference"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current active binding remains distinct from append-only history"
+          ],
+          "kind": "token",
+          "replacement": "current active binding",
+          "value": "re-owns"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current residency-to-legal-entity mapping is explicit and exhaustive"
+          ],
+          "kind": "token",
+          "replacement": "closed one-to-one mapping",
+          "value": "residency-to-legal-entity"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current retry contract reuses the immutable provider idempotency key"
+          ],
+          "kind": "token",
+          "replacement": "same immutable key",
+          "value": "same-key"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current seller Organization genesis and Customer binding scope"
+          ],
+          "kind": "token",
+          "replacement": "Organization",
+          "value": "seller-organization"
+        },
+        {
+          "disposition": "removed_legacy_literal",
+          "evidence": [
+            "Historical legal-entity literal is rejected and retained only in baseline audit evidence"
+          ],
+          "kind": "token",
+          "value": "sourcera_uk_ltd"
+        },
+        {
+          "disposition": "preserved_semantically",
+          "evidence": [
+            "Current immutable provider key carries the exact attempt-minute component"
+          ],
+          "kind": "token",
+          "replacement": "original_attempt_timestamp_minute",
+          "value": "timestamp-bound"
+        }
+      ],
+      "lostTokens": [
+        "all-or-nothing",
+        "bind-failure",
+        "blocked-by",
+        "bound-customer",
+        "commit-bound",
+        "custom",
+        "customer-authored",
+        "non-executable",
+        "organization-creation",
+        "production-owned",
+        "production-proof",
+        "provider-outage",
+        "provider-reference",
+        "re-owns",
+        "residency-to-legal-entity",
+        "same-key",
+        "seller-organization",
+        "sourcera_uk_ltd",
+        "timestamp-bound"
+      ],
+      "lostTokensSha256": "c0ad0293d6696837ed53293ec846de37976a5f3cc24b379f49cbc4d9af65f01a",
+      "lostPaths": [],
+      "lostPathsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "rationale": "The exact residual set is limited to superseded coordination and proof wording, a prohibited historical legal-entity literal, a prior source digest, and compound phrasing replaced by the current closed mapping and five-phase contract. The candidate explicitly preserves the four-value mapping, active binding, append-only history, provider failure behavior, immutable retry, compensation, and independent readback.",
+      "authorityEvidence": [
+        "Sourcera_Master_Spec.md#34.10.5.A Stripe-Customer Atomic-Binding Protocol",
+        "Sourcera_Master_Spec.md#4.8.1 Residency-Locked Invoicing",
+        "_integration/AUTHORED_EXTENSIONS_LEDGER.md AE-V72REM-PH5-01"
+      ],
+      "replacementMap": []
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "schemaVersion": 1,
+  "repairs": [
+    {
+      "requirementId": "F-006",
+      "dependencies": ["F-502"],
+      "rationale": "Authentication traffic and stored identity data require the platform-wide encryption contract.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§6.1; §33.1"
+    },
+    {
+      "requirementId": "F-007",
+      "dependencies": [
+        "F-005",
+        "F-132",
+        "F-139",
+        "F-160",
+        "F-529",
+        "F-537",
+        "F-569",
+        "F-593",
+        "F-630",
+        "F-917"
+      ],
+      "rationale": "The R2 Stripe boundary consumes the proven Convex schema assembler, Customer genesis contract, current price authority, retention classification, role and API/UI authorization, informational seat and pooled-wallet projections, accessibility proof, canary process, and private rollout controls before subscription, invoice, metering, rollback, and customer proof can close. F-631's closed customer-flag catalog is not a private Stripe-control owner.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§1.5; §5.2; §6.8; §34; §34.10.5.A; §36.2; §37; §40.2; §46.3; §46.7"
+    },
+    {
+      "requirementId": "F-079",
+      "dependencies": ["F-005", "F-628"],
+      "rationale": "The Organization contract requires the typed Convex Preview foundation and the per-service test gate before its schema, isolation, recovery, and migration proof can execute.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.2.1–§4.2.1.2; §46.1"
+    },
+    {
+      "requirementId": "F-083",
+      "dependencies": ["F-003", "F-910", "F-911"],
+      "rationale": "Buyer Workspace reads and lists are console-scoped and must enforce org_id plus console query scoping, the deny-by-default cross-origin registry, and the application-header policy before the R0 shell is exposed.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§1.4; §4.3.1 AC 6; §1.5.1; §32.1.1"
+    },
+    {
+      "requirementId": "F-116",
+      "dependencies": ["F-005", "F-117", "F-120", "F-429"],
+      "rationale": "MarketplaceReview and MarketplaceIntegrationHook require the database foundation, canonical AuditEvent writer, Marketplace Listing base entity, and Marketplace discovery authority before their cross-console source, moderation, handoff, recovery, and proof paths can execute.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.5; §4.5.15–§4.5.16; §6.7; §25; §27"
+    },
+    {
+      "requirementId": "F-132",
+      "dependencies": ["F-005", "F-124", "F-524"],
+      "rationale": "The immutable PricingTableVersion fragment requires the canonical Convex schema assembler plus the capability and cost-base inputs used by its deterministic snapshot builder. Customer/Ops authorization and lifecycle orchestration remain with the consuming F-499/F-549 owners.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.8.9; §32.8.0–§32.8.1; §32.8.20–§32.8.21; §34.14.5; §50.12"
+    },
+    {
+      "requirementId": "F-139",
+      "dependencies": ["F-138", "F-160"],
+      "rationale": "Org Owner authority is an additive Organization-role policy contribution and must consume the canonical role-assignment and membership lifecycle plus the shared API/UI enforcement adapter; it cannot become a competing authorization entrypoint.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.2.1–§4.2.3; §5.1; §5.2; §5.11–§5.12; Appendix J Global Organization Roles"
+    },
+    {
+      "requirementId": "F-160",
+      "dependencies": ["F-117", "F-159"],
+      "rationale": "The common API/UI authorization adapter consumes the canonical role-feature decision matrix and immutable AuditEvent writer; it must not redefine either source of authority.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.6.1; §5.11–§5.12; §40.2; Appendix I"
+    },
+    {
+      "requirementId": "F-209",
+      "dependencies": ["F-047", "F-084", "F-160"],
+      "rationale": "Pipeline advancement requires an authorized Workspace owner or member, enforced access, and the common failure-reason-recovery contract.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.1.1–§10.1.3"
+    },
+    {
+      "requirementId": "F-211",
+      "dependencies": ["F-210", "F-235", "F-236", "F-237", "F-238"],
+      "rationale": "Phase 1 begins the mandatory journey only with phase locking plus the canonical advancement API, idempotency, audit, and gate validation controls.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.1.2; §10.2; §10.16–§10.16.3"
+    },
+    {
+      "requirementId": "F-212",
+      "dependencies": ["F-211"],
+      "rationale": "Phase 2 follows completion of Phase 1 in the canonical evaluation journey.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.2–§10.3"
+    },
+    {
+      "requirementId": "F-213",
+      "dependencies": ["F-212"],
+      "rationale": "Phase 3 follows completion of Phase 2 in the canonical evaluation journey.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.3–§10.4"
+    },
+    {
+      "requirementId": "F-214",
+      "dependencies": ["F-213", "F-791"],
+      "rationale": "Vendor discovery and outreach follow Phase 3 validation and advance Target Accounts through their canonical solicitation lifecycle.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.5; Appendix L.6"
+    },
+    {
+      "requirementId": "F-215",
+      "dependencies": ["F-214", "F-397", "F-409", "F-774", "F-775"],
+      "rationale": "Opening bidding follows vendor discovery and outreach and requires versioned Requirement materialization, bridge redaction, and canonical Requirement and Response transitions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.6; §25.1–§25.5; Appendix A; Appendix D"
+    },
+    {
+      "requirementId": "F-217",
+      "dependencies": ["F-215"],
+      "rationale": "Phase 7 response refinement follows the opening of vendor bidding in Phase 6.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.6–§10.7"
+    },
+    {
+      "requirementId": "F-218",
+      "dependencies": ["F-217"],
+      "rationale": "Phase 8 due diligence follows the Phase 7 response refinement window.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.7–§10.8"
+    },
+    {
+      "requirementId": "F-219",
+      "dependencies": ["F-218"],
+      "rationale": "Phase 9 final clarifications follow completion of Phase 8 due diligence and demos.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.8–§10.9"
+    },
+    {
+      "requirementId": "F-220",
+      "dependencies": ["F-219", "F-260"],
+      "rationale": "Phase 10 follows final vendor clarifications and uses the canonical scoring engine and draft-to-locked lifecycle.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.10; §13.1; §13.9"
+    },
+    {
+      "requirementId": "F-223",
+      "dependencies": ["F-220"],
+      "rationale": "Phase 11 score review and consensus follow Phase 10 team evaluation and scoring.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.10–§10.11"
+    },
+    {
+      "requirementId": "F-225",
+      "dependencies": ["F-221", "F-223", "F-224"],
+      "rationale": "Selection begins only after Phase 11 consensus and its Summary Scoring Report are complete and Phase 12 entry locks the evaluation scores.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.12; §13.9.3"
+    },
+    {
+      "requirementId": "F-228",
+      "dependencies": ["F-225", "F-226", "F-776"],
+      "rationale": "Phase 13 closure follows selection and Selection Report generation and performs the canonical Workspace and Bid Workspace state transitions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§10.13; Appendix E"
+    },
+    {
+      "requirementId": "F-229",
+      "dependencies": ["F-170", "F-593", "F-607"],
+      "rationale": "Creating the immutable closure bundle requires canonical append-only mutation audit logging, binding retention, and nightly integrity verification.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.3.24; §6.7.1; §40.2; §42.6.1"
+    },
+    {
+      "requirementId": "F-387",
+      "dependencies": ["F-910", "F-911"],
+      "rationale": "The R0 Bid Workspace shell must inherit the same deny-by-default cross-origin registry and application-header enforcement as the Buyer Workspace before seller entry is exposed.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§23.1; §1.5.1; §32.1.1"
+    },
+    {
+      "requirementId": "F-483",
+      "dependencies": ["F-466", "F-471"],
+      "rationale": "Webhook delivery and replay can execute only after the compiled event registry and subscription-registration firewall resolve the current event, console, audience, entitlement, schema, and target contracts.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§31.1–§31.11.6"
+    },
+    {
+      "requirementId": "F-490",
+      "dependencies": ["F-116", "F-483"],
+      "rationale": "CRM review activity consumes the canonical MarketplaceReview source and only dispatches through the proved webhook/integration delivery foundation; review publication remains independent of CRM availability.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§31.9; §4.5.15–§4.5.16"
+    },
+    {
+      "requirementId": "F-529",
+      "dependencies": ["F-134"],
+      "rationale": "Replay-safe seat snapshots consume the single canonical BillingSeatSnapshot entity and index contract before scheduled or event-driven computation can write or project informational counts.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.8.11; §32.8.19; §34.20.6; §34.20.9; Appendix J billing_seat_snapshot_trigger"
+    },
+    {
+      "requirementId": "F-533",
+      "dependencies": ["F-007", "F-466", "F-467", "F-468", "F-470", "F-473", "F-509", "F-527", "F-528", "F-628", "F-916"],
+      "rationale": "The later Buyer-trial notices and terminal conversion or downgrade require the R0 activation row, Stripe subscription completion, the canonical notification catalog, in-app and email delivery, user preferences and inheritance, the Buyer Free target, canonical plan-change behavior, excess-data preservation, and the service test/evidence control plane; activation cannot wait for the later lifecycle release.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§34.9.1; §34.5; §4.2.13; Appendix C"
+    },
+    {
+      "requirementId": "F-537",
+      "dependencies": ["F-132", "F-536", "F-630"],
+      "rationale": "Organization-pooled wallet recomputation requires current approved pricing inputs, the canonical AIWallet mutation boundary, and F-630's registered private server-side rollout and kill-switch control before customer-visible mutation; F-631's customer flag catalog is not reused.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.8.3; §34.10; §34.12; §46.7; §46.9; Appendix G Billing-Domain Events"
+    },
+    {
+      "requirementId": "F-566",
+      "dependencies": ["F-179", "F-687", "F-693"],
+      "rationale": "Seller setup recovery requires the Settings route and authoritative onboarding state, and the invited-seller checklist must remain suppressed until the first response submission completes.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§35.3–§35.4; §48.8.3–§48.8.7; §49.1.6"
+    },
+    {
+      "requirementId": "F-593",
+      "dependencies": ["F-005"],
+      "rationale": "The canonical retention registry must compile against the authoritative persisted schema and entity inventory; unknown or uncovered storage fails closed before any consumer can delete or move data.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§6.8; §40.2; §40.4; §45.1; Appendix M"
+    },
+    {
+      "requirementId": "F-599",
+      "dependencies": ["F-012", "F-474", "F-483", "F-514", "F-520", "F-543", "F-600"],
+      "rationale": "The Enterprise SLA family requires residency-partitioned deployment, the canonical Support Widget intake channel, signed subscription-aware webhook delivery, Buyer/Seller/combined Enterprise plan owners, and monitoring foundations before its canonical contract, monthly uptime measurement, and breach-notification proof can complete.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§34.1.1–§34.1.2; §34.12.5; §42.1; §42.4; §31; Appendix C; Appendix F"
+    },
+    {
+      "requirementId": "F-628",
+      "dependencies": ["F-005"],
+      "rationale": "The per-service test pyramid requires a real, commit-bound Convex Preview deployment for its mandatory integration lane; database mocks are forbidden outside unit tests.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§46.1.1–§46.1.3"
+    },
+    {
+      "requirementId": "F-630",
+      "dependencies": ["F-005", "F-008", "F-572", "F-600", "F-603", "F-605", "F-612", "F-628"],
+      "rationale": "The release gate requires the canonical Convex schema assembler, stable analytics cohort assignment, accessibility proof, monitoring, recovery drills, observability, performance budgets, and the test pyramid before canary and rollback decisions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§46.1.1–§46.1.2; §46.3; §51.1; Appendix G"
+    },
+    {
+      "requirementId": "F-631",
+      "dependencies": ["F-008", "F-531"],
+      "rationale": "Feature-flag decisions must consume the canonical PostHog integration and current entitlement evaluator so the server can enforce entitlement first, flag second, without copying plan rules.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§22.16.5; §34.8; §46.7"
+    },
+    {
+      "requirementId": "F-655",
+      "dependencies": ["F-653", "F-654", "F-696", "F-701"],
+      "rationale": "The Network Effects Dashboard consumes the canonical network-effect and S1–S7 signal inventories and renders only inside the §50 Ops Console under its capability-envelope role matrix; the retired F-608 Admin Dashboard is not an executable prerequisite.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§43.0; §48.3.2–§48.3.5; §50; §50.3"
+    },
+    {
+      "requirementId": "F-687",
+      "dependencies": ["F-630", "F-751", "F-752", "F-753", "F-755", "F-779", "F-780"],
+      "rationale": "The seven-stage onboarding contract requires release-blocking QA plus canonical event families, envelopes, durable delivery, and product analytics properties.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§49.1.10; §51.1; Appendix G"
+    },
+    {
+      "requirementId": "F-866",
+      "dependencies": ["F-042", "F-043", "F-569", "F-859", "F-860", "F-861", "F-862", "F-863", "F-864"],
+      "rationale": "The shared FormField family must consume the canonical form tokens, validation state machine, accessibility foundation, and complete UX token set before its eleven variants can be implemented without per-console drift.",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sourceVersion": "v2.0.0",
+      "sourceSection": "§5.2.13; Master Spec §3.6 and §37.1"
+    },
+    {
+      "requirementId": "F-689",
+      "dependencies": ["F-789"],
+      "rationale": "Domain Bootstrap creates KB Entries that must follow the canonical KB Entry lifecycle and indexing transitions.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§22.4.1; §49.1.2; Appendix L.4"
+    },
+    {
+      "requirementId": "F-725",
+      "dependencies": [
+        "F-008",
+        "F-117",
+        "F-119",
+        "F-123",
+        "F-124",
+        "F-160",
+        "F-483",
+        "F-499",
+        "F-600",
+        "F-697",
+        "F-701",
+        "F-726",
+        "F-727",
+        "F-728",
+        "F-729",
+        "F-730",
+        "F-779",
+        "F-780"
+      ],
+      "rationale": "The end-to-end Pricing Admin publish surface composes the Ops security boundary, proposal, simulation, communications, rate-card, cost-base, free-allowance, public-cache, audit, telemetry, webhook, monitoring, and recovery contracts; none can be deferred without violating §50.12 acceptance criteria.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.12.1–§50.12.14; §4.8.9; §28"
+    },
+    {
+      "requirementId": "F-899",
+      "dependencies": ["F-001", "F-117", "F-183", "F-387", "F-393", "F-332", "F-333", "F-112", "F-113", "F-429", "F-873", "F-875", "F-876", "F-877", "F-879"],
+      "rationale": "The Seller Dashboard is a read-only composition over canonical bid, action, KB-health, marketplace, audit, shared-state, and navigation owners; every named section and route must exist before the complete UX §4.3.1 outcome can close.",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sourceVersion": "v2.0.0",
+      "sourceSection": "§4.3.1; Master Spec §5.5.1, §22.5, §24.3, §25.1.2"
+    },
+    {
+      "requirementId": "F-910",
+      "dependencies": ["F-002", "F-004", "F-005", "F-911"],
+      "rationale": "Application headers require the reproducible three-shell foundation, console isolation, the validated Convex origin pair, and the deny-by-default cross-origin registry before enforcement.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§1.5.1"
+    },
+    {
+      "requirementId": "F-911",
+      "dependencies": ["F-002", "F-004"],
+      "rationale": "The cross-origin registry requires the reproducible route inventory and dual-console boundary before its empty R0 allowlist and failure contract can be enforced.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§32.1.1"
+    },
+    {
+      "requirementId": "F-912",
+      "dependencies": ["F-006", "F-063", "F-119", "F-170", "F-179", "F-569", "F-628", "F-701", "F-859"],
+      "rationale": "Enterprise branding consumes authenticated Organization settings, canonical tokens and contrast rules, audit/Ops controls, the test pyramid, and the all-plan base-logo owner without granting a Seller entitlement.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§34.1.1; §7.1.2; §3.11.7; UX Design §8.8"
+    },
+    {
+      "requirementId": "F-913",
+      "dependencies": ["F-119", "F-132", "F-302", "F-628", "F-701", "F-706", "F-725"],
+      "rationale": "Reference-data orchestration can run only after template and pricing owners, Ops session/role/state controls, the complete Pricing Admin gate, and commit-bound test evidence exist.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.33"
+    },
+    {
+      "requirementId": "F-916",
+      "dependencies": ["F-006", "F-008", "F-079", "F-080", "F-081", "F-099", "F-117", "F-125", "F-130", "F-511", "F-628", "F-755", "F-779", "F-780", "F-917"],
+      "rationale": "R0 Buyer Org creation must resolve WorkOS identity, User and founding membership; atomically materialize the Organization, active Stripe Customer, TrialState, Business Starter plan, wallet, allowances, and qualified audit; then commit the exact signup-stage UsageEvent/outbox pair under the PostHog taxonomy and standard envelope before exposing a successful Buyer route. F-916 owns only the §48 signup-stage slice; F-636/F-637 retain the later full-funnel stages and their F-527 dependency.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§6.1; §4.2.1–§4.2.3; §4.2.13; §4.3.18; §4.8.3; §4.8.7; §34.9.1; §48.1.1; §48.1.4; §51.1.4; Appendix G; Appendix J"
+    },
+    {
+      "requirementId": "F-917",
+      "dependencies": ["F-079", "F-117", "F-502", "F-628"],
+      "rationale": "The first Stripe Customer can be bound only after the Organization primitive, canonical Organization-created audit emitter, platform encryption and secret-handling contract, and service test/evidence control plane are available.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§34.10.5.A; §4.2.1; §4.6.1; §4.8.1; §33.1"
+    },
+    {
+      "requirementId": "F-922",
+      "dependencies": ["F-117", "F-119", "F-160", "F-593", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-779", "F-780"],
+      "rationale": "The canonical discretionary-Ops audit record requires the current AuditEvent and OpsSession entities, common authorization enforcement, retention registry, monitoring, separated Ops shell/auth/mutation/DB-denial/role controls, and exact analytics envelope before its schema, atomic writer, read firewall, and proof can close.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§4.4.27; §50.5.3; §50.31 D-50-039"
+    },
+    {
+      "requirementId": "F-923",
+      "dependencies": ["F-007", "F-079", "F-117", "F-119", "F-132", "F-160", "F-466", "F-471", "F-483", "F-496", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-725", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "The full plan-tier override surface composes canonical billing and Organization state, audit/session/authorization, notification/webhook/API/error/monitoring/Ops controls, Pricing Admin authority, accessibility, exact event envelopes, and OpsActionRecord atomicity before two-person publish, effective-date execution, reversal, and recovery can close.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.20.1–§50.20.6; §34; §50.12"
+    },
+    {
+      "requirementId": "F-924",
+      "dependencies": ["F-002", "F-079", "F-083", "F-117", "F-119", "F-160", "F-175", "F-466", "F-471", "F-483", "F-496", "F-502", "F-592", "F-593", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "The full Workspace export surface requires canonical console isolation, Organization/Workspace identity, audit/session/authorization, DSAR cascade, secret handling, data export/retention, API/webhook/error/monitoring/Ops controls, accessibility, exact envelopes, and OpsActionRecord atomicity before generation or download can run.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.21; §6.8; §27.10; §40.2"
+    },
+    {
+      "requirementId": "F-925",
+      "dependencies": ["F-007", "F-117", "F-119", "F-125", "F-128", "F-160", "F-466", "F-471", "F-483", "F-496", "F-593", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "Refund authorization composes Stripe, AuditEvent, OpsSession, AIWallet, ContestRecord, common enforcement, notification/webhook/API/error/retention/monitoring/Ops/accessibility/event controls, and OpsActionRecord; the compressed source contract must be repaired before executable children can earn readiness.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.22; §34; §50.12"
+    },
+    {
+      "requirementId": "F-926",
+      "dependencies": ["F-007", "F-117", "F-119", "F-125", "F-126", "F-160", "F-466", "F-471", "F-483", "F-496", "F-593", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "Wallet adjustment composes Stripe, AuditEvent, OpsSession, AIWallet, AIOperation, common enforcement, notification/webhook/API/error/retention/monitoring/Ops/accessibility/event controls, and OpsActionRecord; the compressed source contract must be repaired before executable children can earn readiness.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.23; §4.8.3.B; §34"
+    },
+    {
+      "requirementId": "F-927",
+      "dependencies": ["F-007", "F-079", "F-117", "F-119", "F-160", "F-466", "F-471", "F-483", "F-496", "F-533", "F-593", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-777", "F-779", "F-780", "F-782", "F-916", "F-922", "F-923"],
+      "rationale": "Trial management composes billing, Organization/trial activation, AuditEvent, OpsSession, common enforcement, notification/webhook/API/error/retention/monitoring/Ops/accessibility/event controls, OpsActionRecord, and PlanTierOverride reuse; the compressed source contract must be repaired before executable children can earn readiness.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.24; §34.9.1; §50.20"
+    },
+    {
+      "requirementId": "F-928",
+      "dependencies": ["F-117", "F-119", "F-160", "F-429", "F-447", "F-449", "F-466", "F-471", "F-483", "F-496", "F-593", "F-596", "F-600", "F-602", "F-697", "F-698", "F-699", "F-700", "F-701", "F-746", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "Listing moderation composes Marketplace, abuse, listing, webhook/API/error/retention/monitoring/Ops/accessibility/event controls, role enforcement, fraud review, and OpsActionRecord; the compressed source contract must be repaired before executable children can earn readiness.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.25; §27.8; §27.10; §50.16"
+    },
+    {
+      "requirementId": "F-929",
+      "dependencies": ["F-007", "F-117", "F-119", "F-123", "F-125", "F-128", "F-160", "F-466", "F-471", "F-483", "F-496", "F-539", "F-593", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "AIOperation reversal composes Stripe, AuditEvent, OpsSession, AIOperation, AIWallet, ContestRecord, Outcome Resolver, common enforcement, notification/webhook/API/error/retention/monitoring/Ops/accessibility/event controls, and OpsActionRecord; the compressed source contract must be repaired before executable children can earn readiness.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.26; §34.10.5; §34.11"
+    },
+    {
+      "requirementId": "F-930",
+      "dependencies": ["F-006", "F-079", "F-117", "F-119", "F-138", "F-160", "F-161", "F-164", "F-168", "F-169", "F-466", "F-471", "F-483", "F-496", "F-593", "F-596", "F-600", "F-697", "F-698", "F-699", "F-700", "F-701", "F-777", "F-779", "F-780", "F-782", "F-922"],
+      "rationale": "User-account Ops actions compose customer and Ops identity, Organization scope, AuditEvent/OpsSession, service roles, common enforcement, WorkOS/SSO/API-token/SCIM/deprovisioning, notification/webhook/API/error/retention/monitoring/Ops/accessibility/event controls, and OpsActionRecord; the compressed source contract must be repaired before executable children can earn readiness.",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "sourceSection": "§50.27; §6.1; §6.3; §6.6"
+    }
+  ]
+}

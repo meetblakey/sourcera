@@ -1,0 +1,3094 @@
+{
+  "schemaVersion": 3,
+  "sources": [
+    {
+      "sourceId": "F-139",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.3 Dual-Console Data Isolation Model {#1.3-dual-console-data-isolation-model}",
+          "endHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.5 Group (Org-Scoped; WorkOS Groups API integration) {#4.2.5-group}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.1 RBAC Architecture {#5.1-rbac-architecture}",
+          "endHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.11 Feature Access Matrix (Comprehensive) {#5.11-feature-access-matrix-(comprehensive)}",
+          "endHeading": "## 5.12 Access Control Enforcement {#5.12-access-control-enforcement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.1 Authentication Architecture {#6.1-authentication-architecture}",
+          "endHeading": "## 6.2 Multi-Factor Authentication (MFA) {#6.2-multi-factor-authentication-(mfa)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 32.2 Authentication & Rate Limit Headers {#32.2-authentication-and-rate-limit-headers}",
+          "endHeading": "## 32.3 Pagination Model {#32.3-pagination-model}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 32.6 Error Handling {#32.6-error-handling}",
+          "endHeading": "## 32.7 Acceptance Criteria {#32.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 32.8 Billing Endpoint Detail {#32.8-billing-endpoint-detail}",
+          "endHeading": "## 32.9 Seller KB Export Endpoint {#32.9-seller-kb-export-endpoint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 34\\. Plan Tiers, Billing & Entitlements {#34.-plan-tiers-billing-and-entitlements}",
+          "endHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}",
+          "endHeading": "## 34.2 Pricing {#34.2-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.5 Plan Upgrade / Downgrade {#34.5-plan-upgrade-/-downgrade}",
+          "endHeading": "## 34.6 Downgrade Excess Data Handling {#34.6-downgrade-excess-data-handling}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.8 Entitlement Enforcement {#34.8-entitlement-enforcement}",
+          "endHeading": "## 34.9 Onboarding and Trial Carry-Over {#34.9-onboarding-and-trial-carry-over}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.12 Cross-Side Billing Rules {#34.12-cross-side-billing-rules}",
+          "endHeading": "## 34.13 Buyer-Funded Pro Trial Seat (M17) {#34.13-buyer-funded-pro-trial-seat}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.20.7 Cross-Side Billing",
+          "endHeading": "### 34.20.8 Buyer-Funded Pro Trial Seat (M17)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.1 Accessibility (WCAG 2.1 AA) {#37.1-accessibility-(wcag-2.1-aa)}",
+          "endHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}",
+          "endHeading": "## 37.3 Right-to-Left (RTL) Support {#37.3-right-to-left-(rtl)-support}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.1 Breakpoint Definitions {#38.6.1-breakpoint-definitions}",
+          "endHeading": "### 38.6.2 Per-Breakpoint Layout Rules {#38.6.2-per-breakpoint-layout-rules}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.2 Per-Breakpoint Layout Rules {#38.6.2-per-breakpoint-layout-rules}",
+          "endHeading": "### 38.6.3 Breakpoint-Aware Entity Fields {#38.6.3-breakpoint-aware-entity-fields}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 38.10 Reduced-Motion & Accessibility Tier Overrides {#38.10-reduced-motion-and-accessibility-tier-overrides}",
+          "endHeading": "## 38.11 Right-to-Left & Locale Mirror Behavior {#38.11-right-to-left-and-locale-mirror-behavior}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 38.11 Right-to-Left & Locale Mirror Behavior {#38.11-right-to-left-and-locale-mirror-behavior}",
+          "endHeading": "## 38.12 Presence Avatar Stack Component {#38.12-presence-avatar-stack-component}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}",
+          "endHeading": "## Appendix J: Controlled Vocabulary Registry {#appendix-j-controlled-vocabulary-registry}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Global Organization Roles",
+          "endHeading": "### Workspace Roles"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)",
+          "endHeading": "### `marketplace_entity_console` (§4.5.1, §4.5.2, §4.5.3)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### M.1 Master Surface/Engine Mapping Table",
+          "endHeading": "### M.2 Process Gates"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### M.5.28 v7.2.0-REM Phase 3.1 RBAC Residual P1 addition (D-3.1-003 / D-3.1-004 / D-3.1-005 / D-3.1-007 / D-3.1-014 closure) {#m-5-28-v72rem-phase-3-1-rbac-residual-p1-addition}",
+          "endHeading": "#### M.5.29 v7.2.0-REM Phase 2.2 Firewall P1 addition (D-2.2-041 closure) {#m-5-29-v72rem-phase-2-2-firewall-p1-addition}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "#### Plan & Billing",
+          "endHeading": "#### Teams"
+        }
+      ],
+      "sha256": "bac1add519ef63a7f5996366ea3fdd7b2b73a5a699398eea811239c071c2b89c"
+    },
+    {
+      "sourceId": "F-529",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.8.11 BillingSeatSnapshot (Org-Scoped, Reporting-Only, Periodic) {#4.8.11-billingseatsnapshot}",
+          "endHeading": "### 4.8.12 MarketplaceDiscoveryRevenueRecord (Seller-Org-Scoped, Accounting-Isolated, Non-AI Revenue Line) {#4.8.12-marketplacediscoveryrevenuerecord}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.11 Feature Access Matrix (Comprehensive) {#5.11-feature-access-matrix-(comprehensive)}",
+          "endHeading": "## 5.12 Access Control Enforcement {#5.12-access-control-enforcement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 32.3 Pagination Model {#32.3-pagination-model}",
+          "endHeading": "## 32.4 Rate Limit Enforcement {#32.4-rate-limit-enforcement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.4.5 Rate-Limit Class Registry {#32.4.5-rate-limit-class-registry}",
+          "endHeading": "## 32.5 Endpoints {#32.5-endpoints}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.0 Common Conventions for Billing Endpoints {#32.8.0-common-conventions-for-billing-endpoints}",
+          "endHeading": "### 32.8.1 GET /v1/pricing — Public Pricing API {#32.8.1-get-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.19 GET /v1/orgs/{org_id}/seat-snapshots — Read BillingSeatSnapshots {#32.8.19-get-seat-snapshots}",
+          "endHeading": "### 32.8.20 POST /v1/orgs/{org_id}/pricing/pinned — Pin PricingTableVersion {#32.8.20-post-pricing-pinned}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.23 Acceptance Criteria (Billing Endpoints) {#32.8.23-acceptance-criteria-billing}",
+          "endHeading": "## 32.9 Seller KB Export Endpoint {#32.9-seller-kb-export-endpoint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 34\\. Plan Tiers, Billing & Entitlements {#34.-plan-tiers-billing-and-entitlements}",
+          "endHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}",
+          "endHeading": "## 34.2 Pricing {#34.2-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.4 No Per-Unit Metering on Structural Resources {#34.4-no-per-unit-metering-on-structural-resources}",
+          "endHeading": "## 34.5 Plan Upgrade / Downgrade {#34.5-plan-upgrade-/-downgrade}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.7 Billing Seat Count {#34.7-billing-seat-count}",
+          "endHeading": "## 34.8 Entitlement Enforcement {#34.8-entitlement-enforcement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.20.6 Seat Counting (Informational Only)",
+          "endHeading": "### 34.20.7 Cross-Side Billing"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.20.9 Webhooks, Events, and API Surfaces",
+          "endHeading": "### 34.20.10 Glossary and Enum Discipline"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.1 Accessibility (WCAG 2.1 AA) {#37.1-accessibility-(wcag-2.1-aa)}",
+          "endHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}",
+          "endHeading": "## 37.3 Right-to-Left (RTL) Support {#37.3-right-to-left-(rtl)-support}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.1 Breakpoint Definitions {#38.6.1-breakpoint-definitions}",
+          "endHeading": "### 38.6.2 Per-Breakpoint Layout Rules {#38.6.2-per-breakpoint-layout-rules}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.2 Per-Breakpoint Layout Rules {#38.6.2-per-breakpoint-layout-rules}",
+          "endHeading": "### 38.6.3 Breakpoint-Aware Entity Fields {#38.6.3-breakpoint-aware-entity-fields}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 38.10 Reduced-Motion & Accessibility Tier Overrides {#38.10-reduced-motion-and-accessibility-tier-overrides}",
+          "endHeading": "## 38.11 Right-to-Left & Locale Mirror Behavior {#38.11-right-to-left-and-locale-mirror-behavior}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 38.11 Right-to-Left & Locale Mirror Behavior {#38.11-right-to-left-and-locale-mirror-behavior}",
+          "endHeading": "## 38.12 Presence Avatar Stack Component {#38.12-presence-avatar-stack-component}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix G: PostHog Event Taxonomy {#appendix-g-posthog-event-taxonomy}",
+          "endHeading": "## Appendix H: Stripe Billing Model {#appendix-h-stripe-billing-model}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}",
+          "endHeading": "## Appendix J: Controlled Vocabulary Registry {#appendix-j-controlled-vocabulary-registry}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)",
+          "endHeading": "### `marketplace_entity_console` (§4.5.1, §4.5.2, §4.5.3)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Billing Seat Snapshot Trigger (§4.8.11)",
+          "endHeading": "### Billing Event Charge Kind (§34.2.5; Phase 14.9)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### M.1 Master Surface/Engine Mapping Table",
+          "endHeading": "### M.2 Process Gates"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 8.1.1 Plan & Billing UX (paid tiers — Starter / Growth / Scale / Enterprise)",
+          "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "#### Plan & Billing",
+          "endHeading": "#### Teams"
+        }
+      ],
+      "sha256": "d24cf81d803b34999ba8867dd393deee94f99a7026e97231dae24b6f89553912"
+    },
+    {
+      "sourceId": "F-537",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.8.3 AIWallet (Org-Scoped, Pooled Across Consoles) {#4.8.3-aiwallet}",
+          "endHeading": "### 4.8.4 OutcomeContract (Per-Capability, Versioned, Ops-Managed) {#4.8.4-outcomecontract}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.10 AI Wallet Service {#34.10-ai-wallet-service}",
+          "endHeading": "## 34.11 Outcome Resolver {#34.11-outcome-resolver}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.12 Cross-Side Billing Rules {#34.12-cross-side-billing-rules}",
+          "endHeading": "## 34.13 Buyer-Funded Pro Trial Seat (M17) {#34.13-buyer-funded-pro-trial-seat}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.1 Accessibility (WCAG 2.1 AA) {#37.1-accessibility-(wcag-2.1-aa)}",
+          "endHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.1 Breakpoint Definitions {#38.6.1-breakpoint-definitions}",
+          "endHeading": "### 38.6.3 Breakpoint-Aware Entity Fields {#38.6.3-breakpoint-aware-entity-fields}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 44.6 Solo-Tier Surface Treatment {#44.6-solo-tier-surface-treatment}",
+          "endHeading": "## 44.7 FTC Native-Ad Compliance Observation {#44.7-ftc-native-ad-compliance-observation}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.9 AIWallet / OutcomeContract / Cost-Base Engine Tests (V12 — D-46-013) {#46.9-billing-engine-tests}",
+          "endHeading": "## 46.10 Chaos / Third-Party-Outage Tests (V12 — D-46-015) {#46.10-chaos-outage-tests}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Billing-Domain Events (added §31.8 + Phase 4d)",
+          "endHeading": "### Workspace Analytics Events (added §17)"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 8.1 Plan & Billing UX",
+          "endHeading": "## 8.2 Notifications & Delivery"
+        }
+      ],
+      "sha256": "8b417bc12cf52a7ee65fe7c6cee0fbffc48c7fe9763c241da207527e72b49409"
+    },
+    {
+      "sourceId": "F-630",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.5 Testing & Audit Pipeline {#37.5-testing-and-audit-pipeline}",
+          "endHeading": "## 37.6 Acceptance Criteria {#37.6-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.2 Monitoring & Alerting {#42.2-monitoring-and-alerting}",
+          "endHeading": "## 42.4 Disaster Recovery Targets {#42.4-disaster-recovery-targets}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.5 On-Call Rotation {#42.5-on-call-rotation}",
+          "endHeading": "## 42.7 Acceptance Criteria {#42.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 44.1 Performance Targets {#44.1-performance-targets}",
+          "endHeading": "## 44.2 Agent Performance Budgets {#44.2-agent-performance-budgets}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 44.4 Load Testing {#44.4-load-testing}",
+          "endHeading": "## 44.5 Acceptance Criteria {#44.5-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 46\\. Test Strategy & QA Framework {#46.-test-strategy-and-qa-framework}",
+          "endHeading": "# 47\\. Governance & Future Roadmap {#47.-governance-and-future-roadmap}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 8.7 Feature Flag Behavior",
+          "endHeading": "## 8.8 Custom Branding (Enterprise)"
+        }
+      ],
+      "sha256": "93c8316ca45dd7c4fd2fa193050cc5a534d93962fde8dbdc6a06d9653dab7a38"
+    },
+    {
+      "sourceId": "F-631",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.7 Feature Flag System (V12 Rewrite) {#46.7-feature-flag-system}",
+          "endHeading": "## 46.8 §M.4 / §M.5 CI Gate Self-Testing (V12 — D-46-012) {#46.8-spec-lint-self-test}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 22.16.5 Rollout, Versioning, Canary {#22.16.5-rollout-versioning-canary}",
+          "endHeading": "### 22.16.6 Failure Modes & Recovery {#22.16.6-failure-modes-and-recovery}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 8.7 Feature Flag Behavior",
+          "endHeading": "## 8.8 Custom Branding (Enterprise)"
+        }
+      ],
+      "sha256": "22c30af070f9978199567f84c2066a14747872d5523fe0b4c2e631a81f62eb78"
+    },
+    {
+      "sourceId": "F-132",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.8.9 PricingTableVersion (Platform-Scoped, Public-API-Backing) {#4.8.9-pricingtableversion}",
+          "endHeading": "### 4.8.10 DowngradeExcessDataBucket (Org-Scoped, 90-Day Read-Only Preservation) {#4.8.10-downgradeexcessdatabucket}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.14.5 Rate Card Lifecycle and Change Management",
+          "endHeading": "### 34.14.6 Acceptance Criteria"
+        }
+      ],
+      "sha256": "d4adc8fae9b173fafb59b4e90de5112d64a4fe533b1b8e0dfbac2100b804dac1"
+    },
+    {
+      "sourceId": "F-160",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.12 Access Control Enforcement {#5.12-access-control-enforcement}",
+          "endHeading": "## 5.13 WorkOS FGA Custom Roles & Groups Integration (V3+ remediation, 2026-05-04) {#5.13-workos-fga-custom-roles-and-groups-integration}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 9.3 Error States",
+          "endHeading": "## 9.4 Phase Transition Edge Cases"
+        }
+      ],
+      "sha256": "e01c8a4b07b46cbfdea1924a607f2f8b380c79564907abd0548e09c6e868bcd2"
+    },
+    {
+      "sourceId": "F-593",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.4 Data Residency Contract Registry & Import Round-Trip Fidelity {#40.4-import-round-trip-fidelity}",
+          "endHeading": "## 40.5 Acceptance Criteria {#40.5-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 45.1 Data Privacy {#45.1-data-privacy}",
+          "endHeading": "## 45.2 Abuse Prevention {#45.2-abuse-prevention}"
+        }
+      ],
+      "sha256": "357d23b5cb600e13ab16aba0b72c5f61380659598f01b51dc0dae5c5f25c062d"
+    },
+    {
+      "sourceId": "F-007",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 34\\. Plan Tiers, Billing & Entitlements {#34.-plan-tiers-billing-and-entitlements}",
+          "endHeading": "# 35\\. User Onboarding Experience {#35.-user-onboarding-experience}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 36\\. Settings {#36.-settings}",
+          "endHeading": "# 37\\. Accessibility & Internationalization {#37.-accessibility-and-internationalization}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 42\\. Observability, Reliability & Disaster Recovery {#42.-observability-reliability-and-disaster-recovery}",
+          "endHeading": "# 43\\. Internal Operations & Admin Tooling — RETIRED {#43.-internal-operations-and-admin-tooling}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.3 QA Process (V12 Rewrite) {#46.3-qa-process}",
+          "endHeading": "## 46.4 AIOperation Testing Strategy (V12 — D-46-004) {#46.4-aiop-testing-strategy}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.0 Activation Metrics, Retention Cohorts, and Conversion Funnels {#51.0-activation-metrics-retention-cohorts-conversion-funnels}",
+          "endHeading": "## 51.1 Event Taxonomy {#51.1-event-taxonomy}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.1 Event Taxonomy {#51.1-event-taxonomy}",
+          "endHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}",
+          "endHeading": "## 51.3 Org-Level Usage Dashboard {#51.3-org-level-usage-dashboard}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.7 Retention & DSAR {#51.7-retention-dsar}",
+          "endHeading": "## 51.8 Acceptance Criteria — Aggregate, Self-Challenge, and Counterfactual Pass {#51.8-acceptance-criteria-aggregate}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix H: Stripe Billing Model {#appendix-h-stripe-billing-model}",
+          "endHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 8.1 Plan & Billing UX",
+          "endHeading": "## 8.2 Notifications & Delivery"
+        }
+      ],
+      "sha256": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+    },
+    {
+      "sourceId": "F-007.A",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.5.5 Stripe Plan-Change Webhook Ordering and Recovery {#34.5.5-stripe-plan-change-webhook-ordering-and-recovery}",
+          "endHeading": "## 34.6 Downgrade Excess Data Handling {#34.6-downgrade-excess-data-handling}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.0 Common Conventions for Billing Endpoints {#32.8.0-common-conventions-for-billing-endpoints}",
+          "endHeading": "### 32.8.1 GET /v1/pricing — Public Pricing API {#32.8.1-get-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 33.1 Data Security {#33.1-data-security}",
+          "endHeading": "## 33.2 Multi-Factor Authentication (MFA) {#33.2-multi-factor-authentication-(mfa)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.6 Observability Stack {#42.6-observability-stack}",
+          "endHeading": "## 42.7 Acceptance Criteria {#42.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix H: Stripe Billing Model {#appendix-h-stripe-billing-model}",
+          "endHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}",
+          "endHeading": "## Appendix J: Controlled Vocabulary Registry {#appendix-j-controlled-vocabulary-registry}"
+        }
+      ],
+      "sha256": "5bf486ca1b92dc321b663823f3241cf171d9ed6ced6f06587558321768265cd5"
+    },
+    {
+      "sourceId": "F-007.B",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 36.2 Organization Settings {#36.2-organization-settings}",
+          "endHeading": "## 36.3 Workspace Settings {#36.3-workspace-settings}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 36.4 Acceptance Criteria {#36.4-acceptance-criteria}",
+          "endHeading": "# 37\\. Accessibility & Internationalization {#37.-accessibility-and-internationalization}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}",
+          "endHeading": "## 34.2 Pricing {#34.2-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.2 Pricing {#34.2-pricing}",
+          "endHeading": "## 34.3 Outcome-Based AI Operation Pricing {#34.3-outcome-based-ai-operation-pricing-(overage-rate-card)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.5 Plan Upgrade / Downgrade {#34.5-plan-upgrade-/-downgrade}",
+          "endHeading": "## 34.6 Downgrade Excess Data Handling {#34.6-downgrade-excess-data-handling}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.7 Billing Seat Count {#34.7-billing-seat-count}",
+          "endHeading": "## 34.8 Entitlement Enforcement {#34.8-entitlement-enforcement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.10 AI Wallet Service {#34.10-ai-wallet-service}",
+          "endHeading": "## 34.11 Outcome Resolver {#34.11-outcome-resolver}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.12 Cross-Side Billing Rules {#34.12-cross-side-billing-rules}",
+          "endHeading": "## 34.13 Buyer-Funded Pro Trial Seat (M17) {#34.13-buyer-funded-pro-trial-seat}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.0 Common Conventions for Billing Endpoints {#32.8.0-common-conventions-for-billing-endpoints}",
+          "endHeading": "### 32.8.1 GET /v1/pricing — Public Pricing API {#32.8.1-get-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.1 Accessibility (WCAG 2.1 AA) {#37.1-accessibility-(wcag-2.1-aa)}",
+          "endHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}",
+          "endHeading": "## 37.3 Right-to-Left (RTL) Support {#37.3-right-to-left-(rtl)-support}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.1 Breakpoint Definitions {#38.6.1-breakpoint-definitions}",
+          "endHeading": "### 38.6.2 Per-Breakpoint Layout Rules {#38.6.2-per-breakpoint-layout-rules}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.6.2 Per-Breakpoint Layout Rules {#38.6.2-per-breakpoint-layout-rules}",
+          "endHeading": "### 38.6.3 Breakpoint-Aware Entity Fields {#38.6.3-breakpoint-aware-entity-fields}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 38.10 Reduced-Motion & Accessibility Tier Overrides {#38.10-reduced-motion-and-accessibility-tier-overrides}",
+          "endHeading": "## 38.11 Right-to-Left & Locale Mirror Behavior {#38.11-right-to-left-and-locale-mirror-behavior}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 38.11 Right-to-Left & Locale Mirror Behavior {#38.11-right-to-left-and-locale-mirror-behavior}",
+          "endHeading": "## 38.12 Presence Avatar Stack Component {#38.12-presence-avatar-stack-component}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.1 Event Taxonomy {#51.1-event-taxonomy}",
+          "endHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}",
+          "endHeading": "## 51.3 Org-Level Usage Dashboard {#51.3-org-level-usage-dashboard}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix H: Stripe Billing Model {#appendix-h-stripe-billing-model}",
+          "endHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 8.1.1 Plan & Billing UX (paid tiers — Starter / Growth / Scale / Enterprise)",
+          "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "#### Plan & Billing",
+          "endHeading": "#### Teams"
+        }
+      ],
+      "sha256": "d0d9d1ae7551b5201ed83f9b585a310e971a6e1ce05994bb0541514bf633528e"
+    },
+    {
+      "sourceId": "F-007.C",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5 Stripe Metering",
+          "endHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.0 Common Conventions for Billing Endpoints {#32.8.0-common-conventions-for-billing-endpoints}",
+          "endHeading": "### 32.8.1 GET /v1/pricing — Public Pricing API {#32.8.1-get-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 33.1 Data Security {#33.1-data-security}",
+          "endHeading": "## 33.2 Multi-Factor Authentication (MFA) {#33.2-multi-factor-authentication-(mfa)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.6 Observability Stack {#42.6-observability-stack}",
+          "endHeading": "## 42.7 Acceptance Criteria {#42.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix H: Stripe Billing Model {#appendix-h-stripe-billing-model}",
+          "endHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}"
+        }
+      ],
+      "sha256": "d0d32aeb82c5566c389244f9f8c42f2d3b0a3bf1d1770de0899716b95acb0b72"
+    },
+    {
+      "sourceId": "F-007.D",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.5.5 Stripe Plan-Change Webhook Ordering and Recovery {#34.5.5-stripe-plan-change-webhook-ordering-and-recovery}",
+          "endHeading": "## 34.6 Downgrade Excess Data Handling {#34.6-downgrade-excess-data-handling}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5 Stripe Metering",
+          "endHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 36.2 Organization Settings {#36.2-organization-settings}",
+          "endHeading": "## 36.3 Workspace Settings {#36.3-workspace-settings}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 36.4 Acceptance Criteria {#36.4-acceptance-criteria}",
+          "endHeading": "# 37\\. Accessibility & Internationalization {#37.-accessibility-and-internationalization}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.2 Monitoring & Alerting {#42.2-monitoring-and-alerting}",
+          "endHeading": "## 42.3 Incident Response {#42.3-incident-response}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.3 Incident Response {#42.3-incident-response}",
+          "endHeading": "## 42.4 Disaster Recovery Targets {#42.4-disaster-recovery-targets}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.6 Observability Stack {#42.6-observability-stack}",
+          "endHeading": "## 42.7 Acceptance Criteria {#42.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 42.7 Acceptance Criteria {#42.7-acceptance-criteria}",
+          "endHeading": "## 42.8 Consolidated Acceptance Criteria Pointer {#42.8-consolidated-ac-pointer}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.3 QA Process (V12 Rewrite) {#46.3-qa-process}",
+          "endHeading": "## 46.4 AIOperation Testing Strategy (V12 — D-46-004) {#46.4-aiop-testing-strategy}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## Appendix H: Stripe Billing Model {#appendix-h-stripe-billing-model}",
+          "endHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 8.1.1 Plan & Billing UX (paid tiers — Starter / Growth / Scale / Enterprise)",
+          "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
+        }
+      ],
+      "sha256": "5d019ab527a01bb4dec552ff9f830589609297bbbc394a32149f6ff71c82d80f"
+    },
+    {
+      "sourceId": "F-007.E",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 36.2 Organization Settings {#36.2-organization-settings}",
+          "endHeading": "## 36.3 Workspace Settings {#36.3-workspace-settings}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 36.4 Acceptance Criteria {#36.4-acceptance-criteria}",
+          "endHeading": "# 37\\. Accessibility & Internationalization {#37.-accessibility-and-internationalization}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.8 Data Privacy & GDPR Compliance {#6.8-data-privacy-and-gdpr-compliance}",
+          "endHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.0 Activation Metrics, Retention Cohorts, and Conversion Funnels {#51.0-activation-metrics-retention-cohorts-conversion-funnels}",
+          "endHeading": "## 51.1 Event Taxonomy {#51.1-event-taxonomy}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.1 Event Taxonomy {#51.1-event-taxonomy}",
+          "endHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}",
+          "endHeading": "## 51.3 Org-Level Usage Dashboard {#51.3-org-level-usage-dashboard}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 51.7 Retention & DSAR {#51.7-retention-dsar}",
+          "endHeading": "## 51.8 Acceptance Criteria — Aggregate, Self-Challenge, and Counterfactual Pass {#51.8-acceptance-criteria-aggregate}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.3 QA Process (V12 Rewrite) {#46.3-qa-process}",
+          "endHeading": "## 46.4 AIOperation Testing Strategy (V12 — D-46-004) {#46.4-aiop-testing-strategy}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 8.1.1 Plan & Billing UX (paid tiers — Starter / Growth / Scale / Enterprise)",
+          "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
+        }
+      ],
+      "sha256": "64032a450d85aa65ac4cc1ab973da9a41a8e973e23b5d44223f3be6145b112d0"
+    },
+    {
+      "sourceId": "F-005",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 7.5 Convex Subscription / Reactivity Layer {#7.5-convex-subscription-reactivity-layer}",
+          "endHeading": "# 8\\. Teams & Governance {#8.-teams-and-governance}",
+          "endBeforeHorizontalRule": true
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.5.3 Reactivity SLO {#7.5.3-reactivity-slo}",
+          "endHeading": "# 8\\. Teams & Governance {#8.-teams-and-governance}",
+          "endBeforeHorizontalRule": true
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 44.1 Performance Targets {#44.1-performance-targets}",
+          "endHeading": "## 44.2 Agent Performance Budgets {#44.2-agent-performance-budgets}"
+        }
+      ],
+      "sha256": "673b0270f38dffa149dbd4f459932d6c70e1dbb40a7ac462b81483790a107a8a"
+    },
+    {
+      "sourceId": "F-006",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 6.1 Authentication Architecture {#6.1-authentication-architecture}",
+      "endHeading": "## 6.2 Multi-Factor Authentication (MFA) {#6.2-multi-factor-authentication-(mfa)}",
+      "sha256": "870a0fbdea454b32ef0f73932578e8da2fdbf936dbdbd92490216d52b7774f9f"
+    },
+    {
+      "sourceId": "F-044",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 3.7 Loading / Empty / Error State Catalog {#3.7-loading-empty-error-state-catalog}",
+      "endHeading": "## 3.8 Side Peek Dimensions & Behavior {#3.8-side-peek-dimensions-and-behavior}",
+      "sha256": "6119133a73b14c8149413c1bff2283dbb2b09df515a9f857f7b8e9c790ca5687"
+    },
+    {
+      "sourceId": "F-063",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 3.11.3 Contrast Gate (≥ 4.5:1) {#3.11.3-dark-mode-contrast-gate}",
+      "endHeading": "### 3.11.4 Illustrations and Icons {#3.11.4-dark-mode-illustrations-icons}",
+      "sha256": "9341ec41610287f959051d06301433c4e9d8350e382d222f0255182a684fc1cf"
+    },
+    {
+      "sourceId": "F-079",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 7.1 Organization Lifecycle {#7.1-organization-lifecycle}",
+          "endHeading": "### 7.2 Organization Deletion Cascade"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)",
+          "endHeading": "### 34.10.6 Downgrade Behavior (Wallet)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.3 Dual-Console Data Isolation Model {#1.3-dual-console-data-isolation-model}",
+          "endHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.12.4 Dual-Console Firewall is Unchanged",
+          "endHeading": "### 34.12.4.A AIWallet Aggregate-Counter Read-Permission Scope (Phase 7 V7 D-V7-008 Remediation, 2026-05-07)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.13 TrialState (Org-Scoped Billing / Migration State) {#4.2.13-trialstate}",
+          "endHeading": "### 4.2.14 UserAccessibilityPreference (Org-Scoped User Preference) {#4.2.14-useraccessibilitypreference}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.6.1 Audit Event (Org-Scoped, Cross-Console-Tagged, Append-Only) {#4.6.1-audit-event}",
+          "endHeading": "### 4.6.2 Attachment (Polymorphic, Cross-Console) {#4.6.2-attachment}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.1 Organization Creation",
+          "endHeading": "### 7.1.2 Organization Settings"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.9.1 Buyer Onboarding (14-Day Business Starter Trial)",
+          "endHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)",
+          "endHeading": "### 34.9.3 Buyer-Funded Pro Trial Seat Carry-Over (M17)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.2.2 MFA Enrollment & Enforcement",
+          "endHeading": "### 6.2.4 MFA Method Details"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.15 POST /v1/orgs/{org_id}/plan-change — Change Plan Tier {#32.8.15-post-plan-change}",
+          "endHeading": "### 32.8.16 POST /v1/orgs/{org_id}/pro-trial-seats/{grant_id}/accept — Accept Pro Trial Seat (Vendor) {#32.8.16-post-pro-trial-seat-accept}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}",
+          "endHeading": "## 34.2 Pricing {#34.2-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.8 Entitlement Enforcement {#34.8-entitlement-enforcement}",
+          "endHeading": "## 34.9 Onboarding and Trial Carry-Over {#34.9-onboarding-and-trial-carry-over}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.3 Pooled Budget Across Consoles (Authoritative Rule)",
+          "endHeading": "### 34.10.4 Wallet State Machine (Reference)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.12.1 Per-Console Plan Activation",
+          "endHeading": "### 34.12.2 AI Wallet is Org-Scoped and Pooled"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Breaking Changes",
+          "endHeading": "### Source Document Retirement"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 4.2.1.2 Plan-Tier Split Migration Contract (Authored Extension — requires human sign-off) {#4.2.1.2-plan-tier-split-migration-contract}",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Plan Tiers",
+          "endHeading": "### `downgrade_excess_data_class` (§4.8.10 DowngradeExcessDataBucket)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.3 Organization Deletion",
+          "endHeading": "### 7.2 Organization Deletion Cascade"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.2 Organization Deletion Cascade",
+          "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 1.6.1 Per-Org Residency Change Procedure {#1.6.1-per-org-residency-change-procedure}",
+          "endHeading": "# 2\\. The Sourcera Method {#2.-the-sourcera-method}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.4 Data Residency Contract Registry & Import Round-Trip Fidelity {#40.4-import-round-trip-fidelity}",
+          "endHeading": "## 40.5 Acceptance Criteria {#40.5-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 3.11.1 Theme Mode and Override {#3.11.1-theme-mode-and-override}",
+          "endHeading": "### 3.11.2 Luminance Inversion and Semantic Preservation {#3.11.2-luminance-inversion-semantic-preservation}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.2 Organization Settings",
+          "endHeading": "### 7.1.3 Organization Deletion"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase 3V Audit-Remediation Events (2026-05-04) {#appendix-c-phase-3v-events}",
+          "endHeading": "#### Phase 3V+ WorkOS Group Lifecycle Events (2026-05-04)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Authentication & Security-Domain Events (added Phase 3.3 auth residual closeout)",
+          "endHeading": "### Phase 3V Notification Mirror Events (added v7.2.0-REM Phase 9.1 P1 closure)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 9.4.4 Organization Toggle State Machine {#9.4.4-organization-toggle-state-machine}",
+          "endHeading": "### 9.5 Accessibility, State, and Mobile Behavior {#9.5-accessibility-state-and-mobile-behavior}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Seller Teams, Vendor Response, and AI Assistance Events (added §9)",
+          "endHeading": "### KB / MCP / Managed-Agent Events (added §22.9–§22.16)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### Seller AI Response Generation Settings Audit Actions (§9.4.4)",
+          "endHeading": "#### `seller_team_runtime_gate_failure_kind` (§M.5.79)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 22.18.4.2 Click-Through Explainers {#22.18.4.2-click-through-explainers}",
+          "endHeading": "#### 22.18.4.3 PostHog Telemetry {#22.18.4.3-panel-telemetry}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.19.2 KB Value Meter Formula",
+          "endHeading": "### 34.19.3 Transition-Specific Behavior"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Type — KB additions (§22.4.4, §22.8.5, §22.10.7, §22.12.9, §22.13.3, §22.16.7, §22.20) (extended)",
+          "endHeading": "### Audit Event Action Type — Audit-System additions (§4.6.1.1, §6.7.4) (D-1.5-002 remediation, 2026-05-01) {#audit-event-action-type-audit-system}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.2 Organization Settings",
+          "endHeading": "### 7.2 Organization Deletion Cascade"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.3 Organization Deletion",
+          "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
+        }
+      ],
+      "sha256": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+    },
+    {
+      "sourceId": "F-117",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 4.6.1 Audit Event (Org-Scoped, Cross-Console-Tagged, Append-Only) {#4.6.1-audit-event}",
+      "endHeading": "### 4.6.2 Attachment (Polymorphic, Cross-Console) {#4.6.2-attachment}",
+      "sha256": "c95599b68ff0afde9c8d1dd2b6b580a53fc32d0bbb11fbd933d39516eb4396ea"
+    },
+    {
+      "sourceId": "F-138",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 5.1 RBAC Architecture {#5.1-rbac-architecture}",
+      "endHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+      "sha256": "6351abe1f2fb9ea7b5afbd256608152de92ef8ba4735131fa59b7ac6d1bd805e"
+    },
+    {
+      "sourceId": "F-209",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+      "endHeading": "## 10.2 Phase 1: Stakeholder Alignment & Discovery (1-3 weeks) {#10.2-phase-1-stakeholder-alignment-and-discovery}",
+      "sha256": "fb15f9a801f2d935517b0a130ce5ea2c59bc82e8cb744a4bc62191bc9a7ace2d"
+    },
+    {
+      "sourceId": "F-223",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}",
+      "endHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "sha256": "8c511a80f53a919c63f6eec7389ebb5f445764e4feeb579945b83949b1dafa46"
+    },
+    {
+      "sourceId": "F-224",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}",
+      "endHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "sha256": "8c511a80f53a919c63f6eec7389ebb5f445764e4feeb579945b83949b1dafa46"
+    },
+    {
+      "sourceId": "F-225",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "endHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}",
+      "sha256": "9d9c979919c49afcf5ba6378c1e27154f855980915bcec2ec576ceefe8cc885b"
+    },
+    {
+      "sourceId": "F-226",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "endHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}",
+      "sha256": "9d9c979919c49afcf5ba6378c1e27154f855980915bcec2ec576ceefe8cc885b"
+    },
+    {
+      "sourceId": "F-228",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}",
+      "endHeading": "### 10.13.7 Solo Per-Evaluation Charge — Phase 13 Stripe Charge Failure Path {#10.13.7-solo-per-evaluation-charge-phase-13-stripe-charge-failure-path}",
+      "sha256": "fad5890530cef8c1286dcf045533bdecd38cc54e81b6335b44d5c97306a0e9a4"
+    },
+    {
+      "sourceId": "F-229",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 4.3.24 Selection Record (Immutable Closure Bundle, Workspace-Scoped, Buyer) {#4.3.24-selection-record}",
+      "endHeading": "### 4.3.25 Approval Workflow (Workspace-Scoped, Buyer) {#4.3.25-approval-workflow}",
+      "sha256": "fd8c344882800a94d2d12776af074f429d67665e4ad2a874a3679f293ae5f14c"
+    },
+    {
+      "sourceId": "F-235",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.16 Phase Advancement API {#10.16-phase-advancement-api}",
+      "endHeading": "## 10.17 Cross-Phase State Preservation Under Plan Change {#10.17-cross-phase-state-preservation-under-plan-change}",
+      "sha256": "04a8ddb383f5887fc40b1e22cdbe67d76eb578ad91bcf147a9466b19d373a323"
+    },
+    {
+      "sourceId": "F-236",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 10.16.2 Idempotency",
+      "endHeading": "### 10.16.3 Phase Advancement Audit",
+      "sha256": "ef4073a56d0d3ba380951b248c804340bf054e1ce4e516bffaf941e0641ed568"
+    },
+    {
+      "sourceId": "F-238",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 10.16.1 API Endpoint (§32-canonical)",
+      "endHeading": "### 10.16.2 Idempotency",
+      "sha256": "389cb52c663646475c30195f73c5b5961f7476746a2b3f849b10fd12c5768fc4"
+    },
+    {
+      "sourceId": "F-430",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 27.3 Marketplace Search & Filtering {#27.3-marketplace-search-and-filtering}",
+      "endHeading": "## 27.4 Marketplace Match Score {#27.4-marketplace-match-score}",
+      "sha256": "fea34f1a9dcd692b30e4fb0d3fc26f45ba71ecf407870e798f1c87c4d23c6f65"
+    },
+    {
+      "sourceId": "F-496",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 32.1 Overview {#32.1-overview}",
+      "endHeading": "## 32.8 Billing Endpoint Detail {#32.8-billing-endpoint-detail}",
+      "sha256": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+    },
+    {
+      "sourceId": "F-533",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 34.9.1 Buyer Onboarding (14-Day Business Starter Trial)",
+      "endHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)",
+      "sha256": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+    },
+    {
+      "sourceId": "F-566",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 35.3 Skipped Steps Recoverability {#35.3-skipped-steps-recoverability}",
+      "endHeading": "## 35.4 Acceptance Criteria {#35.4-acceptance-criteria}",
+      "sha256": "6365d9a84813310795e17d4bcf1f75153ba2149f069234803bda121361990b60"
+    },
+    {
+      "sourceId": "F-569",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 37.1 Accessibility (WCAG 2.1 AA) {#37.1-accessibility-(wcag-2.1-aa)}",
+      "endHeading": "## 37.2 Internationalization (i18n) {#37.2-internationalization-(i18n)}",
+      "sha256": "6f25c781dd38423eb56508e541974f4440f532daf7dedff5ae421f1d542de275"
+    },
+    {
+      "sourceId": "F-628",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 46.1 Test Pyramid (Per-Service) {#46.1-test-pyramid}",
+      "endHeading": "## 46.2 Surface-by-Surface Test Cases (V12 Rewrite) {#46.2-surface-test-cases}",
+      "sha256": "3c967a1918dec61660f2d302136c787d9ece0b965042625202f7ea0e326792f7"
+    },
+    {
+      "sourceId": "F-725",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 50.12 Pricing Admin Surface {#50.12-pricing-admin-surface}",
+      "endHeading": "## 50.13 Baseline Assumption Manager {#50.13-baseline-assumption-manager}",
+      "sha256": "96e8c92084dcf94d997e9ee9ab9f240d60e1f0c7b99833119337f3be743f4598"
+    },
+    {
+      "sourceId": "F-864",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "startHeading": "## 2.6 Motion & Transitions",
+      "endHeading": "## 2.7 Iconography",
+      "sha256": "d2560966f544b990e3607b33c293f01fb352a32d162c5fbd163802916f1ee927"
+    },
+    {
+      "sourceId": "F-866",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "startHeading": "### 5.2.13 FormField",
+      "endHeading": "### 5.2.14 TriageQueue",
+      "sha256": "0dda82fa6c410fad04c61270c90de50e80248f9ee6b3501a075b152bc44a5b8f"
+    },
+    {
+      "sourceId": "F-899",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "startHeading": "### 4.3.1 Seller Dashboard",
+      "endHeading": "### 4.3.2 Bid Workspace List",
+      "sha256": "4779a9916934e481d25cb0e1b27cb6dbfce366affe459e95b7a21073ba78e6c1"
+    },
+    {
+      "sourceId": "F-910",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 1.5.1 Application Browser-Security Header Policy (F-910) {#1.5.1-application-browser-security-header-policy}",
+      "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}",
+      "sha256": "fa6645a938f0737d9cd9009592c4ed87de0709128cc65bec2c359e3d1ad87d9c"
+    },
+    {
+      "sourceId": "F-911",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 32.1.1 Cross-Origin Browser Request Policy (F-911) {#32.1.1-cross-origin-browser-request-policy}",
+      "endHeading": "## 32.2 Authentication & Rate Limit Headers {#32.2-authentication-and-rate-limit-headers}",
+      "sha256": "c5cf045301f32586a42bddfddb4f6d624a2d3464c28653db7fbfc4fc3992bd86"
+    },
+    {
+      "sourceId": "F-912",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 34.1.1 Buyer Plan Tiers",
+      "endHeading": "### 34.1.2 Seller Plan Tiers",
+      "sha256": "cca70590b8f4489d713cf9bcb393304bcba741c876a55759d2bbf0cfe62b99d9"
+    },
+    {
+      "sourceId": "F-913",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 50.33 Deterministic Platform Reference-Data Orchestration (F-913) {#50.33-deterministic-platform-reference-data-orchestration}",
+      "endHeading": "## 51.0 Activation Metrics, Retention Cohorts, and Conversion Funnels {#51.0-activation-metrics-retention-cohorts-conversion-funnels}",
+      "sha256": "d3f556f9b0496202829779c3ccc301ac09227671b794772793d920f790c88a17"
+    },
+    {
+      "sourceId": "F-916",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 34.9.1 Buyer Onboarding (14-Day Business Starter Trial)",
+      "endHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)",
+      "sha256": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+    },
+    {
+      "sourceId": "F-917",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)",
+      "endHeading": "### 34.10.6 Downgrade Behavior (Wallet)",
+      "sha256": "45b58047361e2ce73b4fbc6886dcf2666a83fcedadc32ea8d3676e3c3bac448d"
+    },
+    {
+      "sourceId": "F-001",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 1.1 Sourcera Architecture {#1.1-sourcera-architecture}",
+      "endHeading": "## 1.2 Core Value Proposition {#1.2-core-value-proposition}",
+      "sha256": "746bb9f72ce30e3216fbb761782170d9ab4d471c9e4100b048d026cb3040dfb9"
+    },
+    {
+      "sourceId": "F-002",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.3 Dual-Console Data Isolation Model {#1.3-dual-console-data-isolation-model}",
+          "endHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 4\\. Global Data Model {#4.-global-data-model}",
+          "endHeading": "# 5\\. RBAC (Role-Based Access Control) {#5.-rbac-(role-based-access-control)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.2 Organization Deletion Cascade",
+          "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 7.5 Convex Subscription / Reactivity Layer {#7.5-convex-subscription-reactivity-layer}",
+          "endHeading": "# 8\\. Teams & Governance {#8.-teams-and-governance}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 25\\. Cross-Console Mechanics {#25.-cross-console-mechanics}",
+          "endHeading": "# 26\\. Seller Profiles, Verification & Capability Declarations {#26.-seller-profiles-verification-and-capability-declarations}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 31\\. Integrations & Webhooks {#31.-integrations-and-webhooks}",
+          "endHeading": "# 32\\. The Sourcera API {#32.-the-sourcera-api}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 32.6 Error Handling {#32.6-error-handling}",
+          "endHeading": "## 32.7 Acceptance Criteria {#32.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.5 Console Firewall Test Scenarios (V12 — D-46-005) {#46.5-console-firewall-tests}",
+          "endHeading": "## 46.6 DSAR / GDPR Test Scenarios (V12 — D-46-006) {#46.6-dsar-gdpr-tests}"
+        }
+      ],
+      "sha256": "c8146bd5bedc33677de4160604cc2b6f46d1ef14c5195afc7b2535eee3e7e8fa"
+    },
+    {
+      "sourceId": "F-003",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.3 Dual-Console Data Isolation Model {#1.3-dual-console-data-isolation-model}",
+          "endHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 4\\. Global Data Model {#4.-global-data-model}",
+          "endHeading": "# 5\\. RBAC (Role-Based Access Control) {#5.-rbac-(role-based-access-control)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.2 Organization Deletion Cascade",
+          "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 7.5 Convex Subscription / Reactivity Layer {#7.5-convex-subscription-reactivity-layer}",
+          "endHeading": "# 8\\. Teams & Governance {#8.-teams-and-governance}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 32.6 Error Handling {#32.6-error-handling}",
+          "endHeading": "## 32.7 Acceptance Criteria {#32.7-acceptance-criteria}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 46.5 Console Firewall Test Scenarios (V12 — D-46-005) {#46.5-console-firewall-tests}",
+          "endHeading": "## 46.6 DSAR / GDPR Test Scenarios (V12 — D-46-006) {#46.6-dsar-gdpr-tests}"
+        }
+      ],
+      "sha256": "d6c42011d64e3dd77b2a2bf950e205bf0f693ed97c163f3701062478ad2759ba"
+    },
+    {
+      "sourceId": "F-004",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+      "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}",
+      "sha256": "877234173313bc6bf9db1ee8a18161ee6ac5ab2f5523ac45148f29286f13013d"
+    },
+    {
+      "sourceId": "F-210",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.8 Single-Operator Mode {#2.8-single-operator-mode}",
+          "endHeading": "# 3\\. UX Standard — The Linear Constraint {#3.-ux-standard-—-the-linear-constraint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 3.14 Pipeline Surface Compression {#3.14-pipeline-surface-compression}",
+          "endHeading": "# 4\\. Global Data Model {#4.-global-data-model}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+          "endHeading": "# 11\\. Buyer Console — Navigation & Layout {#11.-buyer-console-—-navigation-and-layout}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.11 Pipeline Phase State Machine (§10) {#l-11-pipeline-phase-state-machine}",
+          "endHeading": "### L.12 Approval Workflow State Machine (§10.12 / §4.3.25) {#l-12-approval-workflow-state-machine}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 5.2.19 PipelineSurface",
+          "endHeading": "## 5.3 Deprecated Components"
+        }
+      ],
+      "sha256": "ec2ba5e2532ace5789c4c4a9cd556a3846a1a4637fba26359c5d3005991482e7"
+    },
+    {
+      "sourceId": "F-211",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.6 Cross-Departmental Alignment Patterns {#2.6-cross-departmental-alignment-patterns}",
+          "endHeading": "## 2.7 Template Design Framework {#2.7-template-design-framework}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.8 Single-Operator Mode {#2.8-single-operator-mode}",
+          "endHeading": "# 3\\. UX Standard — The Linear Constraint {#3.-ux-standard-—-the-linear-constraint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.1 Workspace (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.3 Use Case (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.11 Internal Comment Thread (Workspace-Scoped, Buyer-Only)",
+          "endHeading": "### 4.3.14 Presence Record (Session-Scoped, Ephemeral, Cross-Console)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+          "endHeading": "## 10.3 Phase 2: Requirement Definition (2-5 business days) {#10.3-phase-2-requirement-definition}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.11 Pipeline Phase State Machine (§10) {#l-11-pipeline-phase-state-machine}",
+          "endHeading": "### L.12 Approval Workflow State Machine (§10.12 / §4.3.25) {#l-12-approval-workflow-state-machine}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 5.2.19 PipelineSurface",
+          "endHeading": "## 5.3 Deprecated Components"
+        }
+      ],
+      "sha256": "5e31019395dbcf8b74d9405d776d80b96076f54c8c3241d39c92a0f24fb00f5d"
+    },
+    {
+      "sourceId": "F-212",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.2 Decomposition: Use Cases → Requirements {#2.2-decomposition-use-cases-→-requirements}",
+          "endHeading": "## 2.4 Vendor Shortlisting Strategy {#2.4-vendor-shortlisting-strategy}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.8 Single-Operator Mode {#2.8-single-operator-mode}",
+          "endHeading": "# 3\\. UX Standard — The Linear Constraint {#3.-ux-standard-—-the-linear-constraint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.3 Use Case (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.5 Response (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+          "endHeading": "## 10.4 Phase 3: Use Case Definition & Validation (1-2 weeks) {#10.4-phase-3-use-case-definition-and-validation}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.11 Pipeline Phase State Machine (§10) {#l-11-pipeline-phase-state-machine}",
+          "endHeading": "### L.12 Approval Workflow State Machine (§10.12 / §4.3.25) {#l-12-approval-workflow-state-machine}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 4.2.2 Requirements Matrix",
+          "endHeading": "### 4.2.3 Scoring Matrix"
+        }
+      ],
+      "sha256": "e6da2c8bfddff6a62117a5d5e0c4c8f291458ea9dca292155bab80797ab974b2"
+    },
+    {
+      "sourceId": "F-213",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.2 Decomposition: Use Cases → Requirements {#2.2-decomposition-use-cases-→-requirements}",
+          "endHeading": "## 2.3 Scoring Calibration {#2.3-scoring-calibration}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.8 Single-Operator Mode {#2.8-single-operator-mode}",
+          "endHeading": "# 3\\. UX Standard — The Linear Constraint {#3.-ux-standard-—-the-linear-constraint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.2 Workspace Membership (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.5 Response (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.8 Evaluation Scenario (Console-Scoped, Buyer) {#4.3.8-evaluation-scenario-console-scoped-buyer}",
+          "endHeading": "### 4.3.9 Evaluation Scenario Parameters (Retired in V4) {#4.3.9-evaluation-scenario-parameters-retired-in-v4}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+          "endHeading": "## 10.5 Phase 4-5: Vendor Discovery & Outreach (1-2 weeks combined) {#10.5-phase-4-5-vendor-discovery-and-outreach}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 14\\. Scenario Modeling {#14.-scenario-modeling}",
+          "endHeading": "# 15\\. TCO Modeling {#15.-tco-modeling}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.11 Pipeline Phase State Machine (§10) {#l-11-pipeline-phase-state-machine}",
+          "endHeading": "### L.12 Approval Workflow State Machine (§10.12 / §4.3.25) {#l-12-approval-workflow-state-machine}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.14 Use Case Status State Machine (§2.2 / §4.3.3) {#l-14-use-case-status-state-machine}",
+          "endHeading": "### L.15 Bid Response Status State Machine (§4.4.2 / §9.3.3.1)"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 4.2.2 Requirements Matrix",
+          "endHeading": "### 4.2.3 Scoring Matrix"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 5.2.19 PipelineSurface",
+          "endHeading": "## 5.3 Deprecated Components"
+        }
+      ],
+      "sha256": "99756bbbfebb930822aa766ec2d38ca98b6a9afd137b261967d9ce73e7b2f372"
+    },
+    {
+      "sourceId": "F-214",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.4 Vendor Shortlisting Strategy {#2.4-vendor-shortlisting-strategy}",
+          "endHeading": "## 2.5 Evaluation Timeline Benchmarks {#2.5-evaluation-timeline-benchmarks}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.8 Single-Operator Mode {#2.8-single-operator-mode}",
+          "endHeading": "# 3\\. UX Standard — The Linear Constraint {#3.-ux-standard-—-the-linear-constraint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.20 Target Account (Workspace-Scoped, Buyer) {#4.3.20-target-account}",
+          "endHeading": "### 4.3.21 Selection Report Draft (Workspace-Scoped, Buyer) {#4.3.21-selection-report-draft}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.4.1 Bid Workspace (Console-Scoped, Seller) {#4.4.1-bid-workspace}",
+          "endHeading": "### 4.4.2 Bid Response (Console-Scoped, Seller) {#4.4.2-bid-response}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.5.1 Marketplace Listing (Marketplace Domain, Public) {#4.5.1-marketplace-listing}",
+          "endHeading": "### 4.5.2 EOI Record (Expression of Interest) (Marketplace Domain) {#4.5.2-eoi-record}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+          "endHeading": "## 10.6 Phase 6: Vendor Bidding Opens (2-4 weeks; minimum window per §39) {#10.6-phase-6-vendor-bidding-opens}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 25\\. Cross-Console Mechanics {#25.-cross-console-mechanics}",
+          "endHeading": "# 26\\. Seller Profiles, Verification & Capability Declarations {#26.-seller-profiles-verification-and-capability-declarations}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 27\\. Vendor Discovery & RFP Marketplace {#27.-vendor-discovery-and-rfp-marketplace}",
+          "endHeading": "# 28\\. The Markdown Editor {#28.-the-markdown-editor}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.6 Target Account State Machine {#l.6-target-account-state-machine}",
+          "endHeading": "### L.7 Defense View State Machine {#l.7-defense-view-state-machine}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.11 Pipeline Phase State Machine (§10) {#l-11-pipeline-phase-state-machine}",
+          "endHeading": "### L.12 Approval Workflow State Machine (§10.12 / §4.3.25) {#l-12-approval-workflow-state-machine}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 4.2.4 Vendor List",
+          "endHeading": "### 4.2.5 Q&A Threads"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 4.2.12 Marketplace (Buyer View)",
+          "endHeading": "### 4.2.16 Template Library"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 5.2.19 PipelineSurface",
+          "endHeading": "## 5.3 Deprecated Components"
+        }
+      ],
+      "sha256": "a774e70d8158608382719f49d495bb903f36950ac82a1669a46ba2e95b87dd54"
+    },
+    {
+      "sourceId": "F-215",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.8 Single-Operator Mode {#2.8-single-operator-mode}",
+          "endHeading": "# 3\\. UX Standard — The Linear Constraint {#3.-ux-standard-—-the-linear-constraint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.1 Workspace (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.6 Score (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.4.1 Bid Workspace (Console-Scoped, Seller) {#4.4.1-bid-workspace}",
+          "endHeading": "### 4.4.5 Bid Task (Console-Scoped, Seller) {#4.4.5-bid-task}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.5.1 Marketplace Listing (Marketplace Domain, Public) {#4.5.1-marketplace-listing}",
+          "endHeading": "### 4.5.4 Taxonomy Node (Platform-Scoped, Ops-Managed, Multi-Kind Controlled Vocabulary) {#4.5.4-taxonomy-node}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+          "endHeading": "## 10.7 Phase 7: Vendor Response Refinement (sequential; 1-2 week Phase 7-8 target) {#10.7-phase-7-vendor-response-refinement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 18\\. Q\\&A Threads {#18.-qanda-threads}",
+          "endHeading": "# 19\\. Template Library {#19.-template-library}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 23\\. Seller Console — Bid Workspace & Response Management {#23.-seller-console-—-bid-workspace-and-response-management}",
+          "endHeading": "# 26\\. Seller Profiles, Verification & Capability Declarations {#26.-seller-profiles-verification-and-capability-declarations}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.11 Pipeline Phase State Machine (§10) {#l-11-pipeline-phase-state-machine}",
+          "endHeading": "### L.12 Approval Workflow State Machine (§10.12 / §4.3.25) {#l-12-approval-workflow-state-machine}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.13 Q&A Thread Status State Machine (§18.3.1) {#l-13-qa-thread-status-state-machine}",
+          "endHeading": "### L.17 Capability Declaration State Machine (§4.4.4 / §22.20.2) {#l-17-capability-declaration-state-machine}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 4.3.4 Response Editor",
+          "endHeading": "### 4.3.5 Knowledge Base"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 5.2.19 PipelineSurface",
+          "endHeading": "## 5.3 Deprecated Components"
+        }
+      ],
+      "sha256": "5b9b73fe12c5bebf0012734cf3479e4446c832a29fc6bb85c8fde7f092e86290"
+    },
+    {
+      "sourceId": "F-084",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.6 Cross-Departmental Alignment Patterns {#2.6-cross-departmental-alignment-patterns}",
+          "endHeading": "## 2.7 Template Design Framework {#2.7-template-design-framework}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.2 Workspace Membership (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.3 Use Case (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}",
+          "endHeading": "## 5.5 Console-Level Roles (Seller Console) {#5.5-console-level-roles-(seller-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.8.4.1 Cascade Pseudonymization Pattern (D-1V3-001 / D-1V3-003 remediation, 2026-05-01) {#6.8.4.1-cascade-pseudonymization-pattern}",
+          "endHeading": "### 6.8.4.2 Cascade Residency Partitioning (D-3.5-006 remediation, 2026-05-04) {#6.8.4.2-cascade-residency-partitioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.9 User Deprovisioning (D-3.5-004 remediation, 2026-05-04) {#6.9-user-deprovisioning}",
+          "endHeading": "## 7.1 Organization Lifecycle {#7.1-organization-lifecycle}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.J Workspace Cohort Assignment endpoints {#32.10.9.j-workspace-cohort-assignment-endpoints}",
+          "endHeading": "#### 32.10.9.H Concrete examples {#32.10.9.h-concrete-examples}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.24 Workspace Cohort Coverage State Machine (§2.6.1.A / §4.3.2) {#l-24-workspace-cohort-coverage-state-machine}",
+          "endHeading": "### L.25 Buyer Response and Score-Lock State Machines (§4.3.5 / §4.3.6) {#l-25-buyer-response-and-score-lock-state-machines}"
+        }
+      ],
+      "sha256": "baf6f6647a12350fee87f13bfc924e06d97983cac9384697178e72fd001daa38"
+    },
+    {
+      "sourceId": "F-087",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.5 Response (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.6 Score (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.7.1 Console Bridge Event (Cross-Console, Firewall-Bounded Sync Unit) {#4.7.1-console-bridge-event}",
+          "endHeading": "### 4.7.2 Vendor Disqualification Record (Cross-Console, Buyer-Initiated, Seller-Visible-with-Redaction) {#4.7.2-vendor-disqualification-record}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.8.4.1 Cascade Pseudonymization Pattern (D-1V3-001 / D-1V3-003 remediation, 2026-05-01) {#6.8.4.1-cascade-pseudonymization-pattern}",
+          "endHeading": "### 6.8.4.2 Cascade Residency Partitioning (D-3.5-006 remediation, 2026-05-04) {#6.8.4.2-cascade-residency-partitioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.8.4.5 Bridge-Event Body Text PII Sweep (D-9.2-009 V9 remediation, 2026-05-09) {#6.8.4.5-bridge-event-body-text-pii-sweep}",
+          "endHeading": "### 6.8.4.6 Partial-Failure Procedure (D-9.2-011 V9 remediation, 2026-05-09) {#6.8.4.6-partial-failure-procedure}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 25.5 Materialization Protocol (Buyer Requirement → Seller Bid Response) {#25.5-materialization-protocol}",
+          "endHeading": "## 25.6 Console Bridge Observability {#25.6-console-bridge-observability}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.A Core buyer pipeline endpoint matrix {#32.10.9.a-core-buyer-pipeline-endpoint-matrix}",
+          "endHeading": "#### 32.10.9.A.1 Requirement Amendment endpoint {#32.10.9.a.1-requirement-amendment-endpoint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.B Core buyer request schemas {#32.10.9.b-core-buyer-request-schemas}",
+          "endHeading": "#### 32.10.9.C Core buyer error sets {#32.10.9.c-core-buyer-error-sets}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.C Core buyer error sets {#32.10.9.c-core-buyer-error-sets}",
+          "endHeading": "#### 32.10.9.D Capability Declaration endpoints {#32.10.9.d-capability-declaration-endpoints}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.25 Buyer Response and Score-Lock State Machines (§4.3.5 / §4.3.6) {#l-25-buyer-response-and-score-lock-state-machines}",
+          "endHeading": "### L.26 Responsive Breakpoint and Mobile-Parity Classification State Machines (§38.6 / §38.8) {#l-26-responsive-breakpoint-and-mobile-parity-classification-state-machines}"
+        }
+      ],
+      "sha256": "2ed86078614cf98d2bc379bf8db1b56908a0b343dd46b51f41d1d499b46e1940"
+    },
+    {
+      "sourceId": "F-088",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.6 Score (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.7 Intelligence Cache Entry (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.7 Scoring Availability (Gap 4.2, Gap 4.3) {#5.7-scoring-availability-(gap-4.2-gap-4.3)}",
+          "endHeading": "## 5.8 Policy Ingestion Availability (Gap 4.3) {#5.8-policy-ingestion-availability-(gap-4.3)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.8.4.1 Cascade Pseudonymization Pattern (D-1V3-001 / D-1V3-003 remediation, 2026-05-01) {#6.8.4.1-cascade-pseudonymization-pattern}",
+          "endHeading": "### 6.8.4.2 Cascade Residency Partitioning (D-3.5-006 remediation, 2026-05-04) {#6.8.4.2-cascade-residency-partitioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 13.1 Overview {#13.1-overview}",
+          "endHeading": "## 13.11 Defense View {#13.11-defense-view}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.A Core buyer pipeline endpoint matrix {#32.10.9.a-core-buyer-pipeline-endpoint-matrix}",
+          "endHeading": "#### 32.10.9.A.1 Requirement Amendment endpoint {#32.10.9.a.1-requirement-amendment-endpoint}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.A.3 Score Exclusion Proposal endpoints {#32.10.9.a.3-score-exclusion-proposal-endpoints}",
+          "endHeading": "#### 32.10.9.B Core buyer request schemas {#32.10.9.b-core-buyer-request-schemas}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.B Core buyer request schemas {#32.10.9.b-core-buyer-request-schemas}",
+          "endHeading": "#### 32.10.9.C Core buyer error sets {#32.10.9.c-core-buyer-error-sets}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.C Core buyer error sets {#32.10.9.c-core-buyer-error-sets}",
+          "endHeading": "#### 32.10.9.D Capability Declaration endpoints {#32.10.9.d-capability-declaration-endpoints}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.23 Score Disagreement Resolution State Machine (§2.6.3 / §13.6.2 / §13.6.3) {#l-23-score-disagreement-resolution-state-machine}",
+          "endHeading": "### L.24 Workspace Cohort Coverage State Machine (§2.6.1.A / §4.3.2) {#l-24-workspace-cohort-coverage-state-machine}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.25 Buyer Response and Score-Lock State Machines (§4.3.5 / §4.3.6) {#l-25-buyer-response-and-score-lock-state-machines}",
+          "endHeading": "### L.26 Responsive Breakpoint and Mobile-Parity Classification State Machines (§38.6 / §38.8) {#l-26-responsive-breakpoint-and-mobile-parity-classification-state-machines}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 2.6 Motion & Transitions",
+          "endHeading": "## 2.7 Iconography"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 3.4 Responsive Layouts",
+          "endHeading": "## 3.5 Page Header Pattern"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 3.7 Keyboard Shortcut Reference",
+          "endHeading": "# 4. Product Page Specifications"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 4.2.3 Scoring Matrix",
+          "endHeading": "### 4.2.4 Vendor List"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 9.6 Accessibility States",
+          "endHeading": "## 9.7 Responsive Edge Cases"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "## 9.7 Responsive Edge Cases",
+          "endHeading": "# 10. Insertion Mapping"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### Scoring Matrix",
+          "endHeading": "### Q&A Threads"
+        }
+      ],
+      "sha256": "11e9849b46503c88cf43ccbd6cf288299354450713de0ea83d29f870e1d6b0d9"
+    },
+    {
+      "sourceId": "SG-F213-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.4 Phase 3: Use Case Definition & Validation (1-2 weeks) {#10.4-phase-3-use-case-definition-and-validation}",
+          "endHeading": "## 10.5 Phase 4-5: Vendor Discovery & Outreach (1-2 weeks combined) {#10.5-phase-4-5-vendor-discovery-and-outreach}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.6 Score (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.7 Intelligence Cache Entry (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.8 Evaluation Scenario (Console-Scoped, Buyer) {#4.3.8-evaluation-scenario-console-scoped-buyer}",
+          "endHeading": "### 4.3.9 Evaluation Scenario Parameters (Retired in V4) {#4.3.9-evaluation-scenario-parameters-retired-in-v4}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 14\\. Scenario Modeling {#14.-scenario-modeling}",
+          "endHeading": "# 15\\. TCO Modeling {#15.-tco-modeling}"
+        }
+      ],
+      "sha256": "26f7ac5af5ae73f808e494248a0ada88764e10b6acb4ffee612e25f834d9c75d"
+    },
+    {
+      "sourceId": "SG-F226-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.21 Selection Report Draft (Workspace-Scoped, Buyer) {#4.3.21-selection-report-draft}",
+          "endHeading": "### 4.3.22 Inbox Item Group (Org-Scoped, Buyer) {#4.3.22-inbox-item-group}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.23 Selection Report (Finalized, Workspace-Scoped, Buyer) {#4.3.23-selection-report}",
+          "endHeading": "### 4.3.24 Selection Record (Immutable Closure Bundle, Workspace-Scoped, Buyer) {#4.3.24-selection-record}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+          "endHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 32.10.9.A Core buyer pipeline endpoint matrix {#32.10.9.a-core-buyer-pipeline-endpoint-matrix}",
+          "endHeading": "#### 32.10.9.B Core buyer request schemas {#32.10.9.b-core-buyer-request-schemas}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Selection Report Events (Webhook Only — added §10.13.8) {#appendix-c-selection-report-webhook-events}",
+          "endHeading": "### Seller Teams and Vendor Response Events (Webhook + Selective User Notification — added §9)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        }
+      ],
+      "sha256": "4e5409bc696704c32ebf9ae1aaa21d548fcda7f6045744f0f44b384b61fb7c30"
+    },
+    {
+      "sourceId": "SG-F214-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.4.22 SellerOnboardingSession (Org-Scoped, Seller, Funnel-Instrumented) {#4.4.22-selleronboardingsession}",
+          "endHeading": "### 4.4.23 OnboardingAntiPatternExceptionGrant (Platform-Scoped, Ops-Governed) {#4.4.23-onboardingantipatternexceptiongrant}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.7.1 Console Bridge Event (Cross-Console, Firewall-Bounded Sync Unit) {#4.7.1-console-bridge-event}",
+          "endHeading": "### 4.7.2 Vendor Disqualification Record (Cross-Console, Buyer-Initiated, Seller-Visible-with-Redaction) {#4.7.2-vendor-disqualification-record}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.5 Phase 4-5: Vendor Discovery & Outreach (1-2 weeks combined) {#10.5-phase-4-5-vendor-discovery-and-outreach}",
+          "endHeading": "## 10.6 Phase 6: Vendor Bidding Opens (2-4 weeks; minimum window per §39) {#10.6-phase-6-vendor-bidding-opens}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 48.8.2 Pre-Arrival Preparation {#48.8.2-pre-arrival-preparation}",
+          "endHeading": "### 48.8.3 Onboarding Surface — Minutes 0–3 {#48.8.3-onboarding-surface-minutes-0-3}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 49.1.1 Stage 1: Magic-Link Arrival {#49.1.1-stage-1-magic-link-arrival}",
+          "endHeading": "### 49.1.2 Stage 2: Domain Bootstrap {#49.1.2-stage-2-domain-bootstrap}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### `console_bridge_event_kind` (§4.7.1 Console Bridge Event Kind)",
+          "endHeading": "### `console_bridge_event_direction` (§4.7.1 Console Bridge Event Direction)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.6 Target Account State Machine {#l.6-target-account-state-machine}",
+          "endHeading": "### L.7 Defense View State Machine {#l.7-defense-view-state-machine}"
+        }
+      ],
+      "sha256": "0aad16135a7822b19ce332fba2bbbe3ed6bc824527b75672bbe53ab68bb7e359"
+    },
+    {
+      "sourceId": "SG-F922-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.4.27 OpsActionRecord (Platform-Scoped, Ops Audit — Cross-Entity) {#4.4.27-opsactionrecord}",
+          "endHeading": "### 4.4.28 TemplateLibraryEntry (Marketplace-Domain, Ops-Curated + Seller-Proposable, Public) {#4.4.28-templatelibraryentry}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.8.4.1 Cascade Pseudonymization Pattern (D-1V3-001 / D-1V3-003 remediation, 2026-05-01) {#6.8.4.1-cascade-pseudonymization-pattern}",
+          "endHeading": "### 6.8.4.2 Cascade Residency Partitioning (D-3.5-006 remediation, 2026-05-04) {#6.8.4.2-cascade-residency-partitioning}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        }
+      ],
+      "sha256": "b5bacb94f7c072e1cb3d78a096547471c8c118718c57edd17e03d039cd5f6560"
+    },
+    {
+      "sourceId": "SG-F922-002",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.4.27 OpsActionRecord (Platform-Scoped, Ops Audit — Cross-Entity) {#4.4.27-opsactionrecord}",
+          "endHeading": "### 4.4.28 TemplateLibraryEntry (Marketplace-Domain, Ops-Curated + Seller-Proposable, Public) {#4.4.28-templatelibraryentry}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.5.3 OpsActionRecord Extension {#50.5.3-opsactionrecord-extension}",
+          "endHeading": "### 50.5.4 Rendering in the Billing Admin Audit View {#50.5.4-rendering-in-billing-admin-audit-view}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 50.31 Cross-Cutting V12 Patches (D-50-001/002/011/012/013/015/016/017/018/019/022/023/024/025/026/027/028/029/032/033/034/035/036/037/038/039/040) {#50.31-cross-cutting-v12-patches}",
+          "endHeading": "## 50.32 Buyer Template Registry Ops Surface {#50.32-buyer-template-registry-ops-surface}"
+        }
+      ],
+      "sha256": "d7284a295b95db52cb78071cf48d499281333cef56ac231f99af2e6a0e52902c"
+    },
+    {
+      "sourceId": "SG-F923-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.20.2 PlanTierOverrideProposal (Entity) {#50.20.2-plantieroverrideproposal}",
+          "endHeading": "### 50.20.3 State Machine {#50.20.3-state-machine}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.20.3 State Machine {#50.20.3-state-machine}",
+          "endHeading": "### 50.20.4 API Endpoints {#50.20.4-api}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase V12 Additions (2026-05-11) — Operations / QA / Observability / DR {#appendix-j-phase-v12}",
+          "endHeading": "### v7.2.0-REM Phase 3 Additions (2026-05-18) — §M.5 Catalog Schema Tightening {#appendix-j-v72rem-phase-3}"
+        }
+      ],
+      "sha256": "ccb62d287177ed3427f8f0fa3f6cf197bc063f438ec896fdb0370eae3d55201a"
+    },
+    {
+      "sourceId": "SG-F923-002",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.20.3 State Machine {#50.20.3-state-machine}",
+          "endHeading": "### 50.20.4 API Endpoints {#50.20.4-api}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.20.6 Acceptance Criteria {#50.20.6-acceptance-criteria}",
+          "endHeading": "## 50.21 Workspace Export Ops Surface (V12) {#50.21-workspace-export-ops-surface}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.10 AI Wallet Service {#34.10-ai-wallet-service}",
+          "endHeading": "## 34.11 Outcome Resolver {#34.11-outcome-resolver}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.18 Financial Targets {#34.18-financial-targets}",
+          "endHeading": "## 34.19 Seller Plan Upgrade Carry-Over Guarantee {#34.19-seller-plan-upgrade-carry-over-guarantee}"
+        }
+      ],
+      "sha256": "729b2b6c6b6acea378efab17d3b5a85bd1dc82165917be6ae82b5241953a58b3"
+    },
+    {
+      "sourceId": "SG-F923-003",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.3.2 Capability Envelope Matrix {#50.3.2-capability-envelope-matrix}",
+          "endHeading": "### 50.3.3 Role Assignment and Lifecycle {#50.3.3-role-assignment-and-lifecycle}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.20.3 State Machine {#50.20.3-state-machine}",
+          "endHeading": "### 50.20.4 API Endpoints {#50.20.4-api}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.20.6 Acceptance Criteria {#50.20.6-acceptance-criteria}",
+          "endHeading": "## 50.21 Workspace Export Ops Surface (V12) {#50.21-workspace-export-ops-surface}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Ops-Console-Domain Events (Customer Notification — added §50)",
+          "endHeading": "### Internal-Comment-Domain Events (Webhook + Buyer User Notification — added §25.7)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase V12 Additions (2026-05-11) — Operations / QA / Observability / DR {#appendix-i-phase-v12}",
+          "endHeading": "### Phase V13 Additions (2026-05-12) — PLG / Growth / Analytics / Hero Moment {#appendix-i-phase-v13}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase V12 Additions (2026-05-11) — Operations / QA / Observability / DR {#appendix-j-phase-v12}",
+          "endHeading": "### v7.2.0-REM Phase 3 Additions (2026-05-18) — §M.5 Catalog Schema Tightening {#appendix-j-v72rem-phase-3}"
+        }
+      ],
+      "sha256": "8a77c8e14964af6c072b7b8d5d69133e35d508e95d59b405778eae60ffd54942"
+    },
+    {
+      "sourceId": "SG-F924-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 50.21 Workspace Export Ops Surface (V12) {#50.21-workspace-export-ops-surface}",
+          "endHeading": "## 50.22 Refund Authorization Ops Surface (V12 — D-50-008) {#50.22-refund-authorization-ops-surface}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 50.3.2 Capability Envelope Matrix {#50.3.2-capability-envelope-matrix}",
+          "endHeading": "### 50.3.3 Role Assignment and Lifecycle {#50.3.3-role-assignment-and-lifecycle}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase V12 Additions (2026-05-11) — Operations / QA / Observability / DR {#appendix-i-phase-v12}",
+          "endHeading": "### Phase V13 Additions (2026-05-12) — PLG / Growth / Analytics / Hero Moment {#appendix-i-phase-v13}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase V12 Additions (2026-05-11) — Operations / QA / Observability / DR {#appendix-j-phase-v12}",
+          "endHeading": "### v7.2.0-REM Phase 3 Additions (2026-05-18) — §M.5 Catalog Schema Tightening {#appendix-j-v72rem-phase-3}"
+        }
+      ],
+      "sha256": "a673275e4178acf1fd22e6443c9ac9ee4920e415b56eb8fdff2520097f123184"
+    },
+    {
+      "sourceId": "SG-F924-002",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 50.21 Workspace Export Ops Surface (V12) {#50.21-workspace-export-ops-surface}",
+          "endHeading": "## 50.22 Refund Authorization Ops Surface (V12 — D-50-008) {#50.22-refund-authorization-ops-surface}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase V12 Additions (2026-05-11) — Operations / QA / Observability / DR {#appendix-j-phase-v12}",
+          "endHeading": "### v7.2.0-REM Phase 3 Additions (2026-05-18) — §M.5 Catalog Schema Tightening {#appendix-j-v72rem-phase-3}"
+        }
+      ],
+      "sha256": "e5dc5119bb2f34ea745c14aa4bca9ac8b1fae6bd246ea6e86d5c2e7c0e1ae124"
+    },
+    {
+      "sourceId": "SG-F924-003",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 50.21 Workspace Export Ops Surface (V12) {#50.21-workspace-export-ops-surface}",
+          "endHeading": "## 50.22 Refund Authorization Ops Surface (V12 — D-50-008) {#50.22-refund-authorization-ops-surface}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.8.4 DSAR Cascade Across Linked Entities {#6.8.4-dsar-cascade-across-linked-entities}",
+          "endHeading": "### 6.8.4.1 Cascade Pseudonymization Pattern (D-1V3-001 / D-1V3-003 remediation, 2026-05-01) {#6.8.4.1-cascade-pseudonymization-pattern}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 42.6.1.B PII Scrubbing Contract {#42.6.1-pii-scrubbing-contract}",
+          "endHeading": "### 42.6.1.C OpenTelemetry Trace Propagation {#42.6.1-trace-propagation}"
+        }
+      ],
+      "sha256": "29e24945fe09e3c716b066f62a068c76c09ca592aff1b88a420651cc9f81efc5"
+    },
+    {
+      "sourceId": "SG-F924-004",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 50.21 Workspace Export Ops Surface (V12) {#50.21-workspace-export-ops-surface}",
+          "endHeading": "## 50.22 Refund Authorization Ops Surface (V12 — D-50-008) {#50.22-refund-authorization-ops-surface}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        }
+      ],
+      "sha256": "0e976fd19cb53b81669f172cde63782e36d0d53b493e457aaf675e41c9cd99fa"
+    },
+    {
+      "sourceId": "F-085.A",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 2.2 Decomposition: Use Cases → Requirements {#2.2-decomposition-use-cases-→-requirements}",
+          "endHeading": "## 2.3 Scoring Calibration {#2.3-scoring-calibration}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 3.3.2 Use Case & Requirement Features",
+          "endHeading": "### 3.3.3 Scoring & Response Features"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.3 Use Case (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.4 Requirement (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}",
+          "endHeading": "## 5.4 Guest Role & Permission Profiles (Gap S-2) {#5.4-guest-role-and-permission-profiles-(gap-s-2)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.6 Phase 6: Vendor Bidding Opens (2-4 weeks; minimum window per §39) {#10.6-phase-6-vendor-bidding-opens}",
+          "endHeading": "## 10.7 Phase 7: Vendor Response Refinement (sequential; 1-2 week Phase 7-8 target) {#10.7-phase-7-vendor-response-refinement}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 14.6.5 Parent Cascade, Reference Integrity, DSAR, and Deprovisioning {#14.6.5-parent-cascade-reference-integrity-dsar-and-deprovisioning}",
+          "endHeading": "## 14.7 Simulation Mode {#14.7-simulation-mode}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.1.1 Buyer Plan Tiers",
+          "endHeading": "### 34.1.2 Seller Plan Tiers"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 39\\. Object Size Constraints {#39.-object-size-constraints}",
+          "endHeading": "# 40\\. Data Export & Import {#40.-data-export-and-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Standard Events",
+          "endHeading": "### §47.3 Launch-Contract Workspace Events"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### L.14 Use Case Status State Machine (§2.2 / §4.3.3) {#l-14-use-case-status-state-machine}",
+          "endHeading": "### L.15 Bid Response Status State Machine (§4.4.2 / §9.3.3.1)"
+        }
+      ],
+      "sha256": "0e046192ec5f80087dd65dcb1029c15943c6913a5cec1b4ec9d99e2f8d82310e"
+    },
+    {
+      "sourceId": "RG-APPG-ALIAS-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 51.1.6 Acceptance Criteria — §51.1 {#51.1.6-acceptance-criteria-51-1}",
+          "endHeading": "## 51.2 Standardized Event Properties {#51.2-standardized-event-properties}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### §48 PLG, Growth Mechanics & Network Effects — Event Additions {#appendix-g-section-48-additions}",
+          "endHeading": "### §51 Product Usage Analytics Event Additions {#appendix-g-section-51-additions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### §51 Product Usage Analytics Event Additions {#appendix-g-section-51-additions}",
+          "endHeading": "### §3 UX Token & State Catalog — Event Additions {#appendix-g-section-3-ux-additions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### `usage_alias_retirement_pager_tier` (Appendix G `usage_analytics_alias_retirement_overdue.pager_tier`)",
+          "endHeading": "#### `panel_interaction_kind` (Appendix G `usage_dashboard_panel_interacted.interaction_kind`)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### M.5.64 v7.2.0-REM Phase 9.1 Appendix G Residual P1 addition (D-9.1-007 / -008 / -016 / -019 closure; D-9.1-002 adjacent P2 closure) {#m-5-64-v72rem-phase-9-1-appendix-g-residual-p1-addition}",
+          "endHeading": "#### M.5.65 v7.2.0-REM Phase 34.19 Residual Plan Upgrade / Downgrade P1 addition (D-34.19-006 / -007 / -009 / -010 / -018 closure; D-V7-004 / D-V7-009 overlap) {#m-5-65-v72rem-phase-34-19-residual-plan-upgrade-downgrade-p1-addition}"
+        }
+      ],
+      "sha256": "def2adc8580da23258f7d5bd57538b3a94e7b788f6982773a4cfb70e68155af0"
+    },
+    {
+      "sourceId": "F-220",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.10 Phase 10: Team Evaluation & Scoring (1-3 weeks) {#10.10-phase-10-team-evaluation-and-scoring}",
+          "endHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.6 Score (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.7 Intelligence Cache Entry (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "# 13\\. Scoring & Grading {#13.-scoring-and-grading}",
+          "endHeading": "## 13.11 Defense View {#13.11-defense-view}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 38.8.2 Mobile Feature Parity Matrix {#38.8.2-mobile-feature-parity-matrix}",
+          "endHeading": "### 38.8.3 Simplification Disclosure Contract {#38.8.3-simplification-disclosure-contract}"
+        }
+      ],
+      "sha256": "630166eec4a278ab4d379dd6d1897a06f3f39ec783ece99f9a77bb2c1c595436"
+    },
+    {
+      "sourceId": "F-221",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.10 Phase 10: Team Evaluation & Scoring (1-3 weeks) {#10.10-phase-10-team-evaluation-and-scoring}",
+          "endHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}",
+          "endHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+          "endHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.3.6 Score (Console-Scoped, Buyer)",
+          "endHeading": "### 4.3.7 Intelligence Cache Entry (Console-Scoped, Buyer)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 13.9 Scoring Phase Lifecycle {#13.9-scoring-phase-lifecycle}",
+          "endHeading": "## 13.11 Defense View {#13.11-defense-view}"
+        }
+      ],
+      "sha256": "71193b608910fa00860f3b158a61de2dc909300245010e4e8c1145739fdb9e2e"
+    },
+    {
+      "sourceId": "F-079.A",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 7.1 Organization Lifecycle {#7.1-organization-lifecycle}",
+          "endHeading": "### 7.2 Organization Deletion Cascade"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)",
+          "endHeading": "### 34.10.6 Downgrade Behavior (Wallet)"
+        }
+      ],
+      "sha256": "afd425361d35d47d7c1b6178553de6356c33e8beec1de85296e88c3c808c78b4"
+    },
+    {
+      "sourceId": "F-006.A",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.1 Sourcera Architecture {#1.1-sourcera-architecture}",
+          "endHeading": "## 1.2 Core Value Proposition {#1.2-core-value-proposition}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.1 Authentication Architecture {#6.1-authentication-architecture}",
+          "endHeading": "## 6.2 Multi-Factor Authentication (MFA) {#6.2-multi-factor-authentication-(mfa)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Appendix I Preamble — Catalog Conventions {#appendix-i-preamble}",
+          "endHeading": "### Standard HTTP Errors"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Standard HTTP Errors",
+          "endHeading": "### Entity-Specific Errors"
+        }
+      ],
+      "sha256": "8358c0d7b91dae2931d70afd6b67a05d6cb292b06f8bb832d65298478a7b875b"
+    },
+    {
+      "sourceId": "F-006.B",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}",
+          "endHeading": "## 1.6 Deployment Regions {#1.6-deployment-regions}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 6.1 Authentication Architecture {#6.1-authentication-architecture}",
+          "endHeading": "## 6.2 Multi-Factor Authentication (MFA) {#6.2-multi-factor-authentication-(mfa)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Appendix I Preamble — Catalog Conventions {#appendix-i-preamble}",
+          "endHeading": "### Standard HTTP Errors"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Standard HTTP Errors",
+          "endHeading": "### Entity-Specific Errors"
+        }
+      ],
+      "sha256": "a8aea835817797f37d32986da29e1017c58a90954df52d38b0cd6da5e246ec63"
+    },
+    {
+      "sourceId": "SR-F079-001",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.3 Dual-Console Data Isolation Model {#1.3-dual-console-data-isolation-model}",
+          "endHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        }
+      ],
+      "sha256": "b613e1181fa1d974cb0375d6da44158c2ffd040c6b3a9bc0b315576e9b2eda07"
+    },
+    {
+      "sourceId": "SR-F079-002",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.2 Organization Settings",
+          "endHeading": "### 7.2 Organization Deletion Cascade"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        }
+      ],
+      "sha256": "5145b335c206d177414ee9c82768c209c86536c607296264de8e462c28c52445"
+    },
+    {
+      "sourceId": "SR-F079-003",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.3 Organization Deletion",
+          "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        }
+      ],
+      "sha256": "f756b93cb728cdd664502676d4e6d67a9fc330733d0badae2c7bfb50508cc4ca"
+    },
+    {
+      "sourceId": "SR-F079-004",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)",
+          "endHeading": "### 34.10.6 Downgrade Behavior (Wallet)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.4 Data Residency Contract Registry & Import Round-Trip Fidelity {#40.4-import-round-trip-fidelity}",
+          "endHeading": "## 40.5 Acceptance Criteria {#40.5-acceptance-criteria}"
+        }
+      ],
+      "sha256": "e107da835b419bc1d06248eaf36c7b9051a87065d6d7c6618993bb909b1a60cb"
+    },
+    {
+      "sourceId": "SR-F079-005",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Breaking Changes",
+          "endHeading": "### Source Document Retirement"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 4.2.1.2 Plan-Tier Split Migration Contract (Authored Extension — requires human sign-off) {#4.2.1.2-plan-tier-split-migration-contract}",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Plan Tiers",
+          "endHeading": "### `downgrade_excess_data_class` (§4.8.10 DowngradeExcessDataBucket)"
+        }
+      ],
+      "sha256": "27ecb376561a0fea23f5f67e6bf82c22e0c89ed05ce9b0d67be0924f93cd4ced"
+    },
+    {
+      "sourceId": "F-079.B",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 1.3 Dual-Console Data Isolation Model {#1.3-dual-console-data-isolation-model}",
+          "endHeading": "## 1.5 Deployment & Technology Stack {#1.5-deployment-and-technology-stack}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 5.2 Org-Level Roles {#5.2-org-level-roles}",
+          "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.12.4 Dual-Console Firewall is Unchanged",
+          "endHeading": "### 34.12.4.A AIWallet Aggregate-Counter Read-Permission Scope (Phase 7 V7 D-V7-008 Remediation, 2026-05-07)"
+        }
+      ],
+      "sha256": "be20dedb79e4e0dc54e3e6c42a744ee69ea82b0797d7264434550a21efa7f2f3"
+    },
+    {
+      "sourceId": "F-079.D",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.2.2 MFA Enrollment & Enforcement",
+          "endHeading": "### 6.2.4 MFA Method Details"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 32.8.15 POST /v1/orgs/{org_id}/plan-change — Change Plan Tier {#32.8.15-post-plan-change}",
+          "endHeading": "### 32.8.16 POST /v1/orgs/{org_id}/pro-trial-seats/{grant_id}/accept — Accept Pro Trial Seat (Vendor) {#32.8.16-post-pro-trial-seat-accept}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}",
+          "endHeading": "## 34.2 Pricing {#34.2-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.8 Entitlement Enforcement {#34.8-entitlement-enforcement}",
+          "endHeading": "## 34.9 Onboarding and Trial Carry-Over {#34.9-onboarding-and-trial-carry-over}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.3 Pooled Budget Across Consoles (Authoritative Rule)",
+          "endHeading": "### 34.10.4 Wallet State Machine (Reference)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.12.1 Per-Console Plan Activation",
+          "endHeading": "### 34.12.2 AI Wallet is Org-Scoped and Pooled"
+        }
+      ],
+      "sha256": "5289b7b855493a1afee4cefda262e1d370a7ed5183de26e28ad5d3cea8327e91"
+    },
+    {
+      "sourceId": "F-079.F",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.6.1 Audit Event (Org-Scoped, Cross-Console-Tagged, Append-Only) {#4.6.1-audit-event}",
+          "endHeading": "### 4.6.2 Attachment (Polymorphic, Cross-Console) {#4.6.2-attachment}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.3 Organization Deletion",
+          "endHeading": "### 7.2 Organization Deletion Cascade"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.2 Organization Deletion Cascade",
+          "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        }
+      ],
+      "sha256": "0b9feb8fe5500b2d5d70562697557fd0d27c4e90d4e054271a2f013862671d40"
+    },
+    {
+      "sourceId": "F-079.E",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Breaking Changes",
+          "endHeading": "### Source Document Retirement"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 4.2.1.2 Plan-Tier Split Migration Contract (Authored Extension — requires human sign-off) {#4.2.1.2-plan-tier-split-migration-contract}",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.6.1 Audit Event (Org-Scoped, Cross-Console-Tagged, Append-Only) {#4.6.1-audit-event}",
+          "endHeading": "### 4.6.2 Attachment (Polymorphic, Cross-Console) {#4.6.2-attachment}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 34.1 Plan Tier Definitions (Authoritative) {#34.1-plan-tier-definitions-(authoritative)}",
+          "endHeading": "## 34.2 Pricing {#34.2-pricing}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Plan Tiers",
+          "endHeading": "### `downgrade_excess_data_class` (§4.8.10 DowngradeExcessDataBucket)"
+        }
+      ],
+      "sha256": "8b1153fc66b4cf4312148dc8ee56deffb92aa8fb20726b8cec1967bb9f2b8409"
+    },
+    {
+      "sourceId": "F-079.G",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 1.6.1 Per-Org Residency Change Procedure {#1.6.1-per-org-residency-change-procedure}",
+          "endHeading": "# 2\\. The Sourcera Method {#2.-the-sourcera-method}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)",
+          "endHeading": "### 34.10.6 Downgrade Behavior (Wallet)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.2 Data Retention & Deletion {#40.2-data-retention-and-deletion}",
+          "endHeading": "## 40.3 Data Import {#40.3-data-import}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 40.4 Data Residency Contract Registry & Import Round-Trip Fidelity {#40.4-import-round-trip-fidelity}",
+          "endHeading": "## 40.5 Acceptance Criteria {#40.5-acceptance-criteria}"
+        }
+      ],
+      "sha256": "edd75e388ab20167e1b323a532198dfafd5b9416ca6c64ddb2258c375fe5d2cb"
+    },
+    {
+      "sourceId": "F-079.H",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 3.11.1 Theme Mode and Override {#3.11.1-theme-mode-and-override}",
+          "endHeading": "### 3.11.2 Luminance Inversion and Semantic Preservation {#3.11.2-luminance-inversion-semantic-preservation}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 6.2.2 MFA Enrollment & Enforcement",
+          "endHeading": "### 6.2.4 MFA Method Details"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.2 Organization Settings",
+          "endHeading": "### 7.1.3 Organization Deletion"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Phase 3V Audit-Remediation Events (2026-05-04) {#appendix-c-phase-3v-events}",
+          "endHeading": "#### Phase 3V+ WorkOS Group Lifecycle Events (2026-05-04)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Authentication & Security-Domain Events (added Phase 3.3 auth residual closeout)",
+          "endHeading": "### Phase 3V Notification Mirror Events (added v7.2.0-REM Phase 9.1 P1 closure)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        }
+      ],
+      "sha256": "a1947f255642f9c6ca4bf453ba81e09b65a752e272a7890753eb965f8264eabd"
+    },
+    {
+      "sourceId": "F-079.I",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 9.4.4 Organization Toggle State Machine {#9.4.4-organization-toggle-state-machine}",
+          "endHeading": "### 9.5 Accessibility, State, and Mobile Behavior {#9.5-accessibility-state-and-mobile-behavior}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Seller Teams, Vendor Response, and AI Assistance Events (added §9)",
+          "endHeading": "### KB / MCP / Managed-Agent Events (added §22.9–§22.16)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### Seller AI Response Generation Settings Audit Actions (§9.4.4)",
+          "endHeading": "#### `seller_team_runtime_gate_failure_kind` (§M.5.79)"
+        }
+      ],
+      "sha256": "9898fccc6d18f30401f416b35993ac81c85462717979cbd7ecd699a0c6057149"
+    },
+    {
+      "sourceId": "F-079.J",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "#### 22.18.4.2 Click-Through Explainers {#22.18.4.2-click-through-explainers}",
+          "endHeading": "#### 22.18.4.3 PostHog Telemetry {#22.18.4.3-panel-telemetry}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.19.2 KB Value Meter Formula",
+          "endHeading": "### 34.19.3 Transition-Specific Behavior"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Type — KB additions (§22.4.4, §22.8.5, §22.10.7, §22.12.9, §22.13.3, §22.16.7, §22.20) (extended)",
+          "endHeading": "### Audit Event Action Type — Audit-System additions (§4.6.1.1, §6.7.4) (D-1.5-002 remediation, 2026-05-01) {#audit-event-action-type-audit-system}"
+        }
+      ],
+      "sha256": "70c5eb0048b3411946b21599f6bc042ded25b0adec840bedd4acd92960e30a70"
+    },
+    {
+      "sourceId": "F-079.C",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.1 Organization (Org-Scoped)",
+          "endHeading": "### 4.2.2 Organization User / Membership (Org-Scoped)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.2.13 TrialState (Org-Scoped Billing / Migration State) {#4.2.13-trialstate}",
+          "endHeading": "### 4.2.14 UserAccessibilityPreference (Org-Scoped User Preference) {#4.2.14-useraccessibilitypreference}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 4.6.1 Audit Event (Org-Scoped, Cross-Console-Tagged, Append-Only) {#4.6.1-audit-event}",
+          "endHeading": "### 4.6.2 Attachment (Polymorphic, Cross-Console) {#4.6.2-attachment}"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 7.1.1 Organization Creation",
+          "endHeading": "### 7.1.2 Organization Settings"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.9.1 Buyer Onboarding (14-Day Business Starter Trial)",
+          "endHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)",
+          "endHeading": "### 34.9.3 Buyer-Funded Pro Trial Seat Carry-Over (M17)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### 34.10.5.A Stripe-Customer Atomic-Binding Protocol (v7.2.0-REM Phase 5, 2026-05-20)",
+          "endHeading": "### 34.10.6 Downgrade Behavior (Wallet)"
+        },
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "### Audit Event Action Types",
+          "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
+        }
+      ],
+      "sha256": "f652750b6c9d0d32f308979e10b0b99eb70eb97e7beba1aac0aa81cffc61ddc5"
+    },
+    {
+      "sourceId": "RG:buyer_trial_audit_action_registration",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sectionHeading": "#### M.5.121 Buyer Business Starter Trial Audit Registration {#m-5-121-buyer-business-starter-trial-audit-registration}",
+      "sha256": "b80e03e860ddbfb41c15020be494072a0359c025be3acb0980dfe5eb58cff721"
+    },
+    {
+      "sourceId": "F-859",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.2 Color System",
+      "sha256": "09fb506713c9158e83905267cefa94d230742a775d165f229e13fc1166515dfa"
+    },
+    {
+      "sourceId": "F-860",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.1 Typography",
+      "sha256": "704d3cbeff6a37466369b0582c884d39c2bfc6af6bbf5a64a4810358e171212a"
+    },
+    {
+      "sourceId": "F-861",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.3 Spacing Scale",
+      "sha256": "f999c0db0593432e54ce5abd6ad9fa5a843e22c173c7c21fd70c72a58bde1484"
+    },
+    {
+      "sourceId": "F-862",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.5 Border Radius",
+      "sha256": "abca8df6a205b74165e7a046a8ed8f814703c64da3799d0a1003801d7ebdbd8f"
+    },
+    {
+      "sourceId": "F-863",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.4 Elevation & Shadows",
+      "sha256": "67132d2c88feb31068133f42885816353c8107d34b26042ef5ed9b568205a30b"
+    },
+    {
+      "sourceId": "F-865",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### Button Component",
+      "sha256": "0274f47d21ade0f094cedf0343ac22db2807dd1a6c6c5d90cc6638b930c8a33c"
+    },
+    {
+      "sourceId": "F-867",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### 5.2.12 Dropdown",
+      "sha256": "c3b5fe8b1af5524d86d27c94bc6894fa546cf4f41c82143832129815815dd4de"
+    },
+    {
+      "sourceId": "F-868",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### 5.2.11 Modal",
+      "sha256": "5845078dc06db177548826e0835c829bc5feceb53d73179b966e94d1edb11c9d"
+    },
+    {
+      "sourceId": "F-869",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### Side Peek Component",
+      "sha256": "091f04a4a5e561cd3dfb6e23c184c85e6eb3c1a71def9e86b5da0ab80a1a9aac"
+    },
+    {
+      "sourceId": "F-870",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### Toast Notification Component",
+      "sha256": "a7b688ec8bb19243544604450677856b014762f8b10a13730d6dfd79a479deee"
+    },
+    {
+      "sourceId": "F-871",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 5.1 Component Inventory",
+      "sha256": "0fab13bcab37bad2de6b76f12fc242ffccd2e0abdf9cf37eeba23d1bcc39f24c"
+    },
+    {
+      "sourceId": "F-872",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 5.1 Component Inventory",
+      "sha256": "0fab13bcab37bad2de6b76f12fc242ffccd2e0abdf9cf37eeba23d1bcc39f24c"
+    },
+    {
+      "sourceId": "F-873",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### DataTable Component",
+      "sha256": "b56b3ad2ecf75256d67ea4f524484518bae529c9ccb6444bcb32c6a9e3df6ad0"
+    },
+    {
+      "sourceId": "F-874",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### DataTable Component",
+      "sha256": "b56b3ad2ecf75256d67ea4f524484518bae529c9ccb6444bcb32c6a9e3df6ad0"
+    },
+    {
+      "sourceId": "F-875",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 9.2 Empty States",
+      "sha256": "03a03f2be38c0b359f067cdccfdff6c2f63c015688f66e15ddf5bee946bca28a"
+    },
+    {
+      "sourceId": "F-876",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 9.1 Loading States",
+      "sha256": "ebbe04c45d39b138edbf6ed5ad1aac2ba0943010ff22cb83c60b2b7b3de4717e"
+    },
+    {
+      "sourceId": "F-877",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 9.3 Error States",
+      "sha256": "fb97b885148fea9cc1334e8d8a9faeecbf18d091a041ca2af15a230ed4745993"
+    },
+    {
+      "sourceId": "F-878",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### Form Field Component",
+      "sha256": "b134dd73de73d35052aafa070c81c0b05d7b4cfbdad98602589f1254c2981de6"
+    },
+    {
+      "sourceId": "F-879",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "# 3. Global Application Structure",
+      "sha256": "e7f864b3428cb1ab335bf3c0828d0675a08bd8d5066068bf057a2a0084df2fff"
+    },
+    {
+      "sourceId": "F-880",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 3.2 Sidebar Anatomy",
+      "sha256": "fb21058df6f4fc5232be964254a38f1a909f0c96d3a821945ee1077e3b97e1a4"
+    },
+    {
+      "sourceId": "F-881",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.6 Motion & Transitions",
+      "sha256": "d2560966f544b990e3607b33c293f01fb352a32d162c5fbd163802916f1ee927"
+    },
+    {
+      "sourceId": "F-882",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.7 Iconography",
+      "sha256": "f0a994c666b34b53586c4bec493b4bd1c25829e4f7da5b4349248b9a605448d9"
+    },
+    {
+      "sourceId": "F-883",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sectionHeading": "### 3.7.5 Illustration Rules {#3.7.5-illustration-rules}",
+      "sha256": "9f92d0b44e93a1d7d7c0a5d2c3d8b8e68b433b4ae4f05a524cda1d9c169c13d3"
+    },
+    {
+      "sourceId": "F-884",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sectionHeading": "## 3.15 Density Modes — Comfortable / Compact {#3.15-density-modes}",
+      "sha256": "c71583f06b3817e512492db1808502d6b3cb4bc186a77801b8fc7f0788af6504"
+    },
+    {
+      "sourceId": "F-885",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "## 2.2 Color System",
+      "sha256": "09fb506713c9158e83905267cefa94d230742a775d165f229e13fc1166515dfa"
+    },
+    {
+      "sourceId": "F-886",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sectionHeading": "#### 3.7.7.A Voice and Tone Contract {#3.7.7.a-voice-and-tone-contract}",
+      "sha256": "db2786953ac75f8a7ceaff8897d1fe7fe8aad692f32fe4abb2405d9ea4f47be4"
+    },
+    {
+      "sourceId": "F-931",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### Authenticated planning mirror publication {#authenticated-planning-mirror-publication}",
+      "endHeading": "## Citation Convention {#citation-convention}",
+      "sha256": "37aea53f2b86565cb57689ade13d6e644993e4e4440f337db1ac02c365451de5"
+    },
+    {
+      "sourceId": "F-AE-030",
+      "slices": [
+        {
+          "sourceDoc": "Sourcera_Master_Spec.md",
+          "startHeading": "## 3.14 Pipeline Surface Compression {#3.14-pipeline-surface-compression}",
+          "endHeading": "## 3.15 Density Modes — Comfortable / Compact {#3.15-density-modes}"
+        },
+        {
+          "sourceDoc": "UX_Design_of_Sourcera.md",
+          "startHeading": "### 5.2.19 PipelineSurface",
+          "endHeading": "## 5.3 Deprecated Components"
+        }
+      ],
+      "sha256": "4db6f0e007b248190a197fb2a0fa432712c3af80e9550141b39f7aef3ea572a2"
+    },
+    {
+      "sourceId": "F-AE-031",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sectionHeading": "### 5.2.19 PipelineSurface",
+      "sha256": "843c684438dde24b8387e786a6172e43eccbe65e91e08698984844f1ddd99d86"
+    }
+  ]
+}

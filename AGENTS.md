@@ -55,3 +55,13 @@ npm --prefix tools/spec-lint run all
 tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
 tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
 ```
+
+## Delivery control plane
+
+- Live Linear is the sole planning, execution, and implementation-documentation surface.
+- `Sourcera_Master_Spec.md` remains product/engineering behavior authority; Linear issues and documents bind exact sections and checksums without weakening them.
+- Use native initiatives, projects, milestones, releases, cycles, parents, relations, priority, estimates, and assignments. Never copy those fields into prose.
+- Verification inputs: `delivery/`; generate or reconcile them from the current Master Spec and live Linear.
+- `delivery/` and generated `reports/delivery/` are verification mirrors, not a second planning board. Never hand edit generated reports.
+- Local verifier: `tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json`.
+- Scheduled Linear drift: `tools/delivery/linear-live.ts`; it requires `LINEAR_API_KEY` and fails closed.

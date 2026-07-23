@@ -1,0 +1,70 @@
+{
+  "releases": [
+    {
+      "id": "R0",
+      "name": "First Defensible Evaluation",
+      "sequence": 0,
+      "customerHypothesis": "One buyer can complete one defensible evaluation with one seller and trust the retained result.",
+      "operationalHypothesis": "The complete journey is isolated, auditable, recoverable, and supportable.",
+      "pilot": "One invited buyer and one invited seller in staging.",
+      "metrics": ["activation", "completion", "time_to_value", "abandonment", "trust", "reliability", "support"],
+      "customerGate": "The pilot completes the full journey and retains an immutable auditable result.",
+      "operationalGate": "Isolation, rollback, recovery, and support receipts pass for one commit."
+    },
+    {
+      "id": "R1",
+      "name": "Team Evaluation & Collaboration",
+      "sequence": 1,
+      "customerHypothesis": "A buyer team can collaborate on one evaluation without losing ownership, context, or scoring integrity.",
+      "operationalHypothesis": "Concurrent work, permissions, notifications, and recovery remain reliable under team use.",
+      "pilot": "One buyer team with at least three roles and two invited sellers.",
+      "metrics": ["team_activation", "collaborative_completion", "time_to_value", "abandonment", "trust", "reliability", "support"],
+      "customerGate": "The team completes an evaluation with attributable collaboration and no manual repair.",
+      "operationalGate": "Concurrency, role enforcement, notification delivery, and recovery receipts pass."
+    },
+    {
+      "id": "R2",
+      "name": "Repeatability, Reporting & Operations",
+      "sequence": 2,
+      "customerHypothesis": "A returning buyer can repeat an evaluation and produce decision-ready reporting faster than the first run.",
+      "operationalHypothesis": "Templates, reporting, administration, retention, and support workflows are observable and recoverable.",
+      "pilot": "One returning buyer repeats a completed evaluation with an operations reviewer.",
+      "metrics": ["repeat_activation", "repeat_completion", "time_to_value", "report_use", "trust", "reliability", "support"],
+      "customerGate": "The repeat evaluation and report complete with measurable time saved.",
+      "operationalGate": "Admin, export, retention, support, and restore receipts pass."
+    },
+    {
+      "id": "R3",
+      "name": "Marketplace Supply, Discovery, Matching & Trust",
+      "sequence": 3,
+      "customerHypothesis": "Buyers can discover credible sellers and sellers can gain qualified opportunities through trusted marketplace signals.",
+      "operationalHypothesis": "Supply ingestion, matching, moderation, and trust controls resist abuse and recover safely.",
+      "pilot": "A bounded category with approved sellers and invited buyers.",
+      "metrics": ["supply_activation", "qualified_matches", "buyer_engagement", "seller_engagement", "trust", "reliability", "support"],
+      "customerGate": "Pilot users produce qualified matches and report acceptable trust.",
+      "operationalGate": "Moderation, abuse handling, matching replay, and rollback receipts pass."
+    },
+    {
+      "id": "R4",
+      "name": "Intelligence, Scenarios, TCO & Agents",
+      "sequence": 4,
+      "customerHypothesis": "Decision intelligence and agents improve evaluation quality or speed without reducing user trust.",
+      "operationalHypothesis": "Model, tool, cost, safety, and fallback controls are measurable and bounded.",
+      "pilot": "Opt-in evaluations with baseline comparison and human review.",
+      "metrics": ["agent_activation", "assisted_completion", "time_saved", "decision_quality", "trust", "cost", "reliability"],
+      "customerGate": "The pilot improves a named decision metric without lowering trust.",
+      "operationalGate": "Evaluation, cost, safety, fallback, and replay receipts pass."
+    },
+    {
+      "id": "R5",
+      "name": "Enterprise Integrations, Compliance, Globalization & Scale",
+      "sequence": 5,
+      "customerHypothesis": "Enterprise customers can adopt Sourcera within their identity, data, compliance, and regional constraints.",
+      "operationalHypothesis": "Integrations, compliance controls, regional operation, and scale targets are proven under failure and recovery.",
+      "pilot": "One enterprise design partner with agreed identity, integration, compliance, and residency scope.",
+      "metrics": ["enterprise_activation", "integration_completion", "time_to_value", "compliance_acceptance", "trust", "reliability", "support"],
+      "customerGate": "The design partner completes the agreed enterprise journey and accepts the control evidence.",
+      "operationalGate": "Integration, compliance, residency, scale, rollback, and recovery receipts pass."
+    }
+  ]
+}

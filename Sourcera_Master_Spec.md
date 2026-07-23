@@ -5,7 +5,19 @@
 ---
 
 **Version:** 7.1.0a
-**Last Updated:** 2026-07-13 — v7.1.1 M02.3 advisory-guard completion. Full spec-lint and ledger taxonomy audit PASS; the live exact-status scanner reports 0 open P0, 0 open P1, 0 blocked P1, 0 open P2, and 0 open P3. The stamp gate parses 547 runtime rows, 333 `runtime_active`, and 212 product/runtime blockers: 144 M11.3, 39 M21.3, 17 M02.3, and 12 M24.3. Human-ratification blockers are zero. Thirteen pending M02.3 rows now have local guards while their external evidence remains pending; one row has a partial local chain. `_audit/V711_BACKLOG_INDEX.md §2` is the current count-routing authority; dated verification counts remain historical pass boundaries. Current blocker inventory: `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.md`.
+**Last Updated:** 2026-07-23 — Read live release status at use time. Run:
+
+- `tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json`
+- `tools/spec-lint/node_modules/.bin/tsx tools/release/exact_status_scan.ts --json`
+
+**Current blocker routing:**
+
+- `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.md`
+- `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.csv`
+- `_audit/V711_PRODUCTION_GRADE_RUNTIME_CLOSURE_PLAN_2026-07-13.md`
+- `_audit/V711_PRODUCTION_GRADE_RUNTIME_EXECUTION_MATRIX_2026-07-13.csv`
+
+Dated changelog and verification counts below are historical evidence only. They never override live scanner output.
 **Prior Version:** 7.1.0
 **Status:** P0 hot-patch
 
@@ -14,6 +26,14 @@
 ---
 
 # Changelog {#changelog}
+
+## v7.1.0a — 2026-07-23 (Linear Planning Source Integration)
+
+**Conflict.** F-883 pointed at an empty-state copy table instead of the illustration authority. F-884 and F-886 had complete execution contracts in Linear but only partial source support, and Appendix M incorrectly implied that density persisted in UserUIPreference.
+
+**Resolution.** §3.7.5 is the illustration authority; §3.7.7.A is the cross-surface voice contract; §3.15 is the presentation-only Density contract. The feature inventory, UX mirror, Appendix M, and exact source bindings now route to those canonical sections. Linear remains the planning and execution authority; the Master Spec remains product authority.
+
+**Boundary.** This is source and planning closure only. It does not prove implementation, migration, runtime behavior, deployment, or release readiness.
 
 ## v7.1.0a — 2026-07-11 (Workspace Analytics Privacy-Authority Correction)
 
@@ -212,7 +232,7 @@ Per the Phase 6 sign-off scoreboard, all 12 truly-open PROD-CRIT-NN P0 defects a
 - **§M.4.4.2.A–E** — Four-predicate cross-validator authored on top of the V11 baseline; `tools/spec-lint/cross_validation.ts` + `tools/spec-lint/internal_only_concept_class_allowlist.json` + `tools/spec-lint/serializer_redaction_locks.json` wired in `.github/workflows/spec-lint.yml`; closes D-11.2-004 residual firewall-bypass attack surface and the related override-grammar leakage path.
 - **§M.5.4 / §M.5.5 / §M.5.6** — §M.5.4 7-column row index with per-row `Runtime status`, `Execution context`, `Assertion`, `Runbook`, `Override path` columns; §M.5.5 cluster default; §M.5.6 Gate-ID-by-Gate-ID enumeration of the runtime-active surface (now 3 gates including `appendix_k_glossary_canonicality` promoted at Phase 2 closure); §M.5.4 13 cross-reference rows + meta-gate `appendix_m5_cross_reference_resolution_completeness`; §M.5.17 three new gates landed in Phase 5.
 - **§21.4.1.B / §21.4.1.C / §21.4.1.D / §21.4.1.E / §21.4.6** — Buyer-side EvalStarter Maya capability registry rewritten end-to-end; `qa_suggestion` family-rooted sibling split (D-EM-001); seven buyer-side capability rows authored (D-EM-002); `first_pass_rfp_draft` per-requirement registration (D-EM-003); Solo Throttling Membership three rows + meta-gate (D-EM-004).
-- **Appendix C / Appendix G / Appendix I** — Phase 5 body-side row authoring landed 2026-05-20: 4 new error codes in Appendix I v7.2.0-REM Phase 5 block (with 1 forward-tracked registration anchor); 4 new webhook events in Appendix C v7.2.0-REM Phase 5 block (sequenced by `event_seq` per §34.10.5.A invariant #3 step (v); Loops.so transactional templates `lo_org_residency_change_blocked` + `lo_org_residency_change_completed` registered inline); bridge firewall invariant `console_bridge_no_residency_change_event_kinds` forward-tracked; 6 new PostHog events in Appendix G v7.2.0-REM Phase 5 block (5 underscore-form `org_residency_change_*` mirrors + `spec_lint_legal_entity_residency_change_revenue_leak_gate_run`); firewall residency partitioning per §34.10.5.A invariant #3 step (iv) cutover instant.
+- **Appendix C / Appendix G / Appendix I** — Phase 5 body-side row authoring landed 2026-05-20: 4 new error codes in Appendix I v7.2.0-REM Phase 5 block (with 1 forward-tracked registration anchor); 4 new webhook events in Appendix C v7.2.0-REM Phase 5 block (sequenced by `event_seq` across the §34.10.5.A durable binding phases; Loops.so transactional templates `lo_org_residency_change_blocked` + `lo_org_residency_change_completed` registered inline); bridge firewall invariant `console_bridge_no_residency_change_event_kinds` forward-tracked; 6 new PostHog events in Appendix G v7.2.0-REM Phase 5 block (5 underscore-form `org_residency_change_*` mirrors + `spec_lint_legal_entity_residency_change_revenue_leak_gate_run`); firewall residency partitioning at the phase-3 binding cutover.
 - **Appendix J** — `ci_gate_runtime_status` enum registered (Phase 3); incremental V72REM Phase 2/3/4 vocabulary additions registered per the per-phase canonical-row blocks.
 - **§M.5 row-count arithmetic** — Catalog grew from 131 to 134 rows across Phase 5 (3 new §M.5.17 rows).
 
@@ -530,7 +550,7 @@ The reconciliation log (`/_integration/RECONCILIATION.md`, ~9,100 lines) is the 
 8. **`sourcera_owned_cost_center` enum extended 1 → 3 values** (`customer_billed`, `sourcera_owned`, `platform_marketing`); backwards-compatible.
 9. **New `billing_admin` Org-level role** added (§5.2; Appendix J role enum updated; assignment migration required).
 10. **Vendor Pro Trial Seat (M17)** — new cross-Org billing primitive on Buyer Scale + Enterprise (additive; new audit events, Stripe meters, entitlement rows).
-11. **§42.1 Enterprise SLA tightened from "1-hour" to "4-hour critical response"** (Phase 12.4 — narrower than v6.0.0 prose; Sales / Legal must reconcile pre-v7.0.0 contracts before v7.0.0 SLA-citing collateral ships).
+11. **§42.1 Enterprise SLA changed from "1-hour response" to "4-hour critical response"** (Phase 12.4 — a less stringent response-time commitment with narrower critical-only coverage than the v6.0.0 prose; Sales / Legal must reconcile pre-v7.0.0 contracts before v7.0.0 SLA-citing collateral ships).
 
 ### Source Document Retirement
 
@@ -574,6 +594,8 @@ Snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`. v6.0.0 is the baseline
 
 [Introduction](#introduction)
 
+[Planning and Execution Authority](#planning-and-execution-authority)
+
 [Citation Convention](#citation-convention)
 
 [1\. Product Overview](#1.-product-overview)
@@ -587,6 +609,8 @@ Snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`. v6.0.0 is the baseline
 [1.4 Query Scoping Requirements](#1.4-query-scoping-requirements)
 
 [1.5 Deployment & Technology Stack](#1.5-deployment-and-technology-stack)
+
+[1.5.1 Application Browser-Security Header Policy (F-910)](#1.5.1-application-browser-security-header-policy)
 
 [1.6 Deployment Regions](#1.6-deployment-regions)
 
@@ -633,6 +657,12 @@ Snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`. v6.0.0 is the baseline
 [3.11 Dark Mode Parity Rules](#3.11-dark-mode-parity-rules)
 
 [3.12 Presence & Unread Tracking](#3.12-presence-and-unread-tracking)
+
+[3.13 Principle 9 — Surface Simplicity, Engine Complexity](#3.13-principle-9-surface-simplicity-engine-complexity)
+
+[3.14 Pipeline Surface Compression](#3.14-pipeline-surface-compression)
+
+[3.15 Density Modes — Comfortable / Compact](#3.15-density-modes)
 
 [4\. Global Data Model](#4.-global-data-model)
 
@@ -1166,6 +1196,8 @@ Snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`. v6.0.0 is the baseline
 
 [32.1 Overview](#32.1-overview)
 
+[32.1.1 Cross-Origin Browser Request Policy (F-911)](#32.1.1-cross-origin-browser-request-policy)
+
 [32.2 Authentication & Rate Limit Headers](#32.2-authentication-and-rate-limit-headers)
 
 [32.3 Pagination Model](#32.3-pagination-model)
@@ -1464,6 +1496,8 @@ Snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`. v6.0.0 is the baseline
 
 [50.19 Consolidated Acceptance Criteria Pointer](#50.19-consolidated-acceptance-criteria-pointer)
 
+[50.33 Deterministic Platform Reference-Data Orchestration (F-913)](#50.33-deterministic-platform-reference-data-orchestration)
+
 [51\. Product Usage Analytics & PLG Instrumentation](#51.0-activation-metrics-retention-cohorts-conversion-funnels)
 
 [51.1 Event Taxonomy](#51.1-event-taxonomy)
@@ -1511,6 +1545,29 @@ Snapshot at `/_baselines/Sourcera_Master_Spec_v6.0.0.md`. v6.0.0 is the baseline
 ## Introduction {#introduction}
 
 Sourcera is an enterprise software procurement operating system designed to eliminate evaluation friction, accelerate vendor selection, and provide defensible decision documentation. It serves three distinct user cohorts through a dual-console architecture: Buyers (procurement teams, evaluators, decision-makers) and Sellers (vendor representatives, account teams), with a unifying Marketplace domain. This specification defines behavior, data models, UI patterns, access controls, and integration boundaries for the complete platform. It is authoritative and supersedes all prior documentation.
+
+## Planning and Execution Authority {#planning-and-execution-authority}
+
+This Master Spec is the sole authority for product and engineering behavior: what Sourcera must do, the invariants it must preserve, and the evidence required to claim the behavior exists. Linear is the sole authority for planning and executing the software build: initiatives, projects, milestones, releases, issues, status, priority, estimate, assignment, cycle commitment, dependencies, related work, and operational implementation documentation.
+
+The boundary is mandatory:
+
+1. Every executable Master-Spec requirement MUST resolve to one or more active Linear issues through its stable requirement identifier and exact Master-Spec section/version binding. An issue may decompose a requirement, but it cannot weaken, extend, or replace the product contract.
+2. Linear descriptions and Linear documents own the complete implementation contract: outcome, behavior, paths, tests, failure and recovery, rollout, rollback, telemetry, named proof, assumptions, exclusions, and source provenance. Native Linear fields own all planning metadata. Dependencies, parentage, project membership, release membership, milestone membership, and related work MUST use native Linear relations and fields; issue identifiers, URLs, title prefixes, or copied relation lists MUST NOT be used as substitutes in prose.
+3. Repository files under `delivery/` and generated files under `reports/delivery/` are machine-verifiable inputs, snapshots, and readback evidence. They MUST be generated from or reconciled against the current Master Spec and live Linear state. They are never a second planning board and cannot override either authority.
+4. A Linear issue that discovers missing or conflicting product authority MUST remain blocked. The source decision is authored in this Master Spec first; the issue is then refreshed against the new section and checksum. Planning prose cannot silently become product behavior.
+5. A Master-Spec change that changes executable scope invalidates affected Linear readiness until native hierarchy, relations, release, milestone, description, and source provenance are read back and reconciled. A Linear planning change cannot edit the Master Spec implicitly.
+6. Completion requires both authorities to agree on one reviewed commit: the Master-Spec contract is current; the live Linear execution graph is current; the required implementation and runtime receipts exist; and no generated mirror reports unresolved source or native-field drift. Documentation alone never proves runtime completion.
+
+Linear therefore serves as the production execution engine and operational software-documentation system, while this Master Spec remains the immutable product-contract authority. Any other live plan, duplicated issue register, manually maintained dependency list, or prose-only status surface is non-authoritative and MUST be retired or reduced to a pointer.
+
+### Authenticated planning mirror publication {#authenticated-planning-mirror-publication}
+
+F-931 governs publication of the repository verification mirror. The capture MUST run from the current canonical `main` commit in protected CI with a read-only Linear credential held only as a secret. It MUST capture the complete scoped Linear graph, detect changes during pagination through a bounded consistency readback, and fail closed on missing pages, stale state, incomplete native fields, or credential failure.
+
+The publication receipt MUST bind the captured graph, source commit and workflow run, Master Spec and UX Design fingerprints, source inventory and checksums, dispositions, source policy, project and program scopes, release definitions, runtime stamp, and exact-status scan. The uploaded artifact MUST retain its platform attestation and digest. No secret, raw credential, or unrestricted description export may enter an artifact, log, issue, or repository file.
+
+Successful capture MUST regenerate the release plan and every delivery report from the attested artifact, verify them against the same receipt, and publish a reviewable change. Hand-edited mirrors, local-only promotion, stale-base publication, and direct mutation of canonical mirror files are forbidden. Credential creation and rotation remain human-owned native Linear work; expiry or revocation MUST leave publication blocked with a named recovery path and must never weaken validation.
 
 ## Citation Convention {#citation-convention}
 
@@ -1679,6 +1736,58 @@ Sourcera is deployed as a cloud-native SaaS platform with the following authorit
 | **Status & Transparency**    | Statuspage.io                                                                              | Public incident communication                                       |
 | **Customer Support**         | Zendesk                                                                                    | Ticketing, knowledge base, customer success                         |
 | **PDF Parsing**              | Firecrawl                                                                                  | PDF Parsing for knowledge base entries, security documentation, etc |
+
+### 1.5.1 Application Browser-Security Header Policy (F-910) {#1.5.1-application-browser-security-header-policy}
+
+F-910 is the canonical browser-security response contract for the Marketplace, Buyer, and Seller Next.js applications. Every effective route and framework-generated response MUST resolve to exactly one typed response class before deployment. An unregistered application, route, effective method, response class, or policy consumer fails CI and production promotion.
+
+**Ownership boundary.** §32.1.1 owns Origin parsing and the browser cross-origin allow/deny decision in `proxy.ts`, `apps/buyer/proxy.ts`, and `apps/seller/proxy.ts`. F-910 composes headers and per-request nonces into those same proxies only after §32.1.1 allows the request. It may add safe headers to a §32.1.1 denial, but it MUST NOT create another Origin parser, allowlist, or bypass. Tenant, console, role, residency, and resource authorization still execute after this browser boundary and are never granted by a header.
+
+**Current application and source registry.** Production and preview origins come only from the signed deployment receipt and `config/production-targets.json`; local origins are Marketplace `http://localhost:3000`, Buyer `http://localhost:3001`, and Seller `http://localhost:3002`. Suffix matches, regular expressions, provider-wide values, and wildcard deployment domains are forbidden. Production promotion fails while any required application origin, Convex deployment name, or Convex deployment URL is unresolved.
+
+The compiler recognizes these response classes:
+
+| Response class | Current owner | Required behavior |
+| :---- | :---- | :---- |
+| `interactive_document` | Successful application-page GET | Per-request nonce; strict document CSP; private no-store; standard referrer policy. |
+| `document_error` | Framework not-found and error documents | Per-request nonce where rendering requires it; strict document CSP; no-referrer; private no-store. |
+| `api_json` | Registered API GET/POST and generated HEAD | Non-document CSP; no-referrer; preserve a stricter route-level no-store policy. HEAD inherits the owning GET class and has no body. |
+| `framework_options` | Next-generated OPTIONS | Non-document CSP; HTTP 204; zero body; no-store; preserve the exact route-derived `Allow`. |
+| `csp_report` | Same-origin CSP report POST | Non-document CSP; no-referrer; no-store; sanitized bounded input only. |
+| `framework_static` | Next static and image-optimization responses | Non-document framing protection; preserve immutable framework caching. |
+| `cross_origin_denial` | §32.1.1 actual/preflight denial | Non-document CSP; HTTP 403; zero body; no-referrer; no-store; no nonce; no route-derived `Allow`; preserve §32.1.1 `Vary` values. |
+
+The pinned Next.js runtime expands every registered GET handler to HEAD and every handler without explicit OPTIONS to framework-generated OPTIONS before the response registry is checked. A framework upgrade or explicit method implementation that changes expansion, HTTP status, body, ordering, or `Allow` invalidates the compiled registry until reviewed and reproved.
+
+**Content Security Policy.** The current document baseline is a closed policy, compiled without wildcard sources:
+
+```text
+default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none';
+frame-src 'none'; form-action 'self'; script-src 'self' 'nonce-{request_nonce}';
+style-src 'self' 'nonce-{request_nonce}'; img-src 'self' data: blob:;
+font-src 'self'; connect-src 'self' {exact_convex_https_origin} {exact_convex_wss_origin};
+worker-src 'self' blob:; manifest-src 'self'; media-src 'self'
+```
+
+The Convex pair is admitted only when `NEXT_PUBLIC_CONVEX_URL` validates as one exact HTTPS `*.convex.cloud` deployment root with no credentials, custom port, path, query, or fragment. The WSS source uses the same exact host. Provider wildcards, `*.convex.site`, sibling deployments, and unpinned URLs are forbidden. When the exact pair is absent, `connect-src` is self-only and production promotion remains closed.
+
+Non-document responses use `default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`. Production-build, preview, and production policies include `upgrade-insecure-requests`; local development omits it. `unsafe-inline` is forbidden. `unsafe-eval` is allowed only by the local Next.js development policy and is forbidden in CI production builds, preview, and production.
+
+Any later WorkOS, Stripe, PostHog, rich-content, file-hosting, public-media, service-worker, embed, or third-party browser capability MUST add an exact source to the owning response class with same-change tests, report-only evidence, enforcement evidence, and rollback evidence. It cannot broaden the baseline globally.
+
+**Common headers.** Every class receives `X-Content-Type-Options: nosniff` and `X-Frame-Options: DENY`. Document success uses `Referrer-Policy: strict-origin-when-cross-origin`; every other class uses `no-referrer`. The baseline Permissions Policy is exactly `camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()`. `X-Powered-By` is absent. `Cross-Origin-Embedder-Policy` is absent until a separately ratified cross-origin-isolation requirement proves compatibility.
+
+Production HTTPS responses additionally receive `Strict-Transport-Security: max-age=31536000`. `includeSubDomains` and `preload` are not emitted. HSTS is absent from HTTP, local development, CI build responses, and preview. Interactive and error documents are `private, no-store`; OPTIONS, CSP reports, and cross-origin denials are `no-store`; immutable framework caching MUST NOT be replaced.
+
+**CSP reporting.** Each application exposes a same-origin-only `POST /v1/security/csp-report`. The route and its generated OPTIONS method are registered under §32.1.1 with no cross-origin allow row. The POST accepts one `application/csp-report` object or an `application/reports+json` array of at most 20 objects, with a 16,384-byte body ceiling. Unsupported media returns 415, oversized input 413, malformed JSON/shape 400, and a valid sanitized report 204. Error bodies contain no submitted value. Raw reports are never logged or persisted.
+
+Retained report fields are limited to application, environment, response class, disposition, effective directive, blocked-origin class, policy version/checksum, commit SHA, and deployment ID. Raw URLs, hosts, paths, queries, fragments, source locations, samples, cookies, authorization values, customer text, and customer identifiers are discarded before logging. Report handling cannot change the active policy.
+
+**Rollout and proof.** Local development uses `Content-Security-Policy-Report-Only`; CI production builds enforce CSP; preview and the first production phase use report-only; production enforcement follows independent approval of the signed report-only receipt. Rollback restores the prior signed policy and deployment without adding a wildcard, disabling §32.1.1, or weakening HSTS/common headers.
+
+The implementation binding is `packages/domain/src/browser-security-policy.ts`, the three root proxies, the three application layouts/configs, the three CSP-report handlers, `scripts/probe-security-headers.ts`, and `docs/runbooks/security-headers.md`. Unit, integration, and end-to-end tests MUST prove route discovery, response classification, nonce uniqueness, exact Convex pairing, generated HEAD/OPTIONS behavior, denial composition, report sanitation, report-only rollout, enforcement, and rollback. Production, report-only, and rollback receipts bind the policy checksum, source commit, application deployment IDs, exact origins, probe results, reviewer, and timestamp; preview evidence cannot substitute for production proof.
+
+**Acceptance criteria.** No current response is unclassified; no policy contains a wildcard or unapproved provider source; generated OPTIONS retains HTTP 204, zero body, and its exact `Allow`; §32.1.1 denial remains handler-free and non-enumerating; report parsing cannot run after cross-origin denial; raw report data cannot reach logs or receipts; and production remains blocked until every required origin and exact Convex pair is pinned and all three signed receipt phases pass.
 
 ## 1.6 Deployment Regions {#1.6-deployment-regions}
 
@@ -3013,6 +3122,20 @@ Every error state names three things, in order:
 
 All illustrations ship as SVG with `prefers-color-scheme` variants; the dark-mode variant re-tunes stroke color to preserve ≥ 4.5:1 contrast with the dark background (see §3.11).
 
+**Allowed composition and registry.**
+
+1. Routine empty states remain copy-only. A 24px Lucide glyph may appear only where the owning component contract calls for an inline icon; it is not an Illustration System asset and does not override the table above.
+2. Aspirational empty and onboarding surfaces may use only the 120×120px line-art treatment above. Page errors and Plan-gates may use only their registered 96×96px treatment. Loading and Partial states never render illustration assets.
+3. Illustration identifiers resolve through a typed, closed asset registry. Unknown identifiers fall back to the registered generic icon without changing adjacent copy or actions. Remote asset URLs and arbitrary inline SVG are rejected.
+4. Every line illustration has explicit light and dark assets. Dark rendering is not automatic inversion. Filled inline icons consume `currentColor`; semantic state consumes §3.11 tokens rather than hard-coded component colors.
+5. Assets contain no embedded text, script, external reference, raster tracker, animation, customer data, organization branding, or user-generated content. Reduced-motion rendering is static.
+6. Meaningful art has concise alternative text only when adjacent copy does not already carry the same meaning. Redundant or decorative art is `aria-hidden=true`, non-focusable, and never the sole carrier of state.
+7. The host surface owns copy, actions, permission, plan, and workflow. Illustration selection cannot depend on hidden counts, inaccessible records, protected attributes, or cross-console state.
+
+**Failure and recovery.** A missing pair, invalid SVG, contrast failure, or load failure preserves the source-owned message and action, renders the registered generic icon only when the owning context permits art, and reveals no hidden data. Recovery restores the last verified asset pair and reruns asset-sanitizer, contrast, accessibility, theme, high-contrast, forced-colors, RTL, zoom, and reduced-motion fixtures.
+
+**Acceptance boundary.** CI rejects unregistered or orphaned assets, missing theme pairs, forbidden SVG content, inaccessible semantics, hard-coded semantic colors, and use on an unapproved surface. These source requirements do not establish runtime completion; implementation, rendered readback, canary, rollback, and release evidence remain independently required.
+
 ### 3.7.6 Per-Surface Catalog {#3.7.6-per-surface-catalog}
 
 For each page type, the catalog specifies the loading skeleton shape, the empty-state copy and primary CTA, and the canonical error treatments. The per-surface rows below MUST be honored by the corresponding `page_surface_kind` implementations.
@@ -3174,6 +3297,44 @@ This matrix is the authoritative per-surface binding for the Phase SS remediatio
 5. **Future-tense empties.** Empty-state body uses future tense for surfaces that will fill over time ("You'll see activity here as your team adds requirements"); present tense for always-empty-unless-configured surfaces ("Connect your CRM to see signals here").
 6. **Incident IDs.** Error cards render the incident ID or `request_id` in a `Caption`-sized monospace caption, preceded by "Ref:" — e.g., "Ref: `req_01JAXM…`". Copy-to-clipboard on click.
 7. **Status-page links.** Transient 5xx errors link to `https://status.sourcera.com` (or the resolved equivalent from §42.4 dependency config); link is opened in a new tab (`rel="noopener"`).
+
+#### 3.7.7.A Voice and Tone Contract {#3.7.7.a-voice-and-tone-contract}
+
+**Purpose and precedence.** This is Sourcera's canonical cross-surface copy posture. It integrates UX Design §1.1 as a copy-conformance overlay. It does not create or change a surface, action, state, permission, entitlement, notification, event, persisted field, delivery rule, or domain outcome. Exact source-owned copy and the behavior in the applicable feature section remain authoritative. A voice edit MUST NOT weaken an access, console-firewall, privacy, localization, notification, AI-authority, safety, billing, or recovery rule.
+
+**Global voice.**
+
+- Minimal, restrained, efficient, high-signal, operationally serious, and calmly confident.
+- Every message helps the user understand, decide, act, collaborate, review, or recover. Remove copy that serves none of those purposes.
+- Use direct plain English, active voice, concrete nouns, short sentences, and sentence case. Name the object and action.
+- Buttons use the specific verb or verb-noun pair required by §3.7.7. Do not substitute "OK", "Continue", or "Submit" when the action can be named.
+- Avoid filler, routine congratulations, blame, customer-facing engineering jargon, unsupported certainty, anthropomorphism, exclamation marks, and manufactured urgency.
+- Customer copy never exposes raw provider errors, stack traces, model prompts, policy logic, suppressed counts, unauthorized customer data, or internal entity identifiers. This does not suppress a customer-visible identifier required by its local contract, including the §3.7.4 incident or request reference.
+
+| Surface class | Voice and source boundary |
+| :---- | :---- |
+| Transactional success | State exactly what changed and, only when useful, where it appears or what happens next. Do not congratulate routine work. |
+| Transactional pending | Name the work and whether the user may leave. Progress follows the owning contract; never invent a percentage. |
+| Promotional or upgrade | Be outcome-led and factual. Render only the capability, eligibility, price, and actions required by the owning source. No scarcity, fear, fake urgency, comparative superlative, or hidden price. §3.7.4 and §3.7.6 own Plan-gate action anatomy; §34 owns execution authority. |
+| Error or recovery | Use Failure, Reason, Recovery in the §3.7.4 order, the §3.7.7 length limits, and the §3.7.8 recovery action. Never replace a registered failure with provider text. |
+| Validation | Use the §3.6.4 inline slot and state how to correct the value. Do not use "Invalid input" without the applicable rule. |
+| Permission or not found | Follow the owning RBAC and firewall result. Do not confirm protected resource existence. A source-owned hidden action, omission, or non-leaking 404 overrides a generic permission explanation. |
+| Empty | Follow §3.7.3. Name the empty state, explain the next step, and render only the source-owned action. Never use empty treatment for offline or load failure. |
+| Destructive | Follow §3.10.5 and the owning entity contract. Name the action, affected object, consequence, and any source-defined recovery window. Use the destructive verb on the final control and never rely on color alone. |
+| AI-attributed | §21.1 and §21.3 own labeling and confidence. Preserve the exact [AI-Generated] label. "Suggested" or "Drafted" may describe an output only where its source requires it; neither replaces the label nor implies that AI exercised human-only approval or decision authority. Editability, review, and confirmation follow the owning capability. |
+| Notification | Appendix C owns event existence and recipients; §29 owns channels and preferences; §41 owns email. Where an exact template is silent, lead with user impact and any required action. Tone cannot add urgency, cadence, delivery, or a new notification. |
+| Audit or technical | Be precise and neutral and preserve registered terms. Ops surfaces may use internal vocabulary under §3.7.7; customer projections remain redacted and permission-scoped. |
+
+New-surface copy also participates in the §3.13 and UX Design §1.4 First-30-Seconds Test: what the user sees, understands, does next, and what remains hidden.
+
+**Localization and variables.**
+
+1. Customer-facing strings follow §37.2: externalized keys, ICU MessageFormat, CLDR plurals, locale-aware formatting, and no concatenated translated fragments. RTL behavior follows §37.3.
+2. Named variables and their allowed data come from the owning message, template, or feature contract. Copy assembly cannot widen its authorized projection.
+3. Missing, invalid, or unsafe variables follow the owning fallback and §37.2 criticality rules. This section creates no universal runtime fallback and does not authorize English fallback for critical copy.
+4. Exact source-owned English messages remain exact. Translations preserve the same outcome, action, permission, and safety meaning. User-generated content remains unchanged.
+
+**Conformance and proof.** The implementation copy catalog, schema, and linter MUST bind each governed entry to its message key, surface class, owning source, locale, named variables, and any existing recovery kind. These are implementation artifacts, not a second product specification or new persisted product fields. A source or variable change reopens copy, localization, accessibility, and security/privacy review. Proof requires rendered fixtures for every surface class, zero/one/many plurals, long locales, RTL, screen-reader announcement, source-owned exact copy, permission non-disclosure, cross-console redaction, AI attribution, and Plan-gate/destructive-action preservation. Documentation or generated proof alone does not establish runtime completion.
 
 ### 3.7.8 Recovery CTA Rules {#3.7.8-recovery-cta-rules}
 
@@ -4188,6 +4349,87 @@ All events in this subsection are Sourcera-internal Ops PostHog events registere
 | `ui_pipeline_step_transition_animated` | `pipeline_stage_id` crosses a compressed-step boundary | `render_mode`, `from_step`, `to_step`, `from_phase`, `to_phase`, `motion_mode ∈ {animated, reduced_motion_snap}`, `skipped_step_count` |
 | `ui_pipeline_soft_gate_skip_chosen` | Solo user chooses "Skip for now" in the soft-gate toast | `render_mode`, `current_step`, `from_phase`, `to_phase`, `unmet_gate_count`, `gate_ids_hash`, `audit_event_id` |
 | `ui_pipeline_step_tooltip_shown` | Desktop tooltip or mobile bottom-sheet step detail opens | `render_mode`, `step_key`, `surface_kind`, `trigger ∈ {hover, keyboard_focus, mobile_tap}`, `engine_phase_count`, `dwell_ms` |
+
+## 3.15 Density Modes — Comfortable / Compact {#3.15-density-modes}
+
+**Authority and scope.** This section is the canonical contract for F-884. Density changes presentation only. It does not change authorization, returned data, domain state, workflow behavior, billing, or notifications. Comfortable is the default. Compact is an explicit choice on a registered host; viewport, plan, role, console, or customer data never selects it automatically.
+
+Density state is local to the mounted host. Reload or remount returns to Comfortable. No cookie, browser storage, API field, UserUIPreference field, audit row, or other persistence is authorized. Persistence requires a separately approved data-model and API contract.
+
+### 3.15.1 Geometry and Breakpoint Eligibility {#3.15.1-density-geometry}
+
+| Contract | Comfortable | Compact |
+| :---- | :---- | :---- |
+| Matrix row | 48px | 32px |
+| Inline or table input chrome | 36px | 28px |
+| Primary form input | 36px | 36px |
+| Prominent search or onboarding input | 44px | 44px |
+
+The input values consume §3.6.1 without redefining its tokens. A 28px Compact control still provides the §38.6.2 desktop-tier minimum interactive target. Compact changes spacing, not typography, labels, focus rings, validation copy, semantic content, or control availability.
+
+Compact matrix rows are eligible only on desktop and desktop_xl, where §38.6.2 permits 32 × 32 CSS px targets. Tablet remains Comfortable. mobile_xs and mobile_sm use the §38.6.2 card-list alternative and render no density control. Viewport determines eligibility only; it never records or infers a preference.
+
+Search, onboarding, modal actions, destructive confirmations, Side Peek controls, mobile navigation, and mobile card lists remain outside Compact density.
+
+### 3.15.2 Registered Hosts {#3.15.2-density-hosts}
+
+The initial closed registry is the §3.7.6.2 matrix set:
+
+- Requirements Matrix
+- Scoring Matrix
+- Traceability Matrix
+- Selection Matrix
+- Comparison Matrix
+- Vendor Capability Matrix
+
+No other host is implicitly eligible. Adding a host requires this registry, its host tests, and Appendix M to change together. Density cannot hide columns, actions, status, required meaning, or unauthorized-state boundaries.
+
+### 3.15.3 Transition and State Preservation {#3.15.3-density-state-preservation}
+
+A valid mode change is a synchronous presentation-token change. Density alone causes no refetch, subscription restart, route change, or domain mutation. Independent breakpoint behavior remains governed by §38.6.
+
+Changing mode preserves:
+
+- query, sort, filters, grouping, and current page or cursor;
+- selection, focused row or cell, expanded rows, and bulk-action state;
+- active inline-edit value and validation state;
+- open Side Peek entity;
+- logical focus and scroll anchor; and
+- the active §3.7 page state, including loading, partial, empty, error, and ready.
+
+Loading skeletons, read-only rows, disabled controls, inline editing, expanded rows, errors, and bulk actions must render without collision in every eligible mode.
+
+### 3.15.4 Accessibility and Fallback {#3.15.4-density-accessibility}
+
+Both modes inherit §37.1, §38.10, and §38.11. Keyboard order, accessible names, focus visibility, contrast, high-contrast behavior, RTL order, and required meaning remain identical.
+
+Locale expansion, RTL, high contrast, 200% zoom, the §37.1 400% reflow fixture, or a settled resize may invalidate Compact when content clips or targets overlap. The host keeps its current valid layout while measuring, then falls back to Comfortable without writing a preference. A rejected Compact activation announces one polite explanation, does not move focus, and preserves all state listed in §3.15.3. Density changes require no animation; reduced motion cannot remove the control or its result.
+
+### 3.15.5 Failure and Recovery {#3.15.5-density-failure-recovery}
+
+| Failure | Required recovery |
+| :---- | :---- |
+| Compact requested on an unregistered host or ineligible tier | Do not transition. Keep Comfortable and expose the reason. |
+| Required density token is missing or invalid | Keep the last valid layout; fall back to Comfortable if no valid layout remains. |
+| Compact clips content, overlaps targets, or hides meaning | Fall back to Comfortable and announce once. |
+| Resize race or stale provider produces conflicting layouts | Apply only the latest settled valid layout; otherwise use Comfortable. |
+| Data loading or host rendering fails | Preserve density state and use the applicable §3.7.6.2 error and Retry contract. |
+| Inline validation, selection, or Side Peek is active | Preserve it through the change or fallback; never dismiss or clear it. |
+
+Recovery never retries a domain mutation because density performs none.
+
+### 3.15.6 Acceptance Criteria {#3.15.6-density-acceptance-criteria}
+
+1. Every registered host renders 48px Comfortable and 32px Compact rows on both desktop tiers.
+2. Input fixtures enforce 36px default, 28px Compact inline/table, and unchanged 44px prominent controls.
+3. Compact never renders below the §38.6.2 target minimum; tablet remains Comfortable and mobile uses its card-list alternative.
+4. Sort, filters, grouping, page/cursor, selection, focus, inline edits, validation, expanded rows, Side Peek, and scroll survive change and fallback.
+5. Loading, partial, empty, error, ready, disabled, read-only, inline-edit, expanded-row, and bulk-action fixtures pass in every eligible mode.
+6. Keyboard-only, screen-reader, RTL, locale expansion, high contrast, dark mode, 200% zoom, §37.1 reflow, and reduced-motion fixtures preserve complete meaning and operation.
+7. Invalid host, token, geometry, resize, and stale-provider fixtures recover to the last valid layout or Comfortable without refetch, mutation, hidden content, or false success.
+8. F-884 introduces no persisted field, API, product event, audit event, webhook, or customer notification.
+
+These requirements do not establish runtime completion. Release readiness remains evidence-gated.
 
 ---
 
@@ -11124,7 +11366,7 @@ Every stage-transition MUST emit a PostHog event with `seller_org_id`, `bid_id`,
 | `reporter_org_id` | UUID (FK) | Nullable; FK → Organization | Populated for `buyer_user` and `seller_user` reporter kinds |
 | `reporter_ip_hash` | String | 64-char sha256 hex | For `anonymous_public`, stored as a one-way hash (rate-limit key); NEVER stored in clear |
 | `reporter_contact_email` | String | Nullable; valid email | Optional for `anonymous_public` (for follow-up); PII subject to DSAR |
-| `subject_kind` | Enum | See Appendix J `abuse_report_subject_kind`: `marketplace_listing`, `seller_org_page`, `software_page`, `category_page`, `comparison_page`, `guide_page`, `capability_declaration`, `eoi_message`, `vendor_response_excerpt` | What is being reported |
+| `subject_kind` | Enum | See Appendix J `abuse_report_subject_kind`: `marketplace_listing`, `seller_org_page`, `software_page`, `category_page`, `comparison_page`, `guide_page`, `capability_declaration`, `eoi_message`, `vendor_response_excerpt`, `marketplace_review`, `marketplace_review_response` | What is being reported; deprecated input alias `public_review_response` resolves to `marketplace_review_response`. |
 | `subject_id` | UUID | FK (polymorphic; application-validated per `subject_kind`) | Target entity id |
 | `subject_org_id` | UUID (FK) | Nullable; FK → Organization | Seller Org being reported; null for sourcera-owned page kinds |
 | `subject_snapshot_json` | JSON | ≤ 32000 chars | Immutable snapshot of the subject content at report time; survives subsequent subject edits/deletes |
@@ -11702,6 +11944,156 @@ Audit-event action namespace (per §4.6.1): `eval_starter_created`, `eval_starte
 4. The six names in §19.2.1 are seed examples, not an enum or required cardinality. Active rows determine the live set.
 5. The quarterly date is a review target. An overdue review raises §42 Ops observability but does not fabricate or auto-publish a new version.
 6. Registry/Convex failure leaves existing Org-local templates readable. Update badges derive from committed registry versus Org-local versions and do not depend on Loops.so delivery.
+
+### 4.5.15 MarketplaceReview (Marketplace-Domain, Buyer-Authored, Seller-Subject) {#4.5.15-marketplacereview}
+
+**Authoring intent.** `MarketplaceReview` is the canonical Org-level public review named by §1.3.2 and consumed by §31.9.8.8 `marketplace_review_received`. It preserves a Buyer-authored rating and review, an optional Seller response, the public-safe projection, and the private provenance required for moderation, DSAR, and audit. The review is about a Seller Organization, not a CRM Opportunity; an optional Marketplace Listing and Selection Record provide context without changing the Org-level subject. The five-star scale is the reversible default implied by `UX_Design_of_Sourcera.md` §4.3.2 and approved under AE-V711-DPL-MARKETPLACE-WEBHOOK-CONTRACT-01.
+
+**Scope.** Marketplace-domain and cross-console with `console='marketplace'`. `reviewer_org_id` must resolve to a Buyer Organization; `reviewed_seller_org_id` must resolve to a distinct Seller Organization. The authoring row remains in the reviewer Organization's residency partition. Buyer, Seller, Marketplace-authenticated, public, and Ops callers receive different projections below. Every authenticated query uses `org_id` plus `console=marketplace` per §1.4; omission is valid only for the explicitly public GET projection.
+
+| Field | Type | Constraints | Notes |
+| :---- | :---- | :---- | :---- |
+| `id` | UUID | Primary key | Stable review id. |
+| `console` | Enum (Appendix J `marketplace_entity_console`) | Required; fixed `marketplace` | Neutral-domain discriminator. |
+| `reviewer_org_id` | UUID (FK -> Organization) | Required; Buyer Org; must differ from `reviewed_seller_org_id` | Private unless `reviewer_attribution_mode=buyer_org_name`. |
+| `reviewer_user_id` | UUID (FK -> User) | Required at create | Pattern B DSAR treatment; never public. |
+| `reviewed_seller_org_id` | UUID (FK -> Organization) | Required; Seller Org | Org-level review subject. |
+| `marketplace_listing_id` | UUID (FK -> §4.5.1) | Nullable; when present the listing must belong to `reviewed_seller_org_id` | Optional listing context. |
+| `source_selection_record_id` | UUID (FK -> §4.3.24) | Nullable; when present the record belongs to `reviewer_org_id` and selected `reviewed_seller_org_id` | Private verification provenance; never public. |
+| `rating_stars` | SmallInt | Required; §39 `MarketplaceReview.rating_stars` | Public when `status=published`. |
+| `review_body_markdown` | String | Required before submit; §39 `MarketplaceReview.review_body_markdown` | Sanitized public body; §6.8.4.5 body-field sweep. |
+| `public_snippet` | String | Required before submit; §39 `MarketplaceReview.public_snippet` | Server-sanitized plain-text CRM/list-card projection. |
+| `reviewer_attribution_mode` | Enum (Appendix J `marketplace_review_attribution_mode`) | Required; default `anonymous` | `buyer_org_name` requires explicit reviewer consent at submit. |
+| `verification_state` | Enum (Appendix J `marketplace_review_verification_state`) | Required; server-derived | `selection_record_verified` only while the Selection Record predicate above holds. |
+| `status` | Enum (Appendix J `marketplace_review_status`) | Required; default `draft` | Lifecycle below. |
+| `seller_response_body` | String | Nullable; §39 `MarketplaceReview.seller_response_body` | Seller-authored public response; body-field sweep. |
+| `seller_response_status` | Enum (Appendix J `marketplace_review_response_status`) | Required; default `none` | Independent response lifecycle below. |
+| `seller_response_by` | UUID (FK -> User) | Nullable; required when response status is not `none` | Must belong to `reviewed_seller_org_id`; never public. |
+| `seller_responded_at` | Timestamp | Nullable; required after first response publish | UTC. |
+| `published_at` | Timestamp | Nullable; required iff review has entered `published` | First-publication time; immutable after first set. |
+| `hidden_at` | Timestamp | Nullable; required while `status=hidden` | Ops moderation timestamp. |
+| `withdrawn_at` | Timestamp | Nullable; required while `status=withdrawn` | Reviewer withdrawal timestamp. |
+| `rejected_at` | Timestamp | Nullable; required while `status=rejected` | Moderation rejection timestamp. |
+| `last_state_transition_audit_event_id` | UUID (FK -> §4.6.1) | Required after create | Points to the latest review or response transition AuditEvent. |
+| `data_residency_region` | Enum (Appendix J `data_residency_region`) | Required; inherited from `reviewer_org_id` at create | Immutable partition key. |
+| `created_at` / `updated_at` | Timestamp | Required | UTC. |
+| `created_by` / `updated_by` | UUID (FK -> User) | Required | Pattern B DSAR treatment. |
+| `deleted_at` | Timestamp | Nullable | Soft-delete only through retention/DSAR worker. |
+
+`MarketplaceReview` inherits §4.1.1 `dsar_redacted_under_request_id` and `dsar_redacted_at`.
+
+**Indexes.** `(reviewed_seller_org_id, status, published_at DESC)`; `(reviewer_org_id, status, updated_at DESC)`; `(marketplace_listing_id, status, published_at DESC)` partial where listing is non-null; `(source_selection_record_id)` partial where non-null; `(reviewer_org_id, reviewed_seller_org_id, source_selection_record_id)` UNIQUE partial where `source_selection_record_id IS NOT NULL AND status IN ('draft','submitted','published','hidden') AND deleted_at IS NULL`; `(data_residency_region, status)`.
+
+**Routes and projections.** Mutations require `Idempotency-Key`; same key/body returns the first result and same key/different body returns `idempotency_key_request_mismatch`.
+
+| Method / path | Authorized operation | Projection / result |
+| :---- | :---- | :---- |
+| `POST /v1/marketplace/reviews` | Buyer member creates own draft | `201` reviewer projection. |
+| `GET /v1/marketplace/reviews` | Authenticated party list with `org_id` + `console=marketplace`; anonymous public list when both are omitted | Reviewer projection for authoring Org; Seller-subject projection for reviewed Org; otherwise published public projection only. |
+| `GET /v1/marketplace/reviews/{review_id}` | Same audience resolver as list | Wrong Org/console, non-public state, and absent row return identical HTTP 404. |
+| `PATCH /v1/marketplace/reviews/{review_id}` | Reviewer edits only while `draft`; expected `updated_at` required | Cannot mutate subject, provenance, verification, lifecycle, or Seller-response fields. |
+| `POST /v1/marketplace/reviews/{review_id}/submit` | Reviewer submits draft | `202` submitted projection; moderation executes asynchronously. |
+| `POST /v1/marketplace/reviews/{review_id}/withdraw` | Reviewer withdraws a non-terminal review | Public projection disappears immediately. |
+| `PUT /v1/marketplace/reviews/{review_id}/seller-response` | Reviewed Seller Org Owner/Admin publishes, replaces, hides, or withdraws its response | Cannot mutate rating, review body, reviewer attribution, verification, or review status. |
+| `POST /v1/ops/marketplace/reviews/{review_id}/decision` | Existing Marketplace moderation role; decision `publish`, `reject`, `hide`, or `restore` | Full Ops projection; dual-control follows §27.8 where abuse severity requires it. |
+
+Public fields are exactly `id`, `reviewed_seller_org_id` public handle, nullable Marketplace Listing public handle, `rating_stars`, sanitized `review_body_markdown`, `public_snippet`, consented reviewer display label or `anonymous`, derived `verified_review`, published Seller response, `published_at`, and `updated_at`. Seller-subject reads add Seller-response controls but not anonymous reviewer identity or Selection Record provenance. Reviewer reads add private provenance and draft/moderation state but not Ops-internal notes. Ops reads all fields. Arrays, aggregates, and rating counts apply the same audience test to every contributing row; hidden, withdrawn, rejected, deleted, or unclassified fields contribute nothing to public cardinality.
+
+**Review state machine.** Every transition writes AuditEvent and updates `last_state_transition_audit_event_id` in the same transaction.
+
+| From | To | Actor / trigger | Conditions | Side effects |
+| :---- | :---- | :---- | :---- | :---- |
+| (init) | `draft` | Buyer creates | Org, subject, optional listing/Selection Record, and residency validate | Reviewer-only. |
+| `draft` | `submitted` | Reviewer submits | Rating/body/snippet valid; attribution consent recorded; idempotency passes | Queues moderation; no public or CRM projection. |
+| `submitted` | `published` | System/Ops approves | Content scan and abuse predicates pass | Stamps first `published_at`, invalidates public cache, and emits source event `marketplace.review.published`. |
+| `submitted` | `rejected` | System/Ops rejects | Registered rejection AuditEvent | Stamps `rejected_at`; terminal. |
+| `published` | `hidden` | Ops/abuse hold | §4.5.7 or §27.8 predicate | Stamps `hidden_at`; public and pending integration deliveries fail closed. |
+| `hidden` | `published` | Ops restores | Abuse disposition permits restore | Clears `hidden_at`, invalidates cache, emits `marketplace.review.restored`. |
+| `draft`, `submitted`, `published`, `hidden` | `withdrawn` | Reviewer withdraws | Reviewer Org still authorized | Stamps `withdrawn_at`, invalidates cache, emits `marketplace.review.withdrawn`; terminal. |
+
+**Seller-response state machine.** `none -> published`; `published -> hidden|withdrawn`; `hidden -> published`. Only the reviewed Seller Org can author/withdraw; Ops may hide/restore under §27.8. First publish emits `marketplace.review.response_published`. Response transitions never change rating, verification, or review status.
+
+**Events and downstream ownership.** The four `marketplace.review.*` source events are internal MarketplaceIntegrationHook source kinds, not Appendix C customer webhook events. First review publication may create a `consumer_kind=crm_sync` hook only when an active §31.9 connection exists; its downstream activity kind remains the existing `marketplace_review_received`. CRM failure never rolls back publication and follows CRMSyncActivityEvent retry/DLQ. F-490 owns that R5 consumer and depends on F-116; F-116 does not depend on F-490.
+
+**Retention, DSAR, and residency.** §40.2 is authoritative. Draft/rejected/withdrawn rows purge 90 days after terminal state. Published/hidden rows retain for the reviewed Seller Org life plus 24 months; an abuse report or legal hold may impose the longer parent horizon. At purge, only non-identifying rating aggregates may remain. Pattern B pseudonymizes reviewer/Seller-response/actor FKs; body sweep removes review/response text and public attribution before synchronous aggregate recompute. Public cache copies contain only the public projection and are globally cacheable; the authoring row remains in the reviewer Buyer Org region and each cross-side audit projection remains in its owning Org region.
+
+**Failure and recovery.** A duplicate active Selection Record tuple returns `marketplace_review_duplicate_source`; listing/Selection Record ownership mismatch returns `marketplace_review_source_mismatch`; illegal transition returns `marketplace_review_invalid_state_transition`. Seller attempts to mutate review fields and cross-Org/console reads return non-leaking 404. A withdrawal, hide, DSAR, or permission change before downstream dispatch suppresses delivery at send time. Cache invalidation failure fails public reads closed and retries. Interrupted moderation resumes from committed `submitted` state; no partial public projection or downstream activity is permitted.
+
+**Acceptance criteria.**
+
+1. Buyer, reviewed Seller, other Seller, authenticated Marketplace, public, and Ops projections MUST match the exact field matrix above; unclassified fields are denied.
+2. Rating, body, snippet, subject, attribution consent, verification provenance, and residency validate in one transaction before submit.
+3. Every review/response transition MUST follow its state machine, write AuditEvent, and remain idempotent.
+4. Public and CRM projections MUST recheck current review/response state, attribution, DSAR, abuse, Org, and residency before render/send.
+5. `public_review_response` and `public_review_received` remain deprecated read aliases only; canonical entity vocabulary is `marketplace_review` / `marketplace_review_response`.
+6. This source contract closes D-DPL-007 documentation authority only. Schema, route, cache, moderation, CRM, browser, mobile, accessibility, telemetry, migration, and runtime firewall evidence remain pending in F-116/F-628 and MUST NOT be inferred from this section.
+
+### 4.5.16 MarketplaceIntegrationHook (Marketplace-Domain Durable Handoff) {#4.5.16-marketplaceintegrationhook}
+
+**Authoring intent.** `MarketplaceIntegrationHook` is the durable, idempotent handoff/outbox row named by §1.3.2. No prior source defines broader semantics, so the approved reversible default is deliberately narrow: it records a committed Marketplace source mutation and a safe projection for an existing downstream consumer. It is not `WebhookSubscription`, does not configure an endpoint, stores no credential/secret/target URL, and never duplicates §31 or §4.7 retry, signing, redaction, or delivery authority.
+
+| Field | Type | Constraints | Notes |
+| :---- | :---- | :---- | :---- |
+| `id` | UUID | Primary key | Stable hook id. |
+| `console` | Enum (Appendix J `marketplace_entity_console`) | Required; fixed `marketplace` | Neutral-domain discriminator. |
+| `source_entity_kind` | Enum (Appendix J `marketplace_integration_hook_source_kind`) | Required | Listing, EOI, NDA, or Marketplace Review. |
+| `source_entity_id` | UUID | Required; application-validated polymorphic FK | Must resolve in the source Org/residency partition. |
+| `source_org_id` | UUID (FK -> Organization) | Required | Owner of the source mutation. |
+| `counterparty_org_id` | UUID (FK -> Organization) | Nullable | Present only when the source contract authorizes a cross-side safe projection. |
+| `source_audit_event_id` | UUID (FK -> §4.6.1) | Required | Committed source mutation anchor. |
+| `source_event_type` | String | Required; dotted name registered by the owning source section | No free-form producer values. |
+| `consumer_kind` | Enum (Appendix J `marketplace_integration_hook_consumer_kind`) | Required | Existing downstream authority only. |
+| `destination_ref_id` | UUID | Nullable; required for `customer_webhook` and `crm_sync` | Polymorphic reference; Ops-only. |
+| `projection_version` | SemVer string | Required | Safe-projection schema version. |
+| `safe_projection_json` | JSONB | Required; §39 `MarketplaceIntegrationHook.safe_projection_json` | Secrets, URLs, private bodies, raw identities, prompts, and storage keys forbidden. |
+| `payload_sha256` | String | Required; 64 lowercase hex chars | Hash of canonical safe projection. |
+| `idempotency_key` | String | Required; 64 lowercase hex chars | SHA-256 of source event, consumer, destination, and projection version. |
+| `state` | Enum (Appendix J `marketplace_integration_hook_state`) | Required; default `pending` | Lifecycle below. |
+| `attempt_count` | Integer | Required; default 0; >= 0 | Consumer adapter owns retry curve/ceiling. |
+| `next_attempt_at` | Timestamp | Nullable; required while `retry_wait` | UTC. |
+| `last_error_code` | String | Nullable; Appendix I/consumer code | Ops-only; never customer/public. |
+| `producer_service_key` | String | Required; registered service identifier | Required when no User actor exists. |
+| `last_state_transition_audit_event_id` | UUID (FK -> §4.6.1) | Required after create | Latest hook transition audit. |
+| `data_residency_region` | Enum (Appendix J `data_residency_region`) | Required; inherited from source Org | Immutable partition key. |
+| `created_by` / `updated_by` | UUID (FK -> User) | Nullable for system producer; Pattern B when present | `producer_service_key` remains required. |
+| `created_at` / `updated_at` | Timestamp | Required | UTC. |
+| `completed_at` / `canceled_at` | Timestamp | Nullable; state-bound | Terminal timestamps. |
+| `deleted_at` | Timestamp | Nullable | Retention worker only. |
+
+`MarketplaceIntegrationHook` inherits §4.1.1 `dsar_redacted_under_request_id` and `dsar_redacted_at`.
+
+**Indexes.** `(idempotency_key)` UNIQUE; `(state, next_attempt_at)`; `(source_entity_kind, source_entity_id, created_at DESC)`; `(source_org_id, state, created_at DESC)`; `(counterparty_org_id, state, created_at DESC)` partial where non-null; `(consumer_kind, destination_ref_id, state)`; `(data_residency_region, state)`.
+
+**Routes and projections.** Source handlers create hooks only inside their committed mutation/outbox transaction; there is no customer create/update/delete route. `GET /v1/marketplace/integration-hooks` and `GET /v1/marketplace/integration-hooks/{hook_id}` require `org_id` plus `console=marketplace`; source/counterparty Orgs receive only `{id, source_entity_kind, source_entity_id, consumer_kind, state, created_at, completed_at, updated_at, customer_safe_error_class}`. Other Orgs and wrong consoles receive zero/404; public callers receive no projection. Ops receives the full row and may call `POST /v1/ops/marketplace/integration-hooks/{hook_id}/redrive` or `/cancel` with `Idempotency-Key`, `expected_updated_at`, and an AuditEvent reason.
+
+**State machine.** Every transition uses compare-and-set, writes AuditEvent, and keeps the original `idempotency_key`.
+
+| From | To | Trigger / conditions | Result |
+| :---- | :---- | :---- | :---- |
+| (init) | `pending` | Source mutation commits with valid projection/hash | Hook and source AuditEvent commit atomically. |
+| `pending`, `retry_wait` | `dispatching` | Worker lease acquired; source, audience, target, DSAR, and residency revalidate | One consumer attempt. |
+| `dispatching` | `succeeded` | Existing consumer authority acknowledges | Stamp `completed_at`; terminal. |
+| `dispatching` | `retry_wait` | Consumer classifies retryable | Consumer-owned backoff sets `next_attempt_at`. |
+| `dispatching` | `disabled_target` | Target missing/inactive or current permission/entitlement fails | No network/provider send. |
+| `dispatching`, `retry_wait` | `dead_lettered` | Consumer declares terminal or exhausts its own retry budget | Ops-safe failure projection only. |
+| `pending`, `retry_wait`, `dispatching`, `disabled_target` | `canceled` | Source invalidated, withdrawn, hidden, deleted, or DSAR-suppressed | Destroy safe payload on retention schedule; terminal. |
+| `disabled_target`, `dead_lettered` | `pending` | Ops redrive after full current revalidation | Same source event/idempotency key; attempt history retained. |
+
+**Consumer ownership.** `console_bridge` delegates materialization, redaction, retries, and apply semantics to F-120/§4.7/§25. `customer_webhook` delegates registration, signing, retry/DLQ, and delivery to F-466/F-471/F-483/§31. `crm_sync` delegates OAuth, mapping, retry/DLQ, and provider recovery to F-490/§31.9. Those later consumers depend on F-116 when they consume Marketplace hooks; F-116 never depends on later R4/R5 consumers.
+
+**Retention, DSAR, and residency.** §40.2 is authoritative. Terminal safe payload is destroyed after 30 days; structural delivery metadata purges after 90 days. Incident, legal, or audit evidence must be copied to its independently retained AuditEvent/IncidentRecord and cannot silently extend this operational row. DSAR pseudonymizes actor FKs, removes subject-identifying safe-projection values, recomputes the hash, and cancels undelivered rows. The hook remains in the source Org region; a counterparty receives only its separately redacted safe projection.
+
+**Failure and recovery.** Source rollback creates no hook. A missing source cancels the row and raises Ops incident telemetry. Worker failure after an external send retries with the same source event/idempotency key, so the downstream consumer's existing idempotency contract prevents duplicate side effects. Schema/hash mismatch dead-letters without widening payload. Reactivation/redrive reruns current source, target, console, Org, audience, entitlement, DSAR, and residency checks. No hook transition emits another customer webhook recursively.
+
+**Acceptance criteria.**
+
+1. Hook creation MUST be atomic with the committed source AuditEvent and unique idempotency tuple.
+2. Buyer, Seller, Marketplace-authenticated, public, and Ops projections MUST match the exact field contract above; raw payload/destination/internal errors remain Ops-only.
+3. Every dispatch and redrive MUST use the existing consumer's current policy and MUST NOT broaden audience, retry, or retention behavior.
+4. Secrets, credentials, target URLs, private bodies, raw subject identities, prompts, and storage keys MUST be rejected from `safe_projection_json`.
+5. This source contract closes D-DPL-007 documentation authority only. Schema, worker, route, adapter, telemetry, recovery, and runtime firewall evidence remain pending in F-116/F-628 and MUST NOT be inferred from this section.
+
+> **Approved reversible source repair.** §§4.5.15-§4.5.16 are approved under AE-V711-DPL-MARKETPLACE-WEBHOOK-CONTRACT-01. The approval resolves the missing source contract; it does not promote runtime evidence or change F-116's R3 release.
 
 ---
 
@@ -14405,9 +14797,9 @@ Each line below maps to a concrete API operation, Convex mutation, or scheduled 
 
 #### 5.2.1.4 Audit Semantics
 
-Every Billing-Admin-mutated operation MUST emit one Audit Event with `action` ∈ Billing Admin Audit Action Types (Appendix J — new sub-enum), `user_id = caller`, `entity_type ∈ {ai_wallet, contest_record, committed_spend_contract, pricing_table_version, pro_trial_seat_grant, organization_plan, free_allowance_counter, billing_seat_snapshot, downgrade_excess_data_bucket}`, `entity_id = subject id`, and `changes` JSON populated for state mutations (per §4.6.1 Audit Event field semantics). Read operations on billing entities by Billing Admin emit `org.*_viewed` audit events at sample rate 1.0 (no sampling — billing reads are forensic-grade auditable).
+Every Billing-Admin-mutated operation MUST emit one Audit Event with `action` ∈ Billing Admin Audit Action Types (Appendix J — new sub-enum), `user_id = caller` or the scheduled-system actor explicitly authorized by the owning workflow, `entity_type ∈ {ai_wallet, contest_record, committed_spend_contract, pricing_table_version, pro_trial_seat_grant, trial_state, organization_plan, free_allowance_counter, billing_seat_snapshot, downgrade_excess_data_bucket}`, `entity_id = subject id`, and `changes` JSON populated for state mutations (per §4.6.1 Audit Event field semantics). Read operations on billing entities by Billing Admin emit `org.*_viewed` audit events at sample rate 1.0 (no sampling — billing reads are forensic-grade auditable).
 
-The Billing Admin Audit View (Operation #21) is a server-side filter over the Audit Event entity that returns only rows where `action` matches the regex `^org\.(wallet|contest|committed_spend|plan|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*` AND `org_id = session.org_id`. The view is paginated per §32.3 (cursor-based, default 50, max 250). Filter parameters: `action_namespace`, `entity_type`, `user_id`, `from`, `to`, `status`. Export to CSV is permitted (Operation #8 / `org.billing_audit_exported`).
+The Billing Admin Audit View (Operation #21) is a server-side filter over the Audit Event entity that returns only rows where `action` matches the regex `^org\.(wallet|contest|committed_spend|plan|trial|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*` AND `org_id = session.org_id`. The view is paginated per §32.3 (cursor-based, default 50, max 250). Filter parameters: `action_namespace`, `entity_type`, `user_id`, `from`, `to`, `status`. Export to CSV is permitted (Operation #8 / `org.billing_audit_exported`).
 
 This subsection defines the Billing Admin filtered leg of the composed audit-log access matrix. The full customer-facing matrix is canonical in §6.7.4 and rendered through §36.2 Audit Logs: Org Owner / Org Admin get the full cross-namespace view; Billing Admin gets this filtered billing view; Workspace Owner gets workspace-scoped audit logs; Team Owner gets team-scoped audit logs; Ops-actor rows surface the "Sourcera Ops" chip and `actor_type='ops_actor'` filter per §50.5.4; Seller Console parity follows §50.5.5.
 
@@ -14446,7 +14838,8 @@ This subsection defines the Billing Admin filtered leg of the composed audit-log
 14. The role MUST be removable by Org Owner or Org Admin without requiring confirmation flows (no soft-delete, no archived state — the role is an active assignment that is either present or absent); deletion is the audit event `org.billing_admin_role_revoked`.
 15. SCIM mapping (when opted in) MUST follow the same audit semantics; auto-grants from SCIM MUST stamp `org.billing_admin_role_granted_via_scim` (subset of `org.billing_admin_role_granted` for filter convenience).
 16. The Audit Event write-time validator at §4.6.1 MUST accept the union of the bare-verb enum and the `billing_admin_action` qualified namespace per the extension note in Appendix J → Audit Event Action Types. Writes presenting a mismatched namespace for the given `entity_type` MUST return HTTP 422 `audit_event_action_namespace_mismatch` (Appendix I). QA test `audit_event_action_enum_union_validator` asserts all three branches: (a) valid qualified action on billing `entity_type` succeeds; (b) bare verb on billing `entity_type` fails with namespace-mismatch; (c) qualified action on non-billing `entity_type` fails with namespace-mismatch.
-17. The deploy-time audit-vocabulary drift validator at Appendix J MUST assert: (a) every audit action emitted by §5.2.1.1 Permission List Operations is registered in Billing Admin Audit Action Types; (b) every registry entry is emitted by at least one code path (no dead-code entries); (c) the bare-verb enum contains no dotted strings; (d) the qualified namespace contains no bare verbs. Build MUST fail on drift. QA CI job `audit_vocabulary_drift` asserts.
+17. The §34.9.1 Business Starter trial MUST emit only Appendix J `org.trial_started` and `org.trial_ended` against `entity_type=trial_state`; both actions MUST appear in the §5.2.1.4, §6.7.4, and §32.8.22 billing-audit filters. CI gate `buyer_trial_audit_action_registration` asserts the two positive pairs, bare-action rejection, Solo-action cross-use rejection, non-TrialState rejection, bounded payload fields, and exact filter parity.
+18. The deploy-time audit-vocabulary drift validator at Appendix J MUST assert: (a) every audit action emitted by §5.2.1.1 Permission List Operations is registered in Billing Admin Audit Action Types; (b) every registry entry is emitted by at least one code path (no dead-code entries); (c) the bare-verb enum contains no dotted strings; (d) the qualified namespace contains no bare verbs. Build MUST fail on drift. QA CI job `audit_vocabulary_drift` asserts.
 
 #### 5.2.1.7 Glossary Note
 
@@ -15539,7 +15932,7 @@ Retention period begins from audit log creation timestamp. Deletion is automatic
 - Workspace Owner may view audit logs for their Bid Workspace via Workspace Settings → Audit  
 - Team Owner may view team-specific audit logs via Team Settings → Audit
 
-**Cross-section access matrix (D-3.4-005 remediation, 2026-05-04).** The full audit-log access matrix is the union of: Org Owner / Org Admin (full cross-namespace per §6.7.4); Billing Admin (filtered billing view via Billing-Admin Audit View per §5.2.1.4 — server-side filter `^org\.(wallet|contest|committed_spend|plan|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*`); Workspace Owner (workspace-scoped per §6.7.4); Team Owner (team-scoped per §6.7.4); Ops-actor rows surface a "Sourcera Ops" chip per §50.5.4 and `actor_type='ops_actor'` is a permitted filter; Seller Console parity per §50.5.5. The §36.2 settings page is the single user-facing entry point; this §6.7.4 access matrix is the canonical authority. CI gate `audit_log_surfacing_cross_reference_consistency` (Appendix M.5 — new) asserts every section enumerates the same access set under composition.
+**Cross-section access matrix (D-3.4-005 remediation, 2026-05-04).** The full audit-log access matrix is the union of: Org Owner / Org Admin (full cross-namespace per §6.7.4); Billing Admin (filtered billing view via Billing-Admin Audit View per §5.2.1.4 — server-side filter `^org\.(wallet|contest|committed_spend|plan|trial|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*`); Workspace Owner (workspace-scoped per §6.7.4); Team Owner (team-scoped per §6.7.4); Ops-actor rows surface a "Sourcera Ops" chip per §50.5.4 and `actor_type='ops_actor'` is a permitted filter; Seller Console parity per §50.5.5. The §36.2 settings page is the single user-facing entry point; this §6.7.4 access matrix is the canonical authority. CI gate `audit_log_surfacing_cross_reference_consistency` (Appendix M.5 — new) asserts every section enumerates the same access set under composition.
 
 ### 6.7.5 Audit Log Integrity Protection (D-3.4-001 / D-3.4-002 remediation, 2026-05-04) {#6.7.5-audit-log-integrity-protection}
 
@@ -15802,6 +16195,8 @@ A DSAR right-to-erasure request on a user identity MUST cascade across all ownin
 | §4.5.3.1 NDAVersion (`created_by`, `updated_by`, `superseded_by`) | Pattern B for UUID FK fields; body-field / binary sweep per §6.8.4.5 | Version metadata, digest, version number, supersession chain, and non-PII legal facts survive with the parent NDA Record; document bytes inherit the parent legal-defense redaction path. |
 | §4.5.3.2 NDASignatureRecord (`signatory_user_id`, `created_by`, `updated_by`, `signatory_email`) | Pattern B for UUID FK fields; Pattern A string-column pseudonymization for `signatory_email` | Signature evidence, version ID, signed timestamp, signature method, and audit-chain hash survive with the parent NDA Record; signatory email becomes `anonymized_<console>_user_<base32(hash)[:16]>@anonymized.invalid`. |
 | §4.5.14 SourceraTemplateRegistryEntry (`created_by`, `updated_by`) | Pattern B for Ops-user FKs | Published template content and version provenance remain; Ops actor identity resolves through the pseudonymized User row. Customer subject data is forbidden. |
+| §4.5.15 MarketplaceReview (`reviewer_user_id`, `seller_response_by`, `created_by`, `updated_by`) | Pattern B for UUID FK fields; body-field sweep and aggregate recompute per §6.8.4.4–§6.8.4.5 | Review and Seller-response text, public attribution, and subject-linked cache copies are removed or recomputed before any public or downstream render; only non-identifying rating aggregates may survive the §40.2 horizon. |
+| §4.5.16 MarketplaceIntegrationHook (`created_by`, `updated_by`) | Pattern B for UUID FK fields; safe-projection body sweep per §6.8.4.5 | Pending delivery is canceled when erasure invalidates the projection; retained operational metadata may not rehydrate a subject or payload. |
 | §4.8.7 FreeAllowanceCounter / ProTrialSeatGrant (`revoker_user_id`, `granted_by_user_id`, audit fields where present) | Pattern B | UUID FK; preserve target; financial / entitlement audit rows retained under §6.8.5 where applicable. |
 | §4.4.21 VerificationReviewRecord (`reviewer_ops_user_id`, applicant / document subject mentions) | Pattern B for FK fields; third-party body / attachment redaction per §40.2 and §6.8.1 | Documentation refs may name non-account-holder subjects; those spans follow §6.8.6.1 third-party verification. |
 
@@ -15969,6 +16364,8 @@ A DSAR right-to-erasure request on a user identity MUST cascade across all ownin
 | §4.5.12 | MarketplaceMatchScoreSnapshot | 17 + 4 | Pattern B on `created_by`, `updated_by`; aggregate recompute / suppression for subject-linked scores | Cross-console score artifact recomputes or suppresses when a contributing subject is erased. |
 | §4.5.13 | MarketplaceProactiveOffer | 4 + 5 | Pattern B on `withdrawn_by_user_id`, `created_by`, `updated_by`; body-field sweep | Offer identity and withdrawal actor FKs pseudonymize; commercial facts retained only when contract / billing evidence exists. |
 | §4.5.14 | SourceraTemplateRegistryEntry | 1 (platform content governance) | Pattern B on Ops `created_by`, `updated_by` | Active/superseded/deprecated versions retain for seed/update provenance; no customer subject data is allowed. |
+| §4.5.15 | MarketplaceReview | 4 + 17 (public review subject data + marketplace aggregate) | Pattern B on `reviewer_user_id`, `seller_response_by`, `created_by`, `updated_by`; body-field sweep and synchronous aggregate recompute / suppression | Review body, response body, and public attribution are removed before cache or downstream render; rating aggregates recompute and suppress when their source row is no longer eligible. |
+| §4.5.16 | MarketplaceIntegrationHook | 1 + 4 (operational handoff audit + subject data) | Pattern B on `created_by`, `updated_by`; safe-projection body sweep; cancel undelivered rows invalidated by erasure | Structural dispatch evidence may survive only for the §40.2 operational horizon; payload values cannot survive or be replayed after subject invalidation. |
 | §4.6.1 | Audit Event | 1 | Pattern B on `user_id` | §6.8.5 row 1 + §40.2 AuditEvent row (D-9.1R-001 V9 remediation). |
 | §4.6.2 | Attachment | 4 (subject-data) for binary; 1 (audit-integrity) for metadata redaction sentinel | Pattern A on binary detach; Pattern B on `uploader_user_id` metadata FK | §40.2 Attachment row (D-9.1R-014 V9 remediation) — binary 72h hard-delete, metadata 7y. |
 | §4.6.3 | OpsSession | 1 + 2 | Pattern B on `ops_user_id` | §40.2 OpsSession row (D-9.1R-015 V9 remediation; v7.1.1 backlog). |
@@ -19210,7 +19607,7 @@ All sections appear in the following order. Phase-gated sections render as phase
 
 - **Use:** Use Cases, Requirements, Scoring, Scenario comparison  
 - **Structure:** Spreadsheet-like grid, rows \= items, columns \= attributes  
-- **Row height:** 48px (text), 32px (compact mode toggle available)  
+- **Density:** Comfortable and Compact behavior is governed solely by §3.15.
 - **Columns:** Configurable visibility via settings icon in column header  
 - **Sorting:** Click column header to sort A-Z or reverse; chevron indicates direction  
 - **Filtering:** Filter bar above matrix (chip-based, removable filters)  
@@ -31698,6 +32095,8 @@ Every Marketplace Abuse Report binds a single `subject_kind` and `subject_id`. T
 | `capability_declaration` (§26.3) | Seller-authored capability declaration (misleading claims, trademark infringement) | `declaration_removed` OR `seller_warned` OR cascade to Listing hide if declaration anchors the Listing | Opt-out does NOT suppress |
 | `eoi_message` (§4.5.2) | Seller EOI message to a buyer (spam, solicitation, harassment) | `eoi_purged` (EOI record archived, buyer no longer sees it) + `seller_warned` or `seller_banned` on pattern | Not applicable (buyer-private) |
 | `vendor_response_excerpt` | Bid response excerpt surfaced in a Public Selection Report (M2) | Redaction of excerpt in the M2 link; possible buyer-side notification per §48.5.2 | Vendor opt-out (§4.5.6) takes precedence; report may still be filed |
+| `marketplace_review` (§4.5.15) | Published Buyer-authored rating/review of a Seller Org | Hide or reject the review; recompute rating aggregates; may escalate to Seller/Buyer account action under §27.8.7 | Report remains available after review hide/withdrawal through its retained provenance. |
+| `marketplace_review_response` (§4.5.15) | Published Seller response attached to a Marketplace Review | Hide or withdraw only the response unless the parent review independently requires action | Parent review remains visible when only the response is sanctioned. Deprecated read alias: `public_review_response`. |
 
 The `category_page`, `comparison_page`, `guide_page` subject kinds route internally to the editorial Ops queue; their closure disposition enum overlaps with `abuse_report_closure_disposition` but uses editorial sub-dispositions (`editorial_correction`, `page_republish`, `page_retracted`) registered in Appendix J under the existing enum. §27.8.7 handles both seller-bearing and editorial subjects.
 
@@ -34706,7 +35105,7 @@ The four plan events fire on every committed or scheduled plan-tier change (§34
 
 **Trigger.** Organization's `buyer_plan_tier` OR `seller_plan_tier` is updated to a lower-tier value at the **effective** moment (NOT at scheduling — see `billing.plan.downgrade_scheduled` for that). Fires when the previously scheduled downgrade transitions to active state per §34.5.2 (e.g., at next billing anniversary).
 
-**Fired by.** Downgrade execution worker (scheduled job that runs at billing anniversaries).
+**Fired by.** Downgrade execution worker (scheduled job that runs at billing anniversaries) or a registered trial-expiration worker for an automatic trial downgrade.
 
 **Payload `data`.**
 
@@ -34716,14 +35115,14 @@ The four plan events fire on every committed or scheduled plan-tier change (§34
 | `prior_plan_tier` | Enum | Per Appendix J Plan Tiers |
 | `new_plan_tier` | Enum | Lower than `prior_plan_tier` |
 | `effective_at` | Timestamp | UTC; the moment the downgrade took effect |
-| `originally_scheduled_at` | Timestamp | UTC; the moment the customer scheduled the downgrade (per `downgrade_scheduled` event); equal to or later than `scheduled_event_timestamp` |
-| `actor_user_id` | UUID (nullable) | The Billing Admin who scheduled; null for system-initiated downgrades (e.g., payment-failure-triggered automatic downgrade per Appendix H) |
+| `originally_scheduled_at` | Timestamp (nullable) | UTC; the moment the customer scheduled the downgrade (per `downgrade_scheduled` event); null for a system-initiated trial downgrade that had no scheduling event |
+| `actor_user_id` | UUID (nullable) | The Billing Admin who scheduled; null for system-initiated payment-failure or trial-expiration downgrade |
 | `wallet_changes` | Object | `{"prior_budget_value_dollars_cents", "new_budget_value_dollars_cents", "prior_overage_cap_default_cents", "new_overage_cap_default_cents"}` |
 | `feature_access_diff` | Object | `{"capabilities_locked": [capability_id, ...], "limits_decreased": [{"limit_name", "prior_value", "new_value"}, ...], "plan_gates_added": [feature_name, ...]}` |
 | `excess_data_bucket_id` | UUID (nullable) | FK → DowngradeExcessDataBucket; populated when downgrade triggered the §4.8.10 90-day preservation rule |
 | `excess_data_bucket_summary` | Object (nullable) | `{"workspace_count_preserved", "kb_entry_count_preserved", "vendor_count_preserved", "preservation_window_until"}` |
 | `transaction_correlation_id` | UUID | Shared across companion events when both consoles downgraded in one transaction |
-| `change_origin` | Enum | `customer_self_serve_scheduled`, `payment_failure_automatic`, `sales_ops_decommitted` |
+| `change_origin` | Enum | `customer_self_serve_scheduled`, `payment_failure_automatic`, `sales_ops_decommitted`, `business_starter_trial_auto_downgrade`, or `solo_migration_trial_auto_downgrade` |
 
 #### `billing.plan.downgrade_scheduled`
 
@@ -35539,9 +35938,9 @@ Items surfaced during the hostile-staff-engineer review of §31.9 and authored h
 | `console` | Enum | `buyer`, `seller`, or `both` | Declares the authenticated console context under which the subscription was created. `both` is permitted only when the caller is an Org Owner / Org Admin and every requested event class is cross-console safe. |
 | `target_url` | URL string | HTTPS only, max 2048 chars, no private IP ranges, no localhost | Validated at create and on every update. URL changes reset failure counters. |
 | `description` | String | Nullable, max 120 chars | Customer label shown in Settings -> Developer -> Webhooks. |
-| `event_type_filters` | Array[String] | 1-200 values; every value must exist in Appendix C or the event's owning §31 / §27 / §48 catalog | Specific event subscriptions. Mutually compatible with class filters; an event must match either list. |
+| `event_type_filters` | Array[String] | 1-200 values; every value must resolve to one active §31.11.6 `WebhookEventRegistryEntry` | Specific event subscriptions. Mutually compatible with class filters; an event must match either list. Catalog prose is source input to the registry compiler, not a runtime lookup substitute. |
 | `event_class_filters` | Array[Enum] | Values from Appendix J `webhook_event_class` | Class-level subscriptions, e.g. `billing_domain`, `crm_sync_domain`, `marketplace_discovery_domain`. |
-| `delivery_audience_scope` | Enum | Appendix J `webhook_delivery_audience_scope`; default `subject` for customer subscriptions unless an owning catalog requires another value | Abuse-report events require explicit `subject` / `reporter`; Ops-only `ops` is not customer-provisionable. |
+| `delivery_audience_scope` | Enum | Appendix J `webhook_delivery_audience_scope`; persisted and non-null | No global default exists. Omission at API create is accepted only when every selected active registry row permits one identical audience scope; the server then persists that value. Otherwise the caller must supply one value allowed by every selected row. `ops` is never customer-provisionable. |
 | `secret_version_active` | Integer | >= 1 | Version used for new deliveries per §31.10. |
 | `secret_version_previous_valid_until` | Timestamp | Nullable | Previous version overlap boundary per §31.10. |
 | `state` | Enum | `active`, `disabled_by_user`, `quarantined`, `disabled_plan_limit`, `disabled_org_deleted` | Delivery workers send only to `active` subscriptions. |
@@ -35564,7 +35963,7 @@ Items surfaced during the hostile-staff-engineer review of §31.9 and authored h
 
 ### 31.11.2 Subscription Registration Guard {#31.11.2-subscription-registration-guard}
 
-The subscription-registration guard runs before persisting create / patch mutations and before reactivating a quarantined endpoint. It resolves every requested `event_type_filters[]` value to its owning Appendix C / §31 / §27 / §48 catalog row, resolves every `event_class_filters[]` value to Appendix J `webhook_event_class`, then enforces the predicates below.
+The subscription-registration guard runs before persisting create / patch mutations and before reactivating a quarantined endpoint. It resolves every requested `event_type_filters[]` value through the current active §31.11.6 registry row, resolves every `event_class_filters[]` value to Appendix J `webhook_event_class`, expands class filters only through the same registry, then enforces the predicates below. Catalog prose that is missing, stale, duplicated, or schema-hash-inconsistent with the compiled registry fails closed; no subscription write or delivery is permitted.
 
 | Predicate | Failure behavior | Notes |
 | :---- | :---- | :---- |
@@ -35587,7 +35986,7 @@ All endpoints require `Authorization: Bearer <api_token>` with Appendix J scope 
 | `PATCH /v1/webhooks/{subscription_id}` | Update URL, filters, audience scope, description, or state | Partial fields; state may move `active <-> disabled_by_user` | `200 WebhookSubscription projection` | Same guard errors as create; `webhook_endpoint_quarantined` when state is quarantined and caller omitted `reactivate=true` |
 | `DELETE /v1/webhooks/{subscription_id}` | Soft-delete a subscription | Optional `delete_reason` | `204` | `not_found`, `token_scope_insufficient` |
 | `POST /v1/webhooks/{subscription_id}/reactivate` | Clear quarantine after customer fixes target URL | Optional `target_url` replacement | `200 {subscription_id, state='active', failure_count_24h=0}` | `webhook_endpoint_quarantined` when URL remains invalid, `webhook_subscription_target_url_invalid` |
-| `GET /v1/webhooks/available-events` | Return caller-visible event catalog | `console`, `delivery_audience_scope?` | `200 {events[], classes[]}` | Never returns hidden event classes; unauthorized classes are omitted, not errored. |
+| `GET /v1/webhooks/available-events` | Return caller-visible event catalog from §31.11.6 | `console`, `delivery_audience_scope?` | `200 {events[], classes[], catalog_version}` | Never returns hidden event classes; unauthorized classes are omitted, not errored. |
 
 ### 31.11.4 Acceptance Criteria {#31.11.4-acceptance-criteria}
 
@@ -35620,6 +36019,82 @@ These routes materialize Settings -> Integrations -> Failed Webhooks against §4
 4. Dismiss MUST transition the row to `dismissed`, stamp actor/time, hide it from default lists, and preserve the minimal audit row until §40.2 purge.
 5. Cross-Org, cross-console, unauthorized-role, deleted, and expired row reads MUST all use the same non-leaking 404 `webhook_delivery_failure_not_found` envelope.
 6. A DSAR payload rewrite or subscription URL/secret rotation between failure and replay MUST use the current redacted payload/current endpoint/current active secret, not the failed snapshot values.
+
+### 31.11.6 WebhookEventRegistryEntry (Source-Compiled Delivery Authority) {#31.11.6-webhookeventregistryentry}
+
+**Authoring intent.** `WebhookEventRegistryEntry` is the versioned, source-compiled authority used by subscription creation, patch, reactivation, discovery, dispatch, and replay. It closes D-DPL-008 by converting existing Appendix C / §31 / owning-domain catalogs into one exact runtime contract. It is not customer-authored and has no customer CRUD surface. F-466 owns catalog compilation and publication, F-471 owns the registration/firewall guard, and F-483 owns delivery/replay enforcement. This section defines source authority only; schema, compiler, migration, deploy-validator, and runtime proof remain pending.
+
+| Field | Type | Constraints | Notes |
+| :---- | :---- | :---- | :---- |
+| `id` | UUID | Primary key | Stable registry-version row id. |
+| `event_type` | String | Required; canonical dotted event name | No alias may publish a second active row. |
+| `event_version` | SemVer | Required | Producer envelope version. |
+| `schema_version` | SemVer | Required | Payload-schema version. |
+| `event_class` | Enum | Appendix J `webhook_event_class` | Must equal the owning catalog class. |
+| `producer_feature_id` | String | Required; `_audit/FEATURE_INVENTORY.md` feature id | Runtime owner, not evidence of implementation. |
+| `producer_handler_id` | String | Required | Stable handler registry key; free-form producer values are forbidden. |
+| `source_anchor` | String | Required | Exact Master-Spec section or Appendix C row used by the compiler. |
+| `console_scope` | Enum | Appendix J `webhook_event_console_scope` | Buyer/Seller/cross-console/Ops/platform restriction. |
+| `provisionability` | Enum | Appendix J `webhook_event_provisionability` | Customer, entitlement-gated, Ops-only, or disabled. |
+| `required_entitlement_key` | String | Nullable; required iff `provisionability=entitlement_gated` | Current entitlement is rechecked at registration and send. |
+| `allowed_delivery_audience_scopes` | Array[Enum] | 1-3 unique Appendix J `webhook_delivery_audience_scope` values | Empty arrays and customer exposure of `ops` fail compilation. |
+| `organization_scope` | Enum | Appendix J `webhook_event_org_scope` | Whether `org_id` is required, platform-nullable, or forbidden. |
+| `workspace_scope` | Enum | Appendix J `webhook_event_workspace_scope` | Whether `workspace_id` is required, optional, or forbidden. |
+| `payload_schema_id` | String | Required | Stable serializer-schema key. |
+| `payload_schema_version` | SemVer | Required; equals `schema_version` | Mismatch fails publication. |
+| `payload_schema_sha256` | String | Required; 64 lowercase hex chars | Hash of the canonical serializer schema. |
+| `payload_policy` | Enum | Appendix J `webhook_event_payload_policy` | Metadata-only, schema allow-list, or Ops-only. |
+| `retry_class` | Enum | Appendix F retry class | Must equal the owning catalog row. |
+| `delivery_recheck_policy` | Enum | Appendix J `webhook_event_delivery_recheck_policy` | Current subscription, console, audience, entitlement, DSAR, and target are always rechecked. |
+| `posthog_mirror_event` | String | Nullable; Appendix G underscore-form event | When present, must resolve to exactly one mirror row. |
+| `state` | Enum | Appendix J `webhook_event_registry_state` | `active`, `deprecated`, or `disabled`. |
+| `successor_event_type` | String | Nullable; required for a renamed deprecated event | Must resolve to an active row; aliases remain read-only. |
+| `catalog_version` | SemVer | Required | Compiler bundle version. |
+| `source_commit_sha` | String | Required; 40 lowercase hex chars | Immutable source revision input. |
+| `published_at` | Timestamp | Required iff active/deprecated | UTC publication time. |
+| `deprecated_at` | Timestamp | Nullable; required iff deprecated | UTC. |
+| `created_at` / `updated_at` | Timestamp | Required | UTC. |
+
+**Indexes.** UNIQUE `(event_type, event_version)`; UNIQUE `(event_type)` partial where `state='active'`; `(event_class, state)`; `(producer_feature_id, state)`; `(console_scope, state)`; `(payload_schema_id, payload_schema_version)`; UNIQUE `(posthog_mirror_event)` partial where non-null and `state='active'`; GIN `(allowed_delivery_audience_scopes)`.
+
+**Initial active source rows.** Every row uses `event_version=1.0.0`, `schema_version=payload_schema_version=1.0.0`, `state=active`, `organization_scope=required`, `workspace_scope=required`, `delivery_recheck_policy=current_subscription_console_audience_entitlement_dsar_target`, and Appendix F.1 `retry_class=standard`. `subject` is the only allowed audience for this Buyer-Org set. Payload-schema hashes are compiler outputs and MUST NOT be handwritten or copied into this document.
+
+| Event type(s) | Event class | Producer / handler | Source anchor | Console / provisionability | Payload policy / schema id | PostHog mirror |
+| :---- | :---- | :---- | :---- | :---- | :---- | :---- |
+| `internal_comment_thread.created` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.created` | `internal_comment_thread_created` |
+| `internal_comment_thread.post_appended` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.post_appended` | `internal_comment_thread_post_appended` |
+| `internal_comment_thread.mention_sent` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.mention_sent` | `internal_comment_thread_mention_sent` |
+| `internal_comment_thread.resolved` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.resolved` | `internal_comment_thread_resolved` |
+| `internal_comment_thread.reopened` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.reopened` | `internal_comment_thread_reopened` |
+| `internal_comment_thread.archived` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.archived` | `internal_comment_thread_archived` |
+| `internal_comment_thread.visibility_changed` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_thread.visibility_changed` | `internal_comment_thread_visibility_changed` |
+| `internal_comment_post.moderated` | `internal_comment_domain` | F-414 / `internal_comment_mutation_handlers` | §25.7.10 + Appendix C Internal-Comment-Domain | `buyer_only` / `customer` | `metadata_only` / `webhook.internal_comment_post.moderated` | `internal_comment_post_moderated` |
+| `defense_view.generated` | `product_domain` | F-261 / `defense_view_generation_handler` | §13.11.10 + Appendix C Defense-View-Domain | `buyer_only` / `entitlement_gated:defense_view` | `metadata_only` / `webhook.defense_view.generated` | `defense_view_generated` |
+| `defense_view.regenerated` | `product_domain` | F-261 / `defense_view_generation_handler` | §13.11.10 + Appendix C Defense-View-Domain | `buyer_only` / `entitlement_gated:defense_view` | `metadata_only` / `webhook.defense_view.regenerated` | `defense_view_regenerated` |
+| `policy.ingestion.queued` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.queued` | `policy_ingestion_queued` |
+| `policy.ingestion.framework_detected` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.framework_detected` | `policy_ingestion_framework_detected` |
+| `policy.ingestion.framework_pending_user` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.framework_pending_user` | `policy_ingestion_framework_pending_user` |
+| `policy.ingestion.extraction_completed` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.extraction_completed` | `policy_ingestion_extraction_completed` |
+| `policy.ingestion.extraction_partial` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.extraction_partial` | `policy_ingestion_extraction_partial` |
+| `policy.ingestion.extraction_failed` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.extraction_failed` | `policy_ingestion_extraction_failed` |
+| `policy.ingestion.dedup_completed` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.dedup_completed` | `policy_ingestion_dedup_completed` |
+| `policy.ingestion.amendments_drafted` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.amendments_drafted` | `policy_ingestion_amendments_drafted` |
+| `policy.ingestion.published` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.published` | `policy_ingestion_published` |
+| `policy.ingestion.discarded` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.discarded` | `policy_ingestion_discarded` |
+| `policy.ingestion.failed` | `product_domain` | F-245 / `policy_ingestion_job_handlers` | §12 + Appendix C Phase 10 | `buyer_only` / `entitlement_gated:policy_parsing` | `schema_allowlist` / `webhook.policy.ingestion.failed` | `policy_ingestion_failed` |
+
+**Compiler, guard, and delivery rules.** The compiler rejects a missing source row, duplicate active event, unknown enum, source/catalog drift, absent payload schema, schema-hash mismatch, PostHog mirror collision, or incompatible audience/console pair with `webhook_event_registry_contract_mismatch`; publication is atomic. `POST/PATCH/reactivate`, `GET /v1/webhooks/available-events`, send, DLQ replay, and manual retry re-read the current active row. Unknown customer-supplied event names return 422; a known but console-, audience-, role-, entitlement-, or provisionability-restricted event returns the existing non-leaking 404/403 behavior. Deprecation disables new subscriptions while preserving existing rows only until the successor migration is explicitly validated. No caller may bypass the registry with a catalog string, cached allow-list, class default, or legacy alias.
+
+**Retention, DSAR, and residency.** Active and deprecated registry versions retain for platform life; deprecated rows are never hard-deleted because they anchor historical deliveries. Rows contain no customer content or subject PII and may be globally replicated. Payload schemas are metadata-only source artifacts; example payloads, customer identifiers, URLs, credentials, and secrets are forbidden.
+
+**Acceptance criteria.**
+
+1. The 21 initial events above compile to exactly one active row each; no alternate spelling or legacy alias is active.
+2. Seller-console discovery and subscription attempts for any row above return the same non-leaking result and never reveal the event name, class, entitlement, or source anchor.
+3. Create, patch, reactivation, send, and replay recheck registry state, current console, audience, entitlement, DSAR, subscription state, and target before any network send.
+4. Missing, duplicate, stale, or hash-mismatched rows fail closed with no subscription write, queue insert, delivery, replay, or success telemetry.
+5. `delivery_audience_scope` has no global default. API omission is valid only when the selected active rows share exactly one allowed value and that value is persisted.
+6. This section closes D-DPL-008 source authority only. F-466/F-471/F-483 runtime implementation and F-628 staging/browser/telemetry/migration/rollback evidence remain pending; no runtime gate is promoted by this authoring change.
 
 ## 31.12 KB Document and Verification Webhook Completeness Pack {#31.12-kb-document-and-verification-webhook-completeness-pack}
 
@@ -35761,6 +36236,48 @@ Acceptance criteria:
 REST API. Current version: `v1`. Base URL: `https://api.sourcera.io/v1`.
 
 All responses are JSON. All timestamps are ISO 8601 UTC.
+
+### 32.1.1 Cross-Origin Browser Request Policy (F-911) {#32.1.1-cross-origin-browser-request-policy}
+
+F-911 is the sole Origin-resolution and browser cross-origin decision contract for registered browser-callable route handlers. It is enforced in `proxy.ts`, `apps/buyer/proxy.ts`, and `apps/seller/proxy.ts` before authentication, tenant lookup, console lookup, resource lookup, or route business logic. It grants no API authorization. Root-page navigations remain navigations, and server-to-server bearer-token calls remain governed by their authentication, scope, tenant, console, residency, validation, rate-limit, and idempotency contracts.
+
+**Current policy.** The R0 cross-origin allowlist is empty in development, preview, staging, and production. A registered request may continue only when the `Origin` header is absent or when its serialized origin equals the request URL's serialized origin byte-for-byte. The allowed response emits no `Access-Control-*` header. Marketplace, Buyer, and Seller are separate applications; a sibling application is cross-origin and is denied. Preview deployments may call themselves but not another preview or sibling application.
+
+The route registry is source-derived and includes every effective method. The current registered handler families are each application's `/v1/health` GET plus generated HEAD/OPTIONS, and, after §1.5.1 lands, each application's `/v1/security/csp-report` POST plus generated OPTIONS. A GET handler compiles to `GET, HEAD, OPTIONS`; a POST-only CSP-report handler compiles to `OPTIONS, POST`. Allowed generated OPTIONS returns HTTP 204 with a zero-length body and the exact compiled `Allow`. `Allow` is framework route metadata, not a CORS permission header.
+
+**Resolver.** The proxy accepts at most one `Origin` value. Multiple or comma-joined values, control or non-ASCII bytes, leading/trailing whitespace, and values longer than 2,048 bytes are malformed. Literal `null`, opaque/file origins, user-info, paths, queries, fragments, non-HTTP schemes, wildcard or regular-expression text, Unicode/suffix lookalikes, wrong ports, default-port aliases, and unregistered preview origins are denied. All other values are parsed with the WHATWG URL parser; the serialized result MUST equal the raw header and the request origin exactly.
+
+The decision order is fixed:
+
+1. Resolve application, environment, deployment identity, registered route, and framework-expanded method.
+2. Reject a registry or framework-expansion invariant before business handling. CI and promotion fail for any source-discovered handler or effective method absent from the registry.
+3. Resolve and validate `Origin` without reading authentication, tenant, console, resource, or request-body state.
+4. Continue only for absent Origin, exact same origin, or a future exact allow row satisfying the contract below.
+5. Return every other actual request or preflight directly from the proxy as HTTP 403 with a zero-length body and `Cache-Control: no-store`. The handler and framework-generated route response are not invoked.
+
+Every registered response merges `Vary: Origin`. A denied preflight additionally merges `Vary: Access-Control-Request-Method` and `Vary: Access-Control-Request-Headers`. Denials never reflect the origin, emit route-specific content, reveal whether a resource exists, or emit route-derived `Allow`. §1.5.1 adds its registered non-document CSP and common safe headers without changing this decision or the empty body.
+
+**Future exact allow row.** A new browser client is forbidden until a reviewed row supplies all fields below and production proof passes:
+
+| Field | Contract |
+| :---- | :---- |
+| Environment/application/route | One exact environment, one of Marketplace/Buyer/Seller, and one registered route identifier. |
+| Origin | One serialized HTTP(S) origin with exact scheme, host, and explicit non-default port where applicable; no wildcard, suffix, regex, redirect, or mutable alias. |
+| Methods | Sorted unique subset of the compiled route methods. |
+| Request/response headers | Sorted unique lower-case HTTP tokens; only values required by the client. |
+| Credentials | Boolean, default and current value `false`; `true` requires an explicit owning product contract and credentialed denial tests. |
+| Cache | Preflight max age no greater than 600 seconds; current empty policy emits no preflight max-age header. |
+| Governance | Stable owning requirement, environment, release, expiry/review date, reviewer, and signed success, denial, production, and rollback receipts. |
+
+For a future allowed preflight, `Access-Control-Allow-Origin` equals the exact registered origin; methods and headers are the exact registered subsets; credentials are emitted only when the row explicitly sets `true`; and `Access-Control-Max-Age` never exceeds 600. A row that expires or loses its owning deployment identity fails closed.
+
+**Failure, privacy, and recovery.** Policy parse failure, route-registry drift, framework-method drift, or unknown application/method fails CI and promotion. A defensive runtime invariant denies cross-origin traffic while preserving exact registered no-Origin and same-origin health recovery. `cross_origin_policy_denial` is a bounded operational log schema, not a customer event: request correlation, policy version, application, environment, route, method, bounded origin class/reason, commit, and deployment only. Raw origins, hosts, URLs, paths, queries, fragments, headers, bodies, credentials, cookies, customer identifiers, and resource-existence results are forbidden.
+
+Rollback restores the prior signed application deployments and policy artifact. It MUST NOT add `*`, reflect an origin, bypass the proxies, or weaken no-store/non-enumeration behavior. A legitimate denied client recovers only through a new exact allow row and fresh staged proof.
+
+**Implementation and proof.** The canonical implementation binding is `config/cross-origin-policy.json`, `packages/domain/src/cross-origin-policy.ts`, the three root proxies, source-derived route discovery, `scripts/probe-cross-origin-policy.ts`, and `docs/runbooks/cross-origin-policy.md`. Tests MUST cover absent and same origin; malformed, opaque, lookalike, wrong-port, sibling, preview, and external origins; actual and preflight requests; generated HEAD/OPTIONS; exact status/body/`Allow`/`Vary`; handler-not-reached; resource non-enumeration; future-row compilation; runtime-invariant recovery; telemetry redaction; and rollback.
+
+The signed production receipt binds policy/source checksums, commit, exact application origins and deployment IDs, the discovered effective route registry, every allow/deny result, handler counters, reviewer, timestamp, and rollback rehearsal. Preview evidence is not production evidence. Production remains closed while any required application origin is unresolved.
 
 ## 32.2 Authentication & Rate Limit Headers {#32.2-authentication-and-rate-limit-headers}
 
@@ -38361,7 +38878,7 @@ Non-Enterprise upgrades return `status=applied` immediately with `effective_at` 
 
 ### 32.8.22 GET /v1/orgs/{org_id}/audit-events — Billing Admin Audit View {#32.8.22-get-billing-audit-events}
 
-**Purpose.** Filtered audit-event view restricted to billing actions. Server-side enforced regex `^org\.(wallet|contest|committed_spend|plan|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*` per §5.2.1.4. Maps to §5.2.1.1 Operation #21.
+**Purpose.** Filtered audit-event view restricted to billing actions. Server-side enforced regex `^org\.(wallet|contest|committed_spend|plan|trial|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*` per §5.2.1.4. Maps to §5.2.1.1 Operation #21.
 
 **Authentication.** `read:billing`.
 
@@ -38372,7 +38889,7 @@ Non-Enterprise upgrades return `status=applied` immediately with `effective_at` 
 **Query parameters.**
 
 - `action_namespace` (required, MUST equal `org.billing` — other values return HTTP 422 `audit_view_namespace_out_of_scope`).
-- `entity_type` (optional): `ai_wallet` | `contest_record` | `committed_spend_contract` | `pricing_table_version` | `pro_trial_seat_grant` | `organization_plan` | `free_allowance_counter` | `billing_seat_snapshot` | `downgrade_excess_data_bucket`.
+- `entity_type` (optional): `ai_wallet` | `contest_record` | `committed_spend_contract` | `pricing_table_version` | `pro_trial_seat_grant` | `trial_state` | `organization_plan` | `free_allowance_counter` | `billing_seat_snapshot` | `downgrade_excess_data_bucket`.
 - `user_id` (optional).
 - `from`, `to` (ISO 8601; window ≤ retention per plan tier per §5.2.1.4 Audit Retention).
 - `status` (optional).
@@ -41551,7 +42068,7 @@ The single metered surface is **AI value-dollars** consumed via §34.3 outcome-a
 | Carry-over | Seller-side carry-over is canonical in §34.19.1 / §34.19.1.A (13 protected asset classes and sub-class bridge). Buyer-side carry-over is canonical in §34.5.1.A. No implementation may derive an upgrade handler from an inline list in this row. |
 | Wallet behavior | `included_budget_remaining` (§4.8.3) is increased to the new plan's monthly budget at the next billing cycle (no in-period budget catch-up); overage cap and auto-topup configuration carry over unchanged |
 | Audit | `org.plan_changed` audit event with prior + new plan tier and actor user_id |
-| Notification | `plan_upgrade_complete` (Appendix C — to be added per `_integration/RECONCILIATION.md → Webhook Additions`) emailed to Org Owner and `billing_admin` with the upgrade summary and carry-over confirmation |
+| Notification | `plan_upgrade_complete` (Appendix C) emailed to Org Owner and `billing_admin` with the upgrade summary and carry-over confirmation |
 | Free Allowance | Pre-existing FreeAllowanceCounter rows (§4.8.7) are unaffected by upgrade; they continue to decrement as designed |
 | CTA copy requirement | Upgrade CTAs MUST explicitly state carry-over: "Your N KB entries, M in-flight evaluations, and your wallet configuration carry over automatically." |
 | Solo throttling-pressure CTA | Solo throttling-pressure upgrade CTAs are governed only by §44.6.5.A. Buyer Solo routes to `business_starter`; Seller Solo routes to `seller_starter`. The `upgrade_completed.trigger` value is `solo_envelope_pressure`. The throttling toast itself MUST NOT include the CTA; the CTA renders only in the §44.6.2 single-card upgrade rail or the §34.5 plan-change surface. |
@@ -41710,7 +42227,7 @@ Per §6.8 and §40.2, DSAR right-to-erasure for an Org with `archived` data MUST
 
 | Trigger | Notification | Recipient | Source |
 | :---- | :---- | :---- | :---- |
-| Bucket created on downgrade | `downgrade_bucket.created` | Org Owner, `billing_admin` | Pending — `_integration/RECONCILIATION.md → Webhook Additions` |
+| Bucket created on downgrade | `downgrade_bucket.created` | Org Owner, `billing_admin` | Appendix C; §4.8.10 |
 | 60-day notice (30 days remaining) | `downgrade_bucket.notice_d60` (existing `plan_downgrade_warning` superseded for bucket-specific case) | Org Owner, `billing_admin` | §4.8.10 |
 | 80-day notice (10 days remaining) | `downgrade_bucket.notice_d80` | Org Owner, `billing_admin` | §4.8.10 |
 | Hard archive | `downgrade_bucket.archived` | Org Owner, `billing_admin` | §4.8.10 |
@@ -42068,7 +42585,7 @@ This matrix is the runtime contract for plan-gated AI capabilities and the close
 | Free Allowance | All `customer_billed` capabilities receive their default 10-op allowance per §4.8.7 |
 | End-of-trial behavior (day 15, no payment method) | Auto-downgrade to `buyer_free`; `included_budget_remaining` decrements to $5/mo (Free); excess data flow per §34.6 (DowngradeExcessDataBucket) |
 | End-of-trial behavior (day 15, payment method on file) | Conversion to chosen plan tier; carry-over per §34.5.1 |
-| Trial-expiry notifications | Day 11: `trial_expiring` (Appendix C, existing). Day 14: `trial_expiring_today` (Appendix C — to be added per `_integration/RECONCILIATION.md → Webhook Additions`). Day 15 on auto-downgrade: `plan_downgrade_complete` (existing) + bucket-creation notice if overages |
+| Trial-expiry notifications | Day 11: `trial_expiring` (Appendix C). Day 14: `trial_expiring_today` (Appendix C). Day 15 on auto-downgrade: `plan_downgrade_complete` (Appendix C) + bucket-creation notice if overages |
 | Audit | `org.trial_started` and `org.trial_ended` events with actor, plan tier, wallet state |
 
 ### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)
@@ -42252,12 +42769,22 @@ The Stripe Customer Atomic-Binding Protocol is the canonical specification for h
 | :---- | :---- |
 | **#1 — Single active Stripe Customer per `(org_id, legal_entity)`.** | At any point in time, an Organization has exactly one Stripe Customer in `state=active_for_new_invoices` keyed on its current `(org_id, legal_entity)`. The `Organization.stripe_customer_id_active` field carries the active Customer's Stripe ID; the `(org_id, legal_entity)` Convex unique index enforces the 1:1 binding. A second active Customer for the same Org under the same `legal_entity` is rejected at the mutation layer with HTTP 422 `stripe_customer_active_duplicate` (Appendix I — registered v7.2.0-REM Phase 5). |
 | **#2 — Historical Stripe Customer preservation.** | Stripe Customers transitioned out of `active_for_new_invoices` are NOT deleted; they are stamped `closed_for_new_invoices` with `Organization.stripe_customer_id_historical[]` (an append-only string array on the Organization row, ordered chronologically) capturing the historical Customer IDs alongside their close timestamps and the residency / legal-entity context at close. Stripe's underlying Customer object is retained for the full Stripe-side retention horizon (Stripe's customer object never deletes; invoice history attaches indefinitely). |
-| **#3 — Residency-change atomic rebinding.** | An Organization mutation that changes `data_residency_region` from value `R_old` to value `R_new` MUST execute as a single Convex transaction containing five steps in this strict order: (i) compute `legal_entity_new` from the canonical 4-row Residency-Locked Invoicing mapping at §4.8.1; (ii) verify §1.6.1 Org-side migration-eligibility predicates (no Bid Workspace in `phase ∈ {7..13}`; no AIOperation in `settlement_state = pending`; no DSARRequest in `state ∈ {verifying, verified, in_progress}`; no active OutcomeContract in renewal window; per the v7.1.1-pending §1.6.1 authoring per D-RES-007); (iii) call Stripe's `Customer.create` API with `metadata = {org_id: <id>, legal_entity: <legal_entity_new>, residency_region: <R_new>, custom_sovereign_residency_label: <label if custom else null>, atomic_binding_protocol: 'v7.2.0-REM-Phase-5'}` and capture the new Customer ID `C_new`; (iv) update `Organization` row in a single mutation: `data_residency_region = R_new`, `legal_entity_active = legal_entity_new`, `stripe_customer_id_active = C_new`, `stripe_customer_id_historical[] = append(stripe_customer_id_historical, {id: C_old, closed_at: now(), legal_entity_at_close: legal_entity_old, residency_region_at_close: R_old})`; (v) emit four audit-trail events in the same transaction: `org.residency_change.initiated`, `org.residency_change.stripe_customer_created`, `org.residency_change.stripe_customer_closed`, `org.residency_change.completed` per Appendix C registration (v7.2.0-REM Phase 5). The transaction commits atomically; failure of any step rolls back the entire mutation. The transaction MUST acquire a row-level lock on the Organization row before step (i) to prevent concurrent residency-change races (a second concurrent residency-change attempt waits for the lock and re-validates eligibility predicates against post-transaction state). |
+| **#3 — Residency-change externally atomic rebinding.** | A residency change from `R_old` to `R_new` MUST execute as one durable, idempotent binding attempt using the five ordered phases in the executable provider-boundary mapping below. Stripe network traffic never runs inside a Convex transaction. Each Convex mutation is ACID; the complete saga is externally atomic because no customer route reports success until the Stripe metadata round-trip and Organization binding readback agree. A provider-created Customer that cannot be bound is retried by the same immutable attempt or closed for new invoices by compensation. Concurrent attempts serialize on the Organization row and revalidate after lock acquisition. |
 | **#4 — Legacy-invoice fidelity.** | Stripe Charges and Invoices created against the prior Stripe Customer `C_old` remain attached to `C_old` indefinitely for SOC-2 audit fidelity; the §4.8.1 FX-Locking semantics (`fx_rate_locked` and `legal_entity` snapshot at AIOperation write time) bind every settled `effective_charge_cents` to the Stripe Customer active at write time, not at settlement time. In-flight `pending` AIOperations created before the cutover settle on `C_old` even if settlement occurs minutes after the cutover (the AIOperation's `legal_entity` field is the canonical Stripe-Customer-routing key, not the Org's current `legal_entity_active`). The Outcome Resolver looks up the Stripe Customer via `Organization.stripe_customer_id_historical[]` when settling an AIOperation whose `legal_entity` does not match the current `legal_entity_active`. CI gate `legal_entity_residency_change_revenue_leak_test` (Appendix M.5 §M.5.17) asserts the resolver routing logic at deploy time. |
 | **#5 — `custom`-residency Stripe Customer.** | For `data_residency_region = custom`, the Stripe Customer is keyed on `(org_id, sourcera_custom)` with `metadata.custom_sovereign_residency_label = <Organization.custom_sovereign_residency_label>` carrying the Org-specific sub-classification (e.g., `uk_crown_secure`, `de_sovereign_cloud`, `au_irap_protected`). Multiple `custom`-residency Orgs each receive their own Stripe Customer keyed on the same `legal_entity = sourcera_custom` enum but disambiguated by the Stripe Customer ID (`org_id` is the unique identifier; `legal_entity` is the enum value); the `(org_id, legal_entity)` unique index on `Organization.stripe_customer_id_active` is sufficient because `org_id` is unique. A mutation of `custom_sovereign_residency_label` (without a change to `data_residency_region`) is treated as an Ops-Finance correction per invariant #6 below and similarly triggers an atomic rebinding. |
-| **#6 — Ops-Finance correction path.** | Ops Finance MAY trigger an atomic rebinding without a residency change for legal-entity correction (e.g., a migration from legacy `sourcera_uk_ltd` to canonical `sourcera_eu_gmbh` at the v7.1.0a hot-patch stamp Ops Finance reconciliation pass; correction of a `custom_sovereign_residency_label` typo). The correction follows the same five-step transaction as invariant #3 but with `R_old = R_new` (residency unchanged) and a documented `correction_reason` ∈ {`legacy_uk_ltd_to_eu_gmbh`, `custom_sovereign_label_correction`, `legal_entity_typo_correction`, `ops_compliance_action`} captured on the audit-trail events. Requires `ops_finance_admin` role + Founder dual-signoff per the §4.8.1.A Ops Emergency Reversal Protocol pattern (one-line cross-reference). Correction-driven rebindings do NOT close the legacy Customer for `correction_reason = legacy_uk_ltd_to_eu_gmbh` until the legacy Customer's outstanding invoices reach `paid` or `voided` terminal state — preserving the §4.8.1 FX-Locking semantics for in-flight settlements. |
-| **#7 — Stripe API failure handling.** | A Stripe `Customer.create` API failure during step (iii) MUST roll back the entire Convex mutation; the Organization row is restored to its pre-transaction state; the OpsActionRecord audit row is written with `outcome = stripe_api_failure` and `failure_reason = <Stripe error code>`. The Org Settings UI renders the finalized Appendix I localization copy: “We couldn’t update your data residency because the billing service is temporarily unavailable. Try again in a few minutes. Your current residency and billing setup have not changed.” A retry within the §32 idempotency window resolves the attempt without creating a duplicate Stripe Customer (Stripe API idempotency key = `(org_id, legal_entity_new, mutation_timestamp_minute)`). |
-| **#8 — Webhook emission.** | The §31 webhook family `org.residency_change.*` (four events per invariant #3 step v) emits HMAC-SHA256 signed payloads with `event_id` idempotency key per §31 conventions. Recipients: customer's webhook subscription (Billing Admin / Org Owner role gate); Ops Finance dashboard. PostHog mirror family `org_residency_change_*` (Appendix G — registered v7.2.0-REM Phase 5) mirrors the webhook for analytics dashboards using the Appendix G underscore-name convention. |
+| **#6 — Ops-Finance correction path.** | Ops Finance MAY trigger an atomic rebinding without a residency change for legal-entity correction (e.g., a migration from legacy `sourcera_uk_ltd` to canonical `sourcera_eu_gmbh` at the v7.1.0a hot-patch stamp Ops Finance reconciliation pass; correction of a `custom_sovereign_residency_label` typo). The correction follows the same five-phase binding attempt as invariant #3 but with `R_old = R_new` (residency unchanged) and a documented `correction_reason` ∈ {`legacy_uk_ltd_to_eu_gmbh`, `custom_sovereign_label_correction`, `legal_entity_typo_correction`, `ops_compliance_action`} captured on the audit-trail events. Requires `ops_finance_admin` role + Founder dual-signoff per the §4.8.1.A Ops Emergency Reversal Protocol pattern (one-line cross-reference). Correction-driven rebindings do NOT close the legacy Customer for `correction_reason = legacy_uk_ltd_to_eu_gmbh` until the legacy Customer's outstanding invoices reach `paid` or `voided` terminal state — preserving the §4.8.1 FX-Locking semantics for in-flight settlements. |
+| **#7 — Stripe API failure handling.** | A Stripe `Customer.create` API failure during provider phase (ii) leaves the Organization binding unchanged and transitions the durable attempt to `retryable_failure`; a narrow Convex mutation writes the bounded OpsActionRecord with `outcome = stripe_api_failure` and `failure_reason = <Stripe error code>`. The Org Settings UI renders the finalized Appendix I localization copy: “We couldn’t update your data residency because the billing service is temporarily unavailable. Try again in a few minutes. Your current residency and billing setup have not changed.” Every retry reuses the immutable key fixed at preparation as `(org_id, legal_entity_new, original_attempt_timestamp_minute)`, including after the clock minute changes. |
+| **#8 — Webhook emission.** | The §31 webhook family `org.residency_change.*` emits its four success events from the phase-owning mutations in the executable provider-boundary mapping, with monotonic `event_seq`, HMAC-SHA256 signing, and `event_id` idempotency per §31 conventions. `org.residency_change.completed` is impossible before phase 5. Recipients: customer's webhook subscription (Billing Admin / Org Owner role gate); Ops Finance dashboard. PostHog mirror family `org_residency_change_*` (Appendix G — registered v7.2.0-REM Phase 5) mirrors the webhook for analytics dashboards using the Appendix G underscore-name convention. |
+
+**Executable provider-boundary mapping (DEC-SOURCE-F917-001).** One internal `StripeCustomerBindingAttempt` is unique on `organization_creation_attempt_id` and on each non-terminal `(org_id, legal_entity_new)` attempt. It stores no provider body or secret and moves only through `prepared`, `provider_created`, `binding_pending_readback`, `bound`, `retryable_failure`, `compensation_pending`, or `compensated`.
+
+1. **Prepare mutation.** For rebinding, lock the existing Organization; for first Organization creation, reserve the preallocated `org_id` and unique creation-attempt key before any provider call. Compute `legal_entity_new`, validate the applicable §1.6.1 predicates and active-binding uniqueness, snapshot old/new residency and legal-entity values, and commit `prepared` with the immutable Stripe idempotency key. `org.residency_change.initiated` is enqueued by this mutation.
+2. **Provider action.** Call Stripe `Customer.create` with the exact five-key metadata object and immutable idempotency key. A successful return records `C_new` and `provider_created` in a narrow mutation; `org.residency_change.stripe_customer_created` is enqueued there.
+3. **Binding mutation.** Re-lock and revalidate the existing Organization, or revalidate and insert the reserved Organization-creation payload. Atomically write `data_residency_region=R_new`, `legal_entity_active=legal_entity_new`, `stripe_customer_id_active=C_new`, append the prior Customer history when present, enqueue `org.residency_change.stripe_customer_closed` (including the registered Org-creation no-op form), and mark `binding_pending_readback`.
+4. **Readback.** Retrieve the Stripe Customer and read the Organization. All five metadata keys, active Customer ID, residency, and legal entity MUST agree. A mismatch exposes no customer success and enters retry or compensation.
+5. **Complete mutation.** Revalidate the same attempt and binding, mark `bound`, and enqueue `org.residency_change.completed`; only then may the owning Organization route report success. If phase 3 cannot commit, retry reuses `C_new`. A permanent competing winner transitions through `compensation_pending` and closes the losing Customer for new invoices before `compensated`; it never writes that Customer into active or historical Organization state.
+
+**Stripe metadata value contract.** Stripe Customer metadata values are strings. The five keys in invariant #3 are always present. `custom_sovereign_residency_label` MUST equal the Organization's non-empty label when `data_residency_region=custom`; for `us`, `eu`, or `apac`, it MUST equal the exact string sentinel `not_applicable`. A missing key, JSON null, empty string, or the string `null` fails metadata completeness. The sentinel is metadata-only and never replaces the nullable Organization field or Appendix C's nullable old/new residency-change fields.
 
 **Cross-references.**
 
@@ -42274,11 +42801,11 @@ The Stripe Customer Atomic-Binding Protocol is the canonical specification for h
 
 **Acceptance Criteria (§34.10.5.A).**
 
-1. A residency-change mutation transitioning `data_residency_region` from any canonical 4-value to any other canonical 4-value MUST execute the five-step atomic transaction in §34.10.5.A invariant #3 in the specified order; QA test `org_residency_change_atomic_transaction` asserts the transaction's ACID properties (atomic rollback on any step failure; isolation against concurrent residency-change attempts via row-level lock; durability via Convex commit guarantee). Out-of-order or partial-step execution MUST be rejected with HTTP 500 `org_residency_change_transaction_corrupt` (a sentinel error that should never fire under correct implementation; observed firing pages Ops Finance + Engineering immediately).
-2. A new Stripe Customer creation during step (iii) MUST carry the full metadata object specified in invariant #3 (5 keys); QA test `stripe_customer_metadata_completeness` asserts the metadata round-trip via Stripe's `Customer.retrieve` API.
+1. A residency change from any canonical 4-value to any other canonical 4-value MUST execute the five-phase binding attempt in §34.10.5.A invariant #3 in order. QA test `org_residency_change_atomic_transaction` asserts ACID behavior for every Convex mutation, immutable-attempt replay, same-key provider retry, row-lock serialization, no customer-visible partial success, and compensation of a permanently unbindable Customer. An illegal transition or out-of-order phase MUST be rejected with HTTP 500 `org_residency_change_transaction_corrupt` and page Ops Finance + Engineering.
+2. A new Stripe Customer creation during provider phase 2 MUST carry the full metadata object specified in invariant #3 (5 keys); QA test `stripe_customer_metadata_completeness` asserts the metadata round-trip via Stripe's `Customer.retrieve` API, including exact `not_applicable` for every non-custom residency and the exact non-empty Organization label for `custom`.
 3. The `Organization.stripe_customer_id_historical[]` array MUST grow monotonically (no Stripe Customer ID ever removed); QA test `stripe_customer_historical_append_only` asserts the array's append-only property across 100 synthetic residency-change cycles.
 4. The Outcome Resolver MUST route an in-flight AIOperation's settlement to the Stripe Customer matching the AIOperation's `legal_entity` field, NOT the Organization's current `legal_entity_active`; integration test `outcome_resolver_legacy_legal_entity_routing` asserts a synthetic AIOperation written with `legal_entity = sourcera_us_llc` settles against the pre-cutover Stripe Customer even after the Organization has rebinded to `sourcera_eu_gmbh`.
-5. A residency-change attempt during an open DSAR (per the §6.8 deadlock-resolution rule, v7.1.1 stamp authoring) MUST be rejected with HTTP 409 `org_residency_change_blocked_by_active_dsar`; the rejection MUST roll back any pre-step (i) state (none under correct implementation, but a regression here would corrupt invariant #1).
+5. A residency-change attempt during an open DSAR (per the §6.8 deadlock-resolution rule, v7.1.1 stamp authoring) MUST be rejected with HTTP 409 `org_residency_change_blocked_by_active_dsar` during phase 1, before provider traffic or any active-binding mutation.
 6. A residency-change attempt on an Org with an in-flight `pending` AIOperation MUST be rejected with HTTP 409 `org_residency_change_eligibility_predicate_violated` per invariant #3 step (ii); the rejection notifies the Org Owner via `org.residency_change.blocked` Loops.so email with the violated predicate enumerated.
 7. The `custom_sovereign_residency_label` field MUST be non-null when `data_residency_region = custom`; mutation attempts setting `data_residency_region = custom` with `custom_sovereign_residency_label = null` MUST be rejected at the §4.1.1 Organization-write layer with HTTP 422 `organization_custom_residency_label_required` (Appendix I — registered v7.2.0-REM Phase 5). CI gate `org_custom_residency_label_required` (Appendix M.5 §M.5.17 sibling) asserts the field-level constraint at deploy time.
 8. The legacy `sourcera_uk_ltd` value MUST NOT appear in any new Stripe Customer's `metadata.legal_entity` field at or after the v7.2.0-REM Phase 5 stamp (2026-05-20); historical Stripe Customers carrying the legacy value in `metadata.legal_entity` remain readable via Stripe API (Stripe-side immutable) but produce no new invoices. Integration test `stripe_customer_no_new_uk_ltd_writes` asserts the write-time enforcement against 100 synthetic Stripe Customer creations.
@@ -45099,6 +45626,11 @@ This table is authoritative for entity field and object limits.
 | Marketplace Category | description | 2,000 chars | Markdown |
 | Marketplace Category | seo\_metadata\_json | 4,000 chars | JSON |
 | Marketplace Category | depth | 0–1 | Two-level hierarchy max |
+| MarketplaceReview | rating\_stars | Integer 1–5 | Required before submit; whole numbers only. |
+| MarketplaceReview | review\_body\_markdown | 1–5,000 chars | Sanitized Markdown; no raw HTML. |
+| MarketplaceReview | public\_snippet | 1–500 chars | Server-sanitized plain text. |
+| MarketplaceReview | seller\_response\_body | 0–2,000 chars | Sanitized Markdown; nullable while response status is `none`. |
+| MarketplaceIntegrationHook | safe\_projection\_json | 48 KB canonical JSON maximum | RFC 8785 JCS serialization before hashing; no secrets, URLs, raw identities, or private bodies. |
 | Vendor Opt-Out Record | reason\_note | 1,000 chars | Plain text |
 | Vendor Opt-Out Record | ops\_rejection\_reason | 500 chars | Plain text |
 | Vendor Opt-Out Record | retro\_backfill\_affected\_page\_count | ≥ 0 | Integer |
@@ -45286,6 +45818,7 @@ The three rows are distinct contracts. The storage ceiling is defense in depth, 
 | Internal Comment Thread / Post / Mention (V9 split from former row 2 — closes D-9.1R-024) | Life of parent entity (Workspace / Use Case / Requirement / Response / Scenario / Selection Report draft). On parent soft-delete, cascade soft-delete + 30-day purge. **§6.8.5 row 6 exception:** Threads / Posts / Mentions linked to a finalized Selection Report or active legal hold retained Workspace-life + 7 years; cascade DSAR Pattern B per §6.8.4.1 + body sweep per §6.8.4.5. |
 | Canceled subscription | **90 days for the workspace and customer-data scope, then purge — except for entities with a financial-class or audit-integrity-class retention exemption per §6.8.5 (notably AIOperation, AIWallet, ContestRecord, CommittedSpendContract, OutcomeContract, OpsActionRecord, AuditEvent, DSARRequest, NDA Record, MarketplaceDiscoveryRevenueRecord, BillingSeatSnapshot, BidSuccessShare, VerificationReviewRecord, Buyer Referral financial fields, Pro Trial Seat Grant financial fields, PromotedListing financial fields, FeaturedPlacement paid-commitment fields).** Exempt entities follow their own §40.2 row below; the 90-day workspace purge does not apply to them. V9 remediation closes D-9.1R-021 (overbroad pre-V9 row). |
 | WebhookDeliveryFailure (§4.6.6) | **30 days from `dead_lettered_at`, then hard purge.** Replay, replay failure, dismissal, plan downgrade, and subscription mutation do not reset or extend the deadline. At expiry, the sweep first destroys `payload_ciphertext_ref` and `target_url_snapshot_ciphertext_ref`, transitions `state=expired`, writes the minimal AuditEvent, and hard-purges the operational row. DSAR before expiry pseudonymizes actor FKs and body-sweeps subject-identifying payload values before any replay; `payload_sha256` is recomputed. Residency remains pinned to the owning Org. Legal-hold or incident evidence must be copied to the separately retained AuditEvent/IncidentRecord; this queue row has no silent retention override. |
+| WebhookEventRegistryEntry (§31.11.6) | Platform-life. Active and deprecated versions are retained indefinitely as delivery/audit authority; disabled unpublished drafts, if any, purge 30 days after replacement. No customer content or subject PII is permitted. Globally replicated source metadata is read-only outside the compiler publication transaction; `source_commit_sha`, schema hash, and catalog version remain immutable per version. |
 | GDPR DSAR processing SLA (V9 reword — closes D-9.1R-016 entity-vs-processing-time misuse; amended by D-9.2-010 P1) | **Processing-time SLA only:** statutory DSAR fulfillment follows the §6.8.6 receipt-based window from `received_at` / `statutory_deadline_at`; `verified_at` starts the operational worker clock only and cannot extend the statutory deadline. Cascade pause accounting follows §6.8.4.6; verification timing follows §6.8.6.1. **NOT entity retention** — DSARRequest entity retention is governed by the dedicated DSARRequest row below (7y per §6.8.5 audit-integrity exemption). |
 | Deprovisioned user (SCIM) | Owned entities reassigned within 24 hours. User record retained but marked `deprovisioned`. |
 | Internal Comment Thread / Post / Mention | Life of parent entity (Workspace / Use Case / Requirement / Response / Scenario / Selection Report draft). On parent soft-delete, cascade soft-delete + 30-day purge. |
@@ -45361,6 +45894,8 @@ The three rows are distinct contracts. The storage ceiling is defense in depth, 
 | `usage_event_outbox` (PostHog outbox staging for §51 `analytics_meta` family + dual-emitted customer-visibility events) | 7 days past successful ack; failed-delivery rows continue to retry per Appendix F.1 `standard` OR Appendix F.2 `financial_impact` (per the event's registered curve kind) until ack or DLQ. DSAR: redaction sentinels applied at emit time; no post-emit DSAR sweep required on outbox rows (retention is short enough that any DSAR request subsumes the outbox window). Residency: residency-partitioned outbox per §40.4. |
 | `usage_event_envelope_dlq` (envelope-validator DLQ for events rejected by `UsageEventValidator` per Appendix G preamble) | 30 days. Ops-triaged rows are either (a) replayed after remediation (MUST NOT bypass validator) OR (b) dropped with an `ops_session_policy_enforced` / `usage_analytics_envelope_violation` trail. DSAR: redacted payload sample only (SHA-256 hash per Appendix G `usage_analytics_envelope_violation.sample_payload_hash`; raw payload parked in the DLQ with field-level redaction applied on DSAR within the §6.8.6 fulfillment window). Residency: residency-partitioned. |
 | Marketplace Category | Platform-life. `draft` soft-deleted rows purged after 30 days. `deprecated` rows retained indefinitely for FK integrity and URL redirect continuity. Not subject to DSAR (no PII). Residency: taxonomy is global. |
+| MarketplaceReview (§4.5.15) | Draft, rejected, and withdrawn rows purge 90 days after terminal state. Published and hidden rows retain for the reviewed Seller Org life + 24 months; an abuse report or legal hold applies the longer parent horizon. At purge, review/response bodies, attribution, provenance, and actor identity are destroyed; only non-identifying rating aggregates may remain after synchronous recompute. DSAR Pattern B and body sweep follow §6.8.4. Residency: source row remains in the reviewer Buyer Org partition; public cache contains only the current allowed projection. |
+| MarketplaceIntegrationHook (§4.5.16) | Pending, dispatching, and retry-wait rows retain until success/cancel/dead-letter plus 30 days; succeeded, disabled-target, dead-lettered, and canceled rows retain 90 days from terminal state, then payload/projection bytes purge and the row hard-deletes after minimal AuditEvent proof is written. Legal/incident evidence must be copied to its owning retained record. DSAR invalidation cancels undelivered work and sweeps subject values before any replay. Residency: source Org partition; no cross-region fallback. |
 | Vendor Opt-Out Record | Org-life + 7 years per platform-integrity + legal-defensibility policy. Not subject to right-to-erasure under the §6.8.5 row #8 platform-integrity retained-row class. Identity fields (`created_by`, `reason_note`) pseudonymized on DSAR within the §6.8.6 fulfillment window. |
 | SellerSoftware | Org-life. On Seller Org deletion: soft delete immediately; hard purge 90 days later. KB namespace migrates to orphan namespace per §22.4.4. `created_by` / `updated_by` pseudonymized on deprovisioning. `former_org_ids` is retained as structural ownership provenance and does not grant access. Residency: Seller Org's `data_residency_region`. |
 | SellerSoftwareTransferRequest (§4.4.38) | Org-life + 7 years because transfers affect ownership, SEO continuity, KB provenance, and legal-defense audit. DSAR Pattern B pseudonymizes actor/reviewer FKs; justification, Ops decision, and reversal free-text fields are swept under §6.8.4.5. Residency follows the acquiring Org; cross-residency approvals require Ops Legal review before transfer execution. |
@@ -45526,6 +46061,7 @@ This subsection is the canonical data-plane residency contract consumed by §1.6
 | Selection Report Ready | `report_ready` | Selection Report for `[Workspace Name]` is ready | `noreply@sourcera.io` | `noreply` | `transactional` | `transactional_no_opt_out` | Phase 12 report generated |
 | Plan Downgrade Warning | `plan_downgrade_warning` | Your plan will downgrade on `[Date]` | `noreply@sourcera.io` | `billing_support` | `operational_critical` | `transactional_critical` | Billing / downgrade notice |
 | Trial Expiring | `trial_expiring` | Your Sourcera trial expires in 3 days | `noreply@sourcera.io` | `billing_support` | `lifecycle` | `marketing_lifecycle_opt_in` | Trial ending; category preference applies |
+| Trial Expiring Today | `trial_expiring_today` | Your Sourcera trial expires today | `noreply@sourcera.io` | `billing_support` | `lifecycle` | `marketing_lifecycle_opt_in` | Business Starter trial day-14 notice; category preference applies |
 | Marketplace EOI Received | `eoi_received` | New EOI for your listing: `[Listing Name]` | `noreply@sourcera.io` | `seller_inbox` | `transactional` | `transactional_no_opt_out` | Buyer expresses interest |
 | Seller Onboarding Stage 1 Stalled | `seller_onboarding_stage_1_stalled` | Your Sourcera invite is waiting | `noreply@sourcera.io` | `seller_inbox` | `lifecycle` | `marketing_lifecycle_opt_in` | Appendix C `seller_onboarding_stage_1_stalled`; pre-SSO invite-recipient re-engagement |
 | Seller Onboarding Bid Unsubmitted | `seller_onboarding_bid_unsubmitted` | Your bid draft is still waiting | `noreply@sourcera.io` | `seller_inbox` | `lifecycle` | `marketing_lifecycle_opt_in` | Appendix C `seller_onboarding_bid_unsubmitted`; Stage 5 recovery |
@@ -47498,7 +48034,7 @@ The enumerated set MUST achieve ≥ 50% (or ≥ 70% for Ops Console) E2E coverag
 1. §2.8 Single-Operator Mode end-to-end.
 2. §13 13-phase Evaluation Pipeline progression (all 13 phases).
 3. §13.11 Defense View generation + state machine fan-out.
-4. §13.12 Buyer Maya Intake (23 ACs).
+4. §13.12 Buyer Maya Intake (24 current ACs; the original v7.1.0 release authored 23 and later remediation added AC 24).
 5. §22.20 Seller Maya Polish (silent-surface suppression).
 6. §27 Marketplace Discovery (Vendor search, EOI, NDA Execution iframe).
 7. §34.5 plan-change (every tier-to-tier transition).
@@ -47516,7 +48052,7 @@ The enumerated set MUST achieve ≥ 50% (or ≥ 70% for Ops Console) E2E coverag
 
 ### 46.1.3 Test Infrastructure (D-46-019 closure) {#46.1.3-test-infrastructure}
 
-- **Fixture strategy.** Per-feature seed fixtures under `tests/fixtures/`. Synthetic PII per §46.6.3. Multi-tenant scaffolding (Buyer Org × Seller Org × Marketplace × Ops Console) seeded in `tests/fixtures/multi-tenant/`.
+- **Fixture strategy.** Per-feature seed fixtures under `tests/fixtures/`. Synthetic PII per §46.6 item 8. Multi-tenant scaffolding (Buyer Org × Seller Org × Marketplace × Ops Console) seeded in `tests/fixtures/multi-tenant/`.
 - **Mocking strategy.** Integration tests run against a real Convex preview deploy (CLAUDE.md global feedback: NO DB mocking). Unit tests may stub Stripe / Anthropic / Firecrawl / PostHog / Loops.so / Perplexity / Zendesk via per-provider mock adapters in `tests/mocks/{provider}/`.
 - **Test-environment matrix.** local-dev → per-PR ephemeral preview (Convex preview deploy + Vercel preview deploy) → staging → canary → prod. Each environment allows specific test categories (unit + integration in local; integration + E2E in preview; E2E + load in staging; canary smoke in canary; prod synthetic only).
 - **Flaky-test management.** 3-retry budget; quarantine after 3 consecutive cycles; flake-rate budget ≤ 1% per service tracked via Datadog `ci.flaky_test_rate` metric.
@@ -47541,7 +48077,7 @@ V12 remediation (closes D-46-002, D-46-003, D-46-017). Organized per §3.7 `page
 | Marketplace (§27) | Unit + Integration + E2E + Visual + a11y + Mobile | |
 | NDA Execution iframe (§3.7.6.6) | E2E + a11y deviation per §37.1 | Stripe Checkout / Adobe Sign / Zendesk widget iframes |
 | Defense View (§13.11) | Unit + Integration + E2E + Visual + a11y + Mobile | 5 error codes (Appendix I) + state machine (Appendix L.7) |
-| Buyer Maya Intake (§13.12) | Unit + Integration + E2E + Visual + a11y + Mobile | 23 ACs + 4 error codes |
+| Buyer Maya Intake (§13.12) | Unit + Integration + E2E + Visual + a11y + Mobile | 24 current ACs + 4 error codes |
 | Seller Maya Polish (§22.20) | Unit + Integration + E2E + a11y | Silent-AI surface suppression test per §22.20.5 |
 | Pipeline Compression bar (§3.14) | Unit + Visual + Mobile | |
 | Single-Operator Mode (§2.8) | Unit + Integration + E2E | |
@@ -47630,10 +48166,10 @@ CI gate: `aiop_eval_coverage_per_capability` (Appendix M.5 — V12 add) asserts 
 
 V12 remediation (closes D-46-005).
 
-1. **Per-entity org-scope leakage matrix.** Every console-scoped entity in §1.3.2 (17 entities) × Buyer / Seller / Marketplace caller × negative test (cross-console call MUST return zero rows OR HTTP 404 per §7.2 non-leak). Integration test fixture `multi_org_multi_console_firewall_fixture`.
+1. **Per-entity org-scope leakage matrix.** Every console-scoped entity in §1.3.2 (21 entities) × Buyer / Seller / Marketplace caller × negative test (cross-console call MUST return zero rows OR HTTP 404 per §7.2 non-leak). Integration test fixture `multi_org_multi_console_firewall_fixture`.
 2. **Cross-Console Bridge field-redaction round-trip.** §4.7 carried-vs-redacted enumeration test: every Bridge entity round-trips through Buyer + Seller views and the redacted-field set matches the §4.7 declaration.
 3. **§1.4 query-scoping CI gate.** Every list endpoint missing `console` param fails the CI gate `query_scoping_console_required`.
-4. **Marketplace-domain neutral-zone test.** §27.10 firewall enforcement: a Buyer query NEVER receives Seller-only fields from a Marketplace-resident entity.
+4. **Marketplace-domain neutral-zone test.** Enforce §1.3.2, §1.4, and each Marketplace entity's §4.x audience projection: a Buyer query NEVER receives Seller-only fields from a Marketplace-resident entity. §27.10 remains authoritative only for Vendor Opt-Out behavior and is not a general Marketplace projection contract.
 5. **Webhook event-class firewall.** Event_kinds tagged `console=buyer_only` cannot deliver to a Seller-only webhook subscriber (test the §31 subscription routing).
 
 CI gate: `console_firewall_negative_test_coverage` (Appendix M.5 — V12 add).
@@ -48164,7 +48700,7 @@ The launch-readiness report in acceptance criterion #8 MUST consume these source
 
 | Stage | Name | Plan State | Defining Event | Telemetry Marker (Appendix G) | Median-Target Time From Stage Entry |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| 1 | Signup | Free | Google/Microsoft SSO completes; no credit card; Buyer Console provisioned | `signup_completed` (existing) + `funnel_stage_entered {stage="signup"}` | n/a (entry stage) |
+| 1 | Signup | Free | Google/Microsoft SSO completes; no credit card; Buyer Console provisioned | `signup_completed {console="buyer", origin="direct_signup", sso_provider ∈ {google, microsoft}, org_provisioning_outcome="new_org_created", time_to_provision_seconds}` + `funnel_stage_entered {stage="signup", console="buyer", upgrade_pressure_trigger=null, expansion_trigger=null, enterprise_trigger=null, time_from_signup_seconds=null}` | n/a (entry stage) |
 | 2 | Aha Moment | Free | First Pre-Scoring AIOperation across ≥ 3 vendors completes with `settlement_state=accepted` OR `auto_accepted` | `funnel_stage_entered {stage="aha_moment"}`; correlation key = first `pre_scoring` AIOperation `id` | ≤ 60 minutes from signup (median target) |
 | 3 | Ceiling Hit | Free → Starter (upgrade-pressure event) | First of: workspace-count cap breach, vendor-count cap breach, AI budget exhaustion (`free_allowance_exhausted` OR wallet `available_balance_cents=0`), Opus-gated capability invocation | `funnel_stage_entered {stage="ceiling_hit"}`; carries `upgrade_pressure_trigger` per Appendix J `upgrade_completed_trigger` | ≤ 14 days from aha (median target) |
 | 4 | Expansion | Starter → Growth → Scale | Wallet utilization ≥ 80% in two consecutive billing months OR active-evaluation-count exceeds tier ceiling OR CRM Sync request OR numeric Match Score request (Buyer-side: workspace-count proxy) | `funnel_stage_entered {stage="expansion"}`; carries `expansion_trigger ∈ {wallet_utilization_consecutive, evaluation_ceiling, opus_capability_request}` (Appendix J `expansion_trigger` — new) | n/a (chronic) |
@@ -48196,7 +48732,7 @@ Each stage's defining event MAY be tuned by Ops via a per-environment configurat
 
 ### 48.1.4 Acceptance Criteria {#48.1.4-acceptance-criteria}
 
-1. Every Org provisioned through SSO emits exactly one `signup_completed` event AND exactly one `funnel_stage_entered {stage="signup"}` event within 5 seconds of provisioning.
+1. Every Org provisioned through SSO commits exactly one `signup_completed` event AND exactly one `funnel_stage_entered {stage="signup"}` event within 5 seconds of provisioning. Each carries the Appendix G standard envelope and its exact registered payload. The §4.3.18 UsageEvent and §51.1.4 outbox rows are the source-of-truth commit; PostHog delivery is asynchronous and cannot block customer success after that durable commit.
 2. The `funnel_stage_entered` event for `aha_moment` MUST be emitted within 30 seconds of the qualifying AIOperation reaching `settlement_state=accepted` OR `auto_accepted`; longer latencies fail QA.
 3. The `funnel_stage_entered` event for `ceiling_hit` MUST be emitted within 5 seconds of the underlying upgrade-pressure event (cap breach OR `free_allowance_exhausted` OR Opus-gated capability invocation); event MUST carry the `upgrade_pressure_trigger` enum value matching the upstream trigger.
 4. The `funnel_stage_entered` event for `enterprise_trigger` MUST automatically open a CRM lead record routed to founder-led Sales within 60 seconds (CRM integration: §31.6); failure to create the CRM record raises a §42 P1 alert.
@@ -57127,6 +57663,68 @@ Every mutation opens/uses an OpsSession, writes `buyer_template_registry_changed
 
 **Acceptance criteria.** Only `ops_content_admin` can mutate; active-lineage uniqueness and bump rules are server-enforced; no raw template body enters Ops analytics; an overdue quarterly review produces a §42 alert but no automatic publish; publish/deprecate never changes an existing Workspace; and fan-out completion/retry counts reconcile to the eligible Org set without duplicate `template.update_available_received` events.
 
+## 50.33 Deterministic Platform Reference-Data Orchestration (F-913) {#50.33-deterministic-platform-reference-data-orchestration}
+
+F-913 is the canonical release-orchestration contract for platform reference data. It coordinates one or both existing owner lanes — §4.5.14/§50.32 Buyer-template registry and §4.8.9/§50.12 pricing administration — without becoming a third writer. It validates an immutable signed manifest, produces a deterministic read-only diff, invokes only the canonical APIs and controls of each selected lane, verifies canonical readback, and retains recovery and rollback receipts.
+
+This workflow is platform operations, not Organization provisioning. It MUST NOT seed Users, administrators, Organizations, customer fixtures, sessions, wallets, secrets, entitlements, or published prices; reuse production-genesis/bootstrap scripts; import a database writer; mutate Convex directly; or bypass an owning OpsSession, role, approval, idempotency, immutable-version, OpsActionRecord, AuditEvent, cache, fan-out, notification, or rollback rule.
+
+### 50.33.1 Signed Manifest {#50.33.1-signed-manifest}
+
+The manifest is UTF-8 JSON canonicalized with RFC 8785 JSON Canonicalization Scheme; duplicate keys are rejected before parsing. `manifest_sha256` is lowercase SHA-256 over canonical bytes after omitting only `manifest_sha256` and `signatures`. An existing `release_id` may be replayed only with identical canonical bytes. A changed payload, target, actor, approval, endpoint sequence, expected predecessor, deployment, or publish window requires a new release ID and hash.
+
+The signature scheme is `ed25519-sha256-rfc8785-v1`: SHA-256 the canonical bytes, Ed25519-sign the raw 32-byte digest, and encode the detached 64-byte signature as standard padded Base64. Each signature is exactly `{scheme, signing_key_id, signature_base64, signed_digest_sha256}`, and `signed_digest_sha256` MUST equal `manifest_sha256`.
+
+`signing_key_id` resolves to one immutable row in `config/reference-data-releases/trusted-signing-keys.json` with `{key_id, environment, provider, algorithm, public_key_spki_base64, public_key_spki_sha256, state, not_before, not_after}`. Provider is `github_actions_protected_environment`; algorithm is `ed25519`; state is `active|retired|revoked`; timestamps are RFC 3339 UTC. A new manifest accepts only an in-window active key, historical verification may accept an in-window retired key, and revoked always fails. Mutable aliases such as `current` are forbidden. Exact deployment key IDs and fingerprints remain in protected configuration and signed receipts so rotation does not require copying live secrets or mutable values into this specification.
+
+The signing key is PKCS#8 Base64 in `REFERENCE_DATA_SIGNING_KEY_PKCS8_BASE64`. Only `.github/workflows/reference-data-release.yml` on `refs/heads/main`, after the required reviewer approval for environment `reference-data-{manifest.environment}`, may read it. Pull-request and forked workflows receive no key. Evaluation, webhook, deployment, and cross-environment keys cannot be reused. Signature validity never substitutes for lane approval or actor quorum.
+
+Required manifest fields are:
+
+| Group | Required fields |
+| :---- | :---- |
+| Identity | `schema_version`, immutable UUID `release_id`, SemVer `release_version`, RFC 3339 UTC `created_at`, `created_by`, optional immutable `supersedes_release_id`. |
+| Target | Explicit `environment` in `development|test|preview|staging|production` and exact immutable `deployment_id`; no default, redirect, branch alias, or `latest`. |
+| Lanes | One or two uniquely keyed lanes from `buyer_template_registry|pricing_admin_change`. |
+| Per lane | Immutable repository-relative or HTTPS payload URI, payload SHA-256, expected predecessor ID/version/hash, ordered method/path allowlist, idempotency key, required capability, operator identity, proposer/approver identities and OpsSession IDs where applicable, publish-window bounds, and exact postcondition. |
+| Integrity | `manifest_sha256`, `signature_scheme`, at least one complete trusted signature, approval-record IDs, and optional immutable supersession link. |
+
+Secrets, bearer tokens, credentials, connection strings, customer/User/Organization content, device fingerprints, mutable URLs, redirects, and unpinned remote bytes are forbidden anywhere in the manifest or receipt.
+
+### 50.33.2 Validation and Dry Run {#50.33.2-validation-and-dry-run}
+
+`validate` checks schema, duplicate keys, canonical hash, signature encoding/length, scheme/provider/environment, key state/window/fingerprint, every signature, payload hash and immutable location, deployment identity, lane uniqueness, the generated canonical endpoint/capability allowlist, actor separation, active OpsSession references, approval records, publish window, expected predecessor, postcondition, and forbidden fields. Validation makes zero network mutations.
+
+`dry-run` may call only the read/detail/simulation endpoints already authorized by §50.12 and §50.32. It emits a stable ordered per-lane diff containing current and proposed version/hash, expected predecessor, unmet controls, next permitted transition, and expected postcondition. Identical canonical inputs and canonical reads MUST produce byte-identical output. An unavailable or stale read fails the run; it never guesses.
+
+### 50.33.3 Canonical Lane Execution {#50.33.3-canonical-lane-execution}
+
+The Buyer-template lane may call only the §50.32 create-draft, edit-draft, publish, and deprecate operations. Only `ops_content_admin` may mutate it. One active version exists per `template_key`; version/bump, predecessor, idempotency, OpsSession, OpsActionRecord, immutable history, fan-out, partial-failure, and deprecation rules remain §4.5.14/§50.32 authority. The orchestrator cannot write an Org-local WorkspaceTemplate or skip the canonical fan-out worker.
+
+The pricing lane may call only the §50.12.11 read, author, simulation, approval, rejection, scheduling, publish, withdraw, and recovery operations permitted by the manifest's ordered allowlist. All §50.12 server-side state, threshold, simulation-freshness, communications, margin, proposer/approver/device/session separation, publish-window, cache, audit, concurrency, cumulative-drift, withdrawal-rate, and rollback rules remain authoritative. The orchestrator cannot publish merely because a manifest is signed and cannot alter a PricingTableVersion directly.
+
+Every mutation uses the manifest's original idempotency key and returns/stores only canonical record identifiers and bounded result classes. A method, path, capability, role, state, or transition outside the generated allowlist fails before dispatch. Static dependency checks reject direct data writers and bootstrap/genesis imports.
+
+### 50.33.4 Release State, Recovery, and Rollback {#50.33.4-release-state-recovery-rollback}
+
+Release states are `draft|validated|dry_run_complete|awaiting_template_approval|awaiting_pricing_approval|ready_to_apply|applying|partially_applied|verifying|complete|recovery_required|rolling_back|rolled_back|failed`. Per-lane states are `pending|awaiting_control|in_progress|applied|verified|failed|rolled_back|skipped`.
+
+`apply` invokes only the next canonical transition. The append-only journal records release/hash, lane, request ID, idempotency key, operation class, resulting canonical state/version, returned OpsSession/OpsActionRecord/AuditEvent identifiers, timestamp, deployment, and correlation. The journal is not product truth.
+
+Cross-lane atomicity is not claimed. When one lane commits and the other waits or fails, the release is `partially_applied`; the committed result stays visible and a retry touches only the pending/failed lane. A timeout or crash after dispatch enters `recovery_required`. Recovery reads canonical state and compares expected versions, hashes, lineage, approvals, actions, audit, template fan-out, pricing cache identity, and deployment. It replays only the original idempotency key when the canonical result is absent. It never infers success from the journal or a process exit code.
+
+Completion requires every selected lane's canonical readback and required receipts to match the signed manifest and deployment. Drift, missing proof, partial fan-out, stale lineage, absent action/audit/session, or cache mismatch keeps the release open.
+
+Rollback uses only owner workflows. Before pricing publish, withdraw through §50.12; a failed publish uses §50.12 predecessor/cache restoration; a successful business change uses a separately approved successor. Template rollback uses deprecation or an approved successor. Published immutable history is never edited or deleted, and a successor cannot hide a missed or partial rollback.
+
+### 50.33.5 Implementation, Privacy, and Evidence {#50.33.5-implementation-privacy-evidence}
+
+The canonical implementation binding is `.github/workflows/reference-data-release.yml`, `packages/domain/src/reference-data-release.ts`, `tools/reference-data-orchestration/{schema,manifest,validate,dry-run,canonical-client,template-lane,pricing-lane,journal,receipts,orchestrate,cli}.ts`, pinned fixtures/tests, and `docs/runbooks/platform-reference-data-orchestration.md`. Apply remains disabled until validation, dry-run, lane, replay, concurrency, interruption, partial-success, drift, recovery, and rollback suites pass in staging for the reviewed commit.
+
+Receipts are immutable and contain release/version/hash, selected lane, environment/deployment, operation class, state/result, canonical record IDs, bounded failure class, duration, correlation, source/tool/test checksums, reviewer, timestamp, canary, rollback, and `zeroCustomerData=true`. They contain no payload body, secret, signature private material, raw User/session/device value, customer content, or free text. No new customer event, webhook, or notification is created; owner-lane signals retain their existing audience, payload, idempotency, retry, and privacy rules.
+
+**Acceptance criteria.** Valid single- and two-lane manifests produce byte-identical validation/dry-run results; changed-byte replay, duplicate key/lane, bad signature/hash/key state, wrong environment/deployment, mutable URI, forbidden field, stale predecessor, missing role/session/approval/window, non-allowlisted call, and direct-writer import all fail before mutation. Interruption at every dispatch/journal/verification boundary recovers without duplicate mutation. Partial success remains visible. Replay verifies without reapplying. Completion is impossible without canonical readback and every required receipt. Rollback preserves immutable history and uses only §50.12/§50.32 operations.
+
 §51 authors the unified buyer + seller product-analytics surface that powers PLG conversion, expansion scoring, customer-facing ROI narratives, and the growth-loop observability referenced in §48.1.6 and §50.14. It stitches together three pre-existing artefacts into a single canonical customer-visible section: §4.3.18 Usage Event (the Convex-authoritative ledger row, dual-written to PostHog via the standard outbox), §4.3.19 Time-Saved Credit (the per-event labor-hours-saved projection, version-bound to the Ops-owned conversion-factor library), and §50.13 Baseline Assumption Manager (the Ops-owned surface that governs Time-Saved conversion factors and any downstream heuristics).
 
 Every event-taxonomy subsection cross-references Appendix G (PostHog Event Taxonomy) as the authoritative event catalog; §51 adds the meta-rules (standard property set, canonical event-family domains, cardinality budgets, outbox contracts) that every Appendix-G event conforms to, but does NOT duplicate the per-event schemas registered there. Every customer-facing usage dashboard authored here (§51.3 Org-Level, §51.4 User-Level, §51.5 Seller Parity, §51.6 Time-Saved Baseline) is a net-new UX surface and is deliberately distinct from §50.14 Internal Analytics Dashboards by Role (which governs Sourcera-internal Growth PM, GTM Lead, Support, Fraud Analyst, and Finance views).
@@ -58264,9 +58862,14 @@ All other events resolve Push = `false`. Adding an event requires this table, a 
 | Event | Trigger | Recipient | In-App | Email | Frequency |
 | :---- | :---- | :---- | :---- | :---- | :---- |
 | `trial_expiring` | Sourcera trial expiring in 3 days (Business Starter trial per §34.2.3 rule #1) | Org Owner | Yes | Yes | 3 days before expiration |
+| `trial_expiring_today` | Business Starter trial expires at the end of the current trial day (§34.9.1) | Org Owner | Yes | Yes | On day 14; exactly once per TrialState |
 | `plan_downgrade_warning` | Plan downgrade scheduled, current usage exceeds new limits | Org Owner | Yes | Yes | 14 days before downgrade |
-| `plan_downgrade_complete` | Plan downgrade effective | Org Owner | No | Yes | At downgrade time |
+| `plan_upgrade_complete` | Plan upgrade effective with upgrade summary and carry-over confirmation (§34.5.1) | Org Owner, Billing Admin | No | Yes | At upgrade time |
+| `plan_downgrade_complete` | Plan downgrade effective | Org Owner, Billing Admin | No | Yes | At downgrade time |
+| `downgrade_bucket.created` | Effective downgrade creates one or more excess-data preservation buckets (§34.6.7) | Org Owner, Billing Admin | No | Yes | At bucket creation |
 | `weekly_digest` | Weekly Pulse summary | Workspace Owner, Executive Sponsor | Yes | Yes | Weekly (configurable day/time) |
+
+`plan_upgrade_complete`, `plan_downgrade_complete`, and `downgrade_bucket.created` are billing notices classified `operational_critical` / `transactional_critical` by §41.2.4; their placement in this legacy lifecycle table does not make them opt-in. The two trial-expiry rows remain lifecycle opt-in as specified by §41.2.
 
 ### Pulse-Domain Events (Webhook + Selective User Notification)
 
@@ -58930,14 +59533,14 @@ V13 remediation closure batch. All customer webhook deliveries follow §31 conve
 
 ### v7.2.0-REM Phase 5 Additions (2026-05-20) — Residency-Change Webhook Family {#appendix-c-v72rem-phase-5}
 
-v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0), extended by the v7.1.1 D-RES-007 residency-procedure closure. All webhooks follow §31 conventions: HMAC-SHA256 signing, `event_id` idempotency, Appendix F.2 `financial_impact` retry curve, DLQ at 5, payload ≤ 256 KB. The four success events are emitted as a sequenced family from a single §34.10.5.A invariant #3 5-step atomic transaction; ordering is guaranteed by the Convex transaction's commit log and the `event_seq` field on each payload (monotonically increasing within `(org_id, residency_change_id)`). Rollback emits a separate terminal event and suppresses `org.residency_change.completed`.
+v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0), extended by the v7.1.1 D-RES-007 residency-procedure closure. All webhooks follow §31 conventions: HMAC-SHA256 signing, `event_id` idempotency, Appendix F.2 `financial_impact` retry curve, DLQ at 5, payload ≤ 256 KB. The four success events are emitted as a sequenced family from the phase-owning mutations of the durable §34.10.5.A invariant #3 binding attempt. Ordering is guaranteed by the attempt state machine, transactional outbox writes, and the `event_seq` field (monotonically increasing within `(org_id, residency_change_id)`). Rollback emits a separate terminal event and suppresses `org.residency_change.completed`.
 
 | Event Kind | Trigger | Recipient | Channel | Cadence | Payload | Retry Curve |
 |---|---|---|---|---|---|---|
-| `org.residency_change.initiated` | §34.10.5.A invariant #3 step (ii) eligibility predicates PASS; the 5-step atomic transaction has begun | Org `org_owner` + `billing_admin`; Ops Finance dashboard; subscribed customer endpoints (Billing Admin / Org Owner role-gated subscription per §31.5) | Webhook + In-app inbox card | Idempotent on `(org_id, residency_change_id)`; emitted exactly once per residency-change attempt regardless of subsequent rollback | `{event_id, event_seq=1, org_id, residency_change_id, residency_region_old, residency_region_new, legal_entity_old, legal_entity_new, custom_sovereign_residency_label_old, custom_sovereign_residency_label_new, initiated_at, initiator_user_id, initiator_role ∈ {org_owner, enterprise_admin, ops_finance_admin}, correction_reason ∈ Appendix J residency_change_correction_reason_kind \| null}` | `financial_impact` (Appendix F.2) |
-| `org.residency_change.stripe_customer_created` | §34.10.5.A invariant #3 step (iii) Stripe `Customer.create` API call returns success and the new Stripe Customer ID is captured | Org `billing_admin` + `org_owner`; Ops Finance dashboard; subscribed customer endpoints | Webhook only (no in-app; the customer-facing notification is consolidated in `org.residency_change.completed`) | Idempotent on `(org_id, residency_change_id, stripe_customer_id_new)`; emitted once per successful Stripe Customer creation | `{event_id, event_seq=2, org_id, residency_change_id, stripe_customer_id_new, legal_entity_new, residency_region_new, custom_sovereign_residency_label_new \| null, stripe_metadata: {atomic_binding_protocol: 'v7.2.0-REM-Phase-5', legal_entity, residency_region, custom_sovereign_residency_label}, created_at}` | `financial_impact` |
-| `org.residency_change.stripe_customer_closed` | §34.10.5.A invariant #3 step (iv) Organization row is updated; the legacy Stripe Customer is transitioned to `closed_for_new_invoices` and appended to `stripe_customer_id_historical[]` | Org `billing_admin` + `org_owner`; Ops Finance dashboard; subscribed customer endpoints | Webhook only | Idempotent on `(org_id, residency_change_id, stripe_customer_id_closed)`; emitted once per legacy-Customer closure; NO-OP-emission with `payload.no_op=true` at Org-creation (no legacy Customer exists at first Org-creation) per §34.10.5.A invariant #3 step (v) emission contract | `{event_id, event_seq=3, org_id, residency_change_id, stripe_customer_id_closed, legal_entity_at_close, residency_region_at_close, closed_at, no_op (bool; true if Org-creation path)}` | `financial_impact` |
-| `org.residency_change.completed` | §34.10.5.A invariant #3 step (v) all prior audit events have been emitted; the Convex transaction has committed atomically; the new Stripe Customer is the active billing target | Org `org_owner` + `billing_admin`; Ops Finance dashboard; subscribed customer endpoints | Webhook + Email (Loops.so `lo_org_residency_change_completed`) + In-app inbox card | Idempotent on `(org_id, residency_change_id)`; emitted exactly once at successful completion; NOT emitted on rollback (a rollback fires `org.residency_change.rollback` per Appendix F.2 financial-impact emission contract, registered as a Phase-V72REM-PH5 forward-track in §31 rollback semantics) | `{event_id, event_seq=4, org_id, residency_change_id, residency_region_new, legal_entity_new, stripe_customer_id_active, stripe_customer_id_historical_appended, completed_at, total_transaction_duration_ms, total_pending_aiops_settled_on_legacy_customer (int)}` | `financial_impact` |
+| `org.residency_change.initiated` | §34.10.5.A phase 1 eligibility predicates PASS and the durable `prepared` attempt commits | Org `org_owner` + `billing_admin`; Ops Finance dashboard; subscribed customer endpoints (Billing Admin / Org Owner role-gated subscription per §31.5) | Webhook + In-app inbox card | Idempotent on `(org_id, residency_change_id)`; emitted exactly once per residency-change attempt regardless of subsequent rollback | `{event_id, event_seq=1, org_id, residency_change_id, residency_region_old, residency_region_new, legal_entity_old, legal_entity_new, custom_sovereign_residency_label_old, custom_sovereign_residency_label_new, initiated_at, initiator_user_id, initiator_role ∈ {org_owner, enterprise_admin, ops_finance_admin}, correction_reason ∈ Appendix J residency_change_correction_reason_kind \| null}` | `financial_impact` (Appendix F.2) |
+| `org.residency_change.stripe_customer_created` | §34.10.5.A phase 2 Stripe `Customer.create` returns success and the `provider_created` attempt mutation captures the new Customer ID | Org `billing_admin` + `org_owner`; Ops Finance dashboard; subscribed customer endpoints | Webhook only (no in-app; the customer-facing notification is consolidated in `org.residency_change.completed`) | Idempotent on `(org_id, residency_change_id, stripe_customer_id_new)`; emitted once per successful Stripe Customer creation | `{event_id, event_seq=2, org_id, residency_change_id, stripe_customer_id_new, legal_entity_new, residency_region_new, custom_sovereign_residency_label_new \| null, stripe_metadata: {atomic_binding_protocol: 'v7.2.0-REM-Phase-5', legal_entity, residency_region, custom_sovereign_residency_label=<Organization label if custom else 'not_applicable'>}, created_at}` | `financial_impact` |
+| `org.residency_change.stripe_customer_closed` | §34.10.5.A phase 3 binding mutation updates the Organization; the legacy Stripe Customer is transitioned to `closed_for_new_invoices` and appended to `stripe_customer_id_historical[]` | Org `billing_admin` + `org_owner`; Ops Finance dashboard; subscribed customer endpoints | Webhook only | Idempotent on `(org_id, residency_change_id, stripe_customer_id_closed)`; emitted once per legacy-Customer closure; NO-OP-emission with `payload.no_op=true` at Org-creation because no legacy Customer exists | `{event_id, event_seq=3, org_id, residency_change_id, stripe_customer_id_closed, legal_entity_at_close, residency_region_at_close, closed_at, no_op (bool; true if Org-creation path)}` | `financial_impact` |
+| `org.residency_change.completed` | §34.10.5.A phase 5 revalidates the provider/database readback, commits `bound`, and makes the new Stripe Customer the active billing target | Org `org_owner` + `billing_admin`; Ops Finance dashboard; subscribed customer endpoints | Webhook + Email (Loops.so `lo_org_residency_change_completed`) + In-app inbox card | Idempotent on `(org_id, residency_change_id)`; emitted exactly once at successful completion; NOT emitted on rollback (a rollback fires `org.residency_change.rollback` per Appendix F.2 financial-impact emission contract, registered as a Phase-V72REM-PH5 forward-track in §31 rollback semantics) | `{event_id, event_seq=4, org_id, residency_change_id, residency_region_new, legal_entity_new, stripe_customer_id_active, stripe_customer_id_historical_appended, completed_at, total_transaction_duration_ms, total_pending_aiops_settled_on_legacy_customer (int)}` | `financial_impact` |
 | `org.residency_change.rollback` | §1.6.1 migration enters `rollback_required` and source-region authority is restored before cutover | Org `org_owner` + `billing_admin`; Ops Finance dashboard; subscribed customer endpoints | Webhook + Email + In-app inbox card | Idempotent on `(org_id, residency_change_id, rollback_at)`; emitted exactly once per rollback; suppresses `org.residency_change.completed` | `{event_id, org_id, residency_change_id, rollback_reason, residency_region_old, residency_region_attempted, legal_entity_old, stripe_customer_created_rolled_back (bool), target_artifacts_erased (bool), rollback_at, retry_eligible_after}` | `financial_impact` |
 
 **Sequencing and ordering guarantees.** The four success events are emitted in `event_seq` order (1 -> 2 -> 3 -> 4) from the same Convex transaction; consumers MAY rely on the `event_seq` ordering for state-machine reconciliation but SHOULD ALSO honor `event_id` idempotency in case of webhook delivery retries reordering arrival. The §34.10.5.A invariant #3 atomicity guarantee means no partial sequence (e.g., 1 + 2 without 3 + 4) is ever emitted on commit; a rollback at any step suppresses all four success events and replaces them with a single `org.residency_change.rollback` event.
@@ -58947,7 +59550,7 @@ v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0), extended by the v7.
 **Bridge firewall invariant.** Phase-V72REM-PH5 events do NOT cross the Console Bridge. Residency-change events are Org-scoped and emitted to the Org's `billing_admin` + `org_owner` regardless of console (Org-Settings is a platform-wide surface, not a console-scoped surface per §1.3); the events carry no per-Console payload and do not register a `console_bridge_event_kind` enum value. CI gate `console_bridge_no_residency_change_event_kinds` (§M.5 forward-track at v7.1.1 stamp per the §M.5.17 sibling-gate registration pattern) asserts.
 
 **Loops.so transactional templates.** Two templates register with this Phase 5 closure:
-- `lo_org_residency_change_blocked` — fires on HTTP 409 `org_residency_change_eligibility_predicate_violated` from §34.10.5.A invariant #3 step (ii). Variables: `{org_id, residency_region_attempted, violated_predicates[], remediation_steps[]}`. Recipient role-gate: Org Owner + Enterprise Admin (the initiator). Final subject: `Action required: complete your Sourcera data residency change`.
+- `lo_org_residency_change_blocked` — fires on HTTP 409 `org_residency_change_eligibility_predicate_violated` from §34.10.5.A phase 1. Variables: `{org_id, residency_region_attempted, violated_predicates[], remediation_steps[]}`. Recipient role-gate: Org Owner + Enterprise Admin (the initiator). Final subject: `Action required: complete your Sourcera data residency change`.
 - `lo_org_residency_change_completed` — fires from `org.residency_change.completed` webhook payload. Variables: `{org_id, residency_region_old, residency_region_new, legal_entity_new, completed_at, stripe_customer_id_active, customer_invoice_history_link}`. Recipient role-gate: Org Owner + Billing Admin. Final subject: `Your Sourcera data residency change is complete`.
 
 Both templates are registered in the Loops.so transactional template registry (operational layer; not duplicated in this Master Spec body) and bound to §34.10.5.A invariants #3 and #6 via the Authority anchor `Phase 5 D-RES-004 closure → Appendix C v7.2.0-REM Phase 5 block`. Deploy-time presence-verification of both templates in the Loops.so account is the responsibility of the M11.3 implementation pack's Loops.so reconciliation worker (the existing Loops.so template-deploy step runs in CI per the v7.1.0a hot-patch stamp pipeline). A spec-side CI gate `loops_so_template_completeness` covering all spec-registered Loops.so transactional templates is forward-tracked for authoring at v7.1.1 stamp under the D-RES-007 / D-LSO-N1 cluster (the Loops.so registry has additional v7.1.0 + V12 + V13 templates that share the same completeness assertion pattern; consolidating gate authoring across the cluster avoids per-Phase gate duplication).
@@ -60145,6 +60748,7 @@ The events below mirror operational signals from the §48 PLG Framework, the ten
 
 | Event | Trigger | Key Properties |
 | :---- | :---- | :---- |
+| `signup_completed` | Successful SSO provisioning has durably committed the Organization, authenticated User, founding OrganizationMembership, and console access (§48.1.1, §48.1.2, §48.1.4) | `console`, `origin ∈ Appendix J signup_origin`, `sso_provider ∈ Appendix J signup_sso_provider`, `org_provisioning_outcome ∈ Appendix J org_provisioning_outcome`, `time_to_provision_seconds` |
 | `funnel_stage_entered` | First entry into a PLG funnel stage for an Org × console (§48.1.1, §48.1.2) | `stage`, `console`, `upgrade_pressure_trigger` (nullable), `expansion_trigger` (nullable), `enterprise_trigger` (nullable), `time_from_signup_seconds` (nullable on first stage) |
 | `funnel_stage_regressed` | Org regresses to a prior stage (downgrade, churn) | `from_stage`, `to_stage`, `reason`, `console` |
 | `plg_funnel_definition_changed` | Ops mutates a stage definition (§48.1.3) | `stage`, `prior_definition_hash`, `new_definition_hash`, `ops_actor_user_id`, `effective_at` |
@@ -61089,14 +61693,14 @@ Registered in the §3.6–§3.11 Authoring Pass (2026-04-22). These events instr
 
 v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0), extended by the v7.1.1 D-RES-007 residency-procedure closure. Six new PostHog events are registered: five mirroring the Appendix C `org.residency_change.*` webhook family per the Appendix C -> Appendix G coverage gate `appendix_c_to_appendix_g_coverage`; one mirroring the §M.5.17 CI gate runtime emissions per the §M.4.5.1 audit-event schema. All events carry the Appendix G standard property set (`org_id`, `user_id`, `session_id`, `console`, `workspace_id`, `residency_region`, `plan_tier`, `page_surface_kind`, `client_device_class`, `client_timezone`) plus the event-specific properties enumerated below.
 
-**Firewall residency partitioning.** All PostHog `org_residency_change_*` mirror events partition into the Org's CURRENT residency PostHog project at emission time. On the `org_residency_change_completed` event (which represents the cutover moment), the event is emitted to the NEW residency PostHog project per §34.10.5.A invariant #3 step (iv) (the Org's `data_residency_region` has transitioned to the new value at step iv before step v emits the audit events). Events emitted by the Convex transaction prior to step (iv) (`org_residency_change_initiated`, `org_residency_change_stripe_customer_created`, `org_residency_change_stripe_customer_closed`) emit to the OLD residency PostHog project. The source Appendix C webhook names remain dotted (`org.residency_change.*`) and are carried only in trigger text / `source_webhook_event_type` joins. This partitioning is the GDPR-compliant emission rule and aligns with §51 envelope-facing analytics binding via `legal_entity_kind`.
+**Firewall residency partitioning.** All PostHog `org_residency_change_*` mirror events partition into the Organization's authoritative residency at the phase-owning mutation. Phase-1 `org_residency_change_initiated` and phase-2 `org_residency_change_stripe_customer_created` emit to the OLD residency project. Phase-3 `org_residency_change_stripe_customer_closed` and phase-5 `org_residency_change_completed` emit to the NEW residency project because the binding mutation has committed the cutover; first Organization creation has no old project and all events use the new residency. The source Appendix C webhook names remain dotted (`org.residency_change.*`) and are carried only in trigger text / `source_webhook_event_type` joins. This partitioning is the GDPR-compliant emission rule and aligns with §51 envelope-facing analytics binding via `legal_entity_kind`.
 
 | Event | Trigger | Properties |
 | :---- | :---- | :---- |
-| `org_residency_change_initiated` | Appendix C `org.residency_change.initiated` webhook emission per §34.10.5.A invariant #3 step (v) | `source_webhook_event_type='org.residency_change.initiated'`, `residency_change_id`, `residency_region_old`, `residency_region_new`, `legal_entity_old`, `legal_entity_new`, `custom_sovereign_residency_label_old (nullable)`, `custom_sovereign_residency_label_new (nullable)`, `initiator_user_id`, `initiator_role ∈ {org_owner, enterprise_admin, ops_finance_admin}`, `correction_reason ∈ Appendix J residency_change_correction_reason_kind \| null` |
-| `org_residency_change_stripe_customer_created` | Appendix C `org.residency_change.stripe_customer_created` webhook emission per §34.10.5.A invariant #3 step (v) | `source_webhook_event_type='org.residency_change.stripe_customer_created'`, `residency_change_id`, `stripe_customer_id_new`, `legal_entity_new`, `residency_region_new`, `custom_sovereign_residency_label_new (nullable)`, `stripe_api_idempotency_key`, `created_at`, `stripe_api_round_trip_ms` |
-| `org_residency_change_stripe_customer_closed` | Appendix C `org.residency_change.stripe_customer_closed` webhook emission per §34.10.5.A invariant #3 step (v) | `source_webhook_event_type='org.residency_change.stripe_customer_closed'`, `residency_change_id`, `stripe_customer_id_closed`, `legal_entity_at_close`, `residency_region_at_close`, `closed_at`, `no_op (bool; true if Org-creation path)`, `historical_invoice_count_at_close` |
-| `org_residency_change_completed` | Appendix C `org.residency_change.completed` webhook emission per §34.10.5.A invariant #3 step (v) | `source_webhook_event_type='org.residency_change.completed'`, `residency_change_id`, `residency_region_new`, `legal_entity_new`, `stripe_customer_id_active`, `stripe_customer_id_historical_appended`, `total_transaction_duration_ms`, `total_pending_aiops_settled_on_legacy_customer (int)`, `eligibility_predicate_set_evaluated (string[])` (the §1.6.1 predicate names the transaction step (ii) evaluated to PASS — for analytics on which predicates customers most often run into) |
+| `org_residency_change_initiated` | Appendix C `org.residency_change.initiated` webhook emission per §34.10.5.A phase 1 | `source_webhook_event_type='org.residency_change.initiated'`, `residency_change_id`, `residency_region_old`, `residency_region_new`, `legal_entity_old`, `legal_entity_new`, `custom_sovereign_residency_label_old (nullable)`, `custom_sovereign_residency_label_new (nullable)`, `initiator_user_id`, `initiator_role ∈ {org_owner, enterprise_admin, ops_finance_admin}`, `correction_reason ∈ Appendix J residency_change_correction_reason_kind \| null` |
+| `org_residency_change_stripe_customer_created` | Appendix C `org.residency_change.stripe_customer_created` webhook emission per §34.10.5.A phase 2 | `source_webhook_event_type='org.residency_change.stripe_customer_created'`, `residency_change_id`, `stripe_customer_id_new`, `legal_entity_new`, `residency_region_new`, `custom_sovereign_residency_label_new (nullable)`, `stripe_api_idempotency_key`, `created_at`, `stripe_api_round_trip_ms` |
+| `org_residency_change_stripe_customer_closed` | Appendix C `org.residency_change.stripe_customer_closed` webhook emission per §34.10.5.A phase 3 | `source_webhook_event_type='org.residency_change.stripe_customer_closed'`, `residency_change_id`, `stripe_customer_id_closed`, `legal_entity_at_close`, `residency_region_at_close`, `closed_at`, `no_op (bool; true if Org-creation path)`, `historical_invoice_count_at_close` |
+| `org_residency_change_completed` | Appendix C `org.residency_change.completed` webhook emission per §34.10.5.A phase 5 | `source_webhook_event_type='org.residency_change.completed'`, `residency_change_id`, `residency_region_new`, `legal_entity_new`, `stripe_customer_id_active`, `stripe_customer_id_historical_appended`, `total_transaction_duration_ms` (legacy key; end-to-end binding-attempt duration), `total_pending_aiops_settled_on_legacy_customer (int)`, `eligibility_predicate_set_evaluated (string[])` (the §1.6.1 predicate names phase 1 evaluated to PASS) |
 | `org_residency_change_rollback` | Appendix C `org.residency_change.rollback` webhook emission per §1.6.1 rollback-required terminal path | `source_webhook_event_type='org.residency_change.rollback'`, `residency_change_id`, `rollback_reason`, `residency_region_old`, `residency_region_attempted`, `legal_entity_old`, `stripe_customer_created_rolled_back (bool)`, `target_artifacts_erased (bool)`, `retry_eligible_after` |
 | `spec_lint_legal_entity_residency_change_revenue_leak_gate_run` | §M.5.17 `legal_entity_residency_change_revenue_leak_test` gate execution at PR-lint + deploy_validator + runtime_test + synthetic_monitor contexts per §M.4.5.1 audit-event schema | `gate_id = 'legal_entity_residency_change_revenue_leak_test'`, `pr_number (nullable)`, `result_status ∈ {pass, fail}`, `failure_sub_assertion ∈ {a, b, c, d, e, f} \| null`, `execution_context ∈ {pr_lint, deploy_validator, runtime_test, synthetic_monitor}`, `synthetic_op_count (int)`, `runtime_ms (int)`, `commit_sha (nullable)`, `branch (nullable)` — DUAL-EMITTED to Ops `spec-ops` project for nightly digest aggregation per §M.4.6 |
 
@@ -61698,7 +62302,7 @@ Authored in the Phase V8.4 spec-side remediation pass (2026-05-08; defects D-V8.
 | `invalid_markdown` | 400 | All §32 write endpoints | Markdown syntax error or unsafe content (e.g., script tags) | `error.entity.invalid_markdown` |
 | `kb_value_meter_economics_out_of_range` | 422 | §22.18.4.2 internal KB Economics mutation | Draft-time-saved minutes or hourly-rate cents is outside the §4.2.1 field bound; no field, audit event, or recompute job mutates. | `error.kb.kb_value_meter_economics_out_of_range` |
 | `kb_value_meter_economics_version_conflict` | 409 | §22.18.4.2 internal KB Economics mutation | `expected_version` is stale. Response returns only the current version and reload action; it does not overwrite the concurrent editor. | `error.kb.kb_value_meter_economics_version_conflict` |
-| `audit_event_action_namespace_mismatch` | 422 | All §32 write endpoints | Audit Event write presents an `action` value from the wrong namespace for its `entity_type`. Billing `entity_type` values (`ai_wallet`, `contest_record`, `committed_spend_contract`, `pricing_table_version`, `pro_trial_seat_grant`, `organization_plan`, `free_allowance_counter`, `billing_seat_snapshot`, `downgrade_excess_data_bucket`, `billing_admin_role_assignment`, `audit_event_view`) require a qualified `org.*` action from Appendix J Billing Admin Audit Action Types; all other `entity_type` values require a bare-verb action from Appendix J Audit Event Action Types. Enforced by the write-time validator at §4.6.1 and asserted by the `audit_event_action_enum_union_validator` CI test. | `error.audit.audit_event_action_namespace_mismatch` |
+| `audit_event_action_namespace_mismatch` | 422 | All §32 write endpoints | Audit Event write presents an `action` value from the wrong namespace for its `entity_type`. Billing `entity_type` values (`ai_wallet`, `contest_record`, `committed_spend_contract`, `pricing_table_version`, `pro_trial_seat_grant`, `trial_state`, `organization_plan`, `free_allowance_counter`, `billing_seat_snapshot`, `downgrade_excess_data_bucket`, `billing_admin_role_assignment`, `audit_event_view`) require a qualified `org.*` action from Appendix J Billing Admin Audit Action Types; all other `entity_type` values require a bare-verb action from Appendix J Audit Event Action Types. Enforced by the write-time validator at §4.6.1 and asserted by the `audit_event_action_enum_union_validator` CI test plus `buyer_trial_audit_action_registration` for §34.9.1. | `error.audit.audit_event_action_namespace_mismatch` |
 
 ### Disqualification Errors (§25.3)
 
@@ -62842,13 +63446,13 @@ v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0 numerical_singleton; 
 
 **Stripe-Customer Atomic-Binding family** (closes D-RES-004; binds §34.10.5.A invariants #1 + #7 + AC #1; §M.5.17 CI gate `legal_entity_residency_change_revenue_leak_test` sub-assertion (c) + Datadog synthetic monitor `legal_entity_residency_change_revenue_leak_monitor`):
 
-- `stripe_customer_active_duplicate` — HTTP 422; `permanent`; non-retryable. The Convex `(org_id, legal_entity)` unique index on `Organization.stripe_customer_id_active` rejects any mutation that would result in two active Stripe Customers keyed on the same `(org_id, legal_entity)` pair per §34.10.5.A invariant #1. The error fires when (a) the Organization-write transaction at step (iv) of the §34.10.5.A invariant #3 5-step atomic protocol attempts to stamp `stripe_customer_id_active` on an Organization row already carrying a distinct active Customer ID under the same `legal_entity`, or (b) a faulty Ops-Finance correction-path invocation (invariant #6) attempts to mint a parallel active Customer without first transitioning the legacy Customer to `closed_for_new_invoices` via `stripe_customer_id_historical[]`. Remediation requires either (i) reaching out to Ops Finance for an atomic-rebinding via the §34.10.5.A invariant #6 correction path, or (ii) waiting for the in-flight residency-change transaction to complete (the row-level lock at invariant #3 step (i) serializes concurrent attempts). Used by: §32 `POST /v1/orgs/{org_id}/residency-migration-requests` (D-RES-007 forward-tracked); Convex Organization-write mutation layer; Ops Finance correction-path mutation. Localization key: `error.billing.stripe_customer_active_duplicate`. Authority anchor: §34.10.5.A invariant #1 + AC #1.
+- `stripe_customer_active_duplicate` — HTTP 422; `permanent`; non-retryable. The Convex `(org_id, legal_entity)` unique index on `Organization.stripe_customer_id_active` rejects any mutation that would result in two active Stripe Customers keyed on the same `(org_id, legal_entity)` pair per §34.10.5.A invariant #1. The error fires when (a) the phase-3 binding mutation of the §34.10.5.A invariant #3 durable protocol attempts to stamp `stripe_customer_id_active` on an Organization row already carrying a distinct active Customer ID under the same `legal_entity`, or (b) a faulty Ops-Finance correction-path invocation (invariant #6) attempts to mint a parallel active Customer without first transitioning the legacy Customer to `closed_for_new_invoices` via `stripe_customer_id_historical[]`. Remediation requires either (i) reaching out to Ops Finance for an atomic-rebinding via the §34.10.5.A invariant #6 correction path, or (ii) waiting for the in-flight binding attempt to complete (the row lock and unique non-terminal attempt guards serialize concurrent attempts). Used by: §32 `POST /v1/orgs/{org_id}/residency-migration-requests` (D-RES-007 forward-tracked); Convex Organization-write mutation layer; Ops Finance correction-path mutation. Localization key: `error.billing.stripe_customer_active_duplicate`. Authority anchor: §34.10.5.A invariant #1 + AC #1.
 
-- `org_residency_change_stripe_api_failure` — HTTP 502; `transient`; retryable via Stripe API idempotency-key convention (`(org_id, legal_entity_new, mutation_timestamp_minute)` per §34.10.5.A invariant #7). The error fires when the Stripe `Customer.create` API call at step (iii) of the §34.10.5.A invariant #3 5-step atomic protocol returns a Stripe-side error (network timeout; Stripe outage; Stripe 5xx response). The entire Convex mutation is rolled back; the Organization row is restored to its pre-transaction state. An OpsActionRecord writes `outcome=stripe_api_failure` and the provider error code. Final customer copy: `We couldn’t update your data residency because the billing service is temporarily unavailable. Try again in a few minutes. Your current residency and billing setup have not changed.` Retry within the §32 idempotency window resolves the attempt without creating a duplicate Stripe Customer. Used by: §32 residency-change endpoint; Organization-write mutation step (iii); Ops Finance correction path. Localization key: `error.billing.org_residency_change_stripe_api_failure`. Authority anchor: §34.10.5.A invariant #7.
+- `org_residency_change_stripe_api_failure` — HTTP 502; `transient`; retryable via the immutable Stripe API idempotency key `(org_id, legal_entity_new, original_attempt_timestamp_minute)` per §34.10.5.A invariant #7. The error fires when the phase-2 Stripe `Customer.create` action returns a network timeout, Stripe outage, or Stripe 5xx response. The Organization binding remains unchanged; a narrow mutation records `retryable_failure` and an OpsActionRecord with `outcome=stripe_api_failure` plus the bounded provider error code. Final customer copy: `We couldn’t update your data residency because the billing service is temporarily unavailable. Try again in a few minutes. Your current residency and billing setup have not changed.` Retry resolves the same durable attempt without creating a duplicate Stripe Customer. Used by: §32 residency-change endpoint; Stripe Customer provider action; Ops Finance correction path. Localization key: `error.billing.org_residency_change_stripe_api_failure`. Authority anchor: §34.10.5.A invariant #7.
 
-**Residency-Change Eligibility family** (closes D-RES-004 paired with D-RES-007 forward-track; binds §34.10.5.A invariant #3 step (ii); §M.5.17 CI gate `legal_entity_residency_change_revenue_leak_test` sub-assertion (b)):
+**Residency-Change Eligibility family** (closes D-RES-004 paired with D-RES-007 forward-track; binds §34.10.5.A phase 1; §M.5.17 CI gate `legal_entity_residency_change_revenue_leak_test` sub-assertion (b)):
 
-- `org_residency_change_eligibility_predicate_violated` — HTTP 409; `permanent` until predicate clears (Sourcera-Error-Subkind `state_conflict_strict`); the response envelope MUST carry the `Sourcera-Error-Detail` extension naming the violated predicate from the closed set: `bid_workspace_active_phase_7_through_13`, `ai_operation_pending_settlement`, `dsar_request_in_flight`, `outcome_contract_in_renewal_window`. The error fires when an Organization-write transaction attempting to change `data_residency_region` is rejected at step (ii) of the §34.10.5.A invariant #3 5-step atomic protocol because at least one eligibility predicate fails. The predicate set is the §1.6.1 closed set. The error notifies the Org Owner via Loops.so transactional template `lo_org_residency_change_blocked` enumerating the violated predicate(s) and the remediation path (close in-flight Bid Workspaces; wait for `pending` AIOperations to settle; close DSAR; etc.). Retry: not until the violated predicate clears (the operator must take a remediation action; auto-retry is not safe and will produce identical 409 responses). Used by: §32.8.25 residency-change endpoint; Convex Organization-write mutation layer step (ii). Localization key: `error.residency.org_residency_change_eligibility_predicate_violated`. Authority anchor: §34.10.5.A invariant #3 step (ii) + AC #6; §1.6.1.
+- `org_residency_change_eligibility_predicate_violated` — HTTP 409; `permanent` until predicate clears (Sourcera-Error-Subkind `state_conflict_strict`); the response envelope MUST carry the `Sourcera-Error-Detail` extension naming the violated predicate from the closed set: `bid_workspace_active_phase_7_through_13`, `ai_operation_pending_settlement`, `dsar_request_in_flight`, `outcome_contract_in_renewal_window`. The error fires when the phase-1 prepare mutation of the §34.10.5.A invariant #3 durable protocol rejects at least one eligibility predicate before provider traffic. The predicate set is the §1.6.1 closed set. The error notifies the Org Owner via Loops.so transactional template `lo_org_residency_change_blocked` enumerating the violated predicate(s) and the remediation path (close in-flight Bid Workspaces; wait for `pending` AIOperations to settle; close DSAR; etc.). Retry: not until the violated predicate clears (the operator must take a remediation action; auto-retry is not safe and will produce identical 409 responses). Used by: §32.8.25 residency-change endpoint; Convex phase-1 prepare mutation. Localization key: `error.residency.org_residency_change_eligibility_predicate_violated`. Authority anchor: §34.10.5.A invariant #3 phase 1 + AC #6; §1.6.1.
 
 - `org_residency_change_transaction_corrupt` — HTTP 500; `transient`; retry is unsafe until Ops clears the incident. Sentinel error for an impossible out-of-order §1.6.1 / §34.10.5.A transaction state, including a partial Stripe Customer rebinding, a committed Organization region without a matching legal entity, a cutover without audit hash-chain re-rooting, or a `completed` event emitted after rollback. Used by: §1.6.1 migration worker; §34.10.5.A AC #1; §50.30 Ops evacuation surface. Localization key: `error.residency.org_residency_change_transaction_corrupt`. Authority anchor: §1.6.1 state machine + §34.10.5.A AC #1.
 
@@ -63149,6 +63753,17 @@ Phase EM Entitlement Matrix remediation registrations for §34.8.2 / §34.8.5 / 
 | :---- | :---- | :---- | :---- | :---- |
 | `network_effect_counter_signal_invalid_scope` | 422 | `permanent` | §48.3.10 counter-signal query requests an incompatible category/Seller-Org scope or cross-residency combination. | `error.network_effects.network_effect_counter_signal_invalid_scope` |
 | `network_effect_counter_signal_source_unavailable` | 503 | `transient` | §48.3.10 source snapshot cannot be computed; last-known value remains timestamped and no healthy/breached claim is emitted. | `error.network_effects.network_effect_counter_signal_source_unavailable` |
+
+### v7.1.1 Delivery Source-Contract Repair Errors (2026-07-16) {#appendix-i-v711-delivery-source-contract-repair}
+
+| Code | HTTP | Retryable | Used by / meaning | Localization key |
+| :---- | :---- | :---- | :---- | :---- |
+| `marketplace_review_duplicate_source` | 409 | `permanent` | §4.5.15 create/submit conflicts with another non-terminal review for the same reviewer Org, reviewed Seller Org, and Selection Record. | `error.marketplace.review.marketplace_review_duplicate_source` |
+| `marketplace_review_source_mismatch` | 422 | `permanent` | §4.5.15 listing or Selection Record does not belong to the declared reviewer/reviewed Organizations. | `error.marketplace.review.marketplace_review_source_mismatch` |
+| `marketplace_review_invalid_state_transition` | 409 | `permanent` | §4.5.15 review or Seller-response mutation is illegal from the committed lifecycle state. | `error.marketplace.review.marketplace_review_invalid_state_transition` |
+| `marketplace_integration_hook_not_found` | 404 | `permanent` | §4.5.16 hook is absent, expired, deleted, cross-Org, cross-console, or unauthorized; all cases use one non-leaking envelope. | `error.marketplace.integration_hook.marketplace_integration_hook_not_found` |
+| `marketplace_integration_hook_invalid_state_transition` | 409 | `permanent` | §4.5.16 redrive, cancel, or dispatch attempts an illegal transition or stale compare-and-set. | `error.marketplace.integration_hook.marketplace_integration_hook_invalid_state_transition` |
+| `webhook_event_registry_contract_mismatch` | 503 | `transient` | §31.11.6 compiler, deployment, dispatch, or replay detects a missing, duplicate, stale, or schema-hash-mismatched registry row. Customer registration still uses the existing safe 404/422 errors and never receives internal registry detail. | `error.webhook.webhook_event_registry_contract_mismatch` |
 
 ---
 
@@ -63782,7 +64397,7 @@ The v6.0.0 single-console enum (`free`, `business`, `enterprise`) was split into
 
 **Deploy-Time Validator Rules.** Per the §5.2.1.6 acceptance-criteria family, a deploy-time validator MUST assert: (1) every qualified action emitted by §5.2.1.1 Permission List Operations is present in the Billing Admin Audit Action Types registry; (2) every registry entry is emitted by at least one code path (audit-action-dead-code check); (3) the bare-verb enum does not contain any dotted string; (4) the qualified namespace does not contain any bare verb. The validator runs in CI against the production Convex schema and fails the build on drift.
 
-**Cross-Reference.** The `billing_admin_action` namespace is used by the Billing Admin Audit View filter at §5.2.1.4 (regex `^org\.(wallet|contest|committed_spend|plan|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*`), the PostHog event mirror in Appendix G, and the webhook event emission in §31.8 / Appendix C.
+**Cross-Reference.** The `billing_admin_action` namespace is used by the Billing Admin Audit View filter at §5.2.1.4 (regex `^org\.(wallet|contest|committed_spend|plan|trial|solo_trial|pro_trial_seat|billing|downgrade_bucket|free_allowance|pricing|scim_billing|billing_admin)_*`), the PostHog event mirror in Appendix G, and the webhook event emission in §31.8 / Appendix C.
 
 ### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)
 
@@ -63810,7 +64425,9 @@ The `billing_admin_action` namespace registers the qualified action enum used fo
 
 **Plan Tier (§34):**
 
-`org.plan_changed`, `org.plan_state_drift_detected`, `org.plan_change_blocked_pending_ops_signoff`, `org.plan_change_expired`, `org.plan_downgrade_warning_acknowledged`, `org.plan_tier_split_migrated`, `org.solo_trial_started`, `org.solo_trial_expiry_notice_sent`, `org.solo_trial_ended`
+`org.plan_changed`, `org.plan_state_drift_detected`, `org.plan_change_blocked_pending_ops_signoff`, `org.plan_change_expired`, `org.plan_downgrade_warning_acknowledged`, `org.plan_tier_split_migrated`, `org.trial_started`, `org.trial_ended`, `org.solo_trial_started`, `org.solo_trial_expiry_notice_sent`, `org.solo_trial_ended`
+
+`org.trial_started` and `org.trial_ended` are valid only for `entity_type=trial_state` and `trial_kind=business_starter_14d` under §34.9.1. The start payload records the actor, source/target plan, `trial_started_at`, `trial_expires_at`, and wallet state after the atomic write. The end payload records the actor or scheduled-system actor, terminal outcome, source/target plan, terminal timestamp, and wallet state after conversion or automatic downgrade. Both exclude customer-authored content and payment credentials. Cross-entity use, a bare `created`/`updated` TrialState action, or use against a Solo migration trial fails HTTP 422 `audit_event_action_namespace_mismatch`. QA test `audit_event_action_enum_union_validator` covers both valid action/entity pairs and their cross-namespace negatives.
 
 **Buyer-Funded Pro Trial Seat (§34.13):**
 
@@ -64132,6 +64749,40 @@ Ops Console role, registered alongside `ops_taxonomy_admin` and `ops_marketing_e
 ### `marketplace_category_icon_token` (Marketplace Category Icon Token)
 
 `icon_generic_software`, `icon_erp`, `icon_crm`, `icon_hrms`, `icon_analytics`, `icon_supply_chain`, `icon_integration`, `icon_security`, `icon_finance`, `icon_it_ops`, `icon_marketing`, `icon_custom` (design-system-registered tokens; extensible by Ops Taxonomy Admin)
+
+### Marketplace Review and Integration-Hook Enums (§4.5.15–§4.5.16)
+
+#### `marketplace_review_status`
+
+`draft`, `submitted`, `published`, `hidden`, `withdrawn`, `rejected`
+
+#### `marketplace_review_attribution_mode`
+
+`anonymous`, `buyer_org_name`
+
+#### `marketplace_review_verification_state`
+
+`unverified`, `selection_record_verified`
+
+#### `marketplace_review_response_status`
+
+`none`, `published`, `hidden`, `withdrawn`
+
+#### `marketplace_integration_hook_source_kind`
+
+`marketplace_listing`, `eoi_record`, `nda_record`, `marketplace_review`
+
+#### `marketplace_integration_hook_consumer_kind`
+
+`console_bridge`, `customer_webhook`, `crm_sync`
+
+#### `marketplace_integration_hook_state`
+
+`pending`, `dispatching`, `retry_wait`, `succeeded`, `disabled_target`, `dead_lettered`, `canceled`
+
+**Since.** `current_unstamped` under AE-V711-DPL-MARKETPLACE-WEBHOOK-CONTRACT-01. These enums define source contracts only; no runtime readiness is implied.
+
+**Audit actions.** Appendix J `audit_event_action_type` adds `marketplace.review.created`, `marketplace.review.submitted`, `marketplace.review.published`, `marketplace.review.rejected`, `marketplace.review.hidden`, `marketplace.review.restored`, `marketplace.review.withdrawn`, `marketplace.review.seller_response_published`, `marketplace.review.seller_response_hidden`, `marketplace.review.seller_response_restored`, `marketplace.review.seller_response_withdrawn`, `marketplace.integration_hook.created`, `marketplace.integration_hook.dispatch_started`, `marketplace.integration_hook.retry_scheduled`, `marketplace.integration_hook.succeeded`, `marketplace.integration_hook.disabled_target`, `marketplace.integration_hook.dead_lettered`, `marketplace.integration_hook.canceled`, and `marketplace.integration_hook.redriven`. Every committed lifecycle transition emits exactly one matching action against the canonical entity type.
 
 ### Ops Taxonomy Admin Role
 
@@ -64861,12 +65512,12 @@ Public Pricing API publish fanout policy: exponential backoff 1s, 5s, 30s, 2m, 1
 
 ### Plan Change Origin (§31.8.5) (new)
 
-`customer_self_serve`, `sales_ops_provisioned`, `automated_trial_conversion`, `commit_signing_provisioned`, `customer_self_serve_scheduled`, `payment_failure_automatic`, `sales_ops_decommitted`, `solo_migration_trial_auto_downgrade`
+`customer_self_serve`, `sales_ops_provisioned`, `automated_trial_conversion`, `commit_signing_provisioned`, `customer_self_serve_scheduled`, `payment_failure_automatic`, `sales_ops_decommitted`, `business_starter_trial_auto_downgrade`, `solo_migration_trial_auto_downgrade`
 
 **Notes.**
 
 - `billing.plan.upgraded.change_origin` accepts: `customer_self_serve`, `sales_ops_provisioned`, `automated_trial_conversion`, `commit_signing_provisioned`.
-- `billing.plan.downgraded.change_origin` accepts: `customer_self_serve_scheduled`, `payment_failure_automatic`, `sales_ops_decommitted`, `solo_migration_trial_auto_downgrade`.
+- `billing.plan.downgraded.change_origin` accepts: `customer_self_serve_scheduled`, `payment_failure_automatic`, `sales_ops_decommitted`, `business_starter_trial_auto_downgrade`, `solo_migration_trial_auto_downgrade`.
 - `billing.plan.downgrade_scheduled` does NOT carry `change_origin` (always customer-initiated by definition; Sales-Ops decommit follows a separate flow that surfaces as `payment_failure_automatic` or `sales_ops_decommitted` only at the execution event).
 
 ### Trial State Kind (§34.9) (v7.2.0-REM Solo Trial P1 addition)
@@ -65247,6 +65898,20 @@ Public Pricing API publish fanout policy: exponential backoff 1s, 5s, 30s, 2m, 1
 
 `signup`, `aha_moment`, `ceiling_hit`, `expansion`, `enterprise_trigger`, `regressed`
 
+### Signup Origin (§48.1.1–§48.1.2)
+
+`direct_signup`, `vendor_invite`, `m17_grant`
+
+### Signup SSO Provider (§48.1, §49.1)
+
+`google`, `microsoft`, `magic_link_fallback`
+
+### Org Provisioning Outcome (§48.1, §49.1)
+
+`new_org_created`, `existing_org_resolved`, `disambiguation_required`
+
+**Notes.** `signup_completed` permits only `new_org_created` or `existing_org_resolved`; `disambiguation_required` is reserved for the non-completion `seller_sso_completed` diagnostic. Buyer F-916 uses only `origin=direct_signup`, `sso_provider ∈ {google, microsoft}`, and `org_provisioning_outcome=new_org_created`.
+
 ### PLG Funnel Upgrade-Pressure Trigger (§48.1.1)
 
 `evaluation_limit`, `vendor_limit`, `ai_budget_exhaustion`, `opus_gated_capability`, `solo_envelope_pressure`, `concurrent_bid_limit`, `proactive_eoi_request`, `kb_entry_ceiling`, `firecrawl_request`
@@ -65275,7 +65940,7 @@ Extends the existing kind catalog with: `qualitative_label_dispute` (new). Pre-e
 
 ### Email Kind (§4.9 / §41)
 
-`vendor_invited`, `nda_request`, `nda_signed`, `response_submitted`, `qa_question_received`, `qa_answer_posted`, `phase_advanced`, `scoring_started`, `sla_prewarning`, `sla_breach`, `comment_mention`, `vendor_disqualified`, `report_ready`, `plan_downgrade_warning`, `trial_expiring`, `eoi_received`, `workspace_invitation`, `gdpr_request`, `gdpr_export_ready`, `feature_announcement`, `webinar_invitation`, `weekly_digest`, `webhook_secret_rotated`, `webhook_delivery_failed_dlq_entered`, `analytics_export_ready`, `analytics_scheduled_export_executed`, `support_ticket_created`, `kb_export_ready`, `pro_trial_seat_invite`
+`vendor_invited`, `nda_request`, `nda_signed`, `response_submitted`, `qa_question_received`, `qa_answer_posted`, `phase_advanced`, `scoring_started`, `sla_prewarning`, `sla_breach`, `comment_mention`, `vendor_disqualified`, `report_ready`, `plan_downgrade_warning`, `trial_expiring`, `trial_expiring_today`, `eoi_received`, `workspace_invitation`, `gdpr_request`, `gdpr_export_ready`, `feature_announcement`, `webinar_invitation`, `weekly_digest`, `webhook_secret_rotated`, `webhook_delivery_failed_dlq_entered`, `analytics_export_ready`, `analytics_scheduled_export_executed`, `support_ticket_created`, `kb_export_ready`, `pro_trial_seat_invite`
 
 **Notes.** Every Appendix C Email-channel notification event must resolve to an EmailTemplate whose `template_key` is registered here or in a later Appendix J extension block. The generated extension is closed over Appendix C affirmative Email-channel rows: `email_kind` also includes the dot-to-underscore normalized `Event` value for every Appendix C row that §41.2.4 classifies as email-channel affirmative. The detector `email_type_catalog_coverage` expands this generated set at lint time and fails on any affirmative Email-channel event that cannot resolve through §41.2.4. The registry is additive; removing an email kind requires template deprecation, migration, and a reconciliation entry.
 
@@ -65588,9 +66253,9 @@ Existing values (`violation_confirmed`, `no_violation`, `duplicate`, `insufficie
 
 No new values. Documented here for cross-reference completeness: `low`, `medium`, `high`, `critical`. SLAs and content-hide semantics are authored in §27.8.5.
 
-#### `abuse_report_subject_kind` (confirmation — values already registered on §4.5.7)
+#### `abuse_report_subject_kind` (canonical confirmation and aliases)
 
-No new values. `vendor_profile`, `catalog_listing`, `public_review_response`, `public_success_certificate`, `public_quote_card`, `public_category_page`, `seller_managed_agent_behavior`, `buyer_behavior`, `cross_org_message_behavior`. Scoping rules authored in §27.8.3.
+Canonical values are the §4.5.7 / §27.8.3 set, including `marketplace_review` and `marketplace_review_response`, plus the existing later-extension values `vendor_profile`, `catalog_listing`, `public_success_certificate`, `public_quote_card`, `public_category_page`, `seller_managed_agent_behavior`, `buyer_behavior`, and `cross_org_message_behavior`. `public_review_response` is a deprecated read/input alias that resolves only to canonical `marketplace_review_response`; it is never persisted or emitted. Scoping rules are authored in §27.8.3.
 
 #### `audit_event_action_type` — §27.8 extensions
 
@@ -65608,7 +66273,39 @@ Authored Extension. Required on every subscription targeting Marketplace-Abuse-D
 | `reporter` | Events pertaining to the reporting party (e.g., `abuse.report.triage_complete`, `abuse.report.closed` with user-facing disposition). Redacts subject internals and Ops-only triage notes. |
 | `ops` | Full-payload events for internal Ops-aligned subscriptions (e.g., SIEM, Signal Integrity Monitor per §48.4.10 / §50.15). No redaction. Only provisionable by `ops_platform_admin`. |
 
-Default on existing non-abuse subscriptions: `ops` (preserves v6.0.0 behavior for all non-§27.8 webhook classes). New `abuse.*` subscriptions require an explicit value; dispatch fails closed if unset. `seller` and `buyer` are recipient descriptions in domain catalogs, not `webhook_delivery_audience_scope` values. See §31 subscription schema addition flagged in RECONCILIATION.md.
+No global default exists. For each legacy subscription with a null scope, migration resolves the intersection of the selected active §31.11.6 registry rows: exactly one allowed value is persisted; zero or multiple values quarantine the subscription until an authorized user chooses a valid scope. Migration MUST NOT grant `ops`. New subscriptions follow §31.11.1's deterministic omission rule. `seller` and `buyer` are recipient descriptions in domain catalogs, not `webhook_delivery_audience_scope` values.
+
+### Webhook Event Registry Enums (§31.11.6)
+
+#### `webhook_event_console_scope`
+
+`buyer_only`, `seller_only`, `cross_console_safe`, `org_pooled`, `ops_only`, `platform`
+
+#### `webhook_event_provisionability`
+
+`customer`, `entitlement_gated`, `ops_only`, `disabled`
+
+#### `webhook_event_org_scope`
+
+`required`, `platform_nullable`, `forbidden`
+
+#### `webhook_event_workspace_scope`
+
+`required`, `optional`, `forbidden`
+
+#### `webhook_event_payload_policy`
+
+`metadata_only`, `schema_allowlist`, `ops_only`
+
+#### `webhook_event_registry_state`
+
+`active`, `deprecated`, `disabled`
+
+#### `webhook_event_delivery_recheck_policy`
+
+`current_subscription_console_audience_entitlement_dsar_target`
+
+**Since.** `current_unstamped` under AE-V711-DPL-MARKETPLACE-WEBHOOK-CONTRACT-01. The single delivery-recheck value is intentionally strict; a weaker or legacy bypass mode is not registered.
 
 ### Seller-Org Field Extension — §27.8.7
 
@@ -65771,9 +66468,9 @@ Same values as the `paused_*` subset of `crm_sync_connection_state` plus: `crm_c
 
 #### `crm_sync_sourcera_entity_kind`
 
-`eoi`, `seller_signal_cohort_accept`, `bid_workspace_invite`, `bid_workspace_response_submitted`, `bid_workspace_response_shortlisted`, `bid_workspace_response_selected`, `bid_workspace_response_declined`, `qa_thread_message`, `public_review_received`, `direct_invite_offer`, `direct_invite_accepted`, `direct_invite_declined`, `ghost_bid_received`.
+`eoi`, `seller_signal_cohort_accept`, `bid_workspace_invite`, `bid_workspace_response_submitted`, `bid_workspace_response_shortlisted`, `bid_workspace_response_selected`, `bid_workspace_response_declined`, `qa_thread_message`, `marketplace_review`, `direct_invite_offer`, `direct_invite_accepted`, `direct_invite_declined`, `ghost_bid_received`.
 
-**Semantics:** Canonical Sourcera-side source-entity kinds that the CRM Sync pipeline can propagate per §31.9.8. Each kind has a per-provider payload template.
+**Semantics:** Canonical Sourcera-side source-entity kinds that the CRM Sync pipeline can propagate per §31.9.8. Each kind has a per-provider payload template. `public_review_received` is a deprecated read/input alias for `marketplace_review`; new writes, events, mappings, and exports persist only the canonical value.
 
 #### `crm_object_kind` (per-provider partial)
 
@@ -67621,7 +68318,7 @@ The following enum sub-sections close Phase 2.1 D-AJ-007 through D-AJ-011 (inlin
 
 #### `audit_event_entity_type` (§4.6.1.1 canonical entity-type registry — D-AJ-021)
 
-`organization`, `org_membership`, `ip_allowlist_policy`, `org_ip_allowlist_entry`, `sourcera_template_registry_entry`, `user`, `team`, `team_membership`, `workspace`, `workspace_membership`, `use_case`, `requirement`, `requirement_amendment`, `response`, `score`, `score_grade_withdrawal`, `score_exclusion_proposal`, `intelligence_cache_entry`, `intelligence_briefing`, `evaluation_scenario`, `evaluation_pulse_event`, `internal_comment_thread`, `internal_comment_post`, `internal_comment_mention`, `presence_record`, `unread_marker`, `buyer_referral`, `pro_trial_seat_grant`, `usage_event`, `time_saved_credit`, `target_account`, `selection_report`, `selection_report_draft`, `inbox_item_group`, `pulse_digest`, `pulse_digest_export_job`, `tco_model`, `pricing_requirement`, `bid_workspace`, `bid_response`, `bid_task`, `bid_schedule`, `seller_profile`, `capability_declaration`, `capability_declaration_suggestion`, `capability_registry_entry`, `marketplace_category`, `vendor_opt_out_record`, `vendor_disqualification_record`, `seller_software`, `seller_org_page`, `software_page`, `category_page`, `guide_page`, `comparison_page`, `market_intelligence_report`, `heatmap_cell`, `ghost_bid_import`, `kb_export_job`, `kb_citation_graph_edge`, `seller_signal`, `promoted_listing`, `featured_placement`, `verification_review_record`, `seller_onboarding_session`, `page_preview_token_grant`, `onboarding_anti_pattern_exception_grant`, `eoi_draft_queue`, `seller_inventory_demotion_exemption`, `eoi_rate_limit_override`, `ops_action_record`, `template_library_entry`, `bid_success_share`, `marketplace_listing`, `eoi_record`, `eoi_acceptance_record`, `nda_record`, `nda_version`, `nda_signature_record`, `eval_starter`, `audit_event`, `audit_event_export`, `attachment`, `ops_session`, `ops_session_api_request_link`, `webhook_delivery_failure`, `console_bridge_event`, `ai_operation`, `capability_registry_entry_v2`, `org_agent_capability_config`, `agent_feedback_record`, `mcp_session_token_record`, `ai_wallet`, `outcome_contract`, `contest_record`, `cost_base_recalculation_log`, `free_allowance_counter`, `committed_spend_contract`, `pricing_table_version`, `downgrade_excess_data_bucket`, `org_seat_count_snapshot`, `seller_outcome_signal`, `solo_envelope_counter`, `dsar_request`
+`organization`, `org_membership`, `ip_allowlist_policy`, `org_ip_allowlist_entry`, `sourcera_template_registry_entry`, `user`, `team`, `team_membership`, `workspace`, `workspace_membership`, `use_case`, `requirement`, `requirement_amendment`, `response`, `score`, `score_grade_withdrawal`, `score_exclusion_proposal`, `intelligence_cache_entry`, `intelligence_briefing`, `evaluation_scenario`, `evaluation_pulse_event`, `internal_comment_thread`, `internal_comment_post`, `internal_comment_mention`, `presence_record`, `unread_marker`, `buyer_referral`, `pro_trial_seat_grant`, `usage_event`, `time_saved_credit`, `target_account`, `selection_report`, `selection_report_draft`, `inbox_item_group`, `pulse_digest`, `pulse_digest_export_job`, `tco_model`, `pricing_requirement`, `bid_workspace`, `bid_response`, `bid_task`, `bid_schedule`, `seller_profile`, `capability_declaration`, `capability_declaration_suggestion`, `capability_registry_entry`, `marketplace_category`, `vendor_opt_out_record`, `vendor_disqualification_record`, `seller_software`, `seller_org_page`, `software_page`, `category_page`, `guide_page`, `comparison_page`, `market_intelligence_report`, `heatmap_cell`, `ghost_bid_import`, `kb_export_job`, `kb_citation_graph_edge`, `seller_signal`, `promoted_listing`, `featured_placement`, `verification_review_record`, `seller_onboarding_session`, `page_preview_token_grant`, `onboarding_anti_pattern_exception_grant`, `eoi_draft_queue`, `seller_inventory_demotion_exemption`, `eoi_rate_limit_override`, `ops_action_record`, `template_library_entry`, `bid_success_share`, `marketplace_listing`, `eoi_record`, `eoi_acceptance_record`, `nda_record`, `nda_version`, `nda_signature_record`, `eval_starter`, `marketplace_review`, `marketplace_integration_hook`, `audit_event`, `audit_event_export`, `attachment`, `ops_session`, `ops_session_api_request_link`, `webhook_delivery_failure`, `console_bridge_event`, `ai_operation`, `capability_registry_entry_v2`, `org_agent_capability_config`, `agent_feedback_record`, `mcp_session_token_record`, `ai_wallet`, `outcome_contract`, `contest_record`, `cost_base_recalculation_log`, `free_allowance_counter`, `committed_spend_contract`, `pricing_table_version`, `downgrade_excess_data_bucket`, `org_seat_count_snapshot`, `seller_outcome_signal`, `solo_envelope_counter`, `dsar_request`
 
 **Notes.** Closes the §4.6.1.1 promised-but-not-authored canonical entity-type registry. The 70+ values map 1:1 with every §4.x entity sub-section. The §32 audit-emit endpoint validates against this enum; Convex schema validators reject any entity_type value not in this set. The §5.2.1.4 Billing Admin Audit Surface filter binds this enum for audit-projection allow-lists. Adding an entity to §4 requires a parallel addition here (CI gate `audit_event_entity_type_section4_pairing` asserts).
 
@@ -70525,9 +71222,12 @@ The table below is the canonical mapping. Rows are grouped by spec area for scan
 | **Architecture & Console Routing** | | | | |
 | `console` enum (`buyer` / `seller`) on every console-scoped entity | §1.3.2, §4.x `console` field | Two distinct app shells routed at login; user never sees the literal enum string | None (architectural) | Console firewall (§7.2) is a deployment fact; the user perceives "Buyer Sourcera" vs. "Vendor Sourcera," never `console=buyer`. Conformance posture: inherits_§37.1. |
 | Dual-console firewall (cross-console reads return HTTP 404, not 403, to avoid existence-leak) | §7.2, §1.3, §4.7.1 | No surface — manifests only as "We couldn't find that" on a deliberately-malformed cross-console URL | Internal-only, never surfaced | Surfacing the firewall would teach attackers that the resource exists. The 404 is the point. |
-| `data_residency_region` enum (`us` / `eu`) | §1.6, §4.2.1, §40.4 | "Data region: United States" / "Data region: European Union" pill in Org Settings → Privacy | All (Enterprise gates *changing* it; everyone sees the current value) | Set once at Org provisioning. Switching residency is an Enterprise-only Ops-assisted migration. Conformance posture: inherits_§37.1. |
+| `data_residency_region` enum (`us` / `eu` / `apac` / `custom`) | §1.6, §4.2.1, §40.4, §47.4 | The current data-region label in Org Settings → Privacy | All (Enterprise gates *changing* it; everyone sees the current value) | Set at Org provisioning. Switching residency follows the Enterprise-only, Ops-assisted §1.6.1 migration. Custom residency renders the approved customer-safe label, never the raw enum. Conformance posture: inherits_§37.1. |
 | User `home_residency_region` | §4.2.3 / §4.2.3.1, §6.8.4.2 | No surface — source-region routing for identity PII writes and DSAR pseudonymization | Internal-only, never surfaced | Customer-visible residency stays Organization.`data_residency_region`; User source-region routing exists only so global identity infrastructure can satisfy residency-partitioned DSAR cascades without active-active User mutation. |
 | Convex Subscription / Reactivity Layer (p95 ≤ 500 ms reactive SLO) | §1.5, §7.5.3 | No surface — UI just feels live; presence dots and unread counts update without refresh | Internal-only, never surfaced | Reactivity is the platform's ambient promise. A surface for "Convex" would surface implementation. |
+| Application browser-security response policy (F-910) | §1.5.1 | No surface — headers, nonces, and report sanitation protect each response | Internal-only, never surfaced | Users see the application or a bounded error, never CSP directives, provider origins, or policy classes. |
+| Browser cross-origin request gate (F-911) | §32.1.1 | No surface — disallowed browser origins receive the same empty denial | Internal-only, never surfaced | Origin classes, registry decisions, and denial reasons remain operational and cannot disclose tenant/resource existence. |
+| Deterministic platform reference-data release orchestration (F-913) | §50.33 | No customer surface — protected operator workflow and immutable receipts | Internal-only, never surfaced | Coordinates §50.12 and §50.32 without creating another data writer or exposing release internals to customers. |
 | `pipeline_stage_id` integer (0–15) | §4.3.1 Workspace, §4.4.1 Bid Workspace, §10 | Buyer Solo & Seller (always): rendered as the active step of the §3.14 four-step compressed progress bar (Buyer: Setup → Define → Score → Decide; Seller: Receive → Draft → Review → Submit). Buyer Team Mode: rendered as the §3.3.1 thirteen-phase chip ribbon ("Phase 4 of 13 — Vendor Discovery") with phase-name label and progress dots. The integer itself is never displayed. | All (Free sees 1 active evaluation per §34.1.1) | The integer is the single source of truth for both renderings. The Buyer surface variant is gated by `Workspace.evaluation_owner_mode`; the Seller surface is unconditionally compressed. The compressed-step computation function is engine-side and authoritative; the four-step bar component (`UX_Design_of_Sourcera.md` §5.2.19) is a pure projection. Conformance posture: inherits_§37.1. |
 | **UX Cross-Surface Patterns (§3)** | | | | |
 | Side Peek / Bulk Action / Presence / Unread pattern family | §3.8–§3.10, §3.12, §4.3.14–§4.3.15 | Right-rail detail, selection toolbar, live collaborator indicators, and unread markers inside the consuming feature surface | All eligible customer-console surfaces | Pattern rows own engine-to-surface behavior; primitive component styling remains UX-spec authority. Conformance posture: inherits_§37.1. |
@@ -70644,6 +71344,8 @@ The table below is the canonical mapping. Rows are grouped by spec area for scan
 | Marketplace Abuse Report | §4.5.7, §27.8 | "Report this listing" / "Report this vendor" CTAs | All | Severity (`high`/`critical`) and Ops-status state machine engine-only; reporter sees "Submitted — we'll respond within {N} hours." Conformance posture: inherits_§37.1. |
 | EOI Acceptance Record (with `match_score_at_acceptance` snapshot) | §4.5.8 | "Accepted to bid" notification + EOI history | All | Snapshot fields engine-only. Conformance posture: inherits_§37.1. |
 | EvalStarter (Ops-managed per-vertical seed registry) | §4.5.9 | No surface as the registry itself — the registry materializes as the §13.12 tile grid. The `EvalStarter` noun, the `vertical_slug` enum string, the seed schema, the `version` integer, and the Ops audit-action namespace all stay engine-side. | Internal-only as a noun; surface is the §13.12 intake. Ops Console is where Ops admins author rows (§43; never customer-visible). | The registry is the engine; the intake is the surface. Truncation behavior (Free tier seed shrink to 3 / 200) surfaces only as the §13.12.7 "Trimmed to fit your Free plan" inline copy. Conformance posture: inherits_§37.1. |
+| MarketplaceReview | §4.5.15, §27.8, §31.9.8.8 | Five-star public Seller review card with verified marker, consented or anonymous Buyer attribution, and optional Seller response; Buyer and Seller views add their own authoring/status controls | Eligible Buyer reviewers, reviewed Seller admins, authenticated Marketplace users, and public readers of published rows; Ops moderation is internal | Lifecycle, private provenance, moderation, DSAR, residency, and CRM handoff remain engine-owned. Hidden, withdrawn, rejected, or deleted rows never render. Conformance posture: inherits_§37.1. |
+| MarketplaceIntegrationHook | §4.5.16, §31 | No standalone creation surface — manifests as the authorized downstream CRM, webhook, or Console Bridge update and a bounded delivery-status projection | Source and counterparty Organizations see safe status only; Ops may redrive or cancel; never public | The outbox noun, payload hash, destination reference, retry state, and provider errors remain engine-owned. It never configures an endpoint or stores a credential. Conformance posture: inherits_§37.1. |
 | **Data Model — Audit & Cross-Console (§4.6, §4.7)** | | | | |
 | Audit Event (§4.6.1) | §4.6.1, §6.7 | "Audit log" tab in Org Settings (admin/billing-admin only) | Retention per §40.2 AuditEvent row + §34.1.1 / §34.1.2 cell **Audit Log Retention (UI)** | The retention-by-tier delta is the surface; the entity is the same. Conformance posture: inherits_§37.1. |
 | Attachment (polymorphic, cross-console) | §4.6.2 | "Attachments" panel everywhere | All | Polymorphism, virus-scan state — engine. Conformance posture: inherits_§37.1. |
@@ -70850,6 +71552,10 @@ The table below is the canonical mapping. Rows are grouped by spec area for scan
 | Integration Phase Export Mapping / Phase 13 Integration Export | §31.3, §4.3.38, §4.3.39, §32.10.3.F | "Export to {integration name}" CTA on closed Workspace plus Settings -> Integrations mapping card | Buyer Solo, Business Starter, Business Growth, Business Scale, Buyer Enterprise per §34.1.1 cell **Phase 13 Standard Integration Export** | Surface never displays credential material, internal scores, draft Selection Report text, non-winning vendor data, provider error bodies, or raw enum values; terminal status is sourced from IntegrationExportRun and events in Appendix C / G. Conformance posture: inherits_§37.1. |
 | Partner Integrations | §31.4 | Integration tiles in Settings → Integrations | All paid | Conformance posture: inherits_§37.1. |
 | Billing-Domain Webhook Catalog (`billing.*`, `wallet.*`, etc.) | §31.8 | No surface as a catalog — events route to Billing Admin email + webhook | Internal-only, never surfaced; available to Ent webhook subscribers | |
+| `org.residency_change.initiated` webhook event | §1.6.1, §34.10.5.A phase 1, Appendix C | “Data residency change started” in-app card plus the signed developer webhook | Enterprise Org Owner and Billing Admin; authorized subscribers; Ops Finance | Emits only after eligibility passes and the durable attempt commits. Predicate detail, row locks, and provider orchestration remain engine-owned. Conformance posture: inherits_§37.1. |
+| `org.residency_change.stripe_customer_created` webhook event | §34.10.5.A phase 2, Appendix C | Signed webhook progress event for the new billing-customer binding; no in-app interruption | Authorized Enterprise webhook subscribers and Ops Finance | The provider step remains engine-owned; customer-facing completion is consolidated in `org.residency_change.completed`. Conformance posture: inherits_§37.1. |
+| `org.residency_change.stripe_customer_closed` webhook event | §34.10.5.A phase 3, Appendix C | Signed webhook progress event confirming the prior billing customer is closed for new invoices | Authorized Enterprise webhook subscribers and Ops Finance | Historical invoices remain unchanged. The Org-creation path emits the registered no-op form rather than inventing a separate event. Conformance posture: inherits_§37.1. |
+| `org.residency_change.completed` webhook event | §1.6.1, §34.10.5.A phase 5, Appendix C | “Your data residency change is complete” in-app card and email plus the signed developer webhook | Enterprise Org Owner and Billing Admin; authorized subscribers; Ops Finance | Emits only after provider/database readback agrees and the binding is committed. Rollback suppresses this event. Conformance posture: inherits_§37.1. |
 | CRM Sync (Salesforce / HubSpot / Dynamics / Pipedrive) | §31.9 | "Connect Salesforce" / "Connect HubSpot" tile | sF, sSt (—); sGr (Included); sSc (Included + field-map customization); sEnt (Included + custom RevOps integrations) per §34.1.1 | Conformance posture: inherits_§37.1. |
 | `CRMSyncConnection` (OAuth) | §31.9 | "Connect" / "Pause" / "Disconnect" buttons | sGr+ | Conformance posture: inherits_§37.1. |
 | `CRMFieldMapping` (platform default vs. customer-custom) | §31.9 | "Field mapping editor" with platform defaults pre-populated | sGr (defaults only); sSc+ (custom mappings) | Conformance posture: inherits_§37.1. |
@@ -70941,7 +71647,7 @@ The table below is the canonical mapping. Rows are grouped by spec area for scan
 | **Responsive Design (§38)** | | | | |
 | Responsive breakpoint tier engine | §38.6.1, Appendix J `responsive_breakpoint_tier` | No direct surface; manifests as route/component reflow at `mobile_xs`, `mobile_sm`, `tablet`, `desktop`, and `desktop_xl` | All | Internal layout discriminator; telemetry emits active-console-only events. Conformance posture: inherits_§37.1. |
 | Native companion platform adapters | §38.2.1, §3.7.10, §3.9.5, §3.12.7 | Native connectivity, degraded presence, foreground reconciliation, and permission-gated mention push | Existing `ios_app` / `android_app` sessions only | Browser support and responsive-web parity remain §38.2 / §38.8.2; no native full-parity or new entitlement is implied. Conformance posture: inherits_§37.1. |
-| UserUIPreference breakpoint and layout persistence | §4.2.15, §38.6.3, §38.6.4.1 | Restored sidebar, Side Peek width, table density, Appearance, and Reduce data use preference | All signed-in customer users | Row is shared only for firewall-safe preference blobs; `last_observed_breakpoint_tier_by_console_json` is active-console-projected. Conformance posture: inherits_§37.1. |
+| UserUIPreference breakpoint and layout persistence | §4.2.15, §38.6.3, §38.6.4.1 | Restored sidebar, Side Peek width, data-table column visibility, Appearance, and Reduce data use preference | All signed-in customer users | Row is shared only for firewall-safe preference blobs; `last_observed_breakpoint_tier_by_console_json` is active-console-projected. Density is explicitly ephemeral under §3.15. Conformance posture: inherits_§37.1. |
 | Modern device posture and constrained-data renderer | §38.6.4.1 | Safe-area-aware mobile chrome, settled resize handling, width-only foldable rendering, and cache-first constrained-data reads | All customer consoles; self-edit only for persisted Reduce data use preference | Never infers OS power, carrier, hinge, or device identity. Read fanout may reduce; mutations, RBAC, residency, pagination, and console firewall remain unchanged. Conformance posture: inherits_§37.1. |
 | Side Peek tier-aware rendering | §3.8, §38.6.2, §38.8.1 | Full-screen modal on mobile, 72% overlay on tablet, resizeable Peek on desktop | All | Same engine object; tier determines surface form. Conformance posture: inherits_§37.1. |
 | Bottom Nav mobile primary navigation | §38.6.2 | Five-item bottom navigation on mobile tiers | All customer consoles | Replaces desktop sidebar; hidden on tablet/desktop. Conformance posture: inherits_§37.1. |
@@ -71059,6 +71765,7 @@ The table below is the canonical mapping. Rows are grouped by spec area for scan
 | Network Effects (data moat) | §48.3 | No surface — manifests as the value of the platform compounding for every additional seller | Internal-only, never surfaced | |
 | Anti-Spam & Abuse Controls (per growth loop) | §48.4 | No surface — manifests as flagged signals never reaching the user-visible aggregate | Internal-only, never surfaced | |
 | **Forward-Reference Surfaces (Phase 14 program)** | | | | |
+| Density Modes (F-884) | §3.15, §3.6.1, §3.7.6.2, §38.6.2 | Comfortable / Compact control on the six registered matrix hosts | Comfortable on every applicable tier; Compact on desktop and desktop_xl only | Presentation-only, ephemeral, non-authorizing, and non-persisted. Mobile uses the §38.6.2 card-list alternative. Conformance posture: inherits_§37.1. |
 | Single-Operator Mode (§2.8 — closed Phase 14.4) | §2.8, §3.13, §4.3.1 (`evaluation_owner_mode`) | Default surface path for first-time and lone evaluation owners. Renders a 4-step progress bar (Setup → Define → Score → Decide; per §2.8.2 phase-mapping table updated by Phase 14.6 to: Setup = Phases 1–3, Define = Phases 4–6, Score = Phases 7–10, Decide = Phases 11–13) in place of the §3.3.1 13-phase chip ribbon, with soft (skip-with-warning) phase gates per §2.8.3, a single deadline countdown + "What to do this week" panel in place of the per-component Pulse breakdown per §2.8.4, and contextual one-click stakeholder invites at natural moments per §2.8.5 in place of an upfront team-build step. The 4-step progress bar visual / mobile / motion authoring lands in `UX_Design_of_Sourcera.md` §5.2.19 PipelineSurface (Phase 14.6); §2.8.2 and §3.14.1 are the engine-side mappings that the component implements. | Default-on for Buyer Free and Buyer Solo (Phase 14.9) plan tiers; default-off for Buyer Starter, Growth, Scale, Enterprise. Surface visible on every Buyer-side tier when `evaluation_owner_mode=solo`. Seller-side: never (mode is a Buyer-console concept; cross-console firewall excludes the field per §2.8.6, §4.7.1). | The mode is a property of the Workspace, not of the User. The Method (§2.1–§2.7, §10) is invariant; this is a surface compression. The forward-reference row authored in Phase 14.2 is tightened by Phase 14.4 and the step-to-phase mapping is canonicalized by Phase 14.6 (§3.14.1). Conformance posture: inherits_§37.1. |
 | Defense View (§13.11, closed Phase 14.5) | §13.11, §3.13, §13.11.7 (`DefenseView` entity), §10.12 / §10.13 (Selection Report / Selection Record sources) | One-screen leadership-meeting brief generated from the finalized Selection Record. Renders Recommendation (1 sentence), Why (3 weighted reasons with linked evidence), Risks (1–2 with mitigation), Evidence (links back to the Selection Record), plus a one-page printable PDF for the CFO. Generated by the customer-billed Sonnet AIOperation `defense_view_generate` (§13.11.5) on first open and cached against `selection_record_hash`; regenerated only on hash mutation or explicit operator action. PDF action is the only mutating affordance on the surface. | Free (preview only — Recommendation + 1 reason visible, watermarked, PDF export gated to Solo+ upgrade CTA). Buyer Solo, Business Starter, Growth, Scale, and Enterprise: full surface unwatermarked. Buyer-console-only — seller console returns HTTP 404 per §1.3 / §7.2 firewall (existence-leak prevention). Mobile: read-only, regeneration not exposed. | Phase-14.5 surface authoring. The `defense_view_generate` capability registry row, OutcomeContract, and §34.3.4 rate-card are approved AE-14.5-01 (see `_integration/AUTHORED_EXTENSIONS_LEDGER.md`). Conformance posture: inherits_§37.1. |
 | Pipeline Surface Compression (§3.14, closed Phase 14.6) | §3.14, §3.13, §2.8.2 (Buyer Solo mapping), §22.19 (Seller compressed mapping), §4.3.1 (`pipeline_stage_id`, `evaluation_owner_mode`), §4.4.1 (Bid Workspace), §4.7.1 / §25 (Console Bridge projection), §10 (engine pipeline), §10.16 (Phase Advancement API + `soft_gates_enabled`) | The 13-phase engine pipeline is rendered as a 4-step compressed progress bar on both consoles. Buyer console: **Setup → Define → Score → Decide** (Setup = Phases 1–3; Define = Phases 4–6; Score = Phases 7–10; Decide = Phases 11–13). Seller console: **Receive → Draft → Review → Submit** (Receive = Phases 1–2; Draft = Phases 3–7; Review = Phases 8–10; Submit = Phases 11–13). Buyer rendering is gated by `Workspace.evaluation_owner_mode`: `solo` → 4-step bar; `team` → full §3.3.1 13-phase chip ribbon (unchanged). Seller rendering is unconditional — the 4-step bar is the only seller-side rendering, and the 13-phase chip ribbon never renders on the Seller console under any plan tier per the §3.14.4 invariant `pipeline_surface_compression_seller_always_compressed`. Click-on-step jumps to the engine phase corresponding to the step's first sub-phase per §3.14.1 / §3.14.2. Soft phase gates (Solo only) render skip-with-warning toasts per §2.8.3 / §22.19.3; hard gates (Team Mode) retain §10.16 modal-blocking behavior. UI authoring lands in `UX_Design_of_Sourcera.md` §5.2.19 PipelineSurface with two states: `solo` (4-step) and `team` (13-phase breadcrumb). | Buyer console: surface gated by `evaluation_owner_mode`; the 4-step bar is visible to all Buyer plan tiers when `evaluation_owner_mode=solo`. Buyer Team-Mode 13-phase chip ribbon is visible to all Buyer plan tiers when `evaluation_owner_mode=team`. Seller console: 4-step bar visible to all seller plan tiers (sF, sSt, sGr, sSc, sEnt) on every Bid Workspace regardless of `status`. The 13-phase chip ribbon is **never** visible on the Seller console. Plan tiers do not change the step set itself; tier-gated step *content* (e.g., Defense View on Decide for Buyer; KB compounding on Submit for sF vs. sSt+) renders inside the step's expanded view per §5.11. | Phase-14.6 surface authoring; the row supersedes the prior "Solo Pricing Tier Surfaces (Phase 14.6)" forward-reference entry. The seller-side mapping is an Authored Extension flagged in `_integration/RECONCILIATION.md → Phase 14.6 → Authored Extensions` because the seller does not have a separately-numbered 13-phase engine pipeline; the seller's "Phase N" labels in §3.14.2 / §22.19.1 refer to the bound buyer Workspace's `pipeline_stage_id` as observed via the Console Bridge projection (§4.7.1, §25). The §3.14.4 invariants (`pipeline_surface_compression_engine_unchanged`, `pipeline_surface_compression_step_to_phase_canonical`, `pipeline_surface_compression_no_separate_seller_phase_counter`, `pipeline_surface_compression_team_mode_unchanged_buyer`, `pipeline_surface_compression_seller_always_compressed`, `pipeline_surface_compression_soft_gate_solo_only`) are CI-gate identifiers wired in Phase 14.18. Conformance posture: inherits_§37.1. |
@@ -71225,7 +71932,7 @@ The table below is the canonical mapping. Rows are grouped by spec area for scan
 | D-11.4-001 backfill F-878 - Form Layout System | Companion: UX_Design_of_Sourcera.md §Patterns.Form | No standalone customer feature; governs the shared design system behavior that all authored surfaces inherit. | Internal-only, never surfaced | Row-level Appendix M.1 registration for F-878 from _audit/SURFACE_ENGINE_TRACE.md §5.2; no new product behavior. Parent feature rows continue to govern any customer-visible surface. |
 | D-11.4-001 backfill F-881 - Motion / Animation System | Companion: UX_Design_of_Sourcera.md §Motion | No standalone customer feature; governs the shared design system behavior that all authored surfaces inherit. | Internal-only, never surfaced | Row-level Appendix M.1 registration for F-881 from _audit/SURFACE_ENGINE_TRACE.md §5.2; no new product behavior. Parent feature rows continue to govern any customer-visible surface. |
 | D-11.4-001 backfill F-882 - Iconography System | Companion: UX_Design_of_Sourcera.md §Iconography | No standalone customer feature; governs the shared design system behavior that all authored surfaces inherit. | Internal-only, never surfaced | Row-level Appendix M.1 registration for F-882 from _audit/SURFACE_ENGINE_TRACE.md §5.2; no new product behavior. Parent feature rows continue to govern any customer-visible surface. |
-| D-11.4-001 backfill F-883 - Illustration System | Companion: UX_Design_of_Sourcera.md §Illustration | No standalone customer feature; governs the shared design system behavior that all authored surfaces inherit. | Internal-only, never surfaced | Row-level Appendix M.1 registration for F-883 from _audit/SURFACE_ENGINE_TRACE.md §5.2; no new product behavior. Parent feature rows continue to govern any customer-visible surface. |
+| D-11.4-001 backfill F-883 - Illustration System | §3.7.5; companion UX Design §2.7 / §9.2 | No standalone customer feature; governs the closed illustration registry and allowed empty, error, onboarding, and Plan-gate treatments inherited by authored surfaces. | Internal-only system; assets appear only through source-approved host surfaces | Master §3.7.5 owns allowed contexts, registry, accessibility, theme, security, failure, and proof boundaries. Parent feature rows continue to own customer-visible copy and actions. Conformance posture: inherits_§37.1. |
 | **Companion: retired KB Engineering concepts (current §22 bindings)** | | | | |
 | D-11.4-001 backfill F-888 - Skill Registry Authoring Pattern | §22 (current home for retired KB Engineering concept; trace source KB Eng §Skills.Registry) | No standalone customer feature; manifests through the current §22 seller KB and managed-agent surfaces. | Internal-only, never surfaced | Row-level Appendix M.1 registration for F-888 from _audit/SURFACE_ENGINE_TRACE.md §5.2; no new product behavior. Parent feature rows continue to govern any customer-visible surface. |
 | D-11.4-001 backfill F-889 - Retrieval Chunking Strategy | §22 (current home for retired KB Engineering concept; trace source KB Eng §Retrieval.Chunking) | No standalone customer feature; manifests through the current §22 seller KB and managed-agent surfaces. | Internal-only, never surfaced | Row-level Appendix M.1 registration for F-889 from _audit/SURFACE_ENGINE_TRACE.md §5.2; no new product behavior. Parent feature rows continue to govern any customer-visible surface. |
@@ -72268,6 +72975,8 @@ v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0 numerical_singleton o
 | `legal_entity_enum_canonical_consistency` | meta_catalog_invariant | **`runtime_active`** (promoted 2026-07-09; detector `tools/spec-lint/gates/legal_entity_enum_canonical_consistency.ts`; verified PASS on live Master Spec and pass/fail fixtures) | pr_lint | Spec-tree-lint detector at `tools/spec-lint/gates/legal_entity_enum_canonical_consistency.ts`. Asserts the Appendix J body-side "Legal Entity (§4.8.1, §4.8.3)" enum and the Appendix J envelope-facing `legal_entity_kind` enum share the same canonical 4-value membership; every live `legal_entity` field/table citation resolves to Appendix J `legal_entity_kind`; and no live citation references a nonexistent legacy Appendix J enum named legal_entity. Runtime Stripe Customer binding and residency-change behavior remain owned by sibling M24.3 / M11.3 rows. Override path: `not_permitted_billing_singleton` (binding the canonical-enum invariant; bypassing this gate would reintroduce the D-RES-004 P0 attack surface). | `not_permitted_billing_singleton` | `runbooks.sourcera.com/ci-gates/legal_entity_enum_canonical_consistency` | M02.3 |
 | `org_custom_residency_label_required` | per_feature_gate | spec_binding_pending_pack_m11_3 | runtime_test | Runtime property test at `tests/integration/org_custom_residency_label_required.spec.ts`. Asserts that any Organization mutation setting `data_residency_region = custom` with `custom_sovereign_residency_label = null` is rejected at the §4.1.1 Organization-write layer with HTTP 422 `organization_custom_residency_label_required`. The test fires 20 synthetic Organization writes with `custom` residency + null label (all MUST be rejected) + 10 with `custom` + non-null label (all MUST succeed). Fail-closed on any sub-assertion violation. | `not_permitted_residency_integrity` (binding §4.1.1 Organization-write contract; bypassing this gate would create `custom`-residency Orgs without sovereign-cloud sub-classification, breaking §34.10.5.A invariant #5). | `runbooks.sourcera.com/ci-gates/org_custom_residency_label_required` | M11.3 |
 
+**Executable amendment to pending M24.3 sub-assertion (b).** Its historical “five-step atomic transaction” shorthand is superseded by DEC-SOURCE-F917-001 and the §34.10.5.A executable provider-boundary mapping. The gate MUST prove the ordered five-phase durable attempt, ACID behavior of each Convex mutation, immutable Stripe idempotency, row-lock/attempt serialization, provider/database readback before public success, and idempotent compensation after an unbindable provider creation. It MUST reject any implementation that performs Stripe network traffic inside a Convex transaction or treats an intermediate phase as customer success.
+
 **Authoring contract for v7.2.0-REM Phase 5 (§M.5.17 closure).** The three gates above MUST be wired into the implementation packs M24.3 (Stripe-metering and Stripe-Customer reconciliation) + M02.3 (spec-tree-lint) + M11.3 (runtime property tests) before the v7.1.0a hot-patch stamp re-evaluation. Detector and validator sources live at the paths cited in the row `assertion` cells. The wiring landing is registered as AE-V72REM-PH5-01 dependency (v7.1.0a stamp) per `_integration/AUTHORED_EXTENSIONS_LEDGER.md → v7.2.0-REM Program → AE-V72REM-PH5-01`. The §M.5.5 per-row runtime-status assignment for the three gates is `spec_binding_pending_pack_m24_3` / `spec_binding_pending_pack_m02_3` / `spec_binding_pending_pack_m11_3` at §M.5.17 closure; the v7.1.0a hot-patch stamp gate audit (`v7_1_1_stamp_gate_runtime_status_audit` extended to the v7.1.0a-hot-patch sibling per AE-V72REM-07) re-evaluates the three gates for promotion to `runtime_active` at hot-patch stamp time.
 
 **Counterfactual coverage (verification against the D-RES-004 attack surface).** Each of the following adversarial inputs MUST be detected and blocked by the §M.5.17 gates (or by a sibling cross-validator as noted):
@@ -72285,7 +72994,7 @@ v7.2.0-REM Phase 5 remediation closure batch (D-RES-004 P0 numerical_singleton o
 
 **Stack-alignment notes.**
 - **Convex.** New deploy validator + runtime property test at the paths cited above; the validator reads `Organization` (already platform-scoped), `AIOperation` (already org-scoped), `AIWallet` (already org-scoped), `AIWalletLedgerEntry` (already org-scoped), and `MarketplaceDiscoveryRevenueRecord` (already org-scoped) at deploy time. The `(org_id, legal_entity)` unique index on `Organization.stripe_customer_id_active` is new per §34.10.5.A invariant #1 — migration script lands in M11.3 implementation pack.
-- **Stripe.** The Stripe-side `Customer.create` API is unchanged; the v7.2.0-REM Phase 5 closure adds a metadata schema (5 keys) per §34.10.5.A invariant #3 step (iii) and a metadata round-trip test per §34.10.5.A AC #2. No new Stripe webhook event subscriptions are required (the existing `customer.created` + `customer.updated` webhook events are sufficient for the audit trail; the §34.10.5.A invariant #3 step (v) audit events are Convex-internal AuditEvent rows, not Stripe webhooks). Stripe API idempotency key per §34.10.5.A invariant #7 (= `(org_id, legal_entity_new, mutation_timestamp_minute)`) reuses the existing Stripe API idempotency-key convention; no new Stripe-side wiring required.
+- **Stripe.** The Stripe-side `Customer.create` API is unchanged; the v7.2.0-REM Phase 5 closure adds a five-key metadata schema per §34.10.5.A phase 2 and a metadata round-trip test per §34.10.5.A AC #2. No new Stripe webhook event subscriptions are required (the existing `customer.created` + `customer.updated` webhook events are sufficient for the audit trail; the §34.10.5.A phase-owned audit events are Convex-internal AuditEvent rows, not Stripe webhooks). The immutable Stripe API idempotency key is `(org_id, legal_entity_new, original_attempt_timestamp_minute)` per invariant #7; no new Stripe-side wiring is required.
 - **WorkOS.** No new auth surface; the residency-change mutation is authorized via the existing Org Owner / Enterprise Admin role gates per §1.6.1.
 - **Anthropic.** No model surface affected.
 - **PostHog.** New event `spec_lint_legal_entity_residency_change_revenue_leak_gate_run` registered in Appendix G v7.2.0-REM Phase 5 extension (event property set: `gate_id`, `pr_number`, `result_status` ∈ {`pass`, `fail`}, `failure_sub_assertion` nullable ∈ {`a`,`b`,`c`,`d`,`e`,`f`}). PostHog mirror family `org_residency_change_*` (5 events, including rollback) registered per §34.10.5.A invariant #8 and §1.6.1 rollback handling.
@@ -73641,6 +74350,14 @@ The documentation contracts are approved and complete. This workspace contains n
 | `audit_events_export_ready_delivery_runtime` | delivery_runtime_test | `spec_binding_pending_pack_m11_3` | worker_test + outbox_test + serializer_test + retry_test + non_leak_test | The export worker MUST emit exactly one `audit_events.export.ready` outbox event on `running -> ready`, preserve polling as authoritative, use a new export id for regeneration, and apply §31 HMAC plus Appendix F.1 retry/DLQ behavior. The serializer MUST carry only the §32.8.24 payload and never a URL, body, actor identity, namespace list, DSAR detail, storage location, or unbounded analytics field. Required future artifacts: `convex/workers/audit_event_export_worker.ts`, `convex/outbox/audit_events_export_ready.ts`, `tests/integration/audit_events_export_ready_delivery_runtime.spec.ts`, `tests/security/audit_events_export_ready_non_leak.spec.ts`, and `tests/integration/audit_events_export_ready_retry.spec.ts`. | M11.3 |
 
 **§M.5 catalog row arithmetic (post-§M.5.120 rewrite).** Pre-pass stamp inventory: 547 rows. Post-pass inventory: 550 rows (three newly catalogued pending runtime-evidence rows; no runtime promotion).
+
+#### M.5.121 Buyer Business Starter Trial Audit Registration {#m-5-121-buyer-business-starter-trial-audit-registration}
+
+The specification contract is complete. This workspace contains no product runtime, so the row remains pending until the named product artifacts exist and pass. Specification text or static lint cannot promote it.
+
+| gate_id | row_class | runtime_status | execution_context | assertion (summary) | pack |
+| :---- | :---- | :---- | :---- | :---- | :---- |
+| `buyer_trial_audit_action_registration` | audit_runtime_consistency | `spec_binding_pending_pack_m11_3` | deploy_validator + transaction_test + integration_test | The §34.9.1 Business Starter trial start and terminal transition MUST atomically emit exactly one registered qualified action (`org.trial_started` or `org.trial_ended`) against `entity_type=trial_state` and `trial_kind=business_starter_14d`, with the bounded Appendix J payload. Replay and concurrent start/end attempts are idempotent; audit failure rolls back the paired mutation; bare actions, cross-entity pairs, Solo-trial use, unregistered actions, customer content, and payment credentials fail closed. The Billing Admin audit views at §5.2.1.4, §6.7.4, and §32.8.22 MUST include both actions without weakening Org, role, console, or residency scope. Required future artifacts: `convex/deploy_validators/buyer_trial_audit_action_registration.ts`, `tests/transaction/buyer_trial_audit_action_registration.spec.ts`, and `tests/integration/buyer_trial_audit_action_registration.spec.ts`. | M11.3 |
 
 ---
 

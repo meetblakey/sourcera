@@ -1,0 +1,9 @@
+{
+  "extends": "../spec-lint/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "typeRoots": ["../spec-lint/node_modules/@types"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["fixtures"]
+}

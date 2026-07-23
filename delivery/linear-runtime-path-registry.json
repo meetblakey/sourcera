@@ -1,0 +1,1909 @@
+{
+  "schemaVersion": 1,
+  "kind": "linear_runtime_path_registry",
+  "sourceFinding": "runtime_behavior_spec_fixture_only",
+  "sourceDependencyRegistry": "delivery/runtime-gate-dependencies.json",
+  "sourceSpec": "Sourcera_Master_Spec.md",
+  "semantics": {
+    "mappingStatus": "exact_planned",
+    "pathPresenceOrRuntimeReadinessIsNotClaimed": true,
+    "staticCiRowsDoNotReceiveProductHandlers": true,
+    "runtimeState": "fail_closed_pending_same_commit_proof",
+    "promotionRequiresSameCommitExecutionAndProof": true
+  },
+  "summary": {
+    "rowCount": 63,
+    "laneCounts": {
+      "product_runtime": 35,
+      "hybrid": 22,
+      "static_ci": 6
+    },
+    "exactPlannedRows": 63,
+    "unresolvedRows": 0,
+    "allRowsFailClosedPendingProof": true
+  },
+  "entries": [
+    {
+      "issueId": "BUY-365",
+      "gateId": "solo_mode_team_to_solo_blocked_with_stakeholders",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/team-solo-transition-block.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/team-solo-transition-block.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/solo_mode_team_to_solo_blocked_with_stakeholders-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72129 (RG:solo_mode_team_to_solo_blocked_with_stakeholders)",
+        "Sourcera_Master_Spec.md §4.3.1 (F-AE-025)",
+        "Sourcera_Master_Spec.md:72129 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:solo_mode_team_to_solo_blocked_with_stakeholders -> F-AE-025)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "BUY-367",
+      "gateId": "console_bridge_no_defense_view_event_kinds",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/console-bridge-event-entity.ts",
+        "convex/consoleBridgeApplyHandlers.ts",
+        "convex/webhookSubscriptions.ts",
+        "convex/deploy_validators/console_bridge_no_defense_view_event_kinds.ts",
+        "tools/spec-lint/gates/console_bridge_no_defense_view_event_kinds.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/console-bridge-event-entity.spec.ts",
+        "tests/integration/console-bridge-defense-view-event-firewall.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/console_bridge_no_defense_view_event_kinds-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72132 (RG:console_bridge_no_defense_view_event_kinds)",
+        "Sourcera_Master_Spec.md §4.7.1 (F-120)",
+        "Sourcera_Master_Spec.md:72132 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:console_bridge_no_defense_view_event_kinds -> F-120)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "BUY-371",
+      "gateId": "vendor_opt_out_capability_layer_enforcement",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/vendor-opt-out-60-second-enforcement-pipeline.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/vendor-opt-out-60-second-enforcement-pipeline.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/vendor_opt_out_capability_layer_enforcement-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72183 (RG:vendor_opt_out_capability_layer_enforcement)",
+        "Sourcera_Master_Spec.md §27.10.4 (F-443)",
+        "Sourcera_Master_Spec.md:72183 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:vendor_opt_out_capability_layer_enforcement -> F-443)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "BUY-375",
+      "gateId": "policy_ingestion_partial_resume_idempotency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/policy-ingestion-phase-independence.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/policy-ingestion-phase-independence.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/policy_ingestion_partial_resume_idempotency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73067 (RG:policy_ingestion_partial_resume_idempotency)",
+        "Sourcera_Master_Spec.md §5.8 (F-156)",
+        "Sourcera_Master_Spec.md:73067 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:policy_ingestion_partial_resume_idempotency -> F-156)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "BUY-376",
+      "gateId": "policy_ingestion_buyer_console_firewall",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "apps/buyer/app/buyer-console-entity-set/page.tsx",
+        "convex/buyer-console-entity-set.ts",
+        "convex/policy-document-ingestion.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/buyer-console-entity-set.spec.ts",
+        "tests/integration/policy-document-ingestion.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/policy_ingestion_buyer_console_firewall-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73071 (RG:policy_ingestion_buyer_console_firewall)",
+        "Sourcera_Master_Spec.md §1.3 (F-002)",
+        "Sourcera_Master_Spec.md §12.2 (F-245)",
+        "Sourcera_Master_Spec.md §4.3 (F-104)",
+        "Sourcera_Master_Spec.md:73071 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:policy_ingestion_buyer_console_firewall -> F-002, F-104, F-245)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "BUY-378",
+      "gateId": "workspace_template_idempotency_atomicity",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "apps/buyer/app/template-to-workspace-flow/page.tsx",
+        "convex/template-to-workspace-flow.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/template-to-workspace-flow.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/workspace_template_idempotency_atomicity-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73086 (RG:workspace_template_idempotency_atomicity)",
+        "Sourcera_Master_Spec.md §19.5 (F-306)",
+        "Sourcera_Master_Spec.md:73086 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:workspace_template_idempotency_atomicity -> F-306)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "BUY-384",
+      "gateId": "requirement_reopening_runtime_consistency",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/requirement_reopening_runtime_consistency.ts",
+        "convex/requirement-entity.ts",
+        "convex/requirement-status-state-machine.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/requirement-entity.spec.ts",
+        "tests/integration/requirement-status-state-machine.spec.ts",
+        "tests/integration/requirement_reopening_runtime_consistency.spec.ts",
+        "tests/mobile/requirement_reopening_mobile_e2e.spec.ts",
+        "tests/security/requirement_reopening_non_leak.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/requirement_reopening_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md Appendix A (F-774)",
+        "Sourcera_Master_Spec.md line:74004 (RG:requirement_reopening_runtime_consistency)",
+        "Sourcera_Master_Spec.md §4.3.4 (F-086)",
+        "Sourcera_Master_Spec.md:74004 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:requirement_reopening_runtime_consistency -> F-086, F-774)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-706",
+      "gateId": "appendix_m_engine_to_surface_completeness",
+      "lane": "static_ci",
+      "implementationPaths": [
+        "tools/spec-lint/gates/appendix_m_engine_to_surface_completeness.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/appendix-m-engine-to-surface-completeness.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/spec-lint.yml"
+      ],
+      "proofPath": "reports/evidence/appendix_m_engine_to_surface_completeness-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md Appendix M.5 (Phase 14.2) (F-799)",
+        "Sourcera_Master_Spec.md:72121 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:appendix_m_engine_to_surface_completeness owner mapping absent)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-716",
+      "gateId": "eval_starter_seed_use_case_index_validity",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/evalstarter-entity.ts",
+        "tools/spec-lint/gates/eval_starter_seed_use_case_index_validity.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/eval-starter-seed-use-case-index-validity.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/eval_starter_seed_use_case_index_validity-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md Appendix M.5 (Phase 14.7) (F-816)",
+        "Sourcera_Master_Spec.md:72146 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:eval_starter_seed_use_case_index_validity owner mapping absent)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-724",
+      "gateId": "first_30_seconds_test_present_on_new_ux_surface",
+      "lane": "static_ci",
+      "implementationPaths": [
+        "tools/spec-lint/gates/first_30_seconds_test_present_on_new_ux_surface.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/first-30-seconds-new-ux-surface.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/spec-lint.yml"
+      ],
+      "proofPath": "reports/evidence/first_30_seconds_test_present_on_new_ux_surface-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md Appendix M.5 (Phase 14.17) (F-837)",
+        "Sourcera_Master_Spec.md:72173 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:first_30_seconds_test_present_on_new_ux_surface owner mapping absent)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-753",
+      "gateId": "webhook_payload_no_selection_record_body",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/webhook-body-exclusion-gates.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/webhook-body-exclusion-gates.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/webhook_payload_no_selection_record_body-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72133 (RG:webhook_payload_no_selection_record_body)",
+        "Sourcera_Master_Spec.md §31.6.1 (F-487)",
+        "Sourcera_Master_Spec.md:72133 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:webhook_payload_no_selection_record_body -> F-487)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-758",
+      "gateId": "solo_subscription_blocks_per_charge",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/solo-per-charge-orchestration.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/solo-per-charge-orchestration.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/solo_subscription_blocks_per_charge-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72160 (RG:solo_subscription_blocks_per_charge)",
+        "Sourcera_Master_Spec.md §34.2.5 (F-AE-051)",
+        "Sourcera_Master_Spec.md:72160 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:solo_subscription_blocks_per_charge -> F-AE-051)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-761",
+      "gateId": "solo_telemetry_property_schema_completeness",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/solo-engine-telemetry-webhook-catalog.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/solo-engine-telemetry-webhook-catalog.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/solo_telemetry_property_schema_completeness-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72165 (RG:solo_telemetry_property_schema_completeness)",
+        "Sourcera_Master_Spec.md §44.6.5 (F-622)",
+        "Sourcera_Master_Spec.md:72165 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:solo_telemetry_property_schema_completeness -> F-622)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-765",
+      "gateId": "console_isolation_violation_no_data_path_use",
+      "lane": "static_ci",
+      "implementationPaths": [
+        "tools/spec-lint/gates/console_isolation_violation_no_data_path_use.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/console-isolation-error-path-static-analysis.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml"
+      ],
+      "proofPath": "reports/evidence/console_isolation_violation_no_data_path_use-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72182 (RG:console_isolation_violation_no_data_path_use)",
+        "Sourcera_Master_Spec.md §1.3 (F-002)",
+        "Sourcera_Master_Spec.md:72182 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:console_isolation_violation_no_data_path_use -> F-002)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-767",
+      "gateId": "audit_event_break_glass_integrity_scan_triggered",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/audit-integrity-background-jobs.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/audit-integrity-background-jobs.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/audit_event_break_glass_integrity_scan_triggered-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72220 (RG:audit_event_break_glass_integrity_scan_triggered)",
+        "Sourcera_Master_Spec.md §42.6.1 (F-607)",
+        "Sourcera_Master_Spec.md:72220 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:audit_event_break_glass_integrity_scan_triggered -> F-607)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-771",
+      "gateId": "cross_org_guest_sso_bypass_blocked",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/guest-sso-bypass.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/guest-sso-bypass.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/cross_org_guest_sso_bypass_blocked-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72230 (RG:cross_org_guest_sso_bypass_blocked)",
+        "Sourcera_Master_Spec.md §6.5 (F-167)",
+        "Sourcera_Master_Spec.md:72230 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:cross_org_guest_sso_bypass_blocked -> F-167)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-773",
+      "gateId": "workos_predefined_attributes_consumed",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/user-entity.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/user-entity.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/workos_predefined_attributes_consumed-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72240 (RG:workos_predefined_attributes_consumed)",
+        "Sourcera_Master_Spec.md §4.2.3 (F-080)",
+        "Sourcera_Master_Spec.md:72240 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:workos_predefined_attributes_consumed -> F-080)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-774",
+      "gateId": "workos_groups_api_membership_consistency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/organization-membership-entity.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/organization-membership-entity.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/workos_groups_api_membership_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72241 (RG:workos_groups_api_membership_consistency)",
+        "Sourcera_Master_Spec.md §4.2.2 (F-081)",
+        "Sourcera_Master_Spec.md:72241 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:workos_groups_api_membership_consistency -> F-081)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-776",
+      "gateId": "dsar_cascade_aggregate_recompute_synchronous",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/dsar-cascade-across-linked-entities.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/dsar-cascade-across-linked-entities.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dsar_cascade_aggregate_recompute_synchronous-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72249 (RG:dsar_cascade_aggregate_recompute_synchronous)",
+        "Sourcera_Master_Spec.md §6.8.4 (F-175)",
+        "Sourcera_Master_Spec.md:72249 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dsar_cascade_aggregate_recompute_synchronous -> F-175)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-779",
+      "gateId": "dsar_cascade_bridge_payload_body_pii_sweep_completeness",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/dsar-cascade-across-linked-entities.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/dsar-cascade-across-linked-entities.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dsar_cascade_bridge_payload_body_pii_sweep_completeness-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72252 (RG:dsar_cascade_bridge_payload_body_pii_sweep_completeness)",
+        "Sourcera_Master_Spec.md §6.8.4 (F-175)",
+        "Sourcera_Master_Spec.md:72252 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dsar_cascade_bridge_payload_body_pii_sweep_completeness -> F-175)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-783",
+      "gateId": "dsar_cascade_statutory_ceiling_auto_escalation",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/dsar-cascade-across-linked-entities.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/dsar-cascade-across-linked-entities.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dsar_cascade_statutory_ceiling_auto_escalation-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72258 (RG:dsar_cascade_statutory_ceiling_auto_escalation)",
+        "Sourcera_Master_Spec.md §6.8.4 (F-175)",
+        "Sourcera_Master_Spec.md:72258 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dsar_cascade_statutory_ceiling_auto_escalation -> F-175)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-787",
+      "gateId": "dr_failover_no_cross_residency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/disaster-recovery-targets-rto-rpo.ts",
+        "convex/multi-region-deployment-us-eu.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/chaos/dr-failover-no-cross-residency.spec.ts",
+        "tests/integration/disaster-recovery-targets-rto-rpo.spec.ts",
+        "tests/integration/multi-region-deployment-us-eu.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dr_failover_no_cross_residency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72263 (RG:dr_failover_no_cross_residency)",
+        "Sourcera_Master_Spec.md §1.6 (F-012)",
+        "Sourcera_Master_Spec.md §42.4 (F-603)",
+        "Sourcera_Master_Spec.md:72263 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dr_failover_no_cross_residency -> F-012, F-603)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-791",
+      "gateId": "s3_replication_policy_residency_bound",
+      "lane": "static_ci",
+      "implementationPaths": [
+        "infra/terraform/modules/residency-replication/main.tf",
+        "tools/spec-lint/gates/s3_replication_policy_residency_bound.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/s3-replication-policy-residency-bound.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml"
+      ],
+      "proofPath": "reports/evidence/s3_replication_policy_residency_bound-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72267 (RG:s3_replication_policy_residency_bound)",
+        "Sourcera_Master_Spec.md §1.6 (F-012)",
+        "Sourcera_Master_Spec.md §42.4 (F-603)",
+        "Sourcera_Master_Spec.md:72267 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:s3_replication_policy_residency_bound -> F-012, F-603)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-794",
+      "gateId": "dsar_excluded_snapshot_restore_blocked",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/disaster-recovery-targets-rto-rpo.ts",
+        "convex/dsar-data-subject-access-request.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/disaster-recovery-targets-rto-rpo.spec.ts",
+        "tests/integration/dsar-data-subject-access-request.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dsar_excluded_snapshot_restore_blocked-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72270 (RG:dsar_excluded_snapshot_restore_blocked)",
+        "Sourcera_Master_Spec.md §33.4 (F-503)",
+        "Sourcera_Master_Spec.md §42.4 (F-603)",
+        "Sourcera_Master_Spec.md:72270 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dsar_excluded_snapshot_restore_blocked -> F-503, F-603)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-799",
+      "gateId": "bid_disqualification_cascade_active",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/vendor-disqualification-workflow.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/vendor-disqualification-workflow.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/bid_disqualification_cascade_active-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72285 (RG:bid_disqualification_cascade_active)",
+        "Sourcera_Master_Spec.md §25.3 (F-403)",
+        "Sourcera_Master_Spec.md:72285 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:bid_disqualification_cascade_active -> F-403)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-800",
+      "gateId": "wallet_read_role_gate_scope",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/aiwallet-entity.ts",
+        "convex/billing-admin-role.ts",
+        "convex/org-admin-role.ts",
+        "convex/org-owner-role.ts",
+        "convex/rbac-two-level-architecture.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/aiwallet-entity.spec.ts",
+        "tests/integration/billing-admin-role.spec.ts",
+        "tests/integration/org-admin-role.spec.ts",
+        "tests/integration/org-owner-role.spec.ts",
+        "tests/integration/rbac-two-level-architecture.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/wallet_read_role_gate_scope-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72286 (RG:wallet_read_role_gate_scope)",
+        "Sourcera_Master_Spec.md §4.8.3 (F-125)",
+        "Sourcera_Master_Spec.md §5.1 (F-138)",
+        "Sourcera_Master_Spec.md §5.2 (F-139)",
+        "Sourcera_Master_Spec.md §5.2 (F-140)",
+        "Sourcera_Master_Spec.md §5.2.1 (F-142)",
+        "Sourcera_Master_Spec.md:72286 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:wallet_read_role_gate_scope -> F-125, F-138, F-139, F-140, F-142)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-801",
+      "gateId": "committed_spend_single_pool_invariant",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/volume-discount-bands-committed-spend.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/volume-discount-bands-committed-spend.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/committed_spend_single_pool_invariant-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72287 (RG:committed_spend_single_pool_invariant)",
+        "Sourcera_Master_Spec.md §34.2.4 (F-522)",
+        "Sourcera_Master_Spec.md:72287 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:committed_spend_single_pool_invariant -> F-522)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-802",
+      "gateId": "committed_spend_single_auto_renew_invariant",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/volume-discount-bands-committed-spend.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/volume-discount-bands-committed-spend.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/committed_spend_single_auto_renew_invariant-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72288 (RG:committed_spend_single_auto_renew_invariant)",
+        "Sourcera_Master_Spec.md §34.2.4 (F-522)",
+        "Sourcera_Master_Spec.md:72288 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:committed_spend_single_auto_renew_invariant -> F-522)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-803",
+      "gateId": "committed_spend_console_scope_consistency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/committedspendcontract-entity.ts",
+        "convex/volume-discount-bands-committed-spend.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/committedspendcontract-entity.spec.ts",
+        "tests/integration/volume-discount-bands-committed-spend.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/committed_spend_console_scope_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72289 (RG:committed_spend_console_scope_consistency)",
+        "Sourcera_Master_Spec.md §1.3 (F-002)",
+        "Sourcera_Master_Spec.md §34.2.4 (F-522)",
+        "Sourcera_Master_Spec.md §4.8.8 (F-131)",
+        "Sourcera_Master_Spec.md:72289 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:committed_spend_console_scope_consistency -> F-002)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-819",
+      "gateId": "legal_entity_residency_change_revenue_leak_test",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/legal_entity_residency_change_revenue_leak_test.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/legal_entity_residency_change_revenue_leak_test.spec.ts"
+      ],
+      "productionProbePaths": [
+        "synthetics/legal-entity-residency-change-revenue-leak.ts"
+      ],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/production-release.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/legal_entity_residency_change_revenue_leak_test-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72630 (RG:legal_entity_residency_change_revenue_leak_test)",
+        "Sourcera_Master_Spec.md §34.10.5.A (F-917)",
+        "Sourcera_Master_Spec.md:72630 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:legal_entity_residency_change_revenue_leak_test -> F-917)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-820",
+      "gateId": "org_custom_residency_label_required",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "app/organization-creation-trial-reference-boundary/page.tsx",
+        "convex/organizationCreation.ts",
+        "convex/schema.ts",
+        "packages/domain/src/index.ts",
+        "packages/domain/src/organization.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/e2e/organization-creation-trial-reference-boundary.spec.ts",
+        "tests/integration/org_custom_residency_label_required.spec.ts",
+        "tests/integration/organization-creation.spec.ts",
+        "tests/integration/organization-schema.spec.ts",
+        "tests/integration/organization-trial-reference-boundary.spec.ts",
+        "tests/unit/organization-creation.spec.ts",
+        "tests/unit/organization-schema.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/org_custom_residency_label_required-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72632 (RG:org_custom_residency_label_required)",
+        "Sourcera_Master_Spec.md §4.2.1 (F-079.A)",
+        "Sourcera_Master_Spec.md §4.2.1 (F-079.C)",
+        "Sourcera_Master_Spec.md:72632 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:org_custom_residency_label_required -> F-780)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-823",
+      "gateId": "member_role_permission_completeness",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/member-role.ts",
+        "tools/spec-lint/gates/member_role_permission_completeness.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/member-role.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/member_role_permission_completeness-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72793 (RG:member_role_permission_completeness)",
+        "Sourcera_Master_Spec.md §5.2.2 (F-141)",
+        "Sourcera_Master_Spec.md:72793 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:member_role_permission_completeness -> F-141)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-824",
+      "gateId": "org_admin_billing_read_consistency",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/billing-admin-role.ts",
+        "convex/org-admin-role.ts",
+        "tools/spec-lint/gates/org_admin_billing_read_consistency.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/billing-admin-role.spec.ts",
+        "tests/integration/org-admin-role.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/org_admin_billing_read_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72794 (RG:org_admin_billing_read_consistency)",
+        "Sourcera_Master_Spec.md §5.2 (F-140)",
+        "Sourcera_Master_Spec.md §5.2.1 (F-142)",
+        "Sourcera_Master_Spec.md:72794 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:org_admin_billing_read_consistency -> F-140, F-142)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-825",
+      "gateId": "buyer_console_role_permission_completeness",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/guest-role-with-permission-profiles.ts",
+        "convex/reviewer-role.ts",
+        "convex/use-case-lead-role.ts",
+        "convex/workspace-admin-role.ts",
+        "convex/workspace-owner-role.ts",
+        "tools/spec-lint/gates/buyer_console_role_permission_completeness.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/guest-role-with-permission-profiles.spec.ts",
+        "tests/integration/reviewer-role.spec.ts",
+        "tests/integration/use-case-lead-role.spec.ts",
+        "tests/integration/workspace-admin-role.spec.ts",
+        "tests/integration/workspace-owner-role.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/buyer_console_role_permission_completeness-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72795 (RG:buyer_console_role_permission_completeness)",
+        "Sourcera_Master_Spec.md §5.3 (F-144)",
+        "Sourcera_Master_Spec.md §5.3 (F-145)",
+        "Sourcera_Master_Spec.md §5.3 (F-146)",
+        "Sourcera_Master_Spec.md §5.3 (F-147)",
+        "Sourcera_Master_Spec.md §5.4 (F-148)",
+        "Sourcera_Master_Spec.md:72795 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:buyer_console_role_permission_completeness -> F-144, F-145, F-146, F-147, F-148)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-826",
+      "gateId": "email_bounce_complaint_suppression_runtime",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/email-compliance-casl-can-spam-gdpr.ts",
+        "tools/spec-lint/gates/email_bounce_complaint_suppression_runtime.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/email-compliance-casl-can-spam-gdpr.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/email_bounce_complaint_suppression_runtime-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72995 (RG:email_bounce_complaint_suppression_runtime)",
+        "Sourcera_Master_Spec.md §41.3 (F-597)",
+        "Sourcera_Master_Spec.md:72995 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:email_bounce_complaint_suppression_runtime -> F-597)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-827",
+      "gateId": "contest_window_db_trigger_present",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/outcome-contest-window.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/outcome-contest-window.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/contest_window_db_trigger_present-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73012 (RG:contest_window_db_trigger_present)",
+        "Sourcera_Master_Spec.md §34.11.2 (F-541)",
+        "Sourcera_Master_Spec.md:73012 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:contest_window_db_trigger_present -> F-541)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-834",
+      "gateId": "responsive_conformance_suite",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "app/responsive-conformance-test-suite/page.tsx",
+        "convex/responsive-conformance-test-suite.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/e2e/responsive-conformance-test-suite.spec.ts",
+        "tests/integration/responsive-conformance-test-suite.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/responsive_conformance_suite-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73231 (RG:responsive_conformance_suite)",
+        "Sourcera_Master_Spec.md §38.6.5 (F-579)",
+        "Sourcera_Master_Spec.md:73231 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:responsive_conformance_suite -> F-579)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-836",
+      "gateId": "cross_console_shared_ui_preference_firewall",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/cross-console-bridge-entity-set.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/cross-console-bridge-entity-set.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/cross_console_shared_ui_preference_firewall-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73239 (RG:cross_console_shared_ui_preference_firewall)",
+        "Sourcera_Master_Spec.md §4.7 (F-122)",
+        "Sourcera_Master_Spec.md:73239 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:cross_console_shared_ui_preference_firewall -> F-122)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-839",
+      "gateId": "convex_reactivity_slo_regression",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/reactivity-slo-p95-500ms.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/reactivity-slo-p95-500ms.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/convex_reactivity_slo_regression-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73254 (RG:convex_reactivity_slo_regression)",
+        "Sourcera_Master_Spec.md §7.5.3 (F-184)",
+        "Sourcera_Master_Spec.md:73254 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:convex_reactivity_slo_regression -> F-184)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-842",
+      "gateId": "bundle_size_budget_in_app",
+      "lane": "static_ci",
+      "implementationPaths": [
+        "tools/spec-lint/gates/bundle_size_budget_in_app.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/authenticated-bundle-budget.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml"
+      ],
+      "proofPath": "reports/evidence/bundle_size_budget_in_app-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73257 (RG:bundle_size_budget_in_app)",
+        "Sourcera_Master_Spec.md §44.1 (F-612)",
+        "Sourcera_Master_Spec.md §44.3 (F-614)",
+        "Sourcera_Master_Spec.md:73257 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:bundle_size_budget_in_app -> F-612, F-614)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-845",
+      "gateId": "pro_trial_no_refund_after_vendor_notification",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/pro-trial-seat-anti-abuse-rules.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/pro-trial-seat-anti-abuse-rules.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/pro_trial_no_refund_after_vendor_notification-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73280 (RG:pro_trial_no_refund_after_vendor_notification)",
+        "Sourcera_Master_Spec.md §34.13.5 (F-546)",
+        "Sourcera_Master_Spec.md:73280 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:pro_trial_no_refund_after_vendor_notification -> F-546)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-850",
+      "gateId": "audit_event_residency_partitioning_bound",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/usage-analytics-residency-partition.ts",
+        "tools/spec-lint/gates/audit_event_residency_partitioning_bound.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/usage-analytics-residency-partition.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/audit_event_residency_partitioning_bound-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73325 (RG:audit_event_residency_partitioning_bound)",
+        "Sourcera_Master_Spec.md §51.7.3 (F-772)",
+        "Sourcera_Master_Spec.md:73325 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:audit_event_residency_partitioning_bound -> F-772)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-861",
+      "gateId": "api_multistatus_schema_registration",
+      "lane": "static_ci",
+      "implementationPaths": [
+        "tools/openapi/validators/api_multistatus_schema_registration.ts",
+        "tools/spec-lint/gates/api_multistatus_schema_registration.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/openapi/api_multistatus_schema_registration.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml"
+      ],
+      "proofPath": "reports/evidence/api_multistatus_schema_registration-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73612 (RG:api_multistatus_schema_registration)",
+        "Sourcera_Master_Spec.md §32.6.1 (F-498)",
+        "Sourcera_Master_Spec.md:73612 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:api_multistatus_schema_registration -> F-498)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-862",
+      "gateId": "api_standard_retry_after_runtime_consistency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/api-error-code-catalog.ts",
+        "convex/api-rate-limit-enforcement.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/api-error-code-catalog.spec.ts",
+        "tests/integration/api-rate-limit-enforcement.spec.ts",
+        "tests/integration/api_standard_retry_after_runtime_consistency.spec.ts",
+        "tests/middleware/api_standard_retry_after_runtime_consistency.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/api_standard_retry_after_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md Appendix I (F-782)",
+        "Sourcera_Master_Spec.md line:73613 (RG:api_standard_retry_after_runtime_consistency)",
+        "Sourcera_Master_Spec.md §32.1 (F-496)",
+        "Sourcera_Master_Spec.md §32.4 (F-497)",
+        "Sourcera_Master_Spec.md:73613 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:api_standard_retry_after_runtime_consistency -> F-496, F-497, F-782)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-865",
+      "gateId": "webhook_dlq_runtime_consistency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/failed-webhook-dlq-replay.ts",
+        "convex/schema/webhook_delivery_failures.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/failed-webhook-dlq-replay.spec.ts",
+        "tests/integration/webhook_failure_api_runtime_consistency.spec.ts",
+        "tests/workers/webhook_dlq_runtime_consistency.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/webhook_dlq_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73630 (RG:webhook_dlq_runtime_consistency)",
+        "Sourcera_Master_Spec.md §31.6 (F-488)",
+        "Sourcera_Master_Spec.md:73630 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:webhook_dlq_runtime_consistency -> F-488)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-866",
+      "gateId": "webhook_endpoint_pool_runtime_consistency",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/webhook_endpoint_pool_runtime_consistency.ts",
+        "convex/webhook-configuration-limits.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/webhook-configuration-limits.spec.ts",
+        "tests/integration/webhook_endpoint_pool_runtime_consistency.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/webhook_endpoint_pool_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73631 (RG:webhook_endpoint_pool_runtime_consistency)",
+        "Sourcera_Master_Spec.md §31.5 (F-486)",
+        "Sourcera_Master_Spec.md:73631 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:webhook_endpoint_pool_runtime_consistency -> F-486)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-867",
+      "gateId": "webhook_dlq_observability_runtime_consistency",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/failed-webhook-dlq-replay.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/failed-webhook-dlq-replay.spec.ts",
+        "tests/observability/webhook_dlq_observability_runtime_consistency.spec.ts"
+      ],
+      "productionProbePaths": [
+        "synthetics/webhook_dlq_notification_dispatch_latency.ts"
+      ],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/production-release.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/webhook_dlq_observability_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73632 (RG:webhook_dlq_observability_runtime_consistency)",
+        "Sourcera_Master_Spec.md §31.6 (F-488)",
+        "Sourcera_Master_Spec.md:73632 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:webhook_dlq_observability_runtime_consistency -> F-488)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-869",
+      "gateId": "dsar_cascade_audit_completeness",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/dsar-cascade-across-linked-entities.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/dsar-cascade-across-linked-entities.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dsar_cascade_audit_completeness-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73881 (RG:dsar_cascade_audit_completeness)",
+        "Sourcera_Master_Spec.md §6.8.4 (F-175)",
+        "Sourcera_Master_Spec.md:73881 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dsar_cascade_audit_completeness -> F-175)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-872",
+      "gateId": "dsar_sla_window_breached",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/dsar-operational-sla.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/dsar-operational-sla.spec.ts"
+      ],
+      "productionProbePaths": [
+        "synthetics/dsar-sla-window-breached.ts"
+      ],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/production-release.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/dsar_sla_window_breached-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73884 (RG:dsar_sla_window_breached)",
+        "Sourcera_Master_Spec.md §6.8.6 (F-177)",
+        "Sourcera_Master_Spec.md:73884 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:dsar_sla_window_breached -> F-177)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-874",
+      "gateId": "free_allowance_quota_decrease_guard",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/free_allowance_quota_decrease_guard.ts",
+        "convex/free-allowance-editor-pricing-admin.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/billing/free_allowance_quota_decrease_guard.spec.ts",
+        "tests/integration/free-allowance-editor-pricing-admin.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/free_allowance_quota_decrease_guard-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73906 (RG:free_allowance_quota_decrease_guard)",
+        "Sourcera_Master_Spec.md §50.12.9 (F-729)",
+        "Sourcera_Master_Spec.md:73906 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:free_allowance_quota_decrease_guard -> F-729)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "PLA-894",
+      "gateId": "audit_events_export_ready_delivery_runtime",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/audit-log-export.ts",
+        "convex/outbox/audit_events_export_ready.ts",
+        "convex/workers/audit_event_export_worker.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/audit-log-export.spec.ts",
+        "tests/integration/audit_events_export_ready_delivery_runtime.spec.ts",
+        "tests/integration/audit_events_export_ready_retry.spec.ts",
+        "tests/security/audit_events_export_ready_non_leak.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/audit_events_export_ready_delivery_runtime-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:74006 (RG:audit_events_export_ready_delivery_runtime)",
+        "Sourcera_Master_Spec.md §6.7.4 (F-171)",
+        "Sourcera_Master_Spec.md:74006 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:audit_events_export_ready_delivery_runtime -> F-171)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-201",
+      "gateId": "kb_bootstrap_per_org_concurrency_lock_active",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/kb-bootstrap-agent.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/kb-bootstrap-agent.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/kb_bootstrap_per_org_concurrency_lock_active-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72284 (RG:kb_bootstrap_per_org_concurrency_lock_active)",
+        "Sourcera_Master_Spec.md §22.10.3 (F-354)",
+        "Sourcera_Master_Spec.md:72284 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:kb_bootstrap_per_org_concurrency_lock_active -> F-354)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-205",
+      "gateId": "qa_suggestion_family_cardinality",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/kb-to-capability-auto-suggestion.ts",
+        "tools/spec-lint/gates/qa_suggestion_family_cardinality.ts",
+        "tools/spec-lint/qa_suggestion_family_cardinality.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/kb-to-capability-auto-suggestion.spec.ts",
+        "tests/integration/qa_suggestion_family_cardinality.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/qa_suggestion_family_cardinality-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72542 (RG:qa_suggestion_family_cardinality)",
+        "Sourcera_Master_Spec.md §26.4 (F-418)",
+        "Sourcera_Master_Spec.md:72542 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:qa_suggestion_family_cardinality -> F-418)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-207",
+      "gateId": "kb_suggestion_family_cardinality",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/kb-to-capability-suggestion-agent.ts",
+        "tools/spec-lint/gates/kb_suggestion_family_cardinality.ts",
+        "tools/spec-lint/kb_suggestion_family_cardinality.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/kb-to-capability-suggestion-agent.spec.ts",
+        "tests/integration/kb_suggestion_family_cardinality.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/kb_suggestion_family_cardinality-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72569 (RG:kb_suggestion_family_cardinality)",
+        "Sourcera_Master_Spec.md §22.10.5 (F-356)",
+        "Sourcera_Master_Spec.md:72569 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:kb_suggestion_family_cardinality -> F-356)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-209",
+      "gateId": "kb_suggestion_alias_console_resolution_integrity",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/kb_suggestion_alias_console_resolution_integrity.ts",
+        "convex/kb-to-capability-suggestion-agent.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/kb-to-capability-suggestion-agent.spec.ts",
+        "tests/integration/kb_suggestion_alias_console_resolution.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/kb_suggestion_alias_console_resolution_integrity-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72571 (RG:kb_suggestion_alias_console_resolution_integrity)",
+        "Sourcera_Master_Spec.md §22.10.5 (F-356)",
+        "Sourcera_Master_Spec.md:72571 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:kb_suggestion_alias_console_resolution_integrity -> F-356)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-210",
+      "gateId": "first_pass_rfp_draft_outcome_contract_isolation",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/first_pass_rfp_draft_outcome_contract_isolation.ts",
+        "tools/spec-lint/gates/first_pass_rfp_draft_outcome_contract_isolation.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/first_pass_rfp_draft_outcome_contract_isolation.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/first_pass_rfp_draft_outcome_contract_isolation-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:72595 (RG:first_pass_rfp_draft_outcome_contract_isolation)",
+        "Sourcera_Master_Spec.md §22.10.2 (F-353)",
+        "Sourcera_Master_Spec.md:72595 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:first_pass_rfp_draft_outcome_contract_isolation -> F-353)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-220",
+      "gateId": "seller_solo_onboarding_consumption_invisibility",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/solo-tier-surface-treatment-ai-consumption-invisibility.ts",
+        "tools/spec-lint/gates/seller_solo_onboarding_consumption_invisibility.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/solo-tier-surface-treatment-ai-consumption-invisibility.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/spec-lint.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/seller_solo_onboarding_consumption_invisibility-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73296 (RG:seller_solo_onboarding_consumption_invisibility)",
+        "Sourcera_Master_Spec.md §44.6 (F-616)",
+        "Sourcera_Master_Spec.md:73296 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:seller_solo_onboarding_consumption_invisibility -> F-616)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-229",
+      "gateId": "kb_state_persisting_audit_event_coverage",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/auditEvents.ts",
+        "convex/capabilityDeclarations.ts",
+        "convex/deploy_validators/kb_state_persisting_audit_event_coverage.ts",
+        "convex/knowledgeBase.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/capability-chip-audit-events.spec.ts",
+        "tests/integration/kb_state_persisting_audit_event_coverage.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/kb_state_persisting_audit_event_coverage-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73564 (RG:kb_state_persisting_audit_event_coverage)",
+        "Sourcera_Master_Spec.md §22.20.7 (F-AE-042)",
+        "Sourcera_Master_Spec.md:73564 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:kb_state_persisting_audit_event_coverage -> F-AE-042)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-230",
+      "gateId": "seller_maya_billing_detail_plan_guard",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/billing-api.ts",
+        "convex/deploy_validators/seller_maya_billing_detail_plan_guard.ts",
+        "convex/seller-free-plan-tier.ts",
+        "convex/seller-solo-plan-tier.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/billing-api.spec.ts",
+        "tests/integration/seller-free-plan-tier.spec.ts",
+        "tests/integration/seller-solo-plan-tier.spec.ts",
+        "tests/integration/seller_maya_billing_detail_plan_guard.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/seller_maya_billing_detail_plan_guard-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73566 (RG:seller_maya_billing_detail_plan_guard)",
+        "Sourcera_Master_Spec.md §32.8 (F-500)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-515)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-516)",
+        "Sourcera_Master_Spec.md:73566 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:seller_maya_billing_detail_plan_guard -> F-500, F-515, F-516)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-232",
+      "gateId": "bid_response_bulk_submit_runtime_consistency",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/bid_response_bulk_submit_runtime_consistency.ts",
+        "convex/response-submission-per-response-type.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/bid_response_bulk_submit_runtime_consistency.spec.ts",
+        "tests/integration/response-submission-per-response-type.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/bid_response_bulk_submit_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73580 (RG:bid_response_bulk_submit_runtime_consistency)",
+        "Sourcera_Master_Spec.md §23.3 (F-389)",
+        "Sourcera_Master_Spec.md:73580 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:bid_response_bulk_submit_runtime_consistency -> F-389)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-236",
+      "gateId": "nda_lifecycle_notification_runtime_consistency",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/nda_lifecycle_notification_runtime_consistency.ts",
+        "convex/nda-module-execution.ts",
+        "convex/notification-event-catalog.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/nda-module-execution.spec.ts",
+        "tests/integration/nda_lifecycle_notification_runtime_consistency.spec.ts",
+        "tests/integration/notification-event-catalog.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/nda_lifecycle_notification_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73596 (RG:nda_lifecycle_notification_runtime_consistency)",
+        "Sourcera_Master_Spec.md §24.2 (F-392)",
+        "Sourcera_Master_Spec.md §29.1 (F-466)",
+        "Sourcera_Master_Spec.md:73596 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:nda_lifecycle_notification_runtime_consistency -> F-392, F-466)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-239",
+      "gateId": "seller_console_phase24_plan_authority_runtime_consistency",
+      "lane": "hybrid",
+      "implementationPaths": [
+        "convex/deploy_validators/seller_console_phase24_plan_authority_runtime_consistency.ts",
+        "convex/entitlement-matrix.ts",
+        "convex/seller-enterprise-plan-tier-custom.ts",
+        "convex/seller-free-plan-tier.ts",
+        "convex/seller-growth-plan-tier-499.ts",
+        "convex/seller-scale-plan-tier-1-499.ts",
+        "convex/seller-solo-plan-tier.ts",
+        "convex/seller-starter-plan-tier-149.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/entitlement-matrix.spec.ts",
+        "tests/integration/seller-enterprise-plan-tier-custom.spec.ts",
+        "tests/integration/seller-free-plan-tier.spec.ts",
+        "tests/integration/seller-growth-plan-tier-499.spec.ts",
+        "tests/integration/seller-scale-plan-tier-1-499.spec.ts",
+        "tests/integration/seller-solo-plan-tier.spec.ts",
+        "tests/integration/seller-starter-plan-tier-149.spec.ts",
+        "tests/integration/seller_console_phase24_plan_authority_runtime_consistency.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/deploy-validator.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/seller_console_phase24_plan_authority_runtime_consistency-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73599 (RG:seller_console_phase24_plan_authority_runtime_consistency)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-515)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-516)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-517)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-518)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-519)",
+        "Sourcera_Master_Spec.md §34.1.2 (F-520)",
+        "Sourcera_Master_Spec.md §34.8.5 (F-531)",
+        "Sourcera_Master_Spec.md:73599 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:seller_console_phase24_plan_authority_runtime_consistency -> F-515, F-516, F-517, F-518, F-519, F-520, F-531)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    },
+    {
+      "issueId": "SEL-247",
+      "gateId": "seller_qa_phase8_readonly_runtime",
+      "lane": "product_runtime",
+      "implementationPaths": [
+        "convex/seller-q-a.ts"
+      ],
+      "runtimeTestPaths": [
+        "tests/integration/seller-q-a.spec.ts",
+        "tests/mobile/seller-qa-phase8-readonly.spec.ts"
+      ],
+      "productionProbePaths": [],
+      "ciWorkflowPaths": [
+        ".github/workflows/app-ci.yml",
+        ".github/workflows/test-strategy.yml"
+      ],
+      "proofPath": "reports/evidence/seller_qa_phase8_readonly_runtime-runtime-proof.json",
+      "sourceAnchors": [
+        "Sourcera_Master_Spec.md line:73994 (RG:seller_qa_phase8_readonly_runtime)",
+        "Sourcera_Master_Spec.md §24.1 (F-391)",
+        "Sourcera_Master_Spec.md:73994 (Appendix M gate row)",
+        "delivery/runtime-gate-dependencies.json (RG:seller_qa_phase8_readonly_runtime -> F-391)"
+      ],
+      "unresolved": [],
+      "mappingStatus": "exact_planned",
+      "currentRuntimeState": "fail_closed_pending_same_commit_proof",
+      "mustFailClosed": true
+    }
+  ]
+}

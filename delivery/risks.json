@@ -1,0 +1,123 @@
+{
+  "risks": [
+    {
+      "id": "RISK-001",
+      "statement": "False readiness can start oversized or ambiguous work.",
+      "owner": "Blake Rowley",
+      "trigger": "Any codex-ready issue fails a readiness rule.",
+      "response": "Remove the label and repair the issue before execution."
+    },
+    {
+      "id": "RISK-002",
+      "statement": "A persistence or identity slice can start before its provider foundation is verified.",
+      "owner": "Blake Rowley",
+      "trigger": "A data-isolation or identity-dependent issue is made ready without its provider dependency complete.",
+      "response": "Add the dependency and execute the provider foundation first."
+    },
+    {
+      "id": "RISK-003",
+      "statement": "Linear release membership can drift from the delivery manifest.",
+      "owner": "Blake Rowley",
+      "trigger": "A live release count or issue assignment differs from the generated release plan.",
+      "response": "Fail the drift gate, repair the assignment, and read back all affected releases."
+    },
+    {
+      "id": "RISK-004",
+      "statement": "Only one human member is available for ownership and approval.",
+      "owner": "Blake Rowley",
+      "trigger": "A second active human workspace member becomes available.",
+      "response": "Until then, require CI and a separate Codex review before named Blake Rowley release or checkpoint approval; when another human joins, require a distinct human reviewer, split issue owner and reviewer, and recalibrate capacity."
+    },
+    {
+      "id": "RISK-005",
+      "statement": "Scheduled Linear drift enforcement depends on a repository secret.",
+      "owner": "Blake Rowley",
+      "trigger": "The scheduled workflow runs without LINEAR_API_KEY.",
+      "response": "Fail closed and configure the read-only key before treating scheduled drift as operational."
+    },
+    {
+      "id": "RISK-006",
+      "statement": "Default-to-R0 classification can pull later-release behavior and its dependency chain into the first release.",
+      "owner": "Blake Rowley",
+      "trigger": "R0 contains behavior that is not required for the defined one-buyer, one-seller defensible-evaluation journey.",
+      "response": "Use an explicit R0 journey allowlist and keep enhanced behavior in its owning later release unless a smaller source-bound R0 slice exists."
+    },
+    {
+      "id": "RISK-007",
+      "statement": "Truncated Linear list responses can make incomplete issue text look authoritative in the delivery snapshot.",
+      "owner": "Blake Rowley",
+      "trigger": "A listed description contains a truncation marker or omits executable fields present only in the full issue.",
+      "response": "Fetch the full issue before qualification and fail readiness when full text cannot be obtained."
+    },
+    {
+      "id": "RISK-008",
+      "statement": "External provider access can dominate calendar delivery while remaining invisible in active-work throughput.",
+      "owner": "Blake Rowley",
+      "trigger": "The next dependency-safe issue lacks required provider identity, credentials, or environment configuration.",
+      "response": "Withhold the calendar date, report external wait separately, and do not start dependent work before provider proof passes."
+    },
+    {
+      "id": "RISK-009",
+      "statement": "Unresolved release or dependency ownership defaults can hide a required prerequisite or falsely signal readiness.",
+      "owner": "Blake Rowley",
+      "trigger": "A DEC-REL-* validation trigger fires, new source or runtime evidence changes an ownership default, or affected work is proposed as codex-ready.",
+      "response": "Block readiness, revalidate the pinned source and runtime path, update the decision, dependency graph, and release policy, then regenerate and synchronize before execution."
+    },
+    {
+      "id": "RISK-010",
+      "statement": "A first production release without healthy provider predecessors and a live pre-mutation known-good canary can leave no proved rollback path.",
+      "owner": "Blake Rowley",
+      "trigger": "Production staging or promotion is attempted while any DEC-PROD-001 prerequisite is absent.",
+      "response": "Fail before provider mutation, provision or separately approve the bootstrap, and prove the live rollback anchor before customer traffic or domain promotion; historical receipts alone never authorize release."
+    },
+    {
+      "id": "RISK-018",
+      "statement": "A reversible planning contract can be mistaken for ratified product authority.",
+      "owner": "Blake Rowley",
+      "trigger": "Any linear_planning requirement is proposed as codex-ready or implemented without its named validation trigger closing.",
+      "response": "Fail readiness, re-read the Master Spec and UX fallback, validate or replace the planning default, update its checksum and decision, then resynchronize Linear."
+    },
+    {
+      "id": "RISK-019",
+      "statement": "Archiving canceled planning work before its crosswalk is complete can hide a still-required feature or failure path.",
+      "owner": "Blake Rowley",
+      "trigger": "A legacy issue or project is proposed for archive while its mapping is unresolved, reviewer-needed, or lacks live successor read-back.",
+      "response": "Withhold archive, preserve provenance, close the canonical contract and relations, obtain review, then regenerate the crosswalk and drift reports."
+    },
+    {
+      "id": "RISK-020",
+      "statement": "Stripe meter processing is asynchronous and provider identifier reuse outside its bounded window can turn a blind replay into a duplicate financial effect.",
+      "owner": "Blake Rowley",
+      "trigger": "A meter submission has an unknown outcome, a provider error event arrives, or a retry would occur after the pinned identifier-deduplication window.",
+      "response": "Keep one durable Sourcera delivery identity, stop blind replay, reconcile provider summaries/error events and owning source state, and require a Finance-safe receipt before terminal success or correction."
+    },
+    {
+      "id": "RISK-021",
+      "statement": "Conflicting role, pricing-version, seat-retention, or retention-registry source clauses can create a revenue-expanding, access-widening, or destructive false-ready implementation.",
+      "owner": "Blake Rowley",
+      "trigger": "F-007.B, F-132, F-529, or F-593 is proposed as codex-ready before its named source reconciliation and checksum refresh pass.",
+      "response": "Apply only the recorded reversible least-privilege or fail-closed default, keep readiness false, normalize the Master, regenerate ordered source bundles, and rerun authorization, financial, retention, migration, and exact Linear gates."
+    },
+    {
+      "id": "RISK-022",
+      "statement": "Duplicating titles, owners, releases, estimates, labels, or dependency prose inside issue descriptions lets Linear native fields and issue text drift independently.",
+      "owner": "Blake Rowley",
+      "trigger": "The ticket-integrity capture finds a native-field declaration, repeated native title, or dependency/relation section in a tracked issue description.",
+      "response": "Fail ticket integrity, keep behavior and proof detail in the description, move metadata and graph edges to native Linear fields, read back both sides, and regenerate the controlled capture."
+    },
+    {
+      "id": "RISK-023",
+      "statement": "The first F-007 customer pilot has no live cohort baseline, so an unversioned threshold or one-person safety result could create false release confidence.",
+      "owner": "Blake Rowley",
+      "trigger": "F-007.E starts collection without the approved target-set hash, treats the safety run as release proof, changes a threshold after enrollment, or has fewer than five valid starts across three consented Organizations.",
+      "response": "Stop the pilot, preserve the immutable failed or safety-only receipt, require independent target approval and scorecard regeneration, then run a fresh consented cohort under one frozen target version."
+    },
+    {
+      "id": "RISK-024",
+      "statement": "Multiple feature issues editing the central Convex schema file can silently merge incompatible tables, indexes, or generated types.",
+      "owner": "Blake Rowley",
+      "trigger": "A feature issue lists convex/schema.ts, uses wildcard fragment discovery, duplicates a table or index key, or generated types differ from the explicit fragment registry.",
+      "response": "Fail code generation and CI, keep F-005 as the sole assembler owner, return the change to its exact feature fragment, and rerun collision, generated-model, migration, and Linear path readback gates."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "activeRelease": "R0",
+  "lanes": [
+    {
+      "id": "implementation",
+      "owner": "Blake Rowley",
+      "wipLimit": 1
+    }
+  ],
+  "readyQueue": {
+    "minimum": 5,
+    "maximum": 10
+  },
+  "wipDecisionId": "DEC-WIP-001",
+  "reviewerPolicy": {
+    "interimDecisionId": "DEC-OWNER-001",
+    "interimReviewer": "Blake Rowley (interim under DEC-OWNER-001)"
+  },
+  "independentReview": {
+    "checks": [
+      "required-ci",
+      "codex-independent-review"
+    ],
+    "humanApprover": "Blake Rowley",
+    "approvalGate": "Independent CI and Codex review, then named Blake Rowley release or checkpoint approval",
+    "capacityValidationTrigger": "A second active human joins; require a distinct human reviewer and recalibrate capacity"
+  },
+  "priorityPolicy": {
+    "urgent": 1,
+    "decisionId": "DEC-PRIORITY-001"
+  }
+}

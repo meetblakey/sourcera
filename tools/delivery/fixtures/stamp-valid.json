@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "runtime_rows": 1,
+    "runtime_status_counts": {
+      "spec_binding_pending_pack_m11_3": 1
+    },
+    "blocker_count": 1
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "Sourcera_Master_Spec.md",
+      "line": 10,
+      "id": "gate_a",
+      "message": "proof missing"
+    }
+  ]
+}
