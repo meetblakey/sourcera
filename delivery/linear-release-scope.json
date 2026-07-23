@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "evidence": {
+    "capturedAt": "2026-07-15T15:59:18.927Z",
+    "source": "Exact Linear GraphQL release pipeline and release capture",
+    "validationTrigger": "Recapture through tools/delivery/linear-live.ts before any Linear mutation or when the pinned topology changes"
+  },
+  "pipeline": {
+    "id": "3af6bb71-6b7d-4a9a-8724-e55c8e76290b",
+    "name": "Sourcera Product Delivery",
+    "type": "scheduled",
+    "plannedStage": {
+      "id": "1116a1bc-5287-499b-b1ea-6e159b0d6e39",
+      "name": "Planned",
+      "position": 0
+    },
+    "teams": [
+      {
+        "id": "2c74524b-bd29-4b6b-9972-4afb4b83af31",
+        "key": "BUY"
+      },
+      {
+        "id": "510fba6d-6132-4787-986f-26bb89cc8788",
+        "key": "INT"
+      },
+      {
+        "id": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "key": "PLA"
+      },
+      {
+        "id": "7214cc69-e1cd-422d-a32a-94c5996e65b8",
+        "key": "SEL"
+      }
+    ]
+  },
+  "releases": [
+    {
+      "id": "5d3c55fc-c9fe-421e-9d49-a0a1abc9d9e2",
+      "version": "R0"
+    },
+    {
+      "id": "68fac7fb-144d-4591-a2d6-f9eb571b61cc",
+      "version": "R1"
+    },
+    {
+      "id": "b0301c57-7d49-4282-b30f-f187c2447bbe",
+      "version": "R2"
+    },
+    {
+      "id": "a79edff4-e32e-4c37-9752-f79a756d944c",
+      "version": "R3"
+    },
+    {
+      "id": "6aaac10d-7b0e-4f24-b44b-b76853570334",
+      "version": "R4"
+    },
+    {
+      "id": "20fccaea-1e25-4324-8d07-925d2eb1092d",
+      "version": "R5"
+    }
+  ]
+}

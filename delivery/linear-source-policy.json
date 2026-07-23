@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "coordinationIssueIds": [
+    "BUY-186",
+    "BUY-187",
+    "BUY-188",
+    "BUY-189",
+    "BUY-190",
+    "BUY-191",
+    "INT-47",
+    "PLA-202",
+    "PLA-203",
+    "PLA-204",
+    "PLA-205",
+    "PLA-206",
+    "PLA-207",
+    "PLA-208",
+    "PLA-209",
+    "PLA-210",
+    "PLA-211",
+    "PLA-212",
+    "PLA-213",
+    "PLA-214",
+    "PLA-215",
+    "PLA-216",
+    "PLA-283",
+    "SEL-67",
+    "SEL-68",
+    "SEL-69",
+    "SEL-70"
+  ],
+  "sourceAmbiguities": [],
+  "sourceDispositions": [
+    {
+      "sourceId": "F-199",
+      "disposition": "superseded",
+      "replacementSourceId": "F-198",
+      "supersededIssueIds": ["PLA-371"],
+      "rationale": "Master §9.1.2 and §5.5.1 now define one canonical Seller Team role-authority mapping rather than separate Owner and Lead execution issues."
+    },
+    {
+      "sourceId": "F-608",
+      "disposition": "superseded",
+      "replacementSourceId": "F-696",
+      "supersededIssueIds": ["PLA-896"],
+      "rationale": "The retired Admin Dashboard is replaced by the canonical Sourcera Ops Console contract."
+    },
+    {
+      "sourceId": "F-609",
+      "disposition": "superseded",
+      "replacementSourceId": "F-696",
+      "supersededIssueIds": ["PLA-897"],
+      "rationale": "The retired staff gate is replaced by the canonical Ops authentication and capability-envelope contract."
+    },
+    {
+      "sourceId": "F-610",
+      "disposition": "superseded",
+      "replacementSourceId": "F-696",
+      "supersededIssueIds": ["PLA-898"],
+      "rationale": "The bundled support-tools issue is replaced by the canonical Ops Console and its dedicated owners."
+    },
+    {
+      "sourceId": "F-611",
+      "disposition": "superseded",
+      "replacementSourceId": "F-711",
+      "supersededIssueIds": ["PLA-899"],
+      "rationale": "The retired admin audit log is replaced by the canonical AuditEvent and OpsActionRecord contract."
+    },
+    {
+      "sourceId": "F-794",
+      "disposition": "superseded",
+      "replacementSourceId": "F-797",
+      "supersededIssueIds": ["PLA-702"],
+      "rationale": "The authored-extension note is no longer an execution owner; the canonical Appendix M gate catalog owns delivery."
+    },
+    {
+      "sourceId": "F-AE-069",
+      "disposition": "superseded",
+      "replacementSourceId": "F-797",
+      "supersededIssueIds": ["PLA-938"],
+      "rationale": "The authored-extension duplicate is replaced by the canonical Appendix M gate catalog execution issue."
+    },
+    {
+      "sourceId": "F-AE-071",
+      "disposition": "cleared",
+      "replacementSourceId": null,
+      "supersededIssueIds": ["PLA-940"],
+      "rationale": "The historical GTM descope record is planning context and has no current executable Linear owner."
+    },
+    {
+      "sourceId": "F-AE-072",
+      "disposition": "cleared",
+      "replacementSourceId": null,
+      "supersededIssueIds": ["BUY-404"],
+      "rationale": "The historical Marketplace descope record is planning context and has no current executable Linear owner."
+    }
+  ],
+  "splits": [
+    {
+      "sourceId": "F-002",
+      "primaryIssueId": "PLA-218",
+      "executableIssueIds": ["PLA-1013", "PLA-1014", "PLA-1015"],
+      "rationale": "The source contract is delivered through registry, enforcement, and proof slices under one primary issue."
+    },
+    {
+      "sourceId": "F-003",
+      "primaryIssueId": "PLA-219",
+      "executableIssueIds": ["PLA-1016", "PLA-1017", "PLA-1018"],
+      "rationale": "The source contract is delivered through query registry, runtime binding, and proof slices under one primary issue."
+    },
+    {
+      "sourceId": "F-006",
+      "primaryIssueId": "PLA-942",
+      "executableIssueIds": ["PLA-943"],
+      "rationale": "The WorkOS authentication source is implemented by the cross-shell session and signed identity-event slices; its native coordination parent owns no executable source."
+    },
+    {
+      "sourceId": "F-007",
+      "primaryIssueId": "PLA-284",
+      "executableIssueIds": ["PLA-997", "PLA-998", "PLA-999", "PLA-1000", "PLA-1001"],
+      "rationale": "The Stripe integration source is split into subscription, metering, customer journey, recovery, and pilot proof slices."
+    },
+    {
+      "sourceId": "F-079",
+      "primaryIssueId": "PLA-271",
+      "executableIssueIds": ["PLA-959", "PLA-960", "PLA-961", "PLA-962", "PLA-963", "PLA-964", "PLA-965", "PLA-966", "PLA-967", "PLA-968", "PLA-1019", "PLA-1020", "PLA-1021", "PLA-1022", "PLA-1023"],
+      "rationale": "The Organization entity is split into bounded schema, lifecycle, authority, projection, compatibility, and proof slices."
+    },
+    {
+      "sourceId": "F-085",
+      "primaryIssueId": "BUY-411",
+      "executableIssueIds": ["BUY-412"],
+      "rationale": "The Buyer Use Case entity keeps one primary owner and a bounded delete-and-restore atomicity slice."
+    },
+    {
+      "sourceId": "F-226",
+      "primaryIssueId": "BUY-243",
+      "executableIssueIds": ["BUY-410"],
+      "rationale": "Selection Report delivery keeps one primary owner and a bounded atomic finalization and closure slice."
+    },
+    {
+      "sourceId": "F-268",
+      "primaryIssueId": "BUY-284",
+      "executableIssueIds": ["BUY-409"],
+      "rationale": "Scenario scoring keeps one primary owner and a bounded canonical Evaluation Scenario consistency slice."
+    },
+    {
+      "sourceId": "F-430",
+      "primaryIssueId": "BUY-405",
+      "executableIssueIds": ["BUY-406", "BUY-407", "BUY-408"],
+      "rationale": "Marketplace search is split into query grammar, eligible projection, and entitled Buyer journey slices."
+    },
+    {
+      "sourceId": "F-440",
+      "primaryIssueId": "BUY-338",
+      "executableIssueIds": ["BUY-413"],
+      "rationale": "Vendor opt-out delivery keeps one primary registry owner and a bounded public/private-channel source-decision slice."
+    },
+    {
+      "sourceId": "F-496",
+      "primaryIssueId": "PLA-434",
+      "executableIssueIds": ["PLA-955", "PLA-956", "PLA-957", "PLA-958"],
+      "rationale": "The API source is split into ingress registry, OpenAPI generation, documentation, and drift-gate slices."
+    },
+    {
+      "sourceId": "F-533",
+      "primaryIssueId": "PLA-471",
+      "executableIssueIds": ["PLA-978", "PLA-979", "PLA-980"],
+      "rationale": "The Buyer trial source is split into paid conversion, free downgrade, and expiry-notice slices."
+    },
+    {
+      "sourceId": "F-599",
+      "primaryIssueId": "PLA-528",
+      "executableIssueIds": ["PLA-969", "PLA-970", "PLA-971"],
+      "rationale": "The SLA source is split into contract resolution, monthly measurement, and breach-webhook slices."
+    },
+    {
+      "sourceId": "F-601",
+      "primaryIssueId": "PLA-530",
+      "executableIssueIds": ["PLA-1024"],
+      "rationale": "Incident response keeps one primary owner and a bounded customer-reported intake and promotion slice."
+    },
+    {
+      "sourceId": "F-628",
+      "primaryIssueId": "PLA-553",
+      "executableIssueIds": ["PLA-981", "PLA-982", "PLA-983", "PLA-984", "PLA-985", "PLA-986", "PLA-987", "PLA-988", "PLA-989", "PLA-990", "PLA-991", "PLA-992", "PLA-993", "PLA-994", "PLA-995", "PLA-996"],
+      "rationale": "The test-pyramid source is split into commit identity, service activation, fixtures, resilience, coverage, bridge, budget, and R0 proof slices."
+    },
+    {
+      "sourceId": "F-673",
+      "primaryIssueId": "PLA-598",
+      "executableIssueIds": ["PLA-1002"],
+      "rationale": "The Buyer-pull vendor-invite source keeps one primary growth owner and a bounded Marketplace invitation-bridge decision slice."
+    },
+    {
+      "sourceId": "F-696",
+      "primaryIssueId": "PLA-612",
+      "executableIssueIds": ["PLA-1003", "PLA-1028", "PLA-1039"],
+      "rationale": "The Ops Console source keeps one primary owner and bounded reference-repair, Workspace archive, and authorization slices."
+    },
+    {
+      "sourceId": "F-797",
+      "primaryIssueId": "PLA-704",
+      "executableIssueIds": ["PLA-895"],
+      "rationale": "The Appendix M catalog source is split into the canonical catalog owner and the bounded live-scan release-policy slice."
+    },
+    {
+      "sourceId": "F-912",
+      "primaryIssueId": "PLA-945",
+      "executableIssueIds": ["PLA-947", "PLA-948", "PLA-949"],
+      "rationale": "Enterprise branding is split into data safety, settings publication, and Buyer-shell rollout slices."
+    },
+    {
+      "sourceId": "F-913",
+      "primaryIssueId": "PLA-950",
+      "executableIssueIds": ["PLA-951", "PLA-952", "PLA-953", "PLA-954"],
+      "rationale": "Reference-data orchestration is split into manifest, Buyer-template, pricing, and recovery lanes."
+    },
+    {
+      "sourceId": "F-916",
+      "primaryIssueId": "PLA-975",
+      "executableIssueIds": ["PLA-976", "PLA-977"],
+      "rationale": "Buyer trial activation is split into atomic activation and SSO rollout and proof slices."
+    },
+    {
+      "sourceId": "F-917",
+      "primaryIssueId": "PLA-972",
+      "executableIssueIds": ["PLA-973", "PLA-974"],
+      "rationale": "Stripe customer genesis is split into atomic binding and canary and rollback proof slices."
+    },
+    {
+      "sourceId": "F-922",
+      "primaryIssueId": "PLA-1025",
+      "executableIssueIds": ["PLA-1004", "PLA-1005"],
+      "rationale": "OpsActionRecord delivery keeps one primary owner and bounded actor-link and normalization slices."
+    },
+    {
+      "sourceId": "F-923",
+      "primaryIssueId": "PLA-1030",
+      "executableIssueIds": ["PLA-1006", "PLA-1007", "PLA-1008"],
+      "rationale": "Plan override delivery is split into console timing, catalog, and provider financial-record slices."
+    },
+    {
+      "sourceId": "F-924",
+      "primaryIssueId": "PLA-1029",
+      "executableIssueIds": ["PLA-1009", "PLA-1010", "PLA-1011", "PLA-1012"],
+      "rationale": "Workspace export delivery is split into authorization, state recovery, retention, and archive-contract slices."
+    },
+    {
+      "sourceId": "F-925",
+      "primaryIssueId": "PLA-1031",
+      "executableIssueIds": ["PLA-1038"],
+      "rationale": "Refund operations keep one primary owner and one bounded source-authorization decision slice."
+    },
+    {
+      "sourceId": "F-926",
+      "primaryIssueId": "PLA-1032",
+      "executableIssueIds": ["PLA-1037"],
+      "rationale": "AIWallet adjustments keep one primary owner and one bounded source-ceiling decision slice."
+    },
+    {
+      "sourceId": "F-927",
+      "primaryIssueId": "PLA-1033",
+      "executableIssueIds": ["PLA-1027", "PLA-1040"],
+      "rationale": "Trial management keeps one primary owner and bounded pause-resume and source-contract decision slices."
+    },
+    {
+      "sourceId": "F-928",
+      "primaryIssueId": "PLA-1034",
+      "executableIssueIds": ["PLA-1042"],
+      "rationale": "Marketplace moderation keeps one primary owner and one bounded source-contract decision slice."
+    },
+    {
+      "sourceId": "F-929",
+      "primaryIssueId": "PLA-1035",
+      "executableIssueIds": ["PLA-1041"],
+      "rationale": "AI operation reversal keeps one primary owner and one bounded source-contract decision slice."
+    },
+    {
+      "sourceId": "F-930",
+      "primaryIssueId": "PLA-1036",
+      "executableIssueIds": ["PLA-1043"],
+      "rationale": "User-account operations keep one primary owner and one bounded source-contract decision slice."
+    }
+  ]
+}

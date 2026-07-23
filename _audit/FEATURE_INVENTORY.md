@@ -4,7 +4,7 @@
 
 **Conflict surfaced.** Audit_Prompts.md Prompt 0.2 lists `KB_Engineering_Spec.md` as an end-to-end input, but per `CLAUDE.md` and `_audit/AUDIT_README.md` that file was retired in v7.0.0; its content was integrated into Master Spec §22. Resolution: read the retired snapshot at `_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md` for cross-check coverage; companion-doc rows from KB Eng are flagged "[verify §22 redundancy]" in `one_line_summary` for the Phase 0 verification pass.
 
-**Companion-doc fidelity.** Pricing-strategy and UX-Design rows are captured at coarser fidelity than Master Spec rows per Prompt 0.2 ("be conservative; do NOT duplicate features clearly in Master Spec"). UX Design tokens/components are captured as engine_concept / surface families; per-variant population happens in the §3 / UX-Design audit phases.
+**Companion-doc fidelity.** Pricing-strategy and UX-Design rows remain conservative where the Master Spec already owns behavior. Every UX token/component family and required variant/state is now bound to a standalone live Linear execution contract; this inventory records source coverage without duplicating the Linear plan.
 
 **Dedup policy applied.** Where the same feature appeared in multiple source extractions, the most-specific authoritative anchor is the `primary_section_anchor` and the rest are folded into `secondary_section_anchors`. Authored Extensions use `F-AE-*`; Breaking Changes use the sibling `F-BC-*` namespace. Each remains a separate contract row even when its content is also represented by a non-contract feature row.
 
@@ -18,13 +18,13 @@
 
 | feature_id | feature_name | feature_class | primary_section_anchor | secondary_section_anchors | originating_doc | introduced_in_version | one_line_summary | known_dependencies |
 |---|---|---|---|---|---|---|---|---|
-| F-001 | Three-Domain Architecture (Buyer / Seller / Marketplace) | engine_concept | §1.1 | §1.3, §1.4 | master_spec | v6.0.0 | Three-domain platform separating Buyer Console, Seller Console, and Marketplace with shared auth and unified database. | — |
-| F-002 | Dual-Console Data Isolation Model | engine_concept | §1.3 | §1.4, §7.2 | master_spec | v6.0.0 | Strict logical isolation between Buyer and Seller consoles with org-scoped vs console-scoped entity rules. | F-001 |
+| F-001 | Three-Domain Architecture (Buyer / Seller / Marketplace) | engine_concept | §1.1 | §1.3, §1.4 | master_spec | v6.0.0 | Three-domain platform separating Buyer Console, Seller Console, and Marketplace with shared auth and unified database. | F-004 |
+| F-002 | Dual-Console Data Isolation Model | engine_concept | §1.3 | §1.4, §7.2 | master_spec | v6.0.0 | Strict logical isolation between Buyer and Seller consoles with org-scoped vs console-scoped entity rules. | F-001, F-005, F-006 |
 | F-003 | Org-Scoped vs Console-Scoped Query Scoping | engine_concept | §1.4 | §1.3 | master_spec | v6.0.0 | Query parameter contract requiring org_id alone for org-scoped reads and org_id+console for console-scoped reads. | F-002 |
 | F-004 | Authoritative Technology Stack | platform_mechanic | §1.5 | — | master_spec | v6.0.0 | Canonical stack list (Next.js, Convex, WorkOS, Stripe, Anthropic, PostHog, Loops.so, Firecrawl, Vercel, Datadog, Zendesk). | — |
 | F-005 | Convex Backend & Real-Time Database | integration_surface | §1.5 | §7.5 | master_spec | v6.0.0 | Serverless Convex backend providing reactive subscriptions and ACID transactions. | — |
-| F-006 | WorkOS Authentication Integration | integration_surface | §1.5 | §6.1 | master_spec | v6.0.0 | Enterprise SSO/SAML/SCIM identity provider integration via WorkOS. | — |
-| F-007 | Stripe Billing Integration | integration_surface | §1.5 | §34, §34.10.5 | master_spec | v6.0.0 | Subscription management, invoicing, and usage metering integration via Stripe. | — |
+| F-006 | WorkOS Authentication Integration | integration_surface | §1.5 | §6.1 | master_spec | v6.0.0 | Enterprise SSO/SAML/SCIM identity provider integration via WorkOS. | F-001, F-005 |
+| F-007 | Stripe Billing Integration Completion | integration_surface | §1.5 | §34, §34.10.5 | master_spec | v6.0.0 | Completes subscription management, invoicing, usage metering, and later Stripe billing behavior after the R0 Organization-customer genesis boundary is proven. | F-917 |
 | F-008 | PostHog Analytics Integration | integration_surface | §1.5 | §51 | master_spec | v6.0.0 | Feature adoption, user-behavior, and event taxonomy analytics platform. | — |
 | F-009 | Loops.so Email Delivery Integration | integration_surface | §1.5 | §41 | master_spec | v6.0.0 | Transactional and marketing email delivery service. | — |
 | F-010 | Firecrawl Web Intelligence Integration | integration_surface | §1.5 | §22.6 | master_spec | v6.0.0 | Automated vendor website crawl and PDF parsing service. | — |
@@ -134,7 +134,7 @@
 | F-113 | EOI (Expression of Interest) Record Entity | engine_concept | §4.5.2 | §27.5 | master_spec | v6.0.0 | Vendor-initiated record indicating interest in a marketplace listing. | F-112 |
 | F-114 | NDA Record Entity | engine_concept | §4.5.3 | §24.2 | master_spec | v6.0.0 | Marketplace-domain NDA execution record with Adobe Sign integration. | — |
 | F-115 | EvalStarter Entity | engine_concept | §4.5.9 | §13.12 | master_spec | v7.1.0 | Per-vertical seed schema (3–8 Use Cases / 30–80 Requirements) for Buyer Maya intake. | — |
-| F-116 | Marketplace Entity Set | engine_concept | §4.5 | §1.3.2 | master_spec | v6.0.0 | Marketplace-domain entity grouping (Listing, EOI, NDA, MarketplaceReview, Integration Hook). | — |
+| F-116 | Marketplace Entity Set | engine_concept | §4.5 | §1.3.2 | master_spec | v6.0.0 | Marketplace-domain entity grouping (Listing, EOI, NDA, MarketplaceReview, Integration Hook). | F-005, F-117, F-120, F-429 |
 | F-117 | Audit Event Entity | engine_concept | §4.6.1 | §6.7 | master_spec | v6.0.0 | Org-scoped append-only audit row capturing actor, action, entity, changes diff, IP, and request metadata. | — |
 | F-118 | Attachment Entity | engine_concept | §4.6.2 | §39 | master_spec | v6.0.0 | Polymorphic, cross-console attachment with virus scan, byte-cap, and retention. | — |
 | F-119 | OpsSession Entity | engine_concept | §4.6.3 | §50.4 | master_spec | v7.0.0 | Platform-scoped Ops impersonation unit with bounded scope, audit, and customer-visible projection. | F-117 |
@@ -283,7 +283,7 @@
 | F-261 | Defense View | surface | §13.11 | Appendix L.7, Appendix I | master_spec | v7.1.0 | Buyer-facing defensive read-only score-justification surface with state machine and 5 dedicated error codes. | F-252, F-258 |
 | F-262 | defense_view_generate Capability | user_capability | §13.11.5 | §4.8.2 | master_spec | v7.1.0 | Capability registry row with OutcomeContract and rate-card for Defense View generation. | F-261, F-124 |
 | F-263 | Defense View State Machine | engine_concept | Appendix L.7 | §13.11 | master_spec | v7.1.0 | DefenseView entity lifecycle (generated_unopened/opened/regenerated_unopened/archived) with hash-mismatch regeneration. | F-261 |
-| F-264 | Buyer Maya Intake ("What Are You Evaluating?") | user_capability | §13.12 | §13.1, §4.5.9, F-898 (Buyer Maya Materializer Failure Codes & Retry Semantics) | master_spec | v7.1.0 | Conversational Buyer-side Maya intake that translates buyer goals into a scaffolded evaluation workspace. | F-115, F-252, F-898 |
+| F-264 | Buyer Maya Intake ("What Are You Evaluating?") | user_capability | §13.12 | §13.1, §4.5.9, F-898 (Buyer Maya Materializer Failure Codes & Retry Semantics) | master_spec | v7.1.0 | Conversational Buyer-side Maya intake that translates buyer goals into a scaffolded evaluation workspace. | F-115, F-252 |
 | F-265 | Scenario Modeling | engine_concept | §14.1 | §14.2, §14.4, §14.5 | master_spec | v6.0.0 | Engine letting buyers define alternate weighting/inclusion scenarios to re-rank vendors without mutating canonical scores. | F-252, F-258 |
 | F-266 | Scenario Definition | user_capability | §14.2 | §14.3 | master_spec | v6.0.0 | Buyer creation of named scenarios with overridden weights, requirements, and inclusion rules. | F-265 |
 | F-267 | Scenario Validation | engine_concept | §14.3 | §14.2 | master_spec | v6.0.0 | Validates scenario inputs (weight sums, required fields, conflicts) before allowing simulation/save. | F-266 |
@@ -343,7 +343,7 @@
 | F-320 | Outcome Signals & OutcomeContracts | engine_concept | §21.4.5 | §4.8.4, §34.11.1 | master_spec | v7.0.0 | Per-capability accepted/rejected signal definitions with auto-accept timers, contest windows, and explicit-signal overrides. | F-316, F-127 |
 | F-321 | Seller Knowledge Base (KB) | engine_concept | §22.1 | §22.2, §4.4 | master_spec | v6.0.0 | Seller-Console-scoped, AI-indexed library that is the sole retrieval substrate for KB-grounded capabilities. | — |
 | F-322 | KB Layered Architecture | engine_concept | §22.2 | §22.2.1, §22.2.2 | master_spec | v7.0.0 | Four-layer stack (App → Orchestrator → Managed Agents/MCP Server → BM25/vector/metadata stores) for the Seller KB. | F-321 |
-| F-323 | Anthropic Beta Header & Version Pinning | integration_surface | §22.2.3 | — | master_spec | v7.0.0 | Centrally-pinned anthropic-beta header (managed-agents-2026-04-01) with 5%-canary, 7-day metric gate, and 30-day backward support. | F-340 |
+| F-323 | Anthropic Beta Header & Version Pinning | integration_surface | §22.2.3 | — | master_spec | v7.0.0 | Centrally-pinned anthropic-beta header (managed-agents-2026-04-01) with 5%-canary, 7-day metric gate, and 30-day backward support. | — |
 | F-324 | KB Ingestion Channels | engine_concept | §22.3 | §22.3.1 | master_spec | v6.0.0 | Four ingestion paths into the KB: manual authoring, bid-response import, Firecrawl crawl, and Ghost-Bid Importer. | F-321 |
 | F-325 | KBEntry Entity | engine_concept | §22.3.1 | §22.4 | master_spec | v7.0.0 | Authoritative seller-scoped KB row with embedding, BM25 index, namespace, lifecycle state, confidence and win-rate fields. | F-321 |
 | F-326 | KBNamespace Entity | engine_concept | §22.3.4 | §4.4.9 | master_spec | v7.0.0 | Software-vs-Org namespace partitioning that scopes every KB retrieval call via JWT allow-list. | F-325 |
@@ -504,14 +504,14 @@
 | F-480 | Full-Text Search | user_capability | §30.4 | §30.7 | master_spec | v6.0.0 | Cmd+Shift+K modal searching console-scoped entities; KB entries hidden from buyers per firewall. | F-477 |
 | F-481 | Context-Aware Command Filtering | platform_mechanic | §30.5 | §5.11 | master_spec | v6.0.0 | Filters palette commands by console, phase, role, available features, and workspace state. | F-478 |
 | F-482 | Palette Keyboard Accessibility | platform_mechanic | §30.6 | — | master_spec | v6.0.0 | Tab/Arrow/Enter navigation with ARIA roles dialog/listbox for the palette. | F-477 |
-| F-483 | Webhook Delivery System | engine_concept | §31.1 | §31.2, §31.5, §31.6, Appendix F | master_spec | v6.0.0 | HMAC-SHA256 signed JSON webhooks with event_id idempotency, retry curve, DLQ, 256KB payload cap. | — |
+| F-483 | Webhook Delivery System | engine_concept | §31.1 | §31.2, §31.5, §31.6, Appendix F | master_spec | v6.0.0 | HMAC-SHA256 signed JSON webhooks with event_id idempotency, retry curve, DLQ, 256KB payload cap. | F-466, F-471 |
 | F-484 | Integration Phase Export Mapping | user_capability | §31.3 | — | master_spec | v6.0.0 | Phase-13 export of won requirements/responses/TCO to Jira, Linear, Asana, Azure DevOps. | F-483 |
 | F-485 | Partner Integrations (Salesforce/Slack/Teams/Zapier) | integration_surface | §31.4 | §29.4 | master_spec | v6.0.0 | Self-service OAuth-configured integrations; Zapier/Make via webhooks. | F-483 |
 | F-486 | Webhook Configuration & Limits | platform_mechanic | §31.5 | §34.1 | master_spec | v6.0.0 | Per-plan endpoint counts; uniform 5-attempt retry, 256KB payload cap, HMAC-SHA256 signing. | F-483 |
 | F-487 | Webhook Body-Exclusion Gates | platform_mechanic | §31.6.1 | §25.7.10, §10.13, §22 | master_spec | v7.0.0 | CI-enforced exclusion of firewall-sensitive bodies (internal comments, selection report, restricted KB) from payloads. | F-483 |
 | F-488 | Failed Webhook DLQ & Replay | user_capability | §31.6 | — | master_spec | v6.0.0 | DLQ after 5 failures, admin email, manual retry from Settings, 30-day retention. | F-483 |
 | F-489 | Billing-Domain Webhook Catalog | engine_concept | §31.8 | §4.8, §32.8 | master_spec | v7.0.0 | 13 billing.* webhooks covering AIOperation settlement/contest/reversal, wallet thresholds, auto-topup, contest lifecycle. | F-483, F-505 |
-| F-490 | CRM Sync (Salesforce/HubSpot/Dynamics/Pipedrive) | integration_surface | §31.9 | §34.1.2, §34.8.5 | master_spec | v7.0.0 | Bidirectional Seller-side OAuth CRM sync with field mapping, routing rules, account matching, activity ledger, DLQ. | F-483 |
+| F-490 | CRM Sync (Salesforce/HubSpot/Dynamics/Pipedrive) | integration_surface | §31.9 | §34.1.2, §34.8.5 | master_spec | v7.0.0 | Bidirectional Seller-side OAuth CRM sync with field mapping, routing rules, account matching, activity ledger, DLQ. | F-116, F-483 |
 | F-491 | CRMSyncConnection Entity | engine_concept | §31.9.2 | §31.9.3 | master_spec | v7.0.0 | Per-Org per-provider OAuth connection with state machine, ciphertext tokens, health score. | F-490 |
 | F-492 | CRMFieldMapping | engine_concept | §31.9.4 | §34.1.2 | master_spec | v7.0.0 | Field-level mapping rows with direction, transforms, plan-gated customization, and downgrade-grace revert. | F-490 |
 | F-493 | CRMRoutingRule | engine_concept | §31.9.5 | — | master_spec | v7.0.0 | First-match-wins routing rules selecting CRM target object/owner/stage from Sourcera events. | F-490 |
@@ -554,7 +554,7 @@
 | F-530 | Entitlement Enforcement | engine_concept | §34.8 | §4.8.7, §5.11 | master_spec | v7.0.0 | O(1) cached soft/hard mode runtime gating per (capability, plan_tier) with Free Allowance precedence. | F-130, F-125 |
 | F-531 | Entitlement Matrix | engine_concept | §34.8.5 | §4.8.2 | master_spec | v7.0.0 | Authoritative per-capability soft/hard mode + free allowance + plan minima + upgrade surface table. | F-530 |
 | F-532 | Cross-Console Entitlement Isolation | platform_mechanic | §34.8.3 | §7.2 | master_spec | v7.0.0 | Independent per-console entitlement evaluation with billing_admin cross-firewall read exception. | F-530 |
-| F-533 | Buyer 14-Day Trial | growth_mechanic | §34.9.1 | §34.5 | master_spec | v6.0.0 | 14-day Business Starter trial auto-applied at Buyer signup with no credit card and day-15 auto-downgrade. | F-527 |
+| F-533 | Buyer 14-Day Trial Lifecycle Completion | growth_mechanic | §34.9.1 | §34.5, §4.2.13, Appendix C | master_spec | v6.0.0 | Completes the already-active Business Starter trial with exact day-11/day-14 notices and one day-15 paid conversion or Buyer Free auto-downgrade, carry-over, excess-data handling, and terminal audit. | F-007, F-466, F-467, F-468, F-470, F-473, F-509, F-527, F-528, F-628, F-916 |
 | F-534 | Seller Hero Moment Onboarding | growth_mechanic | §34.9.2 | §48.8 | master_spec | v6.0.0 | Magic-link SSO synchronously runs KB Bootstrap + First-Pass RFP Draft + Profile materialization before workspace. | F-354, F-353 |
 | F-535 | Onboarding/Trial Carry-Over | engine_concept | §34.9 | §34.5 | master_spec | v7.0.0 | KB entries, in-flight evaluations, wallet config, Pro Trial Seat balances, and bucket state persist through plan transitions. | F-527 |
 | F-536 | AI Wallet Service | pricing_primitive | §34.10 | §4.8.3, §21.5 | master_spec | v7.0.0 | Org-scoped pooled value-dollar wallet with included/overage/committed counters and burn-priority rules. | F-523, F-125 |
@@ -621,7 +621,7 @@
 | F-596 | Email Type Catalog | engine_concept | §41.2 | Appendix C | master_spec | v6.0.0 | 22 templated email types with subject, sender, category, and trigger. | F-009 |
 | F-597 | Email Compliance (CASL/CAN-SPAM/GDPR) | platform_mechanic | §41.3 | §45.1 | master_spec | v6.0.0 | Unsubscribe + physical address, marketing opt-in, bounce <2%, complaint <0.5%. | F-009 |
 | F-598 | Opt-Out Classification | platform_mechanic | §41.4 | §41.3 | master_spec | v6.0.0 | Transactional / Transactional-Critical / Marketing-Lifecycle classes governing unsubscribe enforcement. | F-596 |
-| F-599 | SLA Commitments | platform_mechanic | §42.1 | §34.1, §44.1 | master_spec | v6.0.0 | Enterprise 99.9% uptime + 4h critical response; lower tiers best effort; latencies cite §44.1. | — |
+| F-599 | Enterprise SLA Commitments | platform_mechanic | §42.1 | §34.1, §31, §42.4, §44.1 | master_spec | v6.0.0 | One canonical Buyer/Seller/combined Enterprise SLA, deterministic calendar-month uptime measurement per residency partition, and signed idempotent customer breach notification; lower tiers have no contractual response-time SLA. | F-012, F-474, F-483, F-514, F-520, F-543, F-600 |
 | F-600 | Monitoring & Alerting Rules | platform_mechanic | §42.2 | §42.6 | master_spec | v6.0.0 | Error-rate, latency, DB, webhook alerting routed to #incident Slack and PagerDuty. | — |
 | F-601 | Incident Response Process | platform_mechanic | §42.3 | §42.3.1, §50.4 | master_spec | v6.0.0 | SEV-1/2/3 severity definitions, war-room, statuspage, postmortem and RCA timelines. | — |
 | F-602 | Marketplace Abuse Operational SLA | platform_mechanic | §42.3.1 | §45.3 | master_spec | v7.0.0 | Authoritative numerical SLAs for abuse-report review/appeal/escalation. | F-447 |
@@ -650,7 +650,7 @@
 | F-625 | Data Privacy Posture | platform_mechanic | §45.1 | §6.8, §45.4 | master_spec | v6.0.0 | Customer-data ownership, no model training, anonymized analytics, DPA, subprocessor list. | — |
 | F-626 | Abuse Prevention Controls | platform_mechanic | §45.2 | §32.4, §33.6 | master_spec | v6.0.0 | Rate limits, login throttling, API token rotation, response validation, marketplace report path. | — |
 | F-627 | Marketplace Abuse Escalation Workflow | platform_mechanic | §45.3 | §42.3.1 | master_spec | v6.0.0 | Eight-step state-transition workflow from buyer report through admin/appeal/escalation/permanent ban. | F-447 |
-| F-628 | Test Pyramid (Unit/Integration/E2E) | platform_mechanic | §46.1 | §46.5 | master_spec | v6.0.0 | Vitest unit ≥80%, Convex integration ≥60%, Playwright E2E ≥40% critical paths. | — |
+| F-628 | Per-Service Test and Evidence Control Plane | platform_mechanic | §46.1 | §46.5 | master_spec | v7.1.0a | Fourteen-service fail-closed matrix: exact per-service line/component/page-flow floors, required branch floors, real-Preview integration, applicable endpoint/method/rate-limit/error contracts, named non-percentage suites, critical-flow E2E floors of 50% (Ops 70%), synthetic fixtures, commit-bound evidence, and the complete console-firewall negative matrix. | F-005 |
 | F-629 | Advanced Feature Test Cases | platform_mechanic | §46.2 | §12, §11, §14, §13, §24, §25, §19 | master_spec | v6.0.0 | Catalog of unit/integration/E2E cases for collaborative scoring, policy ingestion, TCO, scenarios, etc. | — |
 | F-630 | QA Process & Canary Release | platform_mechanic | §46.3 | §44.4, §44.1 | master_spec | v6.0.0 | Pre-release tests, Axe audit, load test, 10% PostHog canary, 24h monitoring before 100% rollout. | F-008 |
 | F-631 | Feature Flag System | engine_concept | §46.4 | §34.1.1, §34.1.2 | master_spec | v6.0.0 | PostHog feature flags evaluated alongside plan-tier entitlement checks for advanced features. | F-008 |
@@ -708,7 +708,7 @@
 | F-682 | Growth Mechanic M14: Seller Bid Success Share | growth_mechanic | §48.7.1 | §48.3.1 | master_spec | v7.0.0 | Sellers share win confirmations as social-network artifacts after closed bids. | F-653 |
 | F-683 | Growth Mechanic M15: Ghost-Bid Importer | growth_mechanic | §48.7.2 | §4.4.17 | master_spec | v7.0.0 | Sellers paste historical RFPs to seed KB via ghost_rfp_ingestion capability; first import free. | F-357, F-538 |
 | F-684 | Growth Mechanic M16: Buyer Referral Credit | growth_mechanic | §48.7.3 | §4.3.16 | master_spec | v7.0.0 | Buyer-referral mechanic awarding credits for activated referee Orgs with seven fraud signals. | F-097, F-664 |
-| F-685 | Seller Hero Moment (Surface Specification) | user_capability | §48.8 | §48.1.5, F-897 (Hero Moment Instrumentation Contract) | master_spec | v7.0.0 | Four-phase Hero Moment surface: pre-arrival, minutes 0-3, minutes 3-45, hour 1+ with banned anti-patterns. | F-321, F-332, F-335, F-897 |
+| F-685 | Seller Hero Moment (Surface Specification) | user_capability | §48.8 | §48.1.5, F-897 (Hero Moment Instrumentation Contract) | master_spec | v7.0.0 | Four-phase Hero Moment surface: pre-arrival, minutes 0-3, minutes 3-45, hour 1+ with banned anti-patterns. | F-321, F-332, F-335 |
 | F-686 | Six Banned Onboarding Anti-Patterns (AP1–AP6) | platform_mechanic | §48.8.7 | §49.1.9 | master_spec | v7.0.0 | Hard-banned anti-patterns including paywall-on-bootstrap and zero-form requirement before bootstrap. | — |
 | F-687 | Seven-Stage Seller Onboarding Flow | engine_concept | §49.1 | §35.2, §48.8 | master_spec | v7.0.0 | Engineering-contract pipeline mapping 7 stages onto SellerOnboardingSession timestamps and §48.8 phases. | F-559 |
 | F-688 | Stage 1: Magic-Link Arrival | user_capability | §49.1.1 | §48.8.3 | master_spec | v7.0.0 | Zero-form unauthenticated landing page resolving invite token and emitting SSO-redirect bootstrap pre-warm. | F-687 |
@@ -908,10 +908,10 @@
 | F-880 | Console-Firewall Visual Treatment | surface | UX Design §Patterns.ConsoleFirewall | §1 | ux_design | v2.0.0 | Visual differentiation between Buyer and Seller consoles (palette, iconography, header). | F-002 |
 | F-881 | Motion / Animation System | engine_concept | UX Design §Motion | §3 | ux_design | v2.0.0 | Motion principles (duration ladder, easing curves, choreography rules). | F-864 |
 | F-882 | Iconography System | engine_concept | UX Design §Iconography | — | ux_design | v2.0.0 | Icon library scope, sizes, stroke rules, semantic usage. | — |
-| F-883 | Illustration System | engine_concept | UX Design §Illustration | — | ux_design | v2.0.0 | Illustration style, usage in empty/error/onboarding surfaces. | F-875 |
-| F-884 | Density Modes (Comfortable / Compact) | platform_mechanic | UX Design §Density | — | ux_design | v2.0.0 | Density mode toggle affecting spacing tokens at component level. | F-861 |
+| F-883 | Illustration System | engine_concept | §3.7.5 | §3.11, UX Design §2.7, UX Design §9.2 | master_spec | v7.1.0a | Closed illustration registry and allowed treatment for aspirational empty, error, onboarding, and Plan-gate surfaces. | F-875 |
+| F-884 | Density Modes (Comfortable / Compact) | platform_mechanic | §3.15 | §3.6.1, §3.7.6.2, §11.3.2, §37.1, §38.6.2 | master_spec | v7.1.0a | Presentation-only Comfortable and Compact density for registered matrix hosts, with breakpoint safety, state preservation, and no persistence. | F-861 |
 | F-885 | Theme System (Light / Dark) | platform_mechanic | UX Design §Theming | — | ux_design | v2.0.0 | Light/dark theme tokens and runtime theme switch behavior. | F-061 |
-| F-886 | Voice & Tone Guidelines | platform_mechanic | UX Design §VoiceTone | — | ux_design | v2.0.0 | Microcopy voice/tone rules per surface class (transactional, promotional, error). | — |
+| F-886 | Voice & Tone Guidelines | platform_mechanic | §3.7.7.A | §3.6.4, §3.7.3–§3.7.4, §3.7.7–§3.7.8, §3.10.5, §3.13, §21.1–§21.3, §29, §37.2–§37.3, §45.1 | master_spec | v7.1.0a | Canonical cross-surface copy posture and source-precedence contract for transactional, promotional, error, permission, empty, destructive, AI-attributed, notification, and technical copy. | — |
 | F-887 | MCP Server Tool Schema Conventions | api_surface | KB Eng §MCP.ToolSchema | §22 | kb_eng | retired-2026-04-26 | MCP tool schema authoring conventions for KB tools. [verify §22 redundancy — likely covered by F-336/F-348]. | F-336 |
 | F-888 | Skill Registry Authoring Pattern | engine_concept | KB Eng §Skills.Registry | §22 | kb_eng | retired-2026-04-26 | Authoring conventions for skills registered to Managed Agents. [verify §22 redundancy — F-361]. | F-361 |
 | F-889 | Retrieval Chunking Strategy | engine_concept | KB Eng §Retrieval.Chunking | §22 | kb_eng | retired-2026-04-26 | Document chunking parameters and rationale for KB retrieval. [verify §22 redundancy — F-349]. | F-349 |
@@ -937,7 +937,7 @@
 | F-AE-013 | AE-12.4-06: Free-Tier 5-Scenario Cap | pricing_primitive | §14.8.1 | — | master_spec | v7.0.0 | Free buyer plan capped at 5 scenarios per workspace. [AE: pending] | F-272 |
 | F-AE-014 | AE-12.4-07: Free-Tier 5 Pricing-Requirement Cap | pricing_primitive | §15.6.1 | — | master_spec | v7.0.0 | Free buyer plan capped at 5 pricing requirements. [AE: pending] | F-278 |
 | F-AE-015 | AE-12.4-08: Free-Tier 10-Question Q&A Cap | pricing_primitive | §18.7.1 | — | master_spec | v7.0.0 | Free tier limited to 10 Q&A questions per vendor per workspace. [AE: pending] | F-301 |
-| F-BC-001 | BC-12.4-01: Enterprise SLA 1-hour → 4-hour | platform_mechanic | §42.1 | §34.1 | master_spec | v7.0.0 | Enterprise SLA reduced from 1-hour to 4-hour critical response. [BC: acknowledged 2026-05-20] | F-599 |
+| F-BC-001 | Enterprise SLA Contract Reconciliation | platform_mechanic | §42.1 | §34.1 | master_spec | v7.0.0 | Inventory and reconcile pre-v7.0.0 one-hour Enterprise commitments against the current four-hour critical-response contract; preserve signed terms until an approved amendment executes. [BC: acknowledged 2026-05-20; Counsel-authored notification protocol remains the residual deliverable] | F-599 |
 | F-AE-017 | AE-13-01: Perplexity Degradation Contract | integration_surface | §16.2.3 | §4.8.4 | master_spec | v7.0.0 | Perplexity degradation banner, 30-day cache fallback, no-blocking invariant, outage cost-routing rule. [AE: pending] | F-279 |
 | F-AE-018 | AE-13-02: External Provider Health Detectors | integration_surface | §42.6.0 | — | master_spec | v7.0.0 | Nine-row detector catalog (Anthropic/Firecrawl/Stripe/WorkOS/PostHog/Loops/Convex/Perplexity/Zendesk) with severity routing. [AE: pending] | F-606 |
 | F-AE-019 | AE-13-03: Webhook Default Retry Class | platform_mechanic | Appendix F | §31 | master_spec | v7.0.0 | Default-coverage rule plus deploy-time webhook retry class validator. [AE: pending] | F-777 |
@@ -951,8 +951,8 @@
 | F-AE-027 | AE-14.5-03: DefenseView Object Size Constraints | platform_mechanic | §39 | §13.11.7 | master_spec | v7.1.0 | Object size constraints for DefenseView text fields (recommendation, top reasons, risks, CFO summary). [AE: ratified] | F-261 |
 | F-AE-028 | AE-14.5-04: DefenseView Error Codes | platform_mechanic | Appendix I | §13.11 | master_spec | v7.1.0 | Five Defense View error codes covering record finalization, throttling, capability, archival, cross-console. [AE: ratified] | F-261 |
 | F-AE-029 | AE-14.6-01: Seller Bid-Lifecycle Phase Mapping | engine_concept | §22.19.1 | §3.14.2 | master_spec | v7.1.0 | Seller phases 1–13 read pipeline_stage_id from bound buyer Workspace via Console Bridge projection. [AE: pending] | F-380 |
-| F-AE-030 | AE-14.6-02: PipelineSurface / PhaseAdvancer Composition | surface | UX §5.2.19 | §3.14 | master_spec | v7.1.0 | Component boundary: PipelineSurface owns bar/ribbon; PhaseAdvancer owns advancement modal. [AE: pending] | F-075 |
-| F-AE-031 | AE-14.6-03: Pipeline Step Design Tokens | surface | UX §5.2.19 | — | master_spec | v7.1.0 | Fourteen new design tokens under pipeline.step.* namespace (composition, no new primitives). [AE: pending] | F-859 |
+| F-AE-030 | AE-14.6-02: PipelineSurface / PhaseAdvancer Composition | surface | UX §5.2.19 | §3.14 | ux_design | v7.1.0 | Component boundary: PipelineSurface owns bar/ribbon; PhaseAdvancer owns advancement modal. [AE: ratified] | F-075 |
+| F-AE-031 | AE-14.6-03: Pipeline Step Design Tokens | surface | UX §5.2.19 | — | ux_design | v7.1.0 | Fourteen new design tokens under pipeline.step.* namespace (composition, no new primitives). [AE: ratified] | F-859 |
 | F-AE-032 | AE-14.6-04: Pipeline Phase Mapping Correction | engine_concept | §2.8.2 | §3.14.1 | master_spec | v7.1.0 | Setup=1–3 / Define=4–6 / Score=7–10 / Decide=11–13 supersedes prior placeholder mapping. [AE: pending] | F-076 |
 | F-AE-033 | AE-14.7-01: Six Default EvalVerticals | engine_concept | §4.5.9 | §13.12 | master_spec | v7.1.0 | Seeds six EvalVertical values (CRM, ITSM, EDR, Observability, Payroll/HRIS, Other) at v7.0.0. [AE: pending] | F-264 |
 | F-AE-034 | AE-14.7-02: EvalStarter Seed Schema Bounds | engine_concept | §39 | §4.5.9 | master_spec | v7.1.0 | Seed bounds 3–8 Use Cases / 30–80 Requirements per EvalStarter row. [AE: ratified] | F-115 |
@@ -1000,28 +1000,55 @@
 | F-897 | Hero Moment Instrumentation Contract | engine_concept | §35.2 | §48.8, §51 (PostHog event family `bid_workspace_hero_moment.*`), Appendix C, Appendix J `onboarding_anti_pattern_kind` | master_spec | v7.0.0 | `hero_moment_completed_at` timestamp field (line 5998), Stage 3 population latency SLO (≤ 10,000 ms; line 6062), p90 rolling alert pipeline (line 6102 failure mode), and 6-value `ap_kind` anti-pattern detector enum (line 6132). | F-559, F-685, F-534, F-099 |
 | F-898 | Buyer Maya Materializer Failure Codes & Retry Semantics | engine_concept | §13.12 | Appendix I (4 dedicated error codes per Master Spec changelog line 63), §44.1 (latency targets via F-AE-037), §13.12.4 step 3 | master_spec | v7.1.0 | Discrete inventory row covering the four §13.12 Buyer Maya intake error codes, retry/idempotency semantics, and materializer p95 fallback paths. | F-264, F-115, F-AE-037 |
 
+### Delivery Control-Plane Legacy Preservation (added 2026-07-16)
+
+| F-899 | Seller Dashboard | surface | UX Design §4.3.1 | Master Spec §5.5.1, §22.5, §24.3, §25.1.2, §34, §§37–38 | ux_design | v2.0.0 | Authorized Seller Console home composing active bids, pending actions, KB health, Marketplace presence, recent activity, and the exact no-active-bids state without duplicating the owning modules. | F-001, F-117, F-183, F-387, F-393, F-332, F-333, F-112, F-113, F-429, F-873, F-875, F-876, F-877, F-879 |
+
+### Delivery Control-Plane Live-Evidence and R0 Dependency-Slice Extensions (added 2026-07-16)
+
+| F-910 | Application Security Headers | platform_mechanic | §1.5.1 | §28.1, §50.2.1 | master_spec | v7.1.0a | Same-origin application-header policy with exact CSP, framing, HSTS, Permissions Policy, reporting, canary, and rollback contracts for the three R0 shells. | F-002, F-004, F-005, F-911 |
+| F-911 | Cross-Origin Request Policy | platform_mechanic | §32.1.1 | §1.3, §1.4, §32.1 | master_spec | v7.1.0a | Deny-by-default cross-origin registry whose R0 allowed set is empty and whose route, origin, method, credential, preflight, failure, and rollback behavior is executable. | F-002, F-004 |
+| F-912 | Enterprise Branding Overrides | user_capability | §34.1.1 | §7.1.2, §3.11.7, UX Design §8.8 | master_spec | v7.1.0a | Buyer Enterprise-only versioned logo, favicon, and accent override with safe assets, contrast waiver, settings preview/publish/revert, deterministic fallback, and no Seller entitlement. | F-006, F-063, F-119, F-170, F-179, F-569, F-628, F-701, F-859 |
+| F-913 | Deterministic Platform Reference-Data Orchestration | platform_mechanic | §50.33 | §4.5.14, §4.8.9, §19.2, §50.12, §50.32 | master_spec | v7.1.0a | Signed, dry-runnable, resumable, and reversible orchestration for Buyer-template and pricing reference-data releases through their canonical authorization, approval, audit, and proof gates. | F-119, F-132, F-302, F-628, F-701, F-706, F-725 |
+| F-916 | Buyer Trial Activation at Org Creation | growth_mechanic | §34.9.1 | §4.2.1, §4.2.13, §4.8.3, §4.8.7, Appendix J | master_spec | v7.1.0a | The R0 Buyer-console Org-creation transaction atomically activates the Business Starter trial, plan, wallet, default capability allowances, TrialState reference, qualified start audit, and active Stripe Customer before any Buyer route reports success. | F-079, F-117, F-125, F-130, F-511, F-628, F-917 |
+| F-917 | Stripe Customer Genesis at Organization Creation | integration_surface | §34.10.5.A | §4.2.1, §4.8.1, Appendix I | master_spec | v7.1.0a | Creates exactly one active Stripe Customer for the Organization's canonical `(org_id, legal_entity)` before Organization creation reports success, with complete metadata, idempotent retries, safe compensation, duplicate rejection, and no legacy legal-entity writes. | F-079, F-502, F-628 |
+
+### Delivery Control-Plane §43 Successor Ownership (added 2026-07-21)
+
+| F-922 | OpsActionRecord Canonical Audit Record and Atomic Writer | engine_concept | §4.4.27 | §50.5.3, §50.31 D-50-039 | master_spec | v7.1.0a | Canonical append-only record and atomic writer for human-discretion Ops actions, including exact reason, target, before/after state, actor, quorum, session linkage, retention, firewall, and audit proof. | F-117, F-119, F-160, F-593, F-600, F-697, F-698, F-699, F-700, F-701, F-779, F-780 |
+| F-923 | Plan-Tier Manual Override Ops Surface | surface | §50.20 | §34, §50.12 | master_spec | v7.1.0a | Two-person plan provisioning, adjustment, discount, effective-date, expiry, and reversal surface with Stripe consistency, customer communication, audit, webhook, and rollback controls. | F-007, F-079, F-117, F-119, F-132, F-160, F-466, F-471, F-483, F-496, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-725, F-777, F-779, F-780, F-782, F-922 |
+| F-924 | Workspace Export Ops Surface | surface | §50.21 | §6.8, §27.10, §40.2 | master_spec | v7.1.0a | Durable, quorum-approved Workspace export with pre-generation DSAR check, residency and marketplace firewalls, exact PII-redaction profile, single-use download, expiry, recovery, and audit proof. | F-002, F-079, F-083, F-117, F-119, F-160, F-175, F-466, F-471, F-483, F-496, F-502, F-592, F-593, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-777, F-779, F-780, F-782, F-922 |
+| F-925 | Refund Authorization Ops Surface | surface | §50.22 | §34, §50.12 | master_spec | v7.1.0a | Two-person refund authorization, execution, reconciliation, customer notification, Stripe idempotency, AIWallet synchronization, ContestRecord linkage, webhook, and recovery surface. | F-007, F-117, F-119, F-125, F-128, F-160, F-466, F-471, F-483, F-496, F-593, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-777, F-779, F-780, F-782, F-922 |
+| F-926 | AIWallet Manual Adjustment Ops Surface | surface | §50.23 | §4.8.3.B, §34 | master_spec | v7.1.0a | Two-person wallet credit/debit and Enterprise auto-topup-ceiling override surface with balance safety, exact audit, customer notification, webhook, failure recovery, and proof. | F-007, F-117, F-119, F-125, F-126, F-160, F-466, F-471, F-483, F-496, F-593, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-777, F-779, F-780, F-782, F-922 |
+| F-927 | Trial Management Ops Surface | surface | §50.24 | §34.9.1, §50.20 | master_spec | v7.1.0a | Controlled trial create, extend, convert, and expire surface whose paid conversion reuses PlanTierOverrideProposal and preserves customer notification, webhook, recovery, and audit behavior. | F-007, F-079, F-117, F-119, F-160, F-466, F-471, F-483, F-496, F-533, F-593, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-777, F-779, F-780, F-782, F-916, F-922, F-923 |
+| F-928 | Marketplace Listing Moderation Ops Surface | surface | §50.25 | §27.8, §27.10, §50.16 | master_spec | v7.1.0a | Domain-scoped two-person listing approval, rejection, hide, restore, and permanent-ban surface with fraud review, quorum, firewall, webhook, recovery, and proof. | F-117, F-119, F-160, F-429, F-447, F-449, F-466, F-471, F-483, F-496, F-593, F-596, F-600, F-602, F-697, F-698, F-699, F-700, F-701, F-746, F-777, F-779, F-780, F-782, F-922 |
+| F-929 | AIOperation Reversal Ops Surface | surface | §50.26 | §34.10.5, §34.11 | master_spec | v7.1.0a | Two-person per-operation reversal with ContestRecord linkage, Stripe meter reversal, AIWallet credit synchronization, customer Inbox notification, rate alert, rollback, and proof. | F-007, F-117, F-119, F-123, F-125, F-128, F-160, F-466, F-471, F-483, F-496, F-539, F-593, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-777, F-779, F-780, F-782, F-922 |
+| F-930 | User Token, Password, and SCIM Ops Surface | surface | §50.27 | §6.1, §6.3, §6.6 | master_spec | v7.1.0a | Support-controlled password-reset dispatch, API-token revocation, SCIM deprovision sync, suspension, and reactivation with approval, customer notification, webhook, recovery, and audit controls. | F-006, F-079, F-117, F-119, F-138, F-160, F-161, F-164, F-168, F-169, F-466, F-471, F-483, F-496, F-593, F-596, F-600, F-697, F-698, F-699, F-700, F-701, F-777, F-779, F-780, F-782, F-922 |
+| F-931 | Authenticated Linear Planning Mirror Publication | platform_mechanic | Authenticated planning mirror publication | Planning and Execution Authority | master_spec | v7.1.0a | Protected canonical-main capture, consistency readback, attested artifact handoff, deterministic report regeneration, reviewable publication, secret safety, and fail-closed credential recovery for the Linear verification mirror. | — |
+
 ## Verification — Counts
 
-Total feature rows: **970** (898 Master Spec / companion-doc derived `F-NNN` rows + 72 Authored Extension `F-AE-NNN` rows). Updated 2026-04-29 to absorb the Phase-0 V0 errata-pack rows F-897 (Hero Moment Instrumentation Contract; remediates D-0V-002) and F-898 (Buyer Maya Materializer Failure Codes & Retry Semantics; remediates D-0V-003).
+Total feature rows: **987** (915 canonical source-derived `F-NNN` rows + 72 Authored Extension `F-AE-NNN` rows). Updated 2026-07-23 to add the authenticated Linear planning-mirror publication contract F-931.
 
 By feature_class (canonical row-walk of `^| F-` data rows; refreshed 2026-04-29 per defect `D-0V-005`; updated for V0 errata-pack):
 
-- engine_concept — 374 (+2 V0 errata-pack rows; F-897 and F-898 both engine_concept)
-- platform_mechanic — 205
-- user_capability — 133
-- surface — 106
+- engine_concept — 375 (+2 V0 errata-pack rows; F-897 and F-898 both engine_concept)
+- platform_mechanic — 209
+- user_capability — 134
+- surface — 115
 - pricing_primitive — 61
-- growth_mechanic — 45
+- growth_mechanic — 46
 - api_surface — 27
-- integration_surface — 19
+- integration_surface — 20
 
 By originating_doc (canonical):
 
-- master_spec — 911 (including all 72 AE rows + 2 V0 errata-pack rows; AE rows use `master_spec` as `originating_doc` and are flagged via `F-AE-NNN` id prefix and `[AE: pending]` / `[AE: ratified]` marker in `one_line_summary`)
-- ux_design — 28
+- master_spec — 927 (including all 72 AE rows + 2 V0 errata-pack rows; AE rows use `master_spec` as `originating_doc` and are flagged via `F-AE-NNN` id prefix and `[AE: pending]` / `[AE: ratified]` marker in `one_line_summary`)
+- ux_design — 29
 - seller_pricing — 11
 - buyer_pricing — 10
 - kb_eng (retired) — 10 (all flagged "[verify §22 redundancy]")
+- linear_planning — 0 (the compatibility register owns no executable behavior)
 
 (Prior approximations: `engine_concept ≈325 / user_capability ≈140 / platform_mechanic ≈220 / surface ≈140 / pricing_primitive ≈70 / growth_mechanic ≈55 / api_surface ≈25 / integration_surface ≈18`; `master_spec ≈833`. Preserved here for audit trail; the canonical counts above supersede.)
 
@@ -1029,7 +1056,7 @@ Unresolved primary_section_anchor: **0** (no row has a missing or "TBD" primary 
 
 ## Verification — Self-Challenge Pass Notes (Opus-mandatory)
 
-1. **Companion-doc fidelity gap.** UX Design rows are intentionally captured at engine_concept / surface family granularity (one row per system, not per variant). A Phase-3-equivalent UX-Design audit will need to expand ≈28 rows into per-component variant rows. This is *not* a P0 inventory defect because the families resolve to UX Design anchors that exist in the doc; it is a Phase-3 expansion task to be tracked in `_audit/PHASE0_FINDINGS.md`.
+1. **Companion-doc fidelity.** The 29 UX families, including F-899, have standalone live Linear owner contracts with their required variants and states. The canonical Linear planning document owns current coverage and drift status; this repository inventory is a verification mirror only.
 2. **KB Engineering Spec retired-doc rows.** F-887 through F-896 are companion-doc rows pointing to the retired snapshot. Each is flagged "[verify §22 redundancy]" with a forward pointer to the §22 row that supersedes it. Phase-22-equivalent audit will resolve each pointer and either (a) merge the row into the §22 master row, or (b) file a P1 documentation_gap if the retired-doc content is materially missing from §22.
 3. **Authored Extensions duplication.** Several AE rows (e.g., F-AE-027 / F-261 Defense View; F-AE-058–F-AE-064 / F-621 surface_throttling_class) describe contracts that are *also* materialized as a non-AE feature row. This is intentional — the AE row tracks ratification status; the non-AE row tracks the resulting product behavior. The COVERAGE_MATRIX phase should treat them as two distinct rows.
 4. **Plan-tier rows (F-509–F-520).** Buyer and seller plan tiers are captured as 12 separate `pricing_primitive` rows. Per Prompt 0.2, this is the prescribed granularity ("capture every Buyer/Seller plan tier as separate rows"). Each tier's numerical content authority sits in §34; the rows do not duplicate numerics, only point to them.

@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "parentInitiative": {
+    "id": "68b43674-ef5a-431e-8105-431ba60892bd",
+    "name": "Sourcera Production Build — Current Master Spec"
+  },
+  "outcomeInitiatives": [
+    {
+      "id": "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10",
+      "name": "Prove Global Production Readiness"
+    },
+    {
+      "id": "6310a6b6-634c-4603-aa34-e4e7f067c4d8",
+      "name": "Operationalize Intelligence and Connected Services"
+    },
+    {
+      "id": "35daace4-7825-4ecd-bd85-90351d43e7ea",
+      "name": "Grow a Trusted Marketplace"
+    },
+    {
+      "id": "dd9b8931-9d3b-42ed-854f-e46248c5bb9e",
+      "name": "Complete Seller Participation and Knowledge"
+    },
+    {
+      "id": "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f",
+      "name": "Complete the Buyer Evaluation Lifecycle"
+    },
+    {
+      "id": "b5ae2103-1f20-4763-9090-cb0fb0a7d74b",
+      "name": "Deliver the Core Product Platform"
+    }
+  ],
+  "planningDocument": {
+    "id": "3fd8304b-547e-48e2-bc76-5a9ebecaa389",
+    "title": "Sourcera Planning Authority — Master Spec Control Plane",
+    "contentFingerprint": "7427aa2489bd5a1760eb1adc13c8570ed99c4cdc251ee098e79d15d184b9cb04",
+    "initiativeId": "68b43674-ef5a-431e-8105-431ba60892bd",
+    "projectId": null,
+    "teamId": null,
+    "issueId": null,
+    "requiredSections": [
+      "Binding authority",
+      "Canonical source fingerprints",
+      "Native planning model",
+      "Coverage and traceability",
+      "UX fidelity control",
+      "Change control",
+      "Runtime truth",
+      "Program completion"
+    ]
+  },
+  "projectDescriptionFingerprints": [
+    {
+      "projectId": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
+      "descriptionFingerprint": "0e36dc4ec70590d175bfebbe8c40ec27445d23eba6f00a67ca8e1ca8f49ab1f2",
+      "milestones": [
+        {
+          "milestoneId": "16eb8024-6c95-425a-93a4-5971c6d23eb1",
+          "descriptionFingerprint": "4f6d0262f7bec2e7ce95cab5ccec6a0708108730c87f9c8cf990a10a15000050"
+        },
+        {
+          "milestoneId": "c6d990c0-5163-4f49-9273-f9446fa42acf",
+          "descriptionFingerprint": "3ab1b0e6472a53d890096b6655cee2528c60f1a7cbf8d7918da9a7cf12cf258e"
+        },
+        {
+          "milestoneId": "df577a95-d860-430e-94ab-69b134c4c057",
+          "descriptionFingerprint": "5bb003c2173049a32a7b4cb7646eda9d714a47f6de5fd01832f8d58f50b6b938"
+        }
+      ]
+    },
+    {
+      "projectId": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
+      "descriptionFingerprint": "83382b5340e42b975a24271db82cc56ea6a57cb9da642d290379f053c44c845a",
+      "milestones": [
+        {
+          "milestoneId": "2b0f20a0-e326-473a-8fc4-fc17019b8f04",
+          "descriptionFingerprint": "64795eb1abf81ec564e717bacd8942fbbb4e70910a49cc0a6240649f5825d6af"
+        },
+        {
+          "milestoneId": "89fac98f-1e03-4be4-9418-6648e9294f09",
+          "descriptionFingerprint": "90577a3cfb0a3a9415f45133e1b6fa2b074dce810151c42b01f57aea633c9af2"
+        },
+        {
+          "milestoneId": "c20d12d1-f37a-488f-b5c8-165f07d4220c",
+          "descriptionFingerprint": "5719aa3d0cf0c2372aaaf114a7585b46ab7ce53f8aa561e74950144b41109ef5"
+        }
+      ]
+    },
+    {
+      "projectId": "32d9c20f-fe88-40e3-8a86-53712a91db58",
+      "descriptionFingerprint": "9343dd17cb9b72dc728247b49e6bf7dddebfe0ae2ff357f73561821ac8711f82",
+      "milestones": [
+        {
+          "milestoneId": "5b5c429e-01c3-443d-89ed-e7edb88b92f8",
+          "descriptionFingerprint": "090d215edd1a0655d89e132539a23fbb9a447f0f021923b9eb8572b8e3575039"
+        },
+        {
+          "milestoneId": "c669220f-0a39-4b84-8068-19b22883a4aa",
+          "descriptionFingerprint": "d6a8c03c5dd9a89397bce556a1543f5012d91694d5b72c7b4382942149e8d802"
+        },
+        {
+          "milestoneId": "d2915a2a-78ef-4bc3-999d-f0ca8d12bf8b",
+          "descriptionFingerprint": "b7be590c1ca0682d4d48431e857061515f09cc31ae924c0095dcc215e2eab669"
+        }
+      ]
+    },
+    {
+      "projectId": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
+      "descriptionFingerprint": "d5ed8bb297fe7b4e837efdd99bc72983293ba561f78621960d6fc2a9dff830ff",
+      "milestones": [
+        {
+          "milestoneId": "4263108c-82f7-4bd9-b29d-95bcb707d666",
+          "descriptionFingerprint": "87085704f55237f59456665784ede95a515dd93f0c921ce92ca6e25cf3c5a18f"
+        },
+        {
+          "milestoneId": "4cf234d6-d479-4acc-a965-57846b3350dd",
+          "descriptionFingerprint": "80d91ea7badcbeca306cc843f35c10d728e2bc4d1090294c671e22da61a5f002"
+        },
+        {
+          "milestoneId": "b05759d0-731a-43a6-83af-167a6203328b",
+          "descriptionFingerprint": "efee165f740669d40735ab35b30faec43d057fee0de8529cac6eb58fedd5b6c7"
+        }
+      ]
+    },
+    {
+      "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+      "descriptionFingerprint": "7fd940a2b12f3a5ef0c00eee7a635fcdeaf648b8b01f0899196676f6402c1136",
+      "milestones": [
+        {
+          "milestoneId": "736f8baa-c326-4368-a00a-b4702c659f6d",
+          "descriptionFingerprint": "6793657288d6f719489e79b41b9c77e4fa74fb9aa5f1f3d51ef32fbb901cb4d6"
+        },
+        {
+          "milestoneId": "aedf9c63-8b99-4b15-a094-700f472a9d79",
+          "descriptionFingerprint": "4c5c27404989155b29124031ff0f463110b7a2dba88391131295109fbf195da4"
+        },
+        {
+          "milestoneId": "c5f366dc-a4aa-4f20-9adb-ebdb16192ced",
+          "descriptionFingerprint": "c245be051c75c1a38b48fd59efe5b143a461d413f4f4354c27b074ee4bc42767"
+        }
+      ]
+    },
+    {
+      "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
+      "descriptionFingerprint": "bce95e4c97f34ebae3211ec8bb52e41ae5cb35b7fbefe7e516a547046a24e3b7",
+      "milestones": [
+        {
+          "milestoneId": "5c7b1b0e-5677-4224-87d3-8dab7ec82eb2",
+          "descriptionFingerprint": "1fab701062622a015ef80aacb570ccb454f41f44fc54a5f4db2502487561ea9f"
+        },
+        {
+          "milestoneId": "8809df46-e7ee-4072-97ab-bc30b44fecf6",
+          "descriptionFingerprint": "63d396b33e44de1036a449fd26153855fbb55ddeefc6c9e5260b17c4e08251b9"
+        },
+        {
+          "milestoneId": "e3b0019a-e7f2-45a5-be1b-11e4773959a4",
+          "descriptionFingerprint": "e597fd697e071db19ff46416bb0ba21bae60cd8254bb5680d1e208127b92f8e3"
+        }
+      ]
+    },
+    {
+      "projectId": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
+      "descriptionFingerprint": "ad29306a3e9c1702bb5e4a8ed524fec230f8b5fe2cbc361ed9fe943d1a804176",
+      "milestones": [
+        {
+          "milestoneId": "510de5f8-ea27-4a30-b3ec-0e023f22a0a8",
+          "descriptionFingerprint": "787d779ecd1f2dde27586831845be2ee300d83799d9fb9518b2eadce845a7214"
+        },
+        {
+          "milestoneId": "8ee4fccd-0536-4282-8d8b-0d8f9acd5091",
+          "descriptionFingerprint": "572fc76126473a9455efef4012425c1d165fd8e0b1f09a68d0e65e3a010c78f9"
+        },
+        {
+          "milestoneId": "d2e73ffb-48a4-4e82-8951-65d03f2b49d2",
+          "descriptionFingerprint": "b665698f13aecc81a2a6fdb9e703b306edbf9ae329d96e2ea5b8d82464aaea29"
+        }
+      ]
+    },
+    {
+      "projectId": "532e0956-047a-4f09-b811-2971892f62ee",
+      "descriptionFingerprint": "6dcb1e35f081f110a20caf25b9acdfc5559101d62d27e5bc981aaad6a04a086d",
+      "milestones": [
+        {
+          "milestoneId": "6d32befd-956e-4614-99f9-7a2f76d00d9e",
+          "descriptionFingerprint": "05f2e9c1ca80d0a91fd6d3246525a3b66ddec0bf176225ab1411dcfa98cca31a"
+        },
+        {
+          "milestoneId": "7c61a753-a040-4fef-97e3-231fb350c6b0",
+          "descriptionFingerprint": "5acdb2c75e0b8e60855534be12c8d227aa474d8f67ec31948e8dd3f7cd1e44fd"
+        },
+        {
+          "milestoneId": "d42c4ff0-6a13-4105-9ee1-99bc891b8fee",
+          "descriptionFingerprint": "689c11e8cc661a2972c90c5fbf631ff6f0590e69b2e54a976f234c74ad8519f2"
+        }
+      ]
+    },
+    {
+      "projectId": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
+      "descriptionFingerprint": "f196efb7b2e4ac055b669cf83153d5c64c0998f26233a438f3bfb4f9baa55345",
+      "milestones": [
+        {
+          "milestoneId": "239523d7-23cc-44f1-8e88-8df26f0f5239",
+          "descriptionFingerprint": "5e799c1e5994acf49d985716f612a87fbbd93e19bf8696288d466a6dded64dd2"
+        },
+        {
+          "milestoneId": "6d0b9ede-4b59-4799-8494-e46e23cbe459",
+          "descriptionFingerprint": "4b7a0a919c3e351207a17ef3eeee864c7c67bef397da505910171c9416dcb954"
+        },
+        {
+          "milestoneId": "aae50726-122c-438a-b1df-75335c3e085b",
+          "descriptionFingerprint": "c463d13693d8ebe2c5705ca89f62b503b59fa2437957b49efc4e2af63d1180a2"
+        }
+      ]
+    },
+    {
+      "projectId": "609d8e2e-4543-4cdb-89b4-281986f93a85",
+      "descriptionFingerprint": "04f51bbdf4d1e6a818aaea74adcc655eb400e8804e3d006943b85b54069a9570",
+      "milestones": [
+        {
+          "milestoneId": "154aee62-5bc2-4f29-aa73-4239334d9915",
+          "descriptionFingerprint": "2bd2520de17726767f16d4f17b9f269c927dfc91c1486f0f4d9ecce2b9b3703e"
+        },
+        {
+          "milestoneId": "31a1f206-2393-47a9-9438-2f9aaa04cbf1",
+          "descriptionFingerprint": "4671a9bba20327fc01614316a19850d39d33d5a5ad945efa32e3167542e35a6e"
+        },
+        {
+          "milestoneId": "e9808b05-b221-41b8-9c8d-6b544e951d5b",
+          "descriptionFingerprint": "1323777ceee719db8aa511b0c09ab21a50aa0c566be2285b4c0a50ff0ef3e838"
+        }
+      ]
+    },
+    {
+      "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
+      "descriptionFingerprint": "f2ac5f396fc7263b1a3acf9589a59ca1b7afc1a4817f74f2b7b2eff302eca1e0",
+      "milestones": [
+        {
+          "milestoneId": "78423650-20cd-4c2f-9512-6f3cfbd2f454",
+          "descriptionFingerprint": "7637b771a37a976eb399a55d46668a40a0a3eab0c9962d359f55b5ba22b08dcf"
+        },
+        {
+          "milestoneId": "d720332f-5259-4ff4-9585-13247ab02c03",
+          "descriptionFingerprint": "62ec3585abf58104b6c6467aa5f5ed5c8286c018792529a6e82522bc4f06a6c8"
+        },
+        {
+          "milestoneId": "f97116e8-7148-40bc-a9da-67b234db2fd0",
+          "descriptionFingerprint": "490e5378fd77e350c746f41d375f550e2e0ef7cccf15f1b7d554814dfe75c506"
+        }
+      ]
+    },
+    {
+      "projectId": "6fe48bc4-c830-4e10-8a44-390facb9063f",
+      "descriptionFingerprint": "a4352c7eb689d65f10541904b7984124d41c41ab7b5fa415dd8c2231e7fc9f1a",
+      "milestones": [
+        {
+          "milestoneId": "18960ed1-5d26-4329-b987-b1e5717817fa",
+          "descriptionFingerprint": "de18e496ce9b7756211769aab4d05d0b5af3b1ffad77b8cb2e091c3ab37ce236"
+        },
+        {
+          "milestoneId": "6051c839-cc44-48e7-8e81-61681dacb8b5",
+          "descriptionFingerprint": "53d386912dcb24a18658a91b1ce5addb68a301c76b20f04e853367ece320a643"
+        },
+        {
+          "milestoneId": "e8efbdfc-5ab7-4309-a487-69d53f5fb65c",
+          "descriptionFingerprint": "46878a321636158ecc3c1b2d6df95aacc998f56e740d875487cf8b37754a4387"
+        }
+      ]
+    },
+    {
+      "projectId": "848dee0f-1121-4ad0-a877-e08629f5b99c",
+      "descriptionFingerprint": "7035f39d8ef441e3b7e7e2fb2217fee51ab37d96df172bd7a1537ce34f1fdd75",
+      "milestones": [
+        {
+          "milestoneId": "61aa4c77-77a6-4b19-9952-81f2939ac87b",
+          "descriptionFingerprint": "bcc89312c9cae709bf62b0dfbe6a7bf554b183120208098534905e032b065a54"
+        },
+        {
+          "milestoneId": "cefd73a4-6081-463e-b2f5-6da303c63344",
+          "descriptionFingerprint": "daec8aec7c4987fbd249604364bbd644e5808c20cea30800f13e946120edab95"
+        },
+        {
+          "milestoneId": "f6cca360-46f9-4d79-8cb9-433ea89fa88c",
+          "descriptionFingerprint": "602150f2b66de8bb6782a71e7b1e49fa8cd4d05d512ba0bb225c239fb0e103de"
+        }
+      ]
+    },
+    {
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "descriptionFingerprint": "d36737ec35fb219c9db9261e45e25bbf60267c5d34d9784ca871662709c83a87",
+      "milestones": [
+        {
+          "milestoneId": "293a7677-0e8f-41fe-bcf2-0422d7d552ea",
+          "descriptionFingerprint": "d7ed1bb5f482855c074d0f1d820081cbb26143774e2f5f8d5f981710e361111c"
+        },
+        {
+          "milestoneId": "67152c98-6b0b-4465-92aa-b3454094f742",
+          "descriptionFingerprint": "d0906b3a48390234d3bd4cc0791c0cef2e23b502f4065a2bee01df27a0b2aeb0"
+        },
+        {
+          "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+          "descriptionFingerprint": "1c9bcf6df3f23a052f71ab35aa536ed3d4f574eca9cb607c5f01c7c0e8cdf8fb"
+        }
+      ]
+    },
+    {
+      "projectId": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
+      "descriptionFingerprint": "06666dda0d27c3e7954e98226a43d8d2feb3e1f3d545b50ff693a7f45325398c",
+      "milestones": [
+        {
+          "milestoneId": "069807ad-f7f0-455b-9027-f2dfb72e2b43",
+          "descriptionFingerprint": "3dac03a4994a0ab03b2af267c8908a097bc52a0a278de970715e74595dce23f1"
+        },
+        {
+          "milestoneId": "da8dfc3c-64eb-44a8-8562-cf7683c06241",
+          "descriptionFingerprint": "f75b7fe096fdc173f2b76c86aa4f8fed49aa9fa53c73a15ff468d5bc25a9ab71"
+        },
+        {
+          "milestoneId": "f4212828-e444-4ebe-a86b-035311fc4d62",
+          "descriptionFingerprint": "f10e85283aeaa3596fba1b4124cd3e4531bfd938dc4bc9e9302d3adb146cd1da"
+        }
+      ]
+    },
+    {
+      "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+      "descriptionFingerprint": "f84437e4a8c5e8275b347c2c7bd1757bd14749e27b4da014ae29ea532a87ec61",
+      "milestones": [
+        {
+          "milestoneId": "6fed94fe-3bb7-44e9-a2fa-4809f6daa655",
+          "descriptionFingerprint": "13eb5658a6bdb22c2647508cfa7758f3a8a067b6ac7fd2c3943c17cb6fff3db8"
+        },
+        {
+          "milestoneId": "c4b2fdc7-148a-4b63-a058-72b2a1a18ab0",
+          "descriptionFingerprint": "1add9355f039a0adbe8104a5006da7bf3a1213e47c34e6d2e25fc7171b74b26f"
+        },
+        {
+          "milestoneId": "e2c72a70-88b5-4b81-aad3-5593d4b37289",
+          "descriptionFingerprint": "ea8ef7b6f82ba77e676ea96f721a46342809fc9b31e8ed8da7f16cd9034f7388"
+        }
+      ]
+    },
+    {
+      "projectId": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
+      "descriptionFingerprint": "ba8024a7caec50828398d2f8a861bcd878f8bdb5a45557a31c40a2527e1c36cd",
+      "milestones": [
+        {
+          "milestoneId": "20399e4b-5094-48ec-9117-0e517ef11fdc",
+          "descriptionFingerprint": "f5ced08b90a1fe73154b75068e00001b4a7bfa821d252dca16bc4171f7efe495"
+        },
+        {
+          "milestoneId": "a3ad03ea-063b-4fae-9fe5-66f121ed5b68",
+          "descriptionFingerprint": "c6d9e895e8932546d50e042846716a2a6d0de4bc43ee051542bd01208f2b9485"
+        },
+        {
+          "milestoneId": "e694166b-5b61-4205-b33a-3e0b2c7347c0",
+          "descriptionFingerprint": "2a56f678f087c07f8157daf8ddca4c295c19a3650b91a68101731072694e2fc4"
+        }
+      ]
+    },
+    {
+      "projectId": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
+      "descriptionFingerprint": "74f071e02847d2a8d8abd43f46c3ebcd71f5889ad1e6c7c2cfb799dd9a73d1a1",
+      "milestones": [
+        {
+          "milestoneId": "6ec90d24-02ce-4405-8fff-d626f3180f86",
+          "descriptionFingerprint": "22388f526675ba0d83334060b3ec4ff88d2e306b50d54a8713734df7ed3a43b3"
+        },
+        {
+          "milestoneId": "739e6330-301f-42da-8c9b-73c8a9758aba",
+          "descriptionFingerprint": "b6cdbe20e834cdcb68c7149fabd8b325d334afecf097dade867aa50147efc08a"
+        },
+        {
+          "milestoneId": "de39ea34-b583-4815-a691-dbd42031393f",
+          "descriptionFingerprint": "f8c71735a1fe8a75fdffe09396c7ccb6eeb0158966dac023caff04a404cf1e28"
+        }
+      ]
+    },
+    {
+      "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
+      "descriptionFingerprint": "8bf1c39b139c01209ae606edb55fed5f9d0701c19d1cb4d8d624628d712a13c2",
+      "milestones": [
+        {
+          "milestoneId": "3c7539b1-e962-4c30-bac7-e24dc450ae3e",
+          "descriptionFingerprint": "57e222d4d53f77729e0b8bcbef4d57d4d1d979226a50bf1c944088649081b7ea"
+        },
+        {
+          "milestoneId": "9011416e-f6f2-4ed8-beb4-07dd532dc2c6",
+          "descriptionFingerprint": "7d1288821fbd748fb6ce1272c249ab3b97a0464a01a8f36f66c7a86626128657"
+        },
+        {
+          "milestoneId": "a5ed01dd-658b-4513-a4c6-3b94e87ead62",
+          "descriptionFingerprint": "296b12ba669af834990da7b0caa276839247cc97b771f4017fa3c70489dcf57d"
+        }
+      ]
+    },
+    {
+      "projectId": "cd7ce280-06f2-4ace-bce6-101141f7d098",
+      "descriptionFingerprint": "26ae791ed58745e5f989c6182c09a58b02b7ddb6923e788455acb5c208bbdf81",
+      "milestones": [
+        {
+          "milestoneId": "541a4427-b5f5-455d-8a62-c98856e34af9",
+          "descriptionFingerprint": "f7ba6cc19e930bd46b2c9f7c4c6e4596ec0a4e7242719dfa86a2314d5bdbf015"
+        },
+        {
+          "milestoneId": "9639fd82-eae9-4871-a2eb-3aeb523b350b",
+          "descriptionFingerprint": "85f4dbf99fafbe43bf70347d909bb4cf658a0f911d2524e891fe0aafaf539592"
+        },
+        {
+          "milestoneId": "ed23d481-2276-41b1-831d-2662e90e416c",
+          "descriptionFingerprint": "01dea1113d7458c62ae3ae666915e0c030311f654a6491a9199a1e7d14e4fa20"
+        }
+      ]
+    },
+    {
+      "projectId": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
+      "descriptionFingerprint": "d43e9e45b4cd539432dffc1d1befe02573ca90983fa0affe28b18510d7abe50e",
+      "milestones": [
+        {
+          "milestoneId": "3647ece2-1d8d-4922-a2f8-423f7ac96306",
+          "descriptionFingerprint": "d8d2baf2cb94661d76f45a824af1e8540e6728acb9ec4d3d5238e6e90bec92e1"
+        },
+        {
+          "milestoneId": "7aff1dcf-0249-40a5-8f8b-54fcc7ac9499",
+          "descriptionFingerprint": "3e796b303d68b1b251d9da472770b879f335b04514ba18e42050bbf5acd9b7d4"
+        },
+        {
+          "milestoneId": "c976f894-6c36-4875-a6ec-5f96a9cb7964",
+          "descriptionFingerprint": "19a5906165bd905327775ba398d32cb9d472144f1477925a7b8bc52f705c32bc"
+        }
+      ]
+    },
+    {
+      "projectId": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
+      "descriptionFingerprint": "d62445b97ce6d6fc06c50a25833977e7b61094f92c73eba6afc224fa487a3159",
+      "milestones": [
+        {
+          "milestoneId": "6cc5a41b-4022-45fb-a74a-b010a4cb73e7",
+          "descriptionFingerprint": "1a041fcde71a157c9d013365262a3e1966f22d68ca394990e27eb166d0bf3f7e"
+        },
+        {
+          "milestoneId": "6f3079ea-946c-4de7-a7c0-139c95fd6544",
+          "descriptionFingerprint": "92fa429115906bb16b857ccdfe65b0bec091f3c3974fd95f3e5ea85bd743ad8b"
+        },
+        {
+          "milestoneId": "f4473ddf-f0c6-4950-8369-23ae1745736d",
+          "descriptionFingerprint": "4f8ebce5ea1b4934d8f129d95e5fd06c6adef3667f3c49da28a20cbafab3c6a0"
+        }
+      ]
+    },
+    {
+      "projectId": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
+      "descriptionFingerprint": "18e3012c8430be0c8040d1555d76b47d805002845824cbc81fc052318bb49015",
+      "milestones": [
+        {
+          "milestoneId": "0444f992-9908-45f1-809d-d2d8c7364f7e",
+          "descriptionFingerprint": "d0c240595dd6ff71cef4bcbe5f1faaa063cabc1d0e78028d5c1ef46ac403b46b"
+        },
+        {
+          "milestoneId": "daf622a7-a91f-4066-a532-07c13140c89d",
+          "descriptionFingerprint": "ef9b62d272d560e6ef3f7975f6a0431d3be7b9f03d9c0bdcfcfc83f4d64ff101"
+        },
+        {
+          "milestoneId": "dfaf1499-aba5-4e51-bfb8-604ad6dbf92c",
+          "descriptionFingerprint": "04701e3e5b518677536e403377d06b9c55236bbcc7e5cc96fedaecaab8ab6ad0"
+        }
+      ]
+    },
+    {
+      "projectId": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
+      "descriptionFingerprint": "f9700f1e711f424572ef88f04cc48cfbc7ed15ae9a2254fff96067c053c564fd",
+      "milestones": [
+        {
+          "milestoneId": "01a192a5-7d2b-4f4f-85e0-4417987aaf36",
+          "descriptionFingerprint": "1b7b8b9f33ad43e7fe9953d8d91b405b946eb34e47c201cf5cc1ee78ba1f1ae8"
+        },
+        {
+          "milestoneId": "d723170d-a8c8-4ec9-ad63-5351e1179b0b",
+          "descriptionFingerprint": "5902a0ab04fe8b9b1ffd726a63a79a5aa8c8fc134f5cb6c37e6250c36a86087f"
+        },
+        {
+          "milestoneId": "dd81927b-f9b0-409d-9907-5894f539ebe2",
+          "descriptionFingerprint": "9b7bbd96038aa23d4a05e5ffb7c87b7938df2a4627562928457ea3c28c0e95c3"
+        }
+      ]
+    },
+    {
+      "projectId": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
+      "descriptionFingerprint": "f740932195bcf345aac31d917f9b3b8cf069afc9c89eab4b452e03f914e77840",
+      "milestones": [
+        {
+          "milestoneId": "426042a6-a111-4d9f-bb7d-963d8383e12e",
+          "descriptionFingerprint": "a480b2e81b2e3e5c73c922a75f4bba6a1fa073e8b6707dcf5cb21eb79977fa6f"
+        },
+        {
+          "milestoneId": "465b5a18-9e23-4304-8bc4-6fe734a8dd89",
+          "descriptionFingerprint": "966d7fbc598d2f9c9ca808b31021443ed57311a50c92a8f767e4f6412bb406c4"
+        },
+        {
+          "milestoneId": "64ac9405-f1b3-47cc-93f6-22d7b8e72780",
+          "descriptionFingerprint": "52fedd6026f89f8b7ae29fface9edfca5868c0b8392544ba39ee504d5aea8f2f"
+        }
+      ]
+    },
+    {
+      "projectId": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
+      "descriptionFingerprint": "8a34cbc14d7a02681457b22591c38d1d490409be7947ba0ddad7b6870b1b02cd",
+      "milestones": [
+        {
+          "milestoneId": "59d67a52-5210-44ef-bd99-91d65f670ff0",
+          "descriptionFingerprint": "fc3455b6f02c3e01f3bd2b0a9197918d6794af097a23b8647b683ffddd3973ad"
+        },
+        {
+          "milestoneId": "69d65cfe-2528-4e33-bf4a-e814db952927",
+          "descriptionFingerprint": "edf397ec4818934b1b49508c1d0af75532256582e540dffa980265d7e91127fc"
+        },
+        {
+          "milestoneId": "8e87e5a7-cac4-4e1e-a7f3-42ed9a6b6975",
+          "descriptionFingerprint": "ab1d9d378f7520217479770dc57527112fe19e59db0ac25ee5aecd85e2992731"
+        }
+      ]
+    }
+  ],
+  "projectInitiatives": [
+    { "projectId": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
+    { "projectId": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"] },
+    { "projectId": "32d9c20f-fe88-40e3-8a86-53712a91db58", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "35daace4-7825-4ecd-bd85-90351d43e7ea"] },
+    { "projectId": "3754aadb-fb17-4931-abf3-a0aa42c5924f", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "35daace4-7825-4ecd-bd85-90351d43e7ea"] },
+    { "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
+    { "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "6310a6b6-634c-4603-aa34-e4e7f067c4d8"] },
+    { "projectId": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
+    { "projectId": "532e0956-047a-4f09-b811-2971892f62ee", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
+    { "projectId": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
+    { "projectId": "609d8e2e-4543-4cdb-89b4-281986f93a85", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
+    { "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
+    { "projectId": "6fe48bc4-c830-4e10-8a44-390facb9063f", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "6310a6b6-634c-4603-aa34-e4e7f067c4d8"] },
+    { "projectId": "848dee0f-1121-4ad0-a877-e08629f5b99c", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
+    { "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
+    { "projectId": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
+    { "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "35daace4-7825-4ecd-bd85-90351d43e7ea"] },
+    { "projectId": "bb989aab-436a-4e7e-9819-aad9f7136d8c", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "6310a6b6-634c-4603-aa34-e4e7f067c4d8"] },
+    { "projectId": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"] },
+    { "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"] },
+    { "projectId": "cd7ce280-06f2-4ace-bce6-101141f7d098", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
+    { "projectId": "ce76b69c-2ba9-47f5-ae97-75475f6ca593", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
+    { "projectId": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
+    { "projectId": "da7ece7a-14a3-41da-b8c8-b30d06383d29", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
+    { "projectId": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
+    { "projectId": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
+    { "projectId": "f8aa9e2a-76a7-4403-910e-e8862c6b593a", "initiativeIds": ["68b43674-ef5a-431e-8105-431ba60892bd", "6310a6b6-634c-4603-aa34-e4e7f067c4d8"] }
+  ]
+}

@@ -1,0 +1,1482 @@
+{
+  "schemaVersion": 1,
+  "kind": "linear_normalization_historical_input",
+  "authority": {
+    "status": "historical_non_authoritative",
+    "authoritativePlanningSurface": "live_linear",
+    "productAuthority": false,
+    "planningAuthority": false,
+    "publicationAuthority": false,
+    "permittedUse": "normalization_migration_and_audit_only"
+  },
+  "sources": {
+    "BUY-192": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.1"
+    },
+    "BUY-366": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§3.14.1",
+      "anchors": [
+        "Buyer Solo step"
+      ]
+    },
+    "BUY-370": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§3.14.1",
+      "anchors": [
+        "Buyer Solo step"
+      ]
+    },
+    "BUY-397": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§13.12.2",
+      "anchors": [
+        "vertical_slug"
+      ]
+    },
+    "INT-48": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§21.2",
+      "anchors": [
+        "Multi-model approach",
+        "Data boundaries"
+      ]
+    },
+    "PLA-285": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§51.1",
+      "anchors": [
+        "51.1.4 Dual-Write Contract",
+        "51.1.6 Acceptance Criteria"
+      ]
+    },
+    "PLA-286": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§41.1",
+      "anchors": [
+        "Provider",
+        "Outage execution"
+      ]
+    },
+    "PLA-819": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§34.10.5.A",
+      "anchors": [
+        "Executable provider-boundary mapping",
+        "Stripe metadata value contract"
+      ]
+    },
+    "PLA-823": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.2.2",
+      "anchors": [
+        "Audit Action",
+        "Explicit denials"
+      ]
+    },
+    "PLA-825": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.3.1",
+      "anchors": [
+        "Audit action",
+        "Guardrails"
+      ]
+    },
+    "SEL-72": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.6",
+      "anchors": [
+        "Domain ownership verification",
+        "Plan limits",
+        "AIOperation accounting",
+        "Failure modes addressed"
+      ]
+    },
+    "SEL-137": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.18.6",
+      "anchors": [
+        "Binding Section",
+        "Each moment emits"
+      ]
+    },
+    "SEL-184": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§49.1",
+      "anchors": [
+        "Entry Timestamp",
+        "Stages 2 and 3 overlap"
+      ]
+    },
+    "BUY-194": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.3"
+    },
+    "BUY-195": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.4"
+    },
+    "BUY-202": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.8",
+      "outcome": "Provide Single-Operator Mode as the default Buyer surface path for first-time and lone evaluation owners while keeping the 13-phase Method invariant."
+    },
+    "BUY-204": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.8.3",
+      "outcome": "Render the Solo-mode skip-with-warning flow for unmet phase gates, including the Finish them first and Skip for now actions, without weakening Team-mode hard gates."
+    },
+    "BUY-206": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.8.5",
+      "outcome": "Provide contextual inline stakeholder invitations at each natural work moment with inferred cohort, least-privilege section visibility, and the existing invitation flow.",
+      "anchors": [
+        "Natural moment",
+        "Each invite is a single click"
+      ]
+    },
+    "BUY-207": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§2.8.5",
+      "outcome": "Auto-promote a Solo Workspace to Team Mode only when the second qualifying non-guest membership is accepted, serialized on workspace_id with one mode-change audit result.",
+      "anchors": [
+        "The first stakeholder accepted",
+        "Auto-transition concurrency"
+      ]
+    },
+    "BUY-220": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§4.5.1",
+      "outcome": "Implement the seller-owned public Marketplace Listing entity with its exact schema, lifecycle, public projection, isolation, retention, and validation rules.",
+      "anchors": [
+        "Scope",
+        "Field",
+        "State Machine",
+        "Acceptance Criteria"
+      ]
+    },
+    "BUY-233": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§10.6",
+      "outcome": "Implement the Phase 6–9 Requirement Amendment Protocol with version-checked creation, timed material-change effectiveness, seller-safe delivery, cancellation guards, and direct-PATCH bypass rejection.",
+      "anchors": [
+        "Amendment Protocol (Phases 6-9; canonical)",
+        "Creation and effectiveness",
+        "Effective event and vendor behavior",
+        "Restrictions and cancellation",
+        "Bypass prohibition"
+      ]
+    },
+    "BUY-237": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§10.10",
+      "outcome": "Run Phase 10 Team Evaluation and Scoring with the active Workspace rubric, assigned reviewers, required Team-mode coverage, divergence handling, and mutable scores only through Phase 11.",
+      "anchors": [
+        "Purpose",
+        "Scoring Mechanics",
+        "Phase Gate Rules",
+        "Acceptance Criteria"
+      ]
+    },
+    "BUY-242": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§10.12",
+      "outcome": "Run Phase 12 Selection and Recommendation through executive review, justified vendor ranking, finalist selection, immutable signed Selection Report, optional approval, vendor notification, and permanent score lock.",
+      "anchors": [
+        "Purpose",
+        "Phase Behavior",
+        "Phase Gate Rules",
+        "Acceptance Criteria"
+      ]
+    },
+    "BUY-392": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§10.16.1",
+      "outcome": "Validate soft_gates_enabled in the Phase Advancement API: auto-apply it for Solo-mode Workspaces and reject client-supplied true for Team-mode Workspaces with HTTP 422 phase_advancement_soft_gates_not_permitted_in_team_mode."
+    },
+    "BUY-393": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§4.3.1",
+      "outcome": "Reject a Team-to-Solo mode change with HTTP 422 evaluation_owner_mode_team_to_solo_blocked_stakeholders_present when any stakeholder, guest, or outstanding invitation is present."
+    },
+    "BUY-256": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§10.16.1",
+      "outcome": "Accept soft_gates_enabled only under the canonical Solo-mode phase-advancement contract and reject Team-mode use without mutation."
+    },
+    "BUY-278": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§13.11"
+    },
+    "BUY-280": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§13.12"
+    },
+    "BUY-331": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.4"
+    },
+    "BUY-350": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§35.2",
+      "outcome": "Deliver the forced-signup Seller onboarding hero moment from magic-link arrival through real bootstrap progress, a ready Bid Workspace with grounded drafts, review and submit, debrief, and contextual upgrade touch.",
+      "anchors": [
+        "Seven-Stage Flow",
+        "Step 2 — Signup + Synchronous Bootstrap",
+        "Step 3 — Ready-Workspace Landing",
+        "Step 4 — Review and Submit",
+        "Onboarding Anti-Patterns (Explicitly Banned)"
+      ]
+    },
+    "BUY-364": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§13.12.4",
+      "outcome": "Make EvalStarter materialization atomic and safely retryable through the existing bounded error path without inventing Buyer Maya AI failure codes."
+    },
+    "PLA-241": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§3.7.12"
+    },
+    "PLA-311": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.2",
+      "outcome": "Implement the Org Owner role with full organization authority, billing authority, workspace-shell creation, and no bypass of console-scoped content permissions.",
+      "anchors": ["Org Owner"]
+    },
+    "PLA-312": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.2",
+      "outcome": "Implement the Org Admin role with organization management, workspace-shell creation, explicit read-only billing rows, denied billing mutations without Billing Admin, and no console-content bypass.",
+      "anchors": ["Org Admin"]
+    },
+    "PLA-313": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.2.2",
+      "outcome": "Implement the Member role as the default low-privilege organization role with self and visible-directory reads, own-team visibility, self-service preferences, and explicit denial of billing, management, and unassigned console content.",
+      "anchors": [
+        "Operation",
+        "Explicit denials",
+        "Acceptance criteria"
+      ]
+    },
+    "PLA-314": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.2.1",
+      "outcome": "Implement the Billing Admin role as an organization-scoped cross-console billing and AI-accounting authority with the exact operation matrix, explicit non-permissions, cross-organization isolation, and audit rules.",
+      "anchors": [
+        "Scope",
+        "Operation",
+        "Explicit Non-Permissions"
+      ]
+    },
+    "PLA-316": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.3",
+      "outcome": "Implement the Workspace Owner role with final Workspace authority, vendor decisions, settings, team management, phase transition, export, audit-log, and Defense View actions.",
+      "anchors": [
+        "workspace_owner",
+        "column:workspace_owner"
+      ]
+    },
+    "PLA-317": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.3",
+      "outcome": "Implement the Workspace Admin role with full evaluation operations except Workspace deletion and team management, bounded by Workspace scope.",
+      "anchors": [
+        "workspace_admin",
+        "column:workspace_admin"
+      ]
+    },
+    "PLA-318": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.3",
+      "outcome": "Implement the Use Case Lead role with assigned-Use-Case requirement authorship, response visibility, scoring, comments, and no global Workspace authority.",
+      "anchors": [
+        "use_case_lead",
+        "column:use_case_lead"
+      ]
+    },
+    "PLA-319": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.3",
+      "outcome": "Implement the Reviewer role with response visibility, Phase 10–11 scoring and rationale, and explicit denial of requirement editing and broader Workspace authority.",
+      "anchors": [
+        "reviewer",
+        "column:reviewer"
+      ]
+    },
+    "PLA-358": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§8.1.2",
+      "outcome": "Implement Team Owner authority for membership, roles, SLA settings, agent instructions, reassignment, escalation, analytics, audit logs, and soft deletion within the owned Team.",
+      "anchors": ["Team Owner"]
+    },
+    "PLA-359": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§8.1.2",
+      "outcome": "Implement Team Lead day-to-day triage, assignment approval, resolution, escalation, analytics, and audit access while denying SLA, membership, and instruction mutation.",
+      "anchors": ["Team Lead"]
+    },
+    "PLA-360": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§8.1.2",
+      "outcome": "Implement Team Member task execution for assigned scoring, response drafting, and self-assigned triage while denying membership, settings, and analytics authority.",
+      "anchors": ["Team Member"]
+    },
+    "PLA-370": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§9.1.2",
+      "outcome": "Map the Seller Team routing workflow label to seller_org_owner, seller_org_admin, or seller_bid_captain authority for Bid Workspace team management and configuration without creating a second role system.",
+      "anchors": ["Team Owner / Team Lead for routing"]
+    },
+    "PLA-372": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§9.1.2",
+      "outcome": "Map the Seller Team drafting workflow label to seller_bid_contributor or seller_bid_captain authority for assigned Bid Response creation and editing without creating a second role system.",
+      "anchors": ["Team Member drafting"]
+    },
+    "PLA-354": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§7.3"
+    },
+    "PLA-389": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§25.3"
+    },
+    "PLA-393": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§25.3.9"
+    },
+    "PLA-394": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§25.3.10"
+    },
+    "PLA-398": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§25.7"
+    },
+    "PLA-427": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§31.8"
+    },
+    "PLA-438": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§32.8"
+    },
+    "PLA-439": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§32.9"
+    },
+    "PLA-440": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§33.1"
+    },
+    "PLA-461": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§34.3"
+    },
+    "PLA-489": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§34.17",
+      "outcome": "Enforce the complete pricing-engineering requirement registry, its cross-requirement invariants, and its observable coverage checks without copying planning history into the delivery contract.",
+      "anchors": [
+        "34.17.1 MS §2.11 Baseline — 14 Requirements",
+        "34.17.3 Cross-Requirement Invariants",
+        "34.17.4 Acceptance Criteria"
+      ]
+    },
+    "PLA-530": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§42.3"
+    },
+    "PLA-534": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§42.6",
+      "outcome": "Operate the complete observability stack with exact log fields, privacy scrubbing, trace propagation, residency routing, Sentry handling, provider-outage recovery, and delivery-alarm disambiguation.",
+      "anchors": [
+        "42.6.0.A Observability Tool Stack",
+        "42.6.1.A Structured Log Schema",
+        "42.6.1.B PII Scrubbing Contract",
+        "42.6.1.C OpenTelemetry Trace Propagation",
+        "42.6.1.E Observability Provider Residency Routing",
+        "42.6.2 Sentry Contract",
+        "42.6.3 Provider-Outage Fallback Contracts",
+        "42.6.4 Webhook Delivery Alarm Disambiguation"
+      ]
+    },
+    "PLA-556": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§46.7",
+      "outcome": "Enforce entitlement before feature-flag evaluation: entitlement denial returns HTTP 403 `feature_not_entitled`; an entitled request with a disabled flag returns HTTP 503 `feature_flag_disabled`; when both fail, 403 wins.",
+      "anchors": [
+        "Flag-AND-entitlement precedence"
+      ]
+    },
+    "PLA-570": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.2.2"
+    },
+    "PLA-573": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.2.6"
+    },
+    "PLA-575": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.2.9"
+    },
+    "PLA-577": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.2.11"
+    },
+    "PLA-602": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.6.5"
+    },
+    "PLA-610": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.8",
+      "outcome": "Deliver the complete Seller Hero Moment surface from pre-arrival preparation through first grounded value, post-submission reveal, conversion moments, banned-pattern enforcement, measurement, recovery, and aggregate acceptance.",
+      "anchors": [
+        "48.8.1 Overview & Scope",
+        "48.8.2 Pre-Arrival Preparation",
+        "48.8.3 Onboarding Surface — Minutes 0–3",
+        "48.8.4 In-Workspace Value Proof — Minutes 3–45",
+        "48.8.5 Post-Submission Reveal — Hour 1+",
+        "48.8.6 Four Seller Conversion Moments — UX Surface Specification",
+        "48.8.7 Six Banned Anti-Patterns — Hard Requirements",
+        "48.8.8 Telemetry & Measurement",
+        "48.8.9 Failure Modes Addressed",
+        "48.8.10 Acceptance Criteria",
+        "48.8.12 Abandonment Recovery"
+      ]
+    },
+    "PLA-612": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.1"
+    },
+    "PLA-613": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.2"
+    },
+    "PLA-614": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.2.2"
+    },
+    "PLA-620": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.4"
+    },
+    "PLA-624": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.4.5"
+    },
+    "PLA-631": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.10"
+    },
+    "PLA-657": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.15"
+    },
+    "PLA-663": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.16"
+    },
+    "PLA-690": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "Appendix F",
+      "outcome": "Implement the complete binary webhook retry contract: standard and financial-impact five-attempt curves, response classification, signing, idempotency, terminal failure record, safe replay, retention, and class membership rules.",
+      "anchors": [
+        "F.1 Standard Retry Curve",
+        "F.2 Tightened Retry Curve for Financial-Impact Events"
+      ]
+    },
+    "PLA-700": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "Appendix M.1",
+      "outcome": "Maintain the complete bidirectional Surface/Engine Mapping Registry with one invariant row schema, positive tier-visibility semantics, valid companion-document anchors, and full conformance coverage.",
+      "anchors": [
+        "M.1.1 Column legend",
+        "M.1.2 Companion-document anchor syntax",
+        "M.1 Master Surface/Engine Mapping Table"
+      ]
+    },
+    "PLA-906": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.17",
+      "outcome": "Deliver the Ops token-drift check and paging runbook surfaces with blocking CI coverage, role-bounded finding history, incident correlation, one-click primary on-call paging, audit, telemetry, and retained evidence.",
+      "anchors": [
+        "50.17.4 Token Drift Check (Ops Console Surface)",
+        "50.17.5 Paging Runbook Surface"
+      ]
+    },
+    "PLA-916": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§3.14.1",
+      "outcome": "Render Buyer Solo pipeline phases through the exact four-step mapping: Setup=1–3, Define=4–6, Score=7–10, Decide=11–13."
+    },
+    "PLA-918": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.8.4",
+      "outcome": "Deliver the Seller in-Workspace value proof from truthful preparation through the first grounded response drafts, explicit source gaps, and actionable review state."
+    },
+    "PLA-937": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.8.5",
+      "outcome": "Deliver the Seller post-submission reveal with measured value, safe evidence, clear next actions, and no invented or pressure-based claims."
+    },
+    "SEL-83": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.3"
+    },
+    "SEL-93": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.6"
+    },
+    "SEL-111": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.10"
+    },
+    "SEL-112": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.10.2"
+    },
+    "SEL-113": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.10.3"
+    },
+    "SEL-124": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.15"
+    },
+    "SEL-139": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.19"
+    },
+    "SEL-173": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.10.5"
+    },
+    "SEL-175": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.9"
+    },
+    "SEL-177": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.9.5"
+    },
+    "SEL-180": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.11"
+    },
+    "SEL-187": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§49.1.4"
+    },
+    "SEL-190": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§49.1.6"
+    },
+    "BUY-250": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§10.14.6",
+      "outcome": "Provide an authorized Workspace Owner with the complete evaluation dataset export during the cancellation grace period, then enforce the current post-cancellation retention and deletion boundary without leaking another organization or console."
+    },
+    "BUY-257": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§11",
+      "outcome": "Render the complete Buyer Console navigation shell, phase-gated workspace navigation, content layouts, persistent controls, responsive states, and acceptance behavior without introducing a second domain model.",
+      "anchors": [
+        "11.2 Sidebar Navigation Structure",
+        "11.3 Content Layout & Regions",
+        "11.4 Persistent UI Elements",
+        "11.5 Acceptance Criteria"
+      ]
+    },
+    "BUY-261": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§12",
+      "outcome": "Generate traceable, deduplicated requirements from an authorized Buyer policy document through the exact ingestion, security, amendment, recovery, observability, and plan-control contract.",
+      "anchors": [
+        "12.1 Overview",
+        "12.2 Supported Document Types",
+        "12.3 Framework Detection & Classification",
+        "12.4 Control Extraction",
+        "12.5 Deduplication",
+        "12.6 Traceability Mapping",
+        "12.7 Requirement Conversion & Amendment Protocol",
+        "12.8.3 Resilience, Observability, and Untrusted-Document Defense",
+        "12.9 Acceptance Criteria"
+      ]
+    },
+    "BUY-306": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§17.3",
+      "outcome": "Compute and render the seven canonical Workspace analytics metrics from authorized Buyer Workspace data with exact formulas, phase availability, empty and partial states, freshness, accessibility, and privacy-safe telemetry.",
+      "anchors": [
+        "17.3.1 Scoring Progress Phase 10+",
+        "17.3.2 Response Rate Phase 6+",
+        "17.3.3 Phase Duration",
+        "17.3.4 Score Distribution",
+        "17.3.5 Weight Coverage",
+        "17.3.6 SLA Compliance",
+        "17.3.7 Team Velocity"
+      ]
+    },
+    "BUY-335": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.6",
+      "outcome": "Implement a fail-closed taxonomy draft, validation, review, publish, deprecate, successor, and rollback workflow for authorized operators while preserving structural versioning, customer isolation, and immutable proof.",
+      "anchors": [
+        "27.6.2 Ops Console Authoring Flow",
+        "27.6.6 Migration Tooling (Tag Retirement)",
+        "27.6.7 Webhook Events for Taxonomy Changes",
+        "27.6.9 Acceptance Criteria"
+      ]
+    },
+    "BUY-346": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.8.13",
+      "outcome": "Process court orders, subpoenas, regulatory takedowns, and DMCA matters through the exact legal-review, authority, non-disclosure, retention, audit, notification, appeal, and recovery contract."
+    },
+    "BUY-355": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.1.6",
+      "outcome": "Calculate elapsed time from a seller's accepted magic-link click to that seller's first submitted requirement response and display the canonical activation metric in the founder dashboard and Ops Console."
+    },
+    "BUY-408": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.3",
+      "outcome": "Let an entitled Buyer search, filter, sort, recover, and open a Marketplace seller profile across desktop and mobile with non-leaking authorization, accessible states, bounded latency, registered privacy-safe measurement, and reversible rollout."
+    },
+    "PLA-219": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§1.4",
+      "outcome": "Coordinate the complete organization-, console-, workspace-, bid-workspace-, user-, and public-query scoping family as a native parent, closing only when every current child proves the exact server-side scope and non-leaking denial contract."
+    },
+    "PLA-236": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§3.7",
+      "outcome": "Render every product page in exactly one governed loading, empty, error, partial, or ready state with content-shaped skeletons, next-best actions, reason-and-recovery copy, offline behavior, accessibility, and registered state telemetry.",
+      "anchors": [
+        "3.7.1 State Governance",
+        "3.7.2 Loading State Rules",
+        "3.7.3 Empty State Rules",
+        "3.7.4 Error State Rules",
+        "3.7.6 Per-Surface Catalog",
+        "3.7.8 Recovery CTA Rules",
+        "3.7.10 Connectivity and Offline Signaling",
+        "3.7.11 Acceptance Criteria"
+      ]
+    },
+    "PLA-284": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§1.5",
+      "outcome": "Coordinate the production billing delivery family as a native parent, closing only when every current child independently proves authorization, financial integrity, idempotency, provider recovery, reconciliation, rollout, rollback, telemetry, and same-commit evidence."
+    },
+    "PLA-310": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§5.1",
+      "outcome": "Enforce the two-level organization and workspace RBAC architecture on every protected read and mutation, including same-scope role union, cross-organization independence, dual-console isolation, stale-context denial, and auditable server decisions."
+    },
+    "PLA-342": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§6.7",
+      "outcome": "Persist one append-only, organization-scoped, console-tagged audit record for every registered action with exact integrity, access, retention, residency, authentication-event, redaction, and recovery behavior.",
+      "anchors": [
+        "6.7.1 Audit Log Scope",
+        "6.7.2 Audit Log Structure",
+        "6.7.3 Retention Policy by Plan",
+        "6.7.4 Audit Log Access",
+        "6.7.5 Audit Log Integrity Protection",
+        "6.7.5.A Audit Log Residency Partitioning",
+        "6.7.6 Authentication Audit Events"
+      ]
+    },
+    "PLA-410": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§29.7",
+      "outcome": "Record every failed in-app, email, Slack, and customer-webhook delivery in Notification Failure Audit with privacy-safe fields, channel-owned retry, DSAR, retention, residency, and recovery behavior."
+    },
+    "PLA-412": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§29.9",
+      "outcome": "Provide the entitled in-app support entry point, Zendesk-backed paid-tier submission, Free-tier mail fallback, critical-ticket handling, exact audit and delivery signals, accessible failure recovery, and safe rollback."
+    },
+    "PLA-522": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§40.2",
+      "outcome": "Build one machine-readable canonical registry that resolves every entity's retention, deletion, DSAR, legal-hold, residency, cascade, and exception rule without copied durations, conflicting rows, or unsafe destructive defaults."
+    },
+    "PLA-580": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§48.3.3",
+      "outcome": "Render the authorized Ops Network Effects Dashboard with the six canonical effect signals, per-category drill-down, source timestamps, freshness states, anti-spam controls, privacy floors, outage recovery, and reversible control rollout."
+    },
+    "PLA-617": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§50.3",
+      "outcome": "Enforce the complete Ops capability envelope by canonical role, exact operation, quorum, re-authentication, assignment lifecycle, escape hatch, denial, audit, and rollback rule.",
+      "anchors": [
+        "50.3.2 Capability Envelope Matrix",
+        "50.3.3 Role Assignment and Lifecycle",
+        "50.3.4 Role Assignment State Machine",
+        "50.3.5 Bootstrap & Escape-Hatch Paths"
+      ]
+    },
+    "SEL-73": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§4.4.1",
+      "outcome": "Persist one seller-console Bid Workspace projection with exact fields, lifecycle, buyer-to-seller carry boundaries, seller authority, indexing, retention, residency, and non-leaking isolation."
+    },
+    "SEL-92": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.5.3",
+      "outcome": "Render the Seller Knowledge Base health dashboard from current authorized health data, including exact status groups, risk and action states, partial and outage recovery, plan gates, accessibility, and privacy-safe measurement."
+    },
+    "SEL-106": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.8.5",
+      "outcome": "Enforce the MCP server permission policy for every tool call with exact allow, ask, scoped-quota, and deny decisions; server-side authority; audit; tenant isolation; recovery; and fail-closed proof."
+    },
+    "SEL-117": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.10.7",
+      "outcome": "Deliver an Agent definition through immutable versioning, evaluation, canary, pointer update, rollback, and kill-switch controls without cross-tenant exposure or unproved production activation."
+    },
+    "SEL-127": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.16.4",
+      "outcome": "Provide KB Observability and Alerting with registered low-cardinality traces, metrics, alerts, budgets, tenant-safe diagnostics, dependency-outage recovery, and same-commit operational proof."
+    },
+    "SEL-159": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§26.7",
+      "outcome": "Render and safely author a Seller Organization Page with exact content, enrichment, domain verification, role authority, Marketplace projection, cache invalidation, anti-scraping, event, webhook, recovery, and rollback behavior.",
+      "anchors": [
+        "26.7.1 Page Content & Structure",
+        "26.7.2 Page Enrichment",
+        "26.7.3 Domain Verification Gate",
+        "26.7.4 Write Access & Roles",
+        "26.7.5 Marketplace Integration",
+        "26.7.6 Edge Caching, Cache Invalidation & Anti-Scraping",
+        "26.7.7 Event and Webhook Classification"
+      ]
+    },
+    "SEL-172": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.10.2",
+      "outcome": "Verify Vendor Opt-Out Authority Attestation through DNS TXT proof or Seller Owner attestation with exact lifecycle, concurrency, scope, expiration, non-leaking denial, audit, retention, residency, and recovery behavior.",
+      "anchors": [
+        "27.10.2.1 VendorOptOutAuthorityAttestation"
+      ]
+    },
+    "SEL-183": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§27.11.7",
+      "outcome": "Provide Marketplace discovery read and write APIs with exact pagination, idempotency, authentication, authorization, console isolation, rate limits, signed webhook delivery, recovery, and proof."
+    },
+    "SEL-252": {
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "section": "§22.20.7",
+      "outcome": "Atomically record the five registered capability-chip and Knowledge Base lifecycle audit actions with exact entity binding, Seller organization isolation, replay behavior, privacy, recovery, and same-commit proof."
+    },
+    "SEL-259": {
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "section": "§4.3.1",
+      "outcome": "Render one responsive Seller Console home with authorized bid, action, Knowledge Base health, Marketplace presence, and recent-activity modules plus the exact no-active-bid recovery state."
+    }
+  },
+  "trustedDrafts": {
+    "BUY-406": {
+      "descriptionSha256": "429f49b62379cb1febc97270a56ddb07cf1ddf5dc9753bf29d5847b2d66afcc6",
+      "semanticBodySha256": "ef24e42b30298b236c1dd1fffc9702c8c28f6927790707f1d09956ea70124207",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "BUY-407": {
+      "descriptionSha256": "9cc707e0be60c606bf5646cd80af4750c3603734f4f87e7210d9ba0935283dba",
+      "semanticBodySha256": "5eb1a23cfb09b95949ca24daccf1b8e65a66f33c6c9e348364a0adf1695e1c4c",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "BUY-408": {
+      "descriptionSha256": "526aae4993d646b48bd8ee93e7cf9f322f7dfed688b884611d6394737b6c7462",
+      "semanticBodySha256": "f98e4e81e4544dd978b1b64d97225874cca6eb2c71ea489c7830b1d090766e0a",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "BUY-412": {
+      "descriptionSha256": "b2897c051c03d3a23531e795c0ba91ff3db6b500bb34c795ad799e79f24dc73a",
+      "semanticBodySha256": "43192867d8eec17f6f47ef7d399702d1d99120161fa633bc19919effc3e8f41f",
+      "excludedHeadings": [
+        "Source provenance"
+      ]
+    },
+    "PLA-942": {
+      "descriptionSha256": "3d93f68347cf7cb49b7bf94df3addf7049b252d01c8e535b108a13f6da18e569",
+      "semanticBodySha256": "1f07f1fcdb8c8cacc081c34345fa89bf61d23254fe1e2cb80ec984a56368fcac",
+      "excludedHeadings": [
+        "Source provenance"
+      ]
+    },
+    "PLA-943": {
+      "descriptionSha256": "53df7e9b1c838f2718ed259dce83ab2dc9c2e132524b679abdbcb18ad69dd90e",
+      "semanticBodySha256": "fd3eec92e5a884b01e4d83891630b20b47784ee04abbe5782f216d1ab92e18df",
+      "excludedHeadings": [
+        "Source provenance"
+      ]
+    },
+    "PLA-944": {
+      "descriptionSha256": "536c46d511f1806da93891fb0220938841cbec269855615968e163035c307155",
+      "semanticBodySha256": "3cc409dc4afd49f3e1fbf5556beea3bc96659dc6887ffd45a898ed70033f1399",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review authority and readiness"
+      ]
+    },
+    "PLA-946": {
+      "descriptionSha256": "2438d4b3475563154df999f5632b3dbcca0e0aa79a120a4916e2e94b409b6b87",
+      "semanticBodySha256": "cfe4a1b9f279f09d4f9166395cbf6f3cebdc9c40e91ca329cf947a7c3ade2960",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review authority and readiness"
+      ]
+    },
+    "PLA-947": {
+      "descriptionSha256": "c9937f3f73731c5ab27f60f8113af877948f097288669195fbf92dbfd533bd08",
+      "semanticBodySha256": "919755e7ecbe240212d3ec55f722dfbc111cc0ece1ebac55f1c7d2e3cb77a91b",
+      "excludedHeadings": [
+        "Parent source contract",
+        "Delivery placement",
+        "Dependencies"
+      ]
+    },
+    "PLA-948": {
+      "descriptionSha256": "0d0f4165e992801e3a51a77eeed49892693947034f9e8364d43eb4179459bb24",
+      "semanticBodySha256": "d463dbd322644f3779ea41c9decbc450140a0cb71832b722ac0d7108efd7c796",
+      "excludedHeadings": [
+        "Parent source contract",
+        "Delivery placement",
+        "Dependencies"
+      ]
+    },
+    "PLA-949": {
+      "descriptionSha256": "045ae5978581b408d0cc2706084d22f7ee6001d3d7423c7e82e6873d5386321f",
+      "semanticBodySha256": "d3b88a7fec3d3c2aed178b79eb5b700c9e2a9598740cff66184d8991785690c4",
+      "excludedHeadings": [
+        "Parent source contract",
+        "Delivery placement",
+        "Dependencies"
+      ]
+    },
+    "PLA-951": {
+      "descriptionSha256": "ccd8a613989fd28e47103fec15b4fe85e2f38e2c562feb582d5fa947b9c70df8",
+      "semanticBodySha256": "9c90ef33e05358ef89a1ccdd480ad1559b2d4abf071ec6e2af25dd7026aa46c6",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-952": {
+      "descriptionSha256": "cfe84caaa7fd8b887717bd68893705ff40134a1d300192f8cb19ae132267ec01",
+      "semanticBodySha256": "d6e7e17062287ebc698fcd35edf2f8c1f342b726099414521e9d4ce8b02c0080",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-953": {
+      "descriptionSha256": "a863cbecd6bbf5b8fc5e43b0835d83e38e25b345927fa975dc23cbdd55d8975e",
+      "semanticBodySha256": "73ad5f2ec8b3a461bf4fcaf7e3424a297561e86123d75532b8423fbb5e3f910c",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-954": {
+      "descriptionSha256": "bb4e21e32cdf40884de98d72d395ce217c028666c088c1418c50fa4d31aebf60",
+      "semanticBodySha256": "0d0adb4ac1c797b1a024df0ff7f288d52423635215d5ade1eb80dbe857459970",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-955": {
+      "descriptionSha256": "71b057c0c73ef3742b44f1a174d166d07a44dd47186193e7b797203b88f74fab",
+      "semanticBodySha256": "affb826cf36162ac3ffdfeb72ce08cd8373576731e9ca8d782c0ac4c95a315bd",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-956": {
+      "descriptionSha256": "6d360696aeef781dcf2debdadac05adccd65bbdb0cfb80e7d1b631bfef915554",
+      "semanticBodySha256": "4dad4b383f11e6afc1d2a8f7a4aa84f2b412febd3642a19162cd0a42909dd941",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-957": {
+      "descriptionSha256": "2bd93b596be8f85e813fb0d24d9739ec658f298cc60568bd9e6b41031efa7af7",
+      "semanticBodySha256": "efc6ea912503ee3c936557bce70e9361b274a73c761c490d3e8044a9b4ebe67a",
+      "excludedHeadings": [
+        "Source provenance and delivery placement",
+        "Blockers"
+      ]
+    },
+    "PLA-959": {
+      "descriptionSha256": "140ff8302c30831f431e0e023160bbbcf50b95a3fd4dcc88118b7ccd5b9101e8",
+      "semanticBodySha256": "a92b351582881e829ab8c9923c9c38fdbb401e9191d63becb05841a4b3ef6254",
+      "excludedHeadings": [
+        "Source provenance"
+      ]
+    },
+    "PLA-960": {
+      "descriptionSha256": "58a7e6c1a4a7803e9d1cba70f2c8f5d2c306cf94f46ea5bc9ac4ba195d546489",
+      "semanticBodySha256": "6c6851ff7b5383e7634f9f8c020dc33cf7f8988aedc3ca2a970a4fe498511b1f",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-961": {
+      "descriptionSha256": "0b42fe8988fc69ec6e61e5dbbdfb03d5218378fd5d0f2615d198773370456ba9",
+      "semanticBodySha256": "a8a3c796e67c5dcb3ee2c55c98768ba68f52fa49f168c3edcc5741a4b18e65be",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-962": {
+      "descriptionSha256": "064995179801c905b3870fb9aa1ca340c1608ffc7eb4d35b51277c82839edfd8",
+      "semanticBodySha256": "8280db153a573470eb41c41918f03da5bd44cdbcaddf356502f3121b20830c9a",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-963": {
+      "descriptionSha256": "780e59dfd09bdbbced4329030b4b60d28cbe9a00c50bdf44740b9e831e6f5056",
+      "semanticBodySha256": "74cc04009ff5af969008bc667a88f7ccc6bc2cfc35020ee475800d83d3b3931f",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-964": {
+      "descriptionSha256": "7a8ca9ff9af8f3c7df881ac0efde6019a4b209c61ecd418030454be7b982cbca",
+      "semanticBodySha256": "5929e6a180e3d28ba15c80d686b4b8ceedcf3db6f1d5ed29614df3f5b1b04048",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-965": {
+      "descriptionSha256": "10eea7a2cb6cb59c0f663ac8b134cfc33c6a9082a6d79181ecdd62f536629b50",
+      "semanticBodySha256": "641d26db8f69afe83f8bd5eac1272ff0023f1f9af81ea3768fe419de8ce435f2",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-966": {
+      "descriptionSha256": "e3ff038f1ad45236d7eac1117183b2544bfd383fe28a961ad3ecf1cd133d1509",
+      "semanticBodySha256": "b58d62779e49ecd100e7635235c83eda99ce659c123a3df8152312d50a8c22f6",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-967": {
+      "descriptionSha256": "4ee19178287a836f0f8095dd39339e59d2eefb6699b10c72351b1cb2eef345c5",
+      "semanticBodySha256": "b992bf88d6c5a1fb81dc1dccb805a3aa00e36355344cebf8d0f7f556b7296beb",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-968": {
+      "descriptionSha256": "75d47c426ad2fd660de2bead15abb276ea740b95766a78b990bdc5aa18baa33b",
+      "semanticBodySha256": "b6cbcfc75cfc4b14f314a05ae3070a21d09466507f6bf028f29ec6f5999a5f2c",
+      "excludedHeadings": [
+        "Source provenance",
+        "Source-repair constraints",
+        "Review and readiness"
+      ]
+    },
+    "PLA-969": {
+      "descriptionSha256": "14938159360adc9b3c0222d176400e878043ba93e337176a17a9fd78bfb2b021",
+      "semanticBodySha256": "234a5ce28843d4c983953ebe6f4b9a6f013d06cac114ecc07473feb7697f03e3",
+      "excludedHeadings": [
+        "Pinned source and placement",
+        "Blockers"
+      ]
+    },
+    "PLA-970": {
+      "descriptionSha256": "659bbd6957ca2dff7f873308fa415fe67dcc59e1f16432c7730c86a2e7d18e91",
+      "semanticBodySha256": "bf03005feb2336ffa04614d6984ebba30e0e3add6dff40afcf3bc7f5cec14c2d",
+      "excludedHeadings": [
+        "Pinned source and placement",
+        "Blockers"
+      ]
+    },
+    "PLA-971": {
+      "descriptionSha256": "36dc5d52287da592797e6dd331e1fcc15e561d546e36a59f0a5eb35a4c62343f",
+      "semanticBodySha256": "44a98a26cc3d75f227e679b4ca06691bdc500cdc1120e4df251813c2aa85beec",
+      "excludedHeadings": [
+        "Pinned source and placement",
+        "Blockers"
+      ]
+    },
+    "PLA-973": {
+      "descriptionSha256": "a67fff030f69510b848cffa8be6ad3143a48bc81740898dbf5f926097119334a",
+      "semanticBodySha256": "87169f2c0d6e44c19eab663096e5d250767a9a3fd8a32678b8969a925bf97656",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-974": {
+      "descriptionSha256": "df80afe4cf6fa4e613e4ed06326fb48390f60d1f76fd3bd973842eb266f15af6",
+      "semanticBodySha256": "0d5cf760470c7d406e3ed1d6e7dedaad8c945e879614f14c70bd4ee83bac3912",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-976": {
+      "descriptionSha256": "1a404e7461eead12caa689aa41336ea86e76f72336a2d71e16809691c0db0146",
+      "semanticBodySha256": "3ac6096fef5e264e430a4f4ac7cf4a057972e8101b0a769dd85775a9fe68cdad",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-977": {
+      "descriptionSha256": "833defb4f64031cdd04e1218321d86c3cb176baa8627358335befa488ab031ff",
+      "semanticBodySha256": "4490d02308e3768c325ae7e178e117d1468794c8d54fe0205c64fd38dced81d3",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-978": {
+      "descriptionSha256": "b6b96c7bd9c8a488adb6cb02eb1234cc84de8f0c15f3a4359cd733faa59256ca",
+      "semanticBodySha256": "5a69fe7cc2322ef1078e7a2b6682f99180be9f4ab6658087caaf4728c7be3b01",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery",
+        "Dependencies"
+      ]
+    },
+    "PLA-979": {
+      "descriptionSha256": "d56bad18e101512ba8958cae601d5718b2d8e1de6782d2fc4d8f2aa5dd3160c1",
+      "semanticBodySha256": "fb01c39851c5cdbca2dc9fdcc24c0f74c20f15f90e2d643c5e1c63d5526f697c",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery",
+        "Dependencies"
+      ]
+    },
+    "PLA-980": {
+      "descriptionSha256": "92a4a11ed30f7692a2932764a1c7c8d01fd8171859cc855905018de479b9e825",
+      "semanticBodySha256": "b823bd71aa75f5f5093178e13625d72cd202db50c4aa90c85f31c7dfacced9b3",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery",
+        "Dependencies"
+      ]
+    },
+    "PLA-981": {
+      "descriptionSha256": "a1d3e476064561749195ce6f1018942105e9f298b9053175dddb60806bc6b6b4",
+      "semanticBodySha256": "5b1ce48763065538f54f7c5e02f24d25379721ec54a8490b9da8962c5bcf1292",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-982": {
+      "descriptionSha256": "10af4af83aa28f0dca7e66bab619f0fc7ef36f57ec8c3d428542e9dd4b9d6226",
+      "semanticBodySha256": "97b9f989723d7b9cff8e0f51bc5378c728ce0a3f51ed00c9c2b1afea525013df",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-983": {
+      "descriptionSha256": "bf0920c8f70b8b544bde8b08939527e54609bd9df23b94b1480f653b1272258d",
+      "semanticBodySha256": "8839de29b0353e7f833238a8b4442789b102774a584ff2a12fb4eaf78c57b8ae",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-984": {
+      "descriptionSha256": "8ff9de5daa56665037c2f62b7a0deed029f5c7e75a5e78412f464d3fd510e382",
+      "semanticBodySha256": "c149e6011be4bd407c7bc1d78112cdf3ba5d5c35fdf1b9039cf72f5289e3b1be",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-985": {
+      "descriptionSha256": "a013ae056434ff698250cea7df96ee2360129462e9ddec31137455020e09f079",
+      "semanticBodySha256": "f8577ba09d6185a074839b321d70eb14ba719a52c4a810d52437efc5f8fa4c24",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-986": {
+      "descriptionSha256": "a54cc69152d26cb2cad97c8f39de4650e3fa5cf6ee5ac6d82c921c568ad9c116",
+      "semanticBodySha256": "cb6d092de1c920f8fd63c6abb25036e508224ab04e9713a9933093a57f4ae97c",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-987": {
+      "descriptionSha256": "9c8d0767ae8618ed24c6a0bb619b6d5fa05f51a3e79bdbf5ebc3f965e2c4d2f2",
+      "semanticBodySha256": "4ea02301b0c14eea8e759a64f636236a23988bf74760b8d19813a72421eed1f0",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-988": {
+      "descriptionSha256": "26d7b9e4d11215c6b3563c155e4dd6303e43a773a9a5ed4298721d4d44a13ab6",
+      "semanticBodySha256": "2eef0b47c03f2842c88b8005fa3a02d2ab10c0b503eda8b312d1413d32862154",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Release and Roadmap Contract",
+        "Delivery"
+      ]
+    },
+    "PLA-989": {
+      "descriptionSha256": "f05001195135d626e72beef95889b9631faff4188d91625a595fe7f44998a53d",
+      "semanticBodySha256": "e793fbc7ade00e7134510ec932ec8192feb68c09b9ffe59f94bbc5dc37a3897e",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-990": {
+      "descriptionSha256": "4f2669263916cf010a92b264736a7def00f21eb2bf0f90eb73457e9191f97764",
+      "semanticBodySha256": "2450de32ddd2b4f61cb8117d006b6febebec55682be219d39b51d35477af0364",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Release and Roadmap Contract",
+        "Delivery"
+      ]
+    },
+    "PLA-991": {
+      "descriptionSha256": "b80433184484b81faea3b16fd7ff2cb5f0dfb560213c2406f4c6d8634c0d44e8",
+      "semanticBodySha256": "d0ae441da44056d93c94d032caa2fb35424b6488fddebbea40acc136b22c0783",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-992": {
+      "descriptionSha256": "756cbf0fe28124a9d419d16652b5388aa09ed8eba7015c1ec42285a9b776c15d",
+      "semanticBodySha256": "31277ab6ce4c755daaec33a29012a8beed45d1937a46c9b99793de50979d3e64",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-993": {
+      "descriptionSha256": "1b5703ab924a5e5de347dbb0d8510ad1b138c6c7d7d8fc61ee8c060b5f0d5b33",
+      "semanticBodySha256": "5affcea0de2919f47b131c4c68aa924e7d1108719841a8c32f48d3ca851ebdc4",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-994": {
+      "descriptionSha256": "b1d06b28ad46cc5e0c17d9ed82e7d5faa969b012fadd50f8fafa993fc8a3e665",
+      "semanticBodySha256": "dff45d51dbc871fb54f9dcb4c381371ae37d3295367b59f65ae4577f232a6640",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Release and Roadmap Contract",
+        "Delivery"
+      ]
+    },
+    "PLA-995": {
+      "descriptionSha256": "d648d1fb8c2e233d98e7708529bb18de302cc2433304d10192055b18458c8533",
+      "semanticBodySha256": "a6d15901faa46d7bf13323ff0f47ad5eb24ca83ee2a09d6205f31ffbb56de523",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Release and Roadmap Contract",
+        "Delivery"
+      ]
+    },
+    "PLA-996": {
+      "descriptionSha256": "5478aae847071ca469e40823186ac2bdae4f07644e331c816e7dbca5360b290f",
+      "semanticBodySha256": "9e74b3c3fb2473a26ba57e7d7081617191083691aaed2c7a344a02cae9a75a8f",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "PLA-997": {
+      "descriptionSha256": "553c170717e3e12337e573c20ceb4ab0090a588a036f848432ff00aa94154f89",
+      "semanticBodySha256": "d8c892469c0e25dc8b3183d4364135b475dad5815b99092dfa01c1d76d4282bf",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-998": {
+      "descriptionSha256": "fabdc3d3aff8bf84750da0952458428bcc065ddc31e2390de514fc4efd8bf847",
+      "semanticBodySha256": "64d73f22cc6b1e15f1f4344bc9a4f2e905e0db25143320532f4d897fd242e406",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-999": {
+      "descriptionSha256": "aadfb647c12a1f7bae9d1858b0ce070298cd455cdf57cfef611a6909ca08b8b3",
+      "semanticBodySha256": "d79e93c54e27d4cbf26eb03965a824048f38a00ddcb83db1b76b02066c4276f5",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1000": {
+      "descriptionSha256": "e937c91722f7772f8716a2ff5805887e2b91e0752e48ba1c5c939cfd126d02a1",
+      "semanticBodySha256": "a9eb791c2e8edda15fa540808a66dfb82d560823b737965777eaebc4d2a6c66b",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1001": {
+      "descriptionSha256": "f8a551ea2acb5e44751a6cc7d4196e9d55abd3a7596c5a2f2e22a063128f2b4f",
+      "semanticBodySha256": "5782778b3f6486674ebf3300fc9eaa7daf9cfe6becf946c6537bc422ecfce3cf",
+      "excludedHeadings": [
+        "Source provenance",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1004": {
+      "descriptionSha256": "244fac2f07706afd008d1ef66a457ce3eead2143269898bececc0d5fc8317aab",
+      "semanticBodySha256": "2604c74b797ffc9744ca2926a7467aa0f7df78c838027a2525273dd5ba548272",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1005": {
+      "descriptionSha256": "0633576657d117532157874b21c8d4367fd1371b12770c7ea7f473ebffa001f1",
+      "semanticBodySha256": "82b8a92144917fa1ed63aa879724d2a7d1bfb123d320795b7fdb1997820d6c03",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1006": {
+      "descriptionSha256": "9bf217904d182b695eeeec2f91717a5d0b88ba1cb49140b8dda19083b93d7996",
+      "semanticBodySha256": "acd23fa76471ba5c47f0255fba6dcacd3f69527b74a2cee89bd284d84bc1550b",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1007": {
+      "descriptionSha256": "5e13ff1372d398dc47c737718871d7a064ae321de9f231edde682da56e4c18af",
+      "semanticBodySha256": "5b81eb21a032d7e6191b20f8fad965402ce29debf68cd635560c5926784ce858",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1008": {
+      "descriptionSha256": "a4fb8da35ae1bf30ecbaabe5b46794f04518654391f16266c8835deba05aec1f",
+      "semanticBodySha256": "da27c62d75507e71c4afe2694da81d9c8eb7c68bc8e9ef5cd9098a577327b409",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1009": {
+      "descriptionSha256": "9d547d5ecb7ada4d03ec34a6c0e83c728d09ab0015481d9ea8db91f9bdfc13f3",
+      "semanticBodySha256": "3a588c5f99866bf9ec40dd558ce8577e7b953b101d4a73acd7e33c69ab58eef1",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1010": {
+      "descriptionSha256": "bf1d5e1481be583f18fee7d54ba5bf16ee24cdd589383d75c47beebed599fc3f",
+      "semanticBodySha256": "79044bd4e10b8fdd9f412d0185598b4901a1b0758ddf58c8c6c676416ce255fa",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1011": {
+      "descriptionSha256": "27a52c2cd28c99b5c998dbbdc1ce9a6ac639b43f10ab5685c0349c66a660d689",
+      "semanticBodySha256": "f5920ef4621cd65a75f4f2a7935af1a52c8586b88112fa41e2436431b66e6c48",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1012": {
+      "descriptionSha256": "ec2988a03fa5a4116ad22c57f7ce063e3625c2374833cefee9f5bef9dfdc0125",
+      "semanticBodySha256": "aaad3ae1292dca911155349aceae8846b80bb65fb0932eafdec92ffe43fbeb53",
+      "excludedHeadings": [
+        "Pinned source and current defect",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1013": {
+      "descriptionSha256": "5b5dc4b24acad712f2c91f7928667ffeb683b4c3e0c73cbc961797fcc18e8391",
+      "semanticBodySha256": "87dd666ee71bc9e74a5328024f57e52d3e28f8eee937a3864243599da7bf8fe1",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1014": {
+      "descriptionSha256": "8a44c6859f684c990621d7431593b7f8de68b59d1382e1147116d7d990f74ed5",
+      "semanticBodySha256": "8ba8d740022ba9b9255c6fab1f3a066ba7021329a5e6497caea601500bf48341",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1015": {
+      "descriptionSha256": "9157bece175123dc262e68a9a2ccdc4d1209a190cd587e622c5dbf1d1b0e05f1",
+      "semanticBodySha256": "26695397e8b3238804745166a2be56e886f82615b5cddcef048826c380f0a484",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1016": {
+      "descriptionSha256": "15cbd4a5183123c74e3b517f39993a79fcbeeec804334b58264c52aadf144a0a",
+      "semanticBodySha256": "0c384f3cb6e1e66602fa896068ddbc6b6bf07cd1ba4d61f131f671eac3fd90cb",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1017": {
+      "descriptionSha256": "4516637f71cbdd9f0863c7923a7d9eb910f2b1cadc47c0d65f2de8871ede43a9",
+      "semanticBodySha256": "31d9832aa1c9c8fdfb8609e1cd1bf7375709852ebfc24b2b06fd6f0659472cf5",
+      "excludedHeadings": [
+        "Source provenance",
+        "Delivery and review readiness"
+      ]
+    },
+    "PLA-1019": {
+      "descriptionSha256": "bf916b3084d94f101f2493aecf1c96c19a754b45536fa66c7bd5972032343741",
+      "semanticBodySha256": "44eb4d251cc3794489878a7e3f3ab3d6b34f2132a6fd7e85a2fed5310dee6c5b",
+      "excludedHeadings": [
+        "Source provenance and current defect",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1020": {
+      "descriptionSha256": "025fb37cc64798cfdbbe78dc6339a26e5b8949a1fe79071c5451e260bc40232b",
+      "semanticBodySha256": "5f61184797c298dcf259c68274c75a21b6f6f09644dcf567dfe0207cdf8786b1",
+      "excludedHeadings": [
+        "Source provenance and current defect",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1021": {
+      "descriptionSha256": "fbd22a917102f026440c0539926479ac4d4f050fa8a5c4a37a948bbace3b8a0c",
+      "semanticBodySha256": "bd0ccc40b5bd997edd0548215cfdfda753cfbaed871f6ca1dd721d9154d89cde",
+      "excludedHeadings": [
+        "Source provenance and current defect",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1022": {
+      "descriptionSha256": "9393fd562cd543f5b4cc80abbd1fa86f0765bdcbd8217b896818d74ffd8d282a",
+      "semanticBodySha256": "7bc231e83f77045ffb3994bb7ff3c12afe3f2611d5b571e9ba95e20ee6748a97",
+      "excludedHeadings": [
+        "Source provenance and current defect",
+        "Review and readiness"
+      ]
+    },
+    "PLA-1023": {
+      "descriptionSha256": "a1c4f365f14c888b71a7e8d277a11cd867d875cba70dbd3ed438dba33671c0d2",
+      "semanticBodySha256": "4bce0b4b4b3204074804aab223d91e4ef87d7719a769e4a72629164ecbf2b2de",
+      "excludedHeadings": [
+        "Source provenance and current defect",
+        "Review and readiness"
+      ]
+    },
+    "SEL-258": {
+      "descriptionSha256": "b7f22c6ff930891a7ffe3056e26fdb96e7cd4da88197bc1a078b6c7606ab94de",
+      "semanticBodySha256": "fb5a0e9428d9d5a2ef65013cfac2f0157d285df11b074c2932b32624d38d048c",
+      "excludedHeadings": [
+        "Pinned Source",
+        "Review and readiness"
+      ]
+    },
+    "SEL-259": {
+      "descriptionSha256": "61a0c910409d7624d57ab40cb3c01ceea01137894a891475a66a084f8d859117",
+      "semanticBodySha256": "b8aab06d4518031f13f4c89648e95f4c5476403d90f7ddced4b39863086dd57a",
+      "excludedHeadings": [
+        "Pinned sources",
+        "Canonical placement",
+        "Dependencies",
+        "Legacy resolution"
+      ]
+    }
+  },
+
+  "oversizedOrCrossCutting": [
+    "BUY-202",
+    "BUY-278",
+    "BUY-280",
+    "BUY-331",
+    "PLA-389",
+    "PLA-398",
+    "PLA-427",
+    "PLA-438",
+    "PLA-439",
+    "PLA-461",
+    "PLA-530",
+    "PLA-602",
+    "PLA-612",
+    "PLA-613",
+    "PLA-620",
+    "PLA-631",
+    "PLA-657",
+    "PLA-663",
+    "SEL-83",
+    "SEL-111",
+    "SEL-175",
+    "SEL-177",
+    "SEL-180"
+  ],
+  "extractionPolicy": {
+    "primary": "Extract complete facts only from the mapped owning section.",
+    "crossReferences": "Resolve only a referenced symbol, enum, event, error, role, state machine, or limit explicitly named by an extracted owning-section fact.",
+    "blockBoundaries": "Never cut paragraphs, bullets, list items, tables, code fences, or words to satisfy a character budget.",
+    "sourceDeferrals": "Remove the lookup instruction while carrying the exact referenced fact into the owning issue."
+  }
+}

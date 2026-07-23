@@ -1,0 +1,442 @@
+{
+  "findings": [
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-224",
+      "message": "BUY-224 dependency links differ from F-116"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-226",
+      "message": "BUY-226 dependency links differ from F-209"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-228",
+      "message": "BUY-228 dependency links differ from F-211"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-229",
+      "message": "BUY-229 dependency links differ from F-212"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-230",
+      "message": "BUY-230 dependency links differ from F-213"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-231",
+      "message": "BUY-231 dependency links differ from F-214"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-232",
+      "message": "BUY-232 dependency links differ from F-215"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-234",
+      "message": "BUY-234 dependency links differ from F-217"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-235",
+      "message": "BUY-235 dependency links differ from F-218"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-236",
+      "message": "BUY-236 dependency links differ from F-219"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-237",
+      "message": "BUY-237 dependency links differ from F-220"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-240",
+      "message": "BUY-240 dependency links differ from F-223"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-242",
+      "message": "BUY-242 dependency links differ from F-225"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-245",
+      "message": "BUY-245 dependency links differ from F-228"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-246",
+      "message": "BUY-246 dependency links differ from F-229"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-357",
+      "message": "BUY-357 dependency links differ from F-566"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "BUY-362",
+      "message": "BUY-362 dependency links differ from F-897"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-271",
+      "message": "PLA-271 dependency links differ from F-079"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-283",
+      "message": "PLA-283 dependency links differ from F-006"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-284",
+      "message": "PLA-284 dependency links differ from F-007"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-288",
+      "message": "PLA-288 dependency links differ from F-083"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-305",
+      "message": "PLA-305 dependency links differ from F-132"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-311",
+      "message": "PLA-311 dependency links differ from F-139"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-332",
+      "message": "PLA-332 dependency links differ from F-160"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-421",
+      "message": "PLA-421 dependency links differ from F-483"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-428",
+      "message": "PLA-428 dependency links differ from F-490"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-471",
+      "message": "PLA-471 dependency links differ from F-533"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-475",
+      "message": "PLA-475 dependency links differ from F-537"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-522",
+      "message": "PLA-522 dependency links differ from F-593"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-528",
+      "message": "PLA-528 dependency links differ from F-599"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-553",
+      "message": "PLA-553 dependency links differ from F-628"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-555",
+      "message": "PLA-555 dependency links differ from F-630"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-556",
+      "message": "PLA-556 dependency links differ from F-631"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-580",
+      "message": "PLA-580 dependency links differ from F-655"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-641",
+      "message": "PLA-641 dependency links differ from F-725"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-703",
+      "message": "PLA-703 dependency links differ from F-796"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-704",
+      "message": "PLA-704 dependency links differ from F-797"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-732",
+      "message": "PLA-732 dependency links differ from F-866"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "PLA-819",
+      "message": "PLA-819 dependency links differ from RG:legal_entity_residency_change_revenue_leak_test"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "SEL-146",
+      "message": "SEL-146 dependency links differ from F-387"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "SEL-184",
+      "message": "SEL-184 dependency links differ from F-687"
+    },
+    {
+      "code": "dependency_drift",
+      "issueId": "SEL-186",
+      "message": "SEL-186 dependency links differ from F-689"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-forecast-baseline.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-three-domain-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-three-domain-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-three-domain-foundation.json does not exist"
+    },
+    {
+      "code": "evidence_missing",
+      "message": "reports/evidence/r0-three-domain-foundation.json does not exist"
+    },
+    {
+      "code": "operating_model_priority_missing",
+      "message": "Tracked Linear work has a missing or invalid live priority fingerprint"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-899",
+      "message": "F-899 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-910",
+      "message": "F-910 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-911",
+      "message": "F-911 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-912",
+      "message": "F-912 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-913",
+      "message": "F-913 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-916",
+      "message": "F-916 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-917",
+      "message": "F-917 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-922",
+      "message": "F-922 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-923",
+      "message": "F-923 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-924",
+      "message": "F-924 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-925",
+      "message": "F-925 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-926",
+      "message": "F-926 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-927",
+      "message": "F-927 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-928",
+      "message": "F-928 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-929",
+      "message": "F-929 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-930",
+      "message": "F-930 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "F-931",
+      "message": "F-931 has no issue"
+    },
+    {
+      "code": "orphan_requirement",
+      "requirementId": "RG:buyer_trial_audit_action_registration",
+      "message": "RG:buyer_trial_audit_action_registration has no issue"
+    },
+    {
+      "code": "ready_queue_under_minimum",
+      "message": "Ready queue has 1; minimum is 5"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-899",
+      "message": "F-899 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-910",
+      "message": "F-910 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-911",
+      "message": "F-911 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-912",
+      "message": "F-912 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-913",
+      "message": "F-913 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-916",
+      "message": "F-916 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-917",
+      "message": "F-917 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-922",
+      "message": "F-922 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-923",
+      "message": "F-923 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-924",
+      "message": "F-924 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-925",
+      "message": "F-925 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-926",
+      "message": "F-926 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-927",
+      "message": "F-927 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-928",
+      "message": "F-928 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-929",
+      "message": "F-929 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-930",
+      "message": "F-930 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "F-931",
+      "message": "F-931 has no release"
+    },
+    {
+      "code": "release_missing",
+      "requirementId": "RG:buyer_trial_audit_action_registration",
+      "message": "RG:buyer_trial_audit_action_registration has no release"
+    },
+    {
+      "code": "validation_plan_invalid",
+      "message": "F-007 approval is pending"
+    }
+  ]
+}

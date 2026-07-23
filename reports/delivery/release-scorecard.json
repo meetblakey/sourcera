@@ -1,0 +1,250 @@
+{
+  "categories": {
+    "planning": 5,
+    "releases": 10,
+    "ownership": 0,
+    "validation": 0,
+    "execution": 0
+  },
+  "total": 15,
+  "tenOfTen": false,
+  "journeyTargets": {
+    "R2": {
+      "F-007": {
+        "sha256": "74bc245b18b55975ef5b1cbbd9a4506c765ae7d77055fda2d758c7004347b980",
+        "target": {
+          "approval": {
+            "accountableOwnerKeyRef": "decision:DEC-OWNER-001",
+            "approvedAt": null,
+            "authorMayApprove": false,
+            "independentReviewerKeyRef": "check:codex-independent-review",
+            "maximumAgeDays": 90,
+            "maximumReleaseCandidates": 1,
+            "pilotOperatorMayApprove": false,
+            "reference": "DEC-VALIDATION-F007-001",
+            "state": "pending"
+          },
+          "journeyId": "F-007",
+          "metrics": [
+            {
+              "key": "r2_f007_activation",
+              "metric": "activation",
+              "proof": "customer",
+              "sampleRule": "valid_starts",
+              "thresholds": [
+                {
+                  "operator": ">=",
+                  "statistic": "rate",
+                  "unit": "ratio",
+                  "value": 0.9
+                }
+              ],
+              "windows": [
+                "normal_action"
+              ]
+            },
+            {
+              "key": "r2_f007_completion",
+              "metric": "completion",
+              "proof": "customer",
+              "sampleRule": "valid_starts",
+              "thresholds": [
+                {
+                  "operator": ">=",
+                  "statistic": "rate",
+                  "unit": "ratio",
+                  "value": 0.8
+                }
+              ],
+              "windows": [
+                "normal_action",
+                "recovery_drill"
+              ]
+            },
+            {
+              "key": "r2_f007_time_to_value",
+              "metric": "timeToValue",
+              "proof": "customer",
+              "sampleRule": "valid_completions",
+              "thresholds": [
+                {
+                  "operator": "<=",
+                  "statistic": "median",
+                  "unit": "seconds",
+                  "value": 180
+                },
+                {
+                  "operator": "<=",
+                  "statistic": "p90",
+                  "unit": "seconds",
+                  "value": 300
+                }
+              ],
+              "windows": [
+                "normal_action"
+              ]
+            },
+            {
+              "key": "r2_f007_abandonment",
+              "metric": "abandonment",
+              "proof": "customer",
+              "sampleRule": "valid_starts",
+              "thresholds": [
+                {
+                  "operator": "<=",
+                  "statistic": "rate",
+                  "unit": "ratio",
+                  "value": 0.1
+                }
+              ],
+              "windows": [
+                "normal_action"
+              ]
+            },
+            {
+              "key": "r2_f007_trust",
+              "metric": "trust",
+              "proof": "customer",
+              "sampleRule": "valid_completions",
+              "thresholds": [
+                {
+                  "operator": ">=",
+                  "statistic": "rate",
+                  "unit": "ratio",
+                  "value": 0.8
+                }
+              ],
+              "windows": [
+                "cohort"
+              ]
+            },
+            {
+              "key": "r2_f007_reliability",
+              "metric": "reliability",
+              "proof": "operational",
+              "sampleRule": "valid_starts",
+              "thresholds": [
+                {
+                  "operator": "=",
+                  "statistic": "rate",
+                  "unit": "ratio",
+                  "value": 1
+                },
+                {
+                  "operator": "=",
+                  "statistic": "forbidden_access_count",
+                  "unit": "count",
+                  "value": 0
+                },
+                {
+                  "operator": "=",
+                  "statistic": "financial_mutation_count",
+                  "unit": "count",
+                  "value": 0
+                },
+                {
+                  "operator": "=",
+                  "statistic": "manual_data_repair_count",
+                  "unit": "count",
+                  "value": 0
+                }
+              ],
+              "windows": [
+                "normal_action",
+                "recovery_drill"
+              ]
+            },
+            {
+              "key": "r2_f007_support",
+              "metric": "support",
+              "proof": "operational",
+              "sampleRule": "valid_completions",
+              "thresholds": [
+                {
+                  "operator": ">=",
+                  "statistic": "zero_unplanned_intervention_rate",
+                  "unit": "ratio",
+                  "value": 0.8
+                },
+                {
+                  "operator": "<=",
+                  "statistic": "median_active_support",
+                  "unit": "seconds",
+                  "value": 120
+                },
+                {
+                  "operator": "=",
+                  "statistic": "data_repair_intervention_count",
+                  "unit": "count",
+                  "value": 0
+                }
+              ],
+              "windows": [
+                "normal_action",
+                "recovery_drill"
+              ]
+            }
+          ],
+          "proofGates": {
+            "customer": [
+              "r2_f007_activation",
+              "r2_f007_completion",
+              "r2_f007_time_to_value",
+              "r2_f007_abandonment",
+              "r2_f007_trust"
+            ],
+            "operational": [
+              "r2_f007_reliability",
+              "r2_f007_support"
+            ],
+            "requireAll": true
+          },
+          "safetyCohort": {
+            "distinctOrganizations": 1,
+            "participants": 1,
+            "runs": 1,
+            "satisfiesReleaseGate": false
+          },
+          "sampleRules": [
+            {
+              "basis": "valid_started_runs",
+              "key": "valid_starts",
+              "minimumDistinctOrganizations": 3,
+              "minimumRuns": 5
+            },
+            {
+              "basis": "valid_completed_runs",
+              "key": "valid_completions",
+              "minimumDistinctOrganizations": 3,
+              "minimumRuns": 4
+            }
+          ],
+          "sourceChecksum": "64032a450d85aa65ac4cc1ab973da9a41a8e973e23b5d44223f3be6145b112d0",
+          "sourceVersion": "F-007.E@v1",
+          "targetSetId": "r2_f007_billing_journey_v1",
+          "targetSetVersion": 1,
+          "windows": [
+            {
+              "duration": 14,
+              "key": "cohort",
+              "startsAt": "first_valid_activation",
+              "unit": "calendar_days"
+            },
+            {
+              "duration": 600,
+              "key": "normal_action",
+              "startsAt": "intentional_plan_billing_open",
+              "unit": "active_seconds"
+            },
+            {
+              "duration": 300,
+              "key": "recovery_drill",
+              "startsAt": "pilot_recovery_drill_start",
+              "unit": "active_seconds"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

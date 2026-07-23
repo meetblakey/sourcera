@@ -1,0 +1,246 @@
+name: Delivery integrity
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 9 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: delivery-integrity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  delivery-integrity:
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Classify committed Linear mirror
+        id: linear_mirror
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          elif ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "PR base commit unavailable" >&2
+            exit 1
+          elif git cat-file -e "${BASE_SHA}:delivery/linear-snapshot.json" 2>/dev/null; then
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "required=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+      - run: tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/source-checksums.ts --contract delivery/ticket-source-checksums.json
+      - name: Capture live release truth
+        shell: bash
+        run: |
+          set +e
+          tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json > /tmp/stamp.json
+          stamp_status=$?
+          tools/spec-lint/node_modules/.bin/tsx tools/release/exact_status_scan.ts --json > /tmp/exact.json
+          exact_status=$?
+          set -e
+          if (( stamp_status > 1 )); then exit "$stamp_status"; fi
+          exit "$exact_status"
+      - name: Verify committed delivery mirror
+        if: steps.linear_mirror.outputs.required == 'true'
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts --stamp /tmp/stamp.json --exact /tmp/exact.json --feature-dependencies delivery/feature-dependencies.json --policy delivery/release-policy.json --release-plan delivery/release-plan.json --roadmap delivery/roadmap-contract.json --linear-project-scope delivery/linear-project-scope.json
+      - run: npm --prefix tools/spec-lint run typecheck
+      - run: npm --prefix tools/spec-lint run all
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
+
+  linear-capture:
+    name: Linear snapshot validation-only handoff
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      artifact-digest: ${{ steps.linear-handoff-upload.outputs.artifact-digest }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+      - run: tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
+      - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/source-checksums.ts --contract delivery/ticket-source-checksums.json
+      - name: Capture exact runtime gate inventory
+        shell: bash
+        run: |
+          set +e
+          tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json > /tmp/linear-runtime-stamp.json
+          stamp_status=$?
+          tools/spec-lint/node_modules/.bin/tsx tools/release/exact_status_scan.ts --json > /tmp/linear-exact-status.json
+          exact_status=$?
+          set -e
+          if (( stamp_status > 1 )); then exit "$stamp_status"; fi
+          if (( exact_status > 0 )); then exit "$exact_status"; fi
+      - name: Capture complete Linear fingerprint
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --linear-project-scope delivery/linear-project-scope.json --linear-program-scope delivery/linear-program-scope.json --out /tmp/linear-fingerprint.json --receipt-out /tmp/linear-capture-receipt.json
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+      - name: Build receipt-bound Linear snapshot candidate
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-fingerprint-overlay.ts --snapshot delivery/linear-snapshot.json --fingerprint /tmp/linear-fingerprint.json --receipt /tmp/linear-capture-receipt.json --linear-project-scope delivery/linear-project-scope.json --dispositions delivery/dispositions.json --stamp /tmp/linear-runtime-stamp.json --runtime-dependencies delivery/runtime-gate-dependencies.json --releases delivery/releases.json --out /tmp/linear-snapshot-candidate.json --candidate-receipt-out /tmp/linear-candidate-receipt.json
+      - name: Validate Linear snapshot candidate semantics
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/validate-linear-candidate.ts --candidate /tmp/linear-snapshot-candidate.json --releases delivery/releases.json
+      - name: Validate guarded promotion in ephemeral checkout
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/promote-linear-candidate.ts --snapshot delivery/linear-snapshot.json --candidate /tmp/linear-snapshot-candidate.json --fingerprint /tmp/linear-fingerprint.json --capture-receipt /tmp/linear-capture-receipt.json --candidate-receipt /tmp/linear-candidate-receipt.json --linear-project-scope delivery/linear-project-scope.json --linear-program-scope delivery/linear-program-scope.json --source-policy delivery/linear-source-policy.json --inventory _audit/FEATURE_INVENTORY.md --source-checksums delivery/ticket-source-checksums.json --dispositions delivery/dispositions.json --stamp /tmp/linear-runtime-stamp.json --runtime-dependencies delivery/runtime-gate-dependencies.json --releases delivery/releases.json
+      - name: Stage exact attested snapshot handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp -s delivery/linear-snapshot.json /tmp/linear-snapshot-candidate.json
+          install -m 0600 delivery/linear-snapshot.json /tmp/linear-snapshot-handoff.json
+      - id: linear-handoff-upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-snapshot-validation-handoff-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            /tmp/linear-fingerprint.json
+            /tmp/linear-capture-receipt.json
+            /tmp/linear-runtime-stamp.json
+            /tmp/linear-exact-status.json
+            /tmp/linear-snapshot-handoff.json
+            /tmp/linear-candidate-receipt.json
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 90
+
+  linear-publication:
+    name: Linear reviewable publication package
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main'
+    needs: linear-capture
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - name: Download exact validated Linear handoff
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: linear-snapshot-validation-handoff-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/linear-handoff
+      - name: Prepare receipt-bound review package
+        run: >-
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/prepare-linear-publication.ts
+          --snapshot delivery/linear-snapshot.json
+          --handoff /tmp/linear-handoff/linear-snapshot-handoff.json
+          --fingerprint /tmp/linear-handoff/linear-fingerprint.json
+          --capture-receipt /tmp/linear-handoff/linear-capture-receipt.json
+          --candidate-receipt /tmp/linear-handoff/linear-candidate-receipt.json
+          --linear-project-scope delivery/linear-project-scope.json
+          --linear-program-scope delivery/linear-program-scope.json
+          --source-policy delivery/linear-source-policy.json
+          --inventory _audit/FEATURE_INVENTORY.md
+          --source-checksums delivery/ticket-source-checksums.json
+          --dispositions delivery/dispositions.json
+          --stamp /tmp/linear-handoff/linear-runtime-stamp.json
+          --exact /tmp/linear-handoff/linear-exact-status.json
+          --runtime-dependencies delivery/runtime-gate-dependencies.json
+          --releases delivery/releases.json
+          --release-policy delivery/release-policy.json
+          --feature-dependencies delivery/feature-dependencies.json
+          --roadmap delivery/roadmap-contract.json
+          --out /tmp/linear-publication
+        env:
+          LINEAR_HANDOFF_ARTIFACT_DIGEST: ${{ needs.linear-capture.outputs.artifact-digest }}
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-reviewable-publication-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            /tmp/linear-publication
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 90
+
+  linear-drift:
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Classify committed Linear mirror
+        id: linear_mirror
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          elif ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "PR base commit unavailable" >&2
+            exit 1
+          elif git cat-file -e "${BASE_SHA}:delivery/linear-snapshot.json" 2>/dev/null; then
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "required=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: npm ci --prefix tools/spec-lint
+      - name: Validate current live Linear
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --linear-project-scope delivery/linear-project-scope.json --linear-program-scope delivery/linear-program-scope.json --out /tmp/linear-fingerprint.json --descriptions-out /tmp/linear-ticket-descriptions.json --receipt-out /tmp/linear-capture-receipt.json
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+      - name: Enforce committed Linear mirror
+        if: steps.linear_mirror.outputs.required == 'true'
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --fixture /tmp/linear-fingerprint.json --snapshot delivery/linear-snapshot.json --linear-project-scope delivery/linear-project-scope.json --linear-program-scope delivery/linear-program-scope.json
+      - if: ${{ always() && steps.linear_mirror.outputs.required == 'true' }}
+        run: >-
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/ticket-integrity.ts
+          --snapshot delivery/linear-snapshot.json
+          --capture /tmp/linear-ticket-descriptions.json
+          --checksum-contract delivery/ticket-source-checksums.json
+          --out /tmp/linear-ticket-integrity.json
+      - if: always()
+        name: Remove raw Linear descriptions
+        run: rm -f /tmp/linear-ticket-descriptions.json
+      - if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-drift-fingerprint-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            /tmp/linear-fingerprint.json
+            /tmp/linear-capture-receipt.json
+            /tmp/linear-ticket-integrity.json
+          if-no-files-found: error
+          retention-days: 7
