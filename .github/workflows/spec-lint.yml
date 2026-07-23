@@ -68,6 +68,7 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
+          cache-dependency-path: tools/spec-lint/package-lock.json
 
       - name: Install spec-lint dependencies
         run: npm ci --prefix tools/spec-lint
