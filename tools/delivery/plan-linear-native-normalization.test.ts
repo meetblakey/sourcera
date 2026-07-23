@@ -438,6 +438,98 @@ test("fails closed when a normalized body retains an unresolved marker", () => {
   assert.match(result.stderr, /unresolved marker/i);
 });
 
+test("preserves product-record supersession language", () => {
+  const { result, plan } = runPlanner([{
+    id: "selection-report-versioning",
+    identifier: "PLA-3109",
+    title: "Version signed selection reports",
+    description: [
+      "## Outcome",
+      "Version signed selection reports without mutating an accepted record.",
+      "## Complete behavior and rules",
+      "A correction creates a new finalized report that supersedes the prior report. The prior signed report and its receipt remain immutable, and only the latest approved version may advance.",
+      "## States and transitions",
+      "A draft may finalize once, then an approved correction creates a separately versioned successor.",
+      "## Permissions, isolation, and privacy",
+      "Only an authorized reviewer in the owning organization may approve the successor; every other caller receives a non-revealing denial.",
+      "## Exact paths",
+      "- `convex/selection-report-versioning.ts`",
+      "- `tests/integration/selection-report-versioning.spec.ts`",
+      "## Review and readiness",
+      "Review the immutable prior row, successor link, authorization denial, replay result, and same-commit proof.",
+      "## Acceptance tests",
+      "### Success",
+      "The authorized correction creates one successor and leaves the prior signed bytes unchanged.",
+      "### Failure",
+      "An unauthorized, stale, or duplicate correction fails before any write.",
+      "### Recovery",
+      "Correct the rejected input and retry with the same idempotency identity.",
+      "## Rollout",
+      "Canary one synthetic correction before wider execution.",
+      "## Rollback",
+      "Disable new corrections and preserve every committed report and receipt.",
+      "## Telemetry and notifications",
+      "Record bounded versioning outcomes without customer content; emit no customer notification.",
+      "## Named proof",
+      "Retain `reports/evidence/selection-report-versioning-proof.json` with commit, result, reviewer, and rollback evidence.",
+      "## Assumptions and validation triggers",
+      "A changed report schema or approval rule invalidates the proof and requires review.",
+      "## Exclusions",
+      "This issue excludes score mutation, manual production edits, and unrelated report delivery.",
+    ].join("\n\n"),
+  }]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(plan);
+  assert.match(plan.updates[0].after.description, /supersedes the prior report/);
+});
+
+test("rejects planning-history supersession language", () => {
+  const { result, plan } = runPlanner([{
+    id: "selection-report-versioning",
+    identifier: "PLA-3109",
+    title: "Version signed selection reports",
+    description: [
+      "## Outcome",
+      "Version signed selection reports without mutating an accepted record.",
+      "## Complete behavior and rules",
+      "A correction supersedes the prior plan before it creates a new finalized report.",
+      "## States and transitions",
+      "A draft may finalize once, then an approved correction creates a separately versioned successor.",
+      "## Permissions, isolation, and privacy",
+      "Only an authorized reviewer in the owning organization may approve the successor; every other caller receives a non-revealing denial.",
+      "## Exact paths",
+      "- `convex/selection-report-versioning.ts`",
+      "- `tests/integration/selection-report-versioning.spec.ts`",
+      "## Review and readiness",
+      "Review the immutable prior row, successor link, authorization denial, replay result, and same-commit proof.",
+      "## Acceptance tests",
+      "### Success",
+      "The authorized correction creates one successor and leaves the prior signed bytes unchanged.",
+      "### Failure",
+      "An unauthorized, stale, or duplicate correction fails before any write.",
+      "### Recovery",
+      "Correct the rejected input and retry with the same idempotency identity.",
+      "## Rollout",
+      "Canary one synthetic correction before wider execution.",
+      "## Rollback",
+      "Disable new corrections and preserve every committed report and receipt.",
+      "## Telemetry and notifications",
+      "Record bounded versioning outcomes without customer content; emit no customer notification.",
+      "## Named proof",
+      "Retain `reports/evidence/selection-report-versioning-proof.json` with commit, result, reviewer, and rollback evidence.",
+      "## Assumptions and validation triggers",
+      "A changed report schema or approval rule invalidates the proof and requires review.",
+      "## Exclusions",
+      "This issue excludes score mutation, manual production edits, and unrelated report delivery.",
+    ].join("\n\n"),
+  }]);
+
+  assert.notEqual(result.status, 0);
+  assert.equal(plan, null);
+  assert.match(result.stderr, /publication-invalid prose.*supersedes the prior/i);
+});
+
 test("scopes Capability Chip Audit Events to its five registered actions", () => {
   const { result, plan } = runPlanner([{
     id: "capability-chip-audit-events",
@@ -2337,6 +2429,26 @@ test("keeps Marketplace Listing extraction inside its owning entity section", ()
   assert.match(failure, /Taxonomy node deprecated after publish/i);
   assert.match(recovery, /published listing remains readable/i);
   assert.doesNotMatch(behavior, /\| \(init\) \| `draft` \||Archived listings retain public-content tombstones|Taxonomy node deprecated after publish|Creating or updating a Marketplace Listing MUST reject/i);
+});
+
+test("replaces the retired marketplace pricing TBD with the canonical publish rule", () => {
+  const { result, plan } = runPlanner([{
+    id: "marketplace-entity-set",
+    identifier: "BUY-224",
+    title: "Marketplace Entity Set",
+    description: [
+      "## Complete behavior and rules",
+      "| Field | Type | Constraints | Notes |",
+      "| --- | --- | --- | --- |",
+      "| `min_price_cents_monthly` | BigInt | Nullable; >= 0 | Minimum monthly price in integer cents; null if custom/TBD |",
+    ].join("\n"),
+  }]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(plan);
+  const description = plan.updates[0].after.description;
+  assert.match(description, /may be `null` while `status=draft` or when `pricing_model=custom`/);
+  assert.doesNotMatch(description, /\bTBD\b/);
 });
 
 test("removes source delegation, planning history, manual source IDs, and copied readiness metadata", () => {
