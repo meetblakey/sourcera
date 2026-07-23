@@ -151,6 +151,7 @@ interface PlannerContext {
   sectionLabelByPath: Map<string, Map<string, string>>;
   referenceLabelByToken: Map<string, string>;
   referenceIssueByToken: Map<string, string>;
+  nativeTitleByIssue: Map<string, string>;
   trustedDraftsByIssue: Map<string, TrustedDraftContract>;
   runtimePathsByIssue: Map<string, LinearRuntimePathRegistryEntry>;
   runtimePathsByGate: Map<string, LinearRuntimePathRegistryEntry>;
@@ -252,7 +253,7 @@ function sha256(value: string): string {
 
 function parseArguments(arguments_: string[]) {
   const allowed = new Set([
-    "--root", "--manifest", "--checksums", "--source-map", "--runtime-path-registry", "--out",
+    "--root", "--manifest", "--checksums", "--source-map", "--runtime-path-registry", "--targets", "--out",
   ]);
   if (arguments_.length % 2 !== 0) throw new Error("Every argument needs a value");
   const values = new Map<string, string>();
@@ -278,6 +279,7 @@ function parseArguments(arguments_: string[]) {
       root,
       values.get("--runtime-path-registry") ?? "delivery/linear-runtime-path-registry.json",
     ),
+    targets: values.has("--targets") ? resolve(root, values.get("--targets")!) : null,
     out: resolve(out),
   };
 }
@@ -334,6 +336,23 @@ function readIssues(): LinearIssueInput[] {
     seen.add(issue.identifier);
   }
   return issues.sort((left, right) => compare(left.identifier, right.identifier));
+}
+
+function readTargetIds(path: string): Set<string> {
+  const parsed = parseJson<unknown>(readFileSync(path, "utf8"), "targets");
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    throw new Error("targets must be a non-empty JSON array");
+  }
+  const targets = new Set<string>();
+  for (const [index, value] of parsed.entries()) {
+    if (typeof value !== "string" || !/^(?:PLA|BUY|SEL|INT)-\d+$/i.test(value.trim())) {
+      throw new Error(`targets entry ${index + 1} must be a Linear identifier`);
+    }
+    const identifier = value.trim().toUpperCase();
+    if (targets.has(identifier)) throw new Error(`targets duplicates ${identifier}`);
+    targets.add(identifier);
+  }
+  return targets;
 }
 
 function assertInside(root: string, path: string, label: string): void {
@@ -502,6 +521,7 @@ function readControlPlane(paths: ReturnType<typeof parseArguments>): PlannerCont
     sectionLabelByPath: new Map<string, Map<string, string>>(),
     referenceLabelByToken: new Map<string, string>(),
     referenceIssueByToken: new Map<string, string>(),
+    nativeTitleByIssue: new Map<string, string>(),
     trustedDraftsByIssue,
     runtimePathsByIssue,
     runtimePathsByGate,
@@ -522,6 +542,7 @@ function cleanTitle(title: string): string {
 function populateReferenceLabels(issues: LinearIssueInput[], context: PlannerContext): void {
   for (const issue of issues) {
     const label = cleanTitle(issue.title);
+    context.nativeTitleByIssue.set(issue.identifier.toUpperCase(), issue.title.trim());
     context.referenceLabelByToken.set(issue.identifier.toUpperCase(), label);
     context.referenceIssueByToken.set(issue.identifier.toUpperCase(), issue.identifier);
     const prefix = prefixValue(issue.title);
@@ -1424,6 +1445,13 @@ function identifiers(value: unknown): string[] {
   return [...direct, ...Object.values(object).flatMap(identifiers)];
 }
 
+function nativeRelationIdentifiers(issue: LinearIssueInput): string[] {
+  if (!issue.relations || typeof issue.relations !== "object") return [];
+  return [...new Set(identifiers(issue.relations))]
+    .filter((identifier) => identifier !== issue.identifier)
+    .sort(compare);
+}
+
 function relationValues(issue: LinearIssueInput, description: string, context: PlannerContext): NativeRelations {
   const relationSets = {
     blockedBy: new Set<string>(),
@@ -1491,6 +1519,49 @@ function relationValues(issue: LinearIssueInput, description: string, context: P
     blocks: [...relationSets.blocks].sort(compare),
     relatedTo: [...relationSets.relatedTo].sort(compare),
   };
+}
+
+function nativeRelatedTitles(
+  relations: NativeRelations,
+  context: PlannerContext,
+): Array<{ title: string; replacement: string }> {
+  const values = new Map<string, string>();
+  const add = (identifiers: string[], replacement: string): void => {
+    for (const identifier of identifiers) {
+      const token = identifier.toUpperCase();
+      const titles = [
+        context.nativeTitleByIssue.get(token),
+        context.referenceLabelByToken.get(token),
+      ];
+      for (const title of titles) {
+        if (title?.trim() && title.trim().length >= 32) {
+          values.set(title.trim(), replacement);
+        }
+      }
+    }
+  };
+  add(relations.blockedBy, "the prerequisite represented by the native blocked-by relation");
+  add(relations.blocks, "the dependent work represented by the native blocks relation");
+  add(relations.relatedTo, "the work represented by the native related relation");
+  return [...values]
+    .map(([title, replacement]) => ({ title, replacement }))
+    .sort((left, right) => right.title.length - left.title.length || compare(left.title, right.title));
+}
+
+function stripNativeRelatedTitles(
+  description: string,
+  titles: Array<{ title: string; replacement: string }>,
+): string {
+  let result = description;
+  for (const { title, replacement } of titles) {
+    const pattern = new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "giu");
+    result = result.replace(pattern, (match) =>
+      /^\p{Lu}/u.test(match)
+        ? `${replacement.charAt(0).toUpperCase()}${replacement.slice(1)}`
+        : replacement
+    );
+  }
+  return repairSanitizedProse(result).replace(/\n{3,}/g, "\n\n").trim();
 }
 
 function concretePaths(description: string): string[] {
@@ -6172,7 +6243,7 @@ function createDescription(
   const assumptionsText = standaloneSection("assumptions", fallback.assumptions);
   const exclusionsText = standaloneSection("exclusions", fallback.exclusions);
   const checksumLine = source.checksum
-    ? `- Canonical source bundle checksum: \`sha256:${source.checksum.sha256}\`.`
+    ? `- Canonical source checksum: \`sha256:${source.checksum.sha256}\`.`
     : "- The contract above is complete; provenance is limited to current canonical inputs.";
   const provenanceSection = source.row
     ? (specialContract && /^Appendix M\.5\b/i.test(source.row.section)
@@ -6608,9 +6679,11 @@ function createDescription(
       scoped,
     );
   }
+  const relatedTitles = nativeRelatedTitles(parsed.relations, context);
+  description = stripNativeRelatedTitles(description, relatedTitles);
   description = sanitizeCodeFences(description).text;
   description = convertRepeatedSectionTables(mergeAdjacentIdenticalTables(description));
-  validateDescription(issue.identifier, title, description);
+  validateDescription(issue.identifier, title, description, relatedTitles.map(({ title }) => title));
   return {
     description,
     sourceExtracted: Boolean(canonicalFacts || specialContract),
@@ -6619,7 +6692,12 @@ function createDescription(
   };
 }
 
-function validateDescription(issueId: string, title: string, description: string): void {
+function validateDescription(
+  issueId: string,
+  title: string,
+  description: string,
+  relatedTitles: string[] = [],
+): void {
   if (description.length > MAX_DESCRIPTION_CHARS) {
     throw new Error(`${issueId} normalized body exceeds ${MAX_DESCRIPTION_CHARS} characters`);
   }
@@ -6639,6 +6717,16 @@ function validateDescription(issueId: string, title: string, description: string
       ? description.slice(Math.max(0, index - 100), Math.min(description.length, index + 160)).replace(/\s+/g, " ")
       : "URL";
     throw new Error(`${issueId} normalized body retains a manual reference ${bannedReference ?? "URL"}: ${nearby}`);
+  }
+  const unresolvedMarker = description.match(/\b(?:TBD|TODO|FIXME|REPLACE_WITH_[A-Z0-9_]+)\b|[<\[]placeholder[>\]]/i)?.[0];
+  if (unresolvedMarker) {
+    throw new Error(`${issueId} normalized body retains unresolved marker ${JSON.stringify(unresolvedMarker)}`);
+  }
+  const duplicatedRelatedTitle = relatedTitles.find((relatedTitle) =>
+    description.toLocaleLowerCase().includes(relatedTitle.toLocaleLowerCase())
+  );
+  if (duplicatedRelatedTitle) {
+    throw new Error(`${issueId} normalized body repeats natively related title ${JSON.stringify(duplicatedRelatedTitle)}`);
   }
   const copiedNativeLine = description.split(/\r?\n/).find((line) =>
     (NATIVE_FIELD.test(line) || RELATION_FIELD.test(line)) &&
@@ -6964,13 +7052,35 @@ function atomicWrite(path: string, contents: string): void {
 function main(): void {
   const paths = parseArguments(process.argv.slice(2));
   const issues = readIssues();
+  const targetIds = paths.targets ? readTargetIds(paths.targets) : null;
+  if (targetIds) {
+    const inputIds = new Set(issues.map((issue) => issue.identifier));
+    const unknownTargets = [...targetIds].filter((identifier) => !inputIds.has(identifier));
+    if (unknownTargets.length > 0) {
+      throw new Error(`targets are absent from stdin: ${unknownTargets.sort(compare).join(", ")}`);
+    }
+  }
   const context = readControlPlane(paths);
   for (const issue of issues) {
     const parentId = typeof issue.parentId === "string" ? issue.parentId.trim().toUpperCase() : "";
     if (/^(?:PLA|BUY|SEL|INT)-\d+$/.test(parentId)) context.nativeParentIds.add(parentId);
   }
   populateReferenceLabels(issues, context);
-  const deletions = issues
+  const selectedIssues = targetIds
+    ? issues.filter((issue) => targetIds.has(issue.identifier))
+    : issues;
+  const inputIds = new Set(issues.map((issue) => issue.identifier));
+  const missingRelationEndpoints = selectedIssues.flatMap((issue) =>
+    nativeRelationIdentifiers(issue)
+      .filter((identifier) => !inputIds.has(identifier))
+      .map((identifier) => `${issue.identifier}->${identifier}`)
+  );
+  if (missingRelationEndpoints.length > 0) {
+    throw new Error(
+      `selected native relation endpoints are absent from stdin: ${missingRelationEndpoints.join(", ")}`,
+    );
+  }
+  const deletions = selectedIssues
     .filter((issue) => OBSOLETE_ISSUE_DELETIONS.has(issue.identifier))
     .map((issue) => ({
       issueId: issue.identifier,
@@ -6979,7 +7089,7 @@ function main(): void {
       reason: OBSOLETE_ISSUE_DELETIONS.get(issue.identifier)!,
       requiresUserConfirmation: true as const,
     }));
-  const updates = issues
+  const updates = selectedIssues
     .filter((issue) => !OBSOLETE_ISSUE_DELETIONS.has(issue.identifier))
     .map((issue) => planIssue(issue, context));
   const qualityGates = assertPlanQuality(updates);
@@ -6997,9 +7107,11 @@ function main(): void {
       checksumContract: relative(paths.root, paths.checksums),
       normalizationSourceMap: relative(paths.root, paths.sourceMap),
       input: "stdin full Linear issue array",
+      selection: targetIds ? "explicit target allowlist" : "all input issues",
     },
     summary: {
       inputIssues: issues.length,
+      selectedIssues: selectedIssues.length,
       plannedUpdates: updates.length,
       plannedDeletions: deletions.length,
       genericTemplates: updates.filter((update) => update.diagnostics.genericTemplate).length,
