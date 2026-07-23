@@ -36,10 +36,35 @@ jobs:
           elif ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
             echo "PR base commit unavailable" >&2
             exit 1
-          elif git cat-file -e "${BASE_SHA}:delivery/linear-snapshot.json" 2>/dev/null; then
+          elif ! git cat-file -e "${BASE_SHA}:delivery/linear-snapshot.json" 2>/dev/null; then
+            echo "PR base Linear mirror unavailable" >&2
+            exit 1
+          elif ! git diff --quiet "${BASE_SHA}" -- \
+            delivery/linear-snapshot.json \
+            delivery/release-plan.json \
+            reports/delivery/delivery-manifest.json \
+            reports/delivery/dependency-graph.json \
+            reports/delivery/drift-report.json \
+            reports/delivery/journey-readiness.json \
+            reports/delivery/readiness-report.json \
+            reports/delivery/release-scorecard.json \
+            reports/delivery/traceability-map.json; then
             echo "required=true" >> "$GITHUB_OUTPUT"
           else
-            echo "required=false" >> "$GITHUB_OUTPUT"
+            git show "${BASE_SHA}:delivery/linear-snapshot.json" > /tmp/base-linear-snapshot.json
+            if jq -e '
+              (.linearCapture == null) and
+              (.linearFingerprint.issues | arrays | length > 0) and
+              (.linearFingerprint.releasePipelines | arrays | length > 0) and
+              (.linearFingerprint.releases | arrays | length > 0) and
+              ((.linearFingerprint.projects == null) or (.linearFingerprint.projects == [])) and
+              ((.linearFingerprint.projectMilestones == null) or (.linearFingerprint.projectMilestones == [])) and
+              (.linearFingerprint.program == null)
+            ' /tmp/base-linear-snapshot.json >/dev/null; then
+              echo "required=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "required=true" >> "$GITHUB_OUTPUT"
+            fi
           fi
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:

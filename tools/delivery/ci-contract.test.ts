@@ -37,6 +37,8 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     "BASE_SHA: ${{ github.event.pull_request.base.sha }}",
     "git cat-file -e \"${BASE_SHA}^{commit}\"",
     "git cat-file -e \"${BASE_SHA}:delivery/linear-snapshot.json\"",
+    "PR base Linear mirror unavailable",
+    "/tmp/base-linear-snapshot.json",
     "Verify committed delivery mirror",
     "steps.linear_mirror.outputs.required == 'true'",
   ]) {
@@ -64,6 +66,38 @@ test("delivery workflow enforces every repository and Linear gate", () => {
   const deliveryIntegrity = workflow.slice(
     workflow.indexOf("  delivery-integrity:"),
     workflow.indexOf("  linear-capture:"),
+  );
+  const mirrorClassification = deliveryIntegrity.slice(
+    deliveryIntegrity.indexOf("      - name: Classify committed Linear mirror"),
+    deliveryIntegrity.indexOf("      - uses: actions/setup-node@"),
+  );
+  for (const path of [
+    "delivery/linear-snapshot.json",
+    "delivery/release-plan.json",
+    "reports/delivery/delivery-manifest.json",
+    "reports/delivery/dependency-graph.json",
+    "reports/delivery/drift-report.json",
+    "reports/delivery/journey-readiness.json",
+    "reports/delivery/readiness-report.json",
+    "reports/delivery/release-scorecard.json",
+    "reports/delivery/traceability-map.json",
+  ]) {
+    assert.match(mirrorClassification, new RegExp(path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  for (const requiredBootstrapField of [
+    ".linearCapture == null",
+    ".linearFingerprint.issues | arrays | length > 0",
+    ".linearFingerprint.releasePipelines | arrays | length > 0",
+    ".linearFingerprint.releases | arrays | length > 0",
+    ".linearFingerprint.projects == null",
+    ".linearFingerprint.projectMilestones == null",
+    ".linearFingerprint.program == null",
+  ]) {
+    assert.match(mirrorClassification, new RegExp(requiredBootstrapField.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  assert.match(
+    mirrorClassification,
+    /git diff --quiet "\$\{BASE_SHA\}" --/,
   );
   const mirrorVerification = deliveryIntegrity.slice(
     deliveryIntegrity.indexOf("      - name: Verify committed delivery mirror"),
