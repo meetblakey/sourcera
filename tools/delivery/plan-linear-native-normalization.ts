@@ -2965,6 +2965,40 @@ function markdownTableCells(line: string): string[] {
   return cells.map((value) => value.trim());
 }
 
+function canonicalMarkdownTableCell(
+  source: string,
+  field: string,
+  column: string,
+): string | null {
+  const lines = source.split(/\r?\n/);
+  const normalized = (value: string): string => value.replace(/[*`]/g, "").trim().toLowerCase();
+  for (let index = 0; index < lines.length;) {
+    if (!/^\s*\|/.test(lines[index])) {
+      index += 1;
+      continue;
+    }
+    const table: string[] = [];
+    while (index < lines.length && /^\s*\|/.test(lines[index])) {
+      table.push(lines[index]);
+      index += 1;
+    }
+    if (table.length < 3) continue;
+    const headers = markdownTableCells(table[0]);
+    const separator = markdownTableCells(table[1]);
+    if (!separator.every((value) => /^:?-{2,}:?$/.test(value))) continue;
+    const fieldIndex = headers.findIndex((value) => normalized(value) === "field");
+    const columnIndex = headers.findIndex((value) => normalized(value) === normalized(column));
+    if (fieldIndex < 0 || columnIndex < 0) continue;
+    for (const row of table.slice(2)) {
+      const cells = markdownTableCells(row);
+      if (normalized(cells[fieldIndex] ?? "") === normalized(field)) {
+        return cells[columnIndex]?.trim() || null;
+      }
+    }
+  }
+  return null;
+}
+
 function sanitizeMarkdownTables(raw: string): { text: string; droppedMalformedRows: number } {
   const lines = raw.split(/\r?\n/);
   const output: string[] = [];
@@ -6649,6 +6683,23 @@ function createDescription(
       "emits the registered `pricing_admin.proposal.withdrawal_rate_limit_hit` event and webhook",
     );
   }
+  const retiredMarketplacePricing = /Minimum monthly price in integer cents[.;]\s*null if custom\/TBD/gi;
+  if (
+    (issue.identifier === "BUY-220" || issue.identifier === "BUY-224") &&
+    retiredMarketplacePricing.test(description)
+  ) {
+    const canonicalPricingNote = resolvedExactSourceSection
+      ? canonicalMarkdownTableCell(
+          resolvedExactSourceSection,
+          "min_price_cents_monthly",
+          "Notes",
+        )
+      : null;
+    if (!canonicalPricingNote) {
+      throw new Error(`${issue.identifier} cannot repair retired marketplace pricing without its canonical source row`);
+    }
+    description = description.replace(retiredMarketplacePricing, canonicalPricingNote);
+  }
   let finalOutcomeBody = contractSectionBody(
     description,
     "## Outcome",
@@ -6778,7 +6829,7 @@ function validateDescription(
     throw new Error(`${issueId} normalized body retains malformed prose ${JSON.stringify(proseQualityDefect)}`);
   }
   const publicationProseDefect = description.match(
-    /(?:\bAC\s*#\d+[a-z]?\b|\bAE--\d+\b|\bR\d+--[a-z0-9-]+\b|\bR-\d+\s+closure\b|\b(?:at\s+)?lines?\s+\d{3,}\b|\b(?:in|through)\s*\.(?=\s|$)|\bfor\s+until\b|\bin\.?0a\b|\bonly after\s*,{2,}|\+\s*(?:AC\b|[—-]\s*sibling\b)|\b(?:retired in (?:this pass|V\d+)|supersedes the (?:prior|pre-existing)|promoted from prose-distributed mentions)\b|^\s*:\s*$|\band\s*$)/im,
+    /(?:\bAC\s*#\d+[a-z]?\b|\bAE--\d+\b|\bR\d+--[a-z0-9-]+\b|\bR-\d+\s+closure\b|\b(?:at\s+)?lines?\s+\d{3,}\b|\b(?:in|through)\s*\.(?=\s|$)|\bfor\s+until\b|\bin\.?0a\b|\bonly after\s*,{2,}|\+\s*(?:AC\b|[—-]\s*sibling\b)|\b(?:retired in (?:this pass|V\d+)|supersedes the (?:prior|pre-existing) (?!(?:report|record|row)\b)|promoted from prose-distributed mentions)\b|^\s*:\s*$|\band\s*$)/im,
   )?.[0];
   if (publicationProseDefect) {
     throw new Error(`${issueId} normalized body retains publication-invalid prose ${JSON.stringify(publicationProseDefect)}`);
