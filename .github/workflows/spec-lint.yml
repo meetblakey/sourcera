@@ -221,6 +221,7 @@ jobs:
           npx tsx tools/spec-lint/run-all.ts \
             --spec Sourcera_Master_Spec.md \
             --ux UX_Design_of_Sourcera.md \
+            --ae-ledger _integration/AUTHORED_EXTENSIONS_LEDGER.md \
             --reconciliation _integration/RECONCILIATION.md \
             --pr-body /tmp/pr_description.txt
 

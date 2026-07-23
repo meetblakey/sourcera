@@ -59,7 +59,7 @@ function run(paths: ReturnType<typeof fixture>, extras: string[] = [], expected 
   return spawnSync(
     process.execPath,
     [
-      "--import", "tsx",
+      "--import", "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
       "tools/delivery/compose-linear-normalization-plan.ts",
       "--base", paths.base,
       "--overlay", paths.overlay,
