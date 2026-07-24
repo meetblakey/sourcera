@@ -615,7 +615,8 @@
       "PLA-1001",
       "PLA-997",
       "PLA-998",
-      "PLA-999"
+      "PLA-999",
+      "PLA-1055"
     ],
     "executableIssues": [
       {
@@ -638,9 +639,7 @@
       {
         "issueId": "PLA-1000",
         "milestone": "Purchase and settlement ready",
-        "dependencies": [
-          "F-630"
-        ],
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -674,7 +673,6 @@
           "F-005",
           "F-132",
           "F-593",
-          "F-630",
           "F-917"
         ],
         "paths": [],
@@ -713,6 +711,21 @@
           "F-537",
           "F-569"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1055",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -26734,8 +26747,7 @@
         "milestone": "Billing contracts ready",
         "dependencies": [
           "F-132",
-          "F-536",
-          "F-630"
+          "F-536"
         ],
         "paths": [],
         "tests": {
@@ -31429,7 +31441,7 @@
       "section": "§46.3"
     },
     "disposition": "executable",
-    "issueId": "PLA-555",
+    "issueId": "PLA-1051",
     "release": "R0",
     "milestone": "Quality gates ready",
     "dependencies": [
@@ -31453,22 +31465,61 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-555"
+      "PLA-1051",
+      "PLA-1052",
+      "PLA-1053",
+      "PLA-1054"
     ],
     "executableIssues": [
       {
-        "issueId": "PLA-555",
+        "issueId": "PLA-1051",
         "milestone": "Quality gates ready",
-        "dependencies": [
-          "F-005",
-          "F-008",
-          "F-572",
-          "F-600",
-          "F-603",
-          "F-605",
-          "F-612",
-          "F-628"
-        ],
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1052",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1053",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1054",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -34190,7 +34241,6 @@
         "milestone": "Seller shell ready",
         "dependencies": [
           "F-559",
-          "F-630",
           "F-751",
           "F-752",
           "F-753",
@@ -48386,7 +48436,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72645"
+      "section": "line:72696"
     },
     "disposition": "proof_only",
     "issueId": "PLA-804",
@@ -48433,7 +48483,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73599"
+      "section": "line:73650"
     },
     "disposition": "proof_only",
     "issueId": "PLA-840",
@@ -48482,7 +48532,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73394"
+      "section": "line:73445"
     },
     "disposition": "proof_only",
     "issueId": "PLA-830",
@@ -48531,7 +48581,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73881"
+      "section": "line:73932"
     },
     "disposition": "proof_only",
     "issueId": "PLA-859",
@@ -48578,7 +48628,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73977"
+      "section": "line:74028"
     },
     "disposition": "proof_only",
     "issueId": "PLA-868",
@@ -48627,7 +48677,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72503"
+      "section": "line:72554"
     },
     "disposition": "proof_only",
     "issueId": "PLA-757",
@@ -48678,7 +48728,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73597"
+      "section": "line:73648"
     },
     "disposition": "proof_only",
     "issueId": "PLA-838",
@@ -48725,7 +48775,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73956"
+      "section": "line:74007"
     },
     "disposition": "proof_only",
     "issueId": "PLA-861",
@@ -48772,7 +48822,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73959"
+      "section": "line:74010"
     },
     "disposition": "proof_only",
     "issueId": "PLA-864",
@@ -48819,7 +48869,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73957"
+      "section": "line:74008"
     },
     "disposition": "proof_only",
     "issueId": "PLA-862",
@@ -48870,7 +48920,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73685"
+      "section": "line:73736"
     },
     "disposition": "proof_only",
     "issueId": "PLA-853",
@@ -48917,7 +48967,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72621"
+      "section": "line:72672"
     },
     "disposition": "proof_only",
     "issueId": "PLA-797",
@@ -48964,7 +49014,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72616"
+      "section": "line:72667"
     },
     "disposition": "proof_only",
     "issueId": "PLA-796",
@@ -49011,7 +49061,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72564"
+      "section": "line:72615"
     },
     "disposition": "proof_only",
     "issueId": "PLA-767",
@@ -49058,7 +49108,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72563"
+      "section": "line:72614"
     },
     "disposition": "proof_only",
     "issueId": "PLA-766",
@@ -49105,7 +49155,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73669"
+      "section": "line:73720"
     },
     "disposition": "proof_only",
     "issueId": "PLA-850",
@@ -49152,7 +49202,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74350"
+      "section": "line:74401"
     },
     "disposition": "proof_only",
     "issueId": "PLA-894",
@@ -49199,7 +49249,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74226"
+      "section": "line:74277"
     },
     "disposition": "proof_only",
     "issueId": "PLA-870",
@@ -49246,7 +49296,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72565"
+      "section": "line:72616"
     },
     "disposition": "proof_only",
     "issueId": "PLA-768",
@@ -49293,7 +49343,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72613"
+      "section": "line:72664"
     },
     "disposition": "proof_only",
     "issueId": "PLA-793",
@@ -49342,7 +49392,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72610"
+      "section": "line:72661"
     },
     "disposition": "proof_only",
     "issueId": "PLA-790",
@@ -49391,7 +49441,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72629"
+      "section": "line:72680"
     },
     "disposition": "proof_only",
     "issueId": "PLA-799",
@@ -49438,7 +49488,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73924"
+      "section": "line:73975"
     },
     "disposition": "proof_only",
     "issueId": "SEL-232",
@@ -49485,7 +49535,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73923"
+      "section": "line:73974"
     },
     "disposition": "proof_only",
     "issueId": "SEL-231",
@@ -49532,7 +49582,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74336"
+      "section": "line:74387"
     },
     "disposition": "proof_only",
     "issueId": "SEL-246",
@@ -49579,7 +49629,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73622"
+      "section": "line:73673"
     },
     "disposition": "proof_only",
     "issueId": "SEL-219",
@@ -49626,7 +49676,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73926"
+      "section": "line:73977"
     },
     "disposition": "proof_only",
     "issueId": "SEL-234",
@@ -49673,7 +49723,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73925"
+      "section": "line:73976"
     },
     "disposition": "proof_only",
     "issueId": "SEL-233",
@@ -49720,7 +49770,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73958"
+      "section": "line:74009"
     },
     "disposition": "proof_only",
     "issueId": "PLA-863",
@@ -49771,7 +49821,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74270"
+      "section": "line:74321"
     },
     "disposition": "proof_only",
     "issueId": "PLA-877",
@@ -49818,7 +49868,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72599"
+      "section": "line:72650"
     },
     "disposition": "proof_only",
     "issueId": "SEL-200",
@@ -49865,7 +49915,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73601"
+      "section": "line:73652"
     },
     "disposition": "proof_only",
     "issueId": "PLA-842",
@@ -49914,7 +49964,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72814"
+      "section": "line:72865"
     },
     "disposition": "proof_only",
     "issueId": "PLA-808",
@@ -49963,7 +50013,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73139"
+      "section": "line:73190"
     },
     "disposition": "proof_only",
     "issueId": "PLA-825",
@@ -50018,7 +50068,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74284"
+      "section": "line:74335"
     },
     "disposition": "proof_only",
     "issueId": "PLA-881",
@@ -50065,7 +50115,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74297"
+      "section": "line:74348"
     },
     "disposition": "proof_only",
     "issueId": "BUY-383",
@@ -50114,7 +50164,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74360"
+      "section": "line:74411"
     },
     "disposition": "proof_only",
     "issueId": "PLA-1026",
@@ -50165,7 +50215,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73880"
+      "section": "line:73931"
     },
     "disposition": "proof_only",
     "issueId": "SEL-226",
@@ -50212,7 +50262,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73756"
+      "section": "line:73807"
     },
     "disposition": "proof_only",
     "issueId": "PLA-855",
@@ -50261,7 +50311,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72633"
+      "section": "line:72684"
     },
     "disposition": "proof_only",
     "issueId": "PLA-803",
@@ -50308,7 +50358,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72632"
+      "section": "line:72683"
     },
     "disposition": "proof_only",
     "issueId": "PLA-802",
@@ -50355,7 +50405,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72631"
+      "section": "line:72682"
     },
     "disposition": "proof_only",
     "issueId": "PLA-801",
@@ -50402,7 +50452,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74327"
+      "section": "line:74378"
     },
     "disposition": "proof_only",
     "issueId": "PLA-891",
@@ -50449,7 +50499,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72476"
+      "section": "line:72527"
     },
     "disposition": "proof_only",
     "issueId": "BUY-367",
@@ -50496,7 +50546,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72526"
+      "section": "line:72577"
     },
     "disposition": "proof_only",
     "issueId": "PLA-765",
@@ -50543,7 +50593,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73356"
+      "section": "line:73407"
     },
     "disposition": "proof_only",
     "issueId": "PLA-827",
@@ -50590,7 +50640,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73598"
+      "section": "line:73649"
     },
     "disposition": "proof_only",
     "issueId": "PLA-839",
@@ -50637,7 +50687,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73596"
+      "section": "line:73647"
     },
     "disposition": "proof_only",
     "issueId": "PLA-837",
@@ -50684,7 +50734,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72625"
+      "section": "line:72676"
     },
     "disposition": "proof_only",
     "issueId": "PLA-798",
@@ -50731,7 +50781,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73583"
+      "section": "line:73634"
     },
     "disposition": "proof_only",
     "issueId": "PLA-836",
@@ -50778,7 +50828,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72574"
+      "section": "line:72625"
     },
     "disposition": "proof_only",
     "issueId": "PLA-771",
@@ -50825,7 +50875,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74281"
+      "section": "line:74332"
     },
     "disposition": "proof_only",
     "issueId": "BUY-382",
@@ -50872,7 +50922,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72479"
+      "section": "line:72530"
     },
     "disposition": "proof_only",
     "issueId": "BUY-368",
@@ -50919,7 +50969,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72606"
+      "section": "line:72657"
     },
     "disposition": "proof_only",
     "issueId": "PLA-786",
@@ -50968,7 +51018,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72607"
+      "section": "line:72658"
     },
     "disposition": "proof_only",
     "issueId": "PLA-787",
@@ -51017,7 +51067,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72605"
+      "section": "line:72656"
     },
     "disposition": "proof_only",
     "issueId": "PLA-785",
@@ -51066,7 +51116,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72609"
+      "section": "line:72660"
     },
     "disposition": "proof_only",
     "issueId": "PLA-789",
@@ -51113,7 +51163,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72608"
+      "section": "line:72659"
     },
     "disposition": "proof_only",
     "issueId": "PLA-788",
@@ -51162,7 +51212,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74227"
+      "section": "line:74278"
     },
     "disposition": "proof_only",
     "issueId": "PLA-871",
@@ -51209,7 +51259,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72595"
+      "section": "line:72646"
     },
     "disposition": "proof_only",
     "issueId": "PLA-778",
@@ -51256,7 +51306,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72594"
+      "section": "line:72645"
     },
     "disposition": "proof_only",
     "issueId": "PLA-777",
@@ -51303,7 +51353,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72593"
+      "section": "line:72644"
     },
     "disposition": "proof_only",
     "issueId": "PLA-776",
@@ -51350,7 +51400,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74225"
+      "section": "line:74276"
     },
     "disposition": "proof_only",
     "issueId": "PLA-869",
@@ -51397,7 +51447,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72596"
+      "section": "line:72647"
     },
     "disposition": "proof_only",
     "issueId": "PLA-779",
@@ -51444,7 +51494,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72597"
+      "section": "line:72648"
     },
     "disposition": "proof_only",
     "issueId": "PLA-780",
@@ -51491,7 +51541,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72600"
+      "section": "line:72651"
     },
     "disposition": "proof_only",
     "issueId": "PLA-781",
@@ -51538,7 +51588,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72601"
+      "section": "line:72652"
     },
     "disposition": "proof_only",
     "issueId": "PLA-782",
@@ -51585,7 +51635,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72604"
+      "section": "line:72655"
     },
     "disposition": "proof_only",
     "issueId": "PLA-784",
@@ -51632,7 +51682,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72566"
+      "section": "line:72617"
     },
     "disposition": "proof_only",
     "issueId": "PLA-769",
@@ -51679,7 +51729,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72602"
+      "section": "line:72653"
     },
     "disposition": "proof_only",
     "issueId": "PLA-783",
@@ -51726,7 +51776,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72845"
+      "section": "line:72896"
     },
     "disposition": "proof_only",
     "issueId": "PLA-813",
@@ -51773,7 +51823,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72844"
+      "section": "line:72895"
     },
     "disposition": "proof_only",
     "issueId": "SEL-204",
@@ -51820,7 +51870,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72614"
+      "section": "line:72665"
     },
     "disposition": "proof_only",
     "issueId": "PLA-794",
@@ -51869,7 +51919,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73670"
+      "section": "line:73721"
     },
     "disposition": "proof_only",
     "issueId": "PLA-851",
@@ -51918,7 +51968,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74319"
+      "section": "line:74370"
     },
     "disposition": "proof_only",
     "issueId": "PLA-890",
@@ -51967,7 +52017,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72573"
+      "section": "line:72624"
     },
     "disposition": "proof_only",
     "issueId": "PLA-770",
@@ -52016,7 +52066,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74318"
+      "section": "line:74369"
     },
     "disposition": "proof_only",
     "issueId": "PLA-889",
@@ -52065,7 +52115,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74228"
+      "section": "line:74279"
     },
     "disposition": "proof_only",
     "issueId": "PLA-872",
@@ -52112,7 +52162,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73339"
+      "section": "line:73390"
     },
     "disposition": "proof_only",
     "issueId": "PLA-826",
@@ -52159,7 +52209,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73463"
+      "section": "line:73514"
     },
     "disposition": "proof_only",
     "issueId": "PLA-832",
@@ -52206,7 +52256,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72885"
+      "section": "line:72936"
     },
     "disposition": "proof_only",
     "issueId": "PLA-818",
@@ -52253,7 +52303,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74283"
+      "section": "line:74334"
     },
     "disposition": "proof_only",
     "issueId": "SEL-243",
@@ -52300,7 +52350,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73757"
+      "section": "line:73808"
     },
     "disposition": "proof_only",
     "issueId": "PLA-856",
@@ -52349,7 +52399,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72812"
+      "section": "line:72863"
     },
     "disposition": "proof_only",
     "issueId": "PLA-807",
@@ -52396,7 +52446,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73909"
+      "section": "line:73960"
     },
     "disposition": "proof_only",
     "issueId": "PLA-860",
@@ -52443,7 +52493,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73623"
+      "section": "line:73674"
     },
     "disposition": "proof_only",
     "issueId": "BUY-380",
@@ -52490,7 +52540,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72939"
+      "section": "line:72990"
     },
     "disposition": "proof_only",
     "issueId": "SEL-210",
@@ -52537,7 +52587,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73357"
+      "section": "line:73408"
     },
     "disposition": "proof_only",
     "issueId": "PLA-828",
@@ -52586,7 +52636,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74250"
+      "section": "line:74301"
     },
     "disposition": "proof_only",
     "issueId": "PLA-874",
@@ -52633,7 +52683,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74337"
+      "section": "line:74388"
     },
     "disposition": "proof_only",
     "issueId": "PLA-893",
@@ -52680,7 +52730,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74239"
+      "section": "line:74290"
     },
     "disposition": "proof_only",
     "issueId": "PLA-873",
@@ -52731,7 +52781,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74240"
+      "section": "line:74291"
     },
     "disposition": "proof_only",
     "issueId": "SEL-241",
@@ -52782,7 +52832,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74328"
+      "section": "line:74379"
     },
     "disposition": "proof_only",
     "issueId": "PLA-892",
@@ -52831,7 +52881,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73380"
+      "section": "line:73431"
     },
     "disposition": "proof_only",
     "issueId": "BUY-374",
@@ -52882,7 +52932,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73729"
+      "section": "line:73780"
     },
     "disposition": "proof_only",
     "issueId": "PLA-854",
@@ -52929,7 +52979,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72813"
+      "section": "line:72864"
     },
     "disposition": "proof_only",
     "issueId": "SEL-203",
@@ -52976,7 +53026,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72628"
+      "section": "line:72679"
     },
     "disposition": "proof_only",
     "issueId": "SEL-201",
@@ -53023,7 +53073,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73907"
+      "section": "line:73958"
     },
     "disposition": "proof_only",
     "issueId": "SEL-228",
@@ -53070,7 +53120,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73539"
+      "section": "line:73590"
     },
     "disposition": "proof_only",
     "issueId": "SEL-217",
@@ -53117,7 +53167,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73908"
+      "section": "line:73959"
     },
     "disposition": "proof_only",
     "issueId": "SEL-229",
@@ -53164,7 +53214,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72915"
+      "section": "line:72966"
     },
     "disposition": "proof_only",
     "issueId": "SEL-209",
@@ -53211,7 +53261,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72913"
+      "section": "line:72964"
     },
     "disposition": "proof_only",
     "issueId": "SEL-207",
@@ -53258,7 +53308,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72914"
+      "section": "line:72965"
     },
     "disposition": "proof_only",
     "issueId": "SEL-208",
@@ -53305,7 +53355,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73906"
+      "section": "line:73957"
     },
     "disposition": "proof_only",
     "issueId": "SEL-227",
@@ -53352,7 +53402,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72974"
+      "section": "line:73025"
     },
     "disposition": "proof_only",
     "issueId": "PLA-819",
@@ -53399,7 +53449,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73600"
+      "section": "line:73651"
     },
     "disposition": "proof_only",
     "issueId": "PLA-841",
@@ -53446,7 +53496,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72650"
+      "section": "line:72701"
     },
     "disposition": "proof_only",
     "issueId": "PLA-806",
@@ -53493,7 +53543,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72820"
+      "section": "line:72871"
     },
     "disposition": "proof_only",
     "issueId": "PLA-810",
@@ -53540,7 +53590,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72826"
+      "section": "line:72877"
     },
     "disposition": "proof_only",
     "issueId": "PLA-811",
@@ -53587,7 +53637,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73507"
+      "section": "line:73558"
     },
     "disposition": "proof_only",
     "issueId": "SEL-215",
@@ -53634,7 +53684,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73522"
+      "section": "line:73573"
     },
     "disposition": "proof_only",
     "issueId": "BUY-379",
@@ -53681,7 +53731,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73521"
+      "section": "line:73572"
     },
     "disposition": "proof_only",
     "issueId": "SEL-216",
@@ -53728,7 +53778,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73538"
+      "section": "line:73589"
     },
     "disposition": "proof_only",
     "issueId": "PLA-833",
@@ -53775,7 +53825,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73137"
+      "section": "line:73188"
     },
     "disposition": "proof_only",
     "issueId": "PLA-823",
@@ -53822,7 +53872,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73763"
+      "section": "line:73814"
     },
     "disposition": "proof_only",
     "issueId": "PLA-858",
@@ -53869,7 +53919,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73940"
+      "section": "line:73991"
     },
     "disposition": "proof_only",
     "issueId": "SEL-236",
@@ -53918,7 +53968,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72851"
+      "section": "line:72902"
     },
     "disposition": "proof_only",
     "issueId": "PLA-817",
@@ -53965,7 +54015,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72850"
+      "section": "line:72901"
     },
     "disposition": "proof_only",
     "issueId": "PLA-816",
@@ -54012,7 +54062,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72848"
+      "section": "line:72899"
     },
     "disposition": "proof_only",
     "issueId": "PLA-814",
@@ -54059,7 +54109,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72849"
+      "section": "line:72900"
     },
     "disposition": "proof_only",
     "issueId": "PLA-815",
@@ -54106,7 +54156,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73671"
+      "section": "line:73722"
     },
     "disposition": "proof_only",
     "issueId": "PLA-852",
@@ -54153,7 +54203,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74272"
+      "section": "line:74323"
     },
     "disposition": "proof_only",
     "issueId": "PLA-879",
@@ -54200,7 +54250,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74269"
+      "section": "line:74320"
     },
     "disposition": "proof_only",
     "issueId": "PLA-876",
@@ -54247,7 +54297,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74271"
+      "section": "line:74322"
     },
     "disposition": "proof_only",
     "issueId": "PLA-878",
@@ -54294,7 +54344,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74273"
+      "section": "line:74324"
     },
     "disposition": "proof_only",
     "issueId": "PLA-880",
@@ -54341,7 +54391,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73138"
+      "section": "line:73189"
     },
     "disposition": "proof_only",
     "issueId": "PLA-824",
@@ -54390,7 +54440,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72976"
+      "section": "line:73027"
     },
     "disposition": "proof_only",
     "issueId": "PLA-820",
@@ -54437,7 +54487,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74251"
+      "section": "line:74302"
     },
     "disposition": "proof_only",
     "issueId": "PLA-875",
@@ -54484,7 +54534,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74307"
+      "section": "line:74358"
     },
     "disposition": "proof_only",
     "issueId": "PLA-885",
@@ -54533,7 +54583,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74309"
+      "section": "line:74360"
     },
     "disposition": "proof_only",
     "issueId": "PLA-887",
@@ -54580,7 +54630,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72485"
+      "section": "line:72536"
     },
     "disposition": "proof_only",
     "issueId": "BUY-369",
@@ -54627,7 +54677,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72486"
+      "section": "line:72537"
     },
     "disposition": "proof_only",
     "issueId": "BUY-370",
@@ -54674,7 +54724,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73415"
+      "section": "line:73466"
     },
     "disposition": "proof_only",
     "issueId": "BUY-376",
@@ -54725,7 +54775,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73413"
+      "section": "line:73464"
     },
     "disposition": "proof_only",
     "issueId": "BUY-377",
@@ -54772,7 +54822,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73411"
+      "section": "line:73462"
     },
     "disposition": "proof_only",
     "issueId": "BUY-375",
@@ -54819,7 +54869,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74285"
+      "section": "line:74336"
     },
     "disposition": "proof_only",
     "issueId": "PLA-882",
@@ -54866,7 +54916,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73645"
+      "section": "line:73696"
     },
     "disposition": "proof_only",
     "issueId": "PLA-849",
@@ -54913,7 +54963,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74296"
+      "section": "line:74347"
     },
     "disposition": "proof_only",
     "issueId": "PLA-883",
@@ -54960,7 +55010,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73624"
+      "section": "line:73675"
     },
     "disposition": "proof_only",
     "issueId": "PLA-845",
@@ -55007,7 +55057,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73377"
+      "section": "line:73428"
     },
     "disposition": "proof_only",
     "issueId": "BUY-373",
@@ -55054,7 +55104,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74238"
+      "section": "line:74289"
     },
     "disposition": "proof_only",
     "issueId": "SEL-240",
@@ -55101,7 +55151,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73493"
+      "section": "line:73544"
     },
     "disposition": "proof_only",
     "issueId": "SEL-214",
@@ -55150,7 +55200,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72886"
+      "section": "line:72937"
     },
     "disposition": "proof_only",
     "issueId": "SEL-205",
@@ -55197,7 +55247,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72887"
+      "section": "line:72938"
     },
     "disposition": "proof_only",
     "issueId": "SEL-206",
@@ -55240,11 +55290,58 @@
     ]
   },
   {
+    "requirementId": "RG:query_scoping_console_required",
+    "source": {
+      "document": "Sourcera_Master_Spec.md",
+      "version": "live",
+      "section": "line:74421"
+    },
+    "disposition": "proof_only",
+    "issueId": "PLA-1056",
+    "release": "R0",
+    "milestone": "Production evidence closed",
+    "dependencies": [
+      "F-003"
+    ],
+    "paths": [],
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
+    "rollout": null,
+    "rollback": null,
+    "telemetry": null,
+    "proof": null,
+    "executableIssueIds": [
+      "PLA-1056"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1056",
+        "milestone": "Production evidence closed",
+        "dependencies": [
+          "F-003"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
+  },
+  {
     "requirementId": "RG:requirement_reopening_runtime_consistency",
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74348"
+      "section": "line:74399"
     },
     "disposition": "proof_only",
     "issueId": "BUY-384",
@@ -55293,7 +55390,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73575"
+      "section": "line:73626"
     },
     "disposition": "proof_only",
     "issueId": "PLA-834",
@@ -55340,7 +55437,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74317"
+      "section": "line:74368"
     },
     "disposition": "proof_only",
     "issueId": "PLA-888",
@@ -55387,7 +55484,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72649"
+      "section": "line:72700"
     },
     "disposition": "proof_only",
     "issueId": "PLA-805",
@@ -55434,7 +55531,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72612"
+      "section": "line:72663"
     },
     "disposition": "proof_only",
     "issueId": "PLA-792",
@@ -55485,7 +55582,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72611"
+      "section": "line:72662"
     },
     "disposition": "proof_only",
     "issueId": "PLA-791",
@@ -55534,7 +55631,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73447"
+      "section": "line:73498"
     },
     "disposition": "proof_only",
     "issueId": "PLA-831",
@@ -55581,7 +55678,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73643"
+      "section": "line:73694"
     },
     "disposition": "proof_only",
     "issueId": "BUY-381",
@@ -55628,7 +55725,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73927"
+      "section": "line:73978"
     },
     "disposition": "proof_only",
     "issueId": "SEL-235",
@@ -55679,7 +55776,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73941"
+      "section": "line:73992"
     },
     "disposition": "proof_only",
     "issueId": "SEL-237",
@@ -55726,7 +55823,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73942"
+      "section": "line:73993"
     },
     "disposition": "proof_only",
     "issueId": "SEL-238",
@@ -55777,7 +55874,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73943"
+      "section": "line:73994"
     },
     "disposition": "proof_only",
     "issueId": "SEL-239",
@@ -55836,7 +55933,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73140"
+      "section": "line:73191"
     },
     "disposition": "proof_only",
     "issueId": "SEL-211",
@@ -55883,7 +55980,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74298"
+      "section": "line:74349"
     },
     "disposition": "proof_only",
     "issueId": "SEL-245",
@@ -55930,7 +56027,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74282"
+      "section": "line:74333"
     },
     "disposition": "proof_only",
     "issueId": "SEL-242",
@@ -55977,7 +56074,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73644"
+      "section": "line:73695"
     },
     "disposition": "proof_only",
     "issueId": "SEL-223",
@@ -56024,7 +56121,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73910"
+      "section": "line:73961"
     },
     "disposition": "proof_only",
     "issueId": "SEL-230",
@@ -56075,7 +56172,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72496"
+      "section": "line:72547"
     },
     "disposition": "proof_only",
     "issueId": "SEL-198",
@@ -56122,7 +56219,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72497"
+      "section": "line:72548"
     },
     "disposition": "proof_only",
     "issueId": "SEL-199",
@@ -56169,7 +56266,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72495"
+      "section": "line:72546"
     },
     "disposition": "proof_only",
     "issueId": "SEL-197",
@@ -56216,7 +56313,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73649"
+      "section": "line:73700"
     },
     "disposition": "proof_only",
     "issueId": "SEL-224",
@@ -56263,7 +56360,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73160"
+      "section": "line:73211"
     },
     "disposition": "proof_only",
     "issueId": "SEL-212",
@@ -56310,7 +56407,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73650"
+      "section": "line:73701"
     },
     "disposition": "proof_only",
     "issueId": "SEL-225",
@@ -56357,7 +56454,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73161"
+      "section": "line:73212"
     },
     "disposition": "proof_only",
     "issueId": "SEL-213",
@@ -56404,7 +56501,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72659"
+      "section": "line:72710"
     },
     "disposition": "proof_only",
     "issueId": "SEL-202",
@@ -56451,7 +56548,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74338"
+      "section": "line:74389"
     },
     "disposition": "proof_only",
     "issueId": "SEL-247",
@@ -56498,7 +56595,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73555"
+      "section": "line:73606"
     },
     "disposition": "proof_only",
     "issueId": "SEL-218",
@@ -56547,7 +56644,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73640"
+      "section": "line:73691"
     },
     "disposition": "proof_only",
     "issueId": "SEL-220",
@@ -56594,7 +56691,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73641"
+      "section": "line:73692"
     },
     "disposition": "proof_only",
     "issueId": "SEL-221",
@@ -56641,7 +56738,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73642"
+      "section": "line:73693"
     },
     "disposition": "proof_only",
     "issueId": "SEL-222",
@@ -56688,7 +56785,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74295"
+      "section": "line:74346"
     },
     "disposition": "proof_only",
     "issueId": "SEL-244",
@@ -56735,7 +56832,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72615"
+      "section": "line:72666"
     },
     "disposition": "proof_only",
     "issueId": "PLA-795",
@@ -56784,7 +56881,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73606"
+      "section": "line:73657"
     },
     "disposition": "proof_only",
     "issueId": "PLA-844",
@@ -56833,7 +56930,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73604"
+      "section": "line:73655"
     },
     "disposition": "proof_only",
     "issueId": "PLA-843",
@@ -56880,7 +56977,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72500"
+      "section": "line:72551"
     },
     "disposition": "proof_only",
     "issueId": "PLA-754",
@@ -56927,7 +57024,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72472"
+      "section": "line:72523"
     },
     "disposition": "proof_only",
     "issueId": "BUY-363",
@@ -56974,7 +57071,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72501"
+      "section": "line:72552"
     },
     "disposition": "proof_only",
     "issueId": "PLA-755",
@@ -57021,7 +57118,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72507"
+      "section": "line:72558"
     },
     "disposition": "proof_only",
     "issueId": "PLA-759",
@@ -57070,7 +57167,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72513"
+      "section": "line:72564"
     },
     "disposition": "proof_only",
     "issueId": "PLA-763",
@@ -57119,7 +57216,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72515"
+      "section": "line:72566"
     },
     "disposition": "proof_only",
     "issueId": "PLA-764",
@@ -57168,7 +57265,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72474"
+      "section": "line:72525"
     },
     "disposition": "proof_only",
     "issueId": "BUY-366",
@@ -57215,7 +57312,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72473"
+      "section": "line:72524"
     },
     "disposition": "proof_only",
     "issueId": "BUY-365",
@@ -57262,7 +57359,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74308"
+      "section": "line:74359"
     },
     "disposition": "proof_only",
     "issueId": "PLA-886",
@@ -57309,7 +57406,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72502"
+      "section": "line:72553"
     },
     "disposition": "proof_only",
     "issueId": "PLA-756",
@@ -57360,7 +57457,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72504"
+      "section": "line:72555"
     },
     "disposition": "proof_only",
     "issueId": "PLA-758",
@@ -57407,7 +57504,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72508"
+      "section": "line:72559"
     },
     "disposition": "proof_only",
     "issueId": "PLA-760",
@@ -57454,7 +57551,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72509"
+      "section": "line:72560"
     },
     "disposition": "proof_only",
     "issueId": "PLA-761",
@@ -57501,7 +57598,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72512"
+      "section": "line:72563"
     },
     "disposition": "proof_only",
     "issueId": "PLA-762",
@@ -57548,7 +57645,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72842"
+      "section": "line:72893"
     },
     "disposition": "proof_only",
     "issueId": "PLA-812",
@@ -57595,7 +57692,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73063"
+      "section": "line:73114"
     },
     "disposition": "proof_only",
     "issueId": "PLA-821",
@@ -57642,7 +57739,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73073"
+      "section": "line:73124"
     },
     "disposition": "proof_only",
     "issueId": "PLA-822",
@@ -57689,7 +57786,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73576"
+      "section": "line:73627"
     },
     "disposition": "proof_only",
     "issueId": "PLA-835",
@@ -57736,7 +57833,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72817"
+      "section": "line:72868"
     },
     "disposition": "proof_only",
     "issueId": "PLA-809",
@@ -57783,7 +57880,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74349"
+      "section": "line:74400"
     },
     "disposition": "proof_only",
     "issueId": "BUY-385",
@@ -57830,7 +57927,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72527"
+      "section": "line:72578"
     },
     "disposition": "proof_only",
     "issueId": "BUY-371",
@@ -57877,7 +57974,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73761"
+      "section": "line:73812"
     },
     "disposition": "proof_only",
     "issueId": "PLA-857",
@@ -57924,7 +58021,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74306"
+      "section": "line:74357"
     },
     "disposition": "proof_only",
     "issueId": "PLA-884",
@@ -57971,7 +58068,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73360"
+      "section": "line:73411"
     },
     "disposition": "proof_only",
     "issueId": "PLA-829",
@@ -58018,7 +58115,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73625"
+      "section": "line:73676"
     },
     "disposition": "proof_only",
     "issueId": "PLA-846",
@@ -58065,7 +58162,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73627"
+      "section": "line:73678"
     },
     "disposition": "proof_only",
     "issueId": "PLA-847",
@@ -58112,7 +58209,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73628"
+      "section": "line:73679"
     },
     "disposition": "proof_only",
     "issueId": "PLA-848",
@@ -58159,7 +58256,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72630"
+      "section": "line:72681"
     },
     "disposition": "proof_only",
     "issueId": "PLA-800",
@@ -58214,7 +58311,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73976"
+      "section": "line:74027"
     },
     "disposition": "proof_only",
     "issueId": "PLA-867",
@@ -58261,7 +58358,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73974"
+      "section": "line:74025"
     },
     "disposition": "proof_only",
     "issueId": "PLA-865",
@@ -58308,7 +58405,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73975"
+      "section": "line:74026"
     },
     "disposition": "proof_only",
     "issueId": "PLA-866",
@@ -58355,7 +58452,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72477"
+      "section": "line:72528"
     },
     "disposition": "proof_only",
     "issueId": "PLA-753",
@@ -58402,7 +58499,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72586"
+      "section": "line:72637"
     },
     "disposition": "proof_only",
     "issueId": "PLA-775",
@@ -58449,7 +58546,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72585"
+      "section": "line:72636"
     },
     "disposition": "proof_only",
     "issueId": "PLA-774",
@@ -58496,7 +58593,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72584"
+      "section": "line:72635"
     },
     "disposition": "proof_only",
     "issueId": "PLA-773",
@@ -58543,7 +58640,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72583"
+      "section": "line:72634"
     },
     "disposition": "proof_only",
     "issueId": "PLA-772",
@@ -58588,7 +58685,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72655"
+      "section": "line:72706"
     },
     "disposition": "proof_only",
     "issueId": "BUY-372",
@@ -58635,7 +58732,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73430"
+      "section": "line:73481"
     },
     "disposition": "proof_only",
     "issueId": "BUY-378",

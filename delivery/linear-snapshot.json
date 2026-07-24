@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T00:26:55.590Z",
+  "generatedAt": "2026-07-24T05:32:12.238Z",
   "authority": {
     "repo": "Sourcera_Master_Spec.md",
     "runtime": [
@@ -36,22 +36,6 @@
       "priority": 3,
       "health": "atRisk",
       "healthUpdatedAt": "2026-07-22T23:38:15.436Z",
-      "targetDate": null,
-      "targetDateResolution": null,
-      "parentInitiativeId": null,
-      "parentInitiative": null
-    },
-    {
-      "id": "68b43674-ef5a-431e-8105-431ba60892bd",
-      "name": "Sourcera Production Build — Current Master Spec",
-      "updatedAt": "2026-07-23T00:13:35.965Z",
-      "archivedAt": null,
-      "owner": "Blake Rowley",
-      "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
-      "status": "Active",
-      "priority": 1,
-      "health": "offTrack",
-      "healthUpdatedAt": "2026-07-23T03:59:06.122Z",
       "targetDate": null,
       "targetDateResolution": null,
       "parentInitiativeId": null,
@@ -126,8 +110,8 @@
     {
       "id": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
       "name": "Data Portability, Retention & Migration",
-      "descriptionFingerprint": "0e36dc4ec70590d175bfebbe8c40ec27445d23eba6f00a67ca8e1ca8f49ab1f2",
-      "updatedAt": "2026-07-22T23:26:08.811Z",
+      "descriptionFingerprint": "236be91688910052de152e5e1e2d91c98113881f1bd75f5e0a2e1baee0909134",
+      "updatedAt": "2026-07-24T04:19:17.216Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -143,8 +127,8 @@
     {
       "id": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
       "name": "Seller Bids, Responses, Q&A & NDA",
-      "descriptionFingerprint": "83382b5340e42b975a24271db82cc56ea6a57cb9da642d290379f053c44c845a",
-      "updatedAt": "2026-07-22T23:27:28.048Z",
+      "descriptionFingerprint": "f0e08ac7b556b0a8841609d9aeea02bc35a92f593c39193ab4823728de946490",
+      "updatedAt": "2026-07-24T04:19:17.602Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -160,8 +144,8 @@
     {
       "id": "32d9c20f-fe88-40e3-8a86-53712a91db58",
       "name": "Marketplace Discovery, Matching & Trust",
-      "descriptionFingerprint": "9343dd17cb9b72dc728247b49e6bf7dddebfe0ae2ff357f73561821ac8711f82",
-      "updatedAt": "2026-07-22T23:27:54.845Z",
+      "descriptionFingerprint": "157ec61676d75c06a1c10d75bd036b4d602ba62a8c1c4e00c8249cca39652434",
+      "updatedAt": "2026-07-24T04:19:17.997Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -177,8 +161,8 @@
     {
       "id": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
       "name": "Marketplace Seller Supply & Promotions",
-      "descriptionFingerprint": "d5ed8bb297fe7b4e837efdd99bc72983293ba561f78621960d6fc2a9dff830ff",
-      "updatedAt": "2026-07-22T23:27:33.021Z",
+      "descriptionFingerprint": "913f627b4a5d942534faa77650cc0f3fa2ed8f8999972e706cb4cc06d2cd13c5",
+      "updatedAt": "2026-07-24T04:19:18.419Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -194,8 +178,8 @@
     {
       "id": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
       "name": "Identity, Organizations & Permissions",
-      "descriptionFingerprint": "7fd940a2b12f3a5ef0c00eee7a635fcdeaf648b8b01f0899196676f6402c1136",
-      "updatedAt": "2026-07-22T23:28:56.394Z",
+      "descriptionFingerprint": "bf19ae5ccf41dbe3ddee0c8f8925909dc0addc332875bf83ff440e1c3f286170",
+      "updatedAt": "2026-07-24T04:19:19.065Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -211,8 +195,8 @@
     {
       "id": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
       "name": "Billing, Pricing & Entitlements",
-      "descriptionFingerprint": "bce95e4c97f34ebae3211ec8bb52e41ae5cb35b7fbefe7e516a547046a24e3b7",
-      "updatedAt": "2026-07-22T23:27:09.046Z",
+      "descriptionFingerprint": "b7d367e4bb6a15fba905699eb21959ab4cfb63c504e2500b35fd72a5d9ee7d0c",
+      "updatedAt": "2026-07-24T04:19:19.421Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -228,8 +212,8 @@
     {
       "id": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
       "name": "Accessibility, Localization & Responsive UX",
-      "descriptionFingerprint": "ad29306a3e9c1702bb5e4a8ed524fec230f8b5fe2cbc361ed9fe943d1a804176",
-      "updatedAt": "2026-07-22T23:26:33.980Z",
+      "descriptionFingerprint": "d928459847a15358e5ccdf0da03ee0da4c506ce056d7f092a515d41bd1ec07f7",
+      "updatedAt": "2026-07-24T04:19:19.751Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -245,8 +229,8 @@
     {
       "id": "532e0956-047a-4f09-b811-2971892f62ee",
       "name": "Platform & Delivery Foundations",
-      "descriptionFingerprint": "6dcb1e35f081f110a20caf25b9acdfc5559101d62d27e5bc981aaad6a04a086d",
-      "updatedAt": "2026-07-22T23:29:03.587Z",
+      "descriptionFingerprint": "263b438a9e5f4c4481d70de216b0ce392afee8ad44d265df6d563c915b249e68",
+      "updatedAt": "2026-07-24T04:19:20.150Z",
       "archivedAt": null,
       "statusId": "beff99c6-76bd-4dfe-bf13-089125af0dc8",
       "status": "In Progress",
@@ -262,8 +246,8 @@
     {
       "id": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
       "name": "Design System & Application Shell",
-      "descriptionFingerprint": "f196efb7b2e4ac055b669cf83153d5c64c0998f26233a438f3bfb4f9baa55345",
-      "updatedAt": "2026-07-22T23:28:47.638Z",
+      "descriptionFingerprint": "0446463db3e0b3467366d38fdfff65c8a24255ac12d0f64787dc0037f3f3583d",
+      "updatedAt": "2026-07-24T04:19:21.767Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -279,8 +263,8 @@
     {
       "id": "609d8e2e-4543-4cdb-89b4-281986f93a85",
       "name": "Security, Privacy, Compliance & Residency",
-      "descriptionFingerprint": "04f51bbdf4d1e6a818aaea74adcc655eb400e8804e3d006943b85b54069a9570",
-      "updatedAt": "2026-07-22T23:26:41.753Z",
+      "descriptionFingerprint": "738c94f815514a21a35508c46c201a7b225195200b765d3988e18362370570eb",
+      "updatedAt": "2026-07-24T04:19:22.158Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -296,8 +280,8 @@
     {
       "id": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
       "name": "Buyer Workspaces & Evaluation Pipeline",
-      "descriptionFingerprint": "f2ac5f396fc7263b1a3acf9589a59ca1b7afc1a4817f74f2b7b2eff302eca1e0",
-      "updatedAt": "2026-07-22T23:28:14.694Z",
+      "descriptionFingerprint": "fa33b6f8bdc9aea771a8c99a9acce8e0b6c6b78b3e599fa0d523a8ec477ad530",
+      "updatedAt": "2026-07-24T04:19:22.513Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -313,8 +297,8 @@
     {
       "id": "6fe48bc4-c830-4e10-8a44-390facb9063f",
       "name": "Integrations, API, Webhooks & MCP",
-      "descriptionFingerprint": "a4352c7eb689d65f10541904b7984124d41c41ab7b5fa415dd8c2231e7fc9f1a",
-      "updatedAt": "2026-07-22T23:27:02.952Z",
+      "descriptionFingerprint": "7e714ba588d7c31114c0f5e8dc36bba0d38a5354cc2d45ad7cace7fe35ce5154",
+      "updatedAt": "2026-07-24T04:19:22.861Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -330,8 +314,8 @@
     {
       "id": "848dee0f-1121-4ad0-a877-e08629f5b99c",
       "name": "Scoring, Scenarios & TCO",
-      "descriptionFingerprint": "7035f39d8ef441e3b7e7e2fb2217fee51ab37d96df172bd7a1537ce34f1fdd75",
-      "updatedAt": "2026-07-22T23:28:07.744Z",
+      "descriptionFingerprint": "a278f5974169fb8a4f7868889d9061bd4695868e14ced12e545abb0340870e18",
+      "updatedAt": "2026-07-24T04:19:23.178Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -347,8 +331,8 @@
     {
       "id": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
       "name": "QA, Release, Deployment & Launch",
-      "descriptionFingerprint": "d36737ec35fb219c9db9261e45e25bbf60267c5d34d9784ca871662709c83a87",
-      "updatedAt": "2026-07-22T23:26:18.938Z",
+      "descriptionFingerprint": "81333cd45e49a73740e755eb6f753e80a7b3567821243d937676aa9e17e50286",
+      "updatedAt": "2026-07-24T04:19:23.622Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -364,8 +348,8 @@
     {
       "id": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
       "name": "Notifications & Email",
-      "descriptionFingerprint": "06666dda0d27c3e7954e98226a43d8d2feb3e1f3d545b50ff693a7f45325398c",
-      "updatedAt": "2026-07-22T23:27:22.088Z",
+      "descriptionFingerprint": "238b55f6bb4c94f0795e04de2f2586694dac6682912012a84345e2e02e63ae2b",
+      "updatedAt": "2026-07-24T04:19:24.032Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -381,8 +365,8 @@
     {
       "id": "b8085a88-9679-447b-9b3d-9b6ca201e182",
       "name": "Product Analytics, Growth & Network Effects",
-      "descriptionFingerprint": "f84437e4a8c5e8275b347c2c7bd1757bd14749e27b4da014ae29ea532a87ec61",
-      "updatedAt": "2026-07-22T23:26:57.589Z",
+      "descriptionFingerprint": "8c93b57ebbf9a07b7ea53db3b75feaeaa28ca30c0796d00dde422389a7148cf1",
+      "updatedAt": "2026-07-24T04:19:24.458Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -398,8 +382,8 @@
     {
       "id": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
       "name": "Operations & Support Console",
-      "descriptionFingerprint": "ba8024a7caec50828398d2f8a861bcd878f8bdb5a45557a31c40a2527e1c36cd",
-      "updatedAt": "2026-07-22T23:26:47.369Z",
+      "descriptionFingerprint": "5bc4331cffd4eaf4bdb5e0e973b3ddf057250194c1b4ba08d07394078c804c62",
+      "updatedAt": "2026-07-24T04:19:24.826Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -415,8 +399,8 @@
     {
       "id": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
       "name": "Seller Knowledge, Profile & Capabilities",
-      "descriptionFingerprint": "74f071e02847d2a8d8abd43f46c3ebcd71f5889ad1e6c7c2cfb799dd9a73d1a1",
-      "updatedAt": "2026-07-22T23:27:42.694Z",
+      "descriptionFingerprint": "0e468d52de952e663df16d9328807949a3f7a9228a738cd739bab22f3e92715d",
+      "updatedAt": "2026-07-24T04:19:25.430Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -432,8 +416,8 @@
     {
       "id": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
       "name": "Seller Console & Onboarding",
-      "descriptionFingerprint": "8bf1c39b139c01209ae606edb55fed5f9d0701c19d1cb4d8d624628d712a13c2",
-      "updatedAt": "2026-07-22T23:27:48.327Z",
+      "descriptionFingerprint": "2f6fa1f92936f11f73912244e99d9b343c0fe876c17d33c1bd8699792fa499e7",
+      "updatedAt": "2026-07-24T04:19:25.789Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -449,8 +433,8 @@
     {
       "id": "cd7ce280-06f2-4ace-bce6-101141f7d098",
       "name": "Buyer Collaboration, Inbox & Reporting",
-      "descriptionFingerprint": "26ae791ed58745e5f989c6182c09a58b02b7ddb6923e788455acb5c208bbdf81",
-      "updatedAt": "2026-07-22T23:28:02.380Z",
+      "descriptionFingerprint": "2b8550b6bfcedca9172fac336298c3c860fed8a2ef97bec7eb3be03f32cbecfb",
+      "updatedAt": "2026-07-24T04:19:26.130Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -466,8 +450,8 @@
     {
       "id": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
       "name": "Requirements, Policies & Templates",
-      "descriptionFingerprint": "d43e9e45b4cd539432dffc1d1befe02573ca90983fa0affe28b18510d7abe50e",
-      "updatedAt": "2026-07-22T23:28:31.927Z",
+      "descriptionFingerprint": "9eec42d79ef2cefe612016511d8138d90a5e48c5b920348454e53285d682028c",
+      "updatedAt": "2026-07-24T04:19:26.627Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -483,8 +467,8 @@
     {
       "id": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
       "name": "Data, Audit & Cross-Console Foundations",
-      "descriptionFingerprint": "d62445b97ce6d6fc06c50a25833977e7b61094f92c73eba6afc224fa487a3159",
-      "updatedAt": "2026-07-22T23:28:43.268Z",
+      "descriptionFingerprint": "4c7828cad71c7e84cbc444a20305533c541f4fb16562516c07f46b84fd03e7c5",
+      "updatedAt": "2026-07-24T04:19:29.658Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -500,8 +484,8 @@
     {
       "id": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
       "name": "Vendors, Invitations & NDA",
-      "descriptionFingerprint": "18e3012c8430be0c8040d1555d76b47d805002845824cbc81fc052318bb49015",
-      "updatedAt": "2026-07-22T23:28:23.840Z",
+      "descriptionFingerprint": "007c696f3fc64b9857105929de0f404d5a2088ada5c3c9629afd05ed87f8a6f2",
+      "updatedAt": "2026-07-24T04:19:30.843Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -517,8 +501,8 @@
     {
       "id": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
       "name": "Observability, Reliability & Performance",
-      "descriptionFingerprint": "f9700f1e711f424572ef88f04cc48cfbc7ed15ae9a2254fff96067c053c564fd",
-      "updatedAt": "2026-07-22T23:26:24.050Z",
+      "descriptionFingerprint": "0a137379de50e90cbba5251100257df1d81a4dc47a94fa07e3d18a7c7ee8100a",
+      "updatedAt": "2026-07-24T04:19:32.242Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -534,8 +518,8 @@
     {
       "id": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
       "name": "Realtime, Search & Collaboration Infrastructure",
-      "descriptionFingerprint": "f740932195bcf345aac31d917f9b3b8cf069afc9c89eab4b452e03f914e77840",
-      "updatedAt": "2026-07-22T23:28:37.858Z",
+      "descriptionFingerprint": "c9256c9cc7ad8eb4c254dfe2ee8d46b22c6a24ffcf82f96a8702b26623199af0",
+      "updatedAt": "2026-07-24T04:19:33.153Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -551,8 +535,8 @@
     {
       "id": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
       "name": "Agent & Intelligence Capabilities",
-      "descriptionFingerprint": "8a34cbc14d7a02681457b22591c38d1d490409be7947ba0ddad7b6870b1b02cd",
-      "updatedAt": "2026-07-22T23:27:16.073Z",
+      "descriptionFingerprint": "b73e0bd3f662d8b6edd98cebbecac571666223e323fda23065688f350f35615b",
+      "updatedAt": "2026-07-24T04:19:33.879Z",
       "archivedAt": null,
       "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
       "status": "Backlog",
@@ -26487,8 +26471,7 @@
       "milestone": "Billing contracts ready",
       "dependencies": [
         "F-132",
-        "F-536",
-        "F-630"
+        "F-536"
       ],
       "owner": null,
       "reviewer": null,
@@ -30423,9 +30406,9 @@
     },
     {
       "id": "PLA-555",
-      "sourceId": "F-630",
+      "sourceId": null,
       "title": "Enforce Pre-Release QA, Canary Promotion, and Rollback",
-      "kind": "executable",
+      "kind": "parent",
       "labels": [
         "infra",
         "platform",
@@ -30460,7 +30443,7 @@
       "sourceSection": "8 registered slices",
       "outcome": "QA Process & Canary Release",
       "parentId": "PLA-216",
-      "sourceFamilyId": "F-630",
+      "sourceFamilyId": null,
       "linearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
       "parentLinearId": "381528c6-49f5-4b0c-a4ba-ef746bebf82b",
       "priority": 2,
@@ -55212,7 +55195,6 @@
       "milestone": "Seller shell ready",
       "dependencies": [
         "F-559",
-        "F-630",
         "F-751",
         "F-752",
         "F-753",
@@ -59456,7 +59438,6 @@
       "kind": "executable",
       "labels": [
         "buyer",
-        "codex-ready",
         "qa"
       ],
       "release": "R0",
@@ -59612,9 +59593,7 @@
       ],
       "release": "R2",
       "milestone": "Purchase and settlement ready",
-      "dependencies": [
-        "F-630"
-      ],
+      "dependencies": [],
       "owner": null,
       "reviewer": null,
       "estimate": 3,
@@ -62001,9 +61980,9 @@
       "parentLinearId": "381528c6-49f5-4b0c-a4ba-ef746bebf82b",
       "priority": 2,
       "dueDate": null,
-      "stateId": "5aecdd5b-58b5-4c78-b35d-86fa21e76f83",
-      "state": "In Progress",
-      "stateType": "started",
+      "stateId": "79f13ec1-e526-46cd-8680-e8ecd41e5f39",
+      "state": "Done",
+      "stateType": "completed",
       "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
       "team": "PLA",
       "cycleId": null,
@@ -62100,7 +62079,6 @@
         "F-004",
         "F-005",
         "F-628",
-        "F-630",
         "RG:committed_spend_console_scope_consistency",
         "RG:console_isolation_violation_no_data_path_use",
         "RG:policy_ingestion_buyer_console_firewall",
@@ -62210,7 +62188,6 @@
       "title": "Prove retention lifecycle controls on the release candidate",
       "kind": "executable",
       "labels": [
-        "codex-ready",
         "compliance-risk",
         "infra",
         "platform",
@@ -62260,7 +62237,6 @@
       "title": "Prove the Convex foundation on the release candidate",
       "kind": "executable",
       "labels": [
-        "codex-ready",
         "integration",
         "platform",
         "qa"
@@ -65111,7 +65087,6 @@
         "F-005",
         "F-132",
         "F-593",
-        "F-630",
         "F-917"
       ],
       "owner": null,
@@ -65363,6 +65338,296 @@
       "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
       "project": "Seller Console & Onboarding",
       "milestoneId": "3c7539b1-e962-4c30-bac7-e24dc450ae3e",
+      "ownerId": null
+    },
+    {
+      "id": "PLA-1051",
+      "sourceId": "F-630",
+      "sourceFamilyId": "F-630",
+      "title": "Enforce ordinary production release fail-closed admission",
+      "kind": "executable",
+      "labels": [
+        "infra",
+        "platform",
+        "qa"
+      ],
+      "release": "R0",
+      "milestone": "Quality gates ready",
+      "dependencies": [],
+      "owner": "Blake Rowley",
+      "reviewer": null,
+      "estimate": 3,
+      "paths": [],
+      "tests": {
+        "success": null,
+        "failure": null,
+        "recovery": null
+      },
+      "rollout": null,
+      "rollback": null,
+      "telemetry": null,
+      "proof": null,
+      "sourceVersion": "v6.0.0",
+      "sourceSection": "8 registered slices",
+      "outcome": "QA Process & Canary Release",
+      "parentId": "PLA-555",
+      "linearId": "5eda1d6f-e3be-4d59-aab7-91d9364f9b7d",
+      "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+      "priority": 2,
+      "dueDate": null,
+      "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+      "state": "Backlog",
+      "stateType": "backlog",
+      "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+      "team": "PLA",
+      "cycleId": null,
+      "cycleNumber": null,
+      "cycle": null,
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "project": "QA, Release, Deployment & Launch",
+      "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+      "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463"
+    },
+    {
+      "id": "PLA-1052",
+      "sourceId": null,
+      "sourceFamilyId": "F-630",
+      "title": "Establish the first three-application Vercel production baseline",
+      "kind": "executable",
+      "labels": [
+        "infra",
+        "platform",
+        "qa"
+      ],
+      "release": "R0",
+      "milestone": "Quality gates ready",
+      "dependencies": [],
+      "owner": "Blake Rowley",
+      "reviewer": null,
+      "estimate": 5,
+      "paths": [],
+      "tests": {
+        "success": null,
+        "failure": null,
+        "recovery": null
+      },
+      "rollout": null,
+      "rollback": null,
+      "telemetry": null,
+      "proof": null,
+      "sourceVersion": "v6.0.0",
+      "sourceSection": "8 registered slices",
+      "outcome": "QA Process & Canary Release",
+      "parentId": "PLA-555",
+      "linearId": "ff1f2018-cd89-422b-b174-0ce10b865c4e",
+      "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+      "priority": 2,
+      "dueDate": null,
+      "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+      "state": "Backlog",
+      "stateType": "backlog",
+      "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+      "team": "PLA",
+      "cycleId": null,
+      "cycleNumber": null,
+      "cycle": null,
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "project": "QA, Release, Deployment & Launch",
+      "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+      "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463"
+    },
+    {
+      "id": "PLA-1053",
+      "sourceId": null,
+      "sourceFamilyId": "F-630",
+      "title": "Recover the Convex production anchor and protected authority history",
+      "kind": "executable",
+      "labels": [
+        "infra",
+        "platform",
+        "qa"
+      ],
+      "release": "R0",
+      "milestone": "Quality gates ready",
+      "dependencies": [],
+      "owner": "Blake Rowley",
+      "reviewer": null,
+      "estimate": 5,
+      "paths": [],
+      "tests": {
+        "success": null,
+        "failure": null,
+        "recovery": null
+      },
+      "rollout": null,
+      "rollback": null,
+      "telemetry": null,
+      "proof": null,
+      "sourceVersion": "v6.0.0",
+      "sourceSection": "8 registered slices",
+      "outcome": "QA Process & Canary Release",
+      "parentId": "PLA-555",
+      "linearId": "c4f143e8-e580-4b49-85a4-6de4df795ae3",
+      "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+      "priority": 2,
+      "dueDate": null,
+      "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+      "state": "Backlog",
+      "stateType": "backlog",
+      "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+      "team": "PLA",
+      "cycleId": null,
+      "cycleNumber": null,
+      "cycle": null,
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "project": "QA, Release, Deployment & Launch",
+      "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+      "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463"
+    },
+    {
+      "id": "PLA-1054",
+      "sourceId": null,
+      "sourceFamilyId": "F-630",
+      "title": "Implement durable candidate proof coordination and promotion",
+      "kind": "executable",
+      "labels": [
+        "infra",
+        "platform",
+        "qa"
+      ],
+      "release": "R0",
+      "milestone": "Quality gates ready",
+      "dependencies": [],
+      "owner": "Blake Rowley",
+      "reviewer": null,
+      "estimate": 8,
+      "paths": [],
+      "tests": {
+        "success": null,
+        "failure": null,
+        "recovery": null
+      },
+      "rollout": null,
+      "rollback": null,
+      "telemetry": null,
+      "proof": null,
+      "sourceVersion": "v6.0.0",
+      "sourceSection": "8 registered slices",
+      "outcome": "QA Process & Canary Release",
+      "parentId": "PLA-555",
+      "linearId": "b92f08af-1225-4975-b74a-4a55cd43fb0f",
+      "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+      "priority": 2,
+      "dueDate": null,
+      "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+      "state": "Backlog",
+      "stateType": "backlog",
+      "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+      "team": "PLA",
+      "cycleId": null,
+      "cycleNumber": null,
+      "cycle": null,
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "project": "QA, Release, Deployment & Launch",
+      "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+      "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463"
+    },
+    {
+      "id": "PLA-1055",
+      "sourceId": null,
+      "sourceFamilyId": "F-007",
+      "title": "Approve the R2 billing-journey pilot target set",
+      "kind": "executable",
+      "labels": [
+        "docs",
+        "human-only",
+        "platform"
+      ],
+      "release": "R2",
+      "milestone": "Purchase and settlement ready",
+      "dependencies": [],
+      "owner": "Blake Rowley",
+      "reviewer": null,
+      "estimate": 1,
+      "paths": [],
+      "tests": {
+        "success": null,
+        "failure": null,
+        "recovery": null
+      },
+      "rollout": null,
+      "rollback": null,
+      "telemetry": null,
+      "proof": null,
+      "sourceVersion": "v6.0.0",
+      "sourceSection": "14 registered slices",
+      "outcome": "Stripe Billing Integration Completion",
+      "parentId": "PLA-284",
+      "linearId": "4843a96a-841e-459f-8f12-1adce9012f36",
+      "parentLinearId": "4937834a-dafa-42f9-bd98-72843abe78b2",
+      "priority": 2,
+      "dueDate": null,
+      "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+      "state": "Backlog",
+      "stateType": "backlog",
+      "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+      "team": "PLA",
+      "cycleId": null,
+      "cycleNumber": null,
+      "cycle": null,
+      "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
+      "project": "Billing, Pricing & Entitlements",
+      "milestoneId": "e3b0019a-e7f2-45a5-be1b-11e4773959a4",
+      "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463"
+    },
+    {
+      "id": "PLA-1056",
+      "sourceId": "RG:query_scoping_console_required",
+      "sourceFamilyId": "RG:query_scoping_console_required",
+      "title": "Prove every list route has exactly one query-scope class",
+      "kind": "proof_only",
+      "labels": [
+        "infra",
+        "platform",
+        "qa"
+      ],
+      "release": "R0",
+      "milestone": "Production evidence closed",
+      "dependencies": [
+        "F-003"
+      ],
+      "owner": null,
+      "reviewer": null,
+      "estimate": 3,
+      "paths": [],
+      "tests": {
+        "success": null,
+        "failure": null,
+        "recovery": null
+      },
+      "rollout": null,
+      "rollback": null,
+      "telemetry": null,
+      "proof": null,
+      "sourceVersion": "live",
+      "sourceSection": "§M.5.122",
+      "outcome": "Prove runtime gate query_scoping_console_required",
+      "parentId": "PLA-203",
+      "linearId": "5fbd4f12-bb59-43ff-98c3-cfe6523e97f4",
+      "parentLinearId": "5ab44727-0f61-4e24-8b0f-d2ed3145e363",
+      "priority": 2,
+      "dueDate": null,
+      "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+      "state": "Backlog",
+      "stateType": "backlog",
+      "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+      "team": "PLA",
+      "cycleId": null,
+      "cycleNumber": null,
+      "cycle": null,
+      "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+      "project": "Identity, Organizations & Permissions",
+      "milestoneId": "c5f366dc-a4aa-4f20-9adb-ebdb16192ced",
       "ownerId": null
     }
   ],
@@ -70745,7 +71010,7 @@
         "linearId": "8abbfbff-9329-4e9b-92f7-3644e250b1df",
         "identifier": "BUY-208",
         "title": "Workspace Membership Entity",
-        "descriptionFingerprint": "3510679fa8bafd4093c4feafb191c638d90c6c6c1eafc7d11ff3cc073c9c28dc",
+        "descriptionFingerprint": "e0a87faa49b847ad0adde33dfd07a4504932080ca678e3566ec9b2bb572f43b3",
         "sourceProvenance": {
           "sourceId": "F-084",
           "sourceDocument": null,
@@ -70755,9 +71020,9 @@
           "section": null,
           "sectionBundleCount": 8,
           "sourceBinding": "b5eb6572a49140e34ba61647f33f77f8a84c14b9b2e63370140d5ce1cd04f410",
-          "sourceChecksum": "baf6f6647a12350fee87f13bfc924e06d97983cac9384697178e72fd001daa38"
+          "sourceChecksum": "8191023995dd303e143d661683e69167b07938decec72804912a9166ba2df2cc"
         },
-        "updatedAt": "2026-07-23T01:01:27.403Z",
+        "updatedAt": "2026-07-24T02:30:17.758Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -70891,7 +71156,7 @@
         "linearId": "dc37f0b9-2970-4dfa-b58e-69b546e35c9d",
         "identifier": "BUY-210",
         "title": "Score Entity",
-        "descriptionFingerprint": "9700ec0b2195825be84fa22137a153013f75b175df8019c2b9022b3d43e8f81d",
+        "descriptionFingerprint": "12b889a2df28ac3218ab262c8c887bf4890b2417e8c7b5be1656e4af5c2bf6f4",
         "sourceProvenance": {
           "sourceId": "F-088",
           "sourceDocument": null,
@@ -70902,9 +71167,9 @@
           "section": null,
           "sectionBundleCount": 18,
           "sourceBinding": "0b5282270809a6dee3bdf4326e11f8b9a35355ea73b33fb46f11cf42425ce960",
-          "sourceChecksum": "11e9849b46503c88cf43ccbd6cf288299354450713de0ea83d29f870e1d6b0d9"
+          "sourceChecksum": "4a1da4094400fb6fbbee950f47638f2ef5b5500bbc2ec81c2a8c6cfc7be5da0c"
         },
-        "updatedAt": "2026-07-23T01:01:35.613Z",
+        "updatedAt": "2026-07-24T02:30:24.241Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -71140,7 +71405,7 @@
         "linearId": "472911a0-a810-45ec-a385-8d5462f5f04c",
         "identifier": "BUY-215",
         "title": "Internal Comment Post Entity",
-        "descriptionFingerprint": "8691123a00db08f3534b395a1c49ef99c80d9c06fc6a6150224499a56303e19d",
+        "descriptionFingerprint": "aedbf3f093d61aacf30ad9d415cb896d5896b12b46444d79f91ec41cabb44272",
         "sourceProvenance": {
           "sourceId": "F-093",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -71150,9 +71415,9 @@
           "section": "§4.3.12",
           "sectionBundleCount": null,
           "sourceBinding": "a178cebbfcb7f275ba98d2e2f9e823a232463605cd41209e64789be3ace74038",
-          "sourceChecksum": "8134496c07a1901433cafd4d7ae3dec4af3602aa77da5ab8625baa35e2355313"
+          "sourceChecksum": "a9d461cf409683ea1d98be6b2761fcaefceac720e47b95503a3a26b3f06490a7"
         },
-        "updatedAt": "2026-07-23T02:43:42.398Z",
+        "updatedAt": "2026-07-24T03:18:59.154Z",
         "estimate": 2,
         "priority": 3,
         "dueDate": null,
@@ -71336,7 +71601,7 @@
         "linearId": "34c649a5-7378-4031-a39d-c5bf73df0664",
         "identifier": "BUY-219",
         "title": "Buyer Console Entity Set",
-        "descriptionFingerprint": "1f4672b9ace252d8a38cb2d98e319d45de1f450dcca13477a897397b49cbaa07",
+        "descriptionFingerprint": "60bcfbc530e92dc9fbf03a40e50eab8105c77e4cf7fba8c799de2d8a47a21741",
         "sourceProvenance": {
           "sourceId": "F-104",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -71346,9 +71611,9 @@
           "section": "§4.3",
           "sectionBundleCount": null,
           "sourceBinding": "55a28fa59e398deb681cf75fcb271140fe0e70346fb8c8b3845b1bf4314139eb",
-          "sourceChecksum": "2067eab69ec6d8e91482619898b900640b64848123c0022f1db91bcc7e61e808"
+          "sourceChecksum": "d0510a83e0982bb9ace2ae1eefe9ef5a0d4ee2069da7318d9bc418add12c4ac6"
         },
-        "updatedAt": "2026-07-23T02:43:09.042Z",
+        "updatedAt": "2026-07-24T03:19:00.195Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -71848,7 +72113,7 @@
         "linearId": "6465a1c0-cf31-44a2-bb86-0ebeb7419e7d",
         "identifier": "BUY-228",
         "title": "Phase 1: Stakeholder Alignment & Discovery",
-        "descriptionFingerprint": "e9c2434b8ff0d50ca2cd759345c7e8f16bee367db964faaebccc264b05cae64b",
+        "descriptionFingerprint": "f0f5c9b96fb395d291f225f1c201a9924c4591e80273b526bcb76f3a583b199a",
         "sourceProvenance": {
           "sourceId": "F-211",
           "sourceDocument": null,
@@ -71859,9 +72124,9 @@
           "section": null,
           "sectionBundleCount": 7,
           "sourceBinding": "28acf9595537010d0e3341c618c17a7d9ed3f85536cd93b67c4640d6b3316ad5",
-          "sourceChecksum": "5e31019395dbcf8b74d9405d776d80b96076f54c8c3241d39c92a0f24fb00f5d"
+          "sourceChecksum": "68845af7509dd0f7569ffeda5e5a3a76cf3fb4223bab6080d522ebd101b9ab0c"
         },
-        "updatedAt": "2026-07-23T01:02:59.277Z",
+        "updatedAt": "2026-07-24T02:30:29.477Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -72001,7 +72266,7 @@
         "linearId": "1e93a34f-211e-4c85-a9dc-86f08e53085f",
         "identifier": "BUY-230",
         "title": "Phase 3: Use Case Definition & Validation",
-        "descriptionFingerprint": "0f6917be5979ba75d2a94fbbf3b4edccd99a8d7c91505492ef09ba664555cbdc",
+        "descriptionFingerprint": "5fe1b909d1155d21ae20d15f22d75974e575ff090b0459295f994df1e7d9b581",
         "sourceProvenance": {
           "sourceId": "F-213",
           "sourceDocument": null,
@@ -72012,9 +72277,9 @@
           "section": null,
           "sectionBundleCount": 10,
           "sourceBinding": "10992864258d00cd50ea11e9a7ebfa175a13629ea0298b23aa1f6b9a608623eb",
-          "sourceChecksum": "99756bbbfebb930822aa766ec2d38ca98b6a9afd137b261967d9ce73e7b2f372"
+          "sourceChecksum": "2bfa22c3d36863b0dca5746303669b90d6381aa9cb34b8860ada12f955cd653c"
         },
-        "updatedAt": "2026-07-23T01:04:57.912Z",
+        "updatedAt": "2026-07-24T02:30:40.113Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -75012,7 +75277,7 @@
         "linearId": "9e23d7d1-bbb6-49a6-a03a-1f470a524aca",
         "identifier": "BUY-285",
         "title": "Scenario Lifecycle & Permissions",
-        "descriptionFingerprint": "01586932137c8fe4c1d5782d540b06c4d916e6a681cf0132a4f7924f0c37a959",
+        "descriptionFingerprint": "64f90f2fed6f8a22f641511b65c8d1d7fc7492e89633225224b63dd33276cba7",
         "sourceProvenance": {
           "sourceId": "F-270",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -75022,9 +75287,9 @@
           "section": "§14.6",
           "sectionBundleCount": null,
           "sourceBinding": "800dc8dc85e0045e85c6172b296c5ed0afb824fe5dc948ec19a808fe8ac0ee07",
-          "sourceChecksum": "371aa28a3594a3504e20911a8afbe5bab99dea6538c7c57db598ccce99ae9edf"
+          "sourceChecksum": "0470813e8a1601c6c4ba4561fd381c3c5b6dae0e767c5bbf4455853e7b975ddb"
         },
-        "updatedAt": "2026-07-23T02:36:17.492Z",
+        "updatedAt": "2026-07-24T03:19:01.113Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -80364,7 +80629,7 @@
         "linearId": "c90897d4-e20f-435a-8081-ea0dbc482487",
         "identifier": "BUY-384",
         "title": "Requirement Reopening Runtime Consistency",
-        "descriptionFingerprint": "03fae2152224e23fa5405247eb2a1ba9c6204ff5d5e3ba6592a1934515b75a7c",
+        "descriptionFingerprint": "d419fd5965faac90c4672735e6d515f4b09dc025cb45c28eae1a256a5562d86a",
         "sourceProvenance": {
           "sourceId": "RG:requirement_reopening_runtime_consistency",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -80374,9 +80639,9 @@
           "section": "§M.5.120",
           "sectionBundleCount": null,
           "sourceBinding": "39c52d986fa252fcc8c40b51cfafe0078368c3606069b92d5b9e33fe1a4d942b",
-          "sourceChecksum": "dde967ddb86f0ef209f4f3150da701d37d17d1f2943a4a617b434fad176c4e3c"
+          "sourceChecksum": "acf2ce6521b603e3140f4a30f6ea685f81c1f7ab68078f732e47a59d32bf7e23"
         },
-        "updatedAt": "2026-07-23T02:24:36.168Z",
+        "updatedAt": "2026-07-24T03:19:01.964Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -80414,7 +80679,7 @@
         "linearId": "236b541d-690c-44d6-b1f7-9b880fb00a45",
         "identifier": "BUY-385",
         "title": "Vendor Disqualification Phase Aware Reversal Runtime",
-        "descriptionFingerprint": "a9186bf29daadce55fb5e6c1c3efa325c7945d452eb16b350c0fb42b420aeae3",
+        "descriptionFingerprint": "d265c8a0d144d9ca25acfe6af69f037af6e1ab2b1a4607ca8dfb604c1e0f62ff",
         "sourceProvenance": {
           "sourceId": "RG:vendor_disqualification_phase_aware_reversal_runtime",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -80424,9 +80689,9 @@
           "section": "§M.5.120",
           "sectionBundleCount": null,
           "sourceBinding": "39c52d986fa252fcc8c40b51cfafe0078368c3606069b92d5b9e33fe1a4d942b",
-          "sourceChecksum": "dde967ddb86f0ef209f4f3150da701d37d17d1f2943a4a617b434fad176c4e3c"
+          "sourceChecksum": "acf2ce6521b603e3140f4a30f6ea685f81c1f7ab68078f732e47a59d32bf7e23"
         },
-        "updatedAt": "2026-07-23T02:24:30.298Z",
+        "updatedAt": "2026-07-24T03:19:02.792Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -82080,7 +82345,7 @@
           "sourceBinding": "60feb00cda2548988918e315947582073f72834682036be0238b3148fde3921f",
           "sourceChecksum": "fb653b7ad35f657ad5e6838ead911cd68f872ea5f252e1a8011302b72546e274"
         },
-        "updatedAt": "2026-07-23T07:26:37.059Z",
+        "updatedAt": "2026-07-24T01:49:01.878Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -82090,7 +82355,6 @@
         "stateType": "unstarted",
         "labels": [
           "buyer",
-          "codex-ready",
           "qa"
         ],
         "assignee": "Blake Rowley",
@@ -87511,7 +87775,7 @@
         "linearId": "27bcda4f-3887-41ab-8a5a-4f86caa87c10",
         "identifier": "PLA-1000",
         "title": "Prove Stripe Billing Canary, Rollback, and Recovery",
-        "descriptionFingerprint": "9a0aaa243c9cbc9ddde1c2f3b58e2c956cfee3f5241e56f069b45996a87c4dba",
+        "descriptionFingerprint": "a4773674f36f358547eeb03a8f722a5cc6373b0cabfe6a99dc3fd90c6f83614e",
         "sourceProvenance": {
           "sourceId": "F-007",
           "sourceDocument": null,
@@ -87522,9 +87786,9 @@
           "section": null,
           "sectionBundleCount": 14,
           "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
-          "sourceChecksum": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
         },
-        "updatedAt": "2026-07-23T11:40:21.727Z",
+        "updatedAt": "2026-07-24T02:30:46.772Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -87570,7 +87834,7 @@
         "linearId": "1b9827d7-1516-4c0e-ba14-7f971d70ee41",
         "identifier": "PLA-1001",
         "title": "Validate the R2 Billing Journey with a Consented Pilot",
-        "descriptionFingerprint": "176107b84814dc7903159bfc6cba8bb10895764f09bf8e1bf3fd27928c63a121",
+        "descriptionFingerprint": "ee037af105f2d159f0126bbe8ab73f32b882de82385ed44e754157b0b564f083",
         "sourceProvenance": {
           "sourceId": "F-007",
           "sourceDocument": null,
@@ -87581,9 +87845,9 @@
           "section": null,
           "sectionBundleCount": 14,
           "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
-          "sourceChecksum": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
         },
-        "updatedAt": "2026-07-23T02:15:58.190Z",
+        "updatedAt": "2026-07-24T05:20:13.943Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -87613,7 +87877,8 @@
           "R2"
         ],
         "relations": [
-          "blocks:PLA-1000:PLA-1001"
+          "blocks:PLA-1000:PLA-1001",
+          "blocks:PLA-1055:PLA-1001"
         ]
       },
       {
@@ -88229,7 +88494,7 @@
         "linearId": "b63f2c80-d31e-48ab-a986-20f2488d2688",
         "identifier": "PLA-1013",
         "title": "Compile the five-scope data and projection policy registry",
-        "descriptionFingerprint": "e9ace2ea2668fb86de20d38a63632de4e1775cfb700a7286c7742db38171f14f",
+        "descriptionFingerprint": "43a749bd2893be70bfb863f4cc4800c78fa1a7732a38246effd5e5b997a92aad",
         "sourceProvenance": {
           "sourceId": "F-002",
           "sourceDocument": null,
@@ -88239,9 +88504,9 @@
           "section": null,
           "sectionBundleCount": 9,
           "sourceBinding": "065c23bac2a86af69513377bd9f1e831726aae4da19d307cb3e25b5a885f519d",
-          "sourceChecksum": "7ef5ed37676ee2424473a3abff3e9426af48695007cc9a5def5c3a085facb962"
+          "sourceChecksum": "26dd95f47068cfddd78d60755a10240645ed058fe3d828e84973172106ba8f01"
         },
-        "updatedAt": "2026-07-23T11:40:30.850Z",
+        "updatedAt": "2026-07-24T02:30:54.558Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88279,7 +88544,7 @@
         "linearId": "d33d523a-9db1-4e62-ba37-9fa847b340c4",
         "identifier": "PLA-1014",
         "title": "Enforce verified scope before materialization and serialization",
-        "descriptionFingerprint": "d5da81992432c30bfed05322f97438296e68e6dd548fe52c6cbe95692faac3ce",
+        "descriptionFingerprint": "ef7f9c24066c6d9aeaa2a7d73aed004f88ff8524ae5c3d967ce1d47f5512b2a6",
         "sourceProvenance": {
           "sourceId": "F-002",
           "sourceDocument": null,
@@ -88289,9 +88554,9 @@
           "section": null,
           "sectionBundleCount": 9,
           "sourceBinding": "065c23bac2a86af69513377bd9f1e831726aae4da19d307cb3e25b5a885f519d",
-          "sourceChecksum": "7ef5ed37676ee2424473a3abff3e9426af48695007cc9a5def5c3a085facb962"
+          "sourceChecksum": "26dd95f47068cfddd78d60755a10240645ed058fe3d828e84973172106ba8f01"
         },
-        "updatedAt": "2026-07-23T11:41:48.871Z",
+        "updatedAt": "2026-07-24T02:30:59.691Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -88331,7 +88596,7 @@
         "linearId": "f1c48c4a-a546-488a-98e3-30f58105cf01",
         "identifier": "PLA-1015",
         "title": "Prove the isolation primitive on synthetic Convex Preview data",
-        "descriptionFingerprint": "e6745a6328571891b59dd567193ac09d418ee52b08e08b1a8257da8446118916",
+        "descriptionFingerprint": "1f174b21527a38ecd33146b7fb04e1ff8fe0fb51ef5a04ec2c6d073924409d48",
         "sourceProvenance": {
           "sourceId": "F-002",
           "sourceDocument": null,
@@ -88341,9 +88606,9 @@
           "section": null,
           "sectionBundleCount": 9,
           "sourceBinding": "065c23bac2a86af69513377bd9f1e831726aae4da19d307cb3e25b5a885f519d",
-          "sourceChecksum": "7ef5ed37676ee2424473a3abff3e9426af48695007cc9a5def5c3a085facb962"
+          "sourceChecksum": "26dd95f47068cfddd78d60755a10240645ed058fe3d828e84973172106ba8f01"
         },
-        "updatedAt": "2026-07-23T11:41:53.648Z",
+        "updatedAt": "2026-07-24T02:31:36.531Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -88380,7 +88645,7 @@
         "linearId": "93a1a417-40fb-4d6c-b112-009f929c2c11",
         "identifier": "PLA-1016",
         "title": "Compile the five-class query-scope registry",
-        "descriptionFingerprint": "b28d71df9c9422972bc847b3e3e0219cb628b551ceacf23a72af6bc72c29ae76",
+        "descriptionFingerprint": "dc95bcf9d430ed2416c29f2ee4371dc3aa8425de1f23c864201d7f651eedeec1",
         "sourceProvenance": {
           "sourceId": "F-003",
           "sourceDocument": null,
@@ -88390,9 +88655,9 @@
           "section": null,
           "sectionBundleCount": 6,
           "sourceBinding": "28e9b6d07b58809445d4d2436b39e3dea7233b9b5f9125a4b184eed24cd21696",
-          "sourceChecksum": "c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c"
+          "sourceChecksum": "0a6dd707514f5ca7c6722ae0f39c02b381ecdc8570e6e2e7cd094a91390f8692"
         },
-        "updatedAt": "2026-07-23T11:42:00.331Z",
+        "updatedAt": "2026-07-24T02:31:43.856Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88430,7 +88695,7 @@
         "linearId": "8847116b-bcd2-405c-a6e4-3d5e7ecc2ff5",
         "identifier": "PLA-1017",
         "title": "Bind query inputs, guards, cursors, caches, and subscriptions",
-        "descriptionFingerprint": "11299173ac7b34085e627783a7c109665ea2004ee3b3fd60393c27ef2bc1ce63",
+        "descriptionFingerprint": "9b4be6495cddd09c6ab7ab2fec761c77a343bde621856c1b1de09de1c860924d",
         "sourceProvenance": {
           "sourceId": "F-003",
           "sourceDocument": null,
@@ -88440,9 +88705,9 @@
           "section": null,
           "sectionBundleCount": 6,
           "sourceBinding": "28e9b6d07b58809445d4d2436b39e3dea7233b9b5f9125a4b184eed24cd21696",
-          "sourceChecksum": "c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c"
+          "sourceChecksum": "0a6dd707514f5ca7c6722ae0f39c02b381ecdc8570e6e2e7cd094a91390f8692"
         },
-        "updatedAt": "2026-07-23T11:42:05.069Z",
+        "updatedAt": "2026-07-24T02:31:50.627Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -88480,7 +88745,7 @@
         "linearId": "e3bf972e-f5f5-446d-814a-a1cad8112f57",
         "identifier": "PLA-1018",
         "title": "Prove all five query classes on synthetic Convex Preview routes",
-        "descriptionFingerprint": "3a04f219bebfb8e7c7ccdd7c992d9c107e7479279fdff33d28403a36cef08b73",
+        "descriptionFingerprint": "d3b10926414b6b00a5195f3f57cd09545634aa24d1eef33e70a1c53fac154a03",
         "sourceProvenance": {
           "sourceId": "F-003",
           "sourceDocument": null,
@@ -88490,9 +88755,9 @@
           "section": null,
           "sectionBundleCount": 6,
           "sourceBinding": "28e9b6d07b58809445d4d2436b39e3dea7233b9b5f9125a4b184eed24cd21696",
-          "sourceChecksum": "c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c"
+          "sourceChecksum": "0a6dd707514f5ca7c6722ae0f39c02b381ecdc8570e6e2e7cd094a91390f8692"
         },
-        "updatedAt": "2026-07-23T10:12:16.874Z",
+        "updatedAt": "2026-07-24T02:32:02.502Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -88530,7 +88795,7 @@
         "linearId": "33ee8d45-1ad7-4ad0-95e6-2da271e696eb",
         "identifier": "PLA-1019",
         "title": "Ratify the Organization projection registry",
-        "descriptionFingerprint": "28e3c0501b07057b14071ed566fa98657944609230edccb6a1ce6ee3c53d8fe2",
+        "descriptionFingerprint": "b3f818813927df5f7ffb010000b8b3c91a0b9df0f706706b5b73f30aeba45e9c",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -88540,9 +88805,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:42:19.287Z",
+        "updatedAt": "2026-07-24T02:32:08.996Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88624,7 +88889,7 @@
         "linearId": "2f41b0bf-6bd6-4e8a-bfaf-2683abc6aa01",
         "identifier": "PLA-1020",
         "title": "Normalize Organization AuditEvent actions",
-        "descriptionFingerprint": "e8b8d63b614e4c7e8f7dee6dc900968865a0248b77faad4e0c1b0105836c18ae",
+        "descriptionFingerprint": "86d8140201ec694fb5ed6bed58076d84147ba663d46327c25ea402e7191ec7ee",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -88634,9 +88899,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:42:24.298Z",
+        "updatedAt": "2026-07-24T02:32:14.003Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88676,7 +88941,7 @@
         "linearId": "25a24186-45f0-4c3b-9e24-ccc2bace1886",
         "identifier": "PLA-1021",
         "title": "Complete Organization lifecycle persistence and recovery",
-        "descriptionFingerprint": "05fdf171f17db17b6700efd8e7e2d74587b4dd3f015f1fd8ca01427181ca24de",
+        "descriptionFingerprint": "ee3965134c727b5895a900d881538064cb66596946c7e91f9b321445fcd390da",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -88686,9 +88951,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:42:29.896Z",
+        "updatedAt": "2026-07-24T02:32:20.874Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88728,7 +88993,7 @@
         "linearId": "c47ff492-1d93-493c-b8ed-7fed55f05d81",
         "identifier": "PLA-1022",
         "title": "Ratify Organization Stripe-binding storage",
-        "descriptionFingerprint": "afaa2a29372b99a0b8d7af8f5962f774adcc8ae0b266a221d1093024a70877a9",
+        "descriptionFingerprint": "96f82a22a73786da96a28ab8182eecd3d470a498e343f9727543ac57cf0f401c",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -88738,9 +89003,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T02:13:08.319Z",
+        "updatedAt": "2026-07-24T02:32:26.239Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88780,7 +89045,7 @@
         "linearId": "0d626dd1-d255-448e-8181-f40a7a96d85b",
         "identifier": "PLA-1023",
         "title": "Reconcile the pre-split Organization plan mapping",
-        "descriptionFingerprint": "c0b7b390475e7112ec91efba3bf09939f7a126b4e1087352be1ba379c21a9c3f",
+        "descriptionFingerprint": "cec0ccca3e828e88c46b3a8da4fa1ba88bd8e09e4c7815be1c841b6462ecad60",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -88790,9 +89055,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:42:38.465Z",
+        "updatedAt": "2026-07-24T02:32:32.620Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -88952,7 +89217,7 @@
         "linearId": "b48f147b-2283-41ce-97cd-4b8c7aa03894",
         "identifier": "PLA-1026",
         "title": "Prove Business Starter trial audit and billing-view parity",
-        "descriptionFingerprint": "bcda7eb42f3bdbf1a6f2ecf3b9a3e220d5647643518adf76c4eff531e17ac51a",
+        "descriptionFingerprint": "ce5b821a6c35fa4253b011fe9609e9e05bbfacafea2e2e0517a7ef4993aa4764",
         "sourceProvenance": {
           "sourceId": "RG:buyer_trial_audit_action_registration",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -88962,9 +89227,9 @@
           "section": "§M.5.121",
           "sectionBundleCount": null,
           "sourceBinding": "e5555ee8f1695b7eafb871a466f064bc71c283e813db7ed2f3c9251e12b6201a",
-          "sourceChecksum": "b80e03e860ddbfb41c15020be494072a0359c025be3acb0980dfe5eb58cff721"
+          "sourceChecksum": "1cb73a3689084f1685e287cd5fe1a9b71c0641f87dc28a70cc2edd51e2f39437"
         },
-        "updatedAt": "2026-07-23T01:12:46.542Z",
+        "updatedAt": "2026-07-24T02:32:39.588Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -90148,14 +90413,14 @@
           "sourceBinding": "1448d9cfe4d8a09e557dbb642f4d6f1c3002e0b0f3c0bea20deb32c8db6b7572",
           "sourceChecksum": "37aea53f2b86565cb57689ade13d6e644993e4e4440f337db1ac02c365451de5"
         },
-        "updatedAt": "2026-07-23T07:54:55.732Z",
+        "updatedAt": "2026-07-24T01:49:13.133Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
         "archivedAt": null,
-        "stateId": "5aecdd5b-58b5-4c78-b35d-86fa21e76f83",
-        "state": "In Progress",
-        "stateType": "started",
+        "stateId": "79f13ec1-e526-46cd-8680-e8ecd41e5f39",
+        "state": "Done",
+        "stateType": "completed",
         "labels": [
           "human-only",
           "infra",
@@ -90367,7 +90632,7 @@
         "linearId": "2cbe95f8-aefe-46e0-8bcb-78776d352b67",
         "identifier": "PLA-1048",
         "title": "Prove retention lifecycle controls on the release candidate",
-        "descriptionFingerprint": "a39464988b696434fcb86a9e6257d529ae81cf3aea977bce6aa1a3cdeeaee7ae",
+        "descriptionFingerprint": "8446eba58a9b547cc08be9a36f9c32e8298d0bf39d847f7b08484f01432914e8",
         "sourceProvenance": {
           "sourceId": "F-593",
           "sourceDocument": null,
@@ -90377,9 +90642,9 @@
           "section": null,
           "sectionBundleCount": 4,
           "sourceBinding": "b7935e0e3e34330444dde5b9f1c2c87ebff7543165319018c117b7fa6e0e1f8c",
-          "sourceChecksum": "357d23b5cb600e13ab16aba0b72c5f61380659598f01b51dc0dae5c5f25c062d"
+          "sourceChecksum": "ae8ed30e667d5ffb816c531acf101eba74a068b0d9d58585bfdaf5bdb662fccb"
         },
-        "updatedAt": "2026-07-23T07:26:04.524Z",
+        "updatedAt": "2026-07-24T02:33:23.738Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -90388,7 +90653,6 @@
         "state": "Todo",
         "stateType": "unstarted",
         "labels": [
-          "codex-ready",
           "compliance-risk",
           "infra",
           "platform",
@@ -90418,7 +90682,7 @@
         "linearId": "3d05970b-002e-4787-a1ff-823e68e68fb0",
         "identifier": "PLA-1049",
         "title": "Prove the Convex foundation on the release candidate",
-        "descriptionFingerprint": "c9690c66e9cefcea55b22fa5d008f7338d8561354c207b6375e52715a5be24f0",
+        "descriptionFingerprint": "4754c9cff5e2d4e62d4ac7649e6379206e6793ddadf5b0fd4e9f6b309a7e6334",
         "sourceProvenance": {
           "sourceId": "F-005",
           "sourceDocument": null,
@@ -90428,9 +90692,9 @@
           "section": null,
           "sectionBundleCount": 4,
           "sourceBinding": "ad386b9b14bb35fdbfea890d2591abf88630ee200d63cd07068a838f84dc5733",
-          "sourceChecksum": "673b0270f38dffa149dbd4f459932d6c70e1dbb40a7ac462b81483790a107a8a"
+          "sourceChecksum": "17ff8fd3fc32375a8502c9b93dbdea500065e2ea1b1a5d6a5f1e96170a1d69d0"
         },
-        "updatedAt": "2026-07-23T07:26:17.977Z",
+        "updatedAt": "2026-07-24T02:33:29.917Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -90439,7 +90703,6 @@
         "state": "Todo",
         "stateType": "unstarted",
         "labels": [
-          "codex-ready",
           "integration",
           "platform",
           "qa"
@@ -90511,7 +90774,7 @@
         "linearId": "cbfff967-fd18-4eb1-9a1a-a18ed0c2ffda",
         "identifier": "PLA-1050",
         "title": "Prove reactive delivery and resynchronization on the release candidate",
-        "descriptionFingerprint": "2c29af06cb5d9a772f0b8ddc22043ab193c81b2aaced5b6d18f2edcb55c82273",
+        "descriptionFingerprint": "a8e6e0db3924aa3db9e0e967d5dfa7d4f5a9df7dac9bfccd96e4c544f3fffb04",
         "sourceProvenance": {
           "sourceId": "F-183",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -90521,9 +90784,9 @@
           "section": "§7.5",
           "sectionBundleCount": null,
           "sourceBinding": "a8b1d73edc2db62397620083fb1cdb0a18b9bb0cacd8b9b586a3a90689b53891",
-          "sourceChecksum": "22997f61589c26bd89fc0372cfd3b5167c425fc2fcf932216639da97476ec551"
+          "sourceChecksum": "c6c5948015170b4b2ee36022285ef3af7eaa77e8faa1680d274b34666707d35b"
         },
-        "updatedAt": "2026-07-23T07:39:07.922Z",
+        "updatedAt": "2026-07-24T03:19:29.611Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -90555,6 +90818,358 @@
         "relations": [
           "blocks:PLA-355:PLA-1050"
         ]
+      },
+      {
+        "linearId": "5eda1d6f-e3be-4d59-aab7-91d9364f9b7d",
+        "identifier": "PLA-1051",
+        "title": "Enforce ordinary production release fail-closed admission",
+        "descriptionFingerprint": "c75b518e58b1637ec35d3f2e7372e331a278ff51813db542b137557e81a03ae5",
+        "sourceProvenance": {
+          "sourceId": "F-630",
+          "sourceDocument": null,
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md",
+            "UX_Design_of_Sourcera.md"
+          ],
+          "section": null,
+          "sectionBundleCount": 8,
+          "sourceBinding": "3d3eee533f29733114e9eada2f512c51352ac21787b112cad54a77249a793759",
+          "sourceChecksum": "04fb1c3e258c049a5e23adbc3d6649ee359d9f2253d1f0bc38b69fc19d130670"
+        },
+        "updatedAt": "2026-07-24T05:20:14.944Z",
+        "estimate": 3,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": null,
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "infra",
+          "platform",
+          "qa"
+        ],
+        "assignee": "Blake Rowley",
+        "assigneeId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+        "project": "QA, Release, Deployment & Launch",
+        "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+        "milestone": "Quality gates ready",
+        "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+        "parent": "PLA-555",
+        "releases": [
+          "R0"
+        ],
+        "relations": [
+          "blocks:PLA-1051:PLA-1052",
+          "blocks:PLA-1051:PLA-1054"
+        ]
+      },
+      {
+        "linearId": "ff1f2018-cd89-422b-b174-0ce10b865c4e",
+        "identifier": "PLA-1052",
+        "title": "Establish the first three-application Vercel production baseline",
+        "descriptionFingerprint": "e5298b7beb47f4c45e5e835687744eee2b8cc23bef6fdc032fd594ad7d32f385",
+        "sourceProvenance": {
+          "sourceId": "F-630",
+          "sourceDocument": null,
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md",
+            "UX_Design_of_Sourcera.md"
+          ],
+          "section": null,
+          "sectionBundleCount": 8,
+          "sourceBinding": "3d3eee533f29733114e9eada2f512c51352ac21787b112cad54a77249a793759",
+          "sourceChecksum": "04fb1c3e258c049a5e23adbc3d6649ee359d9f2253d1f0bc38b69fc19d130670"
+        },
+        "updatedAt": "2026-07-24T05:20:15.867Z",
+        "estimate": 5,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": null,
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "infra",
+          "platform",
+          "qa"
+        ],
+        "assignee": "Blake Rowley",
+        "assigneeId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+        "project": "QA, Release, Deployment & Launch",
+        "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+        "milestone": "Quality gates ready",
+        "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+        "parent": "PLA-555",
+        "releases": [
+          "R0"
+        ],
+        "relations": [
+          "blocks:PLA-1051:PLA-1052",
+          "blocks:PLA-1052:PLA-1053",
+          "blocks:PLA-1052:PLA-1054"
+        ]
+      },
+      {
+        "linearId": "c4f143e8-e580-4b49-85a4-6de4df795ae3",
+        "identifier": "PLA-1053",
+        "title": "Recover the Convex production anchor and protected authority history",
+        "descriptionFingerprint": "51da2da9ed5141a1c9c49ca3786807d6d087ccba265296bc1e0a1b30df102503",
+        "sourceProvenance": {
+          "sourceId": "F-630",
+          "sourceDocument": null,
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md",
+            "UX_Design_of_Sourcera.md"
+          ],
+          "section": null,
+          "sectionBundleCount": 8,
+          "sourceBinding": "3d3eee533f29733114e9eada2f512c51352ac21787b112cad54a77249a793759",
+          "sourceChecksum": "04fb1c3e258c049a5e23adbc3d6649ee359d9f2253d1f0bc38b69fc19d130670"
+        },
+        "updatedAt": "2026-07-24T05:20:17.025Z",
+        "estimate": 5,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": null,
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "infra",
+          "platform",
+          "qa"
+        ],
+        "assignee": "Blake Rowley",
+        "assigneeId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+        "project": "QA, Release, Deployment & Launch",
+        "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+        "milestone": "Quality gates ready",
+        "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+        "parent": "PLA-555",
+        "releases": [
+          "R0"
+        ],
+        "relations": [
+          "blocks:PLA-1052:PLA-1053",
+          "blocks:PLA-1053:PLA-1054"
+        ]
+      },
+      {
+        "linearId": "b92f08af-1225-4975-b74a-4a55cd43fb0f",
+        "identifier": "PLA-1054",
+        "title": "Implement durable candidate proof coordination and promotion",
+        "descriptionFingerprint": "1eb01dc91b29fd6f893972d59f6fd0362768e56c6691e5d2723b37eb4143fa8b",
+        "sourceProvenance": {
+          "sourceId": "F-630",
+          "sourceDocument": null,
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md",
+            "UX_Design_of_Sourcera.md"
+          ],
+          "section": null,
+          "sectionBundleCount": 8,
+          "sourceBinding": "3d3eee533f29733114e9eada2f512c51352ac21787b112cad54a77249a793759",
+          "sourceChecksum": "04fb1c3e258c049a5e23adbc3d6649ee359d9f2253d1f0bc38b69fc19d130670"
+        },
+        "updatedAt": "2026-07-24T05:20:20.067Z",
+        "estimate": 8,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": null,
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "infra",
+          "platform",
+          "qa"
+        ],
+        "assignee": "Blake Rowley",
+        "assigneeId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+        "project": "QA, Release, Deployment & Launch",
+        "milestoneId": "b0485a05-13ce-4344-ad5b-99ab5a86b9d6",
+        "milestone": "Quality gates ready",
+        "parentLinearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
+        "parent": "PLA-555",
+        "releases": [
+          "R0"
+        ],
+        "relations": [
+          "blocks:PLA-1051:PLA-1054",
+          "blocks:PLA-1052:PLA-1054",
+          "blocks:PLA-1053:PLA-1054"
+        ]
+      },
+      {
+        "linearId": "4843a96a-841e-459f-8f12-1adce9012f36",
+        "identifier": "PLA-1055",
+        "title": "Approve the R2 billing-journey pilot target set",
+        "descriptionFingerprint": "75a22abdd2ebcd64ac7c687aace85c3d38e8846b9afcbf76fe5fed029e2bed9d",
+        "sourceProvenance": {
+          "sourceId": "F-007",
+          "sourceDocument": null,
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md",
+            "UX_Design_of_Sourcera.md"
+          ],
+          "section": null,
+          "sectionBundleCount": 14,
+          "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
+        },
+        "updatedAt": "2026-07-24T05:20:21.323Z",
+        "estimate": 1,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": null,
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "docs",
+          "human-only",
+          "platform"
+        ],
+        "assignee": "Blake Rowley",
+        "assigneeId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
+        "project": "Billing, Pricing & Entitlements",
+        "milestoneId": "e3b0019a-e7f2-45a5-be1b-11e4773959a4",
+        "milestone": "Purchase and settlement ready",
+        "parentLinearId": "4937834a-dafa-42f9-bd98-72843abe78b2",
+        "parent": "PLA-284",
+        "releases": [
+          "R2"
+        ],
+        "relations": [
+          "blocks:PLA-1055:PLA-1001"
+        ]
+      },
+      {
+        "linearId": "5fbd4f12-bb59-43ff-98c3-cfe6523e97f4",
+        "identifier": "PLA-1056",
+        "title": "Prove every list route has exactly one query-scope class",
+        "descriptionFingerprint": "ef487d4bb57a795831674c51bec4a16e61abafc06eacb98c5017aee2507c0635",
+        "sourceProvenance": {
+          "sourceId": "RG:query_scoping_console_required",
+          "sourceDocument": "Sourcera_Master_Spec.md",
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md"
+          ],
+          "section": "§M.5.122",
+          "sectionBundleCount": null,
+          "sourceBinding": "965033814c8e29c5736f48be5fc37c3ada666ed0747d7737eb12f47e708feb91",
+          "sourceChecksum": "d3f1396bee3994b8f34db1890fd8d63e79a3f61783202bffde647787d3b4abb0"
+        },
+        "updatedAt": "2026-07-24T05:02:13.575Z",
+        "estimate": 3,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": null,
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "infra",
+          "platform",
+          "qa"
+        ],
+        "assignee": null,
+        "assigneeId": null,
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+        "project": "Identity, Organizations & Permissions",
+        "milestoneId": "c5f366dc-a4aa-4f20-9adb-ebdb16192ced",
+        "milestone": "Production evidence closed",
+        "parentLinearId": "5ab44727-0f61-4e24-8b0f-d2ed3145e363",
+        "parent": "PLA-203",
+        "releases": [
+          "R0"
+        ],
+        "relations": [
+          "blocks:PLA-219:PLA-1056"
+        ]
+      },
+      {
+        "linearId": "51c23c15-de06-4555-b2aa-63da3360aa6a",
+        "identifier": "PLA-1057",
+        "title": "Prove every list route has exactly one query-scope class",
+        "descriptionFingerprint": "ef487d4bb57a795831674c51bec4a16e61abafc06eacb98c5017aee2507c0635",
+        "sourceProvenance": {
+          "sourceId": "RG:query_scoping_console_required",
+          "sourceDocument": "Sourcera_Master_Spec.md",
+          "sourceDocuments": [
+            "Sourcera_Master_Spec.md"
+          ],
+          "section": "§M.5.122",
+          "sectionBundleCount": null,
+          "sourceBinding": "965033814c8e29c5736f48be5fc37c3ada666ed0747d7737eb12f47e708feb91",
+          "sourceChecksum": "d3f1396bee3994b8f34db1890fd8d63e79a3f61783202bffde647787d3b4abb0"
+        },
+        "updatedAt": "2026-07-24T05:03:04.426Z",
+        "estimate": 3,
+        "priority": 2,
+        "dueDate": null,
+        "archivedAt": "2026-07-24T05:07:32.179Z",
+        "stateId": "6de8fdc7-a0e1-4846-be3d-679f42b359c9",
+        "state": "Backlog",
+        "stateType": "backlog",
+        "labels": [
+          "infra",
+          "platform",
+          "qa"
+        ],
+        "assignee": null,
+        "assigneeId": null,
+        "team": "PLA",
+        "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
+        "cycleId": null,
+        "cycleNumber": null,
+        "cycle": null,
+        "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+        "project": "Identity, Organizations & Permissions",
+        "milestoneId": "c5f366dc-a4aa-4f20-9adb-ebdb16192ced",
+        "milestone": "Production evidence closed",
+        "parentLinearId": "5ab44727-0f61-4e24-8b0f-d2ed3145e363",
+        "parent": "PLA-203",
+        "releases": [
+          "R0"
+        ],
+        "relations": []
       },
       {
         "linearId": "e27495c6-9081-440d-91ea-ffda9314762f",
@@ -94771,7 +95386,7 @@
           "sourceBinding": null,
           "sourceChecksum": null
         },
-        "updatedAt": "2026-07-23T07:18:36.555Z",
+        "updatedAt": "2026-07-24T05:02:12.695Z",
         "estimate": null,
         "priority": 2,
         "dueDate": null,
@@ -95512,7 +96127,7 @@
         "linearId": "ae2c7bd4-b9eb-4843-a8ec-ea0341c0e731",
         "identifier": "PLA-218",
         "title": "Dual-Console Data Isolation Model",
-        "descriptionFingerprint": "47968b0361f01a7d371749441a1304e81c82253f9e99cef5f9926021f47aa887",
+        "descriptionFingerprint": "b03c8a383466d64d32b72cdb530e9f5aa7d0a0fede6d4e255afe2d8b04852f9c",
         "sourceProvenance": {
           "sourceId": "F-002",
           "sourceDocument": null,
@@ -95522,9 +96137,9 @@
           "section": null,
           "sectionBundleCount": 9,
           "sourceBinding": "065c23bac2a86af69513377bd9f1e831726aae4da19d307cb3e25b5a885f519d",
-          "sourceChecksum": "7ef5ed37676ee2424473a3abff3e9426af48695007cc9a5def5c3a085facb962"
+          "sourceChecksum": "26dd95f47068cfddd78d60755a10240645ed058fe3d828e84973172106ba8f01"
         },
-        "updatedAt": "2026-07-23T10:11:22.275Z",
+        "updatedAt": "2026-07-24T02:33:36.231Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -95586,7 +96201,7 @@
         "linearId": "cd15d707-a21a-4193-955f-ccdfd79da86f",
         "identifier": "PLA-219",
         "title": "Org-Scoped vs Console-Scoped Query Scoping",
-        "descriptionFingerprint": "af27307544f703a2735227790a1296dd883028549cf503fb6c612d9b928cb741",
+        "descriptionFingerprint": "2cb38a28903a727966da75c59ecf855a768a25c13769caab93a7d956bcca8f5b",
         "sourceProvenance": {
           "sourceId": "F-003",
           "sourceDocument": null,
@@ -95596,9 +96211,9 @@
           "section": null,
           "sectionBundleCount": 6,
           "sourceBinding": "28e9b6d07b58809445d4d2436b39e3dea7233b9b5f9125a4b184eed24cd21696",
-          "sourceChecksum": "c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c"
+          "sourceChecksum": "0a6dd707514f5ca7c6722ae0f39c02b381ecdc8570e6e2e7cd094a91390f8692"
         },
-        "updatedAt": "2026-07-23T10:11:15.082Z",
+        "updatedAt": "2026-07-24T02:33:41.479Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -95633,6 +96248,7 @@
           "blocks:PLA-218:PLA-219",
           "blocks:PLA-219:BUY-412",
           "blocks:PLA-219:PLA-1046",
+          "blocks:PLA-219:PLA-1056",
           "blocks:PLA-219:PLA-288",
           "blocks:PLA-219:PLA-986",
           "blocks:PLA-219:PLA-988",
@@ -95699,7 +96315,7 @@
           "sourceBinding": "271d59ab5941de1d3a2c09ef5ae814585b7d262ed3bce7f325258aa05c69ff6f",
           "sourceChecksum": "877234173313bc6bf9db1ee8a18161ee6ac5ab2f5523ac45148f29286f13013d"
         },
-        "updatedAt": "2026-07-23T01:05:39.424Z",
+        "updatedAt": "2026-07-24T03:59:22.321Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -96521,7 +97137,7 @@
         "linearId": "35173e62-6711-4be3-a0fb-344d60142cd1",
         "identifier": "PLA-236",
         "title": "Loading / Empty / Error State Catalog",
-        "descriptionFingerprint": "002e7a94ec5e072925b36ce0c09e5034b3250b59fcd894f558bf92a5bee2b4fa",
+        "descriptionFingerprint": "7ba8b25e1c964320720baa7a77320247bff6df36ad88b06ec828ebca28cc0e16",
         "sourceProvenance": {
           "sourceId": "F-044",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -96531,9 +97147,9 @@
           "section": "§3.7",
           "sectionBundleCount": null,
           "sourceBinding": "9e1b150a5366f1862ee71879dcc7c077cb95a9dd3b49a109c2795a2e42318337",
-          "sourceChecksum": "6119133a73b14c8149413c1bff2283dbb2b09df515a9f857f7b8e9c790ca5687"
+          "sourceChecksum": "2df60d11c9328423c7d73b34ae5bb2edcead7ed97d98b17202f9e02bb5e8d2a5"
         },
-        "updatedAt": "2026-07-23T12:09:14.143Z",
+        "updatedAt": "2026-07-24T02:33:47.414Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -96673,7 +97289,7 @@
         "linearId": "55a6d39a-7a6b-4b42-902a-a76d53b72dbd",
         "identifier": "PLA-239",
         "title": "Failure / Reason / Recovery Error Contract",
-        "descriptionFingerprint": "5b301ad4549717b65c2baf417fb2d6462c7d9c2de1bfbe5ad08b7adacf875ce0",
+        "descriptionFingerprint": "cb6cffde8ce096c1b37b66fdab641decbbc248c6c159af1c3ca6d1a5539e710d",
         "sourceProvenance": {
           "sourceId": "F-047",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -96683,9 +97299,9 @@
           "section": "§3.7.4",
           "sectionBundleCount": null,
           "sourceBinding": "7b2f8e11bd4bda0ef2ecf5e075645c91839837080a28dd4275bc514a62ae458f",
-          "sourceChecksum": "7af758469dd1c80711385e4e295d0dfd505064b55dc8be935bb6fdc5fc06239d"
+          "sourceChecksum": "1076211d882be1b037fdef8b83f532e9a20aa72ee93270fcf5756b60a7a1451c"
         },
-        "updatedAt": "2026-07-23T02:22:33.265Z",
+        "updatedAt": "2026-07-24T03:19:03.782Z",
         "estimate": 2,
         "priority": 3,
         "dueDate": null,
@@ -98422,7 +99038,7 @@
         "linearId": "5124faa1-bf61-4551-97c7-82728a6621c9",
         "identifier": "PLA-271",
         "title": "Organization Entity",
-        "descriptionFingerprint": "f8e67d4433b2c7cb2a97a5faaaf6d0ebc82523dcf6a18cdcfa831a1aa6966f66",
+        "descriptionFingerprint": "6e875a201214431c8a48c8b80fc5cab8417c1461b6b58af93cd88d2f9aeac3b8",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -98432,9 +99048,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T01:05:02.371Z",
+        "updatedAt": "2026-07-24T02:33:53.872Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -98630,7 +99246,7 @@
         "linearId": "9c0f85f2-d8fc-4325-a120-f550e7481b80",
         "identifier": "PLA-275",
         "title": "Response Entity",
-        "descriptionFingerprint": "db4bd8742b18d61cbb749a857976d49a2779867b2469071a403c4f66697540e4",
+        "descriptionFingerprint": "95285deafcb8c32d51b0c9ea4ac3d77de598d6af48605173bc5f43b7d69e3d7b",
         "sourceProvenance": {
           "sourceId": "F-087",
           "sourceDocument": null,
@@ -98640,9 +99256,9 @@
           "section": null,
           "sectionBundleCount": 10,
           "sourceBinding": "391ec04274c9f7d437169cce759688f9ca5e5590c1278403b6294fcfe95d4266",
-          "sourceChecksum": "2ed86078614cf98d2bc379bf8db1b56908a0b343dd46b51f41d1d499b46e1940"
+          "sourceChecksum": "8edac1e7efed9470d9648c6dcc3f804ebfe6374047c7fb2e5fff7f4f3bf799db"
         },
-        "updatedAt": "2026-07-23T01:04:51.151Z",
+        "updatedAt": "2026-07-24T02:34:00.917Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -99033,7 +99649,7 @@
         "linearId": "52d10add-6e70-4b5e-a5d0-883cba41ca4b",
         "identifier": "PLA-282",
         "title": "Typed Convex Preview foundation and reactive proof",
-        "descriptionFingerprint": "0e90135672ddb18dd4ac7d8f8d5877b249d169e132b58275660cff421ed23fdc",
+        "descriptionFingerprint": "ab26543de0b6026f95218fd8ec206048643b42fee81a6dea781013bd2beabbdd",
         "sourceProvenance": {
           "sourceId": "F-005",
           "sourceDocument": null,
@@ -99043,9 +99659,9 @@
           "section": null,
           "sectionBundleCount": 4,
           "sourceBinding": "ad386b9b14bb35fdbfea890d2591abf88630ee200d63cd07068a838f84dc5733",
-          "sourceChecksum": "673b0270f38dffa149dbd4f459932d6c70e1dbb40a7ac462b81483790a107a8a"
+          "sourceChecksum": "17ff8fd3fc32375a8502c9b93dbdea500065e2ea1b1a5d6a5f1e96170a1d69d0"
         },
-        "updatedAt": "2026-07-23T06:41:02.497Z",
+        "updatedAt": "2026-07-24T02:34:06.404Z",
         "estimate": 5,
         "priority": 1,
         "dueDate": null,
@@ -99169,7 +99785,7 @@
         "linearId": "4937834a-dafa-42f9-bd98-72843abe78b2",
         "identifier": "PLA-284",
         "title": "Deliver Production-Grade Stripe Billing Integration",
-        "descriptionFingerprint": "f2e55d1a2f644e86c8a0ec9b41bc5f371c68682fc365cfe1c09ebda186eabac5",
+        "descriptionFingerprint": "e37839203ccb805d3d9b2aad7f2a906d3569f379d75990bfc22f5bdd3eb28180",
         "sourceProvenance": {
           "sourceId": "F-007",
           "sourceDocument": null,
@@ -99180,9 +99796,9 @@
           "section": null,
           "sectionBundleCount": 14,
           "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
-          "sourceChecksum": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
         },
-        "updatedAt": "2026-07-23T01:03:11.472Z",
+        "updatedAt": "2026-07-24T02:34:14.073Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -100413,7 +101029,7 @@
         "linearId": "c8c819f7-e285-4262-babe-56c9fbf36aa7",
         "identifier": "PLA-305",
         "title": "Publish Immutable Pricing Versions and Reproducible Rate Cards",
-        "descriptionFingerprint": "7ea3c722684c428004abda2729d40e24315115b04a19ebb1b531a33e40b589c2",
+        "descriptionFingerprint": "bdf5d2c5f526dbe2fd8d50fb51eb6eb9986e954b69579b2051018ace55aecbff",
         "sourceProvenance": {
           "sourceId": "F-132",
           "sourceDocument": null,
@@ -100423,9 +101039,9 @@
           "section": null,
           "sectionBundleCount": 2,
           "sourceBinding": "18400e308a22bdd1b788a49656ec9d17981c0ecbc606d79c77053f7395a16149",
-          "sourceChecksum": "d4adc8fae9b173fafb59b4e90de5112d64a4fe533b1b8e0dfbac2100b804dac1"
+          "sourceChecksum": "695f774a0aa69968d17a0c0b0678b29afdc275377ff52751283d92dd78301b68"
         },
-        "updatedAt": "2026-07-23T11:43:40.280Z",
+        "updatedAt": "2026-07-24T02:34:22.893Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -100521,7 +101137,7 @@
         "linearId": "1634a786-60d9-4d4f-987f-ad66c7d10857",
         "identifier": "PLA-307",
         "title": "BillingSeatSnapshot Entity",
-        "descriptionFingerprint": "b67c1138ec03e1a73a1a752828209e296e73a782f7eb633d243dc21ee666cdbc",
+        "descriptionFingerprint": "f57c505e12a843d9bd470c283dde5d5f58203a3cd471f32ad32bf5723f5d9a45",
         "sourceProvenance": {
           "sourceId": "F-134",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -100531,9 +101147,9 @@
           "section": "§4.8.11",
           "sectionBundleCount": null,
           "sourceBinding": "f63b77c3cd62125bc6688e6784515aa9894f7e60d58350e6055f507a7159b02b",
-          "sourceChecksum": "0a41237a37422bdf8ad08c9530ba94a06a9c1104ed7dc34b2c7443c80d7ff02e"
+          "sourceChecksum": "47fbb95923f94f7df0d0bab0c69c16da5abc7010c1fc6dc58c1aa3b2fe74ff41"
         },
-        "updatedAt": "2026-07-23T02:28:54.794Z",
+        "updatedAt": "2026-07-24T03:19:04.765Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -100617,7 +101233,7 @@
         "linearId": "3f2864aa-313c-490b-9b9f-685cfb7adc84",
         "identifier": "PLA-309",
         "title": "Billing & AI Accounting Entity Set",
-        "descriptionFingerprint": "eb87fc1ae28443642c0f122bd03508ae0a0203e75da00ba88f8ec992170f27bc",
+        "descriptionFingerprint": "2736374ccf476114b795b309a6ca6cbba166c8b3b641a504f1dc4b95fa7326df",
         "sourceProvenance": {
           "sourceId": "F-137",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -100627,9 +101243,9 @@
           "section": "§4.8",
           "sectionBundleCount": null,
           "sourceBinding": "cea9a009ee6978d493b52e3f5cd96336a88e097a8f533b5304266b533caec8c7",
-          "sourceChecksum": "451260d5b082d6d94ac6d4d4595b9219e2f1f80be1c0c0045fac597d4b2dcfcb"
+          "sourceChecksum": "2df5cd7c90c8a3e4fc054d5e4762a25f62eabe4a02da5f3a6629cad1778dcb55"
         },
-        "updatedAt": "2026-07-23T02:29:07.315Z",
+        "updatedAt": "2026-07-24T03:19:06.250Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -100776,7 +101392,7 @@
         "linearId": "a2830478-347b-4cf9-a1d2-33db3dfb7a47",
         "identifier": "PLA-311",
         "title": "Enforce Org Owner Authority Without Bypassing Console Isolation",
-        "descriptionFingerprint": "a4b4a438e8f58c70c55f9b8944f597b96994799fa553784266a392e8038ca049",
+        "descriptionFingerprint": "c8440443f66fa0a8913a1c4fbd02c5dbd6def4c8fe235018f3e83a9e685f0bf3",
         "sourceProvenance": {
           "sourceId": "F-139",
           "sourceDocument": null,
@@ -100787,9 +101403,9 @@
           "section": null,
           "sectionBundleCount": 30,
           "sourceBinding": "8ab56208608a4674d56ec3b96323959c9b457eae96f2b7f5fcb92027b543498a",
-          "sourceChecksum": "bac1add519ef63a7f5996366ea3fdd7b2b73a5a699398eea811239c071c2b89c"
+          "sourceChecksum": "5d2953b42228b52380b7b9684c19ef046cc6c91329c1fafba81f756d35fe846a"
         },
-        "updatedAt": "2026-07-23T06:10:13.864Z",
+        "updatedAt": "2026-07-24T02:35:04.309Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -101027,7 +101643,7 @@
         "linearId": "2769c80d-544e-4313-b5de-85ec3d18bde6",
         "identifier": "PLA-316",
         "title": "Workspace Owner Role",
-        "descriptionFingerprint": "5a77fde546b0a45b55f323fcdb12c5c08e721edfcf2f5832a8a301b612e53455",
+        "descriptionFingerprint": "aca665d8fd865816c861ba9c1e1b78383c8556f30f478c419911175c6c973e3e",
         "sourceProvenance": {
           "sourceId": "F-144",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -101037,9 +101653,9 @@
           "section": "§5.3",
           "sectionBundleCount": null,
           "sourceBinding": "fddd320cc792483b447be93eec8d6db63aa57ca734b952f07488c19b94ee6ee7",
-          "sourceChecksum": "cf0978c23b729b7f6e35fe3d3f45ed104b48f0e54f091d86594f113011b904f6"
+          "sourceChecksum": "b77c3dd3ba6b2f40a0dba699a5258f41ad9a899b40cdff6120e604c7c484ee66"
         },
-        "updatedAt": "2026-07-23T02:29:41.024Z",
+        "updatedAt": "2026-07-24T03:19:07.243Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -101077,7 +101693,7 @@
         "linearId": "b1cb9b6b-2c26-4908-8ab0-3ec66c92174d",
         "identifier": "PLA-317",
         "title": "Workspace Admin Role",
-        "descriptionFingerprint": "2d3227200e03a70e84eb5c0475a471ecd45dd17020dbd3dd781ebcbaae520a87",
+        "descriptionFingerprint": "820d009398571c45b96badece2f743af24ba983c5cda3d9dd67a5d98302ff3db",
         "sourceProvenance": {
           "sourceId": "F-145",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -101087,9 +101703,9 @@
           "section": "§5.3",
           "sectionBundleCount": null,
           "sourceBinding": "fddd320cc792483b447be93eec8d6db63aa57ca734b952f07488c19b94ee6ee7",
-          "sourceChecksum": "cf0978c23b729b7f6e35fe3d3f45ed104b48f0e54f091d86594f113011b904f6"
+          "sourceChecksum": "b77c3dd3ba6b2f40a0dba699a5258f41ad9a899b40cdff6120e604c7c484ee66"
         },
-        "updatedAt": "2026-07-23T02:29:48.461Z",
+        "updatedAt": "2026-07-24T03:19:09.852Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -101126,7 +101742,7 @@
         "linearId": "7fb982cd-c989-4b85-96db-0283145551e9",
         "identifier": "PLA-318",
         "title": "Use Case Lead Role",
-        "descriptionFingerprint": "d50c9a03851b2c14b83778ac62022a6ed953fff80248f9841a271867a8dac1a0",
+        "descriptionFingerprint": "38fb156c42e5bb94715787782406683a692a29a5cf76e09c682a2c31d3647be6",
         "sourceProvenance": {
           "sourceId": "F-146",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -101136,9 +101752,9 @@
           "section": "§5.3",
           "sectionBundleCount": null,
           "sourceBinding": "fddd320cc792483b447be93eec8d6db63aa57ca734b952f07488c19b94ee6ee7",
-          "sourceChecksum": "cf0978c23b729b7f6e35fe3d3f45ed104b48f0e54f091d86594f113011b904f6"
+          "sourceChecksum": "b77c3dd3ba6b2f40a0dba699a5258f41ad9a899b40cdff6120e604c7c484ee66"
         },
-        "updatedAt": "2026-07-23T02:30:12.461Z",
+        "updatedAt": "2026-07-24T03:19:11.285Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -101175,7 +101791,7 @@
         "linearId": "36acc31e-71b7-46a2-909a-cb40f7b62bee",
         "identifier": "PLA-319",
         "title": "Reviewer Role",
-        "descriptionFingerprint": "99780582c47a93d8ab6fa91301abde001cf2f6c676d0c4267af7e8bb9f22f5b8",
+        "descriptionFingerprint": "b5d2ca661edcb34eec8b5fa5c3140162aca8c7eb0072027233153be8d165f19e",
         "sourceProvenance": {
           "sourceId": "F-147",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -101185,9 +101801,9 @@
           "section": "§5.3",
           "sectionBundleCount": null,
           "sourceBinding": "fddd320cc792483b447be93eec8d6db63aa57ca734b952f07488c19b94ee6ee7",
-          "sourceChecksum": "cf0978c23b729b7f6e35fe3d3f45ed104b48f0e54f091d86594f113011b904f6"
+          "sourceChecksum": "b77c3dd3ba6b2f40a0dba699a5258f41ad9a899b40cdff6120e604c7c484ee66"
         },
-        "updatedAt": "2026-07-23T02:30:20.969Z",
+        "updatedAt": "2026-07-24T03:19:12.177Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -103167,7 +103783,7 @@
         "linearId": "b91cbc71-fe7f-402c-80f1-ca42625b0aca",
         "identifier": "PLA-355",
         "title": "Convex Subscription / Reactivity Layer",
-        "descriptionFingerprint": "bae5b74dfddb4b1333e744e98908e1751b67ee4f6943962e5a3d3a4f0f4339ef",
+        "descriptionFingerprint": "aeaf491c2bcd7045121c79db54efe4a01c15376cd8438e358b4afc31e96a50df",
         "sourceProvenance": {
           "sourceId": "F-183",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -103177,9 +103793,9 @@
           "section": "§7.5",
           "sectionBundleCount": null,
           "sourceBinding": "a8b1d73edc2db62397620083fb1cdb0a18b9bb0cacd8b9b586a3a90689b53891",
-          "sourceChecksum": "22997f61589c26bd89fc0372cfd3b5167c425fc2fcf932216639da97476ec551"
+          "sourceChecksum": "c6c5948015170b4b2ee36022285ef3af7eaa77e8faa1680d274b34666707d35b"
         },
-        "updatedAt": "2026-07-23T02:34:00.051Z",
+        "updatedAt": "2026-07-24T03:19:17.405Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -104634,7 +105250,7 @@
           "sourceBinding": "15721b0bfc7b991282992c1d4eeb7efa5f24ff170997dbf9abce796e4103ecb4",
           "sourceChecksum": "8c6c30a2b0a0a209d76cb3559d367d917dc5d8630ef46188a198947c995a8900"
         },
-        "updatedAt": "2026-07-23T01:13:06.261Z",
+        "updatedAt": "2026-07-24T03:14:00.093Z",
         "estimate": 2,
         "priority": 1,
         "dueDate": null,
@@ -107455,7 +108071,7 @@
         "linearId": "03e46f9a-fe18-4aec-b619-dfd18933fae1",
         "identifier": "PLA-434",
         "title": "Sourcera API Common Plane & OpenAPI Generator",
-        "descriptionFingerprint": "5490a76f71cf074bb88a6dea895f92468367b80779d4d1a55db6b882df70c4c1",
+        "descriptionFingerprint": "ad201a771372db18892a281484e2a9ac3615643bee5571bd3258d12690e2402b",
         "sourceProvenance": {
           "sourceId": "F-496",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -107465,9 +108081,9 @@
           "section": "§32.1",
           "sectionBundleCount": null,
           "sourceBinding": "ad5bd77e1aa2ec1e04e3969358f06728c8fb821015eb04f5ec471bbb8331482b",
-          "sourceChecksum": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+          "sourceChecksum": "2cbbf712fa0550c90c652865faae61bb7c25440480fe52e7a0c6d7a4768550e2"
         },
-        "updatedAt": "2026-07-23T01:05:43.722Z",
+        "updatedAt": "2026-07-24T02:35:09.162Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -107624,7 +108240,7 @@
         "linearId": "1781a856-caf7-46ae-b0dc-e38f36a8b267",
         "identifier": "PLA-437",
         "title": "Public Pricing API",
-        "descriptionFingerprint": "01bbf9f7c86bcf006367a41c62e10e2d477b9595574315eebd33870b7c1a87b9",
+        "descriptionFingerprint": "38209bf43c3a6d10f74ab44ccd81e0d0baa1e3271c1f0f37ebba78c469189365",
         "sourceProvenance": {
           "sourceId": "F-499",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -107634,9 +108250,9 @@
           "section": "§32.8.1",
           "sectionBundleCount": null,
           "sourceBinding": "ac58782d0721192bf3609e80b6dc05864f1a08ff0b2908309ddd0c0bcb1c12fb",
-          "sourceChecksum": "cd8598f89d8f53c6153c127d324d489312caa5eefaa6fd03d6a86ae832807519"
+          "sourceChecksum": "8d0f971869e391efa1374924e44c3b079f560f475d32bb2dff6afe95c6bd39b2"
         },
-        "updatedAt": "2026-07-23T02:42:49.351Z",
+        "updatedAt": "2026-07-24T03:19:18.477Z",
         "estimate": 3,
         "priority": 3,
         "dueDate": null,
@@ -107674,7 +108290,7 @@
         "linearId": "80db539b-4391-45f3-b76a-909cfb035700",
         "identifier": "PLA-438",
         "title": "Billing API",
-        "descriptionFingerprint": "40530b8f833d9ac1e36e46d1e900174187d6cf10f2e60fa09c46a08883d1709e",
+        "descriptionFingerprint": "56e9d1e255b0f8ff49094bea66ca9b38f026cb952e5237a4078564227ac14df3",
         "sourceProvenance": {
           "sourceId": "F-500",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -107684,9 +108300,9 @@
           "section": "§32.8",
           "sectionBundleCount": null,
           "sourceBinding": "78e98ba3908ff0506957b102c7010b19ccc6767c3093df142831f7ed1a394df4",
-          "sourceChecksum": "bc0d9ea5f9d2f5c8b91a185773b76787b9457db9386f1195305022c87406d8e0"
+          "sourceChecksum": "9f88353cc43e5a186ce62365339e2512aa25998cb0c036742ab15f99bfd98f17"
         },
-        "updatedAt": "2026-07-23T02:42:54.782Z",
+        "updatedAt": "2026-07-24T03:19:22.322Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -109247,7 +109863,7 @@
         "linearId": "c1122737-5654-4928-acfa-e0199043c022",
         "identifier": "PLA-467",
         "title": "Produce Immutable Informational Billing Seat Snapshots",
-        "descriptionFingerprint": "f0454968baac4ea818260a03ae15701d14c65d6ff3ebc2e3e52ea47776485790",
+        "descriptionFingerprint": "6638d7c20f3ce6549db26a352551b9cd41ce61d1364f5f4a4673016908ef29c4",
         "sourceProvenance": {
           "sourceId": "F-529",
           "sourceDocument": null,
@@ -109258,9 +109874,9 @@
           "section": null,
           "sectionBundleCount": 30,
           "sourceBinding": "0d0491e1b86d6ee277520c030464b681bb81cad982e63a60d93f3ede88fa70d3",
-          "sourceChecksum": "d24cf81d803b34999ba8867dd393deee94f99a7026e97231dae24b6f89553912"
+          "sourceChecksum": "185cd016e3e2d2e408986a5e66d34ee659411839f9f99c59998965ae26649562"
         },
-        "updatedAt": "2026-07-23T11:39:15.927Z",
+        "updatedAt": "2026-07-24T02:35:22.254Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -109495,7 +110111,7 @@
         "linearId": "ba6f0140-55c8-4aee-8d1a-58402c2e5ea5",
         "identifier": "PLA-471",
         "title": "Buyer 14-Day Trial Lifecycle Completion",
-        "descriptionFingerprint": "34a3cbdc03de3ff3737414a8844645eca75a3690e566890082653ca20a055e21",
+        "descriptionFingerprint": "d6f900e297bb96e863eaf1720bc4d8029def87932e8b549ff4e5d8bf8b7ee127",
         "sourceProvenance": {
           "sourceId": "F-533",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -109505,9 +110121,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T01:05:56.881Z",
+        "updatedAt": "2026-07-24T02:35:30.400Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -109595,7 +110211,7 @@
         "linearId": "b2fa938b-47d5-4068-bacc-931daebafffe",
         "identifier": "PLA-473",
         "title": "Onboarding/Trial Carry-Over",
-        "descriptionFingerprint": "ef74f14230c81b82bfbefea4019afc2faa1662ad555ca14d95d22bfbbce5a8f0",
+        "descriptionFingerprint": "0194f5d5dbc8a8fd8c2619eedec8fcecf3acd190054fafc362d3591538776caa",
         "sourceProvenance": {
           "sourceId": "F-535",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -109605,9 +110221,9 @@
           "section": "§34.9",
           "sectionBundleCount": null,
           "sourceBinding": "96526fe94cb2bf45d7ea5592d2f7287fcfed69419484a84d34853d16ce4b51f8",
-          "sourceChecksum": "5b15f340cc84d1fd308342db160373521439888c424a80ae40c11f3668322a59"
+          "sourceChecksum": "ab73339066bdca82b1324cbc47efc16fd673e1785596462747d48eb83179dd0e"
         },
-        "updatedAt": "2026-07-23T02:46:59.477Z",
+        "updatedAt": "2026-07-24T03:19:23.397Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -109699,7 +110315,7 @@
         "linearId": "4d4a2289-56a2-4617-8872-79c67c356475",
         "identifier": "PLA-475",
         "title": "Recompute the Organization-Pooled AI Wallet Across Consoles",
-        "descriptionFingerprint": "d5ac6758e78a205fa5624866ce2bc3b353b3c8f69932be170f6c6fbfb89ad304",
+        "descriptionFingerprint": "e410e63ffe45735c9fc293dbbd4b2b414a05de7e127e2fdb1aae41595d966cf2",
         "sourceProvenance": {
           "sourceId": "F-537",
           "sourceDocument": null,
@@ -109710,9 +110326,9 @@
           "section": null,
           "sectionBundleCount": 11,
           "sourceBinding": "6c5bd565d0bf514e2934f77ae757070a8e72d5675154d4276e70edaf31c9a03a",
-          "sourceChecksum": "8b417bc12cf52a7ee65fe7c6cee0fbffc48c7fe9763c241da207527e72b49409"
+          "sourceChecksum": "bfe61f401d4a304a34147413f366d565ab297b83cb740ee2c7956cbd34bd09b7"
         },
-        "updatedAt": "2026-07-23T01:02:54.399Z",
+        "updatedAt": "2026-07-24T02:35:35.782Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -112288,7 +112904,7 @@
         "linearId": "020f69ed-6cba-453a-b2b5-c8ef82e6d2c1",
         "identifier": "PLA-522",
         "title": "Compile the Canonical Retention, Deletion, DSAR, and Residency Registry",
-        "descriptionFingerprint": "b1f922e9c73fa0a3f9459073259b731490d8c5ea3ca96ca236e966f09860b27f",
+        "descriptionFingerprint": "bb3c0435538def050dbedc82febd631a001cf56ca71bd9bad573626e075b6301",
         "sourceProvenance": {
           "sourceId": "F-593",
           "sourceDocument": null,
@@ -112298,9 +112914,9 @@
           "section": null,
           "sectionBundleCount": 4,
           "sourceBinding": "b7935e0e3e34330444dde5b9f1c2c87ebff7543165319018c117b7fa6e0e1f8c",
-          "sourceChecksum": "357d23b5cb600e13ab16aba0b72c5f61380659598f01b51dc0dae5c5f25c062d"
+          "sourceChecksum": "ae8ed30e667d5ffb816c531acf101eba74a068b0d9d58585bfdaf5bdb662fccb"
         },
-        "updatedAt": "2026-07-23T01:09:17.950Z",
+        "updatedAt": "2026-07-24T02:35:40.980Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -114124,20 +114740,17 @@
         "linearId": "e6b818f0-93dd-4253-a6b1-899fc58df668",
         "identifier": "PLA-555",
         "title": "Enforce Pre-Release QA, Canary Promotion, and Rollback",
-        "descriptionFingerprint": "51abaf5a619dfd714865eb1e0998bf3cecfff90de87ecec960ded24d6f786630",
+        "descriptionFingerprint": "40f803e59af74c10b2f075532df6ac5b4bd2662ffb0e34903f7f0ddcc1fd245a",
         "sourceProvenance": {
-          "sourceId": "F-630",
+          "sourceId": null,
           "sourceDocument": null,
-          "sourceDocuments": [
-            "Sourcera_Master_Spec.md",
-            "UX_Design_of_Sourcera.md"
-          ],
+          "sourceDocuments": [],
           "section": null,
-          "sectionBundleCount": 8,
-          "sourceBinding": "3d3eee533f29733114e9eada2f512c51352ac21787b112cad54a77249a793759",
-          "sourceChecksum": "93c8316ca45dd7c4fd2fa193050cc5a534d93962fde8dbdc6a06d9653dab7a38"
+          "sectionBundleCount": null,
+          "sourceBinding": null,
+          "sourceChecksum": null
         },
-        "updatedAt": "2026-07-23T11:39:25.924Z",
+        "updatedAt": "2026-07-24T05:20:22.563Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -114186,7 +114799,7 @@
         "linearId": "68dac967-7239-4b71-9eb0-74ed46a4da80",
         "identifier": "PLA-556",
         "title": "Enforce Feature-Flag and Entitlement Precedence",
-        "descriptionFingerprint": "f9488392d57ed294c1c53e0e2b537ccea3e4918e09b3d1027e3876d2fb87cabd",
+        "descriptionFingerprint": "28b2ba4b906777c6db9004558f6789c6bdb64b87a2153d6c53318fd2eeca37ab",
         "sourceProvenance": {
           "sourceId": "F-631",
           "sourceDocument": null,
@@ -114197,9 +114810,9 @@
           "section": null,
           "sectionBundleCount": 3,
           "sourceBinding": "0847813a6195edfaaf0e696c8396f4744b3d13bd1c80851e076560b2a380ef68",
-          "sourceChecksum": "22c30af070f9978199567f84c2066a14747872d5523fe0b4c2e631a81f62eb78"
+          "sourceChecksum": "d25845efa344345e504ca357d8fa1f2d98f01bda071bb1cc692dae945b601cee"
         },
-        "updatedAt": "2026-07-23T01:05:28.075Z",
+        "updatedAt": "2026-07-24T02:35:47.636Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -121777,7 +122390,7 @@
         "linearId": "07cdcc66-7959-44bb-b82c-c573b7b8775d",
         "identifier": "PLA-696",
         "title": "Controlled Vocabulary Registry",
-        "descriptionFingerprint": "9ce81135284cf834485d5e056a32504299cfdf65dd7b57709e95c3258ca2747e",
+        "descriptionFingerprint": "22872fe302344bcaa130bb8755b4c651afa65a092297da8384a13c83de82195f",
         "sourceProvenance": {
           "sourceId": "F-783",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -121787,9 +122400,9 @@
           "section": "Appendix J",
           "sectionBundleCount": null,
           "sourceBinding": "cc555927685c98516b33c6e26d83bd8a56fbdf7f303caadc4f47a1f1d3ba39a4",
-          "sourceChecksum": "7a976a74855ef120883386050752a9fb8d97f76f46f37ed2787de762d8efc091"
+          "sourceChecksum": "25a9b20c33951b506c7a7cd3c3b7dc20a6132a2af102d51b3e5506abeaa3cfd5"
         },
-        "updatedAt": "2026-07-23T02:55:49.926Z",
+        "updatedAt": "2026-07-24T03:19:24.387Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -121825,7 +122438,7 @@
         "linearId": "77ac480e-067d-440f-9d6b-96a2e21d3267",
         "identifier": "PLA-697",
         "title": "Glossary (canonical term registry)",
-        "descriptionFingerprint": "95c1da54985548601320f30e3d0e88539b6f8420ca56a30393ae981a5f90db0f",
+        "descriptionFingerprint": "5a0dca49ce21178cbd5cae6d88ff55a43d258e55e8f0dab5858bdd69dc90feca",
         "sourceProvenance": {
           "sourceId": "F-784",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -121835,9 +122448,9 @@
           "section": "Appendix K",
           "sectionBundleCount": null,
           "sourceBinding": "6b4a1021d5ecd815ccd1cda67afe87d43f82dda4be2f201c42439499f81bace7",
-          "sourceChecksum": "5b965cb83d360c35504925dcd2ff7bd054311857e213994e15b87a8d7cbd6ae0"
+          "sourceChecksum": "2bf66b601fc721902aaeec7fd45376cda3dcf1793e20cb3e65bcd1e42f1931fa"
         },
-        "updatedAt": "2026-07-23T02:55:41.562Z",
+        "updatedAt": "2026-07-24T03:19:25.296Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -132536,7 +133149,7 @@
         "linearId": "e5fa4232-56e8-4ed5-8b4a-e34efd4f591b",
         "identifier": "PLA-894",
         "title": "Audit Events Export Ready Delivery Runtime",
-        "descriptionFingerprint": "281565b7c0c8872f2c80e3c53be24b2b86480d19f1552fe99b315ff5b1e5382c",
+        "descriptionFingerprint": "b7d4be4385cb1d0e4ca8f2cfe1dd6fefdceddc3fc06d8b54e81f688ea443625d",
         "sourceProvenance": {
           "sourceId": "RG:audit_events_export_ready_delivery_runtime",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -132546,9 +133159,9 @@
           "section": "§M.5.120",
           "sectionBundleCount": null,
           "sourceBinding": "39c52d986fa252fcc8c40b51cfafe0078368c3606069b92d5b9e33fe1a4d942b",
-          "sourceChecksum": "dde967ddb86f0ef209f4f3150da701d37d17d1f2943a4a617b434fad176c4e3c"
+          "sourceChecksum": "acf2ce6521b603e3140f4a30f6ea685f81c1f7ab68078f732e47a59d32bf7e23"
         },
-        "updatedAt": "2026-07-23T02:28:52.996Z",
+        "updatedAt": "2026-07-24T03:19:26.239Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -132975,7 +133588,7 @@
         "linearId": "3f3f1704-87eb-44f2-8baf-fb7193b38073",
         "identifier": "PLA-902",
         "title": "Enforce reactive-subscription rules and service-level objectives",
-        "descriptionFingerprint": "7054eda98b0c3a2c1a75866f12ad32701e7cdd357050306e2ad1031161fbe013",
+        "descriptionFingerprint": "4cc7c580bda594ff2961a0f81c0fc91d435e28e7b6f615db9a4ac1dc37f7d85d",
         "sourceProvenance": {
           "sourceId": "F-AE-004",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -132985,9 +133598,9 @@
           "section": "§7.5",
           "sectionBundleCount": null,
           "sourceBinding": "a8b1d73edc2db62397620083fb1cdb0a18b9bb0cacd8b9b586a3a90689b53891",
-          "sourceChecksum": "22997f61589c26bd89fc0372cfd3b5167c425fc2fcf932216639da97476ec551"
+          "sourceChecksum": "c6c5948015170b4b2ee36022285ef3af7eaa77e8faa1680d274b34666707d35b"
         },
-        "updatedAt": "2026-07-23T11:45:19.921Z",
+        "updatedAt": "2026-07-24T03:19:27.853Z",
         "estimate": 2,
         "priority": 3,
         "dueDate": null,
@@ -133931,7 +134544,7 @@
         "linearId": "1e0bec75-67f2-4c3c-bc94-f1502e7b77e3",
         "identifier": "PLA-920",
         "title": "billing_event_charge_kind Extension",
-        "descriptionFingerprint": "a817f5bde0397421a62622ea37bff72137cf68c8227ac3aee07ef191c86aecf9",
+        "descriptionFingerprint": "a30cfba3041fec5bbd825c5199205113dc1da68a95822be7bf7024abfa4ac6b8",
         "sourceProvenance": {
           "sourceId": "F-AE-048",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -133941,9 +134554,9 @@
           "section": "Appendix J",
           "sectionBundleCount": null,
           "sourceBinding": "cc555927685c98516b33c6e26d83bd8a56fbdf7f303caadc4f47a1f1d3ba39a4",
-          "sourceChecksum": "7a976a74855ef120883386050752a9fb8d97f76f46f37ed2787de762d8efc091"
+          "sourceChecksum": "25a9b20c33951b506c7a7cd3c3b7dc20a6132a2af102d51b3e5506abeaa3cfd5"
         },
-        "updatedAt": "2026-07-23T02:26:26.543Z",
+        "updatedAt": "2026-07-24T03:19:28.725Z",
         "estimate": 2,
         "priority": 3,
         "dueDate": null,
@@ -135835,7 +136448,7 @@
         "linearId": "0a9c945c-4bcb-436a-978b-a9b98707f603",
         "identifier": "PLA-955",
         "title": "Build the common v1 ingress and typed runtime route registry",
-        "descriptionFingerprint": "1ae4f733ac95dd3890549e5b850f2685ce4274ca41c9d83c47f513821398d3df",
+        "descriptionFingerprint": "31532d30928023b5157a933b6542bcd5ee2ce6aa3aef54fd669f9b19a2ff3561",
         "sourceProvenance": {
           "sourceId": "F-496",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -135845,9 +136458,9 @@
           "section": "§32.1",
           "sectionBundleCount": null,
           "sourceBinding": "ad5bd77e1aa2ec1e04e3969358f06728c8fb821015eb04f5ec471bbb8331482b",
-          "sourceChecksum": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+          "sourceChecksum": "2cbbf712fa0550c90c652865faae61bb7c25440480fe52e7a0c6d7a4768550e2"
         },
-        "updatedAt": "2026-07-23T06:37:00.731Z",
+        "updatedAt": "2026-07-24T02:35:53.034Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -135895,7 +136508,7 @@
         "linearId": "4ba5365b-8b40-4c3f-9c48-b77ae27a058f",
         "identifier": "PLA-956",
         "title": "Generate deterministic OpenAPI 3.1 artifacts from the runtime registry",
-        "descriptionFingerprint": "f63050834a5816a674f014337df8de0f5efca36213189333d95fd806a8fe13ee",
+        "descriptionFingerprint": "62aceffb0e3c067900963a78ebbf3590fe15b5168b82dc7ac28219579ebfb1ad",
         "sourceProvenance": {
           "sourceId": "F-496",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -135905,9 +136518,9 @@
           "section": "§32.1",
           "sectionBundleCount": null,
           "sourceBinding": "ad5bd77e1aa2ec1e04e3969358f06728c8fb821015eb04f5ec471bbb8331482b",
-          "sourceChecksum": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+          "sourceChecksum": "2cbbf712fa0550c90c652865faae61bb7c25440480fe52e7a0c6d7a4768550e2"
         },
-        "updatedAt": "2026-07-23T02:23:00.395Z",
+        "updatedAt": "2026-07-24T02:36:11.978Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -135949,7 +136562,7 @@
         "linearId": "bc83662c-4f89-4323-8c6a-f856ffce88c9",
         "identifier": "PLA-957",
         "title": "Publish accessible API docs and a safe explorer with coherent rollback",
-        "descriptionFingerprint": "c7a24164c5b581302eee495f2e8fcff10609def3653b2ddbcf15db833ba2583e",
+        "descriptionFingerprint": "01d469f5aa13d8712add2644a757dced9d5fbe76c4f916966186c2538451a245",
         "sourceProvenance": {
           "sourceId": "F-496",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -135959,9 +136572,9 @@
           "section": "§32.1",
           "sectionBundleCount": null,
           "sourceBinding": "ad5bd77e1aa2ec1e04e3969358f06728c8fb821015eb04f5ec471bbb8331482b",
-          "sourceChecksum": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+          "sourceChecksum": "2cbbf712fa0550c90c652865faae61bb7c25440480fe52e7a0c6d7a4768550e2"
         },
-        "updatedAt": "2026-07-23T02:22:55.196Z",
+        "updatedAt": "2026-07-24T02:36:16.442Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -136003,7 +136616,7 @@
         "linearId": "6fcbd81d-e118-4665-af27-2c279b99ea86",
         "identifier": "PLA-958",
         "title": "Block release when public API source, OpenAPI, runtime, and probes drift",
-        "descriptionFingerprint": "7c0ae62c672eaf23d021b597da555f111fa57d6f6ae5d73040c690982b943e7d",
+        "descriptionFingerprint": "a611a399dcbbfe5b157bfd25625ab7e840372af29546ebb7abd7e165a1e2fd5d",
         "sourceProvenance": {
           "sourceId": "F-496",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -136013,9 +136626,9 @@
           "section": "§32.1",
           "sectionBundleCount": null,
           "sourceBinding": "ad5bd77e1aa2ec1e04e3969358f06728c8fb821015eb04f5ec471bbb8331482b",
-          "sourceChecksum": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+          "sourceChecksum": "2cbbf712fa0550c90c652865faae61bb7c25440480fe52e7a0c6d7a4768550e2"
         },
-        "updatedAt": "2026-07-23T11:45:05.965Z",
+        "updatedAt": "2026-07-24T02:37:06.333Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136058,7 +136671,7 @@
         "linearId": "835f27c4-4789-4fd3-a1cb-1bb19c61e85f",
         "identifier": "PLA-959",
         "title": "Organization Schema, Domain Contract & Indexes",
-        "descriptionFingerprint": "83e375cb04ee2ccf18bdd52b969a1df06db5eadce9acc6fa75f18a83ece92f47",
+        "descriptionFingerprint": "d1172dc8e495cb2f7592bea5ca3534dd240a712b84b03ef79329e4cc86d09720",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136068,9 +136681,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T02:22:40.140Z",
+        "updatedAt": "2026-07-24T02:37:13.226Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136154,7 +136767,7 @@
         "linearId": "15486f1e-05ea-43b6-94d0-06c81329eb28",
         "identifier": "PLA-960",
         "title": "Tenant Scope & Console Projections",
-        "descriptionFingerprint": "f40e2d491bb35112e41d8bcfbbce0c64c2d2c3d1482a9be2eed3d159793a25b2",
+        "descriptionFingerprint": "b695e22c74904b8e0eaeb5099044e0c5cfa5fede93ce83cd45474c98a6a1acb7",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136164,9 +136777,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:45:12.503Z",
+        "updatedAt": "2026-07-24T02:37:18.665Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136211,7 +136824,7 @@
         "linearId": "8782f278-8da2-4d26-a06d-3494c202f4f4",
         "identifier": "PLA-961",
         "title": "Plan & Compatibility Snapshot Authority",
-        "descriptionFingerprint": "b7212d495d9dbdb3f8a6f8bf681dba01d0943f2f4cf913cf4386408e82add1d7",
+        "descriptionFingerprint": "e60c6a68dc82a221749dcf414a4544cdf203021f015aab41bce05d1ef05470c1",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136221,9 +136834,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:39:00.587Z",
+        "updatedAt": "2026-07-24T02:37:23.396Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136266,7 +136879,7 @@
         "linearId": "89e1bb8c-6439-41c4-a64e-7b5d8bdc683c",
         "identifier": "PLA-962",
         "title": "Organization Lifecycle, Soft Delete & Recovery",
-        "descriptionFingerprint": "a82b77264da4b7dd8ff46699e826371464fd82af55422f4bf437f5e700000c48",
+        "descriptionFingerprint": "7400b5ffaf2a2b521ade8c1d0510690e33922b3998a232ea653ea2ae157fca39",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136276,9 +136889,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T12:02:43.684Z",
+        "updatedAt": "2026-07-24T02:37:28.585Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136319,7 +136932,7 @@
         "linearId": "5fd2c2ea-f368-4c25-9c2e-d05d9060891d",
         "identifier": "PLA-963",
         "title": "Pre-split Plan Migration & Human Approval",
-        "descriptionFingerprint": "01b02c96b1bf28bc10fc6afe5879b4e6890cfd3fc2ae61932c39dfd8991785de",
+        "descriptionFingerprint": "26958ca115ea013101e9652355015548d84f14399d908a5d4679a6d34f1205e5",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136329,9 +136942,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:39:05.930Z",
+        "updatedAt": "2026-07-24T02:37:33.541Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -136368,7 +136981,7 @@
         "linearId": "b4f09385-103d-45b6-94b1-f6fd2c68f229",
         "identifier": "PLA-964",
         "title": "MFA, Settings & Transactional Outbox",
-        "descriptionFingerprint": "72989b896dd40f96e820d0735b6a95efaed917f07d6bb554c14aba8319e3ef42",
+        "descriptionFingerprint": "9d6e6b9eb7c8e0dbf0ab4094d12a78672d0d23ffab5f5e547d58e78665fc3463",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136378,9 +136991,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:39:11.106Z",
+        "updatedAt": "2026-07-24T02:37:38.351Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136421,7 +137034,7 @@
         "linearId": "0d3cc548-92f3-4a9d-885c-4243f08b6883",
         "identifier": "PLA-965",
         "title": "Residency, Legal Entity & Stripe Binding",
-        "descriptionFingerprint": "bee4f178a593bb4c409dec906e716aaa89c69438f1039dd0bfa9646744642138",
+        "descriptionFingerprint": "616817aec34b04e40ba4d5dcec60fc179bb4698981921ea3d15b8a3c0edb08fb",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136431,9 +137044,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:39:16.627Z",
+        "updatedAt": "2026-07-24T02:37:43.644Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -136474,7 +137087,7 @@
         "linearId": "b3174e8a-8642-477d-9caa-2ba2525331f2",
         "identifier": "PLA-966",
         "title": "Seller AI Generation Toggle",
-        "descriptionFingerprint": "cd652b8a8d200ccc5bfff52a8a874873e1bca4bcde8ae98fa3638359ff53f8e8",
+        "descriptionFingerprint": "201afbc9f321883700c709cac84035aca8bb99e67174cc41ec5ace788f47b4f1",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136484,9 +137097,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:39:21.431Z",
+        "updatedAt": "2026-07-24T02:37:48.254Z",
         "estimate": 2,
         "priority": 2,
         "dueDate": null,
@@ -136524,7 +137137,7 @@
         "linearId": "108f6fd6-3073-4878-a0ab-68b3e2e12f19",
         "identifier": "PLA-967",
         "title": "KB Value Meter Economics Concurrency",
-        "descriptionFingerprint": "23b8142a811c485a739190dcc27d8fc07fbddc9af4b1dc865d07f82a3f927ca8",
+        "descriptionFingerprint": "00b983d78ebf60f003bdd45b1217017f67828a7f6ed05011b398a672ea3a8c17",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136534,9 +137147,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T11:40:07.045Z",
+        "updatedAt": "2026-07-24T02:37:53.971Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136576,7 +137189,7 @@
         "linearId": "cd4cb3fc-23fc-4b42-a08c-867ebd2a277c",
         "identifier": "PLA-968",
         "title": "Organization Creation & Trial Reference Boundary",
-        "descriptionFingerprint": "61e1a8e5b0d1ae14eb909d16bb928b56c973740f9332e7fb68b1eb725e0db350",
+        "descriptionFingerprint": "10e9d88dc60fa4b8fc25694ed7f050684165e99e40a0f8d251b3f89cd01916b2",
         "sourceProvenance": {
           "sourceId": "F-079",
           "sourceDocument": null,
@@ -136586,9 +137199,9 @@
           "section": null,
           "sectionBundleCount": 38,
           "sourceBinding": "8d0a84bba02590eaa5d2ef5a93d331e6b8a1dc082aa9bd00800009906a24efed",
-          "sourceChecksum": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+          "sourceChecksum": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
         },
-        "updatedAt": "2026-07-23T12:02:46.102Z",
+        "updatedAt": "2026-07-24T02:38:33.154Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -136985,7 +137598,7 @@
         "linearId": "65907ce3-f29e-4a95-b0b6-3a159d2424d2",
         "identifier": "PLA-975",
         "title": "Buyer Trial Activation at Organization Creation",
-        "descriptionFingerprint": "1d2f5eeb2b0a20b34af3c79573b5a2cc828ccce063bae98efe2136ba768266ce",
+        "descriptionFingerprint": "bd94c720d3a5814f9266cd78bdcb69ee0385ee26ace8d1ac54e93dcd1227537f",
         "sourceProvenance": {
           "sourceId": "F-916",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -136995,9 +137608,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T02:20:23.768Z",
+        "updatedAt": "2026-07-24T02:38:27.737Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -137033,7 +137646,7 @@
         "linearId": "d6c63a6a-581f-41ac-a7a9-941ab01dbe31",
         "identifier": "PLA-976",
         "title": "Atomic Buyer Business Starter Trial Activation Contract",
-        "descriptionFingerprint": "6ade71e7ff8038bda2e25b66d6c294f187c60137ceb747e6d45e5b7f7c45ec95",
+        "descriptionFingerprint": "bb68f913f28115296142e568f5ed674b84f092ab51c7571f7a75ddad4cf93bfc",
         "sourceProvenance": {
           "sourceId": "F-916",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -137043,9 +137656,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T11:40:30.164Z",
+        "updatedAt": "2026-07-24T02:38:39.260Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -137091,7 +137704,7 @@
         "linearId": "73195de1-1ad4-4c2b-bc22-73597f14ab11",
         "identifier": "PLA-977",
         "title": "Buyer SSO Activation Journey, Canary, Rollback, and Proof",
-        "descriptionFingerprint": "ac7a5c37614d67a239533bb8190c418c221893e7aa879a6e8ac3a2607228498f",
+        "descriptionFingerprint": "3de64b2fb86da96b9f74edf0aa916261b377d780269566f4b2a58301e1f4e5f3",
         "sourceProvenance": {
           "sourceId": "F-916",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -137101,9 +137714,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T11:41:01.499Z",
+        "updatedAt": "2026-07-24T02:38:44.057Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -137153,7 +137766,7 @@
         "linearId": "51ee2787-dc36-47ac-9fcb-f13311866df2",
         "identifier": "PLA-978",
         "title": "Day-15 Explicitly Chosen Paid-Plan Conversion",
-        "descriptionFingerprint": "7c6465ff61d1674b0a978fa9cdd40769009c8fc874489cb5fbe2d3f8f5c61a8d",
+        "descriptionFingerprint": "54566422a748e74f665176509558f8e8df0e414e6d4d6b91e238432b0f0ce5cb",
         "sourceProvenance": {
           "sourceId": "F-533",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -137163,9 +137776,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T02:19:57.354Z",
+        "updatedAt": "2026-07-24T02:38:48.879Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -137206,7 +137819,7 @@
         "linearId": "0ffdab40-9524-4271-94e6-982a2150cb83",
         "identifier": "PLA-979",
         "title": "Day-15 No-Consent Buyer Free Auto-Downgrade",
-        "descriptionFingerprint": "4e67cb4f8926def1319252294c286d9771118d72ace1e9a4b8c9da1dbd547410",
+        "descriptionFingerprint": "d51111347630de78ab6587ee1489c316f25c5c75c8427b72600a5dd889363411",
         "sourceProvenance": {
           "sourceId": "F-533",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -137216,9 +137829,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T02:19:50.535Z",
+        "updatedAt": "2026-07-24T02:39:04.010Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -137304,7 +137917,7 @@
         "linearId": "e9c464e6-1029-4302-802a-62dec44552ca",
         "identifier": "PLA-980",
         "title": "Day-11 and Day-14 Buyer Trial Expiry Notices",
-        "descriptionFingerprint": "c0998805f32926be398949c1ab41808c2789ccf731d6a47b38cdba4c7bcb028f",
+        "descriptionFingerprint": "bbdc8548b77cc17820b6032aae76246e8dd078c41198a137c15664daf5a17be9",
         "sourceProvenance": {
           "sourceId": "F-533",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -137314,9 +137927,9 @@
           "section": "§34.9.1",
           "sectionBundleCount": null,
           "sourceBinding": "748b930d0d325380f6ba4b3586b4cb532814b0b7f30f974d9bebec9a2e44e5bd",
-          "sourceChecksum": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+          "sourceChecksum": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
         },
-        "updatedAt": "2026-07-23T02:19:44.649Z",
+        "updatedAt": "2026-07-24T02:39:10.296Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -138286,7 +138899,7 @@
         "linearId": "db271ac2-4f7f-44c2-9ce0-ed7fad83cfc4",
         "identifier": "PLA-997",
         "title": "Execute and Reconcile Stripe Subscriptions",
-        "descriptionFingerprint": "57ba107704fa5535493c0f1148c9602ed7b10143a73616188051621d3c6c3f40",
+        "descriptionFingerprint": "75216f481f1031aaf7e27a0fbe10f2067b8bd42ddd723b4f95c7711c02c74461",
         "sourceProvenance": {
           "sourceId": "F-007",
           "sourceDocument": null,
@@ -138297,9 +138910,9 @@
           "section": null,
           "sectionBundleCount": 14,
           "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
-          "sourceChecksum": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
         },
-        "updatedAt": "2026-07-23T11:41:23.196Z",
+        "updatedAt": "2026-07-24T02:39:14.999Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -138341,7 +138954,7 @@
         "linearId": "d1817ed1-9ca3-48c6-ae2b-393a5eafb5b0",
         "identifier": "PLA-998",
         "title": "Transport Stripe Meter Events with Idempotent Receipts",
-        "descriptionFingerprint": "09f52b872bfabba56debda1e8fd581da1141ba01238edb774190b75378274ed7",
+        "descriptionFingerprint": "8eae4d318dc209e3e8e12e3f9b4152077cc1c57366c5d514e03d07dced5c0b49",
         "sourceProvenance": {
           "sourceId": "F-007",
           "sourceDocument": null,
@@ -138352,9 +138965,9 @@
           "section": null,
           "sectionBundleCount": 14,
           "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
-          "sourceChecksum": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
         },
-        "updatedAt": "2026-07-23T02:16:18.615Z",
+        "updatedAt": "2026-07-24T02:39:20.043Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -138391,7 +139004,7 @@
         "linearId": "f99001b8-65af-4f38-90e8-2eee1aa702b6",
         "identifier": "PLA-999",
         "title": "Deliver the Non-Solo Plan, Invoice, and Payment-Method Journey",
-        "descriptionFingerprint": "585ed6c091ed52d1218b5ad1b12b37aa7f9aa89a2d2690f5aef4398691c4d9ba",
+        "descriptionFingerprint": "3d462ce385a3bcfe0f67c8b9f7b242949ee004786e9d49b292bc84fe1f35bbd8",
         "sourceProvenance": {
           "sourceId": "F-007",
           "sourceDocument": null,
@@ -138402,9 +139015,9 @@
           "section": null,
           "sectionBundleCount": 14,
           "sourceBinding": "1cfc2a73bae864c779e666edd9e0793bc24227a0bdaaf3d7d69c89db61b463af",
-          "sourceChecksum": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+          "sourceChecksum": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
         },
-        "updatedAt": "2026-07-23T11:41:47.569Z",
+        "updatedAt": "2026-07-24T02:39:27.032Z",
         "estimate": 5,
         "priority": 2,
         "dueDate": null,
@@ -146888,7 +147501,7 @@
         "linearId": "4f2bf011-dbe6-47ad-b9ac-6a6d0322ec5b",
         "identifier": "SEL-255",
         "title": "Firecrawl Resolution Status Variants",
-        "descriptionFingerprint": "e2d0af7c1ff05b7e00135d98941f26212572a614cc1722d2be3931ead7c3c367",
+        "descriptionFingerprint": "1d56ea5cd8e5c05c7e7fbe373add392311a5b15cc11fbeb4b5e2e2d691a1c779",
         "sourceProvenance": {
           "sourceId": "F-AE-043",
           "sourceDocument": "Sourcera_Master_Spec.md",
@@ -146898,9 +147511,9 @@
           "section": "Appendix J",
           "sectionBundleCount": null,
           "sourceBinding": "cc555927685c98516b33c6e26d83bd8a56fbdf7f303caadc4f47a1f1d3ba39a4",
-          "sourceChecksum": "7a976a74855ef120883386050752a9fb8d97f76f46f37ed2787de762d8efc091"
+          "sourceChecksum": "25a9b20c33951b506c7a7cd3c3b7dc20a6132a2af102d51b3e5506abeaa3cfd5"
         },
-        "updatedAt": "2026-07-23T11:42:56.608Z",
+        "updatedAt": "2026-07-24T03:19:32.905Z",
         "estimate": 2,
         "priority": 3,
         "dueDate": null,
@@ -150986,8 +151599,8 @@
       {
         "id": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
         "name": "Data Portability, Retention & Migration",
-        "descriptionFingerprint": "0e36dc4ec70590d175bfebbe8c40ec27445d23eba6f00a67ca8e1ca8f49ab1f2",
-        "updatedAt": "2026-07-22T23:26:08.811Z",
+        "descriptionFingerprint": "236be91688910052de152e5e1e2d91c98113881f1bd75f5e0a2e1baee0909134",
+        "updatedAt": "2026-07-24T04:19:17.216Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151003,8 +151616,8 @@
       {
         "id": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
         "name": "Seller Bids, Responses, Q&A & NDA",
-        "descriptionFingerprint": "83382b5340e42b975a24271db82cc56ea6a57cb9da642d290379f053c44c845a",
-        "updatedAt": "2026-07-22T23:27:28.048Z",
+        "descriptionFingerprint": "f0e08ac7b556b0a8841609d9aeea02bc35a92f593c39193ab4823728de946490",
+        "updatedAt": "2026-07-24T04:19:17.602Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151020,8 +151633,8 @@
       {
         "id": "32d9c20f-fe88-40e3-8a86-53712a91db58",
         "name": "Marketplace Discovery, Matching & Trust",
-        "descriptionFingerprint": "9343dd17cb9b72dc728247b49e6bf7dddebfe0ae2ff357f73561821ac8711f82",
-        "updatedAt": "2026-07-22T23:27:54.845Z",
+        "descriptionFingerprint": "157ec61676d75c06a1c10d75bd036b4d602ba62a8c1c4e00c8249cca39652434",
+        "updatedAt": "2026-07-24T04:19:17.997Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151037,8 +151650,8 @@
       {
         "id": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
         "name": "Marketplace Seller Supply & Promotions",
-        "descriptionFingerprint": "d5ed8bb297fe7b4e837efdd99bc72983293ba561f78621960d6fc2a9dff830ff",
-        "updatedAt": "2026-07-22T23:27:33.021Z",
+        "descriptionFingerprint": "913f627b4a5d942534faa77650cc0f3fa2ed8f8999972e706cb4cc06d2cd13c5",
+        "updatedAt": "2026-07-24T04:19:18.419Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151054,8 +151667,8 @@
       {
         "id": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
         "name": "Identity, Organizations & Permissions",
-        "descriptionFingerprint": "7fd940a2b12f3a5ef0c00eee7a635fcdeaf648b8b01f0899196676f6402c1136",
-        "updatedAt": "2026-07-22T23:28:56.394Z",
+        "descriptionFingerprint": "bf19ae5ccf41dbe3ddee0c8f8925909dc0addc332875bf83ff440e1c3f286170",
+        "updatedAt": "2026-07-24T04:19:19.065Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151071,8 +151684,8 @@
       {
         "id": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
         "name": "Billing, Pricing & Entitlements",
-        "descriptionFingerprint": "bce95e4c97f34ebae3211ec8bb52e41ae5cb35b7fbefe7e516a547046a24e3b7",
-        "updatedAt": "2026-07-22T23:27:09.046Z",
+        "descriptionFingerprint": "b7d367e4bb6a15fba905699eb21959ab4cfb63c504e2500b35fd72a5d9ee7d0c",
+        "updatedAt": "2026-07-24T04:19:19.421Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151088,8 +151701,8 @@
       {
         "id": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
         "name": "Accessibility, Localization & Responsive UX",
-        "descriptionFingerprint": "ad29306a3e9c1702bb5e4a8ed524fec230f8b5fe2cbc361ed9fe943d1a804176",
-        "updatedAt": "2026-07-22T23:26:33.980Z",
+        "descriptionFingerprint": "d928459847a15358e5ccdf0da03ee0da4c506ce056d7f092a515d41bd1ec07f7",
+        "updatedAt": "2026-07-24T04:19:19.751Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151105,8 +151718,8 @@
       {
         "id": "532e0956-047a-4f09-b811-2971892f62ee",
         "name": "Platform & Delivery Foundations",
-        "descriptionFingerprint": "6dcb1e35f081f110a20caf25b9acdfc5559101d62d27e5bc981aaad6a04a086d",
-        "updatedAt": "2026-07-22T23:29:03.587Z",
+        "descriptionFingerprint": "263b438a9e5f4c4481d70de216b0ce392afee8ad44d265df6d563c915b249e68",
+        "updatedAt": "2026-07-24T04:19:20.150Z",
         "archivedAt": null,
         "statusId": "beff99c6-76bd-4dfe-bf13-089125af0dc8",
         "status": "In Progress",
@@ -151122,8 +151735,8 @@
       {
         "id": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
         "name": "Design System & Application Shell",
-        "descriptionFingerprint": "f196efb7b2e4ac055b669cf83153d5c64c0998f26233a438f3bfb4f9baa55345",
-        "updatedAt": "2026-07-22T23:28:47.638Z",
+        "descriptionFingerprint": "0446463db3e0b3467366d38fdfff65c8a24255ac12d0f64787dc0037f3f3583d",
+        "updatedAt": "2026-07-24T04:19:21.767Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151139,8 +151752,8 @@
       {
         "id": "609d8e2e-4543-4cdb-89b4-281986f93a85",
         "name": "Security, Privacy, Compliance & Residency",
-        "descriptionFingerprint": "04f51bbdf4d1e6a818aaea74adcc655eb400e8804e3d006943b85b54069a9570",
-        "updatedAt": "2026-07-22T23:26:41.753Z",
+        "descriptionFingerprint": "738c94f815514a21a35508c46c201a7b225195200b765d3988e18362370570eb",
+        "updatedAt": "2026-07-24T04:19:22.158Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151156,8 +151769,8 @@
       {
         "id": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
         "name": "Buyer Workspaces & Evaluation Pipeline",
-        "descriptionFingerprint": "f2ac5f396fc7263b1a3acf9589a59ca1b7afc1a4817f74f2b7b2eff302eca1e0",
-        "updatedAt": "2026-07-22T23:28:14.694Z",
+        "descriptionFingerprint": "fa33b6f8bdc9aea771a8c99a9acce8e0b6c6b78b3e599fa0d523a8ec477ad530",
+        "updatedAt": "2026-07-24T04:19:22.513Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151173,8 +151786,8 @@
       {
         "id": "6fe48bc4-c830-4e10-8a44-390facb9063f",
         "name": "Integrations, API, Webhooks & MCP",
-        "descriptionFingerprint": "a4352c7eb689d65f10541904b7984124d41c41ab7b5fa415dd8c2231e7fc9f1a",
-        "updatedAt": "2026-07-22T23:27:02.952Z",
+        "descriptionFingerprint": "7e714ba588d7c31114c0f5e8dc36bba0d38a5354cc2d45ad7cace7fe35ce5154",
+        "updatedAt": "2026-07-24T04:19:22.861Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151190,8 +151803,8 @@
       {
         "id": "848dee0f-1121-4ad0-a877-e08629f5b99c",
         "name": "Scoring, Scenarios & TCO",
-        "descriptionFingerprint": "7035f39d8ef441e3b7e7e2fb2217fee51ab37d96df172bd7a1537ce34f1fdd75",
-        "updatedAt": "2026-07-22T23:28:07.744Z",
+        "descriptionFingerprint": "a278f5974169fb8a4f7868889d9061bd4695868e14ced12e545abb0340870e18",
+        "updatedAt": "2026-07-24T04:19:23.178Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151207,8 +151820,8 @@
       {
         "id": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
         "name": "QA, Release, Deployment & Launch",
-        "descriptionFingerprint": "d36737ec35fb219c9db9261e45e25bbf60267c5d34d9784ca871662709c83a87",
-        "updatedAt": "2026-07-22T23:26:18.938Z",
+        "descriptionFingerprint": "81333cd45e49a73740e755eb6f753e80a7b3567821243d937676aa9e17e50286",
+        "updatedAt": "2026-07-24T04:19:23.622Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151224,8 +151837,8 @@
       {
         "id": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
         "name": "Notifications & Email",
-        "descriptionFingerprint": "06666dda0d27c3e7954e98226a43d8d2feb3e1f3d545b50ff693a7f45325398c",
-        "updatedAt": "2026-07-22T23:27:22.088Z",
+        "descriptionFingerprint": "238b55f6bb4c94f0795e04de2f2586694dac6682912012a84345e2e02e63ae2b",
+        "updatedAt": "2026-07-24T04:19:24.032Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151241,8 +151854,8 @@
       {
         "id": "b8085a88-9679-447b-9b3d-9b6ca201e182",
         "name": "Product Analytics, Growth & Network Effects",
-        "descriptionFingerprint": "f84437e4a8c5e8275b347c2c7bd1757bd14749e27b4da014ae29ea532a87ec61",
-        "updatedAt": "2026-07-22T23:26:57.589Z",
+        "descriptionFingerprint": "8c93b57ebbf9a07b7ea53db3b75feaeaa28ca30c0796d00dde422389a7148cf1",
+        "updatedAt": "2026-07-24T04:19:24.458Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151258,8 +151871,8 @@
       {
         "id": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
         "name": "Operations & Support Console",
-        "descriptionFingerprint": "ba8024a7caec50828398d2f8a861bcd878f8bdb5a45557a31c40a2527e1c36cd",
-        "updatedAt": "2026-07-22T23:26:47.369Z",
+        "descriptionFingerprint": "5bc4331cffd4eaf4bdb5e0e973b3ddf057250194c1b4ba08d07394078c804c62",
+        "updatedAt": "2026-07-24T04:19:24.826Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151275,8 +151888,8 @@
       {
         "id": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
         "name": "Seller Knowledge, Profile & Capabilities",
-        "descriptionFingerprint": "74f071e02847d2a8d8abd43f46c3ebcd71f5889ad1e6c7c2cfb799dd9a73d1a1",
-        "updatedAt": "2026-07-22T23:27:42.694Z",
+        "descriptionFingerprint": "0e468d52de952e663df16d9328807949a3f7a9228a738cd739bab22f3e92715d",
+        "updatedAt": "2026-07-24T04:19:25.430Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151292,8 +151905,8 @@
       {
         "id": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
         "name": "Seller Console & Onboarding",
-        "descriptionFingerprint": "8bf1c39b139c01209ae606edb55fed5f9d0701c19d1cb4d8d624628d712a13c2",
-        "updatedAt": "2026-07-22T23:27:48.327Z",
+        "descriptionFingerprint": "2f6fa1f92936f11f73912244e99d9b343c0fe876c17d33c1bd8699792fa499e7",
+        "updatedAt": "2026-07-24T04:19:25.789Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151309,8 +151922,8 @@
       {
         "id": "cd7ce280-06f2-4ace-bce6-101141f7d098",
         "name": "Buyer Collaboration, Inbox & Reporting",
-        "descriptionFingerprint": "26ae791ed58745e5f989c6182c09a58b02b7ddb6923e788455acb5c208bbdf81",
-        "updatedAt": "2026-07-22T23:28:02.380Z",
+        "descriptionFingerprint": "2b8550b6bfcedca9172fac336298c3c860fed8a2ef97bec7eb3be03f32cbecfb",
+        "updatedAt": "2026-07-24T04:19:26.130Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151326,8 +151939,8 @@
       {
         "id": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
         "name": "Requirements, Policies & Templates",
-        "descriptionFingerprint": "d43e9e45b4cd539432dffc1d1befe02573ca90983fa0affe28b18510d7abe50e",
-        "updatedAt": "2026-07-22T23:28:31.927Z",
+        "descriptionFingerprint": "9eec42d79ef2cefe612016511d8138d90a5e48c5b920348454e53285d682028c",
+        "updatedAt": "2026-07-24T04:19:26.627Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151343,8 +151956,8 @@
       {
         "id": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
         "name": "Data, Audit & Cross-Console Foundations",
-        "descriptionFingerprint": "d62445b97ce6d6fc06c50a25833977e7b61094f92c73eba6afc224fa487a3159",
-        "updatedAt": "2026-07-22T23:28:43.268Z",
+        "descriptionFingerprint": "4c7828cad71c7e84cbc444a20305533c541f4fb16562516c07f46b84fd03e7c5",
+        "updatedAt": "2026-07-24T04:19:29.658Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151360,8 +151973,8 @@
       {
         "id": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
         "name": "Vendors, Invitations & NDA",
-        "descriptionFingerprint": "18e3012c8430be0c8040d1555d76b47d805002845824cbc81fc052318bb49015",
-        "updatedAt": "2026-07-22T23:28:23.840Z",
+        "descriptionFingerprint": "007c696f3fc64b9857105929de0f404d5a2088ada5c3c9629afd05ed87f8a6f2",
+        "updatedAt": "2026-07-24T04:19:30.843Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151377,8 +151990,8 @@
       {
         "id": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
         "name": "Observability, Reliability & Performance",
-        "descriptionFingerprint": "f9700f1e711f424572ef88f04cc48cfbc7ed15ae9a2254fff96067c053c564fd",
-        "updatedAt": "2026-07-22T23:26:24.050Z",
+        "descriptionFingerprint": "0a137379de50e90cbba5251100257df1d81a4dc47a94fa07e3d18a7c7ee8100a",
+        "updatedAt": "2026-07-24T04:19:32.242Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151394,8 +152007,8 @@
       {
         "id": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
         "name": "Realtime, Search & Collaboration Infrastructure",
-        "descriptionFingerprint": "f740932195bcf345aac31d917f9b3b8cf069afc9c89eab4b452e03f914e77840",
-        "updatedAt": "2026-07-22T23:28:37.858Z",
+        "descriptionFingerprint": "c9256c9cc7ad8eb4c254dfe2ee8d46b22c6a24ffcf82f96a8702b26623199af0",
+        "updatedAt": "2026-07-24T04:19:33.153Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -151411,8 +152024,8 @@
       {
         "id": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
         "name": "Agent & Intelligence Capabilities",
-        "descriptionFingerprint": "8a34cbc14d7a02681457b22591c38d1d490409be7947ba0ddad7b6870b1b02cd",
-        "updatedAt": "2026-07-22T23:27:16.073Z",
+        "descriptionFingerprint": "b73e0bd3f662d8b6edd98cebbecac571666223e323fda23065688f350f35615b",
+        "updatedAt": "2026-07-24T04:19:33.879Z",
         "archivedAt": null,
         "statusId": "65f92e39-66c1-48d7-8623-39e2a576f672",
         "status": "Backlog",
@@ -152855,22 +153468,6 @@
           "parentInitiative": null
         },
         {
-          "id": "68b43674-ef5a-431e-8105-431ba60892bd",
-          "name": "Sourcera Production Build — Current Master Spec",
-          "updatedAt": "2026-07-23T00:13:35.965Z",
-          "archivedAt": null,
-          "owner": "Blake Rowley",
-          "ownerId": "e7e65e19-33ee-445e-9be4-7e9e734a5463",
-          "status": "Active",
-          "priority": 1,
-          "health": "offTrack",
-          "healthUpdatedAt": "2026-07-23T03:59:06.122Z",
-          "targetDate": null,
-          "targetDateResolution": null,
-          "parentInitiativeId": null,
-          "parentInitiative": null
-        },
-        {
           "id": "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f",
           "name": "Complete the Buyer Evaluation Lifecycle",
           "updatedAt": "2026-07-22T03:42:48.788Z",
@@ -152939,13 +153536,13 @@
         {
           "id": "3fd8304b-547e-48e2-bc76-5a9ebecaa389",
           "title": "Sourcera Planning Authority — Master Spec Control Plane",
-          "updatedAt": "2026-07-23T23:17:21.538Z",
+          "updatedAt": "2026-07-24T04:19:16.860Z",
           "archivedAt": null,
-          "initiativeId": "68b43674-ef5a-431e-8105-431ba60892bd",
+          "initiativeId": null,
           "projectId": null,
-          "teamId": null,
+          "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
           "issueId": null,
-          "contentFingerprint": "5e844bc7ff16f1260b32b8978fd2c5a95009d7a38e854b4cded26b9ab0683e25",
+          "contentFingerprint": "7e8641dfc12a682c7c18bce602493ce3bf338dd74b5f260e9c15713970fbeeba",
           "sectionHeadings": [
             "Binding authority",
             "Canonical source fingerprints",
@@ -152957,7 +153554,7 @@
             "Program completion"
           ],
           "sourceFingerprints": {
-            "masterSpecSha256": "e3a42b5dc257485271da54986ebefa7a12904d8560f3850bd04b0ef880897be6",
+            "masterSpecSha256": "ec89782ef7c311c4ab63a26bef5b934d9ce6c3d6c54850dcc901caeba8f548b9",
             "uxDesignSha256": "ac029fd024b94446eebecae1db70a478a52f8fa9b4acc599bb75a1bc42e7a788"
           }
         }
@@ -152966,183 +153563,157 @@
         {
           "projectId": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
           ]
         },
         {
           "projectId": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"
           ]
         },
         {
           "projectId": "32d9c20f-fe88-40e3-8a86-53712a91db58",
           "initiativeIds": [
-            "35daace4-7825-4ecd-bd85-90351d43e7ea",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "35daace4-7825-4ecd-bd85-90351d43e7ea"
           ]
         },
         {
           "projectId": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
           "initiativeIds": [
-            "35daace4-7825-4ecd-bd85-90351d43e7ea",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "35daace4-7825-4ecd-bd85-90351d43e7ea"
           ]
         },
         {
           "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
           ]
         },
         {
           "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
           "initiativeIds": [
-            "6310a6b6-634c-4603-aa34-e4e7f067c4d8",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
           ]
         },
         {
           "projectId": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
           ]
         },
         {
           "projectId": "532e0956-047a-4f09-b811-2971892f62ee",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
           ]
         },
         {
           "projectId": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
           ]
         },
         {
           "projectId": "609d8e2e-4543-4cdb-89b4-281986f93a85",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
           ]
         },
         {
           "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
           ]
         },
         {
           "projectId": "6fe48bc4-c830-4e10-8a44-390facb9063f",
           "initiativeIds": [
-            "6310a6b6-634c-4603-aa34-e4e7f067c4d8",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
           ]
         },
         {
           "projectId": "848dee0f-1121-4ad0-a877-e08629f5b99c",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
           ]
         },
         {
           "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
           ]
         },
         {
           "projectId": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
           ]
         },
         {
           "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
           "initiativeIds": [
-            "35daace4-7825-4ecd-bd85-90351d43e7ea",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "35daace4-7825-4ecd-bd85-90351d43e7ea"
           ]
         },
         {
           "projectId": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
           "initiativeIds": [
-            "6310a6b6-634c-4603-aa34-e4e7f067c4d8",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
           ]
         },
         {
           "projectId": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"
           ]
         },
         {
           "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"
           ]
         },
         {
           "projectId": "cd7ce280-06f2-4ace-bce6-101141f7d098",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
           ]
         },
         {
           "projectId": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
           ]
         },
         {
           "projectId": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
           ]
         },
         {
           "projectId": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
           ]
         },
         {
           "projectId": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
           ]
         },
         {
           "projectId": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
           "initiativeIds": [
-            "68b43674-ef5a-431e-8105-431ba60892bd",
             "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
           ]
         },
         {
           "projectId": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
           "initiativeIds": [
-            "6310a6b6-634c-4603-aa34-e4e7f067c4d8",
-            "68b43674-ef5a-431e-8105-431ba60892bd"
+            "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
           ]
         }
       ]
@@ -153150,13 +153721,13 @@
   },
   "linearCapture": {
     "schemaVersion": 1,
-    "capturedAt": "2026-07-24T00:26:55.590Z",
-    "fingerprintSha256": "dd96a35f2003cca8e2fb471ecad50d66976220d195ce69e06b681583c476b12e",
+    "capturedAt": "2026-07-24T05:32:12.238Z",
+    "fingerprintSha256": "09bc7e7c7ca37d63e2ec41123f7c0656475e83baccc6292a7e87d565d088a785",
     "source": {
       "repository": "meetblakey/sourcera",
-      "commit": "8af37b3e234cd4792aebe6f6ea7c559389837716",
+      "commit": "dd8b07b8a866e501d69a8eaea6f9129048438bae",
       "ref": "refs/heads/main",
-      "runId": "30055816634",
+      "runId": "30069374282",
       "runAttempt": "1"
     }
   },
@@ -153165,9 +153736,9 @@
     "findings": [],
     "readinessFindings": [],
     "passed": true,
-    "fingerprintSha256": "dd96a35f2003cca8e2fb471ecad50d66976220d195ce69e06b681583c476b12e",
-    "descriptionCaptureSha256": "84c82f3d83024a695f1d6a9f7fde28556469ba4f8bdd2b62ecb5d0e08e786112",
-    "checkedIssueCount": 1272
+    "fingerprintSha256": "09bc7e7c7ca37d63e2ec41123f7c0656475e83baccc6292a7e87d565d088a785",
+    "descriptionCaptureSha256": "2877a3b62af1777d78dde3ab25d8178c6209bc5283d56b6ac7509830a4c35e42",
+    "checkedIssueCount": 1278
   },
   "cycles": [
     {

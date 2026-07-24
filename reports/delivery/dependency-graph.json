@@ -6197,6 +6197,10 @@
       "to": "F-540"
     },
     {
+      "from": "RG:query_scoping_console_required",
+      "to": "F-003"
+    },
+    {
       "from": "RG:requirement_reopening_runtime_consistency",
       "to": "F-086"
     },

@@ -250,16 +250,21 @@ test("reports live WIP and started-without-readiness violations", () => {
       readFileSync("delivery/linear-snapshot.json", "utf8"),
     );
     delete linear.linearTicketIntegrity;
-    const unready = linear.issues.find(
-      (issue: any) => !issue.labels.includes("codex-ready"),
-    );
-    const live = linear.linearFingerprint.issues.find(
-      (issue: any) => issue.identifier === unready.id,
-    );
-    assert.ok(live);
-    live.state = "In Progress";
-    live.stateType = "started";
-    live.labels = live.labels.filter((label: string) => label !== "codex-ready");
+    const unready = linear.issues
+      .filter((issue: any) => !issue.labels.includes("codex-ready"))
+      .slice(0, 2);
+    assert.equal(unready.length, 2);
+    for (const issue of unready) {
+      const live = linear.linearFingerprint.issues.find(
+        (candidate: any) => candidate.identifier === issue.id,
+      );
+      assert.ok(live);
+      live.state = "In Progress";
+      live.stateType = "started";
+      live.labels = live.labels.filter(
+        (label: string) => label !== "codex-ready",
+      );
+    }
     const linearPath = join(dir, "linear.json");
     writeFileSync(linearPath, JSON.stringify(linear));
     const operatingModelPath = join(dir, "operating-model.json");

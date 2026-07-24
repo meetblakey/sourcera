@@ -5351,6 +5351,11 @@
       "rationale": "Generated readback of the issue's native Linear release."
     },
     {
+      "requirementId": "RG:query_scoping_console_required",
+      "release": "R0",
+      "rationale": "Generated readback of the issue's native Linear release."
+    },
+    {
       "requirementId": "RG:requirement_reopening_runtime_consistency",
       "release": "R0",
       "rationale": "Generated readback of the issue's native Linear release."
