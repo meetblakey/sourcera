@@ -88,12 +88,14 @@ async function observeSample(
         unsubscribe();
         reject(new Error("Reactive observation timed out"));
       }, SAMPLE_TIMEOUT_MS);
-      const onProbe = (probe: {
-        buildCommitSha?: string;
-        commitSha: string;
-        deploymentName?: string;
-        nonceHash: string;
-      } | null) => {
+      const onProbe = (
+        probe: {
+          buildCommitSha?: string;
+          commitSha: string;
+          deploymentName?: string;
+          nonceHash: string;
+        } | null,
+      ) => {
         if (
           settled ||
           !probe ||
@@ -110,7 +112,9 @@ async function observeSample(
           settled = true;
           clearTimeout(timeout);
           unsubscribe();
-          reject(new Error("Convex runtime identity does not match the release"));
+          reject(
+            new Error("Convex runtime identity does not match the release"),
+          );
           return;
         }
         settled = true;
@@ -244,111 +248,111 @@ const productionTarget =
     : undefined;
 const identity =
   runtimeEnvironment === "production"
-    ? readRequiredConvexDeploymentClientIdentity(
-        process.env,
-        productionTarget,
-      )
+    ? readRequiredConvexDeploymentClientIdentity(process.env, productionTarget)
     : readRequiredConvexDeploymentIdentity(process.env);
 const client = new ConvexClient(identity.deploymentUrl, {
   unsavedChangesWarning: false,
 });
 
-try {
-  const observations: number[] = [];
-  let runtimeIdentity:
-    | { buildCommitSha: string; deploymentName: string }
-    | undefined;
-  for (let sample = 1; sample <= SAMPLE_COUNT; sample += 1) {
-    const observation = await observeSample(client, identity, sample);
-    observations.push(observation.latencyMs);
-    if (observation.runtimeIdentity) {
-      if (
-        runtimeIdentity &&
-        (runtimeIdentity.buildCommitSha !==
-          observation.runtimeIdentity.buildCommitSha ||
-          runtimeIdentity.deploymentName !==
-            observation.runtimeIdentity.deploymentName)
-      ) {
-        throw new Error("Convex runtime identity changed during the canary");
+void (async () => {
+  try {
+    const observations: number[] = [];
+    let runtimeIdentity:
+      { buildCommitSha: string; deploymentName: string } | undefined;
+    for (let sample = 1; sample <= SAMPLE_COUNT; sample += 1) {
+      const observation = await observeSample(client, identity, sample);
+      observations.push(observation.latencyMs);
+      if (observation.runtimeIdentity) {
+        if (
+          runtimeIdentity &&
+          (runtimeIdentity.buildCommitSha !==
+            observation.runtimeIdentity.buildCommitSha ||
+            runtimeIdentity.deploymentName !==
+              observation.runtimeIdentity.deploymentName)
+        ) {
+          throw new Error("Convex runtime identity changed during the canary");
+        }
+        runtimeIdentity = observation.runtimeIdentity;
       }
-      runtimeIdentity = observation.runtimeIdentity;
     }
-  }
-  if (identity.environment === "production" && !runtimeIdentity) {
-    throw new Error("Convex production canary returned no runtime identity");
-  }
+    if (identity.environment === "production" && !runtimeIdentity) {
+      throw new Error("Convex production canary returned no runtime identity");
+    }
 
-  const p95 = percentile(observations, 0.95);
-  const p99 = percentile(observations, 0.99);
-  const passed = p95 <= 500 && p99 <= 1_000;
-  const checkedAt = new Date();
-  const receipt = {
-    assertions: [
-      createConvexFoundationHealthResult(
-        process.env,
+    const p95 = percentile(observations, 0.95);
+    const p99 = percentile(observations, 0.99);
+    const passed = p95 <= 500 && p99 <= 1_000;
+    const checkedAt = new Date();
+    const receipt = {
+      assertions: [
+        createConvexFoundationHealthResult(
+          process.env,
+          {
+            assertion: "reactive-observation-p95",
+            observationLatencyMs: p95,
+            result: passed ? "passed" : "failed",
+          },
+          checkedAt,
+          productionTarget,
+        ),
+        createConvexFoundationHealthResult(
+          process.env,
+          {
+            assertion: "reactive-observation-p99",
+            observationLatencyMs: p99,
+            result: passed ? "passed" : "failed",
+          },
+          checkedAt,
+          productionTarget,
+        ),
+      ],
+      outcome: passed ? "passed" : "failed",
+      ...(runtimeIdentity ? { runtimeIdentity } : {}),
+      sampleCount: observations.length,
+      zeroCustomerData: true,
+    };
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    if (!passed) process.exitCode = 1;
+  } catch {
+    const checkedAt = new Date();
+    process.stdout.write(
+      `${JSON.stringify(
         {
-          assertion: "reactive-observation-p95",
-          observationLatencyMs: p95,
-          result: passed ? "passed" : "failed",
+          assertions: [
+            createConvexFoundationHealthResult(
+              process.env,
+              {
+                assertion: "reactive-observation-p95",
+                observationLatencyMs: SAMPLE_TIMEOUT_MS,
+                result: "failed",
+              },
+              checkedAt,
+              productionTarget,
+            ),
+            createConvexFoundationHealthResult(
+              process.env,
+              {
+                assertion: "reactive-observation-p99",
+                observationLatencyMs: SAMPLE_TIMEOUT_MS,
+                result: "failed",
+              },
+              checkedAt,
+              productionTarget,
+            ),
+          ],
+          outcome: "failed",
+          sampleCount: 0,
+          zeroCustomerData: true,
         },
-        checkedAt,
-        productionTarget,
-      ),
-      createConvexFoundationHealthResult(
-        process.env,
-        {
-          assertion: "reactive-observation-p99",
-          observationLatencyMs: p99,
-          result: passed ? "passed" : "failed",
-        },
-        checkedAt,
-        productionTarget,
-      ),
-    ],
-    outcome: passed ? "passed" : "failed",
-    ...(runtimeIdentity ? { runtimeIdentity } : {}),
-    sampleCount: observations.length,
-    zeroCustomerData: true,
-  };
-  process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
-  if (!passed) process.exitCode = 1;
-} catch {
-  const checkedAt = new Date();
-  process.stdout.write(
-    `${JSON.stringify(
-      {
-        assertions: [
-          createConvexFoundationHealthResult(
-            process.env,
-            {
-              assertion: "reactive-observation-p95",
-              observationLatencyMs: SAMPLE_TIMEOUT_MS,
-              result: "failed",
-            },
-            checkedAt,
-            productionTarget,
-          ),
-          createConvexFoundationHealthResult(
-            process.env,
-            {
-              assertion: "reactive-observation-p99",
-              observationLatencyMs: SAMPLE_TIMEOUT_MS,
-              result: "failed",
-            },
-            checkedAt,
-            productionTarget,
-          ),
-        ],
-        outcome: "failed",
-        sampleCount: 0,
-        zeroCustomerData: true,
-      },
-      null,
-      2,
-    )}\n`,
-  );
-  process.stderr.write("Convex foundation probe failed without exposing payload data.\n");
-  process.exitCode = 1;
-} finally {
-  await client.close();
-}
+        null,
+        2,
+      )}\n`,
+    );
+    process.stderr.write(
+      "Convex foundation probe failed without exposing payload data.\n",
+    );
+    process.exitCode = 1;
+  } finally {
+    await client.close();
+  }
+})();

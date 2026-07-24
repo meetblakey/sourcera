@@ -42,7 +42,10 @@ import {
   renderConvexReleaseIdentity,
 } from "../../scripts/lib/convex-release-identity";
 import { readPinnedConvexProductionTarget } from "../../scripts/lib/convex-production-target";
-import { createConvexVercelDeploymentPlan } from "../../scripts/lib/convex-vercel-deployment";
+import {
+  createConvexVercelDeploymentPlan,
+  isRetryableConvexPreviewDeploymentFailure,
+} from "../../scripts/lib/convex-vercel-deployment";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -130,6 +133,27 @@ test("Vercel branch and commit metadata produce one safe Preview identity", () =
   assert.equal(
     createCommitBoundConvexPreviewName("sourcera-pr-1", commitSha),
     `sourcera-pr-1-${commitSha}`,
+  );
+});
+
+test("Vercel retries only transient Convex Preview provider failures", () => {
+  assert.equal(
+    isRetryableConvexPreviewDeploymentFailure(
+      "Error fetching POST https://api.convex.dev/api/claim_preview_deployment 500 Internal Server Error: InternalServerError: Try again later.",
+    ),
+    true,
+  );
+  assert.equal(
+    isRetryableConvexPreviewDeploymentFailure(
+      "Convex request failed with 429 Too Many Requests",
+    ),
+    true,
+  );
+  assert.equal(
+    isRetryableConvexPreviewDeploymentFailure(
+      "TypeScript compilation failed after processing 500 records",
+    ),
+    false,
   );
 });
 
@@ -1512,9 +1536,12 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   assert.match(probe, /onUpdate/);
   assert.match(probe, /api\.foundation\.recordProductionProbe/);
   assert.match(probe, /createHmac/);
+  assert.match(probe, /void \(async \(\) => \{/);
   assert.doesNotMatch(probe, /setAdminAuth/);
   assert.doesNotMatch(probe, /setInterval/);
   assert.match(vercelBuild, /readPinnedConvexProductionTarget/);
+  assert.match(vercelBuild, /isRetryableConvexPreviewDeploymentFailure/);
+  assert.match(vercelBuild, /MAX_PREVIEW_DEPLOY_ATTEMPTS = 3/);
   assert.doesNotMatch(vercelBuild, /spawnSync\("git"/);
   assert.match(vercelDeploymentPlanner, /VERCEL_GIT_PULL_REQUEST_ID/);
   assert.match(vercelDeploymentPlanner, /sourcera-pr-/);

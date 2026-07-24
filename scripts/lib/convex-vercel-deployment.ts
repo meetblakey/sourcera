@@ -8,9 +8,7 @@ import {
 } from "@sourcera/domain/convex";
 
 export type ConvexVercelWorkspace =
-  | "@sourcera/buyer"
-  | "@sourcera/seller"
-  | null;
+  "@sourcera/buyer" | "@sourcera/seller" | null;
 
 export interface ConvexExecutionStep {
   arguments: string[];
@@ -23,6 +21,15 @@ export interface ConvexVercelDeploymentPlan {
   mode: "preview" | "production-client";
   steps: ConvexExecutionStep[];
   target: string;
+}
+
+export function isRetryableConvexPreviewDeploymentFailure(output: string) {
+  return (
+    /(?:api\.convex\.dev|InternalServerError|Convex)/i.test(output) &&
+    /(?:\b(?:429|500|502|503|504)\b[^\n]*(?:Too Many Requests|Internal Server Error|Bad Gateway|Service Unavailable|Gateway Timeout)|ECONNRESET|ETIMEDOUT|Try again later)/i.test(
+      output,
+    )
+  );
 }
 
 function readWorkspace(workspace: string | null): ConvexVercelWorkspace {
@@ -65,7 +72,9 @@ export function createConvexVercelDeploymentPlan(
     sourceEnvironment.SOURCERA_COMMIT_SHA &&
     sourceEnvironment.SOURCERA_COMMIT_SHA !== repositoryCommitSha
   ) {
-    throw new Error("SOURCERA_COMMIT_SHA must match the checked-out Git commit");
+    throw new Error(
+      "SOURCERA_COMMIT_SHA must match the checked-out Git commit",
+    );
   }
 
   const runtimeEnvironment =
