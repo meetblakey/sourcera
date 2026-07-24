@@ -73,14 +73,14 @@ test("attributes a unique-family coordination parent to its source family", () =
         parentId: null,
         sourceId: null,
         title: "Prerequisite container",
-        outcome: "Prerequisite container",
+        outcome: "Shared prerequisite outcome",
       },
       {
         id: "PLA-CHILD",
         parentId: "PLA-CONTAINER",
         sourceId: "F-0",
         title: "Prerequisite child",
-        outcome: "Prerequisite child",
+        outcome: "Shared prerequisite outcome",
         release: "R0",
       },
       {
@@ -107,6 +107,10 @@ test("attributes a unique-family coordination parent to its source family", () =
     },
   );
   assert.equal(hasDependencyDrift(findings), false);
+  assert.equal(
+    findings.some((finding) => finding.code === "duplicate_outcome"),
+    false,
+  );
 });
 
 test("does not attribute a multi-family coordination parent", () => {
