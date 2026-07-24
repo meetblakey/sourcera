@@ -195,6 +195,7 @@ test("replaces a registered bundle checksum without confusing its binding digest
     section: "2 registered slices",
     sectionBundleCount: 2,
     sourceBindingSha256: "f".repeat(64),
+    selector: "registered",
     slices: [
       expected.slices[0],
       {
@@ -218,6 +219,41 @@ test("replaces a registered bundle checksum without confusing its binding digest
   assert.equal(result.afterChecksum, SLICE_SHA);
   assert.match(result.description, new RegExp(bundled.sourceBindingSha256));
   assert.equal(linearSourceProvenance(result.description).sourceChecksum, SLICE_SHA);
+});
+
+test("keeps multi-section feature provenance as one canonical section binding", () => {
+  const multiSection: ResolvedSourceChecksum = {
+    ...expected,
+    section: "§4.7.1, §25.1",
+    sectionBundleCount: 2,
+    sourceBindingSha256: "f".repeat(64),
+    slices: [
+      expected.slices[0],
+      {
+        sourceDoc: "Sourcera_Master_Spec.md",
+        startHeading: "## 25.1 Data Flow via Console Bridge",
+        endHeading: "## 25.2 Sync Behavior",
+      },
+    ],
+  };
+  const value = [
+    "# Delivery contract",
+    "",
+    "## Source provenance",
+    "",
+    "* Canonical requirement: `F-001`",
+    "* Source document: `Sourcera_Master_Spec.md`",
+    "* Source section: §4.7.1, §25.1",
+    `* Canonical source binding: sha256:${multiSection.sourceBindingSha256}`,
+    `* Canonical source checksum: sha256:${OLD_SHA}`,
+  ].join("\n");
+  const result = replaceSourceProvenanceChecksum(
+    "PLA-1",
+    value,
+    multiSection,
+  );
+  assert.equal(result.afterChecksum, SLICE_SHA);
+  assert.equal(linearSourceProvenance(result.description).section, "§4.7.1, §25.1");
 });
 
 test("derives stale active scoped issues without a hardcoded issue list", () => {

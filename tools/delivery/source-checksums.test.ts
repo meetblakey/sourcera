@@ -8,6 +8,7 @@ import test from "node:test";
 
 import {
   buildSourceChecksumCandidate,
+  createLinearSourceChecksumResolutionCache,
   registeredLinearSourceProvenance,
   resolveLinearSourceChecksum,
   resolveRegisteredSourceChecksum,
@@ -356,7 +357,7 @@ test("derives the ready-leaf multi-section checksum manifest", () => {
     [
       "F-005",
       "§1.5, §7.5, §7.5.3, §44.1",
-      "673b0270f38dffa149dbd4f459932d6c70e1dbb40a7ac462b81483790a107a8a",
+      "17ff8fd3fc32375a8502c9b93dbdea500065e2ea1b1a5d6a5f1e96170a1d69d0",
       4,
     ],
     [
@@ -411,7 +412,7 @@ test("binds a registered live source to its exact ordered bundle", () => {
   assert.equal(registered.sectionBundleCount, 4);
   assert.equal(
     registered.sha256,
-    "673b0270f38dffa149dbd4f459932d6c70e1dbb40a7ac462b81483790a107a8a",
+    "17ff8fd3fc32375a8502c9b93dbdea500065e2ea1b1a5d6a5f1e96170a1d69d0",
   );
   const provenance = {
     sourceDocument: null,
@@ -535,6 +536,76 @@ test("hashes every ordered section in a multi-section issue binding", () => {
       ).sha256,
       resolved.sha256,
     );
+  } finally {
+    rmSync(root, { force: true, recursive: true });
+  }
+});
+
+test("reuses one parsed source document across Linear requirements and section bindings", () => {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-source-checksum-"));
+  try {
+    const source = [
+      "## 1.1 Shared",
+      "required behavior",
+      "## 1.2 Other",
+      "other behavior",
+      "## 1.3 End",
+      "unrelated",
+      "",
+    ].join("\n");
+    writeFileSync(join(root, "source.md"), source);
+    let reads = 0;
+    const cache = createLinearSourceChecksumResolutionCache((sourcePath) => {
+      reads += 1;
+      return readFileSync(sourcePath, "utf8");
+    });
+    const provenance = {
+      sourceDocument: "source.md",
+      sourceDocuments: ["source.md"],
+      section: "§1.1",
+      sectionBundleCount: null,
+      sourceBinding: null,
+      sourceChecksum: null,
+    };
+    const requirement = (requirementId: string) => ({
+      requirementId,
+      outcome: "Shared source",
+      sourceDoc: "source.md",
+      sourceVersion: "test",
+      section: "§1.1",
+      dependencies: [],
+      disposition: "executable" as const,
+    });
+    const options = { allowChecksumDrift: true, resolutionCache: cache };
+
+    const first = resolveLinearSourceChecksum(
+      requirement("F-001"),
+      provenance,
+      { schemaVersion: 3, sources: [] },
+      root,
+      options,
+    );
+    const second = resolveLinearSourceChecksum(
+      requirement("F-002"),
+      provenance,
+      { schemaVersion: 3, sources: [] },
+      root,
+      options,
+    );
+    const third = resolveLinearSourceChecksum(
+      { ...requirement("F-003"), section: "§1.2" },
+      { ...provenance, section: "§1.2" },
+      { schemaVersion: 3, sources: [] },
+      root,
+      options,
+    );
+
+    assert.equal(reads, 1);
+    assert.equal(first.sourceId, "F-001");
+    assert.equal(second.sourceId, "F-002");
+    assert.equal(third.sourceId, "F-003");
+    assert.equal(first.sha256, second.sha256);
+    assert.notEqual(first.sha256, third.sha256);
   } finally {
     rmSync(root, { force: true, recursive: true });
   }

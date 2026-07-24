@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "proofTypes": [
+    "tests",
+    "deploy",
+    "rollback",
+    "runtime"
+  ],
+  "issue": "PLA-217",
+  "status": "passed",
+  "observedAt": "2026-07-14T23:51:53.000Z",
+  "sourceCommit": "cc8592bd330c1abe4b1f4491f5eff68d7c5a5553",
+  "local": {
+    "verifiedAt": "2026-07-14T23:51:53.000Z",
+    "commands": {
+      "cleanInstall": "passed-0-vulnerabilities",
+      "lint": "passed",
+      "domainBoundaryCheck": "passed-0-violations",
+      "typecheck": "passed-all-three-applications",
+      "tests": "passed-20-of-20",
+      "independentBuilds": "passed-all-three-applications",
+      "missingUnknownOrMismatchedDomain": "passed-failed-closed",
+      "unsafeFailureTelemetry": "passed-redacted-to-sentinels"
+    }
+  },
+  "previews": [
+    {
+      "domain": "marketplace",
+      "project": "meetblakeys-projects/sourcera",
+      "deploymentId": "dpl_7TMmkhNPddSXzzskYZY7LfLWL8Sb",
+      "deploymentUrl": "https://sourcera-p82z4n9uq-meetblakeys-projects.vercel.app",
+      "healthUrl": "https://sourcera-p82z4n9uq-meetblakeys-projects.vercel.app/api/health",
+      "healthCheckedAt": "2026-07-14T23:56:50.114Z",
+      "healthResult": "passed-200-no-store-exact-commit",
+      "deploymentProtection": "enabled",
+      "customerTraffic": "none"
+    },
+    {
+      "domain": "buyer",
+      "project": "meetblakeys-projects/sourcera-buyer",
+      "deploymentId": "dpl_5PCoPtPKhUX3H8EHMraePbF6thRe",
+      "deploymentUrl": "https://sourcera-buyer-q7pngsz7g-meetblakeys-projects.vercel.app",
+      "healthUrl": "https://sourcera-buyer-q7pngsz7g-meetblakeys-projects.vercel.app/api/health",
+      "healthCheckedAt": "2026-07-14T23:56:50.416Z",
+      "healthResult": "passed-200-no-store-exact-commit",
+      "deploymentProtection": "enabled",
+      "customerTraffic": "none"
+    },
+    {
+      "domain": "seller",
+      "project": "meetblakeys-projects/sourcera-seller",
+      "deploymentId": "dpl_GArLQX4wT6btdQapd934iuosHrtd",
+      "deploymentUrl": "https://sourcera-seller-iijxp87lg-meetblakeys-projects.vercel.app",
+      "healthUrl": "https://sourcera-seller-iijxp87lg-meetblakeys-projects.vercel.app/api/health",
+      "healthCheckedAt": "2026-07-14T23:56:50.214Z",
+      "healthResult": "passed-200-no-store-exact-commit",
+      "deploymentProtection": "enabled",
+      "customerTraffic": "none"
+    }
+  ],
+  "rollback": {
+    "affectedDomain": "buyer",
+    "priorVerifiedDeploymentId": "dpl_ADCMipRFrKG3ZpypXsMEPCWD68AY",
+    "candidateDeploymentId": "dpl_3qAq9dnYKv62xU6MXkaQeW7xBPST",
+    "restoredDeploymentId": "dpl_5PCoPtPKhUX3H8EHMraePbF6thRe",
+    "testedAt": "2026-07-14T23:56:50.416Z",
+    "result": "passed-redeployed-prior-preview",
+    "allThreeHealthRoutesPassed": true,
+    "unaffectedDomainsRedeployed": false
+  },
+  "routingRecovery": {
+    "observation": "first Buyer and Seller Git builds were classified as production and could not read Preview values",
+    "failedDeploymentIds": [
+      "dpl_2gjkgnXLzSjoDqMBgEQNUnTAA4dw",
+      "dpl_Chq4QSH8AYYgSVJfWuDd58DYxpfv"
+    ],
+    "recovery": "redeployed both failed builds explicitly to Preview",
+    "finalTargets": "preview",
+    "customerTraffic": "none"
+  },
+  "review": {
+    "criticalFindings": 0,
+    "importantFindingsRemaining": 0,
+    "verdict": "ready-to-push"
+  }
+}

@@ -1,0 +1,134 @@
+name: Production release
+
+on:
+  workflow_dispatch:
+    inputs:
+      known_good_sha:
+        description: Exact main SHA currently proven healthy in Convex production
+        required: true
+        type: string
+      known_good_receipt_run_id:
+        description: Requested prior authority run to record in the blocked receipt
+        required: true
+        type: number
+
+permissions:
+  actions: read
+  checks: read
+  contents: read
+  deployments: read
+
+concurrency:
+  group: sourcera-production-release
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
+    steps:
+      - name: Require a main-branch dispatch
+        env:
+          SOURCERA_RELEASE_DISPATCH_REF: ${{ github.ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SOURCERA_RELEASE_DISPATCH_REF" = "refs/heads/main"
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          cache: npm
+          node-version: '24.16.0'
+      - name: Verify pinned Node and npm
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = "v24.16.0"
+          test "$(npm --version)" = "11.13.0"
+      - run: npm ci --ignore-scripts
+      - run: npm --prefix tools/spec-lint ci --ignore-scripts
+      - name: Run the no-secret release preflight
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          SOURCERA_RELEASE_APPROVED_SHA: ${{ github.sha }}
+        run: >-
+          npm run release:production:preflight --
+          --out-dir "$RUNNER_TEMP/production-preflight"
+      - id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          if-no-files-found: error
+          name: production-preflight-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          overwrite: false
+          path: ${{ runner.temp }}/production-preflight
+          retention-days: 90
+
+  blocked:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: sourcera-production-release
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          cache: npm
+          node-version: '24.16.0'
+      - name: Verify pinned Node and npm
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = "v24.16.0"
+          test "$(npm --version)" = "11.13.0"
+      - run: npm ci --ignore-scripts
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: production-preflight-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/production-preflight
+      - name: Emit the immutable DEC-PROD-002 no-authority receipt
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          SOURCERA_KNOWN_GOOD_SHA: ${{ inputs.known_good_sha }}
+          SOURCERA_PREFLIGHT_ARTIFACT_DIGEST: ${{ needs.preflight.outputs.artifact-digest }}
+          SOURCERA_RELEASE_APPROVED_SHA: ${{ github.sha }}
+          SOURCERA_REQUESTED_AUTHORITY_RUN_ID: ${{ inputs.known_good_receipt_run_id }}
+        run: >-
+          npm run release:production:no-authority --
+          --preflight-dir "$RUNNER_TEMP/production-preflight"
+          --receipt-out "$RUNNER_TEMP/production-release-no-authority-${{ github.run_id }}-${{ github.run_attempt }}.json"
+      - id: receipt_check
+        name: Validate the required no-authority receipt before publication
+        if: always()
+        env:
+          RECEIPT_PATH: ${{ runner.temp }}/production-release-no-authority-${{ github.run_id }}-${{ github.run_attempt }}.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$RECEIPT_PATH"
+          node -e 'const r=JSON.parse(require("node:fs").readFileSync(process.env.RECEIPT_PATH,"utf8"));if(r.event!=="production_release_no_authority_receipt"||r.result!=="blocked"||r.promotionAllowed!==false||r.providerCredentialCount!==0||r.authority?.historicalDownloadAttempted!==false)throw new Error("invalid no-authority receipt")'
+      - id: upload
+        if: always() && steps.receipt_check.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          if-no-files-found: error
+          name: production-release-no-authority-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          overwrite: false
+          path: ${{ runner.temp }}/production-release-no-authority-${{ github.run_id }}-${{ github.run_attempt }}.json
+          retention-days: 90
+      - name: Fail closed until DEC-PROD-002 is resolved
+        shell: bash
+        run: exit 1

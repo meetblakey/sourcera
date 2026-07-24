@@ -567,9 +567,15 @@ export function assertLinearPlanningContractFingerprints(
 export function linearSourceProvenance(
   description: string | null,
 ): NonNullable<LinearFingerprint["issues"][number]["sourceProvenance"]> {
-  const section = /(?:^|\n)## Source provenance\s*\n([\s\S]*?)(?=\n## |$)/i.exec(
-    description ?? "",
-  )?.[1] ?? "";
+  const maximumSectionLength = 32 * 1024;
+  const body = description ?? "";
+  const heading = /(?:^|\n)## Source provenance[^\S\r\n]*(?:\r?\n|$)/i.exec(body);
+  const sectionStart = heading ? (heading.index ?? 0) + heading[0].length : -1;
+  const nextHeading = sectionStart >= 0 ? body.indexOf("\n## ", sectionStart) : -1;
+  const sectionEnd = nextHeading >= 0 ? nextHeading : body.length;
+  const section = sectionStart >= 0 && sectionEnd - sectionStart <= maximumSectionLength
+    ? body.slice(sectionStart, sectionEnd)
+    : "";
   const singularDocumentLine = section.match(
     /(?:^|\n)[-*]?\s*(?:canonical\s+)?source document\s*:\s*([^\n]+)/i,
   )?.[1] ?? section.match(
@@ -675,31 +681,58 @@ async function request<T>(
   query: string,
   after: string | null,
 ): Promise<T> {
-  const response = await fetcher(ENDPOINT, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: token,
-    },
-    body: JSON.stringify({ query, variables: { after } }),
-  });
-  const payload = (await response.json()) as {
-    data?: T;
-    errors?: Array<{ message: string }>;
-  };
-  if (!response.ok) {
-    const details = payload.errors?.map((error) => error.message).join("; ");
-    throw new Error(
-      `Linear HTTP ${response.status}${details ? `: ${details}` : ""}`,
-    );
+  const maximumAttempts = 3;
+  for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
+    let response: Response;
+    try {
+      response = await fetcher(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: token,
+        },
+        body: JSON.stringify({ query, variables: { after } }),
+      });
+    } catch (error) {
+      if (attempt === maximumAttempts) throw error;
+      await new Promise((resolveDelay) => setTimeout(resolveDelay, attempt * 250));
+      continue;
+    }
+    let payload: {
+      data?: T;
+      errors?: Array<{ message: string }>;
+    };
+    try {
+      payload = (await response.json()) as typeof payload;
+    } catch {
+      if (attempt === maximumAttempts) {
+        throw new Error("Linear returned invalid JSON after bounded retries");
+      }
+      await new Promise((resolveDelay) => setTimeout(resolveDelay, attempt * 250));
+      continue;
+    }
+    if (!response.ok) {
+      const details = payload.errors?.map((error) => error.message).join("; ");
+      if (
+        attempt < maximumAttempts &&
+        (response.status === 429 || response.status >= 500)
+      ) {
+        await new Promise((resolveDelay) => setTimeout(resolveDelay, attempt * 250));
+        continue;
+      }
+      throw new Error(
+        `Linear HTTP ${response.status}${details ? `: ${details}` : ""}`,
+      );
+    }
+    if (payload.errors?.length) {
+      throw new Error(
+        `Linear GraphQL: ${payload.errors.map((error) => error.message).join("; ")}`,
+      );
+    }
+    if (!payload.data) throw new Error("Linear GraphQL returned no data");
+    return payload.data;
   }
-  if (payload.errors?.length) {
-    throw new Error(
-      `Linear GraphQL: ${payload.errors.map((error) => error.message).join("; ")}`,
-    );
-  }
-  if (!payload.data) throw new Error("Linear GraphQL returned no data");
-  return payload.data;
+  throw new Error("Linear request exhausted bounded retries");
 }
 
 async function paginate<T>(
@@ -708,9 +741,22 @@ async function paginate<T>(
   query: string,
   key: string,
 ): Promise<T[]> {
+  const maximumPages = 1_000;
   const rows: T[] = [];
+  const seenCursors = new Set<string>();
+  let pageCount = 0;
   let after: string | null = null;
   do {
+    pageCount += 1;
+    if (pageCount > maximumPages) {
+      throw new Error(`Linear ${key} pagination exceeded ${maximumPages} pages`);
+    }
+    if (after !== null) {
+      if (seenCursors.has(after)) {
+        throw new Error(`Linear ${key} pagination cursor repeated`);
+      }
+      seenCursors.add(after);
+    }
     let data: Record<string, Connection<T>>;
     try {
       data = await request<Record<string, Connection<T>>>(

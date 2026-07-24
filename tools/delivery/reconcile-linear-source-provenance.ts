@@ -44,6 +44,7 @@ import {
 import type { LinearSourcePolicy } from "./lib/linear-source-policy.js";
 import type { SourceRequirement } from "./lib/model.js";
 import {
+  createLinearSourceChecksumResolutionCache,
   resolveLinearSourceChecksum,
   verifySourceChecksumContract,
   type ResolvedSourceChecksum,
@@ -279,6 +280,7 @@ function resolvedChecksums(
     throw new Error("Feature Inventory source IDs are duplicated");
   }
   const resolved = new Map<string, ResolvedSourceChecksum>();
+  const resolutionCache = createLinearSourceChecksumResolutionCache();
   for (const issue of capture.fingerprint.issues) {
     if (
       issue.archivedAt !== null ||
@@ -311,7 +313,7 @@ function resolvedChecksums(
       provenance,
       contract,
       root,
-      { allowChecksumDrift: true },
+      { allowChecksumDrift: true, resolutionCache },
     );
     const prior = resolved.get(checksum.sourceId);
     if (prior && JSON.stringify(prior) !== JSON.stringify(checksum)) {

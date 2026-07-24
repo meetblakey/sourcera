@@ -7,7 +7,7 @@ export const LINEAR_CAPTURE_MAX_AGE_MS = 30 * 60 * 1000;
 export const LINEAR_CAPTURE_FUTURE_TOLERANCE_MS = 60 * 1000;
 
 export function canonicalLinearRunSource(
-  environment: NodeJS.ProcessEnv = process.env,
+  environment: Readonly<Record<string, string | undefined>> = process.env,
 ): LinearRunSource {
   const required = (name: string): string => {
     const value = environment[name]?.trim();

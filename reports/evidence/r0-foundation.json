@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "proofTypes": [
+    "tests",
+    "deploy",
+    "rollback",
+    "runtime"
+  ],
+  "issue": "PLA-220",
+  "status": "passed",
+  "observedAt": "2026-07-14T23:13:10.544Z",
+  "sourceCommit": "67ac6bab49cb4001a0c4f653151105e9bfebac3e",
+  "local": {
+    "verifiedAt": "2026-07-14T23:13:10.544Z",
+    "commands": {
+      "cleanInstall": "passed",
+      "missingDeployEnvironmentCheck": "passed-failed-closed",
+      "deployEnvironmentCheck": "passed",
+      "lint": "passed",
+      "typecheck": "passed",
+      "tests": "passed-4-of-4",
+      "productionBuild": "passed",
+      "dependencyAudit": "passed-0-vulnerabilities"
+    }
+  },
+  "staging": {
+    "project": "meetblakeys-projects/sourcera",
+    "deploymentId": "dpl_GsEwnWnvMVQC81hKnAuVogb7HmvJ",
+    "deploymentUrl": "https://sourcera-chi7mcps2-meetblakeys-projects.vercel.app",
+    "healthUrl": "https://sourcera-chi7mcps2-meetblakeys-projects.vercel.app/api/health",
+    "healthCheckedAt": "2026-07-14T23:17:39.090Z",
+    "healthResult": "passed-200-no-store",
+    "deploymentProtection": "enabled",
+    "customerTraffic": "none"
+  },
+  "rollback": {
+    "fromCommit": "67ac6bab49cb4001a0c4f653151105e9bfebac3e",
+    "toCommit": "9a5eee57dc1ca24b6fa458cdcf5a325fcbb258bd",
+    "testedAt": "2026-07-14T23:16:57.396Z",
+    "restoredDeploymentId": "dpl_3EgfsMT3BdkgKpz4W84UpggWT6Pu",
+    "restoredDeploymentUrl": "https://sourcera-rh07mu1nh-meetblakeys-projects.vercel.app",
+    "healthResult": "passed-200-no-store",
+    "latestCommitRestored": true
+  }
+}

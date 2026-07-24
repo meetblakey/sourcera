@@ -155,7 +155,7 @@
           "endHeading": "#### Teams"
         }
       ],
-      "sha256": "bac1add519ef63a7f5996366ea3fdd7b2b73a5a699398eea811239c071c2b89c"
+      "sha256": "5d2953b42228b52380b7b9684c19ef046cc6c91329c1fafba81f756d35fe846a"
     },
     {
       "sourceId": "F-529",
@@ -311,7 +311,7 @@
           "endHeading": "#### Teams"
         }
       ],
-      "sha256": "d24cf81d803b34999ba8867dd393deee94f99a7026e97231dae24b6f89553912"
+      "sha256": "185cd016e3e2d2e408986a5e66d34ee659411839f9f99c59998965ae26649562"
     },
     {
       "sourceId": "F-537",
@@ -372,7 +372,7 @@
           "endHeading": "## 8.2 Notifications & Delivery"
         }
       ],
-      "sha256": "8b417bc12cf52a7ee65fe7c6cee0fbffc48c7fe9763c241da207527e72b49409"
+      "sha256": "bfe61f401d4a304a34147413f366d565ab297b83cb740ee2c7956cbd34bd09b7"
     },
     {
       "sourceId": "F-630",
@@ -418,7 +418,7 @@
           "endHeading": "## 8.8 Custom Branding (Enterprise)"
         }
       ],
-      "sha256": "93c8316ca45dd7c4fd2fa193050cc5a534d93962fde8dbdc6a06d9653dab7a38"
+      "sha256": "04fb1c3e258c049a5e23adbc3d6649ee359d9f2253d1f0bc38b69fc19d130670"
     },
     {
       "sourceId": "F-631",
@@ -439,7 +439,7 @@
           "endHeading": "## 8.8 Custom Branding (Enterprise)"
         }
       ],
-      "sha256": "22c30af070f9978199567f84c2066a14747872d5523fe0b4c2e631a81f62eb78"
+      "sha256": "d25845efa344345e504ca357d8fa1f2d98f01bda071bb1cc692dae945b601cee"
     },
     {
       "sourceId": "F-132",
@@ -455,7 +455,7 @@
           "endHeading": "### 34.14.6 Acceptance Criteria"
         }
       ],
-      "sha256": "d4adc8fae9b173fafb59b4e90de5112d64a4fe533b1b8e0dfbac2100b804dac1"
+      "sha256": "695f774a0aa69968d17a0c0b0678b29afdc275377ff52751283d92dd78301b68"
     },
     {
       "sourceId": "F-160",
@@ -497,7 +497,7 @@
           "endHeading": "## 45.2 Abuse Prevention {#45.2-abuse-prevention}"
         }
       ],
-      "sha256": "357d23b5cb600e13ab16aba0b72c5f61380659598f01b51dc0dae5c5f25c062d"
+      "sha256": "ae8ed30e667d5ffb816c531acf101eba74a068b0d9d58585bfdaf5bdb662fccb"
     },
     {
       "sourceId": "F-007",
@@ -573,7 +573,7 @@
           "endHeading": "## 8.2 Notifications & Delivery"
         }
       ],
-      "sha256": "d763f1bc236040eef53bae4fd18dae2e939c0eda7640b7136422e834300493d4"
+      "sha256": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
     },
     {
       "sourceId": "F-007.A",
@@ -624,7 +624,7 @@
           "endHeading": "## Appendix J: Controlled Vocabulary Registry {#appendix-j-controlled-vocabulary-registry}"
         }
       ],
-      "sha256": "5bf486ca1b92dc321b663823f3241cf171d9ed6ced6f06587558321768265cd5"
+      "sha256": "654cdacdd5d7d375ed8af074108ae8198f4ad53e4ca29352320ccee916df1f74"
     },
     {
       "sourceId": "F-007.B",
@@ -745,7 +745,7 @@
           "endHeading": "#### Teams"
         }
       ],
-      "sha256": "d0d9d1ae7551b5201ed83f9b585a310e971a6e1ce05994bb0541514bf633528e"
+      "sha256": "b2f82f28b5fd8803829fbad324722b29828271905cbc35905ab57acc5a9cfb00"
     },
     {
       "sourceId": "F-007.C",
@@ -791,7 +791,7 @@
           "endHeading": "## Appendix I: API Error Code Catalog {#appendix-i-api-error-code-catalog}"
         }
       ],
-      "sha256": "d0d32aeb82c5566c389244f9f8c42f2d3b0a3bf1d1770de0899716b95acb0b72"
+      "sha256": "dfc7f4d5b903ec23d17ae67ba41b4c01c77f7ed212c8ebd4836fe828ec549fe5"
     },
     {
       "sourceId": "F-007.D",
@@ -862,7 +862,7 @@
           "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
         }
       ],
-      "sha256": "5d019ab527a01bb4dec552ff9f830589609297bbbc394a32149f6ff71c82d80f"
+      "sha256": "49bad9ed80269101af7bc8a9b3f0e4152a96b69b936921f80e32a5220b699abf"
     },
     {
       "sourceId": "F-007.E",
@@ -918,7 +918,7 @@
           "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
         }
       ],
-      "sha256": "64032a450d85aa65ac4cc1ab973da9a41a8e973e23b5d44223f3be6145b112d0"
+      "sha256": "2c5c5ee325708a4fb5d48279d0e0a05513cdc9efc8186f71485241ea1aa399f4"
     },
     {
       "sourceId": "F-005",
@@ -946,7 +946,7 @@
           "endHeading": "## 44.2 Agent Performance Budgets {#44.2-agent-performance-budgets}"
         }
       ],
-      "sha256": "673b0270f38dffa149dbd4f459932d6c70e1dbb40a7ac462b81483790a107a8a"
+      "sha256": "17ff8fd3fc32375a8502c9b93dbdea500065e2ea1b1a5d6a5f1e96170a1d69d0"
     },
     {
       "sourceId": "F-006",
@@ -960,7 +960,7 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "startHeading": "## 3.7 Loading / Empty / Error State Catalog {#3.7-loading-empty-error-state-catalog}",
       "endHeading": "## 3.8 Side Peek Dimensions & Behavior {#3.8-side-peek-dimensions-and-behavior}",
-      "sha256": "6119133a73b14c8149413c1bff2283dbb2b09df515a9f857f7b8e9c790ca5687"
+      "sha256": "2df60d11c9328423c7d73b34ae5bb2edcead7ed97d98b17202f9e02bb5e8d2a5"
     },
     {
       "sourceId": "F-063",
@@ -1163,7 +1163,7 @@
           "endHeading": "## 7.3 PII Handling Across Org Boundaries {#7.3-pii-handling-across-org-boundaries}"
         }
       ],
-      "sha256": "33b83c3732f911f6c213e1940d3d3b010f7ae1e0dee96ff760fe47e608d95df5"
+      "sha256": "1da1ff5b1264b7a78013ae3835ef5fca9afbb3e0433919715f70e1002cb9f217"
     },
     {
       "sourceId": "F-117",
@@ -1261,14 +1261,14 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "startHeading": "## 32.1 Overview {#32.1-overview}",
       "endHeading": "## 32.8 Billing Endpoint Detail {#32.8-billing-endpoint-detail}",
-      "sha256": "4d260d599ed967b99a1203442c0a566c616745e65ec37eb85ed26d8fa13f1783"
+      "sha256": "2cbbf712fa0550c90c652865faae61bb7c25440480fe52e7a0c6d7a4768550e2"
     },
     {
       "sourceId": "F-533",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "startHeading": "### 34.9.1 Buyer Onboarding (14-Day Business Starter Trial)",
       "endHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)",
-      "sha256": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+      "sha256": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
     },
     {
       "sourceId": "F-566",
@@ -1352,7 +1352,7 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "startHeading": "### 34.9.1 Buyer Onboarding (14-Day Business Starter Trial)",
       "endHeading": "### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)",
-      "sha256": "78317053accb898762aa56242c093f9ec49375bc3aed281bbfa8c46b2e42a7ec"
+      "sha256": "a7f2cffda84dda844fd76037e6efdd4ac9f07c0e375661da023557c0dd8ec8b8"
     },
     {
       "sourceId": "F-917",
@@ -1417,7 +1417,7 @@
           "endHeading": "## 46.6 DSAR / GDPR Test Scenarios (V12 — D-46-006) {#46.6-dsar-gdpr-tests}"
         }
       ],
-      "sha256": "7ef5ed37676ee2424473a3abff3e9426af48695007cc9a5def5c3a085facb962"
+      "sha256": "26dd95f47068cfddd78d60755a10240645ed058fe3d828e84973172106ba8f01"
     },
     {
       "sourceId": "F-003",
@@ -1453,7 +1453,7 @@
           "endHeading": "## 46.6 DSAR / GDPR Test Scenarios (V12 — D-46-006) {#46.6-dsar-gdpr-tests}"
         }
       ],
-      "sha256": "c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c"
+      "sha256": "0a6dd707514f5ca7c6722ae0f39c02b381ecdc8570e6e2e7cd094a91390f8692"
     },
     {
       "sourceId": "F-004",
@@ -1532,7 +1532,7 @@
           "endHeading": "## 5.3 Deprecated Components"
         }
       ],
-      "sha256": "5e31019395dbcf8b74d9405d776d80b96076f54c8c3241d39c92a0f24fb00f5d"
+      "sha256": "68845af7509dd0f7569ffeda5e5a3a76cf3fb4223bab6080d522ebd101b9ab0c"
     },
     {
       "sourceId": "F-212",
@@ -1624,7 +1624,7 @@
           "endHeading": "## 5.3 Deprecated Components"
         }
       ],
-      "sha256": "99756bbbfebb930822aa766ec2d38ca98b6a9afd137b261967d9ce73e7b2f372"
+      "sha256": "2bfa22c3d36863b0dca5746303669b90d6381aa9cb34b8860ada12f955cd653c"
     },
     {
       "sourceId": "F-214",
@@ -1802,7 +1802,7 @@
           "endHeading": "### L.25 Buyer Response and Score-Lock State Machines (§4.3.5 / §4.3.6) {#l-25-buyer-response-and-score-lock-state-machines}"
         }
       ],
-      "sha256": "baf6f6647a12350fee87f13bfc924e06d97983cac9384697178e72fd001daa38"
+      "sha256": "8191023995dd303e143d661683e69167b07938decec72804912a9166ba2df2cc"
     },
     {
       "sourceId": "F-087",
@@ -1858,7 +1858,7 @@
           "endHeading": "### L.26 Responsive Breakpoint and Mobile-Parity Classification State Machines (§38.6 / §38.8) {#l-26-responsive-breakpoint-and-mobile-parity-classification-state-machines}"
         }
       ],
-      "sha256": "2ed86078614cf98d2bc379bf8db1b56908a0b343dd46b51f41d1d499b46e1940"
+      "sha256": "8edac1e7efed9470d9648c6dcc3f804ebfe6374047c7fb2e5fff7f4f3bf799db"
     },
     {
       "sourceId": "F-088",
@@ -1954,7 +1954,7 @@
           "endHeading": "### Q&A Threads"
         }
       ],
-      "sha256": "11e9849b46503c88cf43ccbd6cf288299354450713de0ea83d29f870e1d6b0d9"
+      "sha256": "4a1da4094400fb6fbbee950f47638f2ef5b5500bbc2ec81c2a8c6cfc7be5da0c"
     },
     {
       "sourceId": "SG-F213-001",
@@ -1980,7 +1980,7 @@
           "endHeading": "# 15\\. TCO Modeling {#15.-tco-modeling}"
         }
       ],
-      "sha256": "26f7ac5af5ae73f808e494248a0ada88764e10b6acb4ffee612e25f834d9c75d"
+      "sha256": "50cef7a468064a9ad03eba042b61b352242bac278b3ab44b630a0d52abc1ae30"
     },
     {
       "sourceId": "SG-F226-001",
@@ -2016,7 +2016,7 @@
           "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
         }
       ],
-      "sha256": "4e5409bc696704c32ebf9ae1aaa21d548fcda7f6045744f0f44b384b61fb7c30"
+      "sha256": "49dad00b56626e6627f54cb8cb8cc718051b3cb6a14d07a11578d2e2b75976ba"
     },
     {
       "sourceId": "SG-F214-001",
@@ -2078,7 +2078,7 @@
           "endHeading": "## 40.3 Data Import {#40.3-data-import}"
         }
       ],
-      "sha256": "b5bacb94f7c072e1cb3d78a096547471c8c118718c57edd17e03d039cd5f6560"
+      "sha256": "4cdafe172249ba237728f8dc02a04c61d3986b42cdaa3eb8bebf3990946ffeb4"
     },
     {
       "sourceId": "SG-F922-002",
@@ -2182,7 +2182,7 @@
           "endHeading": "### v7.2.0-REM Phase 3 Additions (2026-05-18) — §M.5 Catalog Schema Tightening {#appendix-j-v72rem-phase-3}"
         }
       ],
-      "sha256": "8a77c8e14964af6c072b7b8d5d69133e35d508e95d59b405778eae60ffd54942"
+      "sha256": "b8718c92649d7fb188d3a717d26356d12962a630943c149b1a9297b3b6aa2e51"
     },
     {
       "sourceId": "SG-F924-001",
@@ -2208,7 +2208,7 @@
           "endHeading": "### v7.2.0-REM Phase 3 Additions (2026-05-18) — §M.5 Catalog Schema Tightening {#appendix-j-v72rem-phase-3}"
         }
       ],
-      "sha256": "a673275e4178acf1fd22e6443c9ac9ee4920e415b56eb8fdff2520097f123184"
+      "sha256": "5dab7ca56888480db5b698eae0b9597fb26eea7eb252c4483519ba097ea75f30"
     },
     {
       "sourceId": "SG-F924-002",
@@ -2261,7 +2261,7 @@
           "endHeading": "## 40.3 Data Import {#40.3-data-import}"
         }
       ],
-      "sha256": "0e976fd19cb53b81669f172cde63782e36d0d53b493e457aaf675e41c9cd99fa"
+      "sha256": "df849d499925fd6ae22b2997e2c6b323f432aff7f38f101f3b05215a59cbb576"
     },
     {
       "sourceId": "F-085.A",
@@ -2322,7 +2322,7 @@
           "endHeading": "### L.15 Bid Response Status State Machine (§4.4.2 / §9.3.3.1)"
         }
       ],
-      "sha256": "0e046192ec5f80087dd65dcb1029c15943c6913a5cec1b4ec9d99e2f8d82310e"
+      "sha256": "5473325b4a343fffb3d89428ed27f812348c3586c0738b6c92ebe8a29ef06aff"
     },
     {
       "sourceId": "RG-APPG-ALIAS-001",
@@ -2493,7 +2493,7 @@
           "endHeading": "### Entity-Specific Errors"
         }
       ],
-      "sha256": "a8aea835817797f37d32986da29e1017c58a90954df52d38b0cd6da5e246ec63"
+      "sha256": "39c8918d2cfd06205d4ad7f2094dbc8393517ea32b04dc7736004d60be09456b"
     },
     {
       "sourceId": "SR-F079-001",
@@ -2514,7 +2514,7 @@
           "endHeading": "## 5.3 Console-Level Roles (Buyer Console) {#5.3-console-level-roles-(buyer-console)}"
         }
       ],
-      "sha256": "b613e1181fa1d974cb0375d6da44158c2ffd040c6b3a9bc0b315576e9b2eda07"
+      "sha256": "37c4f5c67ba2c64027b186431759b98ea05c04baa03a68678b68bf415a64fd2a"
     },
     {
       "sourceId": "SR-F079-002",
@@ -2530,7 +2530,7 @@
           "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
         }
       ],
-      "sha256": "5145b335c206d177414ee9c82768c209c86536c607296264de8e462c28c52445"
+      "sha256": "1c537b8ee94750f1724b932acbe3d082c27a106e8bbd8571c0387732a5bc5fb9"
     },
     {
       "sourceId": "SR-F079-003",
@@ -2551,7 +2551,7 @@
           "endHeading": "## 40.3 Data Import {#40.3-data-import}"
         }
       ],
-      "sha256": "f756b93cb728cdd664502676d4e6d67a9fc330733d0badae2c7bfb50508cc4ca"
+      "sha256": "6ce184cebc3bd75f1be6ddd8d85a1be53e2ec380c0af1b3f8bc0ea1045429fe1"
     },
     {
       "sourceId": "SR-F079-004",
@@ -2619,7 +2619,7 @@
           "endHeading": "### 34.12.4.A AIWallet Aggregate-Counter Read-Permission Scope (Phase 7 V7 D-V7-008 Remediation, 2026-05-07)"
         }
       ],
-      "sha256": "be20dedb79e4e0dc54e3e6c42a744ee69ea82b0797d7264434550a21efa7f2f3"
+      "sha256": "46ab1fda6fbc909eb6eb52b49086c7b21df3bfad893f4fc5c715e10d54016902"
     },
     {
       "sourceId": "F-079.D",
@@ -2696,7 +2696,7 @@
           "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
         }
       ],
-      "sha256": "0b9feb8fe5500b2d5d70562697557fd0d27c4e90d4e054271a2f013862671d40"
+      "sha256": "a72579c7a8269087963eb7269835595ea764bfa70e9b790ef47141e204a13854"
     },
     {
       "sourceId": "F-079.E",
@@ -2758,7 +2758,7 @@
           "endHeading": "## 40.5 Acceptance Criteria {#40.5-acceptance-criteria}"
         }
       ],
-      "sha256": "edd75e388ab20167e1b323a532198dfafd5b9416ca6c64ddb2258c375fe5d2cb"
+      "sha256": "2be1e0527299c9270fa9710954354d80b068d756a4698565e3b3b4b2cdfef3a0"
     },
     {
       "sourceId": "F-079.H",
@@ -2799,7 +2799,7 @@
           "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
         }
       ],
-      "sha256": "a1947f255642f9c6ca4bf453ba81e09b65a752e272a7890753eb965f8264eabd"
+      "sha256": "0325667ba245bf5a6e327c49053809a97f5bfd53bc031f811fa326c51819e1e6"
     },
     {
       "sourceId": "F-079.I",
@@ -2897,13 +2897,13 @@
           "endHeading": "### Billing Admin Audit Action Types (§5.2.1, §4.8.3, §4.8.5, §4.8.7, §4.8.8, §4.8.9, §4.8.10, §4.8.11, §34.12.6, §34.13)"
         }
       ],
-      "sha256": "f652750b6c9d0d32f308979e10b0b99eb70eb97e7beba1aac0aa81cffc61ddc5"
+      "sha256": "e88621baa0a3e81c3664753d6740182a266d016ca618351e18447c079a1c275b"
     },
     {
       "sourceId": "RG:buyer_trial_audit_action_registration",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sectionHeading": "#### M.5.121 Buyer Business Starter Trial Audit Registration {#m-5-121-buyer-business-starter-trial-audit-registration}",
-      "sha256": "b80e03e860ddbfb41c15020be494072a0359c025be3acb0980dfe5eb58cff721"
+      "sha256": "1cb73a3689084f1685e287cd5fe1a9b71c0641f87dc28a70cc2edd51e2f39437"
     },
     {
       "sourceId": "F-859",

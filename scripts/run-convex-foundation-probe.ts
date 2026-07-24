@@ -1,0 +1,358 @@
+import { createHash, createHmac, randomUUID } from "node:crypto";
+import { performance } from "node:perf_hooks";
+
+import { ConvexClient } from "convex/browser";
+
+import productionTargets from "../config/production-targets.json";
+import { api } from "../convex/_generated/api";
+import {
+  createConvexProductionProbePayload,
+  type ConvexProductionProbeOperation,
+  createConvexFoundationHealthResult,
+  readRequiredConvexDeploymentClientIdentity,
+  readRequiredConvexDeploymentIdentity,
+} from "../packages/domain/src/convex";
+import { readPinnedConvexProductionTarget } from "./lib/convex-production-target";
+
+const SAMPLE_COUNT = 20;
+const SAMPLE_TIMEOUT_MS = 5_000;
+
+function percentile(values: number[], percentileValue: number) {
+  const sorted = [...values].sort((left, right) => left - right);
+  const index = Math.max(0, Math.ceil(percentileValue * sorted.length) - 1);
+  return sorted[index];
+}
+
+function productionProbeAuthorization(
+  operation: ConvexProductionProbeOperation,
+  identity: {
+    commitSha: string;
+    deploymentName: string;
+    environment: string;
+  },
+  issuedAt: number,
+  nonceHash: string,
+  sample: number,
+) {
+  const secret = process.env.SOURCERA_CONVEX_CANARY_SECRET;
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      "SOURCERA_CONVEX_CANARY_SECRET must be at least 32 characters",
+    );
+  }
+  return createHmac("sha256", secret)
+    .update(
+      createConvexProductionProbePayload(operation, {
+        commitSha: identity.commitSha,
+        deploymentName: identity.deploymentName,
+        environment: identity.environment,
+        issuedAt,
+        nonceHash,
+        releaseApprovedSha: identity.commitSha,
+        sample,
+      }),
+    )
+    .digest("hex");
+}
+
+async function observeSample(
+  client: ConvexClient,
+  identity: {
+    commitSha: string;
+    deploymentName?: string;
+    deploymentUrl: string;
+    environment: string;
+  },
+  sample: number,
+) {
+  const nonceHash = createHash("sha256")
+    .update(`${identity.commitSha}:${randomUUID()}`)
+    .digest("hex");
+  const issuedAt = Date.now();
+  const startedAt = performance.now();
+  const productionDeploymentName =
+    identity.environment === "production" ? identity.deploymentName : undefined;
+  if (identity.environment === "production" && !productionDeploymentName) {
+    throw new Error("Production probe requires the pinned deployment name");
+  }
+
+  try {
+    return await new Promise<{
+      latencyMs: number;
+      runtimeIdentity?: { buildCommitSha: string; deploymentName: string };
+    }>((resolve, reject) => {
+      let settled = false;
+      let unsubscribe = () => {};
+      const timeout = setTimeout(() => {
+        settled = true;
+        unsubscribe();
+        reject(new Error("Reactive observation timed out"));
+      }, SAMPLE_TIMEOUT_MS);
+      const onProbe = (
+        probe: {
+          buildCommitSha?: string;
+          commitSha: string;
+          deploymentName?: string;
+          nonceHash: string;
+        } | null,
+      ) => {
+        if (
+          settled ||
+          !probe ||
+          probe.commitSha !== identity.commitSha ||
+          probe.nonceHash !== nonceHash
+        ) {
+          return;
+        }
+        if (
+          identity.environment === "production" &&
+          (probe.buildCommitSha !== identity.commitSha ||
+            probe.deploymentName !== productionDeploymentName)
+        ) {
+          settled = true;
+          clearTimeout(timeout);
+          unsubscribe();
+          reject(
+            new Error("Convex runtime identity does not match the release"),
+          );
+          return;
+        }
+        settled = true;
+        clearTimeout(timeout);
+        unsubscribe();
+        resolve({
+          latencyMs: Math.round(performance.now() - startedAt),
+          ...(identity.environment === "production"
+            ? {
+                runtimeIdentity: {
+                  buildCommitSha: probe.buildCommitSha!,
+                  deploymentName: probe.deploymentName!,
+                },
+              }
+            : {}),
+        });
+      };
+      const onError = (error: Error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        unsubscribe();
+        reject(error);
+      };
+      unsubscribe =
+        identity.environment === "production"
+          ? client.onUpdate(
+              api.foundation.observeProductionProbe,
+              {
+                authorization: productionProbeAuthorization(
+                  "observe",
+                  {
+                    ...identity,
+                    deploymentName: productionDeploymentName!,
+                  },
+                  issuedAt,
+                  nonceHash,
+                  sample,
+                ),
+                commitSha: identity.commitSha,
+                deploymentName: productionDeploymentName!,
+                environment: identity.environment,
+                issuedAt,
+                nonceHash,
+                releaseApprovedSha: identity.commitSha,
+                sample,
+              },
+              onProbe,
+              onError,
+            )
+          : client.onUpdate(
+              api.foundation.observeProbe,
+              { commitSha: identity.commitSha, nonceHash },
+              onProbe,
+              onError,
+            );
+
+      const record =
+        identity.environment === "production"
+          ? client.mutation(api.foundation.recordProductionProbe, {
+              authorization: productionProbeAuthorization(
+                "record",
+                {
+                  ...identity,
+                  deploymentName: productionDeploymentName!,
+                },
+                issuedAt,
+                nonceHash,
+                sample,
+              ),
+              commitSha: identity.commitSha,
+              deploymentName: productionDeploymentName!,
+              environment: identity.environment,
+              issuedAt,
+              nonceHash,
+              releaseApprovedSha: identity.commitSha,
+              sample,
+            })
+          : client.mutation(api.foundation.recordProbe, {
+              commitSha: identity.commitSha,
+              environment: identity.environment,
+              issuedAt,
+              nonceHash,
+              sample,
+            });
+      void record.catch((error: unknown) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        unsubscribe();
+        reject(error);
+      });
+    });
+  } finally {
+    if (identity.environment === "production") {
+      await client.mutation(api.foundation.clearProductionProbe, {
+        authorization: productionProbeAuthorization(
+          "clear",
+          {
+            ...identity,
+            deploymentName: productionDeploymentName!,
+          },
+          issuedAt,
+          nonceHash,
+          sample,
+        ),
+        commitSha: identity.commitSha,
+        deploymentName: productionDeploymentName!,
+        environment: identity.environment,
+        issuedAt,
+        nonceHash,
+        releaseApprovedSha: identity.commitSha,
+        sample,
+      });
+    } else {
+      await client.mutation(api.foundation.clearProbe, {
+        commitSha: identity.commitSha,
+        nonceHash,
+      });
+    }
+  }
+}
+
+const runtimeEnvironment =
+  process.env.SOURCERA_ENV ??
+  process.env.VERCEL_TARGET_ENV ??
+  process.env.VERCEL_ENV;
+const productionTarget =
+  runtimeEnvironment === "production"
+    ? readPinnedConvexProductionTarget(productionTargets)
+    : undefined;
+const identity =
+  runtimeEnvironment === "production"
+    ? readRequiredConvexDeploymentClientIdentity(process.env, productionTarget)
+    : readRequiredConvexDeploymentIdentity(process.env);
+const client = new ConvexClient(identity.deploymentUrl, {
+  unsavedChangesWarning: false,
+});
+
+void (async () => {
+  try {
+    const observations: number[] = [];
+    let runtimeIdentity:
+      { buildCommitSha: string; deploymentName: string } | undefined;
+    for (let sample = 1; sample <= SAMPLE_COUNT; sample += 1) {
+      const observation = await observeSample(client, identity, sample);
+      observations.push(observation.latencyMs);
+      if (observation.runtimeIdentity) {
+        if (
+          runtimeIdentity &&
+          (runtimeIdentity.buildCommitSha !==
+            observation.runtimeIdentity.buildCommitSha ||
+            runtimeIdentity.deploymentName !==
+              observation.runtimeIdentity.deploymentName)
+        ) {
+          throw new Error("Convex runtime identity changed during the canary");
+        }
+        runtimeIdentity = observation.runtimeIdentity;
+      }
+    }
+    if (identity.environment === "production" && !runtimeIdentity) {
+      throw new Error("Convex production canary returned no runtime identity");
+    }
+
+    const p95 = percentile(observations, 0.95);
+    const p99 = percentile(observations, 0.99);
+    const passed = p95 <= 500 && p99 <= 1_000;
+    const checkedAt = new Date();
+    const receipt = {
+      assertions: [
+        createConvexFoundationHealthResult(
+          process.env,
+          {
+            assertion: "reactive-observation-p95",
+            observationLatencyMs: p95,
+            result: passed ? "passed" : "failed",
+          },
+          checkedAt,
+          productionTarget,
+        ),
+        createConvexFoundationHealthResult(
+          process.env,
+          {
+            assertion: "reactive-observation-p99",
+            observationLatencyMs: p99,
+            result: passed ? "passed" : "failed",
+          },
+          checkedAt,
+          productionTarget,
+        ),
+      ],
+      outcome: passed ? "passed" : "failed",
+      ...(runtimeIdentity ? { runtimeIdentity } : {}),
+      sampleCount: observations.length,
+      zeroCustomerData: true,
+    };
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    if (!passed) process.exitCode = 1;
+  } catch {
+    const checkedAt = new Date();
+    process.stdout.write(
+      `${JSON.stringify(
+        {
+          assertions: [
+            createConvexFoundationHealthResult(
+              process.env,
+              {
+                assertion: "reactive-observation-p95",
+                observationLatencyMs: SAMPLE_TIMEOUT_MS,
+                result: "failed",
+              },
+              checkedAt,
+              productionTarget,
+            ),
+            createConvexFoundationHealthResult(
+              process.env,
+              {
+                assertion: "reactive-observation-p99",
+                observationLatencyMs: SAMPLE_TIMEOUT_MS,
+                result: "failed",
+              },
+              checkedAt,
+              productionTarget,
+            ),
+          ],
+          outcome: "failed",
+          sampleCount: 0,
+          zeroCustomerData: true,
+        },
+        null,
+        2,
+      )}\n`,
+    );
+    process.stderr.write(
+      "Convex foundation probe failed without exposing payload data.\n",
+    );
+    process.exitCode = 1;
+  } finally {
+    await client.close();
+  }
+})();

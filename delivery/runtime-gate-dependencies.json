@@ -1054,6 +1054,13 @@
       "rationale": "Highest source-section and assertion match: F-540 Outcome Resolver."
     },
     {
+      "requirementId": "RG:query_scoping_console_required",
+      "dependencies": [
+        "F-003"
+      ],
+      "rationale": "F-003 owns the query registry, exact console-scoping runtime binding, and fail-closed proof."
+    },
+    {
       "requirementId": "RG:requirement_reopening_runtime_consistency",
       "dependencies": [
         "F-086",

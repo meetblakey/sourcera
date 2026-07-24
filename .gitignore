@@ -2,6 +2,10 @@
 .fuse_hidden*
 
 node_modules/
+.next/
+.vercel/
+coverage/
+*.tsbuildinfo
 *.log
 
 .env
@@ -12,3 +16,4 @@ _versions/
 _audit/_tmp/
 *.bak
 *.orig
+.vercel

@@ -172,6 +172,7 @@ export function replaceSourceProvenanceChecksum(
     | "sectionBundleCount"
     | "sourceBindingSha256"
     | "sha256"
+    | "selector"
   >,
 ): { description: string; beforeChecksum: string; afterChecksum: string } {
   if (!SHA256.test(expected.sha256)) {
@@ -184,7 +185,8 @@ export function replaceSourceProvenanceChecksum(
     );
   }
   const parsed = linearSourceProvenance(description);
-  const bundled = expected.sectionBundleCount > 1;
+  const bundled =
+    expected.selector === "registered" && expected.sectionBundleCount > 1;
   const canonical =
     parsed.sourceId === expected.sourceId &&
     JSON.stringify(parsed.sourceDocuments) ===
