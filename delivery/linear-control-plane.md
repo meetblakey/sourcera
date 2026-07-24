@@ -12,7 +12,7 @@ Linear is the sole planning source. Its native initiatives, projects, milestones
 
 ## Repository policy
 
-- `delivery/linear-program-scope.json` pins the approved parent initiative, outcome initiatives, planning document, and project memberships.
+- `delivery/linear-program-scope.json` pins the six approved outcome initiatives, the team-level planning document, and each project's single initiative membership. The Master Spec remains source authority and is never represented as an initiative.
 - The capture receipt binds the planning document's full body hash, required headings, native attachment IDs, and full project and milestone description hashes.
 - `delivery/linear-project-scope.json` pins the governed project set.
 - `delivery/linear-source-policy.json` contains only coordination-parent identities and reviewed ambiguity, supersession, clearing, or split exceptions. It is not a second plan.

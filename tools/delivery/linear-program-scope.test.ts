@@ -14,22 +14,19 @@ import { assertLinearPlanningContractFingerprints } from "./lib/linear-live.js";
 
 const MASTER = "a".repeat(64);
 const UX = "b".repeat(64);
+const TEAM = "477029a4-9e0a-44ca-9816-5a169b6baafa";
 
 function scope(): LinearProgramScope {
   return {
-    schemaVersion: 1,
-    parentInitiative: {
-      id: "68b43674-ef5a-431e-8105-431ba60892bd",
-      name: "Program",
-    },
+    schemaVersion: 2,
     outcomeInitiatives: [],
     planningDocument: {
       id: "3fd8304b-547e-48e2-bc76-5a9ebecaa389",
       title: "Planning authority",
       contentFingerprint: "c".repeat(64),
-      initiativeId: "68b43674-ef5a-431e-8105-431ba60892bd",
+      initiativeId: null,
       projectId: null,
-      teamId: null,
+      teamId: TEAM,
       issueId: null,
       requiredSections: ["Binding authority", "Program completion"],
     },
@@ -52,9 +49,9 @@ function fingerprint(
         title: "Planning authority",
         updatedAt: "2026-07-23T00:00:00.000Z",
         archivedAt: null,
-        initiativeId: "68b43674-ef5a-431e-8105-431ba60892bd",
+        initiativeId: null,
         projectId: null,
-        teamId: null,
+        teamId: TEAM,
         issueId: null,
         contentFingerprint: "c".repeat(64),
         sectionHeadings: ["Binding authority", "Program completion"],
@@ -124,26 +121,28 @@ test("rejects missing planning body coverage and attachment drift", () => {
     id: `00000000-0000-4000-8000-00000000000${index}`,
     name: `Outcome ${index}`,
   }));
-  programScope.projectInitiatives = [{
-    projectId: "22222222-2222-4222-8222-222222222222",
-    initiativeIds: [
-      programScope.parentInitiative.id,
-      programScope.outcomeInitiatives[0].id,
-    ],
-  }];
-  programScope.projectDescriptionFingerprints = [{
-    projectId: "22222222-2222-4222-8222-222222222222",
-    descriptionFingerprint: "d".repeat(64),
-    milestones: [{
-      milestoneId: "44444444-4444-4444-8444-444444444444",
-      descriptionFingerprint: "e".repeat(64),
-    }],
-  }];
+  const projectIds = Array.from(
+    { length: 6 },
+    (_, index) => `22222222-2222-4222-8222-22222222222${index}`,
+  );
+  programScope.projectInitiatives = projectIds.map((projectId, index) => ({
+    projectId,
+    initiativeIds: [programScope.outcomeInitiatives[index].id],
+  }));
+  programScope.projectDescriptionFingerprints = projectIds.map(
+    (projectId, index) => ({
+      projectId,
+      descriptionFingerprint: "d".repeat(64),
+      milestones: index === 0
+        ? [{
+          milestoneId: "44444444-4444-4444-8444-444444444444",
+          descriptionFingerprint: "e".repeat(64),
+        }]
+        : [],
+    }),
+  );
   const programFingerprint = fingerprint();
-  programFingerprint.initiatives = [
-    programScope.parentInitiative,
-    ...programScope.outcomeInitiatives,
-  ].map((initiative) => ({
+  programFingerprint.initiatives = programScope.outcomeInitiatives.map((initiative) => ({
     ...initiative,
     updatedAt: "2026-07-23T00:00:00.000Z",
     archivedAt: null,
@@ -162,6 +161,49 @@ test("rejects missing planning body coverage and attachment drift", () => {
 
   assert.doesNotThrow(() =>
     assertLinearProgramScope(programScope, programFingerprint)
+  );
+  const legacyParent = structuredClone(programScope) as LinearProgramScope & {
+    parentInitiative: { id: string; name: string };
+  };
+  legacyParent.parentInitiative = {
+    id: "68b43674-ef5a-431e-8105-431ba60892bd",
+    name: "Legacy wrapper",
+  };
+  assert.throws(
+    () => assertLinearProgramScope(legacyParent, programFingerprint),
+    /missing or invalid/,
+  );
+  const seventhInitiative = structuredClone(programFingerprint);
+  seventhInitiative.initiatives.push({
+    ...seventhInitiative.initiatives[0],
+    id: "77777777-7777-4777-8777-777777777777",
+    name: "Duplicate wrapper",
+  });
+  assert.throws(
+    () => assertLinearProgramScope(programScope, seventhInitiative),
+    /inventory differs/,
+  );
+  const emptyMembership = structuredClone(programScope);
+  emptyMembership.projectInitiatives[0].initiativeIds = [];
+  assert.throws(
+    () => assertLinearProgramScope(emptyMembership, programFingerprint),
+    /mappings are incomplete or invalid/,
+  );
+  const doubleMembership = structuredClone(programScope);
+  doubleMembership.projectInitiatives[0].initiativeIds.push(
+    programScope.outcomeInitiatives[1].id,
+  );
+  assert.throws(
+    () => assertLinearProgramScope(doubleMembership, programFingerprint),
+    /mappings are incomplete or invalid/,
+  );
+  const unusedInitiative = structuredClone(programScope);
+  unusedInitiative.projectInitiatives[5].initiativeIds = [
+    programScope.outcomeInitiatives[0].id,
+  ];
+  assert.throws(
+    () => assertLinearProgramScope(unusedInitiative, programFingerprint),
+    /owns no project/,
   );
   const missingSection = structuredClone(programFingerprint);
   missingSection.documents[0].sectionHeadings = ["Binding authority"];
@@ -191,13 +233,13 @@ test("rejects missing planning body coverage and attachment drift", () => {
 
   const exactDescriptions = {
     program: programFingerprint,
-    projects: [{
-      id: "22222222-2222-4222-8222-222222222222",
+    projects: projectIds.map((id) => ({
+      id,
       descriptionFingerprint: "d".repeat(64),
-    }],
+    })),
     projectMilestones: [{
       id: "44444444-4444-4444-8444-444444444444",
-      projectId: "22222222-2222-4222-8222-222222222222",
+      projectId: projectIds[0],
       descriptionFingerprint: "e".repeat(64),
     }],
     releases: [],

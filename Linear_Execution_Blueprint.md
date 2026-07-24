@@ -8,7 +8,7 @@ This stable path is retained as a pointer. The former blueprint is obsolete and 
 - UX authority where the Master Spec is silent: `UX_Design_of_Sourcera.md`.
 - Delivery policy and verification inputs: `delivery/`; they do not form a second plan.
 - Generated delivery reports: `reports/delivery/`; never hand edit them.
-- Linear plan: the active **Sourcera Production Build — Current Master Spec** program initiative, its outcome initiatives, projects, milestones, releases, native relations, and canonical planning document.
+- Linear plan: the six native outcome initiatives, projects, milestones, releases, native relations, and canonical planning document. The Master Spec is source authority, not an initiative.
 
 ## Linear rules
 
