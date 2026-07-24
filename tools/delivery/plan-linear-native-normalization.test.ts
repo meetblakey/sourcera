@@ -793,13 +793,13 @@ test("extracts a bounded canonical source section for a generic feature", () => 
   const update = plan.updates[0];
   assert.equal(update.diagnostics.genericTemplate, true);
   assert.equal(update.diagnostics.canonicalSourceExtracted, true);
-  assert.match(update.after.description, /Use `org_id` parameter only/);
-  assert.match(update.after.description, /Use both `org_id` AND `console` parameter/);
+  assert.match(update.after.description, /Require verified `org_id` and forbid `console`/);
+  assert.match(update.after.description, /Require `console=marketplace` plus the route's registered authenticated audience/);
   assert.doesNotMatch(update.after.description, /pinned source owns/i);
   assert.doesNotMatch(update.after.description, /\bPLA-\d+\b|\bF-\d+\b/);
   assert.match(
     update.after.description,
-    /Canonical source checksum: `sha256:c45e3aa19709235e7655201864555e79eed14ef655a67f8c4c21f418c2ea013c`/,
+    /Canonical source checksum: `sha256:0a6dd707514f5ca7c6722ae0f39c02b381ecdc8570e6e2e7cd094a91390f8692`/,
   );
 });
 

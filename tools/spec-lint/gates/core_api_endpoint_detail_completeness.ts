@@ -19,7 +19,7 @@ const GATE_ID = "core_api_endpoint_detail_completeness";
 
 const ENDPOINT_INDEX_TOKENS = [
   "D-V8.1-001 closes the remaining list-only gap",
-  "binding Workspaces, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments, Audit Events, and Users & Organization to §32.10.9",
+  "binding Workspaces, Use Cases, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments, Audit Events, and Users & Organization to §32.10.9",
   "Families with pre-existing detail remain single-sourced in their cited sections: Phase Advancement (§10.16), Vendor Disqualification (§25.3), Scenario Modeling (§32.10.3.E), TCO Modeling (§32.5.2), Workspace Analytics (§32.10.3.A), Policy Ingestion (§32.10.3.C), Template Library (§32.10.3.D), Phase 13 Integration Exports (§32.10.3.F), Intelligence (§32.5.1), Webhook Subscriptions (§31.11.3), Vendor Opt-Outs (§27.10.6), Marketplace Discovery (§27.11.7), Billing (§32.8), and Seller KB Export (§32.9).",
   "GET    /v1/workspaces",
   "POST   /v1/workspaces",
@@ -37,7 +37,7 @@ const ENDPOINT_INDEX_TOKENS = [
 
 const DETAIL_PACK_TOKENS = [
   "### 32.10.9 Core Buyer and Administration API Detail Pack {#32.10.9-core-buyer-and-administration-api-detail-pack}",
-  "**Scope.** This pack covers Workspaces, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments alias binding, Audit Events, and Users & Organization.",
+  "**Scope.** This pack covers Workspaces, Use Cases, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments alias binding, Audit Events, and Users & Organization.",
   "| Contract axis | Requirement |",
   "| Base URL | All paths are relative to §32.1 `https://api.sourcera.io/v1`; generated OpenAPI MUST NOT reintroduce an api-prefixed root. |",
   "| Authorization | `Authorization: Bearer <api_token>` is required. The endpoint-local `Auth Scope` cell names the minimum Appendix J `api_token_scope` unless the endpoint is token self-introspection, in which case any active registered scope is sufficient. |",

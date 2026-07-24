@@ -1700,17 +1700,14 @@ These entities exist within a console context (Buyer or Seller) and are NOT shar
 
 ## 1.4 Query Scoping Requirements {#1.4-query-scoping-requirements}
 
-**For org-scoped queries:**
+Every registered list route belongs to exactly one scope class:
 
-- Use `org_id` parameter only  
-- No `console` parameter required  
-- Examples: List Organization Members, Get Team Details, Audit Event Query
+1. **Organization-scoped.** Require verified `org_id` and forbid `console`. Examples: Organization Members, Team Details, and Audit Event queries.
+2. **Buyer-console-scoped or Seller-console-scoped.** Require verified `org_id` plus the exact `console=buyer` or `console=seller` declared by the route. Examples: Buyer Workspaces and Seller Bid Workspaces.
+3. **Managed Marketplace.** Require `console=marketplace` plus the route's registered authenticated audience and, where the owning record is customer-authored, its verified Organization scope.
+4. **Public Marketplace.** Require neither `console` nor an Organization session and return only the registered public projection.
 
-**For console-scoped queries:**
-
-- Use both `org_id` AND `console` parameter (Buyer|Seller)  
-- If querying Marketplace, use `console: marketplace` or omit for public queries  
-- Examples: List Workspaces (requires `org_id` \+ `console: buyer`), List Bid Workspaces (requires `org_id` \+ `console: seller`)
+Missing required scope, an unexpected scope parameter, a caller whose verified audience differs from the route class, or an unregistered or misclassified list route fails closed. A route cannot infer its class from a request parameter.
 
 Data model definitions in Section 4 will explicitly label each entity as org-scoped or console-scoped.
 
@@ -2413,7 +2410,7 @@ This section maps all 46+ features to their primary interaction pattern and defi
 - Mobile: Long-press Use Case row \> "Delete" option.  
 - Acceptance Criteria:  
   - Right-click Use Case in list \> "Delete" option.  
-  - Confirmation modal: "Delete \[Name\]? This cannot be undone. \[Cancel\] \[Delete\]"  
+  - Confirmation modal: "Delete \[Name\]? You can undo this for 10 seconds. \[Cancel\] \[Delete\]"
   - If Use Case has requirements (\>0), secondary confirmation: "This Use Case has N requirements. They will be deleted. \[Cancel\] \[Delete Anyway\]"  
   - Upon delete, show undo button in toast for 10 seconds.  
   - Undo restores Use Case and all associated requirements.
@@ -3107,7 +3104,7 @@ Every error state names three things, in order:
 
 - **Transient** errors (network, 5xx, rate-limit) auto-retry once on mount with exponential backoff, then surface the error card.
 - **Permanent** errors (404, 403, 410) do not auto-retry.
-- **Plan-gate** errors (402 / `feature_not_entitled`) are distinguished with a yellow banner (not red), primary CTA "Upgrade", secondary CTA "Request Upgrade from Billing Admin".
+- **Plan-gate** errors (403 / `feature_not_available_on_plan`) are distinguished with a yellow banner (not red), primary CTA "Upgrade", secondary CTA "Request Upgrade from Billing Admin".
 
 ### 3.7.5 Illustration Rules {#3.7.5-illustration-rules}
 
@@ -3170,7 +3167,7 @@ Applies to: Requirements Matrix, Scoring Matrix, Traceability Matrix, Selection 
 | Error (row-level, score fails to compute) | Cell-level: red dash with tooltip "Score unavailable: [reason]." Recovery: right-click → `Retry`. Does NOT block the matrix. | `error_recovery_kind = retry` | Auto-retry on next poll cycle |
 | Error (matrix-level, 5xx) | Full-table card: Failure "Requirements couldn't load." Reason "A temporary issue interrupted the request." Recovery: `Retry`. | `error_recovery_kind = retry` | Auto-retry once |
 | Error (plan gate: workspace over limit) | Banner (yellow) at top: "This workspace contains more requirements than your plan allows. Upgrade to view all." Primary CTA: `Upgrade`. Secondary CTA: `Request Upgrade from Billing Admin`. Matrix renders the §39-bound visible quota. | `error_recovery_kind = upgrade_plan` | — |
-| Error (403, workspace access revoked) | Full-matrix card: Failure "You no longer have access to this workspace." Reason "Your workspace membership was changed recently." Recovery: `Return to Workspaces` (primary), `Request Access` (secondary — routes a §29 Inbox item to the Workspace Owner per §5.x). Triggered when the live Convex subscription returns a `feature_not_entitled` / `workspace_access_revoked` error (Appendix I) for the current `WorkspaceMembership` row; the in-flight matrix data is discarded client-side. Distinguishes from Empty by suppressing all Create / Filter affordances. | `error_recovery_kind = no_recovery` | — |
+| Error (403, workspace access revoked) | Full-matrix card: Failure "You no longer have access to this workspace." Reason "Your workspace membership was changed recently." Recovery: `Return to Workspaces` (primary), `Request Access` (secondary — routes a §29 Inbox item to the Workspace Owner per §5.x). Triggered when the live Convex subscription returns a `workspace_access_revoked` error (Appendix I) for the current `WorkspaceMembership` row; the in-flight matrix data is discarded client-side. Distinguishes from Empty by suppressing all Create / Filter affordances. | `error_recovery_kind = no_recovery` | — |
 
 #### 3.7.6.3 Detail Surfaces {#3.7.6.3-detail-surfaces}
 
@@ -5082,6 +5079,12 @@ All data models in Sourcera follow these principles:
 | `trial_expires_at` | Timestamp | Nullable | Required once active |
 | `trial_state` | Enum (Appendix J `trial_state_lifecycle` or `solo_trial_state`) | Required | Uses `solo_trial_state` when `trial_kind` is a Solo migration trial |
 | `trial_outcome` | Enum (Appendix J `solo_trial_outcome`) | Nullable | Required for terminal Solo migration-trial states |
+| `chosen_paid_plan_tier` | Enum | Nullable; Appendix J `buyer_plan_tier` or `seller_plan_tier` according to `console` | Explicit customer choice for a paid conversion; never inferred from a payment method or prior plan |
+| `conversion_consent_at` | Timestamp | Nullable | UTC time of the current explicit paid-conversion consent |
+| `conversion_consent_user_id` | UUID (FK) | Nullable; FK → User | Authorized customer actor who gave the current consent |
+| `conversion_consent_terms_version` | String | Nullable; 1–64 chars | Version of the paid-conversion terms presented to the actor |
+| `conversion_consent_terms_sha256` | String | Nullable; 64 lowercase hex chars | Hash of the exact presented terms; no payment data or customer content |
+| `conversion_consent_revoked_at` | Timestamp | Nullable | When non-null at conversion time, the consent is inactive |
 | `conversion_event_ref` | UUID | Nullable | FK to plan-change, wallet, billing event, or audit event that ended trial |
 | `created_at` | Timestamp | Immutable | UTC |
 | `updated_at` | Timestamp | Auto-updated | UTC |
@@ -5101,7 +5104,7 @@ All data models in Sourcera follow these principles:
 | :---- | :---- | :---- | :---- | :---- |
 | (init) | `pending` / `offer_presented` | Trial eligibility evaluated | Eligible Org / console | Business trial uses `pending`; Solo migration uses `offer_presented` |
 | `pending` / `offer_presented` | `active` | Trial accepted / started | No active conflicting TrialState row | Stamps `trial_started_at` / `trial_expires_at`; Organization.`trial_state_ref` points here |
-| `active` | `converted` | Paid conversion | Plan change commits | `conversion_event_ref` required |
+| `active` | `converted` | Paid conversion | Explicit chosen paid plan; complete, current, unrevoked consent receipt; successful provider charge; plan change commits | `conversion_event_ref` required; payment method alone is insufficient |
 | `active` | `expired` / `expired_unaccepted` / `auto_downgraded` | Expiration job | `trial_expires_at <= now()` | Solo outcomes follow §34.9.5 |
 | `pending` / `offer_presented` / `active` | `canceled` | Customer or Ops cancellation | Actor authorized | Terminal |
 
@@ -5112,6 +5115,7 @@ All data models in Sourcera follow these principles:
 3. Trial expiration cron MUST query `(trial_state, trial_expires_at)` and transition due active trials exactly once.
 4. Organization.`trial_state_ref` MUST point to the active / offered TrialState and MUST clear on terminal state.
 5. TrialState writes MUST emit the billing / audit events registered in §34.9.5 and Appendix C/G when the transition is customer-visible.
+6. A Business Starter trial may enter `converted` only when `chosen_paid_plan_tier`, `conversion_consent_at`, `conversion_consent_user_id`, `conversion_consent_terms_version`, and `conversion_consent_terms_sha256` form a current unrevoked consent receipt and the receipt-bound provider charge succeeds. Otherwise expiration follows the no-charge downgrade path.
 
 ### 4.2.14 UserAccessibilityPreference (Org-Scoped User Preference) {#4.2.14-useraccessibilitypreference}
 
@@ -6094,7 +6098,7 @@ Individual post within an Internal Comment Thread. Follows the normalized thread
 
 **Authoring Intent:** Extracting Post as a first-class entity follows the Gap 3.6 normalization pattern and is required to support full-text-search indexes, mention notification fan-out, and per-post audit. §18.3.1 now uses the same normalized Q&A Post / Q&A Mention structure, retiring the prior inline-post deferral.
 
-**Retention:** Inherits parent Internal Comment Thread retention. On thread soft-delete, Posts inherit soft-delete; on thread hard-delete, Posts hard-deleted within 30 days. Per §40.2, `deleted_placeholder = true` rows are retained indefinitely as tombstones (they contain no PII beyond `author_id`, which is pseudonymized on DSAR). DSAR: `author_id`, `moderated_by`, `created_by`, `updated_by` pseudonymized on subject request; `body` redacted to `[REDACTED_DSAR]` if subject PII is detected; `moderated_reason` similarly redacted; `attachment_ids[]` detached (Attachment §4.6.2 handles its own redaction path); rows retained per §6.8.5.
+**Retention:** Inherits parent Internal Comment Thread retention. On thread soft-delete, Posts inherit soft-delete; on thread hard-delete, Posts hard-delete within 30 days. A `deleted_placeholder = true` row follows the same parent, finalized-Selection-Report, or active-legal-hold horizon; placeholder status alone never extends retention. DSAR: `author_id`, `moderated_by`, `created_by`, `updated_by` pseudonymized on subject request; `body` redacted to `[REDACTED_DSAR]` if subject PII is detected; `moderated_reason` similarly redacted; `attachment_ids[]` detached (Attachment §4.6.2 handles its own redaction path); rows retained per §6.8.5.
 
 **Acceptance Criteria:**
 1. Post create requests MUST resolve `thread_id` to a visible Buyer-only Internal Comment Thread and MUST reject authors who lack permission under the thread's `visibility_scope`.
@@ -13133,7 +13137,7 @@ The inverse cascade is idempotent by `(disqualification_id, reversal_reason, rev
 
 ## 4.8 Billing & AI Accounting Entities {#4.8-billing-and-ai-accounting-entities}
 
-**Authoring Intent.** §4.8 introduces the data-model foundation for the outcome-based consumption model that will replace the current §34 plan/seat surface in a subsequent integration phase (Phase 2 of the pricing-rewrite track, distinct from the v7.0.0 entity-integration phase numbering). These entities collectively hold the truth for: every billable AI invocation across both consoles (`AIOperation`); the authoritative, Ops-managed list of billable capabilities (`CapabilityRegistryEntry`) that supersedes the historic "21 capabilities" hardcoding; the org-pooled value-dollar wallet that buyer- and seller-console capabilities draw against (`AIWallet`); the per-capability machine-readable acceptance/rejection contract (`OutcomeContract`) that drives the §4.8.1 settlement state machine; the 14-day customer-initiated dispute lane (`ContestRecord`); the nightly cost-base re-derivation audit (`CostBaseRecalculationLog`); the per-capability free-operation counter (`FreeAllowanceCounter`) that powers the Free Allowance PLG lever; the Enterprise annual commit with discount bands (`CommittedSpendContract`); the publish-time snapshot that feeds the Public Pricing API (`PricingTableVersion`); the 90-day read-only preservation bucket for downgraded customers (`DowngradeExcessDataBucket`); the periodic seat counter used for plan-gate enforcement and reporting only (`BillingSeatSnapshot` — Sourcera does not bill per seat); the marketplace-discovery revenue line (`MarketplaceDiscoveryRevenueRecord`); the seller outcome signal rule config (`SellerOutcomeSignalConfig`); and the Solo absorbed-envelope internal counter (`SoloEnvelopeCounter`).
+**Authoring Intent.** §4.8 introduces the data-model foundation for the outcome-based consumption model that will replace the current §34 plan/seat surface in a subsequent integration phase (Phase 2 of the pricing-rewrite track, distinct from the v7.0.0 entity-integration phase numbering). These entities collectively hold the truth for: every billable AI invocation across both consoles (`AIOperation`); the authoritative, Ops-managed list of billable capabilities (`CapabilityRegistryEntry`) that supersedes the historic "21 capabilities" hardcoding; the org-pooled value-dollar wallet that buyer- and seller-console capabilities draw against (`AIWallet`); the per-capability machine-readable acceptance/rejection contract (`OutcomeContract`) that drives the §4.8.1 settlement state machine; the 14-day customer-initiated dispute lane (`ContestRecord`); the nightly cost-base re-derivation audit (`CostBaseRecalculationLog`); the per-capability free-operation counter (`FreeAllowanceCounter`) that powers the Free Allowance PLG lever; the Enterprise annual commit with discount bands (`CommittedSpendContract`); the publish-time snapshot that feeds the Public Pricing API (`PricingTableVersion`); the 90-day read-only preservation bucket for downgraded customers (`DowngradeExcessDataBucket`); the informational periodic seat counter used only for reporting, audit, support, and capacity planning (`BillingSeatSnapshot` — Sourcera does not bill per seat); the marketplace-discovery revenue line (`MarketplaceDiscoveryRevenueRecord`); the seller outcome signal rule config (`SellerOutcomeSignalConfig`); and the Solo absorbed-envelope internal counter (`SoloEnvelopeCounter`).
 
 These entities are authored to: (a) make every monetary movement in the platform a queryable, immutable, append-only object; (b) preserve the firewall such that a Buyer Workspace cannot read Seller-console operations and vice versa, while still allowing Org-level pooling at the wallet layer; (c) make residency-locked invoicing (§4.5.5 / §4.4.15 residency model) a first-class concept by binding every ledger row to a `legal_entity` enum; (d) make the cost_base re-derivation a documented, auditable, drift-monitored process rather than a quietly-running cron; and (e) decouple the rate card the customer sees from the cost base Sourcera observes, so an Anthropic price move does not surface as customer-visible repricing.
 
@@ -13880,11 +13884,13 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 
 **Scope.** Platform-scoped. Publicly readable (no auth) for `status=published` rows; Ops-only for drafts.
 
+**Implementation ownership.** The §4.8.9 entity contract owns storage compatibility, immutable snapshots, the deterministic snapshot builder, entity guards, and server-internal resolvers only. §28 / F-499 owns the Public Pricing API. §34.14.5 and §50.12 / F-549 own review, publication, supersession, notification, reconciliation, and rollback transitions.
+
 | Field | Type | Constraints | Notes |
 | :---- | :---- | :---- | :---- |
 | `id` | UUID | Primary key | Auto-generated |
 | `version_label` | String | semver-like, e.g., `2026.04.15.001` | Human-readable; chronological |
-| `status` | Enum | See Appendix J `pricing_table_version_status`: `draft`, `published`, `superseded`, `rolled_back` | |
+| `status` | Enum | See Appendix J `pricing_table_version_status`: `draft`, `under_review`, `approved`, `scheduled`, `published`, `superseded`, `rolled_back` | Storage admits the complete §34.14.5 lifecycle; transition ownership remains there and in §50.12. |
 | `effective_at` | Timestamp | UTC | When this version becomes the canonical Public Pricing API response |
 | `superseded_by_version_id` | UUID (FK) | Nullable | |
 | `published_payload_json` | JSON | ≤ 1,048,576 bytes (1 MB) | Full rate card snapshot: capabilities, value_price_cents, cost_price_cents, currencies, plan tiers, free allowances, retry curves, deprecation banners |
@@ -13894,11 +13900,11 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 | `triggering_change_summary` | String | 0–4000 chars | Free text describing what changed since prior version |
 | `triggering_changes_json` | JSON | ≤ 16000 chars | Structured diff: capability_id → field → prior → new |
 | `breaking_change_flag` | Boolean | Default false | True when a customer-visible price increase or capability removal occurs; triggers 30-day-advance customer notification per Pricing Strategy §11 |
-| `customer_notification_sent_at` | Timestamp | Nullable | Required when `breaking_change_flag=true`; sent ≥ 30 days before `effective_at` |
-| `published_at` | Timestamp | Nullable | UTC; null while draft |
-| `published_by_user_id` | UUID (FK) | Ops user with `ops_finance_admin` | |
+| `customer_notification_sent_at` | Timestamp | Nullable | Required when `breaking_change_flag=true`; sent no later than 30 days before `effective_at` |
+| `published_at` | Timestamp | Nullable | UTC; null before the `published` transition |
+| `published_by_user_id` | UUID (FK) | Nullable before publish; required on `published`, `superseded`, or `rolled_back`; Ops user with `ops_finance_admin` | |
 | `created_at` | Timestamp | Immutable | UTC |
-| `updated_at` | Timestamp | Auto-updated | UTC; only mutable in `draft` |
+| `updated_at` | Timestamp | Auto-updated | UTC; advances only through the governed lifecycle transitions in this section; published payload bytes remain immutable |
 | `created_by` | UUID (FK) | System OR Ops | |
 | `updated_by` | UUID (FK) | Ops | |
 | `deleted_at` | Timestamp | Always NULL | Financial / audit record |
@@ -13915,7 +13921,7 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 
 1. The Public Pricing API MUST return the `published_payload_json` of the row with the most recent `effective_at` ≤ `now` and `status=published`.
 2. A new published row MUST atomically transition the prior row to `superseded`.
-3. `breaking_change_flag=true` MUST require `customer_notification_sent_at ≥ effective_at - 30 days`.
+3. `breaking_change_flag=true` MUST require `customer_notification_sent_at ≤ effective_at - 30 days`.
 4. The endpoint MUST be cacheable for 60 seconds with the `published_payload_hash` as the ETag.
 5. Cursor-based pagination MUST follow §32 patterns; default 50, max 250 (rate cards may grow large).
 
@@ -13989,7 +13995,7 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 
 ### 4.8.11 BillingSeatSnapshot (Org-Scoped, Reporting-Only, Periodic) {#4.8.11-billingseatsnapshot}
 
-**Authoring Intent.** This section and §34.1 prohibit per-seat billing while allowing active-seat counts for reporting and plan-gate enforcement through §4.2.1 `max_members` (historical seed C.86). BillingSeatSnapshot is the periodic point-in-time count of active seats per Org per console for analytics, plan-gate enforcement, and Stripe invoice line-item context. Guests and API-only identities are excluded.
+**Authoring Intent.** This section and §34.1 prohibit per-seat billing. BillingSeatSnapshot is an informational periodic point-in-time count of active seats per Org per console for analytics, audit, support, and capacity planning only. It never creates a charge, entitlement, plan gate, or invoice quantity. Guests and API-only identities are excluded.
 
 **Scope.** Org-scoped; rows are immutable snapshots (one per `(org_id, console, taken_at)` tuple). Many snapshots over time; older snapshots downsampled per retention rules.
 
@@ -13997,7 +14003,7 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 | :---- | :---- | :---- | :---- |
 | `id` | UUID | Primary key | Auto-generated |
 | `org_id` | UUID (FK) | FK → Organization | |
-| `console` | Enum | `buyer`, `seller`, `both` | `both` for combined snapshots; per-console for plan-gate evaluations |
+| `console` | Enum | `buyer`, `seller`, `both` | `both` for combined reporting; per-console for reporting and audit |
 | `taken_at` | Timestamp | UTC; immutable | Snapshot moment |
 | `trigger` | Enum | See Appendix J `billing_seat_snapshot_trigger`: `monthly_cron`, `plan_change`, `manual_audit`, `stripe_invoice_generation`, `dsar_request`, `ops_capacity_review` | Why the snapshot was taken |
 | `active_seats_count` | Integer | ≥ 0 | Excludes guests, API-only identities, deleted users |
@@ -14006,8 +14012,8 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 | `deleted_count_30d` | Integer | ≥ 0 | Members deleted in the trailing 30 days; preserved for audit |
 | `seat_breakdown_by_role_json` | JSON | ≤ 8000 chars | Per-role breakdown (e.g., `{"org_owner":1,"org_admin":3,"member":47,"guest":12}`) |
 | `seat_breakdown_by_team_json` | JSON | ≤ 16000 chars | Per-team rollup for the console |
-| `plan_max_members_at_snapshot` | Integer | ≥ 0 | Snapshot of `Organization.max_members` at the moment |
-| `plan_gate_breach_flag` | Boolean | Default false | True when `active_seats_count > plan_max_members_at_snapshot` (a soft-gate condition that surfaces an upgrade prompt) |
+| `plan_max_members_at_snapshot` | Integer | Nullable; when present ≥ 0 | Legacy compatibility snapshot only; null for every current unlimited-seat plan |
+| `plan_gate_breach_flag` | Boolean | Default false; MUST be false when `plan_max_members_at_snapshot` is null | Informational historical comparison only; never gates access, invoices a seat, or triggers an upsell |
 | `linked_stripe_invoice_id` | String | Nullable; ≤ 200 chars | Set when `trigger=stripe_invoice_generation` |
 | `created_at` | Timestamp | Immutable | UTC; equal to `taken_at` |
 | `created_by` | UUID (FK) | System OR Ops | |
@@ -14015,12 +14021,12 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 
 **Indexes.** `(org_id, console, taken_at DESC)` for the time-series read, `(plan_gate_breach_flag, taken_at)` partial where true for the breach-cohort dashboard, `(trigger, taken_at)` for trigger-correlated reporting.
 
-**Retention.** Daily snapshots retained for 90 days; weekly downsamples retained for 1 year; monthly downsamples retained for 7 years. Snapshots tied to a specific `linked_stripe_invoice_id` retained as long as the invoice (7 years for SOC-2). Retention authority: §40.2.
+**Retention.** Immutable source snapshots retain for Organization life plus 7 years. Derived daily projections retain 90 days, weekly projections 1 year, and monthly projections 7 years. Compaction may delete or replace derived projections only; it never deletes, rewrites, or shortens the immutable source-row history. Retention authority: §40.2.
 
 **Failure Modes Addressed.**
 
 1. **Snapshot taken during a bulk-import (1,000 users in 60 seconds).** Resolved: snapshot uses the database snapshot-isolation level; a long bulk-import is captured at the snapshot moment, not as a transient mid-state.
-2. **Plan downgrade between snapshot and Stripe invoice.** Resolved: `plan_max_members_at_snapshot` is the snapshot-time value; subsequent downgrade does not retroactively rewrite the snapshot.
+2. **Plan downgrade between snapshot and Stripe invoice.** Resolved: a nullable legacy `plan_max_members_at_snapshot` value is immutable historical context only; neither it nor the seat count affects the invoice.
 3. **Snapshot for an Org with no `seller` console plan.** Resolved: per-console snapshots only when the Org has the corresponding plan active; `console=both` snapshots always taken.
 
 **Acceptance Criteria.**
@@ -14028,7 +14034,7 @@ The customer-facing auto-topup configuration surface is capped at the self-serve
 1. Monthly snapshots MUST run on the 1st of each month at 02:00 UTC for every active Org.
 2. Plan-change events MUST trigger an immediate snapshot within 60 seconds.
 3. `active_seats_count` MUST exclude guests, API-only identities, and members with `deleted_at IS NOT NULL`.
-4. `plan_gate_breach_flag` MUST be informational only — Sourcera does not block invoicing when seat counts exceed the soft cap; the breach surfaces as an upgrade prompt to `org_owner` and `billing_admin`.
+4. `plan_gate_breach_flag` MUST be false when `plan_max_members_at_snapshot` is null and MUST remain informational when a legacy value exists. It never blocks access or invoicing and never creates an upgrade prompt by itself.
 5. Snapshots MUST be immutable post-creation; any update attempt rejected with HTTP 422 `billing_seat_snapshot_immutable` (new; Appendix I).
 6. The Public Pricing API MUST NOT expose per-seat pricing; QA test `pricing_api_no_per_seat_pricing` asserts.
 
@@ -14896,6 +14902,7 @@ The term **Billing Admin** is added to Appendix K Glossary as: "Org-scoped role 
 | Transition Sourcera Method phase | `POST /v1/workspaces/{workspace_id}/advance` | ✓ | ✓ | ✗ | ✗ | ✗ | `phase_advanced` |
 | Create / edit Use Case | §32 Workspace Use Case endpoints | ✓ | ✓ | ✓ | ✗ | `∈ profile` (`contributor`, `full_participant`) | `use_case.upserted` |
 | Delete Use Case | §32 Workspace Use Case endpoints | ✓ | ✓ | ✗ | ✗ | ✗ | `use_case.deleted` |
+| Restore Use Case within the signed undo window | §32 Workspace Use Case endpoints | ✓ | ✓ | ✗ | ✗ | ✗ | `use_case.restored` |
 | Create / edit Requirement | §32 Requirement endpoints | ✓ | ✓ | ✓ (assigned Use Cases only) | ✗ | `∈ profile` (`contributor`, `full_participant`; assigned Use Cases only) | `requirement.upserted` |
 | Delete Requirement | §32 Requirement endpoints | ✓ | ✓ | ✗ | ✗ | own authored requirement only when profile allows | `requirement.deleted` |
 | View vendor Responses | §32 Response endpoints | ✓ | ✓ | ✓ (assigned Use Cases) | ✓ | `∈ profile` / assigned scope | `response.viewed` |
@@ -16382,7 +16389,7 @@ A DSAR right-to-erasure request on a user identity MUST cascade across all ownin
 | §4.8.7 | FreeAllowanceCounter | 5 (financial reconciliation) | Pattern A on counter rows (no subject-FK); Pattern B on parent Org-life | §40.2 row (v7.1.1 backlog). |
 | §4.8.8 | CommittedSpendContract | 5 (binding contract) | Pattern B on `signed_by_user_id` | §6.8.5 row 3 covers. |
 | §4.8.9 | PricingTableVersion | 9 (versioned platform contract) | Pattern B on `published_by_user_id`, `created_by`, `updated_by` | §40.2 row (v7.1.1 backlog); version values retained, publisher identity pseudonymizes. |
-| §4.8.10 | DowngradeExcessDataBucket | 4 | Pattern A on materialized buckets | §40.2 row enforces 90-day TTL per entity-name contract (v7.1.1 backlog). |
+| §4.8.10 | DowngradeExcessDataBucket | 4 | Pattern A on materialized buckets | §34.6.3 and §40.2 govern 90-day hot read-only preservation followed by the registered archive and restoration contract; the bucket is not hard-deleted at day 90. |
 | §4.8.11 | BillingSeatSnapshot | 5 (financial reporting) | Pattern A on snapshot rows (no subject-FK) | §40.2 row (v7.1.1 backlog). |
 | §4.8.12 | MarketplaceDiscoveryRevenueRecord | 5 (financial) | Pattern A on aggregate rows; Pattern B on `attributed_user_id` | §6.8.5 row 4 covers. |
 | §4.8.13 | SellerOutcomeSignalConfig | 9 | Pattern B on `published_by_user_id`, `created_by`, `updated_by` | Platform-life; versioned config values retained, publisher / actor FKs pseudonymize. |
@@ -17248,10 +17255,11 @@ When an Organization enters `deletion_in_progress` status, the following cascade
 **Subscription contract.**
 
 1. Every page or component that observes mutable state MUST register a Convex reactive query subscription via the `useQuery` hook (frontend) or the `runQuery` server-side primitive (worker).
-2. Subscriptions are scope-isolated by `org_id` + `console` + `workspace_id` (where applicable) by default; cross-Org observation requires explicit Ops authorization per §50.2.
+2. Subscriptions inherit the exact §1.4 route class. Organization-scoped subscriptions bind verified `org_id` and forbid `console`; Buyer and Seller subscriptions bind verified `org_id` plus the exact console; managed Marketplace subscriptions bind their registered audience and applicable Organization scope; public Marketplace subscriptions bind only the public projection. Workspace scope is additionally required where the owning route declares it. Cross-Org observation requires explicit Ops authorization per §50.2.
 3. State changes are pushed via Convex's reactive layer; consumers MUST NOT poll. Polling-based watchers are a deploy-time validator failure (`convex_polling_watcher_violation`).
 4. Optimistic mutations are reconciled against authoritative state via the `useMutation` hook with explicit reconciliation handlers; reconciliation conflicts are surfaced via the standard error-card UX (§3.7).
 5. Reactive query latency MUST satisfy the §44.1 p95 ≤ 500 ms commit-to-observation budget. Breach triggers an Ops alert via §42.2.
+6. Every cursor, cache entry, subscription, export envelope, and reactive result MUST bind to every verified Organization, console, Workspace, or audience value applicable to its §1.4 route class, plus the policy hash and lineage that created it. Re-authentication or an authorized console switch MUST invalidate incompatible state before render. Resume is permitted only when all applicable bindings are identical; otherwise the client starts a fresh authorized query. Stale state MUST NOT render, serialize, or export.
 
 ### 7.5.3 Reactivity SLO {#7.5.3-reactivity-slo}
 
@@ -20965,7 +20973,7 @@ This table resolves parent and privacy events against the current authority hier
 | :---- | :---- | :---- | :---- |
 | Workspace soft-delete | In the parent deletion transaction, every non-deleted Evaluation Scenario is soft-deleted with the Workspace. No child may remain queryable after the parent is soft-deleted. | Scenario lists, comparisons, simulation, and exports return the documented deleted-Workspace response; no stale Scenario result is rendered. | Each affected Scenario produces the required system `scenario.deleted` AuditEvent. The Scenario row purges with the Workspace under §40.2; separately retained AuditEvents follow their §40.2 row. The idempotency key is `(workspace_id, scenario_id, workspace_deleted_at)`; replay is a no-op. |
 | Vendor disqualification or reversal | §4.7.2 / §25.3 are authoritative. The cascade does **not** mutate `parameters.excluded_vendors` or the historical `results` snapshot. | The buyer-only Scenario read model joins active, non-reversed disqualifications for the Workspace and decorates the matching `ranked_vendors[]` entry with derived `disqualified=true`; it is rendered as excluded and cannot be selected in comparison, sensitivity, or report inclusion. Every subsequent recalculation excludes that vendor under §25.3. A reversal removes only the derived decoration; a recalculation is required to produce a new active ranking. | The Vendor Disqualification Record and its cascade action are the audit source; no synthetic Scenario update event is written because the Scenario row is unchanged. Seller, Marketplace, and Console Bridge surfaces never receive the Scenario result or its derived flag. |
-| Use Case soft-delete | The same successful Use Case delete transaction removes that Use Case ID from every affected Scenario `weight_overrides` map and `excluded_use_cases` array, increments Scenario `version`, and marks existing results stale. This prevents a deleted FK from surviving into the next Scenario validation or recalculation. | A Use Case that is merely excluded by a Scenario remains in `excluded_use_cases` while the Use Case exists; a deleted Use Case is not rendered as a selectable Scenario parameter. Historical result snapshots may retain only the non-rendered ID needed for audit replay. | Each changed Scenario writes one system `scenario.updated` AuditEvent with the removed IDs as a canonical diff. This reference-maintenance mutation does not invoke `scenario_modeling`, create an AIOperation, or debit a wallet. The transaction is idempotent on `(use_case_id, deleted_at, scenario_id)`. |
+| Use Case soft-delete and undo | The same successful Use Case delete transaction removes that Use Case ID from every affected Scenario `weight_overrides` map and `excluded_use_cases` array, increments Scenario `version`, marks existing results stale, and records the exact per-Scenario removals in the immutable delete AuditEvent correlation. Undo restores exactly those Requirement and Scenario references in the same restore transaction; it merges the recorded keys without overwriting unrelated later Scenario edits. | A Use Case that is merely excluded by a Scenario remains in `excluded_use_cases` while the Use Case exists; a deleted Use Case is not rendered as a selectable Scenario parameter. Historical result snapshots may retain only the non-rendered ID needed for audit replay. | Each changed Scenario writes one system `scenario.updated` AuditEvent with the removed or restored IDs as a canonical diff. This reference-maintenance mutation does not invoke `scenario_modeling`, create an AIOperation, or debit a wallet. Delete is idempotent on `(use_case_id, deleted_at, scenario_id)`; restore is idempotent on `(delete_audit_event_id, scenario_id)`. |
 | User deprovisioning or user DSAR | Evaluation Scenario has attribution FKs, not a user-owned access grant. The deprovisioned user immediately loses role-derived Scenario access; `created_by` and `updated_by` remain UUID FKs and follow §6.8.4.1 Pattern B. | Scenario content remains Organization-owned. If a Scenario body contains subject-identifying free text, the §6.8.4.5 sweep redacts it before the next buyer read; no seller or Marketplace projection exists. | No Scenario ownership transfer or `created_by` substitution occurs. The User-row pseudonymization and its idempotent audit path are the sole identity mutation. |
 | Seller-user DSAR, Seller Org closure, Target Account hard-delete | A Seller-user DSAR pseudonymizes seller User fields, not the Seller Organization or `vendor_id` structural references. A Target Account hard-delete occurs only with its parent Workspace cascade, so no surviving Scenario may retain that reference. | `vendor_id` in a retained historical result is an Organization identifier, not an erased user identifier. It is never replaced with a fabricated anonymized vendor handle. On Org / Workspace deletion, the Scenario is removed under the parent cascade instead. | This resolves the apparent "vendor hard-delete" conflict in favor of §4.3.20, §4.7.2, §6.8.4, and §40.2. The relevant parent deletion / DSAR record is the audit source; Scenario has no independent retry or retention override. |
 
@@ -36434,7 +36442,7 @@ The `public_pricing_unauth` class shares no counters with the authenticated rate
 
 **Not exposed in v1.** MCPSessionTokenRecord mint and revoke are internal-only security operations under §22.8.3 / §22.8.3.1. They are not customer endpoints, do not accept an Appendix J `api_token_scope`, and MUST NOT appear in generated public OpenAPI output. The internal orchestrator and audited Ops security path are the only callers.
 
-**Endpoint-detail authority.** This section is the API index. Full request / response / error / rate-limit / idempotency detail lives in the cited owning section for each family. D-V8.1-001 closes the remaining list-only gap by binding Workspaces, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments, Audit Events, and Users & Organization to §32.10.9. Families with pre-existing detail remain single-sourced in their cited sections: Phase Advancement (§10.16), Vendor Disqualification (§25.3), Scenario Modeling (§32.10.3.E), TCO Modeling (§32.5.2), Workspace Analytics (§32.10.3.A), Policy Ingestion (§32.10.3.C), Template Library (§32.10.3.D), Phase 13 Integration Exports (§32.10.3.F), Intelligence (§32.5.1), Webhook Subscriptions (§31.11.3), Vendor Opt-Outs (§27.10.6), Marketplace Discovery (§27.11.7), Billing (§32.8), and Seller KB Export (§32.9).
+**Endpoint-detail authority.** This section is the API index. Full request / response / error / rate-limit / idempotency detail lives in the cited owning section for each family. D-V8.1-001 closes the remaining list-only gap by binding Workspaces, Use Cases, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments, Audit Events, and Users & Organization to §32.10.9. Families with pre-existing detail remain single-sourced in their cited sections: Phase Advancement (§10.16), Vendor Disqualification (§25.3), Scenario Modeling (§32.10.3.E), TCO Modeling (§32.5.2), Workspace Analytics (§32.10.3.A), Policy Ingestion (§32.10.3.C), Template Library (§32.10.3.D), Phase 13 Integration Exports (§32.10.3.F), Intelligence (§32.5.1), Webhook Subscriptions (§31.11.3), Vendor Opt-Outs (§27.10.6), Marketplace Discovery (§27.11.7), Billing (§32.8), and Seller KB Export (§32.9).
 
 ### Workspaces
 
@@ -37370,7 +37378,7 @@ The following conventions apply to every endpoint in §32.8 unless an endpoint e
       "wallet_overage_supported": true,
       "wallet_overage_default_cap_value_dollars_cents": 0,
       "free_allowance_capabilities_count": 21,
-      "plan_max_members_soft_cap": 25
+      "max_members": null
     }
   ],
   "capabilities": [
@@ -38725,7 +38733,7 @@ Non-Enterprise upgrades return `status=applied` immediately with `effective_at` 
 
 ### 32.8.19 GET /v1/orgs/{org_id}/seat-snapshots — Read BillingSeatSnapshots {#32.8.19-get-seat-snapshots}
 
-**Purpose.** List BillingSeatSnapshot records (periodic seat-count records used for Pro-Trial-Seat-aware and seat-additive billing calculations). Maps to §5.2.1.1 Operation #18.
+**Purpose.** List informational BillingSeatSnapshot records for authorized reporting, audit, support, and capacity review. The response is never a billing-quantity or per-seat-pricing source. Maps to §5.2.1.1 Operation #18.
 
 **Authentication.** `read:billing`.
 
@@ -38744,11 +38752,12 @@ Non-Enterprise upgrades return `status=applied` immediately with `effective_at` 
       "snapshot_id": "bss_2a9f1e3b",
       "console_enum": "buyer",
       "snapshot_at": "2026-04-01T00:00:00Z",
-      "plan_enum": "business_growth",
-      "paid_seat_count": 12,
-      "pro_trial_seat_count": 0,
-      "total_chargeable_seats": 12,
-      "seat_price_value_cents_at_snapshot": 4500
+      "active_seats_count": 12,
+      "guest_count": 2,
+      "api_only_count": 1,
+      "deleted_count_30d": 0,
+      "plan_max_members_at_snapshot": null,
+      "plan_gate_breach_flag": false
     }
   ],
   "pagination": {
@@ -41031,7 +41040,7 @@ The seller response uses the same envelope, but every `source_ref.handle`, `targ
 
 Authored Extension - requires human sign-off. D-V8.1-001 identified that §32.5 still indexed core API families by method and path only. This pack materializes the missing API contract detail for the remaining live §32.5 families while preserving the existing entity authority in §4, RBAC authority in §5, API-token authority in §6.6, pagination authority in §32.3, rate-limit authority in §32.4.5, and error-code authority in Appendix I. Registered as AE-V72REM-PH8P81-CORE-API-P1-01.
 
-**Scope.** This pack covers Workspaces, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments alias binding, Audit Events, and Users & Organization. It does not replace the more specific endpoint detail already authored in §10.16, §25.3, §25.7.9, §32.5.1, §32.5.2, §32.8, §32.9, or §32.10.3-§32.10.7; those sections remain the single source for their specialized workflows.
+**Scope.** This pack covers Workspaces, Use Cases, Requirements, Responses, Scores, Vendors / Target Accounts, Selection Reports, Traceability Matrices, Capability Declarations, Internal Comments alias binding, Audit Events, and Users & Organization. It does not replace the more specific endpoint detail already authored in §10.16, §25.3, §25.7.9, §32.5.1, §32.5.2, §32.8, §32.9, or §32.10.3-§32.10.7; those sections remain the single source for their specialized workflows.
 
 **Shared conventions.**
 
@@ -41056,6 +41065,8 @@ Authored Extension - requires human sign-off. D-V8.1-001 identified that §32.5 
 | PATCH | `/v1/workspaces/{workspace_id}` | `WorkspacePatchRequest` | `WorkspaceMutationResponse` | `write:workspaces` | Workspace owner, Org Admin, or Use Case Lead for allowed fields | `data_mutation` | Required | `WorkspaceWriteErrors` |
 | DELETE | `/v1/workspaces/{workspace_id}` | `WorkspaceDeleteRequest` | `WorkspaceMutationResponse` | `admin:workspaces` | Org Owner / Org Admin; soft-delete only | `data_mutation` | Required | `WorkspaceWriteErrors` |
 | POST | `/v1/workspaces/{workspace_id}/advance` | §10.16 request | §10.16 response | `write:workspaces` | §10.16 phase-advancement authority | `data_mutation` | Required | §10.16 errors |
+| DELETE | `/v1/workspaces/{workspace_id}/use-cases/{use_case_id}` | `UseCaseDeleteRequest` | `UseCaseDeleteResponse` | `write:workspaces` | Workspace Owner or Workspace Admin | `data_mutation` | Required | `UseCaseWriteErrors` |
+| POST | `/v1/workspaces/{workspace_id}/use-cases/{use_case_id}/restore` | `UseCaseRestoreRequest` | `UseCaseRestoreResponse` | `write:workspaces` | Workspace Owner or Workspace Admin | `data_mutation` | Required | `UseCaseWriteErrors` |
 | GET | `/v1/workspaces/{workspace_id}/requirements` | `RequirementListQuery` | `RequirementListResponse` | `read:requirements` | Workspace member or scoped guest with requirement visibility | `workspace_read` | N/A | `RequirementReadErrors` |
 | POST | `/v1/workspaces/{workspace_id}/requirements` | `RequirementWriteRequest` | `RequirementMutationResponse` | `write:requirements` | Workspace owner, Use Case Lead, or editor role per §12 | `data_mutation` | Required | `RequirementWriteErrors` |
 | GET | `/v1/workspaces/{workspace_id}/requirements/{requirement_id}` | None | `RequirementReadResponse` | `read:requirements` | Same as list | `workspace_read` | N/A | `RequirementReadErrors` |
@@ -41145,6 +41156,16 @@ Content-Type: application/json
 {"data":{"score_exclusion_proposal":{"id":"sep_123","status":"pending","version":1},"score":{"id":"sc_123","version":4}},"audit_event_id":"ae_123","emitted_event_ids":[]}
 ```
 
+#### 32.10.9.A.4 Use Case delete and undo endpoints {#32.10.9.a.4-use-case-delete-and-undo-endpoints}
+
+`DELETE /v1/workspaces/{workspace_id}/use-cases/{use_case_id}` and `POST /v1/workspaces/{workspace_id}/use-cases/{use_case_id}/restore` are the only public Use Case delete and undo routes. Both require `Authorization: Bearer <api_token>`, `write:workspaces`, a Buyer or both-console token, Workspace Owner or Workspace Admin authority, `Idempotency-Key`, and the `data_mutation` rate class. Foreign-Org, foreign-Workspace, seller-console, deleted-beyond-visibility, or otherwise non-visible targets return the same HTTP 404 `invalid_use_case_id` response.
+
+**Delete contract.** `UseCaseDeleteRequest` contains required `expected_version` and a trimmed `delete_reason` of 1–500 characters. A successful delete soft-deletes the Use Case and exactly its eligible child Requirements, applies the §14.6.5 Scenario-reference removals, and writes one immutable `use_case.deleted` AuditEvent in the same transaction. `UseCaseDeleteResponse` returns the safe deleted Use Case projection, affected Requirement and Scenario counts, `delete_audit_event_id`, a server-signed `undo_token`, and `undo_expires_at = deleted_at + 10 seconds`. The token binds Organization, Workspace, Use Case, delete AuditEvent, actor, and expiry; the client cannot supply or alter child or Scenario references.
+
+**Restore contract.** `UseCaseRestoreRequest` contains only the server-signed `undo_token`. The server resolves its immutable delete AuditEvent correlation and restores the Use Case to `pre_delete_status`, the exact Requirements soft-deleted by that event, and the exact Scenario references removed by that event. Scenario restoration merges only the recorded keys and array entries and MUST NOT overwrite unrelated later Scenario edits. The restore transaction rechecks Appendix L.14 phase guards and §34.1.1 / §39 Use Case and Requirement caps before any write. An expired, mismatched, replay-conflicting, over-cap, phase-forbidden, or incomplete correlation restores nothing and returns `use_case_invalid_state_transition` or `plan_limit_exceeded` as applicable. `UseCaseRestoreResponse` returns the safe restored Use Case projection, `restored_requirement_count`, `restored_scenario_reference_count`, `original_delete_audit_event_id`, `restore_audit_event_id`, and `restored_at`; it never returns hidden child identifiers or a reusable undo token.
+
+**Atomicity and side effects.** Delete and restore are all-or-nothing across the Use Case, Requirements, Scenario reference maintenance, and AuditEvent writes. Restore writes exactly one immutable `use_case.restored` AuditEvent whose correlation points to the original delete AuditEvent. Matching-key replay returns the original response; same key with a different request returns `idempotency_key_request_mismatch`. Neither operation emits an email, Inbox item, or customer webhook.
+
 #### 32.10.9.B Core buyer request schemas {#32.10.9.b-core-buyer-request-schemas}
 
 | Schema | Fields |
@@ -41153,6 +41174,8 @@ Content-Type: application/json
 | `WorkspaceCreateRequest` | `name`, `description`, `use_case_id`, `template_id` nullable, `owner_user_id`, `evaluation_method`, `residency_region`, `currency_code`, `metadata_json` nullable. Workspace phase initializes per §4.3.1 / §10. |
 | `WorkspacePatchRequest` | `name`, `description`, `owner_user_id`, `status`, `archive_reason`, `metadata_json`, `expected_version`. Phase changes use §10.16 and MUST NOT be accepted through this generic PATCH route. |
 | `WorkspaceDeleteRequest` | `delete_reason`, `expected_version`. The operation sets `deleted_at` / archive state per §4.3.1 and §40.2; it is not a hard-delete. |
+| `UseCaseDeleteRequest` | `delete_reason`, `expected_version`. Canonical behavior and response fields are §32.10.9.A.4. |
+| `UseCaseRestoreRequest` | `undo_token`. The server derives the delete AuditEvent correlation and every restoration target; client-supplied child or Scenario references are rejected. |
 | `RequirementListQuery` | `use_case_id`, `requirement_type`, `priority`, `state`, `source`, `updated_since`, `cursor`, `limit`. |
 | `RequirementWriteRequest` | `use_case_id`, `parent_requirement_id` nullable, `title`, `description`, `requirement_type`, `priority`, `source`, `traceability_refs_json` nullable, `expected_version` for PATCH. |
 | `RequirementAmendmentCreateRequest` | `expected_requirement_version`, `amendment_kind`, `patch`, `diff_summary`, `rationale_internal` nullable, `effective_at`; canonical detail and field constraints are §32.10.9.A.1 / §4.3.4.1. |
@@ -41170,7 +41193,7 @@ Content-Type: application/json
 | `SelectionReportCreateRequest` | `selection_report_draft_id`, `selection_record_id`, `report_type`, `format`, `include_sections[]`, `approval_workflow_id` nullable, `expected_workspace_version`. |
 | `TraceabilityMatrixListQuery` | `use_case_id`, `requirement_id`, `matrix_kind`, `updated_since`, `cursor`, `limit`. |
 
-**Response envelope shapes.** Read and mutation responses use §32.3 envelopes with these `data` keys: `workspace`, `requirement`, `response`, `score`, `score_exclusion_proposal`, `target_account`, `selection_report`, `traceability_matrix`, or plural list keys for list endpoints. Mutation responses additionally include `version`, `audit_event_id`, and `emitted_event_ids[]`. `ScoreExclusionProposalResponse` omits raw reasons and reviewer identities for callers without approval authority, and is never a Seller / Marketplace / public response shape. List responses include `pagination` from §32.3. Entity fields are projections of the owning §4 entity tables and MUST NOT introduce alias field names.
+**Response envelope shapes.** Read and mutation responses use §32.3 envelopes with these `data` keys: `workspace`, `use_case`, `requirement`, `response`, `score`, `score_exclusion_proposal`, `target_account`, `selection_report`, `traceability_matrix`, or plural list keys for list endpoints. Mutation responses additionally include `version`, `audit_event_id`, and `emitted_event_ids[]`. `UseCaseDeleteResponse` and `UseCaseRestoreResponse` additionally carry only the bounded correlation fields defined in §32.10.9.A.4. `ScoreExclusionProposalResponse` omits raw reasons and reviewer identities for callers without approval authority, and is never a Seller / Marketplace / public response shape. List responses include `pagination` from §32.3. Entity fields are projections of the owning §4 entity tables and MUST NOT introduce alias field names.
 
 #### 32.10.9.C Core buyer error sets {#32.10.9.c-core-buyer-error-sets}
 
@@ -41178,6 +41201,7 @@ Content-Type: application/json
 | :---- | :---- |
 | `WorkspaceReadErrors` | `invalid_workspace_id`, `workspace_not_found`, `token_scope_insufficient`, `query_unsupported_filter_combination`, `pagination_cursor_expired`, `rate_limit_exceeded` |
 | `WorkspaceWriteErrors` | `invalid_workspace_id`, `workspace_not_found`, `invalid_use_case_id`, `token_scope_insufficient`, `idempotency_key_request_mismatch`, `bad_request`, `rate_limit_exceeded` |
+| `UseCaseWriteErrors` | `invalid_workspace_id`, `invalid_use_case_id`, `token_scope_insufficient`, `idempotency_key_request_mismatch`, `use_case_invalid_state_transition`, `plan_limit_exceeded`, `bad_request`, `rate_limit_exceeded` |
 | `RequirementReadErrors` | `invalid_workspace_id`, `invalid_requirement_id`, `token_scope_insufficient`, `query_unsupported_filter_combination`, `pagination_cursor_expired`, `rate_limit_exceeded` |
 | `RequirementWriteErrors` | `invalid_workspace_id`, `invalid_requirement_id`, `invalid_use_case_id`, `token_scope_insufficient`, `idempotency_key_request_mismatch`, `bad_request`, `rate_limit_exceeded` |
 | `RequirementAmendmentWriteErrors` | `invalid_workspace_id`, `invalid_requirement_id`, `token_scope_insufficient`, `idempotency_key_request_mismatch`, `material_amendment_notice_below_minimum`, `requirement_amendment_required`, `requirement_amendment_phase_restricted`, `requirement_amendment_version_conflict`, `requirement_amendment_pending_conflict`, `requirement_amendment_patch_forbidden`, `phase_lock_violation`, `rate_limit_exceeded` |
@@ -41407,6 +41431,7 @@ curl -sS -H "Authorization: Bearer $SOURCERA_TOKEN" \
 8. List endpoints in §32.10.9 MUST use §32.3 cursor semantics and MUST NOT define a duplicate inline page-size limit.
 9. QA MUST include at least one contract test per endpoint family in this pack plus one generated-reference test that confirms legacy Internal Comment compatibility aliases appear only as deprecated alias-map entries.
 10. The Requirement Amendment endpoint MUST enforce §4.3.4.1 and §10.6 before any source or seller side effect. A material floor violation returns HTTP 422 `material_amendment_notice_below_minimum`; no direct Phase 6–9 PATCH bypass is allowed.
+11. The Use Case delete/restore contract test MUST prove the 10-second signed correlation, exact Requirement and Scenario restoration, unrelated-Scenario-edit preservation, expired-token rejection, all-or-nothing failure, idempotent replay, and absence of email, Inbox, or customer-webhook side effects.
 
 # 33\. Enterprise Security & Compliance {#33.-enterprise-security-and-compliance}
 
@@ -42253,7 +42278,7 @@ Acceptance criteria:
 
 ## 34.7 Billing Seat Count {#34.7-billing-seat-count}
 
-Per MS C.86 and §4.8.11 BillingSeatSnapshot, Sourcera does **NOT bill per seat** under any plan. Seats are unlimited on every paid tier (BPS §3 / SPS §3 / MS §2). §34.7 documents the policy rules that govern the periodic seat counter used for reporting and plan-gate enforcement only.
+Per MS C.86 and §4.8.11 BillingSeatSnapshot, Sourcera does **NOT bill per seat** under any plan. Seats are unlimited on every paid tier (BPS §3 / SPS §3 / MS §2). §34.7 governs an informational periodic seat counter used only for reporting, audit, support, and capacity planning.
 
 ### 34.7.1 What Counts as a Seat
 
@@ -42277,12 +42302,12 @@ Per MS C.86 and §4.8.11 BillingSeatSnapshot, Sourcera does **NOT bill per seat*
 | DSAR request | Snapshot taken at DSAR start to preserve seat-state context |
 | Ops capacity review | Quarterly, for cohort planning |
 
-### 34.7.3 Plan-Gate Enforcement (Soft)
+### 34.7.3 Informational Compatibility Fields
 
-The v6.0.0 §39 / §34.1 had `max_members` caps per plan tier. Under v2 the plan tiers **do not enforce a seat cap as a billing dimension**. The `plan_max_members_at_snapshot` field on BillingSeatSnapshot is preserved for legacy compatibility and is informational only:
+The v6.0.0 §39 / §34.1 had `max_members` caps per plan tier. Current plans have unlimited seats. The nullable `plan_max_members_at_snapshot` field is retained only to read historical snapshots and is null on current-plan snapshots:
 
-- `plan_gate_breach_flag=true` (when `active_seats_count > plan_max_members_at_snapshot`) is **informational only**; Sourcera does NOT block invoicing or feature access on seat count.
-- The breach surfaces as an upgrade prompt to `org_owner` and `billing_admin` ("You have N members; consider plan X for additional governance features"), per §4.8.11 acceptance criterion #4.
+- `plan_gate_breach_flag` is false whenever `plan_max_members_at_snapshot` is null. A legacy non-null comparison is **informational only**; Sourcera does NOT block invoicing, feature access, or membership on seat count.
+- No customer upgrade prompt, price, invoice quantity, entitlement, or plan transition may be derived solely from seat count or either compatibility field.
 - The Public Pricing API MUST NOT expose per-seat pricing under any plan; QA test `pricing_api_no_per_seat_pricing` asserts (§4.8.11 acceptance criterion #6).
 
 ### 34.7.4 Deprovisioning Behavior
@@ -42581,12 +42606,14 @@ This matrix is the runtime contract for plan-gated AI capabilities and the close
 | :---- | :---- |
 | Trigger | New Org signup via Buyer Console (Google/Microsoft SSO; no credit card) |
 | Effective plan | `business_starter` for 14 days |
-| Wallet | $50 included budget (Business Starter monthly cap, prorated to the trial period); overage off by default; auto-topup off by default |
+| Wallet | $50 total included budget for the full 14-day trial; no proration, reset, or renewal; overage off by default; auto-topup off by default |
 | Free Allowance | All `customer_billed` capabilities receive their default 10-op allowance per §4.8.7 |
-| End-of-trial behavior (day 15, no payment method) | Auto-downgrade to `buyer_free`; `included_budget_remaining` decrements to $5/mo (Free); excess data flow per §34.6 (DowngradeExcessDataBucket) |
-| End-of-trial behavior (day 15, payment method on file) | Conversion to chosen plan tier; carry-over per §34.5.1 |
+| End-of-trial behavior (day 15, no confirmed paid conversion) | Auto-downgrade to `buyer_free` without charging any stored payment method; the trial wallet closes without carry-over and Buyer Free starts a new $5 monthly budget; excess data flow per §34.6 (DowngradeExcessDataBucket) |
+| End-of-trial behavior (day 15, confirmed paid conversion) | Charge and conversion require both an explicit stored chosen Buyer plan and a current unrevoked stored conversion-consent receipt, followed by a successful receipt-bound provider charge. A missing, failed, stale, revoked, or unproved charge follows the no-charge Buyer Free downgrade path. A payment method alone never authorizes a charge. Carry-over follows §34.5.1. |
 | Trial-expiry notifications | Day 11: `trial_expiring` (Appendix C). Day 14: `trial_expiring_today` (Appendix C). Day 15 on auto-downgrade: `plan_downgrade_complete` (Appendix C) + bucket-creation notice if overages |
 | Audit | `org.trial_started` and `org.trial_ended` events with actor, plan tier, wallet state |
+
+**Activation boundary.** Buyer signup succeeds only after the Organization, Stripe Customer, TrialState, effective plan, wallet, allowances, trial reference, AuditEvent, and signup outbox rows exist, agree, and pass readback. Provider work uses idempotency keys outside the Convex transaction; the local graph, audit, and outbox commit atomically. Any local or provider failure compensates orphaned provider work and returns a retryable failure; it MUST NOT return a partially activated Organization or silently fall back to `buyer_free`. F-916 owns activation. F-533 owns only the day-11 through day-15 lifecycle after activation.
 
 ### 34.9.2 Seller Onboarding (No Trial; Free Is the On-Ramp)
 
@@ -45821,7 +45848,6 @@ The three rows are distinct contracts. The storage ceiling is defense in depth, 
 | WebhookEventRegistryEntry (§31.11.6) | Platform-life. Active and deprecated versions are retained indefinitely as delivery/audit authority; disabled unpublished drafts, if any, purge 30 days after replacement. No customer content or subject PII is permitted. Globally replicated source metadata is read-only outside the compiler publication transaction; `source_commit_sha`, schema hash, and catalog version remain immutable per version. |
 | GDPR DSAR processing SLA (V9 reword — closes D-9.1R-016 entity-vs-processing-time misuse; amended by D-9.2-010 P1) | **Processing-time SLA only:** statutory DSAR fulfillment follows the §6.8.6 receipt-based window from `received_at` / `statutory_deadline_at`; `verified_at` starts the operational worker clock only and cannot extend the statutory deadline. Cascade pause accounting follows §6.8.4.6; verification timing follows §6.8.6.1. **NOT entity retention** — DSARRequest entity retention is governed by the dedicated DSARRequest row below (7y per §6.8.5 audit-integrity exemption). |
 | Deprovisioned user (SCIM) | Owned entities reassigned within 24 hours. User record retained but marked `deprovisioned`. |
-| Internal Comment Thread / Post / Mention | Life of parent entity (Workspace / Use Case / Requirement / Response / Scenario / Selection Report draft). On parent soft-delete, cascade soft-delete + 30-day purge. |
 | Q&A Thread / Post / Mention (§18.3.1) | Life of parent Workspace. On Workspace soft-delete, cascade soft-delete to Q&A Thread, Q&A Post, and Q&A Mention rows and purge after the 30-day processing window unless linked to finalized Selection Report / legal-hold evidence. On Workspace cancellation, follows §10.14 cancellation grace + processing window. DSAR Pattern B pseudonymizes `author_user_id`, `created_by`, `updated_by`, `moderated_by`, and `mentioned_user_id`; body fields are swept per §6.8.4.5. Residency: inherited from Workspace `data_residency_region`; seller projections inherit Bid Workspace residency and carry only the §4.7.1 allowed field set. |
 | Q&A Attachment (§18.5.2 / §4.6.2 owner_entity_type `qa_thread_post`) | Linked attachments inherit parent Q&A Post retention and purge with the parent post after the 30-day cascade window. Presigned orphan uploads purge after 24 hours per §4.6.2. Malware-positive binaries purge immediately while metadata follows §4.6.2 forensic-retention rules. DSAR binary detach follows §4.6.2 Attachment within 72 hours, with Q&A Post body links redacted in the same DSAR cascade. |
 | Presence Record | Ephemeral (Convex session). Evicted 60s after last heartbeat or on explicit disconnect. Never written to cold storage. Not subject to DSAR export. Excluded from round-trip fidelity per §40.4. |
@@ -45936,7 +45962,7 @@ The three rows are distinct contracts. The storage ceiling is defense in depth, 
 | **Triage Queue Item / AI Response Suggestion Payload / Vendor Response AI Audit (§9.2 / §9.4)** — v7.2.0-REM Phase 5.1 residual P1 remediation | Triage Queue Item routing rows retain for the parent Bid Workspace life + 7 years when tied to a submitted BidResponse or billing / outcome evidence; unsubmitted, non-audit routing rows cascade with the parent Bid Workspace. Manual-remap reason text participates in §6.8.4.5 body-field PII sweep and is not buyer-visible. AI Response Suggestion generated text retained 90 days for QA / model-eval, then hard-purged or anonymized to non-reversible aggregate metrics. `ai_suggested_payload_hash`, approval timestamps, decision outcome, and `edits_made` retain with the Vendor Response audit row for Bid Workspace life + 7 years; `approved_by_user_id` follows §6.8.4 Pattern B. Residency follows Seller Org / Bid Workspace residency; generated text never crosses the buyer firewall. |
 | **Marketplace cluster (§4.5 — V9 partial coverage; v7.1.1 entity-rewrite cycle absorbs the residual 7 entities)** — closes D-9.1R-013 P1 partially | **Marketplace Listing (§4.5.1)**: Platform-life with deprecation 180d → archived. **EOI Record (§4.5.2)**: 24m raw + monthly aggregates retained per Usage Event pattern. **NDA Record (§4.5.3), NDAVersion (§4.5.3.1), and NDASignatureRecord (§4.5.3.2)**: Org-life + 7y per binding-contract retention; version and signature rows inherit the parent NDA Record residency and legal-defense DSAR treatment. **Taxonomy Node (§4.5.4) / Controlled-Vocabulary Tag (§4.5.5)**: Platform-life; deprecated nodes archived. **Marketplace Abuse Report (§4.5.7)**: 24m for fraud-pattern detection + Org-life if escalated. **EOI Acceptance Record (§4.5.8)**: Org-life + 7y; aligned with bridge `eoi_acceptance_propagated` financial class. **EvalStarter (§4.5.9)**: Platform-life. Residency: Marketplace-domain (platform-global for taxonomy; per-Org for Listings / EOI Records). |
 | **SubprocessorChangeRecord / SubprocessorObjection (§45.1.1)** — v7.1.1 Phase 45 P2 closure | Published SubprocessorChangeRecord rows and public changelog projections retain for platform life and are append-only after notice publication. Draft rows withdrawn before publication purge after 90 days. SubprocessorObjection rows retain for Org life + 7 years as DPA / compliance evidence. DSAR Pattern B pseudonymizes customer and reviewer actor FKs and body-field-sweeps objection and decision notes; the objection fact, requested resolution, terminal outcome, governing DPA reference, and AuditEvent evidence remain. Objections and AuditEvents stay in the objecting Org's `data_residency_region`; public change records contain no customer data. |
-| **§4.8 residual cluster (CapabilityRegistryEntry, FreeAllowanceCounter, CostBaseRecalculationLog, BillingSeatSnapshot, DowngradeExcessDataBucket, SellerOutcomeSignalConfig)** — V9 partial coverage; closes D-9.1R-017 P1 partially | **CapabilityRegistryEntry (§4.8.2)**: Platform-life; deprecated rows retained for `successor_capability_id` migration graph; never hard-deleted per §4.8.2 `deleted_at = always NULL`. **CostBaseRecalculationLog (§4.8.6)**: `max(Org-life + 7y, max-AIOperation-lifetime + 1y)`. **FreeAllowanceCounter (§4.8.7)**: life of Org per capability; preserves billing reconciliation evidence. **BillingSeatSnapshot (§4.8.11)**: Org-life + 7y per financial reporting. **DowngradeExcessDataBucket (§4.8.10)**: 90d per entity-name contract; auto-purge. **SellerOutcomeSignalConfig (§4.8.13)**: Platform-life; versioned config. Residency: per-Org for Org-scoped rows; platform-global for versioned config. |
+| **§4.8 residual cluster (CapabilityRegistryEntry, FreeAllowanceCounter, CostBaseRecalculationLog, BillingSeatSnapshot, DowngradeExcessDataBucket, SellerOutcomeSignalConfig)** — V9 partial coverage; closes D-9.1R-017 P1 partially | **CapabilityRegistryEntry (§4.8.2)**: Platform-life; deprecated rows retained for `successor_capability_id` migration graph; never hard-deleted per §4.8.2 `deleted_at = always NULL`. **CostBaseRecalculationLog (§4.8.6)**: `max(Org-life + 7y, max-AIOperation-lifetime + 1y)`. **FreeAllowanceCounter (§4.8.7)**: life of Org per capability; preserves billing reconciliation evidence. **BillingSeatSnapshot (§4.8.11)**: immutable source rows retain for Org-life + 7y; derived daily, weekly, and monthly projections retain 90d, 1y, and 7y respectively; compaction never deletes or rewrites source rows. **DowngradeExcessDataBucket (§4.8.10)**: 90d hot read-only preservation, then the §34.6.3 evidence archive horizon; DSAR, legal hold, and protected-asset exceptions remain authoritative. **SellerOutcomeSignalConfig (§4.8.13)**: Platform-life; versioned config. Residency: per-Org for Org-scoped rows; platform-global for versioned config. |
 
 ## 40.3 Data Import {#40.3-data-import}
 
@@ -48115,6 +48141,26 @@ V12 remediation (closes D-46-007 perf-regression slice + D-46-014 stability/cana
 - If stable, 100% rollout.
 - Post-release monitoring 48 hours.
 
+### 46.3.1 Protected Three-Application Production Release Control {#46.3.1-protected-production-release-control}
+
+F-630 also governs production release control for the independently deployed Marketplace, Buyer, and Seller applications and their shared Convex production runtime. GitHub Actions is the only production-mutation boundary. A local command, Vercel integration deployment, retained artifact, narrative approval, or repository credential MUST NOT authorize production traffic or provider mutation.
+
+**Admission contract.** A release attempt MUST bind one reviewed commit, the current Master Spec and live Linear planning fingerprint, fresh exact-status and runtime-stamp scans, all required repository checks, the exact three Vercel project and production-domain pins, the exact Convex production deployment pin, immutable attempt-specific receipts, and live provider proof that automatic Vercel Git production deployment is disabled for `main` on all three projects. Each Vercel project MUST have a separately proved healthy `READY` predecessor before ordinary promotion. The live known-good Convex SHA MUST be a distinct ancestor of the candidate and MUST pass the protected zero-customer-data canary from a clean detached checkout before mutation. Missing, stale, ambiguous, expired, mismatched, or partially read evidence blocks the attempt.
+
+**Credential isolation.** No job or process may receive both Vercel and Convex write credentials. Vercel staging and promotion, Convex mutation and compensation, GitHub evidence finalization, and proof collection MUST run as receipt-bound jobs with the minimum credential for that phase. Provider output, secrets, customer content, and tenant identifiers MUST NOT enter logs or release receipts.
+
+**Ordinary release while durable coordination is absent.** Until the isolated candidate runtime, authenticated proof collectors, durable pause-and-resume coordinator, expiry compensation, single-use promotion lease, and finalizer below are implemented and proved, the ordinary production workflow MUST perform no provider mutation. It MUST publish an immutable, non-promotable, no-authority receipt and fail closed. Repository scripts that contain future mutation logic remain disabled implementation surfaces and MUST NOT be treated as an executable release route.
+
+**First Vercel production baseline.** The first healthy predecessor set MUST be created only by a separate protected baseline workflow. It stages and proves the exact Marketplace, Buyer, and Seller candidates without assigning production traffic, persists one immutable stage receipt, then activates Marketplace, Buyer, and Seller in that order. If activation stops after any project receives traffic, the attempt becomes `recovery_required`; it may resume only the remaining exact candidates from the same receipt after fresh provider readback. A partial first activation is never reported as rolled back because no earlier healthy predecessor exists. Ordinary promotion remains blocked until every project has a separately proved healthy predecessor.
+
+**Convex anchor recovery and history.** A Convex anchor attempt MUST bind the exact live known-good SHA, Convex production target, successful Vercel baseline activation receipt, current GitHub run and attempt, and attempt-specific job result. Every retained production, Convex-anchor, or Vercel-baseline authority artifact MUST be checked against its workflow bytes at the recorded run SHA and an approved path and SHA-256 lineage entry. GitHub artifact inventory is retention-bound evidence only: absence after expiry, deletion, workflow deletion, or rename cannot prove first-ever authority or permanent single use. Bootstrap may run the protected known-good canary and emit a non-promotable blocked anchor receipt, but MUST NOT mutate either provider until a non-expiring protected genesis sentinel and the single-use finalizer exist.
+
+**Durable candidate proof and promotion.** The promotable path MUST stage all three exact Vercel candidates without traffic and deploy the commit to an isolated, non-customer Convex candidate target. A durable coordinator then pauses while authenticated collectors obtain the complete R0 customer-journey and operational proof required by the release scorecard. Proof MUST bind the exact candidate commit, environments, artifact bytes, consented cohort, cleanup, recovery, and rollback results. Missing, synthetic, stale, extra, mismatched, or unverifiable proof expires the attempt and triggers provider-specific compensation. Only the coordinator may issue a single-use promotion lease. Convex promotion, Vercel promotion, and finalization consume receipt-bound phases; a retry returns the stored phase result and cannot mint a second lease.
+
+**States and recovery.** The release lifecycle is `preflight -> staged -> awaiting_proof -> proof_accepted -> promotion_leased -> convex_promoted -> vercel_promoted -> finalized`. Coordinator receipts use the distinct states `awaiting_proofs` and `proofs_collected`; those receipt states MUST NOT be substituted for release state. A pre-mutation failure becomes `blocked`. A partial first baseline becomes `recovery_required`. A post-mutation failure enters `compensating` and ends only as `rolled_back`, `recovered_forward`, or `rollback_failed`. Cancellation MUST persist the last proved phase before credentials expire. Recovery re-reads both providers, uses only the same immutable attempt receipt, restores the proved known-good Convex release where required, and never guesses traffic, deployment, or authority state. Superseded `DEC-PROD-*` decision identifiers remain receipt provenance only and confer no present authority.
+
+**Registered implementation and proof surfaces.** `config/production-release.json` and `config/production-targets.json` own nonsecret pins and approved workflow lineage. Root `vercel.json`, `apps/buyer/vercel.json`, and `apps/seller/vercel.json` own the repository-side automatic-production-deployment denial and require live provider readback. `.github/workflows/production-release.yml`, `.github/workflows/vercel-production-baseline.yml`, and `.github/workflows/production-bootstrap-recovery.yml` own the protected entry points. `scripts/lib/production-proof-contracts.ts`, `scripts/lib/production-release-controller.ts`, the provider-specific baseline and release libraries, and their integration suites own the fail-closed executable contracts. Any path, workflow, provider, domain, credential boundary, receipt schema, or state change invalidates prior release readiness and requires fresh independent review, canary, compensation, and rollback proof.
+
 ## 46.4 AIOperation Testing Strategy (V12 — D-46-004) {#46.4-aiop-testing-strategy}
 
 V12 remediation (closes D-46-004). The §4.8.1 AIOperation engine and §22 Managed Agent runtime are billable, accounted, margin-protected surfaces. AI-quality regression has direct margin and customer-trust consequences.
@@ -48168,7 +48214,7 @@ V12 remediation (closes D-46-005).
 
 1. **Per-entity org-scope leakage matrix.** Every console-scoped entity in §1.3.2 (21 entities) × Buyer / Seller / Marketplace caller × negative test (cross-console call MUST return zero rows OR HTTP 404 per §7.2 non-leak). Integration test fixture `multi_org_multi_console_firewall_fixture`.
 2. **Cross-Console Bridge field-redaction round-trip.** §4.7 carried-vs-redacted enumeration test: every Bridge entity round-trips through Buyer + Seller views and the redacted-field set matches the §4.7 declaration.
-3. **§1.4 query-scoping CI gate.** Every list endpoint missing `console` param fails the CI gate `query_scoping_console_required`.
+3. **§1.4 query-scoping CI gate.** The `query_scoping_console_required` gate is a global census of every registered list route and enforces that route's §1.4 class: Organization-scoped routes require `org_id` and forbid `console`; Buyer- and Seller-console-scoped routes require `org_id` plus the exact `console`; managed Marketplace routes require `console=marketplace` plus the registered audience; public Marketplace routes require neither `console` nor an Organization session. Missing, unexpected, unregistered, or misclassified scope fails closed.
 4. **Marketplace-domain neutral-zone test.** Enforce §1.3.2, §1.4, and each Marketplace entity's §4.x audience projection: a Buyer query NEVER receives Seller-only fields from a Marketplace-resident entity. §27.10 remains authoritative only for Vendor Opt-Out behavior and is not a general Marketplace projection contract.
 5. **Webhook event-class firewall.** Event_kinds tagged `console=buyer_only` cannot deliver to a Seller-only webhook subscriber (test the §31 subscription routing).
 
@@ -48216,9 +48262,11 @@ V12 remediation (closes D-46-010). Feature flag catalog refreshed for v7.1.0. Fl
 | `evaluation_pulse_health_score` | Pulse Health Score | On per §34.1.1 entitlement | (V7.1.0 add) |
 | `evaluation_pulse_digest` | Pulse Digest | On per §34.1.1 entitlement | (V7.1.0 add) |
 
-**Flag-AND-entitlement precedence.** A feature MUST pass both the flag check AND the §34.8 entitlement check. Precedence order: entitlement first (returns HTTP 403 `feature_not_entitled` per Appendix I if denied); flag second (returns HTTP 503 `feature_flag_disabled` per Appendix I — V12 add, if flag is killed). UX surface: a 403 renders the "Upgrade" upsell modal; a 503 renders the "Feature temporarily unavailable" toast.
+**Flag-AND-entitlement precedence.** A feature MUST pass both the flag check AND the §34.8 entitlement check. Precedence order: entitlement first (returns HTTP 403 `feature_not_available_on_plan` per Appendix I if denied); flag second (returns HTTP 503 `feature_flag_disabled` per Appendix I — V12 add, if flag is killed). UX surface: a 403 renders the "Upgrade" upsell modal; a 503 renders the "Feature temporarily unavailable" toast.
 
-Test scenario per feature flag: positive (flag on + entitlement on); negative (flag off + entitlement on → 503); negative (flag on + entitlement off → 403); negative (both off → 403 wins).
+Entitlement-authority unavailability is not a denial: return HTTP 503 `entitlement_authority_unavailable`, skip PostHog evaluation, do not render an upsell, and do not invoke the feature. HTTP 403 applies only to an authoritative entitlement denial; when denial is known, it wins over flag unavailability or disablement.
+
+Test scenario per feature flag: positive (flag on + entitlement on); negative (flag off + entitlement on → 503); negative (flag on + entitlement off → 403); negative (both off → 403 wins); entitlement authority unavailable (flag state irrelevant → 503, no PostHog evaluation, no upsell, no invocation).
 
 ## 46.8 §M.4 / §M.5 CI Gate Self-Testing (V12 — D-46-012) {#46.8-spec-lint-self-test}
 
@@ -48280,7 +48328,7 @@ V12 remediation (closes D-46-016).
 
 V12 remediation (closes D-46-017 — semantic, not numerical-singleton; closes the entitlement gap).
 
-1. Starter user attempting a Growth-only capability → HTTP 403 `feature_not_entitled` per Appendix I.
+1. Starter user attempting a Growth-only capability → HTTP 403 `feature_not_available_on_plan` per Appendix I.
 2. Public Pricing API (§4.8.9) accessible to all tiers per §44.6.1 last paragraph.
 3. Solo engine-absorbed envelope suppresses customer-visible surfaces (§44.6.1 hide list) while engine continues to publish (§4.8.9 AC #1).
 
@@ -62478,7 +62526,7 @@ The codes below are referenced from §22.4–§22.16 (Seller KB and Sourcera KB 
 
 ### KB Export Endpoint Errors (added §32.9 / §22.18)
 
-The codes below are emitted exclusively from the §32.9 Seller KB Export endpoints. All inherit the standard error-response schema; the `details` block is per-code. None of these codes MAY be hoisted into a generic `feature_not_available_on_plan` 402 response: per §22.18.1 P1 "No-Paywall Export," the export endpoint is invariant on plan tier and MUST NEVER return 402.
+The codes below are emitted exclusively from the §32.9 Seller KB Export endpoints. All inherit the standard error-response schema; the `details` block is per-code. None of these codes MAY be hoisted into a generic `feature_not_available_on_plan` 403 response: per §22.18.1 P1 "No-Paywall Export," the export endpoint is invariant on plan tier and MUST NEVER return 402.
 
 | Code | HTTP | Used By | Meaning | Localization Key |
 | :---- | :---- | --- | :---- | --- |
@@ -63216,8 +63264,8 @@ Authored Phase V8.4 (D-V8.4-001, D-V8.4-002, D-V8.4-003, D-V8.4-019). Hoists the
 | `committed_spend_contract_already_active` | 409 | §32.8 billing endpoint family; CommittedSpendContract renewal, partial-dissolution, or restoration activation | `idempotent_retry_only` | Another active contract already owns the Org singleton. The losing transaction rereads current state; no wallet or Stripe mutation commits. | `error.billing.committed_spend_contract_already_active` |
 | `committed_spend_auto_renew_already_scheduled` | 409 | §32.8 billing endpoint family; CommittedSpendContract renewal scheduling | `permanent` | A future renewal already exists for the Org's active contract; conflicting registration is rejected without a second Stripe schedule. | `error.billing.committed_spend_auto_renew_already_scheduled` |
 | `free_allowance_quota_below_consumed` | 422 | Ops FreeAllowanceCounter quota override | `permanent` | Requested `quota_total` is lower than current `quota_consumed`; the write leaves the counter and wallet unchanged and emits no successful override audit. | `error.billing.free_allowance_quota_below_consumed` |
-| `pricing_table_breaking_change_requires_30d_notice` | 422 | PricingTableVersion publish with `breaking_change_flag=true` and notification not scheduled | `permanent` | Per §4.8.7 acceptance #3. Ops must schedule the 30-day customer notification before publish. | `error.billing.pricing_table_breaking_change_requires_30d_notice` |
-| `billing_seat_snapshot_immutable` | 422 | Update attempt on an existing BillingSeatSnapshot | `permanent` | Per §4.8.8 acceptance #5. Snapshots are append-only; corrections written as a new snapshot row. | `error.billing.billing_seat_snapshot_immutable` |
+| `pricing_table_breaking_change_requires_30d_notice` | 422 | PricingTableVersion publish with `breaking_change_flag=true` and notification not scheduled | `permanent` | Per §4.8.9 acceptance #3. Ops must send the customer notification no later than 30 days before effectiveness. | `error.billing.pricing_table_breaking_change_requires_30d_notice` |
+| `billing_seat_snapshot_immutable` | 422 | Update attempt on an existing BillingSeatSnapshot | `permanent` | Per §4.8.11 acceptance #5. Source snapshots are append-only; corrections are written as new source rows. | `error.billing.billing_seat_snapshot_immutable` |
 | `billing_admin_role_insufficient` | 403 | Workspace-data access attempts by a `billing_admin` (per §5.2.1.1 explicit non-permissions) | `permanent` | Per §5.2.1.1 explicit non-permissions table. Body names the attempted operation and the required role. | `error.billing.billing_admin_role_insufficient` |
 | `billing_admin_cross_org_access` | 404 | Cross-Org Billing-Admin Audit View access | `permanent` (subkind `firewall_non_leak`) | Cross-Org non-leak 404. | `error.billing.billing_admin_cross_org_access` |
 | `billing_admin_grant_target_ineligible_role` | 422 | §5.2.1.1 Billing Admin role-grant endpoint for a target user whose Org membership disqualifies them | `permanent` | Per §5.2.1.1 grant gate. Body returns the target user's current role and the eligibility set. | `error.billing.billing_admin_grant_target_ineligible_role` |
@@ -63377,8 +63425,9 @@ V12 remediation closure batch (§42 / §43 retirement / §46 / §50). New error 
 - `plan_tier_override_console_scope_mismatch` — HTTP 422; `permanent`.
 
 **Feature-flag family** (closes D-46-007):
-- `feature_not_entitled` — HTTP 403; `permanent`; §34.8 entitlement gate.
+- `feature_not_available_on_plan` — HTTP 403; `permanent`; canonical §34.8 entitlement gate. The deprecated inbound alias `feature_not_entitled` MUST normalize to this code before any response, telemetry, or proof and MUST NOT be emitted by new code.
 - `feature_flag_disabled` — HTTP 503; `transient`; PostHog feature flag killed.
+- `entitlement_authority_unavailable` — HTTP 503; `transient`; the entitlement authority did not return an authoritative result, so PostHog evaluation and feature invocation are skipped.
 
 **Misc**:
 - `marketplace_domain_action_scope_mismatch` — HTTP 422; `permanent`; per §27.10 marketplace-domain firewall enforcement on §50.25 actions.
@@ -64393,6 +64442,8 @@ The v6.0.0 single-console enum (`free`, `business`, `enterprise`) was split into
 
 **Audit-export action extension (§32.8.24).** `org.audit_event_export_initiated` and `org.audit_event_export_ready` are valid only for `entity_type=audit_event_export`. The ready action records export id, format, row-count bucket, content hash, ready/expiry timestamps, and residency region; it excludes exported rows, filter bodies, download URLs, storage coordinates, and webhook endpoint secrets.
 
+**Use Case lifecycle action extension (§32.10.9.A.4).** `use_case.deleted` and `use_case.restored` are valid only for `entity_type=use_case`. Delete records the bounded reason, prior status, affected counts, and immutable Scenario-reference correlation. Restore records the original delete AuditEvent id, restored counts, resulting status, and restore timestamp. Neither action carries Requirement or Scenario bodies, hidden identifiers, or the signed undo token.
+
 **Enum Extension — `billing_admin_action` Namespace (§5.2, §5.2.1, §5.2.1.4).** The bare-verb enum above is EXTENDED — not replaced — by the qualified-string `billing_admin_action` namespace registered in the next subsection (`Billing Admin Audit Action Types`). Qualified strings follow the form `org.<billing_subdomain>_<verb>` (e.g., `org.wallet_viewed`, `org.contest_filed`, `org.plan_changed`) and are the ONLY valid `action` values for Audit Event rows whose `entity_type` ∈ {`ai_wallet`, `contest_record`, `committed_spend_contract`, `pricing_table_version`, `pro_trial_seat_grant`, `trial_state`, `organization_plan`, `free_allowance_counter`, `billing_seat_snapshot`, `downgrade_excess_data_bucket`, `billing_admin_role_assignment`, `audit_event_view`}. The write-time validator at §4.6.1 MUST accept the union of both enums; implementations that whitelist only the bare-verb enum MUST be treated as a blocking deploy bug. QA test `audit_event_action_enum_union_validator` asserts that a write of `action = 'org.wallet_viewed'` against `entity_type = 'ai_wallet'` succeeds, that a write of `action = 'created'` against `entity_type = 'ai_wallet'` fails with HTTP 422 `audit_event_action_namespace_mismatch` (new; Appendix I), and that a write of `action = 'org.wallet_viewed'` against `entity_type = 'workspace'` also fails with the same error (the two namespaces are mutually exclusive per `entity_type`).
 
 **Deploy-Time Validator Rules.** Per the §5.2.1.6 acceptance-criteria family, a deploy-time validator MUST assert: (1) every qualified action emitted by §5.2.1.1 Permission List Operations is present in the Billing Admin Audit Action Types registry; (2) every registry entry is emitted by at least one code path (audit-action-dead-code check); (3) the bare-verb enum does not contain any dotted string; (4) the qualified namespace does not contain any bare verb. The validator runs in CI against the production Convex schema and fails the build on drift.
@@ -65305,11 +65356,11 @@ Legacy alias: `warning_5_10` is retired as of D-DEC-010 (2026-07-09). Migration 
 
 ### Pricing Table Version Status (§4.8.9)
 
-`draft`, `published`, `superseded`, `rolled_back`
+`draft`, `under_review`, `approved`, `scheduled`, `published`, `superseded`, `rolled_back`
 
 ### Downgrade Excess Bucket Status (§4.8.10)
 
-`active_preservation`, `notice_sent_d60`, `notice_sent_d80`, `archive_pending`, `archived`, `restored`
+`active_preservation`, `notice_sent_d60`, `notice_sent_d80`, `archive_pending`, `archived`, `archived_class_1_protected`, `restored`
 
 ### Downgrade Excess Data Class (§4.8.10)
 
@@ -69330,7 +69381,7 @@ The mapping is canonical. Any documentation, code path, payload schema, audit ev
 
 **DowngradeExcessDataBucket.** The per-Org-per-data-class record of entities preserved in read-only mode after a plan downgrade under this section (historical seed C.85). State machine: `active_preservation → notice_sent_d60 → notice_sent_d80 → archive_pending → archived` for standard buckets; Class-1 protected KB-entry buckets transition to `archived_class_1_protected` instead of standard `archived` and carry §34.6.3.A restoration metadata. `restored` is reachable from eligible preservation / archive states when the customer upgrades back or uses the protected restore flow. See §4.8.10 and §34.6.3.A.
 
-**BillingSeatSnapshot.** The periodic point-in-time count of active seats per Org per console for analytics, plan-gate enforcement, and Stripe invoice line-item context under this section (historical seed C.86). Sourcera does NOT charge per seat; this snapshot is reporting-only. Guests and API-only identities excluded. Snapshots immutable post-creation. See §4.8.11.
+**BillingSeatSnapshot.** The informational periodic point-in-time count of active seats per Org per console for reporting, audit, support, and capacity planning under this section (historical seed C.86). Sourcera does NOT charge per seat; the snapshot cannot create a price, invoice quantity, entitlement, plan gate, or upsell. Guests and API-only identities are excluded. Source snapshots are immutable post-creation. See §4.8.11 and §40.2.
 
 **SoloEnvelopeCounter.** The engine-internal per-Org-per-console counter for Solo absorbed-envelope usage. It powers §44.6 throttling and margin monitoring without rendering wallet balance, rate card, per-operation costs, envelope value, or remaining headroom to Solo customers. State machine: `healthy → throttling_eligible → throttled | exhausted | absorption_cap_reached → closed`; renewal or new Solo charge resets the active period. See §4.8.14.
 
@@ -69382,7 +69433,7 @@ The mapping is canonical. Any documentation, code path, payload schema, audit ev
 
 **Public Pricing API.** The publicly-readable rate-card endpoint at `api.sourcera.com/v1/pricing` under this section (historical seed C.83). Backed by PricingTableVersion. Customers can forecast spend programmatically; published payload includes capabilities, value/cost prices, currencies, plan tiers, free allowances, deprecation banners.
 
-**Breaking Pricing Change.** A PricingTableVersion change involving a customer-visible price increase or capability removal. Requires 30-day-advance customer notification per Pricing Strategy §11; publish rejected with HTTP 422 if `customer_notification_sent_at < effective_at - 30 days`.
+**Breaking Pricing Change.** A PricingTableVersion change involving a customer-visible price increase or capability removal. Requires 30-day-advance customer notification per Pricing Strategy §11; publish rejected with HTTP 422 if `customer_notification_sent_at > effective_at - 30 days`.
 
 **Downgrade Excess Preservation.** The 90-day read-only preservation period under this section (historical seed C.85) during which entities exceeding the new plan's caps remain accessible (read-only) to the customer. After preservation, hard-archived to cold storage; restorable for up to 90 days post-archive.
 
@@ -74341,23 +74392,35 @@ Source contracts and conflicts are closed; product evidence remains pending. Sta
 
 #### M.5.120 v7.1.1 Documentation Blocker Major Rewrite {#m-5-120-v711-documentation-blocker-major-rewrite}
 
-The documentation contracts are approved and complete. This workspace contains no application, so every row remains pending until the named future product artifacts exist and pass. Documentation text, AE approval, or static specification lint cannot promote these rows.
+The documentation contracts are approved and complete. This repository contains specification/control-plane files and application/runtime paths. Path presence is not runtime proof. A pending row may promote only when its registered current-path artifacts execute in the required CI/deploy context and produce the evidence required by §M.5.1.1. Static text, AE approval, scaffold existence, or local lint alone cannot promote it.
 
 | gate_id | row_class | runtime_status | execution_context | assertion (summary) | pack |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| `requirement_reopening_runtime_consistency` | workflow_runtime_test | `spec_binding_pending_pack_m11_3` | API_test + transaction_test + materializer_test + mobile_e2e + non_leak_test | The Phase-9-only reopen endpoint MUST enforce all §4.3.4 predicates, step-up authentication, expected-version serialization, replay safety, and the Phase-advance race; the materializer clears only `phase_9_submissions_closed`, preserves every independent lock and response-history field, and emits exactly one bounded Seller projection without Buyer-private or scoring data. Required future artifacts: `convex/deploy_validators/requirement_reopening_runtime_consistency.ts`, `tests/integration/requirement_reopening_runtime_consistency.spec.ts`, `tests/mobile/requirement_reopening_mobile_e2e.spec.ts`, and `tests/security/requirement_reopening_non_leak.spec.ts`. | M11.3 |
-| `vendor_disqualification_phase_aware_reversal_runtime` | workflow_runtime_test | `spec_binding_pending_pack_m11_3` | transaction_test + scoring_test + report_finality_test + webhook_test + mobile_e2e | Reversal MUST compute and persist the §4.7.2 phase scope under the phase-advance/finalization lock: pre-Phase-10 can restore the current evaluation, Phase 10/11 can create only missing unlocked Score shells, and Phase 12+ changes future eligibility only. Existing grades, recommendations, selections, report bodies, and historical terminal snapshots never change; the post-selection annotation and bounded webhook are idempotent. Required future artifacts: `convex/deploy_validators/vendor_disqualification_phase_aware_reversal_runtime.ts`, `tests/integration/vendor_disqualification_phase_aware_reversal_runtime.spec.ts`, `tests/integration/vendor_disqualification_report_finality.spec.ts`, and `tests/mobile/vendor_disqualification_reversal_mobile_e2e.spec.ts`. | M11.3 |
-| `audit_events_export_ready_delivery_runtime` | delivery_runtime_test | `spec_binding_pending_pack_m11_3` | worker_test + outbox_test + serializer_test + retry_test + non_leak_test | The export worker MUST emit exactly one `audit_events.export.ready` outbox event on `running -> ready`, preserve polling as authoritative, use a new export id for regeneration, and apply §31 HMAC plus Appendix F.1 retry/DLQ behavior. The serializer MUST carry only the §32.8.24 payload and never a URL, body, actor identity, namespace list, DSAR detail, storage location, or unbounded analytics field. Required future artifacts: `convex/workers/audit_event_export_worker.ts`, `convex/outbox/audit_events_export_ready.ts`, `tests/integration/audit_events_export_ready_delivery_runtime.spec.ts`, `tests/security/audit_events_export_ready_non_leak.spec.ts`, and `tests/integration/audit_events_export_ready_retry.spec.ts`. | M11.3 |
+| `requirement_reopening_runtime_consistency` | workflow_runtime_test | `spec_binding_pending_pack_m11_3` | API_test + transaction_test + materializer_test + mobile_e2e + non_leak_test | The Phase-9-only reopen endpoint MUST enforce all §4.3.4 predicates, step-up authentication, expected-version serialization, replay safety, and the Phase-advance race; the materializer clears only `phase_9_submissions_closed`, preserves every independent lock and response-history field, and emits exactly one bounded Seller projection without Buyer-private or scoring data. Required runtime artifacts: `convex/deploy_validators/requirement_reopening_runtime_consistency.ts`, `tests/integration/requirement_reopening_runtime_consistency.spec.ts`, `tests/mobile/requirement_reopening_mobile_e2e.spec.ts`, and `tests/security/requirement_reopening_non_leak.spec.ts`. | M11.3 |
+| `vendor_disqualification_phase_aware_reversal_runtime` | workflow_runtime_test | `spec_binding_pending_pack_m11_3` | transaction_test + scoring_test + report_finality_test + webhook_test + mobile_e2e | Reversal MUST compute and persist the §4.7.2 phase scope under the phase-advance/finalization lock: pre-Phase-10 can restore the current evaluation, Phase 10/11 can create only missing unlocked Score shells, and Phase 12+ changes future eligibility only. Existing grades, recommendations, selections, report bodies, and historical terminal snapshots never change; the post-selection annotation and bounded webhook are idempotent. Required runtime artifacts: `convex/deploy_validators/vendor_disqualification_phase_aware_reversal_runtime.ts`, `tests/integration/vendor_disqualification_phase_aware_reversal_runtime.spec.ts`, `tests/integration/vendor_disqualification_report_finality.spec.ts`, and `tests/mobile/vendor_disqualification_reversal_mobile_e2e.spec.ts`. | M11.3 |
+| `audit_events_export_ready_delivery_runtime` | delivery_runtime_test | `spec_binding_pending_pack_m11_3` | worker_test + outbox_test + serializer_test + retry_test + non_leak_test | The export worker MUST emit exactly one `audit_events.export.ready` outbox event on `running -> ready`, preserve polling as authoritative, use a new export id for regeneration, and apply §31 HMAC plus Appendix F.1 retry/DLQ behavior. The serializer MUST carry only the §32.8.24 payload and never a URL, body, actor identity, namespace list, DSAR detail, storage location, or unbounded analytics field. Required runtime artifacts: `convex/workers/audit_event_export_worker.ts`, `convex/outbox/audit_events_export_ready.ts`, `tests/integration/audit_events_export_ready_delivery_runtime.spec.ts`, `tests/security/audit_events_export_ready_non_leak.spec.ts`, and `tests/integration/audit_events_export_ready_retry.spec.ts`. | M11.3 |
 
 **§M.5 catalog row arithmetic (post-§M.5.120 rewrite).** Pre-pass stamp inventory: 547 rows. Post-pass inventory: 550 rows (three newly catalogued pending runtime-evidence rows; no runtime promotion).
 
 #### M.5.121 Buyer Business Starter Trial Audit Registration {#m-5-121-buyer-business-starter-trial-audit-registration}
 
-The specification contract is complete. This workspace contains no product runtime, so the row remains pending until the named product artifacts exist and pass. Specification text or static lint cannot promote it.
+The specification contract is complete. This repository contains specification/control-plane files and application/runtime paths. Path presence is not runtime proof. This row may promote only when its registered current-path artifacts execute in the required CI/deploy context and produce the evidence required by §M.5.1.1. Static text, scaffold existence, or local lint alone cannot promote it.
 
 | gate_id | row_class | runtime_status | execution_context | assertion (summary) | pack |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| `buyer_trial_audit_action_registration` | audit_runtime_consistency | `spec_binding_pending_pack_m11_3` | deploy_validator + transaction_test + integration_test | The §34.9.1 Business Starter trial start and terminal transition MUST atomically emit exactly one registered qualified action (`org.trial_started` or `org.trial_ended`) against `entity_type=trial_state` and `trial_kind=business_starter_14d`, with the bounded Appendix J payload. Replay and concurrent start/end attempts are idempotent; audit failure rolls back the paired mutation; bare actions, cross-entity pairs, Solo-trial use, unregistered actions, customer content, and payment credentials fail closed. The Billing Admin audit views at §5.2.1.4, §6.7.4, and §32.8.22 MUST include both actions without weakening Org, role, console, or residency scope. Required future artifacts: `convex/deploy_validators/buyer_trial_audit_action_registration.ts`, `tests/transaction/buyer_trial_audit_action_registration.spec.ts`, and `tests/integration/buyer_trial_audit_action_registration.spec.ts`. | M11.3 |
+| `buyer_trial_audit_action_registration` | audit_runtime_consistency | `spec_binding_pending_pack_m11_3` | deploy_validator + transaction_test + integration_test | The §34.9.1 Business Starter trial start and terminal transition MUST atomically emit exactly one registered qualified action (`org.trial_started` or `org.trial_ended`) against `entity_type=trial_state` and `trial_kind=business_starter_14d`, with the bounded Appendix J payload. Replay and concurrent start/end attempts are idempotent; audit failure rolls back the paired mutation; bare actions, cross-entity pairs, Solo-trial use, unregistered actions, customer content, and payment credentials fail closed. The Billing Admin audit views at §5.2.1.4, §6.7.4, and §32.8.22 MUST include both actions without weakening Org, role, console, or residency scope. Required runtime artifacts: `convex/deploy_validators/buyer_trial_audit_action_registration.ts`, `tests/transaction/buyer_trial_audit_action_registration.spec.ts`, and `tests/integration/buyer_trial_audit_action_registration.spec.ts`. | M11.3 |
+
+**§M.5 catalog row arithmetic (post-§M.5.121 registration).** Pre-pass stamp inventory: 550 rows. Post-pass inventory: 551 rows (one newly catalogued pending runtime-evidence row; no runtime promotion).
+
+#### M.5.122 Query Scoping Route-Class Census {#m-5-122-query-scoping-route-class-census}
+
+The specification contract is complete. This repository contains specification/control-plane files and application/runtime paths. Path presence is not runtime proof. This row may promote only when its registered current-path artifacts execute in the required CI/deploy context and produce the evidence required by §M.5.1.1. Static text, scaffold existence, or local lint alone cannot promote it.
+
+| gate_id | row_class | runtime_status | execution_context | assertion (summary) | pack |
+| :---- | :---- | :---- | :---- | :---- | :---- |
+| `query_scoping_console_required` | scope_runtime_test | `spec_binding_pending_pack_m11_3` | deploy_validator + integration_test + security_test | Every registered list route MUST belong to exactly one §1.4 class. Organization routes require verified `org_id` and reject `console`; Buyer and Seller routes require verified `org_id` plus the exact console; managed Marketplace routes require `console=marketplace`, the registered audience, and any applicable Organization binding; public Marketplace routes reject Organization sessions and expose only the registered public projection. Missing, extra, inferred, unregistered, or misclassified scope and every cross-Org, cross-console, or audience-leak attempt fail closed. Required runtime artifacts: `convex/deploy_validators/query_scoping_console_required.ts`, `tests/integration/query_scoping_console_required.spec.ts`, and `tests/security/query_scoping_console_required_non_leak.spec.ts`. | M11.3 |
+
+**§M.5 catalog row arithmetic (post-§M.5.122 registration).** Pre-pass stamp inventory: 551 rows. Post-pass inventory: 552 rows (one newly catalogued pending runtime-evidence row; no runtime promotion).
 
 ---
 

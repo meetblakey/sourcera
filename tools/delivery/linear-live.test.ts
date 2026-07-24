@@ -222,6 +222,34 @@ test("captures a registered named source heading", () => {
   );
 });
 
+test("parses source provenance without expanding a large issue body", () => {
+  const description = `${"Implementation detail.\n".repeat(100_000)}
+## Source provenance
+- Canonical requirement: \`F-139\`
+- Source documents: \`Sourcera_Master_Spec.md\`, \`UX_Design_of_Sourcera.md\`
+- Source section bundle: 30 registered slices
+- Canonical source binding: sha256:${"b".repeat(64)}
+- Canonical source checksum: sha256:${"c".repeat(64)}
+
+## Later section
+
+${"Trailing detail.\n".repeat(100_000)}`;
+  const result = linearSourceProvenance(description);
+  assert.equal(result.sourceId, "F-139");
+  assert.equal(result.sectionBundleCount, 30);
+  assert.equal(result.sourceBinding, "b".repeat(64));
+  assert.equal(result.sourceChecksum, "c".repeat(64));
+});
+
+test("fails closed on an unbounded source provenance section", () => {
+  const result = linearSourceProvenance(`
+## Source provenance
+- Canonical requirement: \`F-139\`
+${"Unbounded detail.\n".repeat(10_000)}`);
+  assert.equal(result.sourceId, null);
+  assert.equal(result.sourceChecksum, null);
+});
+
 test("captures full issue descriptions beside the canonical fingerprint", async () => {
   const fetcher: typeof fetch = async (_input, init) => {
     const query = (JSON.parse(String(init?.body)) as { query: string }).query;
@@ -1227,11 +1255,38 @@ test("rejects truncated project milestone pagination", async () => {
     if (query.includes("DeliveryProjects")) return response({ data: { projects: empty } });
     if (query.includes("DeliveryIssues")) return response({ data: { issues: empty } });
     if (query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: empty } });
+    if (query.includes("DeliveryCycles")) return response({ data: { cycles: empty } });
     return response({ data: { releases: empty } });
   };
   await assert.rejects(
     () => fetchLinearFingerprint(fetcher, "secret"),
     /projectMilestones pagination cursor missing/,
+  );
+});
+
+test("rejects a repeated Linear pagination cursor", async () => {
+  const fetcher: typeof fetch = async (_input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    const empty = completeConnection([]);
+    if (query.includes("DeliveryProjectMilestones")) {
+      return response({
+        data: {
+          projectMilestones: {
+            nodes: [],
+            pageInfo: { hasNextPage: true, endCursor: "repeated" },
+          },
+        },
+      });
+    }
+    if (query.includes("DeliveryProjects")) return response({ data: { projects: empty } });
+    if (query.includes("DeliveryIssues")) return response({ data: { issues: empty } });
+    if (query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: empty } });
+    if (query.includes("DeliveryCycles")) return response({ data: { cycles: empty } });
+    return response({ data: { releases: empty } });
+  };
+  await assert.rejects(
+    () => fetchLinearFingerprint(fetcher, "secret"),
+    /projectMilestones pagination cursor repeated/,
   );
 });
 
@@ -1470,6 +1525,32 @@ test("reports the rejected Linear connection and HTTP GraphQL error", async () =
     () => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"),
     /Linear issues page failed: Linear HTTP 400: Query too complex/,
   );
+});
+
+test("retries transient invalid Linear JSON with a fixed bound", async () => {
+  const empty = completeConnection([]);
+  let issueAttempts = 0;
+  const fetcher: typeof fetch = async (_input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    if (query.includes("DeliveryIssues")) {
+      issueAttempts += 1;
+      if (issueAttempts < 3) {
+        return new Response("upstream connection error", { status: 502 });
+      }
+      return response({ data: { issues: empty } });
+    }
+    if (query.includes("DeliveryPipelines")) {
+      return response({ data: { releasePipelines: empty } });
+    }
+    return response({ data: { releases: empty } });
+  };
+
+  const fingerprint = await fetchLinearFingerprint(
+    withEmptyProjectInventories(fetcher),
+    "secret",
+  );
+  assert.equal(issueAttempts, 3);
+  assert.deepEqual(fingerprint.issues, []);
 });
 
 test("rejects a GraphQL relation whose endpoint was not captured", async () => {

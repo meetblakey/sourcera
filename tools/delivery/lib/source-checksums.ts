@@ -757,18 +757,22 @@ export function buildSourceChecksumCandidate(
   };
 }
 
-function sourceHeadingRows(source: string): Array<{
+interface SourceHeadingRow {
   line: string;
   text: string;
   level: number;
   offset: number;
-}> {
-  const rows: Array<{
-    line: string;
-    text: string;
-    level: number;
-    offset: number;
-  }> = [];
+}
+
+interface IndexedSourceDocument {
+  source: string;
+  headings: SourceHeadingRow[];
+}
+
+type IndexedSourceDocumentReader = (sourcePath: string) => IndexedSourceDocument;
+
+function sourceHeadingRows(source: string): SourceHeadingRow[] {
+  const rows: SourceHeadingRow[] = [];
   let offset = 0;
   for (const lineWithEnding of source.match(/.*(?:\r?\n|$)/g) ?? []) {
     if (!lineWithEnding) continue;
@@ -861,6 +865,7 @@ function resolveFeatureInventorySection(
   requirement: SourceRequirement,
   repositoryRoot: string,
   section: string,
+  readIndexedSource: IndexedSourceDocumentReader,
 ): ResolvedSourceChecksum {
   const canonicalRoot = realpathSync(repositoryRoot);
   const sourcePath = path.resolve(canonicalRoot, requirement.sourceDoc);
@@ -877,8 +882,7 @@ function resolveFeatureInventorySection(
       `${requirement.requirementId} lacks a registered exact source slice for ${section}`,
     );
   }
-  const source = readFileSync(canonicalSource, "utf8");
-  const headings = sourceHeadingRows(source);
+  const { source, headings } = readIndexedSource(canonicalSource);
   const resolveHeading = (key: string) => {
     const candidates = headings.filter((heading) => headingKey(heading.text) === key);
     const minimumLevel = Math.min(...candidates.map((heading) => heading.level));
@@ -930,6 +934,7 @@ function resolveFeatureInventorySections(
   requirement: SourceRequirement,
   repositoryRoot: string,
   binding: string,
+  readIndexedSource: IndexedSourceDocumentReader = cachedIndexedSourceReader(),
 ): ResolvedSourceChecksum {
   const sections = sourceSectionReferences(binding);
   if (!sections.length) {
@@ -938,7 +943,12 @@ function resolveFeatureInventorySections(
     );
   }
   const resolved = sections.map((section) =>
-    resolveFeatureInventorySection(requirement, repositoryRoot, section)
+    resolveFeatureInventorySection(
+      requirement,
+      repositoryRoot,
+      section,
+      readIndexedSource,
+    )
   );
   if (resolved.length === 1) return resolved[0];
   const slices = resolved.flatMap((row) => row.slices);
@@ -958,6 +968,63 @@ function resolveFeatureInventorySections(
     sha256: sha256(JSON.stringify([BUNDLE_HASH_DOMAIN, inputs])),
     selector: "feature_inventory_section",
     slices,
+  };
+}
+
+function cachedIndexedSourceReader(
+  readSource: (sourcePath: string) => string = (sourcePath) =>
+    readFileSync(sourcePath, "utf8"),
+): IndexedSourceDocumentReader {
+  const documents = new Map<string, IndexedSourceDocument>();
+  return (sourcePath) => {
+    const cached = documents.get(sourcePath);
+    if (cached) return cached;
+    const source = readSource(sourcePath);
+    const indexed = { source, headings: sourceHeadingRows(source) };
+    documents.set(sourcePath, indexed);
+    return indexed;
+  };
+}
+
+export interface LinearSourceChecksumResolutionCache {
+  resolve(
+    requirement: SourceRequirement,
+    repositoryRoot: string,
+    binding: string,
+  ): ResolvedSourceChecksum;
+}
+
+export function createLinearSourceChecksumResolutionCache(
+  readSource?: (sourcePath: string) => string,
+): LinearSourceChecksumResolutionCache {
+  const readIndexedSource = cachedIndexedSourceReader(readSource);
+  const resolutions = new Map<string, ResolvedSourceChecksum>();
+  return {
+    resolve(requirement, repositoryRoot, binding) {
+      const sections = sourceSectionReferences(binding);
+      const key = JSON.stringify([
+        realpathSync(repositoryRoot),
+        requirement.sourceDoc,
+        sections,
+      ]);
+      const cached = resolutions.get(key);
+      if (cached) {
+        return {
+          ...cached,
+          sourceId: requirement.requirementId,
+          sourceDocuments: [...cached.sourceDocuments],
+          slices: cached.slices.map((slice) => ({ ...slice })),
+        };
+      }
+      const resolved = resolveFeatureInventorySections(
+        requirement,
+        repositoryRoot,
+        binding,
+        readIndexedSource,
+      );
+      resolutions.set(key, resolved);
+      return resolved;
+    },
   };
 }
 
@@ -1077,7 +1144,10 @@ export function resolveLinearSourceChecksum(
   provenance: LinearSourceChecksumProvenance,
   contract: SourceChecksumContract,
   repositoryRoot: string,
-  options: { allowChecksumDrift?: boolean } = {},
+  options: {
+    allowChecksumDrift?: boolean;
+    resolutionCache?: LinearSourceChecksumResolutionCache;
+  } = {},
 ): ResolvedSourceChecksum {
   const registered = registeredChecksum(requirement.requirementId, contract);
   if (registered) {
@@ -1132,11 +1202,17 @@ export function resolveLinearSourceChecksum(
       `${requirement.requirementId} Linear provenance differs from its canonical source document and section`,
     );
   }
-  const resolved = resolveFeatureInventorySections(
-    requirement,
-    repositoryRoot,
-    provenance.section,
-  );
+  const resolved = options.resolutionCache
+    ? options.resolutionCache.resolve(
+        requirement,
+        repositoryRoot,
+        provenance.section,
+      )
+    : resolveFeatureInventorySections(
+        requirement,
+        repositoryRoot,
+        provenance.section,
+      );
   if (
     (!options.allowChecksumDrift &&
       provenance.sourceChecksum !== resolved.sha256) ||

@@ -26,6 +26,7 @@
     "PLA-215",
     "PLA-216",
     "PLA-283",
+    "PLA-555",
     "PLA-1045",
     "PLA-1046",
     "PLA-1047",
@@ -128,8 +129,8 @@
     {
       "sourceId": "F-007",
       "primaryIssueId": "PLA-284",
-      "executableIssueIds": ["PLA-997", "PLA-998", "PLA-999", "PLA-1000", "PLA-1001"],
-      "rationale": "The Stripe integration source is split into subscription, metering, customer journey, recovery, and pilot proof slices."
+      "executableIssueIds": ["PLA-997", "PLA-998", "PLA-999", "PLA-1000", "PLA-1001", "PLA-1055"],
+      "rationale": "The Stripe integration source is split into subscription, metering, customer journey, recovery, pilot proof, and human target-approval slices."
     },
     {
       "sourceId": "F-079",
@@ -220,6 +221,12 @@
       "primaryIssueId": "PLA-553",
       "executableIssueIds": ["PLA-981", "PLA-982", "PLA-983", "PLA-984", "PLA-985", "PLA-986", "PLA-987", "PLA-988", "PLA-989", "PLA-990", "PLA-991", "PLA-992", "PLA-993", "PLA-994", "PLA-995", "PLA-996"],
       "rationale": "The test-pyramid source is split into commit identity, service activation, fixtures, resilience, coverage, bridge, budget, and R0 proof slices."
+    },
+    {
+      "sourceId": "F-630",
+      "primaryIssueId": "PLA-1051",
+      "executableIssueIds": ["PLA-1052", "PLA-1053", "PLA-1054"],
+      "rationale": "Fail-closed admission is the primary executable owner; the first Vercel baseline, Convex anchor recovery, and durable candidate proof and promotion remain bounded sibling slices under the native coordination parent."
     },
     {
       "sourceId": "F-673",
