@@ -1,10 +1,12 @@
 import { strict as assert } from "node:assert";
+import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { assertPublicationIntegrityReport } from "./lib/publication-integrity.js";
+import { canonicalLinearFingerprint } from "./lib/linear-live.js";
 
 test("verification accepts only a passing publication-integrity summary", () => {
   assert.deepEqual(
@@ -48,6 +50,18 @@ test("verification accepts only a passing publication-integrity summary", () => 
 test("verification fails closed before reports when the promoted Linear capture is incomplete", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-delivery-verify-"));
   try {
+    const linear = JSON.parse(
+      readFileSync("delivery/linear-snapshot.json", "utf8"),
+    );
+    linear.linearFingerprint.projects = [];
+    if (linear.linearCapture) {
+      const fingerprint = canonicalLinearFingerprint(linear.linearFingerprint);
+      linear.linearCapture.fingerprintSha256 = createHash("sha256")
+        .update(`${JSON.stringify(fingerprint, null, 2)}\n`)
+        .digest("hex");
+    }
+    const linearPath = join(dir, "linear.json");
+    writeFileSync(linearPath, JSON.stringify(linear));
     const runtimeDependencies = JSON.parse(
       readFileSync("delivery/runtime-gate-dependencies.json", "utf8"),
     ) as { dependencies: Array<{ requirementId: string }> };
@@ -73,6 +87,8 @@ test("verification fails closed before reports when the promoted Linear capture 
         process.cwd(),
         "--stamp",
         stamp,
+        "--linear",
+        linearPath,
       ],
       { cwd: process.cwd(), encoding: "utf8" },
     );

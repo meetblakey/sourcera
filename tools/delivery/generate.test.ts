@@ -167,6 +167,13 @@ test("publishes the exact canonical journey target with a deterministic hash", (
 test("publishes native Linear releases even when the repository mirror is stale", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-live-release-authority-"));
   try {
+    const linear = JSON.parse(
+      readFileSync("delivery/linear-snapshot.json", "utf8"),
+    );
+    const canonical = linear.issues.find(
+      (issue: any) => issue.sourceId === "F-210",
+    );
+    assert.ok(canonical?.release);
     const readback = JSON.parse(
       readFileSync("delivery/release-plan.json", "utf8"),
     );
@@ -174,7 +181,7 @@ test("publishes native Linear releases even when the repository mirror is stale"
       (assignment: any) => assignment.requirementId === "F-210",
     );
     assert.ok(stale);
-    stale.release = "R0";
+    stale.release = canonical.release === "R0" ? "R1" : "R0";
     const releasePlan = join(dir, "release-plan.json");
     writeFileSync(releasePlan, JSON.stringify(readback));
     const { args, reports } = canonicalGenerationArgs(dir, [
@@ -191,11 +198,11 @@ test("publishes native Linear releases even when the repository mirror is stale"
     );
     assert.equal(
       manifest.rows.find((row: any) => row.requirementId === "F-210")?.release,
-      "R1",
+      canonical.release,
     );
     assert.equal(
       traceability.find((row: any) => row.requirementId === "F-210")?.release,
-      "R1",
+      canonical.release,
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -203,6 +210,7 @@ test("publishes native Linear releases even when the repository mirror is stale"
 });
 
 function addLinearInventoryFingerprint(linear: any): void {
+  delete linear.linearTicketIntegrity;
   linear.linearFingerprint.projects = linear.projects.map((project: any) => ({
     id: project.id,
     name: project.name,
@@ -241,6 +249,7 @@ test("reports live WIP and started-without-readiness violations", () => {
     const linear = JSON.parse(
       readFileSync("delivery/linear-snapshot.json", "utf8"),
     );
+    delete linear.linearTicketIntegrity;
     const unready = linear.issues.find(
       (issue: any) => !issue.labels.includes("codex-ready"),
     );
@@ -339,8 +348,21 @@ test("generates semantic journey readiness and fails empty evidence milestones a
       (issue: { sourceId: string | null }) => issue.sourceId === "F-211",
     );
     assert.ok(phaseOne);
-    phaseOne.dependencies = phaseOne.dependencies.filter(
-      (dependency: string) => dependency !== "F-210",
+    const phaseZero = linear.issues.find(
+      (issue: { sourceId: string | null }) => issue.sourceId === "F-210",
+    );
+    assert.ok(phaseZero);
+    const missingRelation = `blocks:${phaseZero.id}:${phaseOne.id}`;
+    for (const issue of linear.linearFingerprint.issues) {
+      issue.relations = issue.relations.filter(
+        (relation: string) => relation !== missingRelation,
+      );
+    }
+    assert.equal(
+      linear.linearFingerprint.issues.some((issue: any) =>
+        issue.relations.includes(missingRelation),
+      ),
+      false,
     );
     const linearPath = join(dir, "linear.json");
     writeFileSync(linearPath, JSON.stringify(linear));
