@@ -161,8 +161,10 @@ test("the normal blocked lane writes one immutable no-authority receipt", async 
       path.join(preflightDirectory, "production-preflight.json"),
       `${JSON.stringify(preflightReceipt)}\n`,
     );
-    const command = path.resolve("tools/spec-lint/node_modules/.bin/tsx");
+    const command = process.execPath;
     const arguments_ = [
+      "--import",
+      "./node_modules/tsx/dist/loader.mjs",
       "scripts/production-release-no-authority.ts",
       "--preflight-dir",
       preflightDirectory,
