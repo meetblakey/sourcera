@@ -15,6 +15,7 @@ export interface SourceRequirement {
   section: string;
   dependencies: string[];
   disposition: Disposition;
+  replacementId?: string;
 }
 
 export interface ReleaseDefinition {
@@ -36,9 +37,11 @@ export interface ReleaseAssignment {
 }
 
 export interface ReleasePolicy {
-  schemaVersion: 1;
-  r0Roots: string[];
-  baselineAssignments: ReleaseAssignment[];
+  schemaVersion: 2;
+  releaseAuthority: "linear_native";
+  allowedReleaseIds: ReleaseId[];
+  exactlyOneReleasePerMappedIssue: true;
+  dependencyOrder: "prerequisite_not_later";
 }
 
 export type R0CheckpointId =
@@ -136,6 +139,7 @@ export interface LinearIssueSnapshot {
   id: string;
   parentId: string | null;
   sourceId: string | null;
+  sourceFamilyId?: string | null;
   title: string;
   kind: "executable" | "parent" | "decision" | "proof_only";
   labels: string[];

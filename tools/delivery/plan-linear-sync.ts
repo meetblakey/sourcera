@@ -696,9 +696,6 @@ for (const assignment of releaseInput.assignments) {
   if (assignmentById.has(assignment.requirementId)) {
     throw new Error(`Duplicate release assignment ${assignment.requirementId}`);
   }
-  if (!expectedSourceIds.has(assignment.requirementId)) {
-    throw new Error(`Release plan contains non-executable ${assignment.requirementId}`);
-  }
   if (!(assignment.release in RELEASE_SEQUENCE)) {
     throw new Error(`Release plan contains invalid ${assignment.release}`);
   }
@@ -707,12 +704,6 @@ for (const assignment of releaseInput.assignments) {
   }
   assignmentById.set(assignment.requirementId, assignment);
 }
-for (const requirementId of [...expectedSourceIds].sort(compare)) {
-  if (!assignmentById.has(requirementId)) {
-    throw new Error(`Release plan is missing ${requirementId}`);
-  }
-}
-
 const sourceGraph: SourceRequirement[] = [
   ...executableFeatures,
   ...runtimeRows.map<SourceRequirement>((row) => ({
@@ -729,20 +720,11 @@ const sourceAdjacency = new Map<string, Set<string>>(
   sourceGraph.map((row) => [row.requirementId, new Set<string>()]),
 );
 for (const row of sourceGraph) {
-  const dependentRelease = assignmentById.get(row.requirementId)!.release;
   for (const dependencyId of row.dependencies) {
     if (!expectedSourceIds.has(dependencyId)) {
       throw new Error(`${row.requirementId} depends on unknown ${dependencyId}`);
     }
     sourceAdjacency.get(dependencyId)!.add(row.requirementId);
-    const dependencyRelease = assignmentById.get(dependencyId)!.release;
-    if (
-      RELEASE_SEQUENCE[dependencyRelease] > RELEASE_SEQUENCE[dependentRelease]
-    ) {
-      throw new Error(
-        `Cross-release inversion: ${row.requirementId} ${dependentRelease} depends on ${dependencyId} ${dependencyRelease}`,
-      );
-    }
   }
 }
 const sourceCycle = findCycle(sourceAdjacency);
@@ -1236,6 +1218,21 @@ for (const requirementId of [...expectedSourceIds].sort(compare)) {
   if (issue.archivedAt !== null) {
     throw new Error(`${kind} source ${requirementId} maps to archived issue ${issueId}`);
   }
+  for (const membership of issue.releases) {
+    if (!/^R[0-5]$/.test(membership)) {
+      throw new Error(
+        `Linear issue ${issueId} has ungoverned release ${membership}`,
+      );
+    }
+  }
+  if (
+    issue.releases.length !== 1 ||
+    !/^R[0-5]$/.test(issue.releases[0] ?? "")
+  ) {
+    throw new Error(
+      `${kind} source ${requirementId} must have exactly one canonical live release`,
+    );
+  }
   if (!canonicalTeamIdentities.has(`${issue.team}:${issue.teamId}`)) {
     throw new Error(
       `Mapped issue team ${issue.team}:${issue.teamId} is absent from canonical pipeline`,
@@ -1269,30 +1266,39 @@ for (const requirementId of [...expectedSourceIds].sort(compare)) {
   sourceByIssue.set(issueId, requirementId);
 }
 
-const activeIssueIds = new Set(issueBySource.values());
-for (const relation of [...allRelations].sort(compare)) {
-  const [type, prerequisiteIssueId, dependentIssueId] = relation.split(":");
+for (const row of sourceGraph) {
+  const dependentIssue = liveById.get(issueBySource.get(row.requirementId)!);
+  const dependentRelease = dependentIssue!.releases[0] as ReleaseId;
+  for (const dependencyId of row.dependencies) {
+    const dependencyIssue = liveById.get(issueBySource.get(dependencyId)!);
+    const dependencyRelease = dependencyIssue!.releases[0] as ReleaseId;
+    if (RELEASE_SEQUENCE[dependencyRelease] > RELEASE_SEQUENCE[dependentRelease]) {
+      throw new Error(
+        `Cross-release inversion: ${row.requirementId} ${dependentRelease} depends on ${dependencyId} ${dependencyRelease}`,
+      );
+    }
+  }
+}
+
+for (const mapping of snapshot.issues) {
+  if (!mapping.sourceId) continue;
+  const live = liveById.get(mapping.id);
   if (
-    type !== "blocks" ||
-    !activeIssueIds.has(prerequisiteIssueId) ||
-    !activeIssueIds.has(dependentIssueId)
+    !live ||
+    live.releases.length !== 1 ||
+    !/^R[0-5]$/.test(live.releases[0] ?? "")
   ) {
     continue;
   }
-  const prerequisiteSourceId = sourceByIssue.get(prerequisiteIssueId)!;
-  const dependentSourceId = sourceByIssue.get(dependentIssueId)!;
-  const prerequisiteRelease = assignmentById.get(prerequisiteSourceId)!.release;
-  const dependentRelease = assignmentById.get(dependentSourceId)!.release;
-  if (
-    RELEASE_SEQUENCE[prerequisiteRelease] >
-      RELEASE_SEQUENCE[dependentRelease]
-  ) {
+  const readback = assignmentById.get(mapping.sourceId);
+  if (!readback || readback.release !== live.releases[0]) {
     throw new Error(
-      `Active mapped block ${relation} inverts releases: ${prerequisiteSourceId} ${prerequisiteRelease} blocks ${dependentSourceId} ${dependentRelease}`,
+      `Release readback for ${mapping.sourceId} differs from live Linear ${live.releases[0]}`,
     );
   }
 }
 
+const activeIssueIds = new Set(issueBySource.values());
 const desiredBlocks = new Map<string, BlockChange>();
 for (const row of sourceGraph) {
   for (const dependencyId of row.dependencies) {
@@ -1318,11 +1324,36 @@ const blockAdditions = [...desiredBlocks.values()]
       !relationsByIssue.get(change.prerequisiteIssueId)!.has(change.relation),
   )
   .sort((left, right) => compare(left.relation, right.relation));
+const blockRemovals = [...allRelations]
+  .flatMap((relation): BlockChange[] => {
+    const [type, prerequisiteIssueId, dependentIssueId] = relation.split(":");
+    if (
+      type !== "blocks" ||
+      !activeIssueIds.has(prerequisiteIssueId) ||
+      !activeIssueIds.has(dependentIssueId) ||
+      desiredBlocks.has(relation)
+    ) {
+      return [];
+    }
+    return [
+      {
+        relation,
+        prerequisiteIssueId,
+        prerequisiteSourceId: sourceByIssue.get(prerequisiteIssueId)!,
+        dependentIssueId,
+        dependentSourceId: sourceByIssue.get(dependentIssueId)!,
+      },
+    ];
+  })
+  .sort((left, right) => compare(left.relation, right.relation));
+const removedBlockKeys = new Set(
+  blockRemovals.map((change) => change.relation),
+);
 
 const mappedLinearAdjacency = new Map<string, Set<string>>(
   [...activeIssueIds].map((issueId) => [issueId, new Set<string>()]),
 );
-for (const relation of allRelations) {
+for (const relation of desiredBlocks.keys()) {
   const [type, prerequisite, dependent] = relation.split(":");
   if (
     type === "blocks" &&
@@ -1348,6 +1379,7 @@ const linearAdjacency = new Map<string, Set<string>>(
   [...activeCapturedIssueIds].map((issueId) => [issueId, new Set<string>()]),
 );
 for (const relation of allRelations) {
+  if (removedBlockKeys.has(relation)) continue;
   const [type, prerequisite, dependent] = relation.split(":");
   if (
     type === "blocks" &&
@@ -1375,43 +1407,12 @@ for (const change of blockAdditions) {
 }
 
 const releaseChanges: ReleaseChange[] = [];
-for (const requirementId of [...expectedSourceIds].sort(compare)) {
-  const issueId = issueBySource.get(requirementId)!;
-  const issue = liveById.get(issueId)!;
-  const release = assignmentById.get(requirementId)!.release;
-  const before = [...issue.releases].sort();
-  for (const membership of before) {
-    if (!/^R[0-5]$/.test(membership)) {
-      throw new Error(
-        `Linear issue ${issueId} has ungoverned release ${membership}`,
-      );
-    }
-  }
-  const targetReleaseId = releaseIdByMembership.get(release);
-  if (!targetReleaseId) {
-    throw new Error(`Linear fingerprint has no release identity for ${release}`);
-  }
-  const after = [release];
-  if (JSON.stringify(before) !== JSON.stringify(after)) {
-    releaseChanges.push({
-      issueId,
-      sourceId: requirementId,
-      before,
-      after,
-      beforeReleaseIds: before.map((membership) =>
-        releaseIdByMembership.get(membership)!
-      ),
-      afterReleaseIds: [targetReleaseId],
-    });
-  }
-}
-releaseChanges.sort((left, right) => compare(left.issueId, right.issueId));
 
 const relationIssueIds = new Set(
-  blockAdditions.flatMap((change) => [
-    change.prerequisiteIssueId,
-    change.dependentIssueId,
-  ]),
+  [...blockAdditions, ...blockRemovals].flatMap((change) => [
+      change.prerequisiteIssueId,
+      change.dependentIssueId,
+    ]),
 );
 const expectedRelationsByIssue: RelationExpectation[] = [
   ...relationIssueIds,
@@ -1420,7 +1421,9 @@ const expectedRelationsByIssue: RelationExpectation[] = [
   .map((issueId) => ({
     issueId,
     relations: [
-      ...(relationsByIssue.get(issueId) ?? []),
+      ...[...(relationsByIssue.get(issueId) ?? [])].filter(
+        (relation) => !removedBlockKeys.has(relation),
+      ),
       ...blockAdditions
         .filter(
           (change) =>
@@ -1466,6 +1469,7 @@ const plan = {
   },
   releaseChanges,
   blockAdditions,
+  blockRemovals,
   expectedRelationsByIssue,
   rollback: {
     releaseChanges: releaseChanges.map((change) => ({
@@ -1476,6 +1480,7 @@ const plan = {
       beforeReleaseIds: change.afterReleaseIds,
       afterReleaseIds: change.beforeReleaseIds,
     })),
+    blockAdditions: blockRemovals,
     blockRemovals: blockAdditions,
     expectedRelationsByIssue: rollbackRelationsByIssue,
   },

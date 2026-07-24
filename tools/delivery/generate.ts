@@ -33,7 +33,10 @@ import {
   type OperatingModel,
 } from "./lib/operating-model.js";
 import {
-  buildReleaseAssignments,
+  publicationIntegrityFindings,
+  publicationIntegritySummary,
+} from "./lib/publication-integrity.js";
+import {
   releasePolicyFindings,
 } from "./lib/release-policy.js";
 import type {
@@ -48,6 +51,10 @@ import type {
   SourceRequirement,
 } from "./lib/model.js";
 import { readinessFindings } from "./lib/readiness.js";
+import {
+  assertBoundTicketIntegrityReport,
+  type BoundTicketIntegrityReport,
+} from "./lib/ticket-integrity.js";
 import { validateReleases } from "./lib/releases.js";
 import { calculateScorecard } from "./lib/scorecard.js";
 import { semanticRoadmapFindings } from "./lib/semantic-roadmap.js";
@@ -57,6 +64,7 @@ import {
   sourceReferenceFindings,
 } from "./lib/sources.js";
 import {
+  resolvedJourneyTargets,
   validationEvidenceGroups,
   validationPlanFindings,
   type ValidationPlan,
@@ -78,6 +86,7 @@ interface RuntimeGateDependency {
 interface LinearDeliverySnapshot extends LinearMilestoneSnapshot {
   issues: LinearIssueSnapshot[];
   linearFingerprint: LinearFingerprint;
+  linearTicketIntegrity?: BoundTicketIntegrityReport;
 }
 
 function argumentsByName(): Map<string, string> {
@@ -175,6 +184,15 @@ const releasePlan = json<{ assignments: ReleaseAssignment[] }>(releasePlanPath)
   .assignments;
 const policy = json<ReleasePolicy>(policyPath);
 const linearSnapshot = json<LinearDeliverySnapshot>(linearPath);
+const descriptionContractVerified = linearSnapshot.linearTicketIntegrity
+  ? Boolean(
+      assertBoundTicketIntegrityReport(
+        linearSnapshot.linearTicketIntegrity,
+        `${JSON.stringify(linearSnapshot.linearFingerprint, null, 2)}\n`,
+        linearSnapshot.issues.length,
+      ),
+    )
+  : false;
 const operatingModel = json<OperatingModel>(operatingModelPath);
 const linearProjectScope = json<LinearProjectScope>(linearProjectScopePath);
 const issues = linearSnapshot.issues;
@@ -220,9 +238,6 @@ const validationFindings = validationPlanFindings(validation, releases);
 const overrideById = new Map(
   overrides.map((override) => [override.requirementId, override]),
 );
-const releaseById = new Map(
-  releasePlan.map((assignment) => [assignment.requirementId, assignment]),
-);
 const sourceFeatures = applyFeatureDependencies(
   parseFeatureInventory(readFileSync(inventoryPath, "utf8")),
   featureDependencies,
@@ -254,7 +269,7 @@ const manifest: ManifestRow[] = requirements.map((row) => {
   const issue = issueBySource.get(row.requirementId);
   return {
     ...row,
-    release: releaseById.get(row.requirementId)?.release ?? null,
+    release: issue?.release ?? null,
     issueId: issue?.id ?? null,
   };
 });
@@ -363,29 +378,29 @@ const policyFindings = releasePolicyFindings(
   policy,
   releases,
 );
-const expectedAssignments = policyFindings.length
-  ? []
-  : buildReleaseAssignments(
-      executablePolicyGraph,
-      runtimeGates,
-      policy,
-      runtimeDependencies,
-      releases,
-    ).sort((left, right) =>
-      left.requirementId.localeCompare(right.requirementId, undefined, {
-        numeric: true,
-      }),
-    );
-const releasePlanPolicyFindings: Finding[] =
-  policyFindings.length === 0 &&
-    JSON.stringify(releasePlan) !== JSON.stringify(expectedAssignments)
-    ? [
-        {
-          code: "release_plan_policy_drift",
-          message: "Release plan differs from the canonical release policy",
-        },
-      ]
-    : [];
+const releasePlanById = new Map(
+  releasePlan.map((assignment) => [assignment.requirementId, assignment]),
+);
+const releasePlanReadbackFindings: Finding[] = manifest.flatMap((row) => {
+  if (!row.issueId || !row.release) return [];
+  const readback = releasePlanById.get(row.requirementId);
+  if (!readback) {
+    return [{
+      code: "release_readback_missing",
+      requirementId: row.requirementId,
+      issueId: row.issueId,
+      message: `${row.requirementId} live Linear release ${row.release} is absent from the readback mirror`,
+    }];
+  }
+  return readback.release === row.release
+    ? []
+    : [{
+        code: "release_readback_drift",
+        requirementId: row.requirementId,
+        issueId: row.issueId,
+        message: `${row.requirementId} readback ${readback.release} differs from live Linear ${row.release}`,
+      }];
+});
 const exactOpenRows = Number(
   exact.open_rows ?? exact.summary?.open_rows ?? 0,
 );
@@ -411,7 +426,7 @@ const duplicateReleaseAssignments: Finding[] = releasePlan
   }));
 const releasePlanFindings: Finding[] = [
   ...policyFindings,
-  ...releasePlanPolicyFindings,
+  ...releasePlanReadbackFindings,
   ...duplicateReleaseAssignments,
   ...releasePlan
     .filter(
@@ -431,22 +446,6 @@ const releasePlanFindings: Finding[] = [
       code: "release_assignment_rationale_missing",
       requirementId: assignment.requirementId,
       message: `${assignment.requirementId} lacks release rationale`,
-    })),
-  ...releasePlan
-    .filter((assignment) => {
-      const row = requirements.find(
-        (candidate) => candidate.requirementId === assignment.requirementId,
-      );
-      return Boolean(
-        row &&
-          row.disposition !== "executable" &&
-          !row.requirementId.startsWith("RG:"),
-      );
-    })
-    .map((assignment) => ({
-      code: "release_assignment_non_executable",
-      requirementId: assignment.requirementId,
-      message: `${assignment.requirementId} is not executable release work`,
     })),
   ...releasePlan
     .filter(
@@ -510,7 +509,9 @@ const releaseFindings = validateReleases(releases);
 const graphFindings = validateGraph(manifest, releases);
 const readiness = issues
   .filter((issue) => issue.labels.includes("codex-ready"))
-  .flatMap((issue) => readinessFindings(issue));
+  .flatMap((issue) =>
+    readinessFindings(issue, { descriptionContractVerified }),
+  );
 const readyGraphFindings = graphFindings.filter(
   (finding) =>
     finding.requirementId &&
@@ -520,10 +521,34 @@ const readyGraphFindings = graphFindings.filter(
         issue.labels.includes("codex-ready"),
     ),
 );
-const tracedIssues = issues.filter(
-  (issue) => Boolean(issue.sourceId) || issue.kind === "executable",
+const replacementById = new Map(
+  overrides.flatMap((override) =>
+    override.replacementId
+      ? [[override.requirementId, override.replacementId] as const]
+      : [],
+  ),
 );
-const drift = driftFindings(manifest, tracedIssues);
+const canonicalDependency = (sourceId: string): string => {
+  const seen = new Set<string>();
+  let current = sourceId;
+  while (replacementById.has(current)) {
+    if (seen.has(current)) throw new Error(`Disposition replacement cycle at ${current}`);
+    seen.add(current);
+    current = replacementById.get(current)!;
+  }
+  return current;
+};
+const canonicalDependencyManifest = manifest.map((row) => ({
+  ...row,
+  dependencies: [
+    ...new Set(row.dependencies.map(canonicalDependency)),
+  ].filter((dependency) => dependency !== row.requirementId).sort(),
+}));
+const drift = driftFindings(
+  canonicalDependencyManifest,
+  issues,
+  linearSnapshot.linearFingerprint,
+);
 const releaseAssignment: Finding[] = manifest
   .filter(
     (row) =>
@@ -536,27 +561,30 @@ const releaseAssignment: Finding[] = manifest
     requirementId: row.requirementId,
     message: `${row.requirementId} has no release`,
   }));
-const allFindings = [
-  ...sourceFindings,
-  ...dispositionFindings,
-  ...duplicateOverrides,
-  ...runtimeDependencyFindings,
-  ...exactFindings,
-  ...releasePlanFindings,
-  ...duplicateIssueSources,
-  ...decisionFindings,
-  ...riskFindings,
-  ...operatingFindings,
-  ...validationFindings,
-  ...evidenceFindings,
-  ...familyFindings,
-  ...releaseFindings,
-  ...graphFindings,
-  ...readiness,
-  ...drift,
-  ...releaseAssignment,
-  ...journeyReadinessFindings,
-];
+const publicationBlockingFindings = publicationIntegrityFindings({
+  planningFindings: [
+    ...sourceFindings,
+    ...dispositionFindings,
+    ...duplicateOverrides,
+    ...runtimeDependencyFindings,
+    ...releasePlanFindings,
+    ...duplicateIssueSources,
+    ...decisionFindings,
+    ...riskFindings,
+    ...familyFindings,
+    ...releaseFindings,
+    ...drift,
+    ...releaseAssignment,
+  ],
+  graphFindings,
+  codexReadyFindings: readiness,
+  validationFindings,
+  operatingFindings,
+  journeyFindings: journeyReadinessFindings,
+});
+const publicationIntegrity = publicationIntegritySummary(
+  publicationBlockingFindings,
+);
 const evidencePasses = (kind: EvidenceKind) => {
   const group = evidenceGroups.find((candidate) => candidate.kind === kind);
   return Boolean(group && evidenceGroupPasses(root, group));
@@ -564,7 +592,7 @@ const evidencePasses = (kind: EvidenceKind) => {
 const readyIssues = issues.filter((issue) =>
   issue.labels.includes("codex-ready"),
 );
-const scorecard = calculateScorecard({
+const categoryScorecard = calculateScorecard({
   planning: [
     sourceFindings.length +
         dispositionFindings.length +
@@ -618,6 +646,10 @@ const scorecard = calculateScorecard({
     evidencePasses("runtime"),
   ],
 });
+const scorecard = {
+  ...categoryScorecard,
+  journeyTargets: resolvedJourneyTargets(validation),
+};
 
 const traceability = manifest.map((row) => {
   const issue = row.issueId
@@ -691,6 +723,7 @@ const reports = {
     ]),
   },
   "drift-report.json": {
+    publicationIntegrity,
     findings: sortFindings([
       ...sourceFindings,
       ...dispositionFindings,
@@ -705,6 +738,7 @@ const reports = {
       ...validationFindings,
       ...evidenceFindings,
       ...familyFindings,
+      ...releaseFindings,
       ...drift,
       ...releaseAssignment,
     ]),
@@ -726,4 +760,4 @@ mkdirSync(outDir, { recursive: true });
 for (const [name, value] of Object.entries(reports)) {
   writeFileSync(resolve(outDir, name), `${JSON.stringify(value, null, 2)}\n`);
 }
-process.exitCode = allFindings.length ? 1 : 0;
+process.exitCode = publicationIntegrity.passed ? 0 : 1;

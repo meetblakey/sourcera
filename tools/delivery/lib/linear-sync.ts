@@ -142,23 +142,17 @@ function expectedRelationSet(
   }
   const relations = sorted([...new Set(normalized)]);
   const beforeSet = new Set(beforeRelations);
-  if (beforeRelations.some((relation) => !relations.includes(relation))) {
-    add(
-      findings,
-      "linear_sync_expected_relations_remove_existing",
-      `${issueId} expected relations remove an existing relation`,
-      issueId,
-    );
-  }
   if (
-    relations.some(
-      (relation) => !beforeSet.has(relation) && !relation.startsWith("blocks:"),
+    [...new Set([...beforeRelations, ...relations])].some(
+      (relation) =>
+        beforeSet.has(relation) !== relations.includes(relation) &&
+        !relation.startsWith("blocks:"),
     )
   ) {
     add(
       findings,
       "linear_sync_expected_relation_type_invalid",
-      `${issueId} expected relations add a relation other than blocks`,
+      `${issueId} expected relations change a relation other than blocks`,
       issueId,
     );
   }
@@ -178,12 +172,16 @@ function validateExpectedRelationEndpoints(
     const beforeIssue = beforeIssues.get(issueId);
     if (!beforeIssue || !Array.isArray(expectedRelations)) continue;
     const beforeRelations = new Set(beforeIssue.relations);
-    for (const relation of expectedRelations) {
+    const expectedSet = new Set(expectedRelations);
+    for (const relation of new Set([
+      ...beforeRelations,
+      ...expectedRelations,
+    ])) {
       const parts = relation.split(":");
       if (
         parts.length !== 3 ||
         parts[0] !== "blocks" ||
-        beforeRelations.has(relation) ||
+        beforeRelations.has(relation) === expectedSet.has(relation) ||
         (parts[1] !== issueId && parts[2] !== issueId)
       ) {
         continue;
@@ -197,10 +195,14 @@ function validateExpectedRelationEndpoints(
       } catch {
         continue;
       }
+      const shouldExist = expectedSet.has(relation);
       if (
-        [parts[1], parts[2]].some((endpoint) =>
-          !expectedRelationsByIssue.get(endpoint)?.includes(relation)
-        )
+        [parts[1], parts[2]].some((endpoint) => {
+          const endpointRelations = expectedRelationsByIssue.get(endpoint);
+          return (
+            !endpointRelations || endpointRelations.includes(relation) !== shouldExist
+          );
+        })
       ) {
         incomplete.add(relation);
       }
@@ -241,6 +243,10 @@ function compareIssue(
       code: "linear_sync_description_changed",
       label: "description",
     },
+    sourceProvenance: {
+      code: "linear_sync_source_provenance_changed",
+      label: "source provenance",
+    },
     estimate: {
       code: "linear_sync_estimate_changed",
       label: "estimate",
@@ -249,9 +255,17 @@ function compareIssue(
       code: "linear_sync_priority_changed",
       label: "priority",
     },
+    dueDate: {
+      code: "linear_sync_due_date_changed",
+      label: "due date",
+    },
     archivedAt: {
       code: "linear_sync_archived_changed",
       label: "archive identity",
+    },
+    stateId: {
+      code: "linear_sync_state_identity_changed",
+      label: "state identity",
     },
     assignee: {
       code: "linear_sync_owner_changed",
@@ -266,6 +280,18 @@ function compareIssue(
       code: "linear_sync_team_identity_changed",
       label: "team identity",
     },
+    cycleId: {
+      code: "linear_sync_cycle_identity_changed",
+      label: "cycle identity",
+    },
+    cycleNumber: {
+      code: "linear_sync_cycle_number_changed",
+      label: "cycle number",
+    },
+    cycle: {
+      code: "linear_sync_cycle_changed",
+      label: "cycle",
+    },
     projectId: {
       code: "linear_sync_project_changed",
       label: "project identity",
@@ -277,6 +303,10 @@ function compareIssue(
     parent: {
       code: "linear_sync_parent_changed",
       label: "parent",
+    },
+    parentLinearId: {
+      code: "linear_sync_parent_identity_changed",
+      label: "parent identity",
     },
     state: { code: "linear_sync_state_changed", label: "state" },
     stateType: {

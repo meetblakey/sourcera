@@ -71,53 +71,53 @@
       "response": "Fail before provider mutation, provision or separately approve the bootstrap, and prove the live rollback anchor before customer traffic or domain promotion; historical receipts alone never authorize release."
     },
     {
-      "id": "RISK-011",
-      "statement": "Waiting for invited-human release proof while candidate Convex code is live can expose unproved behavior or strand a release after the runner exits.",
+      "id": "RISK-018",
+      "statement": "A reversible planning contract can be mistaken for ratified product authority.",
       "owner": "Blake Rowley",
-      "trigger": "A release attempts to collect customer or operational proof without the isolated candidate target and durable coordinator required by DEC-PROD-002.",
-      "response": "Block promotion, restore and prove the known-good Convex release, and collect proof only after the isolated candidate, authenticated durable handoff, expiry compensation, and single-use finalizer are operational."
+      "trigger": "Any linear_planning requirement is proposed as codex-ready or implemented without its named validation trigger closing.",
+      "response": "Fail readiness, re-read the Master Spec and UX fallback, validate or replace the planning default, update its checksum and decision, then resynchronize Linear."
     },
     {
-      "id": "RISK-012",
-      "statement": "The first Vercel production activation has no predecessor and cannot provide atomic cross-project rollback.",
+      "id": "RISK-019",
+      "statement": "Archiving canceled planning work before its crosswalk is complete can hide a still-required feature or failure path.",
       "owner": "Blake Rowley",
-      "trigger": "Baseline activation stops after one or more applications receive traffic but before all three exact candidates are proved live and healthy.",
-      "response": "Stop new mutations, re-read every project and domain, retain the immutable stage receipt, mark recovery_required, and resume only the remaining exact candidates from that receipt. Never label the partial state rolled back; strict rollback requires a separately provisioned healthy maintenance predecessor for every project."
+      "trigger": "A legacy issue or project is proposed for archive while its mapping is unresolved, reviewer-needed, or lacks live successor read-back.",
+      "response": "Withhold archive, preserve provenance, close the canonical contract and relations, obtain review, then regenerate the crosswalk and drift reports."
     },
     {
-      "id": "RISK-013",
-      "statement": "A later GitHub rerun can change the latest workflow-run record and invalidate an otherwise immutable successful baseline artifact.",
+      "id": "RISK-020",
+      "statement": "Stripe meter processing is asynchronous and provider identifier reuse outside its bounded window can turn a blind replay into a duplicate financial effect.",
       "owner": "Blake Rowley",
-      "trigger": "Baseline provenance is read from the mutable run endpoint instead of the exact successful attempt endpoint.",
-      "response": "Bind the artifact, run, SHA, and conclusion to the attempt-specific GitHub readback and reject any proof that depends on the latest mutable attempt."
+      "trigger": "A meter submission has an unknown outcome, a provider error event arrives, or a retry would occur after the pinned identifier-deduplication window.",
+      "response": "Keep one durable Sourcera delivery identity, stop blind replay, reconcile provider summaries/error events and owning source state, and require a Finance-safe receipt before terminal success or correction."
     },
     {
-      "id": "RISK-014",
-      "statement": "A reason-only bootstrap can mint recovery authority without proving first genesis or an expired anchor.",
+      "id": "RISK-021",
+      "statement": "Conflicting role, pricing-version, seat-retention, or retention-registry source clauses can create a revenue-expanding, access-widening, or destructive false-ready implementation.",
       "owner": "Blake Rowley",
-      "trigger": "Bootstrap is requested without an exhaustive, receipt-bound inventory of prior production and bootstrap anchors.",
-      "response": "Allow only machine-proven initial genesis or exact expired-anchor recovery, keep the authority non-promotable, and require the DEC-PROD-002 single-use finalizer before mutation."
+      "trigger": "F-007.B, F-132, F-529, or F-593 is proposed as codex-ready before its named source reconciliation and checksum refresh pass.",
+      "response": "Apply only the recorded reversible least-privilege or fail-closed default, keep readiness false, normalize the Master, regenerate ordered source bundles, and rerun authorization, financial, retention, migration, and exact Linear gates."
     },
     {
-      "id": "RISK-015",
-      "statement": "Cancellation during a Vercel mutation can outlive the runner grace period and lose recovery evidence.",
+      "id": "RISK-022",
+      "statement": "Duplicating titles, owners, releases, estimates, labels, or dependency prose inside issue descriptions lets Linear native fields and issue text drift independently.",
       "owner": "Blake Rowley",
-      "trigger": "A baseline provider command remains active after a cancellation signal or any pinned production domain is not proved on the promoted deployment.",
-      "response": "Terminate promptly, persist recovery_required with traffic unknown, and reconcile only through the same immutable receipt; promotion passes only when every pinned production domain is assigned."
+      "trigger": "The ticket-integrity capture finds a native-field declaration, repeated native title, or dependency/relation section in a tracked issue description.",
+      "response": "Fail ticket integrity, keep behavior and proof detail in the description, move metadata and graph edges to native Linear fields, read back both sides, and regenerate the controlled capture."
     },
     {
-      "id": "RISK-016",
-      "statement": "Co-locating Vercel and Convex write credentials gives one process unnecessary cross-provider mutation authority.",
+      "id": "RISK-023",
+      "statement": "The first F-007 customer pilot has no live cohort baseline, so an unversioned threshold or one-person safety result could create false release confidence.",
       "owner": "Blake Rowley",
-      "trigger": "A job or process receives both provider credential classes before the durable phase coordinator is operational.",
-      "response": "Fail closed and split stage, mutation, promotion, and compensation into receipt-bound provider-specific jobs before enabling production mutation."
+      "trigger": "F-007.E starts collection without the approved target-set hash, treats the safety run as release proof, changes a threshold after enrollment, or has fewer than five valid starts across three consented Organizations.",
+      "response": "Stop the pilot, preserve the immutable failed or safety-only receipt, require independent target approval and scorecard regeneration, then run a fresh consented cohort under one frozen target version."
     },
     {
-      "id": "RISK-017",
-      "statement": "Artifact retention, deletion, or workflow identity changes can erase the GitHub evidence needed to distinguish first genesis from recovery.",
+      "id": "RISK-024",
+      "statement": "Multiple feature issues editing the central Convex schema file can silently merge incompatible tables, indexes, or generated types.",
       "owner": "Blake Rowley",
-      "trigger": "A production authority approaches expiry, an authority artifact or run is deleted, or an authority-producing workflow is renamed, copied, or removed.",
-      "response": "Keep every artifact-derived anchor non-promotable and block provider mutation until a protected non-expiring genesis sentinel and single-use finalizer preserve authority history independently of Actions retention."
+      "trigger": "A feature issue lists convex/schema.ts, uses wildcard fragment discovery, duplicates a table or index key, or generated types differ from the explicit fragment registry.",
+      "response": "Fail code generation and CI, keep F-005 as the sole assembler owner, return the change to its exact feature fragment, and rerun collision, generated-model, migration, and Linear path readback gates."
     }
   ]
 }

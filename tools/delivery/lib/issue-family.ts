@@ -14,6 +14,11 @@ export function issueFamilyForSource(
 ): IssueFamily | null {
   const sourceIssue = issues.find((issue) => issue.sourceId === sourceId);
   if (!sourceIssue) return null;
+  const explicitFamily = issues.filter(
+    (issue) =>
+      issue.kind === "executable" &&
+      (issue.sourceFamilyId ?? issue.sourceId) === sourceId,
+  );
   return {
     sourceIssue,
     executableIssues: sourceIssue.kind === "parent"
@@ -22,6 +27,8 @@ export function issueFamilyForSource(
             issue.kind === "executable" &&
             issue.parentId === sourceIssue.id,
         )
+      : explicitFamily.length
+      ? explicitFamily
       : [sourceIssue],
   };
 }
@@ -31,6 +38,11 @@ export function issueFamilyFindings(
 ): Finding[] {
   const findings: Finding[] = [];
   const byId = new Map(issues.map((issue) => [issue.id, issue]));
+  const sourceOwners = new Map(
+    issues.flatMap((issue) =>
+      issue.sourceId ? [[issue.sourceId, issue] as const] : []
+    ),
+  );
 
   for (const issue of issues) {
     if (issue.kind === "parent") {
@@ -61,6 +73,18 @@ export function issueFamilyFindings(
     }
 
     if (issue.kind !== "executable") continue;
+    const sourceFamilyId = issue.sourceFamilyId ?? issue.sourceId;
+    if (
+      issue.sourceFamilyId &&
+      issue.sourceId &&
+      issue.sourceFamilyId !== issue.sourceId
+    ) {
+      findings.push({
+        code: "source_family_conflict",
+        issueId: issue.id,
+        message: `${issue.id} source family differs from its source identity`,
+      });
+    }
     const parent = issue.parentId ? byId.get(issue.parentId) : undefined;
     if (issue.parentId && !parent) {
       findings.push({
@@ -70,7 +94,14 @@ export function issueFamilyFindings(
       });
       continue;
     }
-    if (parent && parent.kind !== "parent") {
+    const parentSourceFamilyId = parent
+      ? parent.sourceFamilyId ?? parent.sourceId
+      : null;
+    const nativeSplitParent =
+      parent?.kind === "executable" &&
+      sourceFamilyId !== null &&
+      parentSourceFamilyId === sourceFamilyId;
+    if (parent && parent.kind !== "parent" && !nativeSplitParent) {
       findings.push({
         code: "child_parent_invalid",
         issueId: issue.id,
@@ -97,11 +128,17 @@ export function issueFamilyFindings(
       continue;
     }
 
-    if (!issue.sourceId) {
+    if (!sourceFamilyId) {
       findings.push({
         code: "source_less_top_level_executable",
         issueId: issue.id,
         message: `${issue.id} has neither a source nor a source-backed parent`,
+      });
+    } else if (!sourceOwners.has(sourceFamilyId)) {
+      findings.push({
+        code: "source_family_owner_missing",
+        issueId: issue.id,
+        message: `${issue.id} source family ${sourceFamilyId} has no primary owner`,
       });
     }
   }

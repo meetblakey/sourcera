@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import {
+  assertLinearPlanningContractFingerprints,
   canonicalLinearFingerprint,
-  fetchLinearCapture,
+  fetchConsistentLinearCapture,
   fingerprintDiff,
   type LinearFingerprint,
 } from "./lib/linear-live.js";
@@ -13,6 +14,10 @@ import {
   assertLinearProjectScope,
   type LinearProjectScope,
 } from "./lib/linear-project-scope.js";
+import {
+  assertLinearProgramScope,
+  type LinearProgramScope,
+} from "./lib/linear-program-scope.js";
 
 async function main(): Promise<void> {
   const argv = new Map<string, string>();
@@ -36,6 +41,13 @@ async function main(): Promise<void> {
   const projectScope = JSON.parse(
     readFileSync(projectScopePath, "utf8"),
   ) as LinearProjectScope;
+  const programScopePath = resolve(
+    argv.get("--linear-program-scope") ??
+      join(dirname(projectScopePath), "linear-program-scope.json"),
+  );
+  const programScope = existsSync(programScopePath)
+    ? JSON.parse(readFileSync(programScopePath, "utf8")) as LinearProgramScope
+    : undefined;
   const fixturePath = argv.get("--fixture");
   const fixture = fixturePath
     ? JSON.parse(readFileSync(resolve(fixturePath), "utf8")) as
@@ -47,10 +59,11 @@ async function main(): Promise<void> {
     : null;
   const liveCapture = fixture
     ? null
-    : await fetchLinearCapture(
+    : await fetchConsistentLinearCapture(
         fetch,
         process.env.LINEAR_API_KEY ?? "",
         projectScope,
+        programScope,
       );
   const captured = fixture
     ? ("fingerprint" in fixture ? fixture.fingerprint : fixture)
@@ -60,6 +73,10 @@ async function main(): Promise<void> {
     : liveCapture?.issueDescriptions ?? null;
   const actual = canonicalLinearFingerprint(captured);
   assertLinearProjectScope(projectScope, actual.projects);
+  if (programScope) {
+    if (!actual.program) throw new Error("Linear fingerprint lacks program topology");
+    assertLinearPlanningContractFingerprints(programScope, actual);
+  }
 
   const fingerprintJson = `${JSON.stringify(actual, null, 2)}\n`;
   if (outPath) {

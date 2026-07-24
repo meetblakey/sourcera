@@ -222,7 +222,7 @@ function fixture(options: FixtureOptions = {}) {
       ],
       linearFingerprint: {
         issues: options.fingerprintIssues ?? [
-          liveIssue("PLA-1", ["R1"], [related]),
+          liveIssue("PLA-1", ["R0"], [related]),
           liveIssue("PLA-2", ["R0"]),
           liveIssue("PLA-3", ["R0"]),
           liveIssue("PLA-4", [], [related]),
@@ -380,23 +380,14 @@ function mutateJson(
   writeFileSync(path, JSON.stringify(value));
 }
 
-test("plans only release drift and missing canonical blocks with exact rollback", () => {
+test("preserves live releases while planning missing canonical blocks", () => {
   const value = fixture();
   try {
     const first = run(value);
     assert.equal(first.status, 0, first.stderr);
     const plan = JSON.parse(readFileSync(value.out, "utf8"));
 
-    assert.deepEqual(plan.releaseChanges, [
-      {
-        issueId: "PLA-1",
-        sourceId: "F-001",
-        before: ["R1"],
-        after: ["R0"],
-        beforeReleaseIds: [RELEASE_IDS.R1],
-        afterReleaseIds: [RELEASE_IDS.R0],
-      },
-    ]);
+    assert.deepEqual(plan.releaseChanges, []);
     assert.deepEqual(plan.blockAdditions, [
       {
         relation: "blocks:PLA-1:PLA-3",
@@ -413,6 +404,7 @@ test("plans only release drift and missing canonical blocks with exact rollback"
         dependentSourceId: "F-001",
       },
     ]);
+    assert.deepEqual(plan.blockRemovals, []);
     assert.deepEqual(plan.expectedRelationsByIssue, [
       {
         issueId: "PLA-1",
@@ -447,16 +439,8 @@ test("plans only release drift and missing canonical blocks with exact rollback"
         },
       ],
     });
-    assert.deepEqual(plan.rollback.releaseChanges, [
-      {
-        issueId: "PLA-1",
-        sourceId: "F-001",
-        before: ["R0"],
-        after: ["R1"],
-        beforeReleaseIds: [RELEASE_IDS.R0],
-        afterReleaseIds: [RELEASE_IDS.R1],
-      },
-    ]);
+    assert.deepEqual(plan.rollback.releaseChanges, []);
+    assert.deepEqual(plan.rollback.blockAdditions, []);
     assert.deepEqual(plan.rollback.blockRemovals, plan.blockAdditions);
     assert.deepEqual(plan.rollback.expectedRelationsByIssue, [
       { issueId: "PLA-1", relations: ["related:PLA-1:PLA-4"] },
@@ -504,10 +488,12 @@ test("emits no mutations when canonical releases and blocks already match", () =
     const plan = JSON.parse(readFileSync(value.out, "utf8"));
     assert.deepEqual(plan.releaseChanges, []);
     assert.deepEqual(plan.blockAdditions, []);
+    assert.deepEqual(plan.blockRemovals, []);
     assert.deepEqual(plan.expectedRelationsByIssue, []);
     assert.deepEqual(plan.guards, { issues: [] });
     assert.deepEqual(plan.rollback, {
       releaseChanges: [],
+      blockAdditions: [],
       blockRemovals: [],
       expectedRelationsByIssue: [],
     });
@@ -587,6 +573,11 @@ test("rejects cross-release inversions before writing a plan", () => {
         rationale: "runtime",
       },
     ],
+    fingerprintIssues: [
+      liveIssue("PLA-1", ["R0"]),
+      liveIssue("PLA-2", ["R1"]),
+      liveIssue("PLA-3", ["R0"]),
+    ],
   });
   try {
     const result = run(value);
@@ -598,7 +589,32 @@ test("rejects cross-release inversions before writing a plan", () => {
   }
 });
 
-test("rejects a cycle closed by a planned block among mapped source issues", () => {
+test("treats repository release assignments only as a live readback mirror", () => {
+  const value = fixture({
+    assignments: [
+      { requirementId: "F-001", release: "R1", rationale: "stale readback" },
+      { requirementId: "F-002", release: "R0", rationale: "foundation" },
+      {
+        requirementId: "RG:journey-proof",
+        release: "R0",
+        rationale: "runtime",
+      },
+    ],
+  });
+  try {
+    const result = run(value);
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /Release readback for F-001 differs from live Linear R0/,
+    );
+    assert.throws(() => readFileSync(value.out, "utf8"));
+  } finally {
+    rmSync(value.dir, { recursive: true, force: true });
+  }
+});
+
+test("removes a stale reverse block before adding the canonical block", () => {
   const reverse = "blocks:PLA-1:PLA-2";
   const value = fixture({
     fingerprintIssues: [
@@ -609,8 +625,17 @@ test("rejects a cycle closed by a planned block among mapped source issues", () 
   });
   try {
     const result = run(value);
-    assert.equal(result.status, 1);
-    assert.match(result.stderr, /Planned Linear blocks create a cycle/);
+    assert.equal(result.status, 0, result.stderr);
+    const plan = JSON.parse(readFileSync(value.out, "utf8"));
+    assert.deepEqual(plan.blockRemovals, [
+      {
+        relation: reverse,
+        prerequisiteIssueId: "PLA-1",
+        prerequisiteSourceId: "F-001",
+        dependentIssueId: "PLA-2",
+        dependentSourceId: "F-002",
+      },
+    ]);
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
   }
@@ -621,7 +646,7 @@ test("rejects a cycle closed through an active unmapped captured issue", () => {
   const second = "blocks:PLA-4:PLA-2";
   const value = fixture({
     fingerprintIssues: [
-      liveIssue("PLA-1", ["R1"], [first]),
+      liveIssue("PLA-1", ["R0"], [first]),
       liveIssue("PLA-2", ["R0"], [second]),
       liveIssue("PLA-3", ["R0"]),
       liveIssue("PLA-4", [], [first, second]),
@@ -637,7 +662,7 @@ test("rejects a cycle closed through an active unmapped captured issue", () => {
   }
 });
 
-test("continues to reject a pre-existing active mapped Linear cycle", () => {
+test("removes the stale edge from a pre-existing mapped Linear cycle", () => {
   const foundationToJourney = "blocks:PLA-2:PLA-1";
   const journeyToProof = "blocks:PLA-1:PLA-3";
   const proofToFoundation = "blocks:PLA-3:PLA-2";
@@ -650,9 +675,12 @@ test("continues to reject a pre-existing active mapped Linear cycle", () => {
   });
   try {
     const result = run(value);
-    assert.equal(result.status, 1);
-    assert.match(result.stderr, /Planned Linear blocks create a cycle/);
-    assert.throws(() => readFileSync(value.out, "utf8"));
+    assert.equal(result.status, 0, result.stderr);
+    const plan = JSON.parse(readFileSync(value.out, "utf8"));
+    assert.deepEqual(
+      plan.blockRemovals.map((change: { relation: string }) => change.relation),
+      [proofToFoundation],
+    );
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
   }
@@ -671,7 +699,7 @@ test("does not route cycle detection through canceled or archived intermediaries
     }
     const value = fixture({
       fingerprintIssues: [
-        liveIssue("PLA-1", ["R1"], [first]),
+        liveIssue("PLA-1", ["R0"], [first]),
         liveIssue("PLA-2", ["R0"], [second]),
         liveIssue("PLA-3", ["R0"]),
         intermediary,
@@ -686,7 +714,7 @@ test("does not route cycle detection through canceled or archived intermediaries
   }
 });
 
-test("rejects an existing active mapped block that inverts planned releases", () => {
+test("removes an existing mapped block that is absent from the source graph", () => {
   const inverted = "blocks:PLA-1:PLA-2";
   const value = fixture({
     assignments: [
@@ -706,22 +734,22 @@ test("rejects an existing active mapped block that inverts planned releases", ()
   });
   try {
     const result = run(value);
-    assert.equal(result.status, 1);
-    assert.match(
-      result.stderr,
-      /Active mapped block blocks:PLA-1:PLA-2 inverts releases: F-001 R1 blocks F-002 R0/,
+    assert.equal(result.status, 0, result.stderr);
+    const plan = JSON.parse(readFileSync(value.out, "utf8"));
+    assert.deepEqual(
+      plan.blockRemovals.map((change: { relation: string }) => change.relation),
+      [inverted],
     );
-    assert.throws(() => readFileSync(value.out, "utf8"));
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
   }
 });
 
-test("preserves an acyclic same-release active block outside the source graph", () => {
+test("removes an acyclic active block outside the source graph", () => {
   const extra = "blocks:PLA-2:PLA-3";
   const value = fixture({
     fingerprintIssues: [
-      liveIssue("PLA-1", ["R1"]),
+      liveIssue("PLA-1", ["R0"]),
       liveIssue("PLA-2", ["R0"], [extra]),
       liveIssue("PLA-3", ["R0"], [extra]),
     ],
@@ -734,13 +762,17 @@ test("preserves an acyclic same-release active block outside the source graph", 
       plan.expectedRelationsByIssue.find(
         (row: { issueId: string }) => row.issueId === "PLA-2",
       ).relations,
-      ["blocks:PLA-2:PLA-1", "blocks:PLA-2:PLA-3"],
+      ["blocks:PLA-2:PLA-1"],
     );
     assert.equal(
       plan.blockAdditions.some(
         (change: { relation: string }) => change.relation === extra,
       ),
       false,
+    );
+    assert.deepEqual(
+      plan.blockRemovals.map((change: { relation: string }) => change.relation),
+      [extra],
     );
   } finally {
     rmSync(value.dir, { recursive: true, force: true });
@@ -761,7 +793,7 @@ test("ignores canceled historical cycles outside the mapped graph and canonical 
   });
   const value = fixture({
     fingerprintIssues: [
-      liveIssue("PLA-1", ["R1"]),
+      liveIssue("PLA-1", ["R0"]),
       liveIssue("PLA-2", ["R0"]),
       liveIssue("PLA-3", ["R0"]),
       legacyIssue("LEG-1"),

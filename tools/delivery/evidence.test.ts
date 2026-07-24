@@ -3,7 +3,6 @@ import { execFileSync } from "node:child_process";
 import {
   mkdtempSync,
   mkdirSync,
-  readFileSync,
   rmSync,
   symlinkSync,
   writeFileSync,
@@ -19,6 +18,188 @@ import {
   type EvidenceGroup,
 } from "./lib/evidence.js";
 import type { CheckpointProofType } from "./lib/model.js";
+
+interface ForecastObservationFixture {
+  issue: string;
+  estimate: number;
+  firstImplementationCommit: string;
+  closeoutCommit: string;
+  startedAt: string;
+  completedAt: string;
+  activeSeconds: number;
+  reviewEvidence: string;
+  runtimeEvidence: string;
+}
+
+interface ForecastReceiptFixture {
+  schemaVersion: number;
+  proofTypes: string[];
+  status: string;
+  observedAt: string;
+  policy: {
+    laneCount: number;
+    wipLimit: number;
+    calendarDates: string;
+    measurement: string;
+  };
+  observations: ForecastObservationFixture[];
+  baseline: {
+    completedEstimate: number;
+    activeSeconds: number;
+    pointsPerActiveHour: number;
+    confidence: string;
+  };
+  next: {
+    issue: string;
+    estimate: number;
+    activeWorkMinutesAfterExternalUnblock: {
+      lower: number;
+      upper: number;
+    };
+    calendarDate: null;
+    externalWait: string;
+    rule: string;
+  };
+  recalibrationTrigger: string;
+}
+
+interface ForecastFixture {
+  root: string;
+  receipt: ForecastReceiptFixture;
+  forecastPath: string;
+  runtimePaths: string[];
+  reviewReceipts: Array<Record<string, unknown>>;
+}
+
+function fixtureCommit(root: string, message: string): string {
+  execFileSync("git", ["commit", "--allow-empty", "-qm", message], {
+    cwd: root,
+  });
+  return execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: root,
+    encoding: "utf8",
+  }).trim();
+}
+
+function cloneForecastReceipt(
+  receipt: ForecastReceiptFixture,
+): ForecastReceiptFixture {
+  return JSON.parse(JSON.stringify(receipt)) as ForecastReceiptFixture;
+}
+
+function createForecastFixture(): ForecastFixture {
+  const root = mkdtempSync(join(tmpdir(), "sourcera-forecast-evidence-"));
+  execFileSync("git", ["init", "-q"], { cwd: root });
+  execFileSync("git", ["config", "user.email", "test@sourcera.local"], {
+    cwd: root,
+  });
+  execFileSync("git", ["config", "user.name", "Sourcera Test"], {
+    cwd: root,
+  });
+  mkdirSync(join(root, "reports", "evidence"), { recursive: true });
+
+  const commitPairs = [
+    [
+      fixtureCommit(root, "first implementation one"),
+      fixtureCommit(root, "closeout one"),
+    ],
+    [
+      fixtureCommit(root, "first implementation two"),
+      fixtureCommit(root, "closeout two"),
+    ],
+  ];
+  const runtimePaths = [
+    "reports/evidence/runtime-one.json",
+    "reports/evidence/runtime-two.json",
+  ];
+  const reviewPaths = [
+    "reports/evidence/review-one.json",
+    "reports/evidence/review-two.json",
+  ];
+  const observations: ForecastObservationFixture[] = commitPairs.map(
+    ([firstImplementationCommit, closeoutCommit], index) => ({
+      issue: `PLA-${index + 1}`,
+      estimate: index === 0 ? 3 : 5,
+      firstImplementationCommit,
+      closeoutCommit,
+      startedAt:
+        index === 0 ? "2020-01-01T10:00:00Z" : "2020-01-01T10:20:00Z",
+      completedAt:
+        index === 0 ? "2020-01-01T10:10:00Z" : "2020-01-01T10:30:00Z",
+      activeSeconds: 600,
+      reviewEvidence: reviewPaths[index],
+      runtimeEvidence: runtimePaths[index],
+    }),
+  );
+  const reviewReceipts = observations.map((observation) => ({
+    schemaVersion: 1,
+    issue: observation.issue,
+    status: "passed",
+    reviewedAt: "2020-01-01T10:31:00Z",
+    reviewer: "Independent test reviewer",
+    reviewType: "commit-bound fixture review",
+    scope: {
+      firstImplementationCommit: observation.firstImplementationCommit,
+      closeoutCommit: observation.closeoutCommit,
+      evidence: observation.runtimeEvidence,
+    },
+    findings: [],
+    verdict: "accepted",
+  }));
+  observations.forEach((observation, index) => {
+    const runtimeReceipt = {
+      schemaVersion: 1,
+      proofTypes: ["tests", "deploy", "rollback", "runtime"],
+      issue: observation.issue,
+      status: "passed",
+      observedAt: "2020-01-01T10:31:00Z",
+      sourceCommit: observation.closeoutCommit,
+      local: { commands: { tests: "passed" } },
+      staging: { healthResult: "passed" },
+      rollback: { healthResult: "passed" },
+    };
+    writeFileSync(
+      join(root, runtimePaths[index]),
+      `${JSON.stringify(runtimeReceipt)}\n`,
+    );
+    writeFileSync(
+      join(root, reviewPaths[index]),
+      `${JSON.stringify(reviewReceipts[index])}\n`,
+    );
+  });
+
+  const receipt: ForecastReceiptFixture = {
+    schemaVersion: 1,
+    proofTypes: ["forecast"],
+    status: "passed",
+    observedAt: "2020-01-01T10:31:00Z",
+    policy: {
+      laneCount: 1,
+      wipLimit: 1,
+      calendarDates: "withheld pending more observations",
+      measurement: "active batch time",
+    },
+    observations,
+    baseline: {
+      completedEstimate: 8,
+      activeSeconds: 1200,
+      pointsPerActiveHour: 24,
+      confidence: "low",
+    },
+    next: {
+      issue: "PLA-3",
+      estimate: 5,
+      activeWorkMinutesAfterExternalUnblock: { lower: 15, upper: 60 },
+      calendarDate: null,
+      externalWait: "provider access",
+      rule: "wait for proof",
+    },
+    recalibrationTrigger: "after every completed batch",
+  };
+  const forecastPath = "reports/evidence/forecast.json";
+  writeFileSync(join(root, forecastPath), `${JSON.stringify(receipt)}\n`);
+  return { root, receipt, forecastPath, runtimePaths, reviewReceipts };
+}
 
 test("rejects an existing but empty proof receipt", () => {
   const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
@@ -162,23 +343,27 @@ test("rejects execution proof that is not commit-bound", () => {
 });
 
 test("accepts the current commit-bound execution and forecast receipts", () => {
-  const executionPaths = [
-    "reports/evidence/r0-foundation.json",
-    "reports/evidence/r0-three-domain-foundation.json",
-  ];
-  for (const kind of ["tests", "deploy", "rollback", "runtime"] as const) {
+  const fixture = createForecastFixture();
+  try {
+    for (const kind of ["tests", "deploy", "rollback", "runtime"] as const) {
+      assert.equal(
+        evidenceGroupPasses(fixture.root, {
+          kind,
+          paths: fixture.runtimePaths,
+        }),
+        true,
+      );
+    }
     assert.equal(
-      evidenceGroupPasses(process.cwd(), { kind, paths: executionPaths }),
+      evidenceGroupPasses(fixture.root, {
+        kind: "forecast",
+        paths: [fixture.forecastPath],
+      }),
       true,
     );
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
   }
-  assert.equal(
-    evidenceGroupPasses(process.cwd(), {
-      kind: "forecast",
-      paths: ["reports/evidence/r0-forecast-baseline.json"],
-    }),
-    true,
-  );
 });
 
 test("rejects customer proof without release metrics and a passed gate", () => {
@@ -395,28 +580,25 @@ test("rejects proof bound to a nonexistent commit", () => {
 });
 
 test("rejects forecast observations bound to nonexistent commits", () => {
-  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  const fixture = createForecastFixture();
   try {
-    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as { observations: Array<{ closeoutCommit: string }> };
+    const receipt = cloneForecastReceipt(fixture.receipt);
     receipt.observations[0].closeoutCommit =
       "0123456789abcdef0123456789abcdef01234567";
     writeFileSync(
-      join(root, "reports", "evidence", "forecast.json"),
+      join(fixture.root, fixture.forecastPath),
       `${JSON.stringify(receipt)}\n`,
     );
 
     assert.deepEqual(
-      evidenceGroupFindings(root, {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: ["reports/evidence/forecast.json"],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_commit_invalid"],
     );
   } finally {
-    rmSync(root, { recursive: true, force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
@@ -514,170 +696,144 @@ test("rejects forecast observations with missing linked evidence", () => {
 });
 
 test("rejects forecast evidence links that escape through a symlink", () => {
+  const fixture = createForecastFixture();
   const outsideRoot = mkdtempSync(join(tmpdir(), "sourcera-evidence-link-"));
-  const suffix = outsideRoot.split("-").at(-1);
-  const linkedRelative = `reports/evidence/linked-${suffix}.json`;
-  const forecastRelative = `reports/evidence/forecast-${suffix}.json`;
-  const linkedPath = join(process.cwd(), linkedRelative);
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const linkedRelative = "reports/evidence/linked.json";
+  const linkedPath = join(fixture.root, linkedRelative);
   const outsidePath = join(outsideRoot, "outside.json");
   try {
     writeFileSync(outsidePath, "{}\n");
     symlinkSync(outsidePath, linkedPath);
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as {
-      observations: Array<{
-        reviewEvidence: string;
-        runtimeEvidence: string;
-      }>;
-    };
+    const receipt = cloneForecastReceipt(fixture.receipt);
     for (const observation of receipt.observations) {
       observation.reviewEvidence = linkedRelative;
       observation.runtimeEvidence = linkedRelative;
     }
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_reference_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
-    rmSync(linkedPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
     rmSync(outsideRoot, { recursive: true, force: true });
   }
 });
 
 test("rejects an empty linked runtime receipt", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const linkedRelative = `reports/evidence/empty-runtime-${suffix}.json`;
-  const forecastRelative = `reports/evidence/forecast-runtime-${suffix}.json`;
-  const linkedPath = join(process.cwd(), linkedRelative);
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
+  const linkedRelative = "reports/evidence/empty-runtime.json";
   try {
-    writeFileSync(linkedPath, "{}\n");
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as { observations: Array<{ runtimeEvidence: string }> };
+    writeFileSync(join(fixture.root, linkedRelative), "{}\n");
+    const receipt = cloneForecastReceipt(fixture.receipt);
     receipt.observations[0].runtimeEvidence = linkedRelative;
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_reference_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
-    rmSync(linkedPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects an empty linked review receipt", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const linkedRelative = `reports/evidence/empty-review-${suffix}.json`;
-  const forecastRelative = `reports/evidence/forecast-review-${suffix}.json`;
-  const linkedPath = join(process.cwd(), linkedRelative);
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
+  const linkedRelative = "reports/evidence/empty-review.json";
   try {
-    writeFileSync(linkedPath, "{}\n");
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as { observations: Array<{ reviewEvidence: string }> };
+    writeFileSync(join(fixture.root, linkedRelative), "{}\n");
+    const receipt = cloneForecastReceipt(fixture.receipt);
     receipt.observations[0].reviewEvidence = linkedRelative;
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_reference_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
-    rmSync(linkedPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects a direct review bound to a different batch", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const linkedRelative = `reports/evidence/mismatched-review-${suffix}.json`;
-  const forecastRelative = `reports/evidence/forecast-review-${suffix}.json`;
-  const linkedPath = join(process.cwd(), linkedRelative);
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
+  const linkedRelative = "reports/evidence/mismatched-review.json";
   try {
     const review = JSON.parse(
-      readFileSync("reports/evidence/r0-foundation-review.json", "utf8"),
+      JSON.stringify(fixture.reviewReceipts[0]),
     ) as { scope: { closeoutCommit: string } };
     review.scope.closeoutCommit =
       "0123456789abcdef0123456789abcdef01234567";
-    writeFileSync(linkedPath, `${JSON.stringify(review)}\n`);
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as { observations: Array<{ reviewEvidence: string }> };
+    writeFileSync(
+      join(fixture.root, linkedRelative),
+      `${JSON.stringify(review)}\n`,
+    );
+    const receipt = cloneForecastReceipt(fixture.receipt);
     receipt.observations[0].reviewEvidence = linkedRelative;
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_reference_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
-    rmSync(linkedPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects a forecast batch completed before it started", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const forecastRelative = `reports/evidence/forecast-time-${suffix}.json`;
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
   try {
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as {
-      observations: Array<{ startedAt: string; completedAt: string }>;
-    };
-    receipt.observations[0].completedAt = "2026-07-14T19:00:00-04:00";
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    const receipt = cloneForecastReceipt(fixture.receipt);
+    receipt.observations[0].completedAt = "2020-01-01T09:00:00Z";
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_receipt_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects active batch time longer than elapsed time", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const forecastRelative = `reports/evidence/forecast-duration-${suffix}.json`;
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
   try {
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as {
-      observations: Array<{ estimate: number; activeSeconds: number }>;
-      baseline: {
-        activeSeconds: number;
-        pointsPerActiveHour: number;
-      };
-    };
-    receipt.observations[0].activeSeconds = 900;
+    const receipt = cloneForecastReceipt(fixture.receipt);
+    receipt.observations[0].activeSeconds = 601;
     const activeSeconds = receipt.observations.reduce(
       (sum, observation) => sum + observation.activeSeconds,
       0,
@@ -690,95 +846,90 @@ test("rejects active batch time longer than elapsed time", () => {
     receipt.baseline.pointsPerActiveHour = Number(
       (completedEstimate / (activeSeconds / 3600)).toFixed(2),
     );
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_receipt_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects a closeout commit that predates implementation", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const forecastRelative = `reports/evidence/forecast-commits-${suffix}.json`;
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
   try {
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as {
-      observations: Array<{
-        firstImplementationCommit: string;
-        closeoutCommit: string;
-      }>;
-    };
+    const receipt = cloneForecastReceipt(fixture.receipt);
     const observation = receipt.observations[1];
     [observation.firstImplementationCommit, observation.closeoutCommit] = [
       observation.closeoutCommit,
       observation.firstImplementationCommit,
     ];
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_commit_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects forecast proof observed before batch completion", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const forecastRelative = `reports/evidence/forecast-observed-${suffix}.json`;
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
   try {
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as { observedAt: string };
-    receipt.observedAt = "2026-07-14T19:00:00-04:00";
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    const receipt = cloneForecastReceipt(fixture.receipt);
+    receipt.observedAt = "2020-01-01T09:00:00Z";
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_receipt_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
 test("rejects proof receipts dated in the future", () => {
-  const suffix = `${process.pid}-${Date.now()}`;
-  const forecastRelative = `reports/evidence/forecast-future-${suffix}.json`;
-  const forecastPath = join(process.cwd(), forecastRelative);
+  const fixture = createForecastFixture();
   try {
-    const receipt = JSON.parse(
-      readFileSync("reports/evidence/r0-forecast-baseline.json", "utf8"),
-    ) as { observedAt: string };
+    const receipt = cloneForecastReceipt(fixture.receipt);
     receipt.observedAt = "2999-01-01T00:00:00Z";
-    writeFileSync(forecastPath, `${JSON.stringify(receipt)}\n`);
+    writeFileSync(
+      join(fixture.root, fixture.forecastPath),
+      `${JSON.stringify(receipt)}\n`,
+    );
 
     assert.deepEqual(
-      evidenceGroupFindings(process.cwd(), {
+      evidenceGroupFindings(fixture.root, {
         kind: "forecast",
-        paths: [forecastRelative],
+        paths: [fixture.forecastPath],
       }).map((finding) => finding.code),
       ["evidence_receipt_invalid"],
     );
   } finally {
-    rmSync(forecastPath, { force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 
@@ -849,31 +1000,29 @@ test("rejects forecast proof with unmeasured batch observations", () => {
 });
 
 test("rejects forecast proof without a reconciled baseline and next batch", () => {
-  const root = mkdtempSync(join(tmpdir(), "sourcera-evidence-"));
+  const fixture = createForecastFixture();
   try {
-    mkdirSync(join(root, "reports", "evidence"), { recursive: true });
-    const receipt = JSON.parse(
-      readFileSync(
-        join(process.cwd(), "reports/evidence/r0-forecast-baseline.json"),
-        "utf8",
-      ),
-    ) as Record<string, unknown>;
+    const receipt: Partial<ForecastReceiptFixture> = cloneForecastReceipt(
+      fixture.receipt,
+    );
     delete receipt.baseline;
     writeFileSync(
-      join(root, "reports", "evidence", "forecast.json"),
+      join(fixture.root, fixture.forecastPath),
       `${JSON.stringify(receipt)}\n`,
     );
     const group: EvidenceGroup = {
       kind: "forecast",
-      paths: ["reports/evidence/forecast.json"],
+      paths: [fixture.forecastPath],
     };
 
     assert.deepEqual(
-      evidenceGroupFindings(root, group).map((finding) => finding.code),
+      evidenceGroupFindings(fixture.root, group).map(
+        (finding) => finding.code,
+      ),
       ["evidence_receipt_invalid"],
     );
   } finally {
-    rmSync(root, { recursive: true, force: true });
+    rmSync(fixture.root, { recursive: true, force: true });
   }
 });
 

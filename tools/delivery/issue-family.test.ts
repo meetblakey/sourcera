@@ -59,6 +59,14 @@ const direct = issue({
   outcome: "Three application shells",
 });
 
+const split = issue({
+  id: "PLA-943",
+  parentId: group.id,
+  sourceId: null,
+  sourceFamilyId: "F-001",
+  outcome: "Signed identity events",
+});
+
 test("accepts source parents, mergeable children, and organizational groups", () => {
   assert.deepEqual(issueFamilyFindings([group, parent, child, direct]), []);
   assert.deepEqual(
@@ -75,6 +83,21 @@ test("accepts source parents, mergeable children, and organizational groups", ()
     )?.executableIssues.map((candidate) => candidate.id),
     ["PLA-217"],
   );
+});
+
+test("keeps every executable split in its explicit source family", () => {
+  assert.deepEqual(issueFamilyFindings([group, direct, split]), []);
+  assert.deepEqual(
+    issueFamilyForSource([group, direct, split], "F-001")?.executableIssues.map(
+      (candidate) => candidate.id,
+    ),
+    ["PLA-217", "PLA-943"],
+  );
+});
+
+test("accepts a native split child under its executable family owner", () => {
+  const nestedSplit = { ...split, parentId: direct.id };
+  assert.deepEqual(issueFamilyFindings([group, direct, nestedSplit]), []);
 });
 
 test("rejects empty parents, missing parents, and source-less top-level work", () => {

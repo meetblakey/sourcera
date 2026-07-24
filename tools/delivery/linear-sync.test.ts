@@ -30,6 +30,8 @@ function issue(identifier: string, release: ReleaseId): Issue {
     updatedAt: "2026-07-15T10:00:00.000Z",
     estimate: identifier === "PLA-1" ? 5 : null,
     priority: 2,
+    dueDate: null,
+    stateId: "state-backlog",
     state: "Backlog",
     stateType: "backlog",
     archivedAt: null,
@@ -40,10 +42,14 @@ function issue(identifier: string, release: ReleaseId): Issue {
     assigneeId: identifier === "PLA-1" ? "person-owner" : null,
     team: "PLA",
     teamId: "team-pla",
+    cycleId: null,
+    cycleNumber: null,
+    cycle: null,
     projectId: "project-1",
     project: "Sourcera",
     milestoneId: "milestone-1",
     milestone: "Existing milestone",
+    parentLinearId: stableIssueId("PLA-0"),
     parent: "PLA-0",
     releases: [release],
     relations: [`blocks:${identifier}:PLA-9`, `related:${identifier}:PLA-8`],
@@ -106,7 +112,11 @@ function fingerprint(): LinearFingerprint {
       {
         id: "release-0",
         name: "First Defensible Evaluation",
+        descriptionFingerprint: "0".repeat(64),
         version: "R0",
+        commitSha: null,
+        startDate: null,
+        targetDate: null,
         updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
         pipeline: "pipeline-1",
@@ -116,7 +126,11 @@ function fingerprint(): LinearFingerprint {
       {
         id: "release-1",
         name: "Team Evaluation & Collaboration",
+        descriptionFingerprint: "0".repeat(64),
         version: "R1",
+        commitSha: null,
+        startDate: null,
+        targetDate: null,
         updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
         pipeline: "pipeline-1",
@@ -128,26 +142,46 @@ function fingerprint(): LinearFingerprint {
       {
         id: "project-1",
         name: "Sourcera",
+        descriptionFingerprint: "0".repeat(64),
         updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
+        statusId: "status-planned",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        lead: null,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
       },
     ],
     projectMilestones: [
       {
         id: "milestone-1",
         name: "Existing milestone",
+        descriptionFingerprint: "0".repeat(64),
         projectId: "project-1",
         project: "Sourcera",
+        updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
+        targetDate: null,
+        status: "planned",
       },
       {
         id: "milestone-required",
         name: "Required R0 milestone",
+        descriptionFingerprint: "0".repeat(64),
         projectId: "project-1",
         project: "Sourcera",
+        updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
+        targetDate: null,
+        status: "planned",
       },
     ],
+    cycles: [],
   };
 }
 
@@ -221,11 +255,17 @@ test("rejects every protected issue-field mutation with stable codes", () => {
   changed.descriptionFingerprint = "changed-description-hash";
   changed.estimate = null;
   changed.priority = 4;
+  changed.dueDate = "2026-08-01";
+  changed.stateId = "state-in-progress";
   changed.assignee = "Different owner";
   changed.assigneeId = "person-different";
   changed.team = "OTHER";
   changed.teamId = "team-other";
+  changed.cycleId = "cycle-1";
+  changed.cycleNumber = 1;
+  changed.cycle = "Cycle 1";
   changed.project = "Different project";
+  changed.parentLinearId = stableIssueId("PLA-3");
   changed.parent = null;
   changed.relations = [];
   changed.state = "In Progress";
@@ -243,11 +283,17 @@ test("rejects every protected issue-field mutation with stable codes", () => {
       "linear_sync_description_changed",
       "linear_sync_estimate_changed",
       "linear_sync_priority_changed",
+      "linear_sync_due_date_changed",
+      "linear_sync_state_identity_changed",
       "linear_sync_owner_changed",
       "linear_sync_owner_identity_changed",
       "linear_sync_team_changed",
       "linear_sync_team_identity_changed",
+      "linear_sync_cycle_identity_changed",
+      "linear_sync_cycle_number_changed",
+      "linear_sync_cycle_changed",
       "linear_sync_project_changed",
+      "linear_sync_parent_identity_changed",
       "linear_sync_parent_changed",
       "linear_sync_relations_changed",
       "linear_sync_state_changed",
@@ -452,15 +498,30 @@ test("validates planned milestone identity against active after-state inventory 
       const secondProject = {
         id: "project-2",
         name: "Other",
+        descriptionFingerprint: "0".repeat(64),
         updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
+        statusId: "status-planned",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        lead: null,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
       };
       const secondMilestone = {
         id: "milestone-other",
         name: "Other milestone",
+        descriptionFingerprint: "0".repeat(64),
         projectId: "project-2",
         project: "Other",
+        updatedAt: "2026-07-15T10:00:00.000Z",
         archivedAt: null,
+        targetDate: null,
+        status: "planned",
       };
       before.projects.push(secondProject);
       after.projects.push(structuredClone(secondProject));
@@ -684,19 +745,50 @@ test("rejects duplicate and noncanonical expected relation sets", () => {
   );
 });
 
-test("does not allow a planned relation set to remove an existing relation", () => {
+test("allows a symmetric planned blocks relation removal", () => {
   const before = fingerprint();
+  const removed = "blocks:PLA-1:PLA-2";
+  before.issues[0].relations.push(removed);
+  before.issues[1].relations.push(removed);
   const after = clone(before);
   after.issues[0].releases = ["R0"];
-  after.issues[0].relations = [before.issues[0].relations[0]];
+  after.issues[0].relations = after.issues[0].relations.filter(
+    (relation) => relation !== removed,
+  );
+  after.issues[1].relations = after.issues[1].relations.filter(
+    (relation) => relation !== removed,
+  );
 
   assert.deepEqual(
     codes(linearSyncPreservationFindings(before, after, expected(), {
       expectedRelationsByIssue: new Map([
         ["PLA-1", [...after.issues[0].relations]],
+        ["PLA-2", [...after.issues[1].relations]],
       ]),
     })),
-    ["linear_sync_expected_relations_remove_existing"],
+    [],
+  );
+});
+
+test("rejects an asymmetric planned blocks relation removal", () => {
+  const before = fingerprint();
+  const removed = "blocks:PLA-1:PLA-2";
+  before.issues[0].relations.push(removed);
+  before.issues[1].relations.push(removed);
+  const after = clone(before);
+  after.issues[0].releases = ["R0"];
+  after.issues[0].relations = after.issues[0].relations.filter(
+    (relation) => relation !== removed,
+  );
+
+  assert.deepEqual(
+    codes(linearSyncPreservationFindings(before, after, expected(), {
+      expectedRelationsByIssue: new Map([
+        ["PLA-1", [...after.issues[0].relations]],
+        ["PLA-2", [...after.issues[1].relations]],
+      ]),
+    })),
+    ["linear_sync_expected_relation_endpoint_incomplete"],
   );
 });
 

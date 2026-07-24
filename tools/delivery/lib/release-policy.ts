@@ -2,9 +2,7 @@ import { validateGraph } from "./graph.js";
 import type {
   Finding,
   ManifestRow,
-  ReleaseAssignment,
   ReleaseDefinition,
-  ReleaseId,
   ReleasePolicy,
   SourceRequirement,
 } from "./model.js";
@@ -12,112 +10,93 @@ import type {
 const compareIds = (left: string, right: string): number =>
   left.localeCompare(right, undefined, { numeric: true });
 
-function counts(values: string[]): Map<string, number> {
-  const result = new Map<string, number>();
-  for (const value of values) result.set(value, (result.get(value) ?? 0) + 1);
-  return result;
-}
-
-export function r0DependencyClosure(
-  rows: SourceRequirement[],
-  roots: string[],
-): Set<string> {
-  const byId = new Map(rows.map((row) => [row.requirementId, row]));
-  const closure = new Set<string>();
-
-  const visit = (requirementId: string): void => {
-    if (closure.has(requirementId) || !byId.has(requirementId)) return;
-    closure.add(requirementId);
-    const dependencies = [...(byId.get(requirementId)?.dependencies ?? [])].sort(
-      compareIds,
-    );
-    for (const dependencyId of dependencies) visit(dependencyId);
-  };
-
-  for (const root of [...roots].sort(compareIds)) visit(root);
-  return closure;
-}
-
 export function releasePolicyFindings(
   rows: SourceRequirement[],
   policy: ReleasePolicy,
   releases: ReleaseDefinition[],
 ): Finding[] {
   const findings: Finding[] = [];
-  if (policy.schemaVersion !== 1) {
+  const value = policy as unknown as Record<string, unknown>;
+  const expectedKeys = [
+    "schemaVersion",
+    "releaseAuthority",
+    "allowedReleaseIds",
+    "exactlyOneReleasePerMappedIssue",
+    "dependencyOrder",
+  ];
+  if (
+    Object.keys(value).length !== expectedKeys.length ||
+    expectedKeys.some((key) => !Object.hasOwn(value, key))
+  ) {
+    findings.push({
+      code: "release_policy_shape",
+      message: "Release policy must contain only the canonical structural fields",
+    });
+  }
+
+  if (value.schemaVersion !== 2) {
     findings.push({
       code: "release_policy_schema_version",
-      message: `Release policy schemaVersion must be 1; received ${String(policy.schemaVersion)}`,
+      message: `Release policy schemaVersion must be 2; received ${String(value.schemaVersion)}`,
     });
   }
-
-  for (const assignment of [...policy.baselineAssignments]
-    .filter((candidate) => !candidate.rationale?.trim())
-    .sort((left, right) =>
-      compareIds(left.requirementId, right.requirementId),
-    )) {
+  if (value.releaseAuthority !== "linear_native") {
     findings.push({
-      code: "release_policy_rationale_missing",
-      requirementId: assignment.requirementId,
-      message: `${assignment.requirementId} has no baseline release rationale`,
+      code: "release_policy_authority",
+      message: "Release policy must declare Linear native releases as its sole authority",
+    });
+  }
+  if (value.exactlyOneReleasePerMappedIssue !== true) {
+    findings.push({
+      code: "release_policy_cardinality",
+      message: "Release policy must require exactly one native release per mapped issue",
+    });
+  }
+  if (value.dependencyOrder !== "prerequisite_not_later") {
+    findings.push({
+      code: "release_policy_dependency_order",
+      message: "Release policy must require each prerequisite to be in the same or an earlier release",
+    });
+  }
+  if (Object.hasOwn(value, "baselineAssignments") || Object.hasOwn(value, "r0Roots")) {
+    findings.push({
+      code: "release_policy_embedded_assignments",
+      message: "Release policy cannot embed feature assignments or R0 source roots",
     });
   }
 
-  const rowCounts = counts(rows.map((row) => row.requirementId));
-  const assignmentCounts = counts(
-    policy.baselineAssignments.map((assignment) => assignment.requirementId),
-  );
-  const rowIds = new Set(rowCounts.keys());
-  const releaseIds = new Set(releases.map((release) => release.id));
+  const expectedReleaseIds = [...releases]
+    .sort((left, right) => left.sequence - right.sequence)
+    .map((release) => release.id);
+  const allowedReleaseIds = Array.isArray(value.allowedReleaseIds)
+    ? value.allowedReleaseIds.filter(
+        (releaseId): releaseId is string => typeof releaseId === "string",
+      )
+    : [];
+  if (
+    allowedReleaseIds.length !== expectedReleaseIds.length ||
+    allowedReleaseIds.some(
+      (releaseId, index) => releaseId !== expectedReleaseIds[index],
+    )
+  ) {
+    findings.push({
+      code: "release_policy_release_catalog",
+      message: `Release policy must mirror the ordered native release catalog: ${expectedReleaseIds.join(", ")}`,
+    });
+  }
 
-  for (const requirementId of [...rowIds].sort(compareIds)) {
-    if (!assignmentCounts.has(requirementId)) {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    counts.set(row.requirementId, (counts.get(row.requirementId) ?? 0) + 1);
+  }
+  for (const [requirementId, count] of [...counts].sort(([left], [right]) =>
+    compareIds(left, right),
+  )) {
+    if (count > 1) {
       findings.push({
-        code: "release_policy_unclassified",
+        code: "release_policy_duplicate",
         requirementId,
-        message: `${requirementId} has no baseline release assignment`,
-      });
-    }
-  }
-
-  for (const assignment of policy.baselineAssignments) {
-    if (!rowIds.has(assignment.requirementId)) {
-      findings.push({
-        code: "release_policy_unclassified",
-        requirementId: assignment.requirementId,
-        message: `${assignment.requirementId} is not a canonical feature`,
-      });
-    }
-    if (!releaseIds.has(assignment.release)) {
-      findings.push({
-        code: "release_policy_unclassified",
-        requirementId: assignment.requirementId,
-        message: `${assignment.requirementId} has unknown release ${assignment.release}`,
-      });
-    }
-  }
-
-  const duplicateIds = new Set<string>();
-  for (const [requirementId, count] of rowCounts) {
-    if (count > 1) duplicateIds.add(requirementId);
-  }
-  for (const [requirementId, count] of assignmentCounts) {
-    if (count > 1) duplicateIds.add(requirementId);
-  }
-  for (const requirementId of [...duplicateIds].sort(compareIds)) {
-    findings.push({
-      code: "release_policy_duplicate",
-      requirementId,
-      message: `${requirementId} occurs more than once`,
-    });
-  }
-
-  for (const root of [...new Set(policy.r0Roots)].sort(compareIds)) {
-    if (!rowIds.has(root)) {
-      findings.push({
-        code: "release_policy_root_missing",
-        requirementId: root,
-        message: `R0 root ${root} is not a canonical feature`,
+        message: `${requirementId} occurs more than once in source truth`,
       });
     }
   }
@@ -128,150 +107,5 @@ export function releasePolicyFindings(
     issueId: null,
   }));
   findings.push(...validateGraph(graphRows, releases));
-
-  const closure = r0DependencyClosure(rows, policy.r0Roots);
-  for (const assignment of policy.baselineAssignments) {
-    if (assignment.release === "R0" && !closure.has(assignment.requirementId)) {
-      findings.push({
-        code: "release_policy_unexpected_r0",
-        requirementId: assignment.requirementId,
-        message: `${assignment.requirementId} is R0 but outside the approved closure`,
-      });
-    }
-  }
-
   return findings;
-}
-
-function fail(findings: Finding[]): never {
-  throw new Error(
-    `Release policy invalid:\n${findings
-      .map((finding) => `${finding.code}: ${finding.message}`)
-      .join("\n")}`,
-  );
-}
-
-export function buildReleaseAssignments(
-  features: SourceRequirement[],
-  runtimeGates: SourceRequirement[],
-  policy: ReleasePolicy,
-  runtimeOwners: Array<{ requirementId: string; dependencies: string[] }>,
-  releases: ReleaseDefinition[],
-): ReleaseAssignment[] {
-  const findings = releasePolicyFindings(features, policy, releases);
-  if (findings.length) fail(findings);
-
-  const baselineById = new Map(
-    policy.baselineAssignments.map((assignment) => [
-      assignment.requirementId,
-      assignment,
-    ]),
-  );
-  const closure = r0DependencyClosure(features, policy.r0Roots);
-  const assignments: ReleaseAssignment[] = [];
-  const finalById = new Map<string, ReleaseAssignment>();
-
-  const addFeature = (requirementId: string): void => {
-    const baseline = baselineById.get(requirementId);
-    if (!baseline) return;
-    const assignment = {
-      ...baseline,
-      release: closure.has(requirementId) ? ("R0" as const) : baseline.release,
-    };
-    assignments.push(assignment);
-    finalById.set(requirementId, assignment);
-  };
-
-  for (const requirementId of closure) addFeature(requirementId);
-  for (const requirementId of features
-    .map((feature) => feature.requirementId)
-    .filter((requirementId) => !closure.has(requirementId))
-    .sort(compareIds)) {
-    addFeature(requirementId);
-  }
-
-  const finalGraphFindings = validateGraph(
-    features.map((feature) => ({
-      ...feature,
-      release: finalById.get(feature.requirementId)?.release ?? null,
-      issueId: null,
-    })),
-    releases,
-  );
-  if (finalGraphFindings.length) fail(finalGraphFindings);
-
-  const runtimeCounts = counts(
-    runtimeGates.map((runtimeGate) => runtimeGate.requirementId),
-  );
-  const runtimeIds = new Set(runtimeCounts.keys());
-  const runtimeFindings: Finding[] = [];
-  for (const [requirementId, count] of runtimeCounts) {
-    if (count > 1) {
-      runtimeFindings.push({
-        code: "release_policy_duplicate",
-        requirementId,
-        message: `${requirementId} occurs more than once`,
-      });
-    }
-  }
-
-  const ownerDependencies = new Map<string, Set<string>>();
-  for (const owner of runtimeOwners) {
-    if (!runtimeIds.has(owner.requirementId)) {
-      runtimeFindings.push({
-        code: "release_policy_unclassified",
-        requirementId: owner.requirementId,
-        message: `${owner.requirementId} is not a live runtime gate`,
-      });
-      continue;
-    }
-    const dependencies = ownerDependencies.get(owner.requirementId) ?? new Set();
-    for (const dependencyId of owner.dependencies) dependencies.add(dependencyId);
-    ownerDependencies.set(owner.requirementId, dependencies);
-  }
-
-  const releaseSequence = new Map<ReleaseId, number>(
-    releases.map((release) => [release.id, release.sequence]),
-  );
-  const runtimeAssignments: ReleaseAssignment[] = [];
-  for (const requirementId of [...runtimeIds].sort(compareIds)) {
-    const dependencies = [...(ownerDependencies.get(requirementId) ?? [])].sort(
-      compareIds,
-    );
-    if (!dependencies.length) {
-      runtimeFindings.push({
-        code: "release_policy_unclassified",
-        requirementId,
-        message: `${requirementId} has no explicit behavior owner`,
-      });
-      continue;
-    }
-    const dependencyAssignments = dependencies.map((dependencyId) => {
-      const assignment = finalById.get(dependencyId);
-      if (!assignment) {
-        runtimeFindings.push({
-          code: "release_policy_unclassified",
-          requirementId,
-          message: `${requirementId} references unassigned owner ${dependencyId}`,
-        });
-      }
-      return assignment;
-    });
-    if (dependencyAssignments.some((assignment) => !assignment)) continue;
-
-    const latest = dependencyAssignments.reduce((candidate, assignment) =>
-      (releaseSequence.get(assignment!.release) ?? -1) >
-      (releaseSequence.get(candidate!.release) ?? -1)
-        ? assignment
-        : candidate,
-    );
-    runtimeAssignments.push({
-      requirementId,
-      release: latest!.release,
-      rationale: `${latest!.release}: runtime proof follows ${dependencies.join(", ")}.`,
-    });
-  }
-
-  if (runtimeFindings.length) fail(runtimeFindings);
-  return [...assignments, ...runtimeAssignments];
 }

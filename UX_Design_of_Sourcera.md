@@ -194,6 +194,8 @@ Dark-mode values mirror Master Spec §3.11.2. Dark mode inverts luminance relati
 
 Base unit: 4px. All spacing uses multiples of 4.
 
+**Density authority.** Master Spec §3.15 governs Comfortable and Compact behavior, registered hosts, breakpoint eligibility, state preservation, fallback, and the no-persistence boundary. This table supplies base spacing tokens only.
+
 | Token | Value | Usage |
 |-------|-------|-------|
 | `--space-1` | 4px | Inline padding within badges, tight element gaps |

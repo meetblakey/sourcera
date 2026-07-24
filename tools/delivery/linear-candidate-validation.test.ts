@@ -61,6 +61,8 @@ function candidate(): LinearSnapshotCandidate {
           project: "Sourcera Production",
           milestoneId: "33333333-3333-4333-8333-333333333333",
           milestone: "Production evidence closed",
+          releases: ["R0"],
+          relations: ["blocks:PLA-1:PLA-2"],
         },
         {
           identifier: "PLA-2",
@@ -68,6 +70,8 @@ function candidate(): LinearSnapshotCandidate {
           project: "Sourcera Production",
           milestoneId: "33333333-3333-4333-8333-333333333333",
           milestone: "Production evidence closed",
+          releases: ["R1"],
+          relations: ["blocks:PLA-1:PLA-2"],
         },
       ],
     },
@@ -80,7 +84,8 @@ test("accepts a mapped candidate with an acyclic release-ordered graph", () => {
 
 test("rejects a mapped candidate dependency cycle", () => {
   const value = candidate();
-  value.issues[0].dependencies = ["F-002"];
+  value.linearFingerprint.issues[0].relations!.push("blocks:PLA-2:PLA-1");
+  value.linearFingerprint.issues[1].relations!.push("blocks:PLA-2:PLA-1");
   assert.ok(
     linearCandidateFindings(value, releases).some(
       (finding) => finding.code === "dependency_cycle",
@@ -90,13 +95,97 @@ test("rejects a mapped candidate dependency cycle", () => {
 
 test("rejects a mapped candidate cross-release inversion", () => {
   const value = candidate();
-  value.issues[0].dependencies = ["F-002"];
-  value.issues[1].dependencies = [];
+  value.linearFingerprint.issues[0].relations = ["blocks:PLA-2:PLA-1"];
+  value.linearFingerprint.issues[1].relations = ["blocks:PLA-2:PLA-1"];
   assert.ok(
     linearCandidateFindings(value, releases).some(
       (finding) => finding.code === "cross_release_inversion",
     ),
   );
+});
+
+test("requires exactly one matching canonical live release", () => {
+  for (const liveReleases of [[], ["R0", "R1"], ["partner-beta"]]) {
+    const value = candidate();
+    value.linearFingerprint.issues[0].releases = liveReleases;
+    assert.ok(
+      linearCandidateFindings(value, releases).some(
+        (finding) =>
+          finding.code === "linear_candidate_executable_release_invalid" &&
+          finding.issueId === "PLA-1",
+      ),
+    );
+  }
+  const value = candidate();
+  value.issues[0].release = null;
+  assert.ok(
+    linearCandidateFindings(value, releases).some(
+      (finding) =>
+        finding.code === "linear_candidate_executable_release_invalid",
+    ),
+  );
+});
+
+test("requires source-split executable children to retain native project and milestone", () => {
+  const value = candidate();
+  value.issues.push({
+    id: "PLA-3",
+    sourceId: null,
+    sourceFamilyId: "F-001",
+    kind: "executable",
+    dependencies: [],
+    release: "R1",
+    milestone: "Production evidence closed",
+  });
+  value.linearFingerprint.issues.push({
+    identifier: "PLA-3",
+    projectId: "22222222-2222-4222-8222-222222222222",
+    project: "Sourcera Production",
+    milestoneId: "33333333-3333-4333-8333-333333333333",
+    milestone: "Production evidence closed",
+    releases: ["R1"],
+    relations: [],
+  });
+  assert.deepEqual(linearCandidateFindings(value, releases), []);
+
+  value.linearFingerprint.issues[2].milestoneId = null;
+  value.linearFingerprint.issues[2].milestone = null;
+  value.issues[2].milestone = null;
+  assert.ok(
+    linearCandidateFindings(value, releases).some(
+      (finding) =>
+        finding.code === "linear_candidate_mapped_issue_scope_missing" &&
+        finding.issueId === "PLA-3",
+    ),
+  );
+});
+
+test("validates split-source dependencies at native issue level", () => {
+  const value = candidate();
+  value.issues.push({
+    id: "PLA-3",
+    sourceId: null,
+    sourceFamilyId: "F-001",
+    kind: "executable",
+    dependencies: ["F-002"],
+    release: "R1",
+    milestone: "Production evidence closed",
+  });
+  value.linearFingerprint.issues.push({
+    identifier: "PLA-3",
+    projectId: "22222222-2222-4222-8222-222222222222",
+    project: "Sourcera Production",
+    milestoneId: "33333333-3333-4333-8333-333333333333",
+    milestone: "Production evidence closed",
+    releases: ["R1"],
+    relations: ["blocks:PLA-2:PLA-3"],
+  });
+  value.linearFingerprint.issues[0].relations = ["blocks:PLA-1:PLA-2"];
+  value.linearFingerprint.issues[1].relations = [
+    "blocks:PLA-1:PLA-2",
+    "blocks:PLA-2:PLA-3",
+  ];
+  assert.deepEqual(linearCandidateFindings(value, releases), []);
 });
 
 for (const field of ["project", "milestone"] as const) {
@@ -126,7 +215,8 @@ test("candidate validator CLI fails closed on semantic findings", () => {
   const releasesPath = join(directory, "releases.json");
   try {
     const value = candidate();
-    value.issues[0].dependencies = ["F-002"];
+    value.linearFingerprint.issues[0].relations = ["blocks:PLA-2:PLA-1"];
+    value.linearFingerprint.issues[1].relations = ["blocks:PLA-2:PLA-1"];
     writeFileSync(candidatePath, JSON.stringify(value));
     writeFileSync(releasesPath, JSON.stringify({ releases }));
     const result = spawnSync(

@@ -232,6 +232,58 @@
       "rationale": "Seller referral narrative is context only; no Master Spec executable contract is introduced."
     },
     {
+      "requirementId": "F-199",
+      "disposition": "superseded",
+      "replacementId": "F-198",
+      "rationale": "Master Spec §9.1.2 now treats Team Owner and Team Lead as workflow labels over the canonical §5.5.1 Seller Console roles; F-198 owns the combined executable authority map."
+    },
+    {
+      "requirementId": "F-608",
+      "disposition": "superseded",
+      "replacementId": "F-696",
+      "rationale": "Master Spec §43.0 retires the v6 Admin Dashboard and redirects every operation to the §50 Sourcera Ops Console and its dedicated successor surfaces."
+    },
+    {
+      "requirementId": "F-609",
+      "disposition": "superseded",
+      "replacementId": "F-696",
+      "rationale": "Master Spec §43.2 retires the is_staff gate; §50.2–§50.3 now own separate Ops authentication, hardware-key MFA, step-up re-auth, and the capability-envelope role matrix."
+    },
+    {
+      "requirementId": "F-610",
+      "disposition": "superseded",
+      "replacementId": "F-696",
+      "rationale": "Master Spec §43.3 retires the bundled support-tools issue and redirects Zendesk, impersonation, export, and observability to their dedicated §42 and §50 owners."
+    },
+    {
+      "requirementId": "F-611",
+      "disposition": "superseded",
+      "replacementId": "F-711",
+      "rationale": "Master Spec §43.4 retires admin_audit_log and redirects Ops attribution to AuditEvent, OpsActionRecord, OpsSession, and the §50.5 Ops-tagged audit contract."
+    },
+    {
+      "requirementId": "F-794",
+      "disposition": "superseded",
+      "replacementId": "F-797",
+      "rationale": "The Appendix M authored-extension note is change history; F-797 owns the executable CI gate catalog."
+    },
+    {
+      "requirementId": "F-AE-069",
+      "disposition": "superseded",
+      "replacementId": "F-797",
+      "rationale": "The authored-extension duplicate is replaced by the canonical F-797 Appendix M gate catalog."
+    },
+    {
+      "requirementId": "F-AE-071",
+      "disposition": "narrative_context",
+      "rationale": "The GTM rewrite descope is historical planning context and introduces no current executable product behavior."
+    },
+    {
+      "requirementId": "F-AE-072",
+      "disposition": "narrative_context",
+      "rationale": "The Marketplace-as-RFP-Exchange descope is historical planning context and introduces no current executable product behavior."
+    },
+    {
       "requirementId": "F-887",
       "disposition": "retired_source",
       "replacementId": "F-336",

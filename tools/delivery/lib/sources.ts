@@ -7,6 +7,7 @@ const SOURCE_DOCS: Record<string, string> = {
   ux_design: "UX_Design_of_Sourcera.md",
   buyer_pricing: "Sourcera_Buyer_Pricing_Strategy.md",
   seller_pricing: "Sourcera_Seller_Pricing_Strategy.md",
+  linear_planning: "delivery/planning-source-register.md",
   kb_eng:
     "_baselines/retired-sources/KB_Engineering_Spec_retired_2026-04-26.md",
 };

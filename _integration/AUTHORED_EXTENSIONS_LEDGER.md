@@ -4059,3 +4059,11 @@ All eleven §51.8.4 Authored Extensions are approved under the explicit user-aut
 | AE-V711-DOCBLOCK-AUDIT-EXPORT-READY-01 | Exact `audit_events.export.ready` lifecycle, payload, polling, HMAC, retry/DLQ, bounded analytics, failure handling, and catalog authority | v7.1.1 documentation authority; M11.3 runtime evidence | approved 2026-07-13 — explicit user approval of the documentation design; runtime evidence pending | Approved design §6 and §10; Master Spec §32.8.24 / §31 / §41 / §42 / Appendices C/G/J/M |
 
 **Approval boundary.** The user's approval establishes product-owner documentation authority for these three decisions. It does not establish application code, deployment, integration, security, mobile, delivery, or other runtime evidence and promotes no §M.5 row.
+
+## v7.1.1 Delivery Source-Contract Repair (2026-07-16)
+
+| ID | Subject | Target Version | Status | Evidence |
+| :---- | :---- | :---- | :---- | :---- |
+| AE-V711-DPL-MARKETPLACE-WEBHOOK-CONTRACT-01 | §4.5.15 `MarketplaceReview`, §4.5.16 `MarketplaceIntegrationHook`, §31.11.6 `WebhookEventRegistryEntry`, canonical aliases/enums, retention/DSAR/residency, and feature/runtime ownership for D-DPL-007 / D-DPL-008 | v7.1.1 source authority; R3 Marketplace and R4 Intelligence runtime evidence | approved 2026-07-16 — explicit user authorization to make each issue document-complete without losing features or drift | Master Spec §4.5.15–§4.5.16 / §6.8.4.3 / §31.11–§31.11.6 / §39 / §40.2 / Appendices I/J; D-DPL-007 / D-DPL-008; F-116 / F-466 / F-471 / F-483 / F-628 |
+
+**Runtime boundary.** Approval establishes source authority only. Schema migrations, route handlers, serializers, moderation, cache invalidation, compiler publication, subscription migration, delivery/replay enforcement, CRM consumption, browser/mobile/accessibility behavior, telemetry, rollback, and deployed receipts remain pending. No runtime row is promoted by this approval.

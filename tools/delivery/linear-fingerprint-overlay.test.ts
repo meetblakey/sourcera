@@ -14,6 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import type { LinearFingerprint } from "./lib/linear-live.js";
+import type { LinearProgramScope } from "./lib/linear-program-scope.js";
 
 const SOURCE = {
   repository: "meetblakey/sourcera",
@@ -38,7 +39,9 @@ function issue(
     updatedAt: "2026-07-15T15:00:00.000Z",
     estimate: identifier === "PLA-1" ? 5 : 2,
     priority: 2,
+    dueDate: identifier === "PLA-1" ? "2026-08-01" : null,
     archivedAt: null,
+    stateId: "12121212-1212-4121-8121-121212121212",
     state: "Backlog",
     stateType: "backlog",
     labels: ["Feature", "platform"],
@@ -46,10 +49,14 @@ function issue(
     assigneeId: "e7e65e19-33ee-445e-9be4-7e9e734a5463",
     team: "PLA",
     teamId: "11111111-1111-4111-8111-111111111111",
+    cycleId: null,
+    cycleNumber: null,
+    cycle: null,
     projectId: "22222222-2222-4222-8222-222222222222",
     project: "Sourcera Production",
     milestoneId: "33333333-3333-4333-8333-333333333333",
     milestone: "Production evidence closed",
+    parentLinearId: null,
     parent: null,
     releases: ["R0"],
     relations: ["blocks:PLA-2:PLA-1"],
@@ -92,7 +99,11 @@ function fingerprint(
       {
         id: "66666666-6666-4666-8666-666666666666",
         name: "First Defensible Evaluation",
+        descriptionFingerprint: "d".repeat(64),
         version: "R0",
+        commitSha: null,
+        startDate: "2026-07-01",
+        targetDate: "2026-07-31",
         updatedAt: "2026-07-15T15:00:00.000Z",
         archivedAt: null,
         pipeline: "44444444-4444-4444-8444-444444444444",
@@ -104,19 +115,35 @@ function fingerprint(
       {
         id: "22222222-2222-4222-8222-222222222222",
         name: "Sourcera Production",
+        descriptionFingerprint: "b".repeat(64),
         updatedAt: "2026-07-15T15:00:00.000Z",
         archivedAt: null,
+        statusId: "77777777-7777-4777-8777-777777777777",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        lead: null,
+        leadId: null,
+        startDate: "2026-07-01",
+        startDateResolution: null,
+        targetDate: "2026-07-31",
+        targetDateResolution: null,
       },
     ],
     projectMilestones: [
       {
         id: "33333333-3333-4333-8333-333333333333",
         name: "Production evidence closed",
+        descriptionFingerprint: "c".repeat(64),
         projectId: "22222222-2222-4222-8222-222222222222",
         project: "Sourcera Production",
+        updatedAt: "2026-07-15T15:00:00.000Z",
         archivedAt: null,
+        targetDate: "2026-07-30",
+        status: "next",
       },
     ],
+    cycles: [],
     ...overrides,
   };
 }
@@ -159,6 +186,7 @@ function plannedIssue(id: string, sourceId: string): Record<string, unknown> {
 
 interface FixtureOptions {
   fingerprint?: LinearFingerprint;
+  programScope?: LinearProgramScope;
   mutateReceipt?: (receipt: Record<string, unknown>) => void;
   snapshot?: Record<string, unknown>;
 }
@@ -178,7 +206,18 @@ function fixture(options: FixtureOptions = {}) {
     generatedAt: "2026-07-14T00:00:00.000Z",
     labels: [{ id: "label-1", name: "Feature", color: "#000000" }],
     users: [{ id: "user-1", name: "Blake" }],
-    initiatives: [{ id: "initiative-1", name: "Sourcera" }],
+    initiatives: live.program
+      ? [{
+          id: "40404040-4040-4040-8040-404040404040",
+          name: "Retired stale initiative",
+          status: "Canceled",
+          priority: 4,
+          owner: "Stale owner",
+          targetDate: "2025-01-01",
+          updatedAt: "2025-01-01T00:00:00.000Z",
+          staleOnly: true,
+        }]
+      : [{ id: "initiative-1", name: "Sourcera" }],
     issues: [plannedIssue("PLA-1", "F-001"), plannedIssue("PLA-2", "F-002")],
     releases: [
       {
@@ -187,8 +226,9 @@ function fixture(options: FixtureOptions = {}) {
         name: "Prior release name",
         pipeline: "Prior pipeline",
         stage: "Prior stage",
-        startDate: "2026-07-01",
-        targetDate: "2026-07-31",
+        startDate: "2025-07-01",
+        targetDate: "2025-07-31",
+        staleOnly: true,
         updatedAt: "2026-07-14T00:00:00.000Z",
       },
     ],
@@ -196,8 +236,9 @@ function fixture(options: FixtureOptions = {}) {
       {
         id: "22222222-2222-4222-8222-222222222222",
         name: "Sourcera Production",
-        priority: 2,
-        targetDate: "2026-07-31",
+        priority: 4,
+        targetDate: "2025-07-31",
+        state: "deprecated",
         updatedAt: "2026-07-14T00:00:00.000Z",
       },
     ],
@@ -207,7 +248,8 @@ function fixture(options: FixtureOptions = {}) {
         name: "Production evidence closed",
         projectId: "22222222-2222-4222-8222-222222222222",
         project: "Sourcera Production",
-        targetDate: "2026-07-30",
+        targetDate: "2025-07-30",
+        status: "stale",
         updatedAt: null,
       },
     ],
@@ -243,6 +285,12 @@ function fixture(options: FixtureOptions = {}) {
       2,
     )}\n`,
   );
+  if (options.programScope) {
+    writeFileSync(
+      join(delivery, "linear-program-scope.json"),
+      `${JSON.stringify(options.programScope, null, 2)}\n`,
+    );
+  }
   return {
     root,
     snapshotPath,
@@ -322,22 +370,205 @@ test("writes a receipt-bound candidate without changing the source snapshot", ()
     assert.deepEqual(candidate.linearFingerprint, fingerprint());
     assert.deepEqual(candidate.issues[0], {
       ...plannedIssue("PLA-1", "F-001"),
+      linearId: "00000000-0000-4000-8000-000000000001",
+      parentLinearId: null,
       parentId: null,
       title: "PLA-1 live title",
       labels: ["Feature", "platform"],
       release: "R0",
+      priority: 2,
+      dueDate: "2026-08-01",
+      stateId: "12121212-1212-4121-8121-121212121212",
+      state: "Backlog",
+      stateType: "backlog",
+      teamId: "11111111-1111-4111-8111-111111111111",
+      team: "PLA",
+      cycleId: null,
+      cycleNumber: null,
+      cycle: null,
+      projectId: "22222222-2222-4222-8222-222222222222",
+      project: "Sourcera Production",
+      milestoneId: "33333333-3333-4333-8333-333333333333",
       milestone: "Production evidence closed",
       dependencies: ["F-002"],
       owner: "Blake Rowley",
+      ownerId: "e7e65e19-33ee-445e-9be4-7e9e734a5463",
       estimate: 5,
     });
-    assert.equal(candidate.projects[0].targetDate, "2026-07-31");
-    assert.equal(candidate.projects[0].updatedAt, "2026-07-15T15:00:00.000Z");
-    assert.equal(candidate.milestones[0].targetDate, "2026-07-30");
-    assert.equal(candidate.releases[0].startDate, "2026-07-01");
-    assert.equal(candidate.releases[0].pipeline, "Sourcera Product Delivery");
-    assert.equal(candidate.releases[0].stage, "Planned");
+    assert.deepEqual(candidate.projects, fingerprint().projects);
+    assert.deepEqual(candidate.milestones, fingerprint().projectMilestones);
+    assert.deepEqual(candidate.cycles, []);
+    assert.deepEqual(candidate.releases[0], {
+      id: "66666666-6666-4666-8666-666666666666",
+      version: "R0",
+      name: "First Defensible Evaluation",
+      descriptionFingerprint: "d".repeat(64),
+      commitSha: null,
+      pipelineId: "44444444-4444-4444-8444-444444444444",
+      pipeline: "Sourcera Product Delivery",
+      stageId: "55555555-5555-4555-8555-555555555555",
+      stage: "Planned",
+      stageType: "planned",
+      startDate: "2026-07-01",
+      targetDate: "2026-07-31",
+      updatedAt: "2026-07-15T15:00:00.000Z",
+      archivedAt: null,
+    });
     assert.equal(statSync(current.outPath).mode & 0o777, 0o600);
+  } finally {
+    rmSync(current.root, { recursive: true, force: true });
+  }
+});
+
+test("projects native cycle fields and rejects orphaned cycle assignments", () => {
+  const live = cloneFingerprint();
+  const cycleId = "abababab-abab-4bab-8bab-abababababab";
+  live.cycles = [{
+    id: cycleId,
+    number: 12,
+    name: "Foundation",
+    descriptionFingerprint: "e".repeat(64),
+    updatedAt: "2026-07-15T15:00:00.000Z",
+    archivedAt: null,
+    startsAt: "2026-07-14T00:00:00.000Z",
+    endsAt: "2026-07-28T00:00:00.000Z",
+    completedAt: null,
+    team: "PLA",
+    teamId: "11111111-1111-4111-8111-111111111111",
+    inheritedFromId: null,
+  }];
+  Object.assign(live.issues[0], {
+    cycleId,
+    cycleNumber: 12,
+    cycle: "Foundation",
+  });
+  const current = fixture({ fingerprint: live });
+  try {
+    const result = run(current);
+    assert.equal(result.status, 0, result.stderr);
+    const candidate = JSON.parse(readFileSync(current.outPath, "utf8"));
+    assert.equal(candidate.issues[0].cycleId, cycleId);
+    assert.equal(candidate.issues[0].cycleNumber, 12);
+    assert.equal(candidate.issues[0].dueDate, "2026-08-01");
+    assert.deepEqual(candidate.cycles, live.cycles);
+  } finally {
+    rmSync(current.root, { recursive: true, force: true });
+  }
+
+  const orphaned = cloneFingerprint(live);
+  orphaned.issues[0].cycleId = "cdcdcdcd-cdcd-4dcd-8dcd-cdcdcdcdcdcd";
+  const invalid = fixture({ fingerprint: orphaned });
+  try {
+    const result = run(invalid);
+    assert.equal(result.status, 1, result.stderr);
+    assert.match(result.stderr, /cycle.*unknown|cycle.*orphan/i);
+  } finally {
+    rmSync(invalid.root, { recursive: true, force: true });
+  }
+});
+
+test("replaces stale initiatives with the exact native program fingerprint", () => {
+  const live = cloneFingerprint();
+  const parentId = "10101010-1010-4010-8010-101010101010";
+  const outcomes = Array.from({ length: 6 }, (_, index) => ({
+    id: `20202020-2020-4020-8020-20202020202${index}`,
+    name: `Outcome ${index + 1}`,
+  }));
+  const masterSpecSha256 = createHash("sha256")
+    .update(readFileSync("Sourcera_Master_Spec.md"))
+    .digest("hex");
+  const uxDesignSha256 = createHash("sha256")
+    .update(readFileSync("UX_Design_of_Sourcera.md"))
+    .digest("hex");
+  const initiative = (
+    id: string,
+    name: string,
+  ): NonNullable<LinearFingerprint["program"]>["initiatives"][number] => ({
+    id,
+    name,
+    updatedAt: "2026-07-15T15:00:00.000Z",
+    archivedAt: null,
+    owner: id === parentId ? "Blake Rowley" : null,
+    ownerId: id === parentId
+      ? "e7e65e19-33ee-445e-9be4-7e9e734a5463"
+      : null,
+    status: "Planned",
+    priority: 2,
+    health: id === parentId ? "onTrack" : null,
+    healthUpdatedAt: id === parentId
+      ? "2026-07-15T14:00:00.000Z"
+      : null,
+    targetDate: id === parentId ? "2026-12-31" : null,
+    targetDateResolution: id === parentId ? "quarter" : null,
+    parentInitiativeId: null,
+    parentInitiative: null,
+  });
+  const documentId = "30303030-3030-4030-8030-303030303030";
+  const documentFingerprint = "f".repeat(64);
+  live.program = {
+    initiatives: [
+      initiative(parentId, "Sourcera program"),
+      ...outcomes.map((outcome) => initiative(outcome.id, outcome.name)),
+    ],
+    documents: [{
+      id: documentId,
+      title: "Planning authority",
+      updatedAt: "2026-07-15T15:00:00.000Z",
+      archivedAt: null,
+      initiativeId: parentId,
+      projectId: null,
+      teamId: null,
+      issueId: null,
+      contentFingerprint: documentFingerprint,
+      sectionHeadings: ["Binding authority"],
+      sourceFingerprints: { masterSpecSha256, uxDesignSha256 },
+    }],
+    projectInitiatives: [{
+      projectId: live.projects[0].id,
+      initiativeIds: [parentId, outcomes[0].id],
+    }],
+  };
+  const programScope: LinearProgramScope = {
+    schemaVersion: 1,
+    parentInitiative: { id: parentId, name: "Sourcera program" },
+    outcomeInitiatives: outcomes,
+    planningDocument: {
+      id: documentId,
+      title: "Planning authority",
+      contentFingerprint: documentFingerprint,
+      initiativeId: parentId,
+      projectId: null,
+      teamId: null,
+      issueId: null,
+      requiredSections: ["Binding authority"],
+    },
+    projectDescriptionFingerprints: [{
+      projectId: live.projects[0].id,
+      descriptionFingerprint: live.projects[0].descriptionFingerprint,
+      milestones: [{
+        milestoneId: live.projectMilestones[0].id,
+        descriptionFingerprint:
+          live.projectMilestones[0].descriptionFingerprint,
+      }],
+    }],
+    projectInitiatives: [{
+      projectId: live.projects[0].id,
+      initiativeIds: [parentId, outcomes[0].id],
+    }],
+  };
+  const current = fixture({ fingerprint: live, programScope });
+  try {
+    const result = run(current);
+    assert.equal(result.status, 0, result.stderr);
+    const candidate = JSON.parse(readFileSync(current.outPath, "utf8"));
+    assert.deepEqual(candidate.initiatives, live.program.initiatives);
+    assert.equal(candidate.initiatives[0].owner, "Blake Rowley");
+    assert.equal(candidate.initiatives[0].health, "onTrack");
+    assert.equal(candidate.initiatives[0].targetDate, "2026-12-31");
+    assert.equal(
+      Object.hasOwn(candidate.initiatives[0], "staleOnly"),
+      false,
+    );
   } finally {
     rmSync(current.root, { recursive: true, force: true });
   }
@@ -385,8 +616,19 @@ const exactInventoryCases = [
     liveRow: {
       id: "77777777-7777-4777-8777-777777777777",
       name: "Additional project",
+      descriptionFingerprint: "d".repeat(64),
       updatedAt: "2026-07-15T15:00:00.000Z",
       archivedAt: null,
+      statusId: "abababab-abab-4bab-8bab-abababababab",
+      status: "Planned",
+      statusType: "planned",
+      priority: 2,
+      lead: null,
+      leadId: null,
+      startDate: null,
+      startDateResolution: null,
+      targetDate: "2026-08-31",
+      targetDateResolution: null,
     },
   },
   {
@@ -405,9 +647,13 @@ const exactInventoryCases = [
     liveRow: {
       id: "88888888-8888-4888-8888-888888888888",
       name: "Additional milestone",
+      descriptionFingerprint: "e".repeat(64),
       projectId: "22222222-2222-4222-8222-222222222222",
       project: "Sourcera Production",
+      updatedAt: "2026-07-15T15:00:00.000Z",
       archivedAt: null,
+      targetDate: "2026-08-30",
+      status: "unstarted",
     },
   },
   {
@@ -428,7 +674,11 @@ const exactInventoryCases = [
     liveRow: {
       id: "99999999-9999-4999-8999-999999999999",
       name: "Additional release",
+      descriptionFingerprint: "f".repeat(64),
       version: "R1",
+      commitSha: null,
+      startDate: "2026-08-01",
+      targetDate: "2026-08-31",
       updatedAt: "2026-07-15T15:00:00.000Z",
       archivedAt: null,
       pipeline: "44444444-4444-4444-8444-444444444444",
@@ -674,6 +924,8 @@ test("rejects duplicate, orphaned, asymmetric, or multiply released topology", (
     {
       name: "missing parent endpoint",
       mutate: (candidate) => {
+        candidate.issues[0].parentLinearId =
+          "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
         candidate.issues[0].parent = "PLA-404";
       },
     },
@@ -773,6 +1025,31 @@ test("rejects unexpected connector-shaped fields from the exact fingerprint", ()
     assert.throws(() => readFileSync(current.outPath), /ENOENT/);
   } finally {
     rmSync(current.root, { recursive: true, force: true });
+  }
+});
+
+test("rejects missing project or milestone description fingerprints", () => {
+  for (const mutate of [
+    (candidate: LinearFingerprint) => {
+      delete (candidate.projects[0] as Partial<
+        LinearFingerprint["projects"][number]
+      >).descriptionFingerprint;
+    },
+    (candidate: LinearFingerprint) => {
+      candidate.projectMilestones[0].descriptionFingerprint = "short";
+    },
+  ]) {
+    const live = cloneFingerprint();
+    mutate(live);
+    const current = fixture({ fingerprint: live });
+    try {
+      const result = run(current);
+      assert.equal(result.status, 1, result.stderr);
+      assert.match(result.stderr, /description fingerprint|Missing descriptionFingerprint/i);
+      assert.throws(() => readFileSync(current.outPath), /ENOENT/);
+    } finally {
+      rmSync(current.root, { recursive: true, force: true });
+    }
   }
 });
 
@@ -884,6 +1161,7 @@ test("allows an unplanned canceled legacy issue outside the scoped projects", ()
         .digest("hex"),
       state: "Canceled",
       stateType: "canceled",
+      stateId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
       projectId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
       project: "Retired legacy project",
       milestoneId: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",

@@ -1,16 +1,16 @@
 {
   "liveEvidence": {
     "stamp": {
-      "runtime_rows": 550,
+      "runtime_rows": 551,
       "runtime_status_counts": {
         "runtime_active": 333,
-        "spec_binding_pending_pack_m11_3": 147,
+        "spec_binding_pending_pack_m11_3": 148,
         "spec_binding_pending_pack_m24_3": 12,
         "spec_binding_pending_pack_m21_3": 39,
         "spec_binding_pending_pack_m02_3": 17,
         "spec_binding_release_gate_only": 2
       },
-      "blocker_count": 215,
+      "blocker_count": 216,
       "scanned_files": [
         "Sourcera_Master_Spec.md",
         "_integration/AUTHORED_EXTENSIONS_LEDGER.md",
@@ -20,7 +20,7 @@
     },
     "exact": {
       "ledger": "_audit/DEFECT_LEDGER.md",
-      "canonical_rows_scanned": 1929,
+      "canonical_rows_scanned": 1941,
       "open_rows": 0,
       "open_by_severity": {
         "P0": 0,
@@ -108,15 +108,26 @@
       ],
       "disposition": "executable",
       "release": "R0",
-      "issueId": "PLA-283"
+      "issueId": "PLA-942"
     },
     {
       "requirementId": "F-007",
-      "outcome": "Stripe Billing Integration",
+      "outcome": "Stripe Billing Integration Completion",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§1.5",
-      "dependencies": [],
+      "dependencies": [
+        "F-005",
+        "F-132",
+        "F-139",
+        "F-160",
+        "F-529",
+        "F-537",
+        "F-569",
+        "F-593",
+        "F-630",
+        "F-917"
+      ],
       "disposition": "executable",
       "release": "R2",
       "issueId": "PLA-284"
@@ -1029,7 +1040,10 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§4.2.1",
-      "dependencies": [],
+      "dependencies": [
+        "F-005",
+        "F-628"
+      ],
       "disposition": "executable",
       "release": "R0",
       "issueId": "PLA-271"
@@ -1044,7 +1058,7 @@
         "F-006"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R0",
       "issueId": "PLA-272"
     },
     {
@@ -1058,7 +1072,7 @@
         "F-080"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R0",
       "issueId": "PLA-273"
     },
     {
@@ -1082,7 +1096,9 @@
       "section": "§4.3.1",
       "dependencies": [
         "F-003",
-        "F-079"
+        "F-079",
+        "F-910",
+        "F-911"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -1112,7 +1128,7 @@
       ],
       "disposition": "executable",
       "release": "R0",
-      "issueId": "SEL-71"
+      "issueId": "BUY-411"
     },
     {
       "requirementId": "F-086",
@@ -1500,7 +1516,12 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§4.5",
-      "dependencies": [],
+      "dependencies": [
+        "F-005",
+        "F-117",
+        "F-120",
+        "F-429"
+      ],
       "disposition": "executable",
       "release": "R3",
       "issueId": "BUY-224"
@@ -1674,7 +1695,7 @@
         "F-125"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R0",
       "issueId": "PLA-303"
     },
     {
@@ -1696,7 +1717,11 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v7.0.0",
       "section": "§4.8.9",
-      "dependencies": [],
+      "dependencies": [
+        "F-005",
+        "F-124",
+        "F-524"
+      ],
       "disposition": "executable",
       "release": "R2",
       "issueId": "PLA-305"
@@ -1779,7 +1804,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§5.2",
       "dependencies": [
-        "F-138"
+        "F-138",
+        "F-160"
       ],
       "disposition": "executable",
       "release": "R1",
@@ -2051,6 +2077,7 @@
       "sourceVersion": "v6.0.0",
       "section": "§5.12",
       "dependencies": [
+        "F-117",
         "F-159"
       ],
       "disposition": "executable",
@@ -2556,9 +2583,9 @@
       "dependencies": [
         "F-197"
       ],
-      "disposition": "executable",
-      "release": "R1",
-      "issueId": "PLA-371"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-200",
@@ -5062,7 +5089,9 @@
       "sourceVersion": "v6.0.0",
       "section": "§23.1",
       "dependencies": [
-        "F-120"
+        "F-120",
+        "F-910",
+        "F-911"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -5624,7 +5653,7 @@
       ],
       "disposition": "executable",
       "release": "R3",
-      "issueId": "SEL-169"
+      "issueId": "BUY-405"
     },
     {
       "requirementId": "F-431",
@@ -6306,7 +6335,10 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§31.1",
-      "dependencies": [],
+      "dependencies": [
+        "F-466",
+        "F-471"
+      ],
       "disposition": "executable",
       "release": "R4",
       "issueId": "PLA-421"
@@ -6397,6 +6429,7 @@
       "sourceVersion": "v7.0.0",
       "section": "§31.9",
       "dependencies": [
+        "F-116",
         "F-483"
       ],
       "disposition": "executable",
@@ -6657,7 +6690,7 @@
       "section": "§34.1.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R0",
       "issueId": "PLA-449"
     },
     {
@@ -6919,12 +6952,22 @@
     },
     {
       "requirementId": "F-533",
-      "outcome": "Buyer 14-Day Trial",
+      "outcome": "Buyer 14-Day Trial Lifecycle Completion",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§34.9.1",
       "dependencies": [
-        "F-527"
+        "F-007",
+        "F-466",
+        "F-467",
+        "F-468",
+        "F-470",
+        "F-473",
+        "F-509",
+        "F-527",
+        "F-528",
+        "F-628",
+        "F-916"
       ],
       "disposition": "executable",
       "release": "R2",
@@ -6978,7 +7021,9 @@
       "sourceVersion": "v7.0.0",
       "section": "§34.10.3",
       "dependencies": [
-        "F-536"
+        "F-132",
+        "F-536",
+        "F-630"
       ],
       "disposition": "executable",
       "release": "R2",
@@ -7355,11 +7400,13 @@
       "sourceVersion": "v6.0.0",
       "section": "§35.3",
       "dependencies": [
-        "F-179"
+        "F-179",
+        "F-687",
+        "F-693"
       ],
       "disposition": "executable",
       "release": "R5",
-      "issueId": "BUY-357"
+      "issueId": "SEL-258"
     },
     {
       "requirementId": "F-567",
@@ -7685,7 +7732,9 @@
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§40.2",
-      "dependencies": [],
+      "dependencies": [
+        "F-005"
+      ],
       "disposition": "executable",
       "release": "R0",
       "issueId": "PLA-522"
@@ -7755,11 +7804,19 @@
     },
     {
       "requirementId": "F-599",
-      "outcome": "SLA Commitments",
+      "outcome": "Enterprise SLA Commitments",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v6.0.0",
       "section": "§42.1",
-      "dependencies": [],
+      "dependencies": [
+        "F-012",
+        "F-474",
+        "F-483",
+        "F-514",
+        "F-520",
+        "F-543",
+        "F-600"
+      ],
       "disposition": "executable",
       "release": "R5",
       "issueId": "PLA-528"
@@ -7870,9 +7927,9 @@
         "F-007",
         "F-008"
       ],
-      "disposition": "executable",
-      "release": "R2",
-      "issueId": "PLA-896"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-609",
@@ -7883,9 +7940,9 @@
       "dependencies": [
         "F-161"
       ],
-      "disposition": "executable",
-      "release": "R5",
-      "issueId": "PLA-897"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-610",
@@ -7894,9 +7951,9 @@
       "sourceVersion": "v6.0.0",
       "section": "§43.3",
       "dependencies": [],
-      "disposition": "executable",
-      "release": "R2",
-      "issueId": "PLA-898"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-611",
@@ -7907,9 +7964,9 @@
       "dependencies": [
         "F-117"
       ],
-      "disposition": "executable",
-      "release": "R2",
-      "issueId": "PLA-899"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-612",
@@ -8115,11 +8172,13 @@
     },
     {
       "requirementId": "F-628",
-      "outcome": "Test Pyramid (Unit/Integration/E2E)",
+      "outcome": "Per-Service Test and Evidence Control Plane",
       "sourceDoc": "Sourcera_Master_Spec.md",
-      "sourceVersion": "v6.0.0",
+      "sourceVersion": "v7.1.0a",
       "section": "§46.1",
-      "dependencies": [],
+      "dependencies": [
+        "F-005"
+      ],
       "disposition": "executable",
       "release": "R0",
       "issueId": "PLA-553"
@@ -8142,6 +8201,7 @@
       "sourceVersion": "v6.0.0",
       "section": "§46.3",
       "dependencies": [
+        "F-005",
         "F-008",
         "F-572",
         "F-600",
@@ -8161,7 +8221,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§46.4",
       "dependencies": [
-        "F-008"
+        "F-008",
+        "F-531"
       ],
       "disposition": "executable",
       "release": "R2",
@@ -8471,7 +8532,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§48.3.3",
       "dependencies": [
-        "F-608"
+        "F-608",
+        "F-653",
+        "F-654",
+        "F-696",
+        "F-701"
       ],
       "disposition": "executable",
       "release": "R3",
@@ -10289,9 +10354,9 @@
       "dependencies": [
         "F-793"
       ],
-      "disposition": "executable",
-      "release": "R2",
-      "issueId": "PLA-702"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-795",
@@ -11210,7 +11275,15 @@
       "sourceVersion": "v2.0.0",
       "section": "UX Design §Components.Input",
       "dependencies": [
-        "F-860"
+        "F-042",
+        "F-043",
+        "F-569",
+        "F-859",
+        "F-860",
+        "F-861",
+        "F-862",
+        "F-863",
+        "F-864"
       ],
       "disposition": "executable",
       "release": "R2",
@@ -11421,9 +11494,9 @@
     {
       "requirementId": "F-883",
       "outcome": "Illustration System",
-      "sourceDoc": "UX_Design_of_Sourcera.md",
-      "sourceVersion": "v2.0.0",
-      "section": "UX Design §Illustration",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§3.7.5",
       "dependencies": [
         "F-875"
       ],
@@ -11434,9 +11507,9 @@
     {
       "requirementId": "F-884",
       "outcome": "Density Modes (Comfortable / Compact)",
-      "sourceDoc": "UX_Design_of_Sourcera.md",
-      "sourceVersion": "v2.0.0",
-      "section": "UX Design §Density",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§3.15",
       "dependencies": [
         "F-861"
       ],
@@ -11460,9 +11533,9 @@
     {
       "requirementId": "F-886",
       "outcome": "Voice & Tone Guidelines",
-      "sourceDoc": "UX_Design_of_Sourcera.md",
-      "sourceVersion": "v2.0.0",
-      "section": "UX Design §VoiceTone",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§3.7.7.A",
       "dependencies": [],
       "disposition": "executable",
       "release": "R3",
@@ -11628,6 +11701,474 @@
       "disposition": "executable",
       "release": "R4",
       "issueId": "BUY-364"
+    },
+    {
+      "requirementId": "F-899",
+      "outcome": "Seller Dashboard",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
+      "sourceVersion": "v2.0.0",
+      "section": "UX Design §4.3.1",
+      "dependencies": [
+        "F-001",
+        "F-112",
+        "F-113",
+        "F-117",
+        "F-183",
+        "F-332",
+        "F-333",
+        "F-387",
+        "F-393",
+        "F-429",
+        "F-873",
+        "F-875",
+        "F-876",
+        "F-877",
+        "F-879"
+      ],
+      "disposition": "executable",
+      "release": "R4",
+      "issueId": "SEL-259"
+    },
+    {
+      "requirementId": "F-910",
+      "outcome": "Application Security Headers",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§1.5.1",
+      "dependencies": [
+        "F-002",
+        "F-004",
+        "F-005",
+        "F-911"
+      ],
+      "disposition": "executable",
+      "release": "R0",
+      "issueId": "PLA-946"
+    },
+    {
+      "requirementId": "F-911",
+      "outcome": "Cross-Origin Request Policy",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§32.1.1",
+      "dependencies": [
+        "F-002",
+        "F-004"
+      ],
+      "disposition": "executable",
+      "release": "R0",
+      "issueId": "PLA-944"
+    },
+    {
+      "requirementId": "F-912",
+      "outcome": "Enterprise Branding Overrides",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§34.1.1",
+      "dependencies": [
+        "F-006",
+        "F-063",
+        "F-119",
+        "F-170",
+        "F-179",
+        "F-569",
+        "F-628",
+        "F-701",
+        "F-859"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-945"
+    },
+    {
+      "requirementId": "F-913",
+      "outcome": "Deterministic Platform Reference-Data Orchestration",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.33",
+      "dependencies": [
+        "F-119",
+        "F-132",
+        "F-302",
+        "F-628",
+        "F-701",
+        "F-706",
+        "F-725"
+      ],
+      "disposition": "executable",
+      "release": "R4",
+      "issueId": "PLA-950"
+    },
+    {
+      "requirementId": "F-916",
+      "outcome": "Buyer Trial Activation at Org Creation",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§34.9.1",
+      "dependencies": [
+        "F-006",
+        "F-008",
+        "F-079",
+        "F-080",
+        "F-081",
+        "F-099",
+        "F-117",
+        "F-125",
+        "F-130",
+        "F-511",
+        "F-628",
+        "F-755",
+        "F-779",
+        "F-780",
+        "F-917"
+      ],
+      "disposition": "executable",
+      "release": "R0",
+      "issueId": "PLA-975"
+    },
+    {
+      "requirementId": "F-917",
+      "outcome": "Stripe Customer Genesis at Organization Creation",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§34.10.5.A",
+      "dependencies": [
+        "F-079",
+        "F-117",
+        "F-502",
+        "F-628"
+      ],
+      "disposition": "executable",
+      "release": "R0",
+      "issueId": "PLA-972"
+    },
+    {
+      "requirementId": "F-922",
+      "outcome": "OpsActionRecord Canonical Audit Record and Atomic Writer",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§4.4.27",
+      "dependencies": [
+        "F-117",
+        "F-119",
+        "F-160",
+        "F-593",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-779",
+        "F-780"
+      ],
+      "disposition": "executable",
+      "release": "R2",
+      "issueId": "PLA-1025"
+    },
+    {
+      "requirementId": "F-923",
+      "outcome": "Plan-Tier Manual Override Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.20",
+      "dependencies": [
+        "F-007",
+        "F-079",
+        "F-117",
+        "F-119",
+        "F-132",
+        "F-160",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-725",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1030"
+    },
+    {
+      "requirementId": "F-924",
+      "outcome": "Workspace Export Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.21",
+      "dependencies": [
+        "F-002",
+        "F-079",
+        "F-083",
+        "F-117",
+        "F-119",
+        "F-160",
+        "F-175",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-502",
+        "F-592",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1029"
+    },
+    {
+      "requirementId": "F-925",
+      "outcome": "Refund Authorization Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.22",
+      "dependencies": [
+        "F-007",
+        "F-117",
+        "F-119",
+        "F-125",
+        "F-128",
+        "F-160",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1031"
+    },
+    {
+      "requirementId": "F-926",
+      "outcome": "AIWallet Manual Adjustment Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.23",
+      "dependencies": [
+        "F-007",
+        "F-117",
+        "F-119",
+        "F-125",
+        "F-126",
+        "F-160",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1032"
+    },
+    {
+      "requirementId": "F-927",
+      "outcome": "Trial Management Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.24",
+      "dependencies": [
+        "F-007",
+        "F-079",
+        "F-117",
+        "F-119",
+        "F-160",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-533",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-916",
+        "F-922",
+        "F-923"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1033"
+    },
+    {
+      "requirementId": "F-928",
+      "outcome": "Marketplace Listing Moderation Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.25",
+      "dependencies": [
+        "F-117",
+        "F-119",
+        "F-160",
+        "F-429",
+        "F-447",
+        "F-449",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-602",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-746",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1034"
+    },
+    {
+      "requirementId": "F-929",
+      "outcome": "AIOperation Reversal Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.26",
+      "dependencies": [
+        "F-007",
+        "F-117",
+        "F-119",
+        "F-123",
+        "F-125",
+        "F-128",
+        "F-160",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-539",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1035"
+    },
+    {
+      "requirementId": "F-930",
+      "outcome": "User Token, Password, and SCIM Ops Surface",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "§50.27",
+      "dependencies": [
+        "F-006",
+        "F-079",
+        "F-117",
+        "F-119",
+        "F-138",
+        "F-160",
+        "F-161",
+        "F-164",
+        "F-168",
+        "F-169",
+        "F-466",
+        "F-471",
+        "F-483",
+        "F-496",
+        "F-593",
+        "F-596",
+        "F-600",
+        "F-697",
+        "F-698",
+        "F-699",
+        "F-700",
+        "F-701",
+        "F-777",
+        "F-779",
+        "F-780",
+        "F-782",
+        "F-922"
+      ],
+      "disposition": "executable",
+      "release": "R5",
+      "issueId": "PLA-1036"
+    },
+    {
+      "requirementId": "F-931",
+      "outcome": "Authenticated Linear Planning Mirror Publication",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "v7.1.0a",
+      "section": "Authenticated planning mirror publication",
+      "dependencies": [],
+      "disposition": "executable",
+      "release": "R0",
+      "issueId": "PLA-1044"
     },
     {
       "requirementId": "F-AE-001",
@@ -11996,7 +12537,7 @@
     {
       "requirementId": "F-AE-030",
       "outcome": "AE-14.6-02: PipelineSurface / PhaseAdvancer Composition",
-      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
       "sourceVersion": "v7.1.0",
       "section": "UX §5.2.19",
       "dependencies": [
@@ -12009,7 +12550,7 @@
     {
       "requirementId": "F-AE-031",
       "outcome": "AE-14.6-03: Pipeline Step Design Tokens",
-      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceDoc": "UX_Design_of_Sourcera.md",
       "sourceVersion": "v7.1.0",
       "section": "UX §5.2.19",
       "dependencies": [
@@ -12510,9 +13051,9 @@
       "dependencies": [
         "F-797"
       ],
-      "disposition": "executable",
-      "release": "R2",
-      "issueId": "PLA-938"
+      "disposition": "superseded",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-AE-070",
@@ -12534,9 +13075,9 @@
       "sourceVersion": "v7.1.0",
       "section": "_integration/RECONCILIATION.md → Phase 14.0.1",
       "dependencies": [],
-      "disposition": "executable",
-      "release": "R3",
-      "issueId": "PLA-940"
+      "disposition": "narrative_context",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-AE-072",
@@ -12547,13 +13088,13 @@
       "dependencies": [
         "F-429"
       ],
-      "disposition": "executable",
-      "release": "R3",
-      "issueId": "BUY-404"
+      "disposition": "narrative_context",
+      "release": null,
+      "issueId": null
     },
     {
       "requirementId": "F-BC-001",
-      "outcome": "BC-12.4-01: Enterprise SLA 1-hour → 4-hour",
+      "outcome": "Enterprise SLA Contract Reconciliation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "v7.0.0",
       "section": "§42.1",
@@ -12569,7 +13110,7 @@
       "outcome": "Prove runtime gate accessibility_settings_preference_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71950",
+      "section": "line:72645",
       "dependencies": [
         "F-062"
       ],
@@ -12582,7 +13123,7 @@
       "outcome": "Prove runtime gate agent_budget_breach",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72902",
+      "section": "line:73599",
       "dependencies": [
         "F-613",
         "F-318"
@@ -12596,7 +13137,7 @@
       "outcome": "Prove runtime gate agent_feedback_no_model_training",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72697",
+      "section": "line:73394",
       "dependencies": [
         "F-315",
         "F-625"
@@ -12610,7 +13151,7 @@
       "outcome": "Prove runtime gate ai_response_generation_billing_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73184",
+      "section": "line:73881",
       "dependencies": [
         "F-207"
       ],
@@ -12623,7 +13164,7 @@
       "outcome": "Prove runtime gate ai_wallet_state_machine_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73280",
+      "section": "line:73977",
       "dependencies": [
         "F-125",
         "F-536"
@@ -12637,7 +13178,7 @@
       "outcome": "Prove runtime gate aiwallet_response_excludes_solo_envelope",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71808",
+      "section": "line:72503",
       "dependencies": [
         "F-125",
         "F-385",
@@ -12652,7 +13193,7 @@
       "outcome": "Prove runtime gate api_latency_p95_regression",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72900",
+      "section": "line:73597",
       "dependencies": [
         "F-612"
       ],
@@ -12665,7 +13206,7 @@
       "outcome": "Prove runtime gate api_multistatus_schema_registration",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73259",
+      "section": "line:73956",
       "dependencies": [
         "F-498"
       ],
@@ -12678,7 +13219,7 @@
       "outcome": "Prove runtime gate api_rate_limit_plan_quota_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73262",
+      "section": "line:73959",
       "dependencies": [
         "F-497"
       ],
@@ -12691,7 +13232,7 @@
       "outcome": "Prove runtime gate api_standard_retry_after_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73260",
+      "section": "line:73957",
       "dependencies": [
         "F-496",
         "F-497",
@@ -12706,7 +13247,7 @@
       "outcome": "Prove runtime gate appendix_g_legacy_alias_retirement_enforced",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72988",
+      "section": "line:73685",
       "dependencies": [
         "F-754"
       ],
@@ -12719,9 +13260,9 @@
       "outcome": "Prove runtime gate appendix_m_coverage_on_diff",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71926",
+      "section": "line:72621",
       "dependencies": [
-        "F-796"
+        "F-792"
       ],
       "disposition": "proof_only",
       "release": "R2",
@@ -12732,7 +13273,7 @@
       "outcome": "Prove runtime gate attachment_dsar_72h_binary_detach_sla",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71921",
+      "section": "line:72616",
       "dependencies": [
         "F-177"
       ],
@@ -12745,7 +13286,7 @@
       "outcome": "Prove runtime gate audit_event_break_glass_integrity_scan_triggered",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71869",
+      "section": "line:72564",
       "dependencies": [
         "F-607"
       ],
@@ -12758,7 +13299,7 @@
       "outcome": "Prove runtime gate audit_event_hash_chain_full_corpus_coverage",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71868",
+      "section": "line:72563",
       "dependencies": [
         "F-405"
       ],
@@ -12771,7 +13312,7 @@
       "outcome": "Prove runtime gate audit_event_residency_partitioning_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72972",
+      "section": "line:73669",
       "dependencies": [
         "F-772"
       ],
@@ -12784,7 +13325,7 @@
       "outcome": "Prove runtime gate audit_events_export_ready_delivery_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73653",
+      "section": "line:74350",
       "dependencies": [
         "F-171"
       ],
@@ -12797,7 +13338,7 @@
       "outcome": "Prove runtime gate audit_integrity_exemption_redaction_path_correctness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73529",
+      "section": "line:74226",
       "dependencies": [
         "F-176"
       ],
@@ -12810,7 +13351,7 @@
       "outcome": "Prove runtime gate auth_audit_event_emission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71870",
+      "section": "line:72565",
       "dependencies": [
         "F-117"
       ],
@@ -12823,7 +13364,7 @@
       "outcome": "Prove runtime gate backup_dsar_repseudonymization_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71918",
+      "section": "line:72613",
       "dependencies": [
         "F-175",
         "F-603"
@@ -12837,7 +13378,7 @@
       "outcome": "Prove runtime gate backup_residency_partition_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71915",
+      "section": "line:72610",
       "dependencies": [
         "F-012",
         "F-603"
@@ -12851,7 +13392,7 @@
       "outcome": "Prove runtime gate bid_disqualification_cascade_active",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71934",
+      "section": "line:72629",
       "dependencies": [
         "F-403"
       ],
@@ -12864,7 +13405,7 @@
       "outcome": "Prove runtime gate bid_response_bulk_submit_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73227",
+      "section": "line:73924",
       "dependencies": [
         "F-389"
       ],
@@ -12877,7 +13418,7 @@
       "outcome": "Prove runtime gate bid_response_editor_lock_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73226",
+      "section": "line:73923",
       "dependencies": [
         "F-106"
       ],
@@ -12890,7 +13431,7 @@
       "outcome": "Prove runtime gate bid_workspace_buyer_purge_orphan_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73639",
+      "section": "line:74336",
       "dependencies": [
         "F-105"
       ],
@@ -12903,7 +13444,7 @@
       "outcome": "Prove runtime gate bid_workspace_deal_size_band_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72925",
+      "section": "line:73622",
       "dependencies": [
         "F-105"
       ],
@@ -12916,7 +13457,7 @@
       "outcome": "Prove runtime gate bid_workspace_surface_state_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73229",
+      "section": "line:73926",
       "dependencies": [
         "F-776"
       ],
@@ -12929,7 +13470,7 @@
       "outcome": "Prove runtime gate bid_workspace_voluntary_withdrawal_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73228",
+      "section": "line:73925",
       "dependencies": [
         "F-390"
       ],
@@ -12942,7 +13483,7 @@
       "outcome": "Prove runtime gate billing_async_failure_state_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73261",
+      "section": "line:73958",
       "dependencies": [
         "F-126",
         "F-500",
@@ -12957,7 +13498,7 @@
       "outcome": "Prove runtime gate billing_organization_suspended_webhook_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73573",
+      "section": "line:74270",
       "dependencies": [
         "F-489"
       ],
@@ -12970,7 +13511,7 @@
       "outcome": "Prove runtime gate bridge_payload_body_pii_sweep_buyer_seller_parity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71904",
+      "section": "line:72599",
       "dependencies": [
         "F-409"
       ],
@@ -12983,7 +13524,7 @@
       "outcome": "Prove runtime gate bundle_size_budget_in_app",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72904",
+      "section": "line:73601",
       "dependencies": [
         "F-612",
         "F-614"
@@ -12997,7 +13538,7 @@
       "outcome": "Prove runtime gate buyer_activation_metric_canonical_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72119",
+      "section": "line:72814",
       "dependencies": [
         "F-637",
         "F-752"
@@ -13011,7 +13552,7 @@
       "outcome": "Prove runtime gate buyer_console_role_permission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72442",
+      "section": "line:73139",
       "dependencies": [
         "F-144",
         "F-145",
@@ -13028,7 +13569,7 @@
       "outcome": "Prove runtime gate buyer_evaluation_funnel_derivation_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73587",
+      "section": "line:74284",
       "dependencies": [
         "F-637"
       ],
@@ -13041,7 +13582,7 @@
       "outcome": "Prove runtime gate buyer_pulse_interactive_render_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73600",
+      "section": "line:74297",
       "dependencies": [
         "F-308",
         "F-612"
@@ -13051,11 +13592,26 @@
       "issueId": "BUY-383"
     },
     {
+      "requirementId": "RG:buyer_trial_audit_action_registration",
+      "outcome": "Prove runtime gate buyer_trial_audit_action_registration",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "sourceVersion": "live",
+      "section": "line:74360",
+      "dependencies": [
+        "F-117",
+        "F-533",
+        "F-916"
+      ],
+      "disposition": "proof_only",
+      "release": "R2",
+      "issueId": "PLA-1026"
+    },
+    {
       "requirementId": "RG:capability_declaration_reuse_count_consistency",
       "outcome": "Prove runtime gate capability_declaration_reuse_count_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73183",
+      "section": "line:73880",
       "dependencies": [
         "F-206"
       ],
@@ -13068,7 +13624,7 @@
       "outcome": "Prove runtime gate cmek_rotation_runtime_evidence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73059",
+      "section": "line:73756",
       "dependencies": [
         "F-502",
         "F-634"
@@ -13082,7 +13638,7 @@
       "outcome": "Prove runtime gate committed_spend_console_scope_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71938",
+      "section": "line:72633",
       "dependencies": [
         "F-002"
       ],
@@ -13095,7 +13651,7 @@
       "outcome": "Prove runtime gate committed_spend_single_auto_renew_invariant",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71937",
+      "section": "line:72632",
       "dependencies": [
         "F-522"
       ],
@@ -13108,7 +13664,7 @@
       "outcome": "Prove runtime gate committed_spend_single_pool_invariant",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71936",
+      "section": "line:72631",
       "dependencies": [
         "F-522"
       ],
@@ -13121,7 +13677,7 @@
       "outcome": "Prove runtime gate console_bridge_failure_storm_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73630",
+      "section": "line:74327",
       "dependencies": [
         "F-400"
       ],
@@ -13134,7 +13690,7 @@
       "outcome": "Prove runtime gate console_bridge_no_defense_view_event_kinds",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71781",
+      "section": "line:72476",
       "dependencies": [
         "F-120"
       ],
@@ -13147,7 +13703,7 @@
       "outcome": "Prove runtime gate console_isolation_violation_no_data_path_use",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71831",
+      "section": "line:72526",
       "dependencies": [
         "F-002"
       ],
@@ -13160,7 +13716,7 @@
       "outcome": "Prove runtime gate contest_window_db_trigger_present",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72659",
+      "section": "line:73356",
       "dependencies": [
         "F-541"
       ],
@@ -13173,7 +13729,7 @@
       "outcome": "Prove runtime gate convex_reactivity_slo_regression",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72901",
+      "section": "line:73598",
       "dependencies": [
         "F-184"
       ],
@@ -13186,7 +13742,7 @@
       "outcome": "Prove runtime gate core_web_vitals_in_app_lighthouse_ci",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72899",
+      "section": "line:73596",
       "dependencies": [
         "F-612"
       ],
@@ -13199,7 +13755,7 @@
       "outcome": "Prove runtime gate cost_base_recalc_notice_window_trajectory_gate",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71930",
+      "section": "line:72625",
       "dependencies": [
         "F-524"
       ],
@@ -13212,7 +13768,7 @@
       "outcome": "Prove runtime gate cross_console_shared_ui_preference_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72886",
+      "section": "line:73583",
       "dependencies": [
         "F-122"
       ],
@@ -13225,7 +13781,7 @@
       "outcome": "Prove runtime gate cross_org_guest_sso_bypass_blocked",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71879",
+      "section": "line:72574",
       "dependencies": [
         "F-167"
       ],
@@ -13238,7 +13794,7 @@
       "outcome": "Prove runtime gate defense_view_engagement_event_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73584",
+      "section": "line:74281",
       "dependencies": [
         "F-263"
       ],
@@ -13251,7 +13807,7 @@
       "outcome": "Prove runtime gate defense_view_regeneration_throttle_5min",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71784",
+      "section": "line:72479",
       "dependencies": [
         "F-263"
       ],
@@ -13264,7 +13820,7 @@
       "outcome": "Prove runtime gate dns_failover_target_residency_match",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71911",
+      "section": "line:72606",
       "dependencies": [
         "F-012",
         "F-603"
@@ -13278,7 +13834,7 @@
       "outcome": "Prove runtime gate dr_failover_no_cross_residency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71912",
+      "section": "line:72607",
       "dependencies": [
         "F-012",
         "F-603"
@@ -13292,7 +13848,7 @@
       "outcome": "Prove runtime gate dr_failover_residency_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71910",
+      "section": "line:72605",
       "dependencies": [
         "F-012",
         "F-603"
@@ -13306,7 +13862,7 @@
       "outcome": "Prove runtime gate dr_game_day_overdue",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71914",
+      "section": "line:72609",
       "dependencies": [
         "F-603"
       ],
@@ -13319,7 +13875,7 @@
       "outcome": "Prove runtime gate dr_restore_test_residency_partition",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71913",
+      "section": "line:72608",
       "dependencies": [
         "F-603",
         "F-772"
@@ -13333,7 +13889,7 @@
       "outcome": "Prove runtime gate dsar_30d_sla_observability",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73530",
+      "section": "line:74227",
       "dependencies": [
         "F-177"
       ],
@@ -13346,7 +13902,7 @@
       "outcome": "Prove runtime gate dsar_cascade_aggregate_recompute_backstop_drift",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71900",
+      "section": "line:72595",
       "dependencies": [
         "F-175"
       ],
@@ -13359,7 +13915,7 @@
       "outcome": "Prove runtime gate dsar_cascade_aggregate_recompute_suppression_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71899",
+      "section": "line:72594",
       "dependencies": [
         "F-175"
       ],
@@ -13372,7 +13928,7 @@
       "outcome": "Prove runtime gate dsar_cascade_aggregate_recompute_synchronous",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71898",
+      "section": "line:72593",
       "dependencies": [
         "F-175"
       ],
@@ -13385,7 +13941,7 @@
       "outcome": "Prove runtime gate dsar_cascade_audit_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73528",
+      "section": "line:74225",
       "dependencies": [
         "F-175"
       ],
@@ -13398,7 +13954,7 @@
       "outcome": "Prove runtime gate dsar_cascade_bridge_payload_body_pii_sweep_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71901",
+      "section": "line:72596",
       "dependencies": [
         "F-175"
       ],
@@ -13411,7 +13967,7 @@
       "outcome": "Prove runtime gate dsar_cascade_bridge_redaction_hash_recompute",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71902",
+      "section": "line:72597",
       "dependencies": [
         "F-397"
       ],
@@ -13424,7 +13980,7 @@
       "outcome": "Prove runtime gate dsar_cascade_partial_failure_pagerduty_sla",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71905",
+      "section": "line:72600",
       "dependencies": [
         "F-175"
       ],
@@ -13437,7 +13993,7 @@
       "outcome": "Prove runtime gate dsar_cascade_partial_failure_resume_sla_24h",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71906",
+      "section": "line:72601",
       "dependencies": [
         "F-175"
       ],
@@ -13450,7 +14006,7 @@
       "outcome": "Prove runtime gate dsar_cascade_pseudonym_epoch_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71909",
+      "section": "line:72604",
       "dependencies": [
         "F-175"
       ],
@@ -13463,7 +14019,7 @@
       "outcome": "Prove runtime gate dsar_cascade_residency_partition_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71871",
+      "section": "line:72566",
       "dependencies": [
         "F-175"
       ],
@@ -13476,7 +14032,7 @@
       "outcome": "Prove runtime gate dsar_cascade_statutory_ceiling_auto_escalation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71907",
+      "section": "line:72602",
       "dependencies": [
         "F-175"
       ],
@@ -13489,7 +14045,7 @@
       "outcome": "Prove runtime gate dsar_erased_buyer_excluded_from_recovery_cadence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72150",
+      "section": "line:72845",
       "dependencies": [
         "F-175"
       ],
@@ -13502,7 +14058,7 @@
       "outcome": "Prove runtime gate dsar_erased_seller_excluded_from_recovery_cadence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72149",
+      "section": "line:72844",
       "dependencies": [
         "F-175"
       ],
@@ -13515,7 +14071,7 @@
       "outcome": "Prove runtime gate dsar_excluded_snapshot_restore_blocked",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71919",
+      "section": "line:72614",
       "dependencies": [
         "F-503",
         "F-603"
@@ -13529,7 +14085,7 @@
       "outcome": "Prove runtime gate dsar_export_delivery_residency_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72973",
+      "section": "line:73670",
       "dependencies": [
         "F-503",
         "F-772"
@@ -13543,7 +14099,7 @@
       "outcome": "Prove runtime gate dsar_manifestly_unfounded_appeal_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73622",
+      "section": "line:74319",
       "dependencies": [
         "F-177",
         "F-503"
@@ -13557,7 +14113,7 @@
       "outcome": "Prove runtime gate dsar_manifestly_unfounded_rejection_audit_emission",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71878",
+      "section": "line:72573",
       "dependencies": [
         "F-117",
         "F-503"
@@ -13571,7 +14127,7 @@
       "outcome": "Prove runtime gate dsar_pseudonym_epoch_content_scrub_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73621",
+      "section": "line:74318",
       "dependencies": [
         "F-175",
         "F-503"
@@ -13585,7 +14141,7 @@
       "outcome": "Prove runtime gate dsar_sla_window_breached",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73531",
+      "section": "line:74228",
       "dependencies": [
         "F-177"
       ],
@@ -13598,7 +14154,7 @@
       "outcome": "Prove runtime gate email_bounce_complaint_suppression_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72642",
+      "section": "line:73339",
       "dependencies": [
         "F-597"
       ],
@@ -13611,7 +14167,7 @@
       "outcome": "Prove runtime gate entitlement_matrix_non_ai_runtime_branching",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72766",
+      "section": "line:73463",
       "dependencies": [
         "F-531"
       ],
@@ -13624,7 +14180,7 @@
       "outcome": "Prove runtime gate entitlement_matrix_registry_binding_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72190",
+      "section": "line:72885",
       "dependencies": [
         "F-531"
       ],
@@ -13637,7 +14193,7 @@
       "outcome": "Prove runtime gate featured_placement_funnel_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73586",
+      "section": "line:74283",
       "dependencies": [
         "F-460"
       ],
@@ -13650,7 +14206,7 @@
       "outcome": "Prove runtime gate field_encryption_plaintext_egress_guard",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73060",
+      "section": "line:73757",
       "dependencies": [
         "F-502",
         "F-625"
@@ -13664,7 +14220,7 @@
       "outcome": "Prove runtime gate firecrawl_outage_progress_line_substitution",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72117",
+      "section": "line:72812",
       "dependencies": [
         "F-560"
       ],
@@ -13677,7 +14233,7 @@
       "outcome": "Prove runtime gate firecrawl_status_line_variant_materialization",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73212",
+      "section": "line:73909",
       "dependencies": [
         "F-AE-043"
       ],
@@ -13690,7 +14246,7 @@
       "outcome": "Prove runtime gate first_pass_high_stakes_band_only",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72926",
+      "section": "line:73623",
       "dependencies": [
         "F-353"
       ],
@@ -13703,7 +14259,7 @@
       "outcome": "Prove runtime gate first_pass_rfp_draft_outcome_contract_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72244",
+      "section": "line:72939",
       "dependencies": [
         "F-353"
       ],
@@ -13716,7 +14272,7 @@
       "outcome": "Prove runtime gate free_allowance_plan_entitlement_partitioning",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72660",
+      "section": "line:73357",
       "dependencies": [
         "F-530",
         "F-531"
@@ -13730,7 +14286,7 @@
       "outcome": "Prove runtime gate free_allowance_quota_decrease_guard",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73553",
+      "section": "line:74250",
       "dependencies": [
         "F-729"
       ],
@@ -13743,7 +14299,7 @@
       "outcome": "Prove runtime gate ghost_ingestion_mcp_allowlist_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73640",
+      "section": "line:74337",
       "dependencies": [
         "F-345"
       ],
@@ -13756,7 +14312,7 @@
       "outcome": "Prove runtime gate global_ban_reversal_core_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73542",
+      "section": "line:74239",
       "dependencies": [
         "F-407",
         "F-447",
@@ -13771,7 +14327,7 @@
       "outcome": "Prove runtime gate global_ban_reversal_marketplace_restoration_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73543",
+      "section": "line:74240",
       "dependencies": [
         "F-429",
         "F-447",
@@ -13786,7 +14342,7 @@
       "outcome": "Prove runtime gate growth_loop_l1_delivery_reputation_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73631",
+      "section": "line:74328",
       "dependencies": [
         "F-009",
         "F-645"
@@ -13800,7 +14356,7 @@
       "outcome": "Prove runtime gate inbox_mutation_idempotency_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72683",
+      "section": "line:73380",
       "dependencies": [
         "F-035",
         "F-041",
@@ -13815,7 +14371,7 @@
       "outcome": "Prove runtime gate integration_export_payload_allowlist",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73032",
+      "section": "line:73729",
       "dependencies": [
         "F-484"
       ],
@@ -13828,7 +14384,7 @@
       "outcome": "Prove runtime gate kb_bootstrap_allowance_compensation_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72118",
+      "section": "line:72813",
       "dependencies": [
         "F-354"
       ],
@@ -13841,7 +14397,7 @@
       "outcome": "Prove runtime gate kb_bootstrap_per_org_concurrency_lock_active",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71933",
+      "section": "line:72628",
       "dependencies": [
         "F-354"
       ],
@@ -13854,7 +14410,7 @@
       "outcome": "Prove runtime gate kb_injection_scanner_registry_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73210",
+      "section": "line:73907",
       "dependencies": [
         "F-369"
       ],
@@ -13867,7 +14423,7 @@
       "outcome": "Prove runtime gate kb_mcp_webhook_alert_catalog_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72842",
+      "section": "line:73539",
       "dependencies": [
         "F-336"
       ],
@@ -13880,7 +14436,7 @@
       "outcome": "Prove runtime gate kb_state_persisting_audit_event_coverage",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73211",
+      "section": "line:73908",
       "dependencies": [
         "F-AE-042"
       ],
@@ -13893,7 +14449,7 @@
       "outcome": "Prove runtime gate kb_suggestion_alias_console_resolution_integrity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72220",
+      "section": "line:72915",
       "dependencies": [
         "F-356"
       ],
@@ -13906,7 +14462,7 @@
       "outcome": "Prove runtime gate kb_suggestion_family_cardinality",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72218",
+      "section": "line:72913",
       "dependencies": [
         "F-356"
       ],
@@ -13919,7 +14475,7 @@
       "outcome": "Prove runtime gate kb_suggestion_family_outcome_contract_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72219",
+      "section": "line:72914",
       "dependencies": [
         "F-540"
       ],
@@ -13932,7 +14488,7 @@
       "outcome": "Prove runtime gate kb_value_meter_estimated_value_guard_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73209",
+      "section": "line:73906",
       "dependencies": [
         "F-376"
       ],
@@ -13945,9 +14501,9 @@
       "outcome": "Prove runtime gate legal_entity_residency_change_revenue_leak_test",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72279",
+      "section": "line:72974",
       "dependencies": [
-        "F-539"
+        "F-917"
       ],
       "disposition": "proof_only",
       "release": "R4",
@@ -13958,7 +14514,7 @@
       "outcome": "Prove runtime gate load_test_sla_breach",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72903",
+      "section": "line:73600",
       "dependencies": [
         "F-615"
       ],
@@ -13971,7 +14527,7 @@
       "outcome": "Prove runtime gate locale_resolution_engine_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71955",
+      "section": "line:72650",
       "dependencies": [
         "F-570"
       ],
@@ -13984,7 +14540,7 @@
       "outcome": "Prove runtime gate m16_same_domain_enforcement_dual_point_canonical",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72125",
+      "section": "line:72820",
       "dependencies": [
         "F-674"
       ],
@@ -13997,7 +14553,7 @@
       "outcome": "Prove runtime gate m3_signed_payload_anonymity_binding",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72131",
+      "section": "line:72826",
       "dependencies": [
         "F-483"
       ],
@@ -14010,7 +14566,7 @@
       "outcome": "Prove runtime gate marketplace_match_score_snapshot_tuple_uniqueness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72810",
+      "section": "line:73507",
       "dependencies": [
         "F-431"
       ],
@@ -14023,7 +14579,7 @@
       "outcome": "Prove runtime gate marketplace_proactive_offer_lifecycle_state_machine",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72825",
+      "section": "line:73522",
       "dependencies": [
         "F-429"
       ],
@@ -14036,7 +14592,7 @@
       "outcome": "Prove runtime gate marketplace_proactive_offer_pre_acceptance_redaction",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72824",
+      "section": "line:73521",
       "dependencies": [
         "F-456"
       ],
@@ -14049,7 +14605,7 @@
       "outcome": "Prove runtime gate mcp_session_token_record_entity_home",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72841",
+      "section": "line:73538",
       "dependencies": [
         "F-337"
       ],
@@ -14062,7 +14618,7 @@
       "outcome": "Prove runtime gate member_role_permission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72440",
+      "section": "line:73137",
       "dependencies": [
         "F-141"
       ],
@@ -14075,7 +14631,7 @@
       "outcome": "Prove runtime gate mobile_full_parity_closure",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73066",
+      "section": "line:73763",
       "dependencies": [
         "F-575"
       ],
@@ -14088,7 +14644,7 @@
       "outcome": "Prove runtime gate nda_lifecycle_notification_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73243",
+      "section": "line:73940",
       "dependencies": [
         "F-392",
         "F-466"
@@ -14102,7 +14658,7 @@
       "outcome": "Prove runtime gate negative_network_effects_monitoring_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72156",
+      "section": "line:72851",
       "dependencies": [
         "F-653"
       ],
@@ -14115,7 +14671,7 @@
       "outcome": "Prove runtime gate network_effect_attribution_window_canonical_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72155",
+      "section": "line:72850",
       "dependencies": [
         "F-655"
       ],
@@ -14128,7 +14684,7 @@
       "outcome": "Prove runtime gate network_effects_dashboard_outage_render_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72153",
+      "section": "line:72848",
       "dependencies": [
         "F-655"
       ],
@@ -14141,7 +14697,7 @@
       "outcome": "Prove runtime gate network_effects_residency_partition_canonical_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72154",
+      "section": "line:72849",
       "dependencies": [
         "F-655"
       ],
@@ -14154,7 +14710,7 @@
       "outcome": "Prove runtime gate observability_residency_routing_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72974",
+      "section": "line:73671",
       "dependencies": [
         "F-772"
       ],
@@ -14167,7 +14723,7 @@
       "outcome": "Prove runtime gate ops_console_accessibility_compliance",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73575",
+      "section": "line:74272",
       "dependencies": [
         "F-696"
       ],
@@ -14180,7 +14736,7 @@
       "outcome": "Prove runtime gate ops_read_audit_event_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73572",
+      "section": "line:74269",
       "dependencies": [
         "F-117"
       ],
@@ -14193,7 +14749,7 @@
       "outcome": "Prove runtime gate ops_session_notification_partial_success_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73574",
+      "section": "line:74271",
       "dependencies": [
         "F-708"
       ],
@@ -14206,7 +14762,7 @@
       "outcome": "Prove runtime gate ops_session_numerical_caps_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73576",
+      "section": "line:74273",
       "dependencies": [
         "F-364"
       ],
@@ -14219,7 +14775,7 @@
       "outcome": "Prove runtime gate org_admin_billing_read_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72441",
+      "section": "line:73138",
       "dependencies": [
         "F-140",
         "F-142"
@@ -14233,7 +14789,7 @@
       "outcome": "Prove runtime gate org_custom_residency_label_required",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72281",
+      "section": "line:72976",
       "dependencies": [
         "F-780"
       ],
@@ -14246,7 +14802,7 @@
       "outcome": "Prove runtime gate outcome_contract_signal_subject_enum_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73554",
+      "section": "line:74251",
       "dependencies": [
         "F-320"
       ],
@@ -14259,7 +14815,7 @@
       "outcome": "Prove runtime gate outcome_resolver_free_allowance_settlement_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73610",
+      "section": "line:74307",
       "dependencies": [
         "F-530",
         "F-540"
@@ -14273,7 +14829,7 @@
       "outcome": "Prove runtime gate outcome_resolver_liveness_backlog_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73612",
+      "section": "line:74309",
       "dependencies": [
         "F-540"
       ],
@@ -14286,7 +14842,7 @@
       "outcome": "Prove runtime gate pipeline_surface_compression_seller_always_compressed",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71790",
+      "section": "line:72485",
       "dependencies": [
         "F-075"
       ],
@@ -14299,7 +14855,7 @@
       "outcome": "Prove runtime gate pipeline_surface_compression_soft_gate_solo_only",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71791",
+      "section": "line:72486",
       "dependencies": [
         "F-075"
       ],
@@ -14312,7 +14868,7 @@
       "outcome": "Prove runtime gate policy_ingestion_buyer_console_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72718",
+      "section": "line:73415",
       "dependencies": [
         "F-002",
         "F-104",
@@ -14327,7 +14883,7 @@
       "outcome": "Prove runtime gate policy_ingestion_parent_child_settlement",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72716",
+      "section": "line:73413",
       "dependencies": [
         "F-156"
       ],
@@ -14340,7 +14896,7 @@
       "outcome": "Prove runtime gate policy_ingestion_partial_resume_idempotency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72714",
+      "section": "line:73411",
       "dependencies": [
         "F-156"
       ],
@@ -14353,7 +14909,7 @@
       "outcome": "Prove runtime gate posthog_event_contract_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73588",
+      "section": "line:74285",
       "dependencies": [
         "F-779"
       ],
@@ -14366,7 +14922,7 @@
       "outcome": "Prove runtime gate pro_trial_day_31_contextual_cta_entitlement_fit",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72948",
+      "section": "line:73645",
       "dependencies": [
         "F-563"
       ],
@@ -14379,7 +14935,7 @@
       "outcome": "Prove runtime gate pro_trial_hero_moment_slo_precedence_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73599",
+      "section": "line:74296",
       "dependencies": [
         "F-897"
       ],
@@ -14392,7 +14948,7 @@
       "outcome": "Prove runtime gate pro_trial_no_refund_after_vendor_notification",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72927",
+      "section": "line:73624",
       "dependencies": [
         "F-546"
       ],
@@ -14405,7 +14961,7 @@
       "outcome": "Prove runtime gate pulse_digest_summary_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72680",
+      "section": "line:73377",
       "dependencies": [
         "F-311"
       ],
@@ -14418,7 +14974,7 @@
       "outcome": "Prove runtime gate qa_attachment_cross_console_content_scan_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73541",
+      "section": "line:74238",
       "dependencies": [
         "F-118"
       ],
@@ -14431,7 +14987,7 @@
       "outcome": "Prove runtime gate qa_suggestion_cross_console_firewall_boundary",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72796",
+      "section": "line:73493",
       "dependencies": [
         "F-122",
         "F-298"
@@ -14445,7 +15001,7 @@
       "outcome": "Prove runtime gate qa_suggestion_family_cardinality",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72191",
+      "section": "line:72886",
       "dependencies": [
         "F-418"
       ],
@@ -14458,7 +15014,7 @@
       "outcome": "Prove runtime gate qa_suggestion_family_outcome_contract_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72192",
+      "section": "line:72887",
       "dependencies": [
         "F-540"
       ],
@@ -14471,7 +15027,7 @@
       "outcome": "Prove runtime gate requirement_reopening_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73651",
+      "section": "line:74348",
       "dependencies": [
         "F-086",
         "F-774"
@@ -14485,7 +15041,7 @@
       "outcome": "Prove runtime gate responsive_conformance_suite",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72878",
+      "section": "line:73575",
       "dependencies": [
         "F-579"
       ],
@@ -14498,7 +15054,7 @@
       "outcome": "Prove runtime gate retention_table_residency_default_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73620",
+      "section": "line:74317",
       "dependencies": [
         "F-593"
       ],
@@ -14511,7 +15067,7 @@
       "outcome": "Prove runtime gate rtl_directionality_runtime_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71954",
+      "section": "line:72649",
       "dependencies": [
         "F-589"
       ],
@@ -14524,7 +15080,7 @@
       "outcome": "Prove runtime gate s3_cross_region_replica_dpa_approval_required",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71917",
+      "section": "line:72612",
       "dependencies": [
         "F-012",
         "F-504",
@@ -14539,7 +15095,7 @@
       "outcome": "Prove runtime gate s3_replication_policy_residency_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71916",
+      "section": "line:72611",
       "dependencies": [
         "F-012",
         "F-603"
@@ -14553,7 +15109,7 @@
       "outcome": "Prove runtime gate scenario_modeling_aioperation_settlement",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72750",
+      "section": "line:73447",
       "dependencies": [
         "F-265"
       ],
@@ -14566,7 +15122,7 @@
       "outcome": "Prove runtime gate selection_report_v2_watermark_grandfathering",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72946",
+      "section": "line:73643",
       "dependencies": [
         "F-670"
       ],
@@ -14579,7 +15135,7 @@
       "outcome": "Prove runtime gate seller_bid_workspace_mobile_accessibility_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73230",
+      "section": "line:73927",
       "dependencies": [
         "F-387",
         "F-569",
@@ -14594,7 +15150,7 @@
       "outcome": "Prove runtime gate seller_console_phase24_firewall_state_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73244",
+      "section": "line:73941",
       "dependencies": [
         "F-120"
       ],
@@ -14607,7 +15163,7 @@
       "outcome": "Prove runtime gate seller_console_phase24_mobile_accessibility_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73245",
+      "section": "line:73942",
       "dependencies": [
         "F-111",
         "F-569",
@@ -14622,7 +15178,7 @@
       "outcome": "Prove runtime gate seller_console_phase24_plan_authority_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73246",
+      "section": "line:73943",
       "dependencies": [
         "F-515",
         "F-516",
@@ -14641,7 +15197,7 @@
       "outcome": "Prove runtime gate seller_console_role_permission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72443",
+      "section": "line:73140",
       "dependencies": [
         "F-148"
       ],
@@ -14654,7 +15210,7 @@
       "outcome": "Prove runtime gate seller_direct_signup_value_activation_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73601",
+      "section": "line:74298",
       "dependencies": [
         "F-559"
       ],
@@ -14667,7 +15223,7 @@
       "outcome": "Prove runtime gate seller_kb_first_entry_indexed_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73585",
+      "section": "line:74282",
       "dependencies": [
         "F-789"
       ],
@@ -14680,7 +15236,7 @@
       "outcome": "Prove runtime gate seller_kb_v2_cutover_grandfathering",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72947",
+      "section": "line:73644",
       "dependencies": [
         "F-515"
       ],
@@ -14693,7 +15249,7 @@
       "outcome": "Prove runtime gate seller_maya_billing_detail_plan_guard",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73213",
+      "section": "line:73910",
       "dependencies": [
         "F-500",
         "F-515",
@@ -14708,7 +15264,7 @@
       "outcome": "Prove runtime gate seller_maya_chip_list_auto_publish_state_machine",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71801",
+      "section": "line:72496",
       "dependencies": [
         "F-382"
       ],
@@ -14721,7 +15277,7 @@
       "outcome": "Prove runtime gate seller_maya_match_score_three_label_compression",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71802",
+      "section": "line:72497",
       "dependencies": [
         "F-384"
       ],
@@ -14734,7 +15290,7 @@
       "outcome": "Prove runtime gate seller_maya_solo_free_copy_string_lint",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71800",
+      "section": "line:72495",
       "dependencies": [
         "F-381"
       ],
@@ -14747,7 +15303,7 @@
       "outcome": "Prove runtime gate seller_onboarding_provider_outage_visible",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72952",
+      "section": "line:73649",
       "dependencies": [
         "F-687"
       ],
@@ -14760,7 +15316,7 @@
       "outcome": "Prove runtime gate seller_onboarding_reactivation_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72463",
+      "section": "line:73160",
       "dependencies": [
         "F-688"
       ],
@@ -14773,7 +15329,7 @@
       "outcome": "Prove runtime gate seller_onboarding_stage3_abandonment_allowance_not_debited",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72953",
+      "section": "line:73650",
       "dependencies": [
         "F-559"
       ],
@@ -14786,7 +15342,7 @@
       "outcome": "Prove runtime gate seller_onboarding_staleness_window_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72464",
+      "section": "line:73161",
       "dependencies": [
         "F-559"
       ],
@@ -14799,7 +15355,7 @@
       "outcome": "Prove runtime gate seller_pulse_surface_engine_mapping",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71964",
+      "section": "line:72659",
       "dependencies": [
         "F-792"
       ],
@@ -14812,7 +15368,7 @@
       "outcome": "Prove runtime gate seller_qa_phase8_readonly_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73641",
+      "section": "line:74338",
       "dependencies": [
         "F-391"
       ],
@@ -14825,7 +15381,7 @@
       "outcome": "Prove runtime gate seller_software_transfer_request_entity_home",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72858",
+      "section": "line:73555",
       "dependencies": [
         "F-330",
         "F-423"
@@ -14839,7 +15395,7 @@
       "outcome": "Prove runtime gate seller_solo_onboarding_consumption_invisibility",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72943",
+      "section": "line:73640",
       "dependencies": [
         "F-616"
       ],
@@ -14852,7 +15408,7 @@
       "outcome": "Prove runtime gate seller_solo_per_bid_charge_stage_binding",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72944",
+      "section": "line:73641",
       "dependencies": [
         "F-521"
       ],
@@ -14865,7 +15421,7 @@
       "outcome": "Prove runtime gate seller_solo_per_bid_election_authorization_binding",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72945",
+      "section": "line:73642",
       "dependencies": [
         "F-516"
       ],
@@ -14878,7 +15434,7 @@
       "outcome": "Prove runtime gate seller_stake_reveal_outcome_targets_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73598",
+      "section": "line:74295",
       "dependencies": [
         "F-378"
       ],
@@ -14891,7 +15447,7 @@
       "outcome": "Prove runtime gate snapshot_catalog_residency_partition",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71920",
+      "section": "line:72615",
       "dependencies": [
         "F-603",
         "F-772"
@@ -14905,7 +15461,7 @@
       "outcome": "Prove runtime gate solo_absorption_cap_counter_state_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72909",
+      "section": "line:73606",
       "dependencies": [
         "F-619",
         "F-620"
@@ -14919,7 +15475,7 @@
       "outcome": "Prove runtime gate solo_absorption_cap_enforced",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72907",
+      "section": "line:73604",
       "dependencies": [
         "F-619"
       ],
@@ -14932,7 +15488,7 @@
       "outcome": "Prove runtime gate solo_charge_kind_registered",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71805",
+      "section": "line:72500",
       "dependencies": [
         "F-AE-048"
       ],
@@ -14945,7 +15501,7 @@
       "outcome": "Prove runtime gate solo_deadline_countdown_renders_in_user_timezone",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71777",
+      "section": "line:72472",
       "dependencies": [
         "F-AE-068"
       ],
@@ -14958,7 +15514,7 @@
       "outcome": "Prove runtime gate solo_dual_console_independent_invoicing",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71806",
+      "section": "line:72501",
       "dependencies": [
         "F-AE-050"
       ],
@@ -14971,7 +15527,7 @@
       "outcome": "Prove runtime gate solo_engine_metering_parity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71812",
+      "section": "line:72507",
       "dependencies": [
         "F-540",
         "F-616"
@@ -14985,7 +15541,7 @@
       "outcome": "Prove runtime gate solo_envelope_per_console_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71818",
+      "section": "line:72513",
       "dependencies": [
         "F-002",
         "F-620"
@@ -14999,7 +15555,7 @@
       "outcome": "Prove runtime gate solo_envelope_throttling_targets_low_priority_background_only",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71820",
+      "section": "line:72515",
       "dependencies": [
         "F-620",
         "F-621"
@@ -15013,7 +15569,7 @@
       "outcome": "Prove runtime gate solo_mode_chip_ribbon_suppression_buyer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71779",
+      "section": "line:72474",
       "dependencies": [
         "F-076"
       ],
@@ -15026,7 +15582,7 @@
       "outcome": "Prove runtime gate solo_mode_team_to_solo_blocked_with_stakeholders",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71778",
+      "section": "line:72473",
       "dependencies": [
         "F-AE-025"
       ],
@@ -15039,7 +15595,7 @@
       "outcome": "Prove runtime gate solo_per_charge_dispute_disambiguation_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73611",
+      "section": "line:74308",
       "dependencies": [
         "F-AE-051"
       ],
@@ -15052,7 +15608,7 @@
       "outcome": "Prove runtime gate solo_plan_change_console_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71807",
+      "section": "line:72502",
       "dependencies": [
         "F-002",
         "F-510",
@@ -15067,7 +15623,7 @@
       "outcome": "Prove runtime gate solo_subscription_blocks_per_charge",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71809",
+      "section": "line:72504",
       "dependencies": [
         "F-AE-051"
       ],
@@ -15080,7 +15636,7 @@
       "outcome": "Prove runtime gate solo_telemetry_no_customer_routing",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71813",
+      "section": "line:72508",
       "dependencies": [
         "F-622"
       ],
@@ -15093,7 +15649,7 @@
       "outcome": "Prove runtime gate solo_telemetry_property_schema_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71814",
+      "section": "line:72509",
       "dependencies": [
         "F-622"
       ],
@@ -15106,7 +15662,7 @@
       "outcome": "Prove runtime gate solo_throttling_class_change_takes_effect_at_next_envelope_rollover",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71817",
+      "section": "line:72512",
       "dependencies": [
         "F-621"
       ],
@@ -15119,7 +15675,7 @@
       "outcome": "Prove runtime gate solo_tier_buyer_hero_moment_slo_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72147",
+      "section": "line:72842",
       "dependencies": [
         "F-897"
       ],
@@ -15132,7 +15688,7 @@
       "outcome": "Prove runtime gate solo_trial_one_per_org_lifetime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72366",
+      "section": "line:73063",
       "dependencies": [
         "F-521"
       ],
@@ -15145,7 +15701,7 @@
       "outcome": "Prove runtime gate solo_upgrade_cta_threshold_3_events_30d_subscription_immediate_per_eval_bid",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72376",
+      "section": "line:73073",
       "dependencies": [
         "F-521"
       ],
@@ -15158,7 +15714,7 @@
       "outcome": "Prove runtime gate tap_count_probe",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72879",
+      "section": "line:73576",
       "dependencies": [
         "F-582"
       ],
@@ -15171,7 +15727,7 @@
       "outcome": "Prove runtime gate usage_dashboard_plan_gating_canonical_6_tier_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72122",
+      "section": "line:72817",
       "dependencies": [
         "F-760"
       ],
@@ -15184,7 +15740,7 @@
       "outcome": "Prove runtime gate vendor_disqualification_phase_aware_reversal_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73652",
+      "section": "line:74349",
       "dependencies": [
         "F-121"
       ],
@@ -15197,7 +15753,7 @@
       "outcome": "Prove runtime gate vendor_opt_out_capability_layer_enforcement",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71832",
+      "section": "line:72527",
       "dependencies": [
         "F-443"
       ],
@@ -15210,7 +15766,7 @@
       "outcome": "Prove runtime gate video_demo_transcript_pii_redaction",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73064",
+      "section": "line:73761",
       "dependencies": [
         "F-182"
       ],
@@ -15223,7 +15779,7 @@
       "outcome": "Prove runtime gate wallet_auto_topup_daily_frequency_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73609",
+      "section": "line:74306",
       "dependencies": [
         "F-126"
       ],
@@ -15236,7 +15792,7 @@
       "outcome": "Prove runtime gate wallet_auto_topup_period_cap_counter_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72663",
+      "section": "line:73360",
       "dependencies": [
         "F-126"
       ],
@@ -15249,7 +15805,7 @@
       "outcome": "Prove runtime gate wallet_autotopup_ops_override_bounds",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72928",
+      "section": "line:73625",
       "dependencies": [
         "F-125"
       ],
@@ -15262,7 +15818,7 @@
       "outcome": "Prove runtime gate wallet_free_free_additive_pool",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72930",
+      "section": "line:73627",
       "dependencies": [
         "F-537"
       ],
@@ -15275,7 +15831,7 @@
       "outcome": "Prove runtime gate wallet_free_paid_additive_pool_solo_exception",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72931",
+      "section": "line:73628",
       "dependencies": [
         "F-537"
       ],
@@ -15288,7 +15844,7 @@
       "outcome": "Prove runtime gate wallet_read_role_gate_scope",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71935",
+      "section": "line:72630",
       "dependencies": [
         "F-125",
         "F-138",
@@ -15305,7 +15861,7 @@
       "outcome": "Prove runtime gate webhook_dlq_observability_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73279",
+      "section": "line:73976",
       "dependencies": [
         "F-488"
       ],
@@ -15318,7 +15874,7 @@
       "outcome": "Prove runtime gate webhook_dlq_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73277",
+      "section": "line:73974",
       "dependencies": [
         "F-488"
       ],
@@ -15331,7 +15887,7 @@
       "outcome": "Prove runtime gate webhook_endpoint_pool_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73278",
+      "section": "line:73975",
       "dependencies": [
         "F-486"
       ],
@@ -15344,7 +15900,7 @@
       "outcome": "Prove runtime gate webhook_payload_no_selection_record_body",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71782",
+      "section": "line:72477",
       "dependencies": [
         "F-487"
       ],
@@ -15357,7 +15913,7 @@
       "outcome": "Prove runtime gate workos_directory_group_role_assignment_precedence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71891",
+      "section": "line:72586",
       "dependencies": [
         "F-702"
       ],
@@ -15370,7 +15926,7 @@
       "outcome": "Prove runtime gate workos_groups_api_membership_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71890",
+      "section": "line:72585",
       "dependencies": [
         "F-081"
       ],
@@ -15383,7 +15939,7 @@
       "outcome": "Prove runtime gate workos_predefined_attributes_consumed",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71889",
+      "section": "line:72584",
       "dependencies": [
         "F-080"
       ],
@@ -15396,7 +15952,7 @@
       "outcome": "Prove runtime gate workos_raw_attributes_not_consumed",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71888",
+      "section": "line:72583",
       "dependencies": [
         "F-006"
       ],
@@ -15409,7 +15965,7 @@
       "outcome": "Prove runtime gate workspace_pulse_health_persistence_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71960",
+      "section": "line:72655",
       "dependencies": [
         "F-310"
       ],
@@ -15422,7 +15978,7 @@
       "outcome": "Prove runtime gate workspace_template_idempotency_atomicity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72733",
+      "section": "line:73430",
       "dependencies": [
         "F-306"
       ],

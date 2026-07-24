@@ -87,9 +87,9 @@
     {
       "requirementId": "RG:appendix_m_coverage_on_diff",
       "dependencies": [
-        "F-796"
+        "F-792"
       ],
-      "rationale": "Highest source-section and assertion match: F-796 @appendix-m-internal-only Override Annotation."
+      "rationale": "The replacement runtime gate inherits F-795's canonical dependency on F-792 Surface/Engine Mapping Registry."
     },
     {
       "requirementId": "RG:attachment_dsar_72h_binary_detach_sla",
@@ -269,6 +269,15 @@
         "F-612"
       ],
       "rationale": "Buyer Pulse behavior and performance targets own this rendered-runtime assertion."
+    },
+    {
+      "requirementId": "RG:buyer_trial_audit_action_registration",
+      "dependencies": [
+        "F-117",
+        "F-533",
+        "F-916"
+      ],
+      "rationale": "The AuditEvent entity, R0 trial activation, and later Buyer trial lifecycle jointly own qualified start/end actions, atomic emission, and their registered billing-audit filter coverage."
     },
     {
       "requirementId": "RG:capability_declaration_reuse_count_consistency",
@@ -761,9 +770,9 @@
     {
       "requirementId": "RG:legal_entity_residency_change_revenue_leak_test",
       "dependencies": [
-        "F-539"
+        "F-917"
       ],
-      "rationale": "Highest source-section and assertion match: F-539 Stripe Metering Integration."
+      "rationale": "Highest source-section and assertion match: F-917 Stripe Customer Genesis at Organization Creation."
     },
     {
       "requirementId": "RG:load_test_sla_breach",

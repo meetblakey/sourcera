@@ -37,6 +37,15 @@ test("rejects duplicate identities", () => {
   );
 });
 
+test("resolves normalized Linear planning provenance to the canonical register", () => {
+  const [row] = parseFeatureInventory(
+    "| F-910 | Header policy | platform_mechanic | LINEAR:PLA-137 | §28.1 | linear_planning | 2026-07-16 | Header policy. | F-004 |",
+  );
+  assert.equal(row.sourceDoc, "delivery/planning-source-register.md");
+  assert.deepEqual(row.dependencies, ["F-004"]);
+  assert.deepEqual(sourceReferenceFindings([row], process.cwd()), []);
+});
+
 test("fails a broken source path", () => {
   const [row] = parseFeatureInventory(fixture("feature-inventory-valid.md"));
   assert.equal(

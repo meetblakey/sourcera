@@ -13,6 +13,7 @@
     { "requirementId": "RG:buyer_activation_metric_canonical_consumer", "dependencies": ["F-637", "F-752"], "rationale": "The buyer funnel and canonical event registry own activation measurement." },
     { "requirementId": "RG:buyer_console_role_permission_completeness", "dependencies": ["F-144", "F-145", "F-146", "F-147", "F-148"], "rationale": "All Buyer Console role contracts must agree with endpoint permissions." },
     { "requirementId": "RG:buyer_pulse_interactive_render_runtime", "dependencies": ["F-308", "F-612"], "rationale": "Buyer Pulse behavior and performance targets own this rendered-runtime assertion." },
+    { "requirementId": "RG:buyer_trial_audit_action_registration", "dependencies": ["F-117", "F-533", "F-916"], "rationale": "The AuditEvent entity, R0 trial activation, and later Buyer trial lifecycle jointly own qualified start/end actions, atomic emission, and their registered billing-audit filter coverage." },
     { "requirementId": "RG:cmek_rotation_runtime_evidence", "dependencies": ["F-502", "F-634"], "rationale": "Encryption controls and the enterprise CMEK roadmap own rotation evidence." },
     { "requirementId": "RG:core_web_vitals_in_app_lighthouse_ci", "dependencies": ["F-612"], "rationale": "Performance Targets owns authenticated Core Web Vitals budgets." },
     { "requirementId": "RG:dns_failover_target_residency_match", "dependencies": ["F-012", "F-603"], "rationale": "Multi-region deployment and disaster recovery own DNS failover residency." },
