@@ -93,10 +93,19 @@ function requireCompleteReceipt(receipt: VercelProductionStageReceipt) {
         application.state !== "READY" ||
         application.substate !== "STAGED" ||
         application.providerGitSha !== receipt.approvedSha ||
+        !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i.test(
+          application.predecessorProviderGitSha,
+        ) ||
         application.health.commitSha !== receipt.approvedSha ||
         application.health.domain !== application.application ||
         application.health.environment !== "production" ||
-        application.health.status !== "ok",
+        application.health.status !== "ok" ||
+        !Array.isArray(application.productionDomains) ||
+        (application.productionDomain === null
+          ? application.productionDomains.length !== 0
+          : !application.productionDomains.includes(
+              application.productionDomain,
+            )),
     )
   ) {
     throw new Error("Receipt does not contain the complete staged application set");

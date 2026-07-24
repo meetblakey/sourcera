@@ -170,11 +170,15 @@ function descriptionFindings(
   wildcardPath ??= issue.paths.find(
     (candidate) => candidate.includes("*") || candidate.endsWith("/"),
   ) ?? null;
-  if (ready && wildcardPath) {
+  if ((ready || issue.kind === "executable") && wildcardPath) {
     findings.push({
-      code: "ticket_ready_wildcard_path",
+      code: ready
+        ? "ticket_ready_wildcard_path"
+        : "ticket_executable_wildcard_path",
       issueId,
-      message: `${issueId} is codex-ready with generic path ${wildcardPath}`,
+      message: ready
+        ? `${issueId} is codex-ready with generic path ${wildcardPath}`
+        : `${issueId} is executable with generic path ${wildcardPath}`,
     });
   }
   return findings.sort(findingOrder);
@@ -277,8 +281,6 @@ export function scanTicketIntegrity(
     schemaVersion: 1,
     findings,
     readinessFindings: readiness,
-    passed:
-      readiness.length === 0 &&
-      !findings.some((finding) => finding.code.startsWith("ticket_capture_")),
+    passed: readiness.length === 0 && findings.length === 0,
   };
 }

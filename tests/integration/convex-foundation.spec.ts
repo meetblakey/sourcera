@@ -31,6 +31,7 @@ import {
   createConvexProductionDeploymentPlan,
   createConvexProductionFailureReceipt,
   executeConvexProductionDeployment,
+  executeConvexProductionDeploymentAsync,
   readPassingConvexProductionCanaryReceipt,
   readPassingKnownGoodConvexReceipt,
   writeConvexProductionReceipt,
@@ -573,6 +574,53 @@ test("a mutation-ambiguous candidate deploy error automatically proves rollback"
   );
 });
 
+test("an interrupted async candidate deploy waits for a proved known-good rollback", async () => {
+  const plan = createConvexProductionDeploymentPlan(
+    productionEnvironment,
+    productionTarget,
+    commitSha,
+  );
+  const events: string[] = [];
+  let interrupted = false;
+
+  const result = await executeConvexProductionDeploymentAsync(plan, {
+    cleanupCheckout() {
+      events.push("cleanup");
+    },
+    async executeStep(release, step) {
+      events.push(`${release.approvedSha}:${step.name}`);
+      await Promise.resolve();
+      if (release.approvedSha === commitSha && step.name === "deploy") {
+        interrupted = true;
+        throw new Error("candidate deploy interrupted after provider contact");
+      }
+      if (
+        interrupted &&
+        release.approvedSha === plan.knownGoodSha &&
+        step.name === "deploy"
+      ) {
+        events.push("rollback-not-cancelled");
+      }
+      return step.name === "canary"
+        ? productionCanaryFor(release.approvedSha)
+        : undefined;
+    },
+    prepareCheckout(sha) {
+      events.push(`checkout:${sha}`);
+    },
+  });
+
+  assert.equal(result.result, "candidate_failed_rolled_back");
+  assert.equal(result.promotionAllowed, false);
+  assert.equal(events.includes("rollback-not-cancelled"), true);
+  assert.equal(
+    events.filter(
+      (event) => event === `${plan.knownGoodSha}:canary`,
+    ).length,
+    2,
+  );
+});
+
 test("a deploy-error rollback failure stays non-promotable", () => {
   const plan = createConvexProductionDeploymentPlan(
     productionEnvironment,
@@ -800,12 +848,31 @@ test("production deploy accepts only a canary read back from the compiled releas
       plan,
     ),
   );
+  const knownGoodSha = "e".repeat(40);
+  const rollbackCanary = {
+    ...receipt,
+    assertions: receipt.assertions.map((assertion) => ({
+      ...assertion,
+      commitSha: knownGoodSha,
+    })),
+    runtimeIdentity: {
+      ...receipt.runtimeIdentity,
+      buildCommitSha: knownGoodSha,
+    },
+  };
   const deploymentReceipt = {
     approvedSha: commitSha,
     canary: receipt,
+    checkedAt: "2026-07-15T17:00:00.000Z",
     event: "convex_production_deployment_receipt",
-    knownGoodSha: "e".repeat(40),
+    knownGoodReceiptSha256: "a".repeat(64),
+    knownGoodSha,
     result: "passed",
+    rollbackAnchor: {
+      canary: rollbackCanary,
+      knownGoodSha,
+      result: "passed",
+    },
     schemaVersion: 1,
     target: productionTarget,
   };
@@ -816,6 +883,13 @@ test("production deploy accepts only a canary read back from the compiled releas
       productionTarget,
     ),
     deploymentReceipt,
+  );
+  assert.throws(() =>
+    readPassingKnownGoodConvexReceipt(
+      { ...deploymentReceipt, rollbackAnchor: undefined },
+      commitSha,
+      productionTarget,
+    ),
   );
   assert.throws(() =>
     readPassingKnownGoodConvexReceipt(
@@ -1458,7 +1532,7 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   assert.match(productionDeploy, /releaseNpmUserConfig/);
   assert.match(productionDeploy, /recordRollbackAnchor/);
   assert.match(productionDeploy, /writeConvexProductionReceipt/);
-  assert.match(productionDeploy, /interrupted_after_mutation/);
+  assert.match(productionDeploy, /executeConvexProductionDeploymentAsync/);
   assert.match(productionDeploy, /--untracked-files=all/);
   assert.match(productionDeploy, /rollback_required/);
   assert.match(productionFoundation, /SOURCERA_CONVEX_BUILD_COMMIT_SHA/);

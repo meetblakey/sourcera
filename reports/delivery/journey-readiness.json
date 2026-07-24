@@ -582,56 +582,6 @@
   ],
   "findings": [
     {
-      "code": "journey_artifact_later_release",
-      "requirementId": "F-223",
-      "message": "Mandatory journey artifact F-223 must be R0, not R2"
-    },
-    {
-      "code": "journey_artifact_later_release",
-      "requirementId": "F-224",
-      "message": "Mandatory journey artifact F-224 must be R0, not R2"
-    },
-    {
-      "code": "journey_optional_release_changed",
-      "requirementId": "F-222",
-      "message": "Optional path F-222 must remain R1"
-    },
-    {
-      "code": "journey_optional_release_changed",
-      "requirementId": "F-227",
-      "message": "Optional path F-227 must remain R1"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-211",
-      "message": "Phase 1 F-211 must be R0, not R3"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-213",
-      "message": "Phase 3 F-213 must be R0, not R4"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-214",
-      "message": "Phase 4 F-214 must be R0, not R3"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-214",
-      "message": "Phase 5 F-214 must be R0, not R3"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-217",
-      "message": "Phase 7 F-217 must be R0, not R1"
-    },
-    {
-      "code": "journey_phase_later_release",
-      "requirementId": "F-223",
-      "message": "Phase 11 F-223 must be R0, not R2"
-    },
-    {
       "code": "linear_fingerprint_milestones_missing",
       "message": "Linear fingerprint lacks the project milestone inventory"
     },
@@ -642,10 +592,6 @@
     {
       "code": "linear_issue_project_milestone_metadata_incomplete",
       "message": "Linear issue fingerprint has partial project or milestone identity"
-    },
-    {
-      "code": "linear_milestone_inventory_incomplete",
-      "message": "Linear milestone inventory has missing identity, project, or update metadata"
     },
     {
       "code": "production_evidence_milestone_empty",

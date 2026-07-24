@@ -15,10 +15,10 @@ jobs:
     if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
@@ -48,8 +48,8 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
@@ -59,12 +59,17 @@ jobs:
         run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts --linear-project-scope delivery/linear-project-scope.json --out /tmp/linear-fingerprint.json --receipt-out /tmp/linear-capture-receipt.json
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
-      - uses: actions/upload-artifact@v4
+      - name: Build receipt-bound Linear snapshot candidate
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-fingerprint-overlay.ts --snapshot delivery/linear-snapshot.json --fingerprint /tmp/linear-fingerprint.json --receipt /tmp/linear-capture-receipt.json --linear-project-scope delivery/linear-project-scope.json --out /tmp/linear-snapshot-candidate.json
+      - name: Validate Linear snapshot candidate semantics
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/validate-linear-candidate.ts --candidate /tmp/linear-snapshot-candidate.json --releases delivery/releases.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: linear-fingerprint-${{ github.sha }}-${{ github.run_id }}
           path: |
             /tmp/linear-fingerprint.json
             /tmp/linear-capture-receipt.json
+            /tmp/linear-snapshot-candidate.json
           if-no-files-found: error
           retention-days: 7
 
@@ -76,8 +81,8 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
       - run: npm ci --prefix tools/spec-lint
@@ -92,7 +97,10 @@ jobs:
           --checksum-contract delivery/ticket-source-checksums.json
           --out /tmp/linear-ticket-integrity.json
       - if: always()
-        uses: actions/upload-artifact@v4
+        name: Remove raw Linear descriptions
+        run: rm -f /tmp/linear-ticket-descriptions.json
+      - if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: linear-drift-fingerprint-${{ github.sha }}-${{ github.run_id }}
           path: |

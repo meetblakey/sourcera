@@ -46,11 +46,13 @@ export interface CommandResult {
 export type CommandRunner = (invocation: CommandInvocation) => CommandResult;
 
 export interface VercelProductionTarget {
+  allowedProductionEnvironmentKeys: string[];
   application: VercelProductionApplication;
   autoExposeSystemEnvs: true;
   cwd: string;
   productionBranch: "main";
   productionDomain: string | null;
+  productionDomains: string[];
   projectId: string;
   projectName: string;
   rootDirectory: string | null;
@@ -81,8 +83,10 @@ export interface VercelProductionStagedApplication {
   deploymentId: string;
   health: VercelProductionHealthProof;
   predecessorDeploymentId: string;
+  predecessorProviderGitSha: string;
   predecessorUrl: string;
   productionDomain: string | null;
+  productionDomains: string[];
   projectId: string;
   projectName: string;
   providerGitSha: string;
@@ -124,6 +128,7 @@ interface DeploymentReadback {
 }
 
 interface PredecessorReceipt {
+  providerGitSha: string;
   deploymentId: string;
   url: string;
 }
@@ -266,6 +271,28 @@ function readProductionDomain(value: unknown, context: string): string | null {
   return value;
 }
 
+function readProductionDomains(value: unknown, context: string): string[] {
+  if (!Array.isArray(value)) {
+    throw new Error(`${context} productionDomains must be an array`);
+  }
+  const domains = value.map((domain) => {
+    const parsed = readProductionDomain(domain, context);
+    if (parsed === null) {
+      throw new Error(`${context} productionDomains cannot contain null`);
+    }
+    return parsed;
+  });
+  if (
+    new Set(domains).size !== domains.length ||
+    domains.some((domain, index) => index > 0 && domains[index - 1]! > domain)
+  ) {
+    throw new Error(
+      `${context} productionDomains must be unique and sorted`,
+    );
+  }
+  return domains;
+}
+
 function readProjectRootDirectory(
   value: unknown,
   context: string,
@@ -296,6 +323,31 @@ function readRequiredTrue(
     throw new Error(`${context} ${key} must be true`);
   }
   return true;
+}
+
+function readEnvironmentKeyAllowlist(value: unknown, context: string) {
+  if (
+    !Array.isArray(value) ||
+    value.some(
+      (key) =>
+        typeof key !== "string" ||
+        !/^[A-Z][A-Z0-9_]{0,127}$/.test(key),
+    )
+  ) {
+    throw new Error(
+      `${context} allowedProductionEnvironmentKeys must be an array of environment keys`,
+    );
+  }
+  const keys = value as string[];
+  if (
+    new Set(keys).size !== keys.length ||
+    keys.some((key, index) => index > 0 && keys[index - 1]! > key)
+  ) {
+    throw new Error(
+      `${context} allowedProductionEnvironmentKeys must be unique and sorted`,
+    );
+  }
+  return [...keys];
 }
 
 function readTarget(
@@ -347,7 +399,28 @@ function readTarget(
   if (!/^[a-z0-9][a-z0-9-]{0,99}$/.test(projectName)) {
     throw new Error(`${application} target has an invalid projectName`);
   }
+  const productionDomain = readProductionDomain(
+    value.productionDomain,
+    `${application} target`,
+  );
+  const productionDomains = readProductionDomains(
+    value.productionDomains,
+    `${application} target`,
+  );
+  if (
+    (productionDomain === null && productionDomains.length !== 0) ||
+    (productionDomain !== null &&
+      !productionDomains.includes(productionDomain))
+  ) {
+    throw new Error(
+      `${application} productionDomain must identify a controlled productionDomains entry`,
+    );
+  }
   return {
+    allowedProductionEnvironmentKeys: readEnvironmentKeyAllowlist(
+      value.allowedProductionEnvironmentKeys,
+      `${application} target`,
+    ),
     application: expectedApplication,
     autoExposeSystemEnvs: readRequiredTrue(
       value,
@@ -356,10 +429,8 @@ function readTarget(
     ),
     cwd: relativeCwd,
     productionBranch,
-    productionDomain: readProductionDomain(
-      value.productionDomain,
-      `${application} target`,
-    ),
+    productionDomain,
+    productionDomains,
     projectId,
     projectName,
     rootDirectory: readProjectRootDirectory(
@@ -402,11 +473,8 @@ export function readVercelProductionReleaseConfig(
   );
   if (
     new Set(targets.map((target) => target.projectId)).size !== targets.length ||
-    new Set(
-      targets
-        .map((target) => target.productionDomain)
-        .filter((domain): domain is string => domain !== null),
-    ).size !== targets.filter((target) => target.productionDomain !== null).length
+    new Set(targets.flatMap((target) => target.productionDomains)).size !==
+      targets.flatMap((target) => target.productionDomains).length
   ) {
     throw new Error("Vercel production targets must be unique");
   }
@@ -652,6 +720,139 @@ function requireProductionReady(
   }
 }
 
+function requireCompleteApiPage(value: Record<string, unknown>, context: string) {
+  if (value.pagination === undefined) return;
+  if (!isRecord(value.pagination) || value.pagination.next !== null) {
+    throw new Error(`${context} response is incomplete`);
+  }
+}
+
+export function validateProductionEnvironmentMetadata(
+  value: unknown,
+  target: VercelProductionTarget,
+) {
+  if (!isRecord(value)) {
+    throw new Error(
+      `${target.application} production environment metadata is invalid`,
+    );
+  }
+  requireCompleteApiPage(
+    value,
+    `${target.application} production environment metadata`,
+  );
+  if (
+    value.hiddenProductionEnvCount !== undefined &&
+    value.hiddenProductionEnvCount !== 0
+  ) {
+    throw new Error(
+      `${target.application} has hidden production environment variables`,
+    );
+  }
+  const rawEntries = Array.isArray(value.envs)
+    ? value.envs
+    : typeof value.key === "string"
+      ? [value]
+      : undefined;
+  if (!rawEntries) {
+    throw new Error(
+      `${target.application} production environment metadata is incomplete`,
+    );
+  }
+  const productionKeys = rawEntries.flatMap((entry) => {
+    if (!isRecord(entry) || typeof entry.key !== "string") {
+      throw new Error(
+        `${target.application} production environment entry is invalid`,
+      );
+    }
+    const scopes = Array.isArray(entry.target)
+      ? entry.target
+      : entry.target === undefined
+        ? ["production"]
+        : [entry.target];
+    if (
+      scopes.length === 0 ||
+      scopes.some(
+        (scope) =>
+          scope !== "development" &&
+          scope !== "preview" &&
+          scope !== "production",
+      )
+    ) {
+      throw new Error(
+        `${target.application} production environment scope is invalid`,
+      );
+    }
+    return scopes.includes("production") ? [entry.key] : [];
+  });
+  const exactKeys = [...new Set(productionKeys)].sort();
+  if (
+    exactKeys.length !== target.allowedProductionEnvironmentKeys.length ||
+    exactKeys.some(
+      (key, index) => key !== target.allowedProductionEnvironmentKeys[index],
+    )
+  ) {
+    throw new Error(
+      `${target.application} production environment keys do not match the repo allowlist`,
+    );
+  }
+}
+
+export function validateProductionDomains(
+  value: unknown,
+  target: VercelProductionTarget,
+) {
+  if (!isRecord(value) || !Array.isArray(value.domains)) {
+    throw new Error(`${target.application} production domains are invalid`);
+  }
+  const pagination = value.pagination;
+  if (
+    !isRecord(pagination) ||
+    !Number.isSafeInteger(pagination.count) ||
+    Number(pagination.count) < 0 ||
+    pagination.count !== value.domains.length ||
+    pagination.next !== null ||
+    pagination.prev !== null
+  ) {
+    throw new Error(
+      `${target.application} production domain pagination is incomplete or its count does not match the inventory`,
+    );
+  }
+  const domains = value.domains.map((entry) => {
+    if (
+      !isRecord(entry) ||
+      typeof entry.name !== "string" ||
+      entry.projectId !== target.projectId ||
+      entry.verified !== true ||
+      (entry.gitBranch !== undefined && entry.gitBranch !== null) ||
+      (entry.customEnvironmentId !== undefined &&
+        entry.customEnvironmentId !== null)
+    ) {
+      throw new Error(
+        `${target.application} production domain metadata is invalid`,
+      );
+    }
+    const domain = readProductionDomain(
+      entry.name,
+      `${target.application} target`,
+    );
+    if (domain === null) {
+      throw new Error(`${target.application} production domain is invalid`);
+    }
+    return domain;
+  });
+  const exactDomains = [...new Set(domains)].sort();
+  if (
+    exactDomains.length !== target.productionDomains.length ||
+    exactDomains.some(
+      (domain, index) => domain !== target.productionDomains[index],
+    )
+  ) {
+    throw new Error(
+      `${target.application} production domains do not match the repo pin`,
+    );
+  }
+}
+
 function capturePredecessor(
   run: CommandRunner,
   target: VercelProductionTarget,
@@ -659,6 +860,49 @@ function capturePredecessor(
   environment: ReleaseProcessEnvironment,
   worktreeRoot: string,
 ): PredecessorReceipt {
+  const environmentOutput = runChecked(
+    run,
+    {
+      arguments: [
+        "api",
+        `/v10/projects/${target.projectId}/env?decrypt=false&teamId=${teamId}`,
+        "--raw",
+        "--scope",
+        teamId,
+      ],
+      command: "vercel",
+      cwd: worktreeRoot,
+      environment,
+    },
+    `${target.application} production environment metadata is missing`,
+  );
+  validateProductionEnvironmentMetadata(
+    parseJson(
+      environmentOutput,
+      `${target.application} production environment metadata`,
+    ),
+    target,
+  );
+  const domainsOutput = runChecked(
+    run,
+    {
+      arguments: [
+        "api",
+        `/v9/projects/${target.projectId}/domains?production=true&limit=100&teamId=${teamId}`,
+        "--raw",
+        "--scope",
+        teamId,
+      ],
+      command: "vercel",
+      cwd: worktreeRoot,
+      environment,
+    },
+    `${target.application} production domains are missing`,
+  );
+  validateProductionDomains(
+    parseJson(domainsOutput, `${target.application} production domains`),
+    target,
+  );
   const output = runChecked(
     run,
     {
@@ -742,12 +986,15 @@ function capturePredecessor(
         `${target.application} production predecessor identity does not match`,
       );
     }
+    const aliases = readDeploymentAliases(
+      deployment,
+      `${target.application} production predecessor`,
+    );
     if (
-      target.productionDomain &&
-      !deploymentAliases(deployment).includes(target.productionDomain)
+      target.productionDomains.some((domain) => !aliases.includes(domain))
     ) {
       throw new Error(
-        `${target.application} production predecessor does not own its pinned productionDomain`,
+        `${target.application} production predecessor does not own every pinned production domain`,
       );
     }
   } catch (error) {
@@ -757,16 +1004,21 @@ function capturePredecessor(
     );
   }
   const deploymentId = deployment.id;
+  const predecessorMetadata = readRecord(deployment, "meta");
+  const providerGitSha = predecessorMetadata?.githubCommitSha;
   if (
     typeof deploymentId !== "string" ||
-    !/^dpl_[A-Za-z0-9_-]+$/.test(deploymentId)
+    !/^dpl_[A-Za-z0-9_-]+$/.test(deploymentId) ||
+    typeof providerGitSha !== "string" ||
+    !FULL_GIT_COMMIT_SHA.test(providerGitSha)
   ) {
     throw new Error(
-      `${target.application} production predecessor has no deployment ID`,
+      `${target.application} production predecessor has no deployment ID or Git SHA`,
     );
   }
   return {
     deploymentId,
+    providerGitSha,
     url: readDeploymentUrl(
       deployment,
       `${target.application} production predecessor`,
@@ -866,21 +1118,58 @@ function requireVisibleBuildMarkers(
   }
 }
 
-function deploymentAliases(deployment: DeploymentReadback): string[] {
-  return [deployment.alias, deployment.automaticAliases, deployment.userAliases]
-    .flatMap((value) => (Array.isArray(value) ? value : []))
-    .filter((value): value is string => typeof value === "string")
-    .map((value) => {
-      try {
-        return new URL(
-          value.startsWith("http://") || value.startsWith("https://")
-            ? value
-            : `https://${value}`,
-        ).hostname;
-      } catch {
-        return value;
-      }
-    });
+function readDeploymentAlias(value: unknown, context: string) {
+  if (typeof value !== "string" || !value || value !== value.trim()) {
+    throw new Error(`${context} alias data is malformed`);
+  }
+  let hostname = value;
+  if (value.startsWith("http://") || value.startsWith("https://")) {
+    let url: URL;
+    try {
+      url = new URL(value);
+    } catch {
+      throw new Error(`${context} alias data is malformed`);
+    }
+    if (
+      url.username ||
+      url.password ||
+      url.port ||
+      url.pathname !== "/" ||
+      url.search ||
+      url.hash
+    ) {
+      throw new Error(`${context} alias data is malformed`);
+    }
+    hostname = url.hostname;
+  }
+  try {
+    const domain = readProductionDomain(hostname, context);
+    if (domain === null) throw new Error("null alias");
+    return domain;
+  } catch (cause) {
+    throw new Error(`${context} alias data is malformed`, { cause });
+  }
+}
+
+export function readDeploymentAliases(
+  deployment: unknown,
+  context: string,
+): string[] {
+  if (!isRecord(deployment) || !Array.isArray(deployment.alias)) {
+    throw new Error(`${context} alias data must include an alias array`);
+  }
+  const aliases: string[] = [];
+  for (const key of ["alias", "automaticAliases", "userAliases"] as const) {
+    const value = deployment[key];
+    if (value === undefined) continue;
+    if (!Array.isArray(value)) {
+      throw new Error(`${context} ${key} alias data must be an array`);
+    }
+    aliases.push(
+      ...value.map((entry) => readDeploymentAlias(entry, context)),
+    );
+  }
+  return aliases;
 }
 
 function validateStagedDeployment(
@@ -899,11 +1188,12 @@ function validateStagedDeployment(
   }
   requireDeploymentOwnership(deployment, target, teamId, context);
   requireProductionReady(deployment, context);
+  const aliases = readDeploymentAliases(deployment, context);
   if (
     deployment.readySubstate !== "STAGED" ||
-    deployment.autoAssignCustomDomains === true ||
-    (target.productionDomain !== null &&
-      deploymentAliases(deployment).includes(target.productionDomain))
+    deployment.autoAssignCustomDomains !== false ||
+    deployment.aliasAssigned !== false ||
+    aliases.length !== 0
   ) {
     throw new Error(`${context} deployment is not STAGED`);
   }
@@ -1193,8 +1483,10 @@ export function stageVercelProductionRelease(
           now().getTime(),
         ),
         predecessorDeploymentId: predecessor.deploymentId,
+        predecessorProviderGitSha: predecessor.providerGitSha,
         predecessorUrl: predecessor.url,
         productionDomain: target.productionDomain,
+        productionDomains: [...target.productionDomains],
         projectId: target.projectId,
         projectName: target.projectName,
         providerGitSha: readback.providerGitSha,
@@ -1211,6 +1503,28 @@ export function stageVercelProductionRelease(
         gitEnvironment,
       );
     }
+
+    for (const target of configuration.targets) {
+      const initial = predecessors.get(target.application);
+      const final = capturePredecessor(
+        options.run,
+        target,
+        configuration.teamId,
+        vercelEnvironment,
+        worktreeRoot,
+      );
+      if (!initial || JSON.stringify(final) !== JSON.stringify(initial)) {
+        throw new Error(
+          `${target.application} production predecessor changed during staging`,
+        );
+      }
+    }
+    requireDetachedCleanCheckout(
+      options.run,
+      worktreeRoot,
+      approvedSha,
+      gitEnvironment,
+    );
   } catch (error) {
     operationFailure = error;
   }

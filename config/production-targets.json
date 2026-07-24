@@ -8,9 +8,11 @@
     "targets": [
       {
         "application": "marketplace",
+        "allowedProductionEnvironmentKeys": [],
         "autoExposeSystemEnvs": true,
         "cwd": ".",
         "productionDomain": null,
+        "productionDomains": [],
         "productionBranch": "main",
         "projectId": "prj_FIBSOffJX8GtY8JHTSXKixfVryBp",
         "projectName": "sourcera",
@@ -19,9 +21,13 @@
       },
       {
         "application": "buyer",
+        "allowedProductionEnvironmentKeys": [],
         "autoExposeSystemEnvs": true,
         "cwd": ".",
         "productionDomain": "sourcera-buyer-meetblakeys-projects.vercel.app",
+        "productionDomains": [
+          "sourcera-buyer-meetblakeys-projects.vercel.app"
+        ],
         "productionBranch": "main",
         "projectId": "prj_ZbZgRUXjPzgv6Oqepe13W6yV2AyN",
         "projectName": "sourcera-buyer",
@@ -30,9 +36,13 @@
       },
       {
         "application": "seller",
+        "allowedProductionEnvironmentKeys": [],
         "autoExposeSystemEnvs": true,
         "cwd": ".",
         "productionDomain": "sourcera-seller-meetblakeys-projects.vercel.app",
+        "productionDomains": [
+          "sourcera-seller-meetblakeys-projects.vercel.app"
+        ],
         "productionBranch": "main",
         "projectId": "prj_Vd0Roi2q0XPkphCrn8rtoNxI1DkS",
         "projectName": "sourcera-seller",

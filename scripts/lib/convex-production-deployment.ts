@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import {
   existsSync,
   linkSync,
@@ -15,6 +15,13 @@ import {
   readConvexProductionTarget,
   readRequiredConvexProductionKeyIdentity,
 } from "@sourcera/domain/convex";
+
+import {
+  readGithubProductionApprovalReceipt,
+  readPassingConvexProductionGenesisReceipt,
+  type ConvexProductionGenesisExpectation,
+  type ConvexProductionGenesisReceipt,
+} from "./convex-production-bootstrap";
 
 const FULL_GIT_COMMIT_SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 const RECEIPT_HASH = /^[a-f0-9]{64}$/i;
@@ -52,6 +59,13 @@ export interface ConvexProductionExecutionStep {
 
 export interface ConvexProductionDeploymentPlan {
   approvedSha: string;
+  knownGoodSha: string;
+  steps: ConvexProductionExecutionStep[];
+  target: ConvexProductionTarget;
+}
+
+export interface ConvexProductionRollbackOnlyPlan {
+  candidateSha: string;
   knownGoodSha: string;
   steps: ConvexProductionExecutionStep[];
   target: ConvexProductionTarget;
@@ -100,6 +114,55 @@ export interface ConvexProductionDeploymentExecutor {
   recordRollbackAnchor?(anchor: ConvexProductionRollbackAnchor): void;
 }
 
+export interface AsyncConvexProductionDeploymentExecutor {
+  cleanupCheckout(): Promise<void> | void;
+  executeStep(
+    release: ConvexProductionDeploymentPlan,
+    step: ConvexProductionExecutionStep,
+  ): Promise<unknown>;
+  prepareCheckout(commitSha: string): Promise<void> | void;
+  recordRollbackAnchor?(anchor: ConvexProductionRollbackAnchor): void;
+}
+
+export interface ConvexProductionRollbackOnlyExecutor {
+  cleanupCheckout(): Promise<void> | void;
+  executeStep(
+    release: ConvexProductionRollbackOnlyPlan,
+    step: ConvexProductionExecutionStep,
+  ): Promise<unknown>;
+  prepareCheckout(commitSha: string): Promise<void> | void;
+}
+
+export type ConvexProductionRollbackSignal =
+  | "SIGHUP"
+  | "SIGINT"
+  | "SIGTERM";
+
+export class ConvexProductionRollbackSignalGuard {
+  private recordedSignal: ConvexProductionRollbackSignal | undefined;
+  private providerMutationStarted = false;
+
+  get mutationStarted() {
+    return this.providerMutationStarted;
+  }
+
+  get signal() {
+    return this.recordedSignal;
+  }
+
+  beginProviderMutation() {
+    if (this.recordedSignal) {
+      throw new Error("Convex rollback was interrupted before provider mutation");
+    }
+    this.providerMutationStarted = true;
+  }
+
+  record(signal: ConvexProductionRollbackSignal) {
+    this.recordedSignal ??= signal;
+    return !this.providerMutationStarted;
+  }
+}
+
 export interface ConvexProductionRollbackAnchor {
   canary: ConvexProductionCanaryReceipt;
   knownGoodSha: string;
@@ -122,6 +185,40 @@ export interface ConvexProductionFailureReceiptInput {
   knownGoodSha: string;
   result: ConvexProductionFailureResult;
   rollbackAnchor?: ConvexProductionRollbackAnchor;
+  target: ConvexProductionTarget;
+}
+
+export interface ConvexProductionForcedRollbackReceiptInput {
+  approvalReceiptSha256?: string;
+  candidateSha: string;
+  canary: ConvexProductionCanaryReceipt;
+  checkedAt: string;
+  interruptedBy: ConvexProductionRollbackSignal | null;
+  knownGoodReceiptKind?: "genesis";
+  knownGoodReceiptSha256: string;
+  knownGoodSha: string;
+  target: ConvexProductionTarget;
+}
+
+export interface ConvexProductionForcedRollbackArguments {
+  approvalReceiptPath?: string;
+  knownGoodReceiptPath: string;
+  knownGoodReceiptSha256: string;
+  receiptOutputPath: string;
+}
+
+export interface ConvexProductionForcedRollbackReceiptExpectation {
+  approvalReceiptSha256?: string;
+  candidateSha: string;
+  knownGoodReceiptSha256: string;
+  knownGoodSha: string;
+  target: ConvexProductionTarget;
+}
+
+export interface ConvexProductionCandidateRollbackReceiptExpectation {
+  candidateSha: string;
+  knownGoodReceiptSha256: string;
+  knownGoodSha: string;
   target: ConvexProductionTarget;
 }
 
@@ -179,6 +276,63 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function requireExactObjectKeys(
+  value: Record<string, unknown>,
+  expected: string[],
+  context: string,
+) {
+  const actual = Object.keys(value).sort();
+  const required = [...expected].sort();
+  if (
+    actual.length !== required.length ||
+    actual.some((key, index) => key !== required[index])
+  ) {
+    throw new Error(`${context} fields are invalid`);
+  }
+}
+
+function requireStrictConvexProductionCanaryShape(value: unknown) {
+  if (!isRecord(value) || !isRecord(value.runtimeIdentity)) {
+    throw new Error("Convex production canary fields are invalid");
+  }
+  requireExactObjectKeys(
+    value,
+    [
+      "assertions",
+      "outcome",
+      "runtimeIdentity",
+      "sampleCount",
+      "zeroCustomerData",
+    ],
+    "Convex production canary",
+  );
+  requireExactObjectKeys(
+    value.runtimeIdentity,
+    ["buildCommitSha", "deploymentName"],
+    "Convex production canary runtime identity",
+  );
+  if (!Array.isArray(value.assertions)) {
+    throw new Error("Convex production canary assertions are invalid");
+  }
+  for (const assertion of value.assertions) {
+    if (!isRecord(assertion)) {
+      throw new Error("Convex production canary assertion is invalid");
+    }
+    requireExactObjectKeys(
+      assertion,
+      [
+        "assertion",
+        "commitSha",
+        "deployment",
+        "environment",
+        "observationLatencyMs",
+        "result",
+      ],
+      "Convex production canary assertion",
+    );
+  }
+}
+
 function createConvexProductionExecutionSteps(
   approvedSha: string,
   target: ConvexProductionTarget,
@@ -231,8 +385,27 @@ function createConvexProductionRollbackPlan(
   };
 }
 
+export function createConvexProductionRollbackOnlyPlan(
+  sourceEnvironment: ConvexEnvironment,
+  pinnedProductionTarget: ConvexProductionTarget,
+  repositoryCommitSha: string,
+): ConvexProductionRollbackOnlyPlan {
+  const candidate = createConvexProductionDeploymentPlan(
+    sourceEnvironment,
+    pinnedProductionTarget,
+    repositoryCommitSha,
+  );
+  const rollback = createConvexProductionRollbackPlan(candidate);
+  return {
+    candidateSha: candidate.approvedSha,
+    knownGoodSha: rollback.approvedSha,
+    steps: rollback.steps,
+    target: rollback.target,
+  };
+}
+
 function requiredStep(
-  plan: ConvexProductionDeploymentPlan,
+  plan: Pick<ConvexProductionDeploymentPlan, "steps">,
   name: ConvexProductionExecutionStep["name"],
 ) {
   const step = plan.steps.find((candidate) => candidate.name === name);
@@ -250,6 +423,18 @@ function executeDeploymentAttempt(
   executor.executeStep(plan, requiredStep(plan, "deploy"));
   return readPassingConvexProductionCanaryReceipt(
     executor.executeStep(plan, requiredStep(plan, "canary")),
+    plan,
+  );
+}
+
+async function executeDeploymentAttemptAsync(
+  plan: ConvexProductionDeploymentPlan,
+  executor: AsyncConvexProductionDeploymentExecutor,
+) {
+  await executor.executeStep(plan, requiredStep(plan, "install"));
+  await executor.executeStep(plan, requiredStep(plan, "deploy"));
+  return readPassingConvexProductionCanaryReceipt(
+    await executor.executeStep(plan, requiredStep(plan, "canary")),
     plan,
   );
 }
@@ -381,6 +566,137 @@ export function executeConvexProductionDeployment(
     throw new ConvexProductionCandidateError(cause, rollbackAnchor);
   } finally {
     cleanupCheckout();
+  }
+}
+
+/**
+ * Async production execution keeps Node's signal loop responsive while a
+ * provider command is active. Candidate ambiguity always flows through the
+ * same known-good redeploy and canary proof as an ordinary candidate failure.
+ */
+export async function executeConvexProductionDeploymentAsync(
+  plan: ConvexProductionDeploymentPlan,
+  executor: AsyncConvexProductionDeploymentExecutor,
+): Promise<ConvexProductionDeploymentResult> {
+  let checkoutPrepared = false;
+  const prepareCheckout = async (commitSha: string) => {
+    await executor.prepareCheckout(commitSha);
+    checkoutPrepared = true;
+  };
+  const cleanupCheckout = async () => {
+    if (!checkoutPrepared) return;
+    await executor.cleanupCheckout();
+    checkoutPrepared = false;
+  };
+
+  const rollbackPlan = createConvexProductionRollbackPlan(plan);
+  await prepareCheckout(rollbackPlan.approvedSha);
+  let baselineCanary: ConvexProductionCanaryReceipt;
+  try {
+    await executor.executeStep(
+      rollbackPlan,
+      requiredStep(rollbackPlan, "install"),
+    );
+    baselineCanary = readPassingConvexProductionCanaryReceipt(
+      await executor.executeStep(
+        rollbackPlan,
+        requiredStep(rollbackPlan, "canary"),
+      ),
+      rollbackPlan,
+    );
+  } catch (cause) {
+    throw new ConvexProductionBaselineError(cause);
+  } finally {
+    await cleanupCheckout();
+  }
+
+  const rollbackAnchor = {
+    canary: baselineCanary,
+    knownGoodSha: rollbackPlan.approvedSha,
+    result: "passed" as const,
+  };
+  executor.recordRollbackAnchor?.(rollbackAnchor);
+  await prepareCheckout(plan.approvedSha);
+  try {
+    await executor.executeStep(plan, requiredStep(plan, "install"));
+    let failedStep: "canary" | "deploy" = "deploy";
+    try {
+      await executor.executeStep(plan, requiredStep(plan, "deploy"));
+      failedStep = "canary";
+      return {
+        canary: readPassingConvexProductionCanaryReceipt(
+          await executor.executeStep(plan, requiredStep(plan, "canary")),
+          plan,
+        ),
+        promotionAllowed: true,
+        result: "passed",
+        rollbackAnchor,
+      };
+    } catch {
+      await cleanupCheckout();
+      try {
+        await prepareCheckout(rollbackPlan.approvedSha);
+        const rollbackCanary = await executeDeploymentAttemptAsync(
+          rollbackPlan,
+          executor,
+        );
+        return {
+          candidate: {
+            approvedSha: plan.approvedSha,
+            failedStep,
+            result: "failed",
+          },
+          promotionAllowed: false,
+          result: "candidate_failed_rolled_back",
+          rollbackAnchor,
+          rollback: {
+            canary: rollbackCanary,
+            knownGoodSha: rollbackPlan.approvedSha,
+            result: "passed",
+          },
+        };
+      } catch (cause) {
+        throw new ConvexProductionRollbackError(cause, rollbackAnchor);
+      }
+    }
+  } catch (cause) {
+    if (cause instanceof ConvexProductionRollbackError) throw cause;
+    throw new ConvexProductionCandidateError(cause, rollbackAnchor);
+  } finally {
+    await cleanupCheckout();
+  }
+}
+
+export async function executeConvexProductionRollbackOnly(
+  plan: ConvexProductionRollbackOnlyPlan,
+  executor: ConvexProductionRollbackOnlyExecutor,
+) {
+  let checkoutPrepared = false;
+  try {
+    await executor.prepareCheckout(plan.knownGoodSha);
+    checkoutPrepared = true;
+    await executor.executeStep(plan, requiredStep(plan, "install"));
+    await executor.executeStep(plan, requiredStep(plan, "deploy"));
+    const canary = readPassingConvexProductionCanaryReceipt(
+      await executor.executeStep(plan, requiredStep(plan, "canary")),
+      {
+        approvedSha: plan.knownGoodSha,
+        knownGoodSha: plan.knownGoodSha,
+        steps: plan.steps,
+        target: plan.target,
+      },
+    );
+    return {
+      canary,
+      checkout: {
+        cleanBeforeInstall: true as const,
+        commitSha: plan.knownGoodSha,
+        detached: true as const,
+      },
+      result: "known_good_restored" as const,
+    };
+  } finally {
+    if (checkoutPrepared) await executor.cleanupCheckout();
   }
 }
 
@@ -530,6 +846,87 @@ function requireCompleteConvexProductionReceipt(value: unknown) {
       );
       return;
     }
+    if (value.event === "convex_production_forced_rollback_receipt") {
+      const forcedRollbackFields = [
+        "candidateSha",
+        "canary",
+        "checkedAt",
+        "checkout",
+        "event",
+        "interruptedBy",
+        "knownGoodReceiptSha256",
+        "knownGoodSha",
+        "promotionAllowed",
+        "result",
+        "schemaVersion",
+        "target",
+      ];
+      const hasGenesisBinding =
+        value.knownGoodReceiptKind !== undefined ||
+        value.approvalReceiptSha256 !== undefined;
+      requireExactObjectKeys(
+        value,
+        hasGenesisBinding
+          ? [
+              ...forcedRollbackFields,
+              "approvalReceiptSha256",
+              "knownGoodReceiptKind",
+            ]
+          : forcedRollbackFields,
+        "Convex forced rollback receipt",
+      );
+      const normalKnownGoodReceipt =
+        value.knownGoodReceiptKind === undefined &&
+        value.approvalReceiptSha256 === undefined;
+      const genesisKnownGoodReceipt =
+        value.knownGoodReceiptKind === "genesis" &&
+        typeof value.approvalReceiptSha256 === "string" &&
+        RECEIPT_HASH.test(value.approvalReceiptSha256);
+      if (
+        value.result !== "known_good_restored" ||
+        value.promotionAllowed !== false ||
+        typeof value.candidateSha !== "string" ||
+        !FULL_GIT_COMMIT_SHA.test(value.candidateSha) ||
+        typeof value.knownGoodSha !== "string" ||
+        !FULL_GIT_COMMIT_SHA.test(value.knownGoodSha) ||
+        value.knownGoodSha === value.candidateSha ||
+        typeof value.knownGoodReceiptSha256 !== "string" ||
+        !RECEIPT_HASH.test(value.knownGoodReceiptSha256) ||
+        !(normalKnownGoodReceipt || genesisKnownGoodReceipt) ||
+        !(
+          value.interruptedBy === null ||
+          ["SIGHUP", "SIGINT", "SIGTERM"].includes(
+            typeof value.interruptedBy === "string"
+              ? value.interruptedBy
+              : "",
+          )
+        ) ||
+        !isRecord(value.checkout) ||
+        value.checkout.cleanBeforeInstall !== true ||
+        value.checkout.commitSha !== value.knownGoodSha ||
+        value.checkout.detached !== true
+      ) {
+        throw new Error("Convex forced rollback receipt is incomplete");
+      }
+      requireExactObjectKeys(
+        value.checkout,
+        ["cleanBeforeInstall", "commitSha", "detached"],
+        "Convex forced rollback checkout",
+      );
+      requireExactObjectKeys(
+        value.target as Record<string, unknown>,
+        ["deploymentName", "deploymentUrl"],
+        "Convex forced rollback target",
+      );
+      requireStrictConvexProductionCanaryShape(value.canary);
+      readPassingConvexProductionCanaryReceipt(value.canary, {
+        approvedSha: value.knownGoodSha,
+        knownGoodSha: value.knownGoodSha,
+        steps: [],
+        target,
+      });
+      return;
+    }
     if (value.event === "convex_production_failure_receipt") {
       if (
         ![
@@ -612,6 +1009,131 @@ export function createConvexProductionFailureReceipt(
   return receipt;
 }
 
+export function createConvexProductionForcedRollbackReceipt(
+  input: ConvexProductionForcedRollbackReceiptInput,
+) {
+  const normalKnownGoodReceipt =
+    input.knownGoodReceiptKind === undefined &&
+    input.approvalReceiptSha256 === undefined;
+  const genesisKnownGoodReceipt =
+    input.knownGoodReceiptKind === "genesis" &&
+    typeof input.approvalReceiptSha256 === "string" &&
+    RECEIPT_HASH.test(input.approvalReceiptSha256);
+  if (!(normalKnownGoodReceipt || genesisKnownGoodReceipt)) {
+    throw new Error("Convex forced rollback approval binding is invalid");
+  }
+  const receipt = {
+    ...(genesisKnownGoodReceipt
+      ? {
+          approvalReceiptSha256: input.approvalReceiptSha256!,
+          knownGoodReceiptKind: "genesis" as const,
+        }
+      : {}),
+    candidateSha: input.candidateSha,
+    canary: input.canary,
+    checkedAt: input.checkedAt,
+    checkout: {
+      cleanBeforeInstall: true as const,
+      commitSha: input.knownGoodSha,
+      detached: true as const,
+    },
+    event: "convex_production_forced_rollback_receipt" as const,
+    interruptedBy: input.interruptedBy,
+    knownGoodReceiptSha256: input.knownGoodReceiptSha256,
+    knownGoodSha: input.knownGoodSha,
+    promotionAllowed: false as const,
+    result: "known_good_restored" as const,
+    schemaVersion: 1 as const,
+    target: input.target,
+  };
+  requireCompleteConvexProductionReceipt(receipt);
+  return receipt;
+}
+
+export function readPassingConvexProductionForcedRollbackReceipt(
+  value: unknown,
+  expected: ConvexProductionForcedRollbackReceiptExpectation,
+) {
+  requireCompleteConvexProductionReceipt(value);
+  if (!isRecord(value) || value.event !== "convex_production_forced_rollback_receipt") {
+    throw new Error("Convex forced rollback receipt is not a passing receipt");
+  }
+  const expectsGenesis = expected.approvalReceiptSha256 !== undefined;
+  if (
+    value.candidateSha !== expected.candidateSha ||
+    value.knownGoodSha !== expected.knownGoodSha ||
+    value.knownGoodReceiptSha256 !== expected.knownGoodReceiptSha256 ||
+    !isRecord(value.target) ||
+    value.target.deploymentName !== expected.target.deploymentName ||
+    value.target.deploymentUrl !== expected.target.deploymentUrl ||
+    (expectsGenesis
+      ? value.knownGoodReceiptKind !== "genesis" ||
+        value.approvalReceiptSha256 !== expected.approvalReceiptSha256
+      : value.knownGoodReceiptKind !== undefined ||
+        value.approvalReceiptSha256 !== undefined)
+  ) {
+    throw new Error("Convex forced rollback receipt does not match the release");
+  }
+  return value;
+}
+
+export function readPassingConvexProductionCandidateRollbackReceipt(
+  value: unknown,
+  expected: ConvexProductionCandidateRollbackReceiptExpectation,
+) {
+  requireCompleteConvexProductionReceipt(value);
+  if (
+    !isRecord(value) ||
+    value.event !== "convex_production_rollback_receipt" ||
+    !isRecord(value.candidate) ||
+    !isRecord(value.rollback) ||
+    value.candidate.approvedSha !== expected.candidateSha ||
+    value.rollback.knownGoodSha !== expected.knownGoodSha ||
+    value.rollback.knownGoodReceiptSha256 !==
+      expected.knownGoodReceiptSha256 ||
+    !isRecord(value.target) ||
+    value.target.deploymentName !== expected.target.deploymentName ||
+    value.target.deploymentUrl !== expected.target.deploymentUrl
+  ) {
+    throw new Error("Convex candidate rollback receipt does not match the release");
+  }
+  requireExactObjectKeys(
+    value,
+    [
+      "candidate",
+      "checkedAt",
+      "event",
+      "promotionAllowed",
+      "result",
+      "rollback",
+      "rollbackAnchor",
+      "schemaVersion",
+      "target",
+    ],
+    "Convex candidate rollback receipt",
+  );
+  requireExactObjectKeys(
+    value.candidate,
+    ["approvedSha", "failedStep", "result"],
+    "Convex candidate rollback",
+  );
+  requireExactObjectKeys(
+    value.rollback,
+    ["canary", "knownGoodReceiptSha256", "knownGoodSha", "result"],
+    "Convex candidate rollback proof",
+  );
+  requireExactObjectKeys(
+    value.rollbackAnchor as Record<string, unknown>,
+    ["canary", "knownGoodSha", "result"],
+    "Convex candidate rollback anchor",
+  );
+  requireStrictConvexProductionCanaryShape(value.rollback.canary);
+  requireStrictConvexProductionCanaryShape(
+    (value.rollbackAnchor as Record<string, unknown>).canary,
+  );
+  return value;
+}
+
 function canonicalizeReceiptPath(value: string) {
   let existingAncestor = path.resolve(value);
   const missingSegments: string[] = [];
@@ -632,6 +1154,80 @@ function requireReceiptOutsideRepository(value: string, repositoryRoot: string) 
   ) {
     throw new Error("Convex receipt output must remain outside the repository");
   }
+}
+
+export function readConvexProductionForcedRollbackArguments(
+  arguments_: string[],
+  repositoryRoot: string,
+): ConvexProductionForcedRollbackArguments {
+  const values = new Map<string, string>();
+  for (let index = 0; index < arguments_.length; index += 2) {
+    const option = arguments_[index];
+    const value = arguments_[index + 1];
+    if (
+      ![
+        "--approval-receipt",
+        "--known-good-receipt",
+        "--known-good-receipt-sha256",
+        "--receipt-out",
+      ].includes(option ?? "") ||
+      !value?.trim() ||
+      value.startsWith("--") ||
+      values.has(option)
+    ) {
+      throw new Error(
+        "Usage: rollback-convex-production --known-good-receipt <path> --known-good-receipt-sha256 <sha256> [--approval-receipt <path>] --receipt-out <path>",
+      );
+    }
+    values.set(option, value);
+  }
+  if (
+    values.size < 3 ||
+    values.size > 4 ||
+    !values.has("--known-good-receipt") ||
+    !values.has("--known-good-receipt-sha256") ||
+    !values.has("--receipt-out")
+  ) {
+    throw new Error(
+      "Usage: rollback-convex-production --known-good-receipt <path> --known-good-receipt-sha256 <sha256> [--approval-receipt <path>] --receipt-out <path>",
+    );
+  }
+  const knownGoodReceiptSha256 = values.get(
+    "--known-good-receipt-sha256",
+  )!;
+  if (!RECEIPT_HASH.test(knownGoodReceiptSha256)) {
+    throw new Error("--known-good-receipt-sha256 must be an exact SHA-256");
+  }
+  const knownGoodReceiptPath = realpathSync(
+    values.get("--known-good-receipt")!,
+  );
+  const approvalReceiptPath = values.has("--approval-receipt")
+    ? realpathSync(values.get("--approval-receipt")!)
+    : undefined;
+  const receiptOutputPath = canonicalizeReceiptPath(
+    values.get("--receipt-out")!,
+  );
+  requireReceiptOutsideRepository(knownGoodReceiptPath, repositoryRoot);
+  if (approvalReceiptPath) {
+    requireReceiptOutsideRepository(approvalReceiptPath, repositoryRoot);
+  }
+  requireReceiptOutsideRepository(receiptOutputPath, repositoryRoot);
+  if (
+    knownGoodReceiptPath === receiptOutputPath ||
+    approvalReceiptPath === knownGoodReceiptPath ||
+    approvalReceiptPath === receiptOutputPath
+  ) {
+    throw new Error("Convex forced rollback receipt paths must be distinct");
+  }
+  if (existsSync(receiptOutputPath)) {
+    throw new Error("--receipt-out must not already exist");
+  }
+  return {
+    ...(approvalReceiptPath ? { approvalReceiptPath } : {}),
+    knownGoodReceiptPath,
+    knownGoodReceiptSha256: knownGoodReceiptSha256.toLowerCase(),
+    receiptOutputPath,
+  };
 }
 
 function isNodeError(error: unknown): error is NodeJS.ErrnoException {
@@ -674,7 +1270,25 @@ export function readPassingKnownGoodConvexReceipt(
   value: unknown,
   expectedCommitSha: string,
   expectedTarget: ConvexProductionTarget,
-): ConvexProductionDeploymentReceipt {
+  genesisBinding?: Omit<
+    ConvexProductionGenesisExpectation,
+    "knownGoodSha" | "target"
+  >,
+): ConvexProductionDeploymentReceipt | ConvexProductionGenesisReceipt {
+  if (
+    isRecord(value) &&
+    value.event === "convex_production_genesis_receipt"
+  ) {
+    if (!genesisBinding) {
+      throw new Error("Genesis Convex receipt requires current-run binding");
+    }
+    return readPassingConvexProductionGenesisReceipt(value, {
+      ...genesisBinding,
+      knownGoodSha: expectedCommitSha,
+      target: expectedTarget,
+    });
+  }
+  requireCompleteConvexProductionReceipt(value);
   if (
     !isRecord(value) ||
     value.schemaVersion !== 1 ||
@@ -696,6 +1310,173 @@ export function readPassingKnownGoodConvexReceipt(
     target: expectedTarget,
   });
   return value as unknown as ConvexProductionDeploymentReceipt;
+}
+
+export interface ConvexProductionKnownGoodReceiptExpectation {
+  approvedCandidateSha: string;
+  githubRepository: "meetblakey/sourcera";
+  githubRunAttempt: number;
+  githubRunId: number;
+  knownGoodSha: string;
+  target: ConvexProductionTarget;
+}
+
+export interface ConvexProductionForcedRollbackInputExpectation {
+  candidateSha: string;
+  githubRepository?: string;
+  githubRunAttempt?: number;
+  githubRunId?: number;
+  knownGoodReceiptSha256: string;
+  knownGoodSha: string;
+  target: ConvexProductionTarget;
+}
+
+function parseReceiptBytes(value: Uint8Array, context: string) {
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(value);
+    return JSON.parse(text) as unknown;
+  } catch (cause) {
+    throw new Error(`${context} is not valid UTF-8 JSON`, { cause });
+  }
+}
+
+export function readConvexProductionKnownGoodReceiptBytes(
+  knownGoodReceiptBytes: Uint8Array,
+  approvalReceiptBytes: Uint8Array | undefined,
+  expected: ConvexProductionKnownGoodReceiptExpectation,
+) {
+  const value = parseReceiptBytes(
+    knownGoodReceiptBytes,
+    "Known-good Convex receipt",
+  );
+  const knownGoodReceiptSha256 = createHash("sha256")
+    .update(knownGoodReceiptBytes)
+    .digest("hex");
+  const genesis =
+    isRecord(value) && value.event === "convex_production_genesis_receipt";
+  if (!genesis) {
+    if (approvalReceiptBytes !== undefined) {
+      throw new Error("Normal Convex receipt forbids current approval input");
+    }
+    return {
+      knownGoodReceiptSha256,
+      receipt: readPassingKnownGoodConvexReceipt(
+        value,
+        expected.knownGoodSha,
+        expected.target,
+      ),
+    };
+  }
+  if (approvalReceiptBytes === undefined) {
+    throw new Error("Genesis Convex receipt requires current approval input");
+  }
+  if (expected.githubRunAttempt !== 1) {
+    throw new Error("Genesis Convex receipt requires GitHub run attempt 1");
+  }
+  const approvalReceiptSha256 = createHash("sha256")
+    .update(approvalReceiptBytes)
+    .digest("hex");
+  readGithubProductionApprovalReceipt(
+    parseReceiptBytes(approvalReceiptBytes, "GitHub production approval receipt"),
+    {
+      approvedCandidateSha: expected.approvedCandidateSha,
+      githubRepository: expected.githubRepository,
+      githubRunAttempt: 1,
+      githubRunId: expected.githubRunId,
+    },
+  );
+  return {
+    approvalReceiptSha256,
+    knownGoodReceiptSha256,
+    receipt: readPassingKnownGoodConvexReceipt(
+      value,
+      expected.knownGoodSha,
+      expected.target,
+      {
+        approvedCandidateSha: expected.approvedCandidateSha,
+        approvalReceiptSha256,
+        githubRunAttempt: expected.githubRunAttempt,
+        githubRunId: expected.githubRunId,
+      },
+    ),
+  };
+}
+
+export function readConvexProductionForcedRollbackInputBytes(
+  knownGoodReceiptBytes: Uint8Array,
+  approvalReceiptBytes: Uint8Array | undefined,
+  expected: ConvexProductionForcedRollbackInputExpectation,
+) {
+  if (
+    !FULL_GIT_COMMIT_SHA.test(expected.candidateSha) ||
+    !FULL_GIT_COMMIT_SHA.test(expected.knownGoodSha) ||
+    expected.candidateSha === expected.knownGoodSha ||
+    !RECEIPT_HASH.test(expected.knownGoodReceiptSha256)
+  ) {
+    throw new Error("Convex forced rollback release binding is invalid");
+  }
+  const knownGoodReceiptSha256 = createHash("sha256")
+    .update(knownGoodReceiptBytes)
+    .digest("hex");
+  if (
+    knownGoodReceiptSha256 !==
+    expected.knownGoodReceiptSha256.toLowerCase()
+  ) {
+    throw new Error("Exact known-good receipt bytes do not match SHA-256");
+  }
+  const value = parseReceiptBytes(
+    knownGoodReceiptBytes,
+    "Known-good Convex rollback receipt",
+  );
+  const genesis =
+    isRecord(value) && value.event === "convex_production_genesis_receipt";
+  if (!genesis) {
+    if (approvalReceiptBytes !== undefined) {
+      throw new Error("Normal Convex receipt forbids current approval input");
+    }
+    return {
+      kind: "normal" as const,
+      knownGoodReceiptSha256,
+      receipt: readPassingKnownGoodConvexReceipt(
+        value,
+        expected.knownGoodSha,
+        expected.target,
+      ),
+    };
+  }
+  if (
+    expected.githubRepository !== "meetblakey/sourcera" ||
+    expected.githubRunAttempt !== 1 ||
+    !Number.isSafeInteger(expected.githubRunId) ||
+    Number(expected.githubRunId) < 1
+  ) {
+    throw new Error("Genesis forced rollback GitHub binding is invalid");
+  }
+  const validated = readConvexProductionKnownGoodReceiptBytes(
+    knownGoodReceiptBytes,
+    approvalReceiptBytes,
+    {
+      approvedCandidateSha: expected.candidateSha,
+      githubRepository: "meetblakey/sourcera",
+      githubRunAttempt: 1,
+      githubRunId: expected.githubRunId!,
+      knownGoodSha: expected.knownGoodSha,
+      target: expected.target,
+    },
+  );
+  if (
+    validated.knownGoodReceiptSha256 !== knownGoodReceiptSha256 ||
+    validated.approvalReceiptSha256 === undefined
+  ) {
+    throw new Error("Genesis forced rollback approval binding is incomplete");
+  }
+  return {
+    approvalReceiptSha256: validated.approvalReceiptSha256,
+    kind: "genesis" as const,
+    knownGoodReceiptSha256,
+    receipt: validated.receipt,
+  };
 }
 
 export function createConvexProductionDeploymentPlan(

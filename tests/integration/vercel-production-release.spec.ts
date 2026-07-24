@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { realpathSync } from "node:fs";
 import {
   mkdtemp,
@@ -17,6 +18,8 @@ import {
   type CommandResult,
   readVercelProductionReleaseConfig,
   stageVercelProductionRelease,
+  validateProductionDomains,
+  validateProductionEnvironmentMetadata,
 } from "../../scripts/lib/vercel-production-release";
 import {
   cleanupVercelStagingWorktree,
@@ -43,6 +46,34 @@ const releaseEnvironment = {
   VERCEL_TOKEN: vercelToken,
 };
 
+test("the pinned Vercel CLI retains every beta surface used by release safety", () => {
+  const executable = path.join(process.cwd(), "node_modules", ".bin", "vercel");
+  const run = (arguments_: string[], allowedStatuses = [0]) => {
+    const result = spawnSync(executable, arguments_, {
+      encoding: "utf8",
+      env: { ...process.env, NO_COLOR: "1" },
+    });
+    assert.ok(
+      allowedStatuses.includes(result.status ?? -1),
+      result.stderr,
+    );
+    return `${result.stdout}${result.stderr}`;
+  };
+  assert.match(run(["--version"]), /56\.2\.0/);
+  const apiHelp = run(["api", "--help"], [0, 2]);
+  assert.match(apiHelp, /authenticated HTTP requests/);
+  assert.match(apiHelp, /--raw/);
+  assert.match(apiHelp, /--paginate/);
+  const curlHelp = run(["curl", "--help"], [0, 2]);
+  assert.match(curlHelp, /--deployment/);
+  assert.match(curlHelp, /protection bypass/);
+  for (const command of ["promote", "rollback"]) {
+    const help = run([command, "--help"], [0, 2]);
+    assert.match(help, /--timeout/);
+    assert.match(help, /--yes/);
+  }
+});
+
 const config = {
   convexProduction: {
     deploymentName: "careful-otter-123",
@@ -52,33 +83,44 @@ const config = {
     teamId,
     targets: [
       {
+        allowedProductionEnvironmentKeys: [],
         application: "marketplace",
         autoExposeSystemEnvs: true,
         cwd: ".",
         productionBranch: "main",
         productionDomain: null,
+        productionDomains: [],
         projectId: "prj_FIBSOffJX8GtY8JHTSXKixfVryBp",
         projectName: "sourcera",
         rootDirectory: null,
         sourceFilesOutsideRootDirectory: true,
       },
       {
+        allowedProductionEnvironmentKeys: [],
         application: "buyer",
         autoExposeSystemEnvs: true,
         cwd: ".",
         productionBranch: "main",
         productionDomain: "sourcera-buyer-meetblakeys-projects.vercel.app",
+        productionDomains: [
+          "sourcera-buyer-meetblakeys-projects.vercel.app",
+          "www.sourcera-buyer-meetblakeys-projects.vercel.app",
+        ],
         projectId: "prj_ZbZgRUXjPzgv6Oqepe13W6yV2AyN",
         projectName: "sourcera-buyer",
         rootDirectory: "apps/buyer",
         sourceFilesOutsideRootDirectory: true,
       },
       {
+        allowedProductionEnvironmentKeys: [],
         application: "seller",
         autoExposeSystemEnvs: true,
         cwd: ".",
         productionBranch: "main",
         productionDomain: "sourcera-seller-meetblakeys-projects.vercel.app",
+        productionDomains: [
+          "sourcera-seller-meetblakeys-projects.vercel.app",
+        ],
         projectId: "prj_Vd0Roi2q0XPkphCrn8rtoNxI1DkS",
         projectName: "sourcera-seller",
         rootDirectory: "apps/seller",
@@ -109,6 +151,7 @@ function deploymentReadback(
   return {
     alias: [],
     aliasAssigned: false,
+    autoAssignCustomDomains: false,
     createdAt: startedAt.getTime(),
     id: deploymentIds[application],
     meta: {
@@ -146,7 +189,7 @@ function projectReadback(
     sourceFilesOutsideRootDirectory: target.sourceFilesOutsideRootDirectory,
     targets: {
       production: {
-        alias: target.productionDomain ? [target.productionDomain] : [],
+        alias: target.productionDomains,
         createdAt: startedAt.getTime() - 60_000,
         id: `dpl_${application}_previous`,
         meta: { githubCommitSha: "f".repeat(40) },
@@ -157,6 +200,26 @@ function projectReadback(
         url: `${target.projectName}-previous.vercel.app`,
       },
     },
+  };
+}
+
+function productionDomainsReadback(
+  application: "buyer" | "marketplace" | "seller",
+) {
+  const target = config.vercelProduction.targets.find(
+    (candidate) => candidate.application === application,
+  );
+  assert.ok(target);
+  return {
+    domains: target.productionDomains.map((name) => ({
+      apexName: name,
+      customEnvironmentId: null,
+      gitBranch: null,
+      name,
+      projectId: target.projectId,
+      verified: true,
+    })),
+    pagination: { count: target.productionDomains.length, next: null, prev: null },
   };
 }
 
@@ -222,6 +285,17 @@ function successfulRunner(
     const application = target.application as keyof typeof deploymentIds;
 
     if (invocation.arguments[0] === "api") {
+      if (subject.includes("/env?")) {
+        return gitResult(
+          JSON.stringify({
+            envs: [],
+            hiddenProductionEnvCount: 0,
+          }),
+        );
+      }
+      if (subject.includes("/domains?")) {
+        return gitResult(JSON.stringify(productionDomainsReadback(application)));
+      }
       if (subject.startsWith("/v9/projects/")) {
         return gitResult(JSON.stringify(projectReadback(application)));
       }
@@ -322,6 +396,127 @@ test("production config requires the exact Marketplace, Buyer, Seller order", ()
   }
 });
 
+test("production environment metadata is exact and never accepts hidden keys", () => {
+  const target = readVercelProductionReleaseConfig(
+    config,
+    repositoryRoot,
+  ).targets[1]!;
+  assert.doesNotThrow(() =>
+    validateProductionEnvironmentMetadata(
+      {
+        envs: [
+          {
+            key: "CONVEX_PREVIEW_NAME",
+            target: ["preview"],
+            type: "encrypted",
+            value: "redacted",
+          },
+        ],
+        hiddenProductionEnvCount: 0,
+      },
+      target,
+    ),
+  );
+  assert.throws(
+    () =>
+      validateProductionEnvironmentMetadata(
+        {
+          envs: [
+            {
+              key: "CONVEX_DEPLOY_KEY",
+              target: ["production"],
+              type: "encrypted",
+              value: "redacted",
+            },
+          ],
+          hiddenProductionEnvCount: 0,
+        },
+        target,
+      ),
+    /do not match the repo allowlist/,
+  );
+  assert.throws(
+    () =>
+      validateProductionEnvironmentMetadata(
+        { envs: [], hiddenProductionEnvCount: 1 },
+        target,
+      ),
+    /hidden production environment variables/,
+  );
+});
+
+test("production domain metadata must equal the complete controlled alias set", () => {
+  const target = readVercelProductionReleaseConfig(
+    config,
+    repositoryRoot,
+  ).targets[1]!;
+  assert.doesNotThrow(() =>
+    validateProductionDomains(productionDomainsReadback("buyer"), target),
+  );
+  assert.throws(
+    () =>
+      validateProductionDomains(
+        {
+          domains: [
+            ...productionDomainsReadback("buyer").domains,
+            {
+              apexName: "unexpected.example.com",
+              customEnvironmentId: null,
+              gitBranch: null,
+              name: "unexpected.example.com",
+              projectId: target.projectId,
+              verified: true,
+            },
+          ],
+          pagination: { count: 3, next: null, prev: null },
+        },
+        target,
+      ),
+    /do not match the repo pin/,
+  );
+  assert.throws(
+    () =>
+      validateProductionDomains(
+        {
+          ...productionDomainsReadback("buyer"),
+          pagination: {
+            count: productionDomainsReadback("buyer").domains.length,
+            next: 123,
+            prev: null,
+          },
+        },
+        target,
+      ),
+    /pagination is incomplete/,
+  );
+});
+
+test("production domain inventory requires complete reconciled pagination", () => {
+  const target = readVercelProductionReleaseConfig(
+    config,
+    repositoryRoot,
+  ).targets[1]!;
+  const valid = productionDomainsReadback("buyer");
+  const invalidInventories = [
+    { domains: valid.domains },
+    { ...valid, pagination: { count: valid.domains.length, next: null } },
+    {
+      ...valid,
+      pagination: {
+        count: valid.domains.length - 1,
+        next: null,
+        prev: null,
+      },
+    },
+  ];
+  for (const inventory of invalidInventories) {
+    assert.throws(
+      () => validateProductionDomains(inventory, target),
+      /pagination|incomplete|count/,
+    );
+  }
+});
+
 test("canonical production targets retain the live Vercel identity contract", async () => {
   const canonical = JSON.parse(
     await readFile(
@@ -336,11 +531,14 @@ test("canonical production targets retain the live Vercel identity contract", as
 
   assert.deepEqual(
     parsed.targets.map((target) => ({
+      allowedProductionEnvironmentKeys:
+        target.allowedProductionEnvironmentKeys,
       application: target.application,
       autoExposeSystemEnvs: target.autoExposeSystemEnvs,
       cwd: target.cwd,
       productionBranch: target.productionBranch,
       productionDomain: target.productionDomain,
+      productionDomains: target.productionDomains,
       projectId: target.projectId,
       projectName: target.projectName,
       rootDirectory: target.rootDirectory,
@@ -348,33 +546,43 @@ test("canonical production targets retain the live Vercel identity contract", as
     })),
     [
       {
+        allowedProductionEnvironmentKeys: [],
         application: "marketplace",
         autoExposeSystemEnvs: true,
         cwd: ".",
         productionBranch: "main",
         productionDomain: null,
+        productionDomains: [],
         projectId: "prj_FIBSOffJX8GtY8JHTSXKixfVryBp",
         projectName: "sourcera",
         rootDirectory: null,
         sourceFilesOutsideRootDirectory: true,
       },
       {
+        allowedProductionEnvironmentKeys: [],
         application: "buyer",
         autoExposeSystemEnvs: true,
         cwd: ".",
         productionBranch: "main",
         productionDomain: "sourcera-buyer-meetblakeys-projects.vercel.app",
+        productionDomains: [
+          "sourcera-buyer-meetblakeys-projects.vercel.app",
+        ],
         projectId: "prj_ZbZgRUXjPzgv6Oqepe13W6yV2AyN",
         projectName: "sourcera-buyer",
         rootDirectory: "apps/buyer",
         sourceFilesOutsideRootDirectory: true,
       },
       {
+        allowedProductionEnvironmentKeys: [],
         application: "seller",
         autoExposeSystemEnvs: true,
         cwd: ".",
         productionBranch: "main",
         productionDomain: "sourcera-seller-meetblakeys-projects.vercel.app",
+        productionDomains: [
+          "sourcera-seller-meetblakeys-projects.vercel.app",
+        ],
         projectId: "prj_Vd0Roi2q0XPkphCrn8rtoNxI1DkS",
         projectName: "sourcera-seller",
         rootDirectory: "apps/seller",
@@ -456,6 +664,10 @@ test("staging captures all predecessors, stages in order, and returns one receip
     receipt.applications[0].predecessorDeploymentId,
     "dpl_marketplace_previous",
   );
+  assert.equal(
+    receipt.applications[0].predecessorProviderGitSha,
+    "f".repeat(40),
+  );
   assert.equal(receipt.applications[0].productionDomain, null);
   assert.equal(receipt.applications[1].rootDirectory, "apps/buyer");
   assert.deepEqual(receipt.applications[0].health, healthReadback("marketplace"));
@@ -468,12 +680,22 @@ test("staging captures all predecessors, stages in order, and returns one receip
     true,
   );
   assert.deepEqual(
-    vercelInvocations.slice(0, 3).map((invocation) => invocation.arguments[1]),
-    [
-      `/v9/projects/${config.vercelProduction.targets[0].projectId}?teamId=${teamId}`,
-      `/v9/projects/${config.vercelProduction.targets[1].projectId}?teamId=${teamId}`,
-      `/v9/projects/${config.vercelProduction.targets[2].projectId}?teamId=${teamId}`,
-    ],
+    vercelInvocations
+      .filter(
+        (invocation) =>
+          invocation.arguments[0] === "api" &&
+          config.vercelProduction.targets.some(
+            (target) =>
+              invocation.arguments[1] ===
+              `/v9/projects/${target.projectId}?teamId=${teamId}`,
+          ),
+      )
+      .map((invocation) => invocation.arguments[1]),
+    [0, 1].flatMap(() =>
+      config.vercelProduction.targets.map(
+        (target) => `/v9/projects/${target.projectId}?teamId=${teamId}`,
+      )
+    ),
   );
   assert.deepEqual(
     vercelInvocations
@@ -507,6 +729,13 @@ test("staging captures all predecessors, stages in order, and returns one receip
       assert.equal(invocation.environment?.[key], undefined);
     }
     if (invocation.arguments[0] !== "deploy") continue;
+    const projectId = invocation.arguments[
+      invocation.arguments.indexOf("--project") + 1
+    ];
+    const application = config.vercelProduction.targets.find(
+      (target) => target.projectId === projectId,
+    )?.application;
+    assert.ok(application);
     assert.deepEqual(invocation.arguments.slice(0, 4), [
       "deploy",
       "--prod",
@@ -517,6 +746,12 @@ test("staging captures all predecessors, stages in order, and returns one receip
       invocation.arguments.includes(
         `SOURCERA_RELEASE_APPROVED_SHA=${approvedSha}`,
       ),
+    );
+    assert.equal(
+      invocation.arguments.filter(
+        (argument) => argument === `SOURCERA_DOMAIN=${application}`,
+      ).length,
+      2,
     );
     assert.ok(
       invocation.arguments.includes(`sourceraReleaseRunId=${releaseRunId}`),
@@ -534,7 +769,7 @@ test("staging captures all predecessors, stages in order, and returns one receip
   assert.equal(
     vercelInvocations.filter((invocation) => invocation.arguments[0] === "api")
       .length,
-    6,
+    21,
   );
   assert.equal(
     vercelInvocations.filter((invocation) => invocation.arguments[0] === "curl")
@@ -709,9 +944,8 @@ test("a missing predecessor rejects the run before the first deploy", () => {
     if (
       invocation.command === "vercel" &&
       invocation.arguments[0] === "api" &&
-      invocation.arguments[1].startsWith(
-        `/v9/projects/${config.vercelProduction.targets[1].projectId}`,
-      )
+      invocation.arguments[1] ===
+        `/v9/projects/${config.vercelProduction.targets[1].projectId}?teamId=${teamId}`
     ) {
       runner.invocations.push(invocation);
       return gitResult(
@@ -748,7 +982,11 @@ test("a missing predecessor rejects the run before the first deploy", () => {
     runner.invocations.filter(
       (invocation) =>
         invocation.command === "vercel" &&
-        invocation.arguments[1]?.startsWith("/v9/projects/"),
+        config.vercelProduction.targets.some(
+          (target) =>
+            invocation.arguments[1] ===
+            `/v9/projects/${target.projectId}?teamId=${teamId}`,
+        ),
     ).length,
     3,
   );
@@ -761,9 +999,8 @@ test("a predecessor must be the READY production target of its pinned project", 
     if (
       invocation.command === "vercel" &&
       invocation.arguments[0] === "api" &&
-      invocation.arguments[1].startsWith(
-        `/v9/projects/${config.vercelProduction.targets[0].projectId}`,
-      )
+      invocation.arguments[1] ===
+        `/v9/projects/${config.vercelProduction.targets[0].projectId}?teamId=${teamId}`
     ) {
       return gitResult(
         JSON.stringify({
@@ -802,6 +1039,54 @@ test("a predecessor must be the READY production target of its pinned project", 
   );
 });
 
+test("a production predecessor must own every pinned production domain", () => {
+  const runner = successfulRunner();
+  const originalRun = runner.run;
+  runner.run = (invocation) => {
+    if (
+      invocation.command === "vercel" &&
+      invocation.arguments[0] === "api" &&
+      invocation.arguments[1] ===
+        `/v9/projects/${config.vercelProduction.targets[1].projectId}?teamId=${teamId}`
+    ) {
+      const project = projectReadback("buyer");
+      return gitResult(
+        JSON.stringify({
+          ...project,
+          targets: {
+            production: {
+              ...project.targets.production,
+              alias: [config.vercelProduction.targets[1].productionDomain],
+            },
+          },
+        }),
+      );
+    }
+    return originalRun(invocation);
+  };
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: releaseEnvironment,
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: runner.run,
+        worktreeRoot,
+      }),
+    /every pinned production domain/,
+  );
+  assert.equal(
+    runner.invocations.some(
+      (invocation) => invocation.arguments[0] === "deploy",
+    ),
+    false,
+  );
+});
+
 test("live Vercel rootDirectory drift blocks all staging", () => {
   const runner = successfulRunner();
   const originalRun = runner.run;
@@ -809,9 +1094,8 @@ test("live Vercel rootDirectory drift blocks all staging", () => {
     if (
       invocation.command === "vercel" &&
       invocation.arguments[0] === "api" &&
-      invocation.arguments[1].startsWith(
-        `/v9/projects/${config.vercelProduction.targets[1].projectId}`,
-      )
+      invocation.arguments[1] ===
+        `/v9/projects/${config.vercelProduction.targets[1].projectId}?teamId=${teamId}`
     ) {
       runner.invocations.push(invocation);
       return gitResult(
@@ -863,9 +1147,8 @@ test("live Vercel project policy drift blocks all staging", () => {
       if (
         invocation.command === "vercel" &&
         invocation.arguments[0] === "api" &&
-        invocation.arguments[1].startsWith(
-          `/v9/projects/${config.vercelProduction.targets[1].projectId}`,
-        )
+        invocation.arguments[1] ===
+          `/v9/projects/${config.vercelProduction.targets[1].projectId}?teamId=${teamId}`
       ) {
         runner.invocations.push(invocation);
         return gitResult(
@@ -1107,6 +1390,101 @@ test("partial staging emits no receipt when authenticated readback is wrong", ()
       1,
     );
   }
+});
+
+test("a staged candidate cannot own a secondary pinned production domain", () => {
+  const secondaryDomain = config.vercelProduction.targets[1]
+    .productionDomains[1]!;
+  const runner = successfulRunner({ buyer: { alias: [secondaryDomain] } });
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: releaseEnvironment,
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: runner.run,
+        worktreeRoot,
+      }),
+    /buyer deployment is not STAGED/,
+  );
+});
+
+test("ordinary staged readback requires exact no-traffic evidence", () => {
+  const invalidReadbacks: Array<[string, Record<string, unknown>]> = [
+    ["missing auto assignment policy", { autoAssignCustomDomains: undefined }],
+    ["non-boolean auto assignment policy", { autoAssignCustomDomains: "false" }],
+    ["missing alias assignment state", { aliasAssigned: undefined }],
+    ["assigned alias state", { aliasAssigned: true }],
+    ["unrelated assigned alias", { alias: ["preview.example.com"] }],
+    ["non-array alias", { alias: "preview.example.com" }],
+    ["non-array automatic aliases", { automaticAliases: "preview.example.com" }],
+    ["malformed user aliases", { userAliases: [42] }],
+  ];
+
+  for (const [name, override] of invalidReadbacks) {
+    const runner = successfulRunner({ buyer: override });
+    assert.throws(
+      () =>
+        stageVercelProductionRelease({
+          approvedSha,
+          config,
+          environment: releaseEnvironment,
+          now: () => startedAt,
+          releaseRunId,
+          repositoryRoot,
+          run: runner.run,
+          worktreeRoot,
+        }),
+      /not STAGED|alias/i,
+      name,
+    );
+  }
+});
+
+test("domain drift after deploy blocks the ordinary stage receipt", () => {
+  const runner = successfulRunner();
+  const originalRun = runner.run;
+  let buyerDomainReads = 0;
+  runner.run = (invocation) => {
+    if (
+      invocation.command === "vercel" &&
+      invocation.arguments[0] === "api" &&
+      invocation.arguments[1] ===
+        `/v9/projects/${config.vercelProduction.targets[1].projectId}/domains?production=true&limit=100&teamId=${teamId}`
+    ) {
+      buyerDomainReads += 1;
+      if (buyerDomainReads > 1) {
+        runner.invocations.push(invocation);
+        return gitResult(
+          JSON.stringify({
+            domains: [],
+            pagination: { count: 0, next: null, prev: null },
+          }),
+        );
+      }
+    }
+    return originalRun(invocation);
+  };
+
+  assert.throws(
+    () =>
+      stageVercelProductionRelease({
+        approvedSha,
+        config,
+        environment: releaseEnvironment,
+        now: () => startedAt,
+        releaseRunId,
+        repositoryRoot,
+        run: runner.run,
+        worktreeRoot,
+      }),
+    /production domains do not match the repo pin/,
+  );
+  assert.equal(buyerDomainReads, 2);
 });
 
 test("health proof must match commit, application, and production", () => {

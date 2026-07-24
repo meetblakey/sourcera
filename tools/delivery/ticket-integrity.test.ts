@@ -292,3 +292,39 @@ test("detects an unquoted wildcard in a ready ticket path section", () => {
     ["ticket_ready_wildcard_path"],
   );
 });
+
+test("fails closed on corrupt non-ready executable tickets", () => {
+  const capped = `${"A".repeat(234)} trunc`;
+  const captured = issue(
+    [
+      "## Source",
+      "* Requirement map: F-005",
+      "## Paths",
+      "* `convex/**`",
+      "## Implementation Notes",
+      `* ${capped}`,
+      "## Acceptance Tests",
+      `- [ ] ${capped}`,
+    ].join("\n"),
+    { labels: [] },
+  );
+  const snapshot = snapshotFor(captured);
+  snapshot.issues[0].labels = [];
+
+  const { result, report } = runScanner(snapshot, {
+    schemaVersion: 1,
+    issues: [captured],
+  });
+
+  assert.equal(result.status, 1, result.stderr);
+  assert.deepEqual(
+    report.findings.map((finding: { code: string }) => finding.code),
+    [
+      "ticket_description_cap_mid_token",
+      "ticket_description_repeated_cap",
+      "ticket_executable_wildcard_path",
+    ],
+  );
+  assert.deepEqual(report.readinessFindings, []);
+  assert.equal(report.passed, false);
+});

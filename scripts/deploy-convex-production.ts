@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   existsSync,
@@ -25,8 +25,8 @@ import {
   createConvexProductionDeploymentPlan,
   createConvexProductionFailureReceipt,
   createConvexProductionStepEnvironment,
-  executeConvexProductionDeployment,
-  readPassingKnownGoodConvexReceipt,
+  executeConvexProductionDeploymentAsync,
+  readConvexProductionKnownGoodReceiptBytes,
   writeConvexProductionReceipt,
 } from "./lib/convex-production-deployment";
 import {
@@ -144,6 +144,7 @@ function assertPathOutsideRepository(value: string, option: string) {
 
 function readArguments(arguments_: string[]) {
   const values: {
+    approvalReceiptPath?: string;
     knownGoodReceiptPath?: string;
     receiptPath?: string;
   } = {};
@@ -152,10 +153,15 @@ function readArguments(arguments_: string[]) {
     const value = arguments_[index + 1];
     if (!value?.trim() || value.startsWith("--")) {
       throw new Error(
-        "Usage: deploy-convex-production --known-good-receipt <path> --receipt-out <path>",
+        "Usage: deploy-convex-production --known-good-receipt <path> [--approval-receipt <path>] --receipt-out <path>",
       );
     }
-    if (option === "--known-good-receipt") {
+    if (option === "--approval-receipt") {
+      if (values.approvalReceiptPath) {
+        throw new Error("--approval-receipt may be provided only once");
+      }
+      values.approvalReceiptPath = value;
+    } else if (option === "--known-good-receipt") {
       if (values.knownGoodReceiptPath) {
         throw new Error("--known-good-receipt may be provided only once");
       }
@@ -172,9 +178,12 @@ function readArguments(arguments_: string[]) {
   return values;
 }
 
-const { knownGoodReceiptPath, receiptPath } = readArguments(
+const { approvalReceiptPath, knownGoodReceiptPath, receiptPath } = readArguments(
   process.argv.slice(2),
 );
+const canonicalApprovalReceiptPath = approvalReceiptPath
+  ? assertPathOutsideRepository(approvalReceiptPath, "--approval-receipt")
+  : undefined;
 const canonicalReceiptPath = receiptPath
   ? assertPathOutsideRepository(receiptPath, "--receipt-out")
   : undefined;
@@ -190,6 +199,13 @@ if (
 ) {
   throw new Error("receipt paths must be distinct");
 }
+if (
+  canonicalApprovalReceiptPath &&
+  (canonicalApprovalReceiptPath === canonicalKnownGoodReceiptPath ||
+    canonicalApprovalReceiptPath === canonicalReceiptPath)
+) {
+  throw new Error("receipt paths must be distinct");
+}
 if (canonicalReceiptPath && existsSync(canonicalReceiptPath)) {
   throw new Error("--receipt-out must not already exist");
 }
@@ -199,7 +215,34 @@ if (!canonicalReceiptPath) {
 if (!canonicalKnownGoodReceiptPath) {
   throw new Error("--known-good-receipt requires a historical receipt path");
 }
+const knownGoodReceiptInputPath = canonicalKnownGoodReceiptPath;
 const receiptOutputPath = canonicalReceiptPath;
+let knownGoodReceiptBytes: Buffer | undefined;
+let approvalReceiptBytes: Buffer | undefined;
+if (existsSync(knownGoodReceiptInputPath)) {
+  knownGoodReceiptBytes = readFileSync(knownGoodReceiptInputPath);
+  let knownGoodReceiptHeader: unknown;
+  try {
+    knownGoodReceiptHeader = JSON.parse(knownGoodReceiptBytes.toString("utf8"));
+  } catch (cause) {
+    throw new Error("Known-good Convex receipt is not valid JSON", { cause });
+  }
+  const isGenesisReceipt =
+    typeof knownGoodReceiptHeader === "object" &&
+    knownGoodReceiptHeader !== null &&
+    !Array.isArray(knownGoodReceiptHeader) &&
+    "event" in knownGoodReceiptHeader &&
+    knownGoodReceiptHeader.event === "convex_production_genesis_receipt";
+  if (isGenesisReceipt && !canonicalApprovalReceiptPath) {
+    throw new Error("Genesis Convex receipt requires --approval-receipt");
+  }
+  if (!isGenesisReceipt && canonicalApprovalReceiptPath) {
+    throw new Error("Normal Convex receipt forbids --approval-receipt");
+  }
+  approvalReceiptBytes = canonicalApprovalReceiptPath
+    ? readFileSync(canonicalApprovalReceiptPath)
+    : undefined;
+}
 
 const environmentWithoutProductionCredentials =
   createConvexProductionBaseEnvironment(process.env);
@@ -218,54 +261,69 @@ const plan = createConvexProductionDeploymentPlan(
 const deployKey = process.env.CONVEX_DEPLOY_KEY!;
 const canarySecret = process.env.SOURCERA_CONVEX_CANARY_SECRET!;
 let knownGoodReceiptSha256: string | null = null;
-try {
-  const knownGoodReceiptBytes = readFileSync(
-    canonicalKnownGoodReceiptPath,
-    "utf8",
-  );
-  knownGoodReceiptSha256 = createHash("sha256")
-    .update(knownGoodReceiptBytes)
-    .digest("hex");
-  readPassingKnownGoodConvexReceipt(
-    JSON.parse(knownGoodReceiptBytes),
-    plan.knownGoodSha,
-    plan.target,
-  );
-  requireCleanCheckout(repositoryRoot, environmentWithoutProductionCredentials);
-  commandOutput(
-    "git",
-    ["cat-file", "-e", `${plan.knownGoodSha}^{commit}`],
-    repositoryRoot,
-    environmentWithoutProductionCredentials,
-  );
-  commandOutput(
-    "git",
-    ["merge-base", "--is-ancestor", plan.knownGoodSha, plan.approvedSha],
-    repositoryRoot,
-    environmentWithoutProductionCredentials,
-  );
-} catch (error) {
-  const preflightReceipt = createConvexProductionFailureReceipt({
-    approvedSha: plan.approvedSha,
-    checkedAt: new Date().toISOString(),
-    failureStage: "preflight",
-    knownGoodReceiptSha256,
-    knownGoodSha: plan.knownGoodSha,
-    result: "baseline_failed",
-    target: plan.target,
-  });
+async function runDeployment() {
   try {
-    writeConvexProductionReceipt(
-      receiptOutputPath,
-      preflightReceipt,
-      repositoryRoot,
+    knownGoodReceiptBytes ??= readFileSync(knownGoodReceiptInputPath);
+    approvalReceiptBytes ??= canonicalApprovalReceiptPath
+      ? readFileSync(canonicalApprovalReceiptPath)
+      : undefined;
+    knownGoodReceiptSha256 = createHash("sha256")
+      .update(knownGoodReceiptBytes)
+      .digest("hex");
+    const knownGood = readConvexProductionKnownGoodReceiptBytes(
+      knownGoodReceiptBytes,
+      approvalReceiptBytes,
+      {
+        approvedCandidateSha: plan.approvedSha,
+        githubRepository: process.env
+          .GITHUB_REPOSITORY as "meetblakey/sourcera",
+        githubRunAttempt: Number(process.env.GITHUB_RUN_ATTEMPT),
+        githubRunId: Number(process.env.GITHUB_RUN_ID),
+        knownGoodSha: plan.knownGoodSha,
+        target: plan.target,
+      },
     );
-  } catch {
-    // Stderr retains the negative receipt if durable output fails.
+    if (knownGood.knownGoodReceiptSha256 !== knownGoodReceiptSha256) {
+      throw new Error("Known-good Convex receipt hash changed during preflight");
+    }
+    requireCleanCheckout(
+      repositoryRoot,
+      environmentWithoutProductionCredentials,
+    );
+    commandOutput(
+      "git",
+      ["cat-file", "-e", `${plan.knownGoodSha}^{commit}`],
+      repositoryRoot,
+      environmentWithoutProductionCredentials,
+    );
+    commandOutput(
+      "git",
+      ["merge-base", "--is-ancestor", plan.knownGoodSha, plan.approvedSha],
+      repositoryRoot,
+      environmentWithoutProductionCredentials,
+    );
+  } catch (error) {
+    const preflightReceipt = createConvexProductionFailureReceipt({
+      approvedSha: plan.approvedSha,
+      checkedAt: new Date().toISOString(),
+      failureStage: "preflight",
+      knownGoodReceiptSha256,
+      knownGoodSha: plan.knownGoodSha,
+      result: "baseline_failed",
+      target: plan.target,
+    });
+    try {
+      writeConvexProductionReceipt(
+        receiptOutputPath,
+        preflightReceipt,
+        repositoryRoot,
+      );
+    } catch {
+      // Stderr retains the negative receipt if durable output fails.
+    }
+    process.stderr.write(`${JSON.stringify(preflightReceipt)}\n`);
+    throw error;
   }
-  process.stderr.write(`${JSON.stringify(preflightReceipt)}\n`);
-  throw error;
-}
 
 let temporaryRoot: string;
 try {
@@ -308,6 +366,87 @@ const releaseWorktree = path.join(temporaryRoot, "checkout");
 let worktreeAdded = false;
 let deploymentStarted = false;
 let identityStamped = false;
+let interruption:
+  | { exitCode: number; signal: "SIGHUP" | "SIGINT" | "SIGTERM" }
+  | undefined;
+let activeProviderCommand:
+  | { child: ChildProcess; interruptible: boolean }
+  | undefined;
+
+function terminateProviderCommand(child: ChildProcess) {
+  if (!child.pid) return;
+  try {
+    if (process.platform !== "win32") process.kill(-child.pid, "SIGTERM");
+    else child.kill("SIGTERM");
+  } catch {
+    child.kill("SIGTERM");
+  }
+}
+
+async function runProviderCommand(
+  command: string,
+  arguments_: string[],
+  cwd: string,
+  environment: NodeJS.ProcessEnv,
+  options: { capture: boolean; interruptible: boolean },
+) {
+  if (interruption && options.interruptible) {
+    throw new Error("Convex production command interrupted before execution");
+  }
+  if (activeProviderCommand) {
+    throw new Error("A Convex production provider command is already active");
+  }
+  const child = spawn(command, arguments_, {
+    cwd,
+    detached: process.platform !== "win32",
+    env: environment,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  activeProviderCommand = { child, interruptible: options.interruptible };
+  let stderr = "";
+  let stdout = "";
+  let outputBytes = 0;
+  let commandError: Error | undefined;
+  const capture = (stream: "stderr" | "stdout", chunk: Buffer) => {
+    outputBytes += chunk.byteLength;
+    if (outputBytes > 64 * 1024 * 1024) {
+      commandError ??= new Error("Convex provider output exceeded 64 MiB");
+      terminateProviderCommand(child);
+      return;
+    }
+    const text = chunk.toString("utf8");
+    if (stream === "stderr") {
+      stderr += text;
+      if (!options.capture) process.stderr.write(text);
+    } else {
+      stdout += text;
+      if (!options.capture) process.stdout.write(text);
+    }
+  };
+  child.stderr?.on("data", (chunk: Buffer) => capture("stderr", chunk));
+  child.stdout?.on("data", (chunk: Buffer) => capture("stdout", chunk));
+  child.once("error", (error) => {
+    commandError = error;
+  });
+  const status = await new Promise<number>((resolve) => {
+    child.once("close", (code) => resolve(code ?? 1));
+  });
+  if (activeProviderCommand?.child === child) activeProviderCommand = undefined;
+  if (commandError) throw commandError;
+  if (interruption && options.interruptible) {
+    throw new Error(
+      `Convex production command interrupted by ${interruption.signal}`,
+    );
+  }
+  if (status !== 0) {
+    throw new Error(
+      `${command} ${arguments_.join(" ")} failed${
+        stderr.trim() ? `: ${stderr.trim()}` : ""
+      }`,
+    );
+  }
+  return stdout.trimEnd();
+}
 
 function cleanupCheckout() {
   if (worktreeAdded) {
@@ -353,41 +492,17 @@ for (const [signal, exitCode] of [
   ["SIGTERM", 143],
 ] as const) {
   process.once(signal, () => {
-    try {
-      cleanup();
-    } catch {
-      // The interruption receipt below remains non-promotable.
+    interruption ??= { exitCode, signal };
+    if (activeProviderCommand?.interruptible) {
+      terminateProviderCommand(activeProviderCommand.child);
     }
-    try {
-      const interruptionReceipt = createConvexProductionFailureReceipt({
-        approvedSha: plan.approvedSha,
-        checkedAt: new Date().toISOString(),
-        failureStage: "signal",
-        knownGoodReceiptSha256,
-        knownGoodSha: plan.knownGoodSha,
-        result: deploymentStarted
-          ? "interrupted_after_mutation"
-          : "interrupted_before_mutation",
-        rollbackAnchor: liveRollbackAnchor,
-        target: plan.target,
-      });
-      writeConvexProductionReceipt(
-        receiptOutputPath,
-        interruptionReceipt,
-        repositoryRoot,
-      );
-      process.stderr.write(`${JSON.stringify(interruptionReceipt)}\n`);
-    } catch {
-      // A pre-existing output is never overwritten.
-    }
-    process.exit(exitCode);
   });
 }
 
 try {
-  const execution = executeConvexProductionDeployment(plan, {
+  const execution = await executeConvexProductionDeploymentAsync(plan, {
     cleanupCheckout,
-    executeStep(release, step) {
+    async executeStep(release, step) {
       if (!worktreeAdded) {
         throw new Error("Convex production step has no detached checkout");
       }
@@ -423,25 +538,28 @@ try {
       environment.HOME = releaseHome;
       environment.XDG_CONFIG_HOME = releaseConfigHome;
       environment.npm_config_userconfig = releaseNpmUserConfig;
+      const rollbackInProgress =
+        deploymentStarted &&
+        liveRollbackAnchor !== undefined &&
+        release.approvedSha === plan.knownGoodSha;
       if (step.name !== "canary") {
-        runInherited(
+        await runProviderCommand(
           step.command,
           step.arguments,
           releaseWorktree,
           environment,
+          { capture: false, interruptible: !rollbackInProgress },
         );
         return undefined;
       }
 
-      const canary = spawnSync(step.command, step.arguments, {
-        cwd: releaseWorktree,
-        encoding: "utf8",
-        env: environment,
-      });
-      if (canary.error) throw canary.error;
-      if (canary.status !== 0) {
-        throw new Error("Convex production canary failed");
-      }
+      const canaryOutput = await runProviderCommand(
+        step.command,
+        step.arguments,
+        releaseWorktree,
+        environment,
+        { capture: true, interruptible: !rollbackInProgress },
+      );
       if (identityStamped) {
         assertControlledConvexReleaseIdentityChange(
           readGitStatus(releaseWorktree, releaseProcessEnvironment),
@@ -449,7 +567,7 @@ try {
       } else {
         requireCleanCheckout(releaseWorktree, releaseProcessEnvironment);
       }
-      return JSON.parse(canary.stdout) as unknown;
+      return JSON.parse(canaryOutput) as unknown;
     },
     prepareCheckout(commitSha) {
       if (worktreeAdded) {
@@ -540,7 +658,7 @@ try {
   writeConvexProductionReceipt(receiptOutputPath, receipt, repositoryRoot);
   process.stdout.write(serializedReceipt);
   if (execution.result !== "passed") {
-    process.exitCode = 1;
+    process.exitCode = interruption?.exitCode ?? 1;
   }
 } catch (error) {
   try {
@@ -553,9 +671,14 @@ try {
     error instanceof ConvexProductionCandidateError
       ? error.rollbackAnchor
       : liveRollbackAnchor;
-  const result =
-    error instanceof ConvexProductionBaselineError ||
-    (!rollbackAnchor && !deploymentStarted)
+  const result = interruption
+    ? error instanceof ConvexProductionRollbackError
+      ? "rollback_failed"
+      : deploymentStarted
+        ? "rollback_required"
+        : "interrupted_before_mutation"
+    : error instanceof ConvexProductionBaselineError ||
+        (!rollbackAnchor && !deploymentStarted)
       ? "baseline_failed"
       : error instanceof ConvexProductionRollbackError
         ? "rollback_failed"
@@ -563,7 +686,9 @@ try {
           ? "rollback_required"
           : "failed";
   const failureStage =
-    error instanceof ConvexProductionBaselineError
+    interruption
+      ? "signal"
+      : error instanceof ConvexProductionBaselineError
       ? "baseline"
       : error instanceof ConvexProductionRollbackError
         ? "rollback"
@@ -592,5 +717,13 @@ try {
     // Stderr retains the complete negative receipt if durable output fails.
   }
   process.stderr.write(`${JSON.stringify(failureReceipt)}\n`);
-  process.exitCode = 1;
+  process.exitCode = interruption?.exitCode ?? 1;
 }
+}
+
+void runDeployment().catch((error: unknown) => {
+  process.stderr.write(
+    `${error instanceof Error ? error.message : "Convex production deployment failed"}\n`,
+  );
+  process.exitCode = 1;
+});

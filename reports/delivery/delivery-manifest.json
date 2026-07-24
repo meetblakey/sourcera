@@ -103,7 +103,8 @@
       "section": "§1.5",
       "dependencies": [
         "F-001",
-        "F-005"
+        "F-005",
+        "F-502"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -139,7 +140,7 @@
       "section": "§1.5",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-286"
     },
     {
@@ -161,7 +162,7 @@
       "section": "§1.5",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "INT-48"
     },
     {
@@ -196,7 +197,7 @@
         "F-013"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-193"
     },
     {
@@ -209,7 +210,7 @@
         "F-014"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-194"
     },
     {
@@ -222,7 +223,7 @@
         "F-013"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-195"
     },
     {
@@ -235,7 +236,7 @@
         "F-013"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "BUY-196"
     },
     {
@@ -285,7 +286,7 @@
         "F-013"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-200"
     },
     {
@@ -312,7 +313,7 @@
         "F-094"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-202"
     },
     {
@@ -325,7 +326,7 @@
         "F-023"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-203"
     },
     {
@@ -339,7 +340,7 @@
         "F-227"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-204"
     },
     {
@@ -363,8 +364,8 @@
       "sourceVersion": "v7.1.0",
       "section": "§2.8.5",
       "dependencies": [
-        "F-023",
-        "F-018"
+        "F-018",
+        "F-023"
       ],
       "disposition": "executable",
       "release": "R1",
@@ -391,7 +392,7 @@
       "section": "§3.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-221"
     },
     {
@@ -404,7 +405,7 @@
         "F-029"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-222"
     },
     {
@@ -417,7 +418,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-223"
     },
     {
@@ -430,7 +431,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-224"
     },
     {
@@ -443,7 +444,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-225"
     },
     {
@@ -456,7 +457,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-226"
     },
     {
@@ -469,7 +470,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-227"
     },
     {
@@ -482,7 +483,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-228"
     },
     {
@@ -495,7 +496,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-229"
     },
     {
@@ -521,7 +522,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-231"
     },
     {
@@ -534,7 +535,7 @@
         "F-029"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-232"
     },
     {
@@ -547,7 +548,7 @@
         "F-035"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-233"
     },
     {
@@ -558,7 +559,7 @@
       "section": "§3.6",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-234"
     },
     {
@@ -571,7 +572,7 @@
         "F-042"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-235"
     },
     {
@@ -595,7 +596,7 @@
         "F-044"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-237"
     },
     {
@@ -608,7 +609,7 @@
         "F-044"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-238"
     },
     {
@@ -634,7 +635,7 @@
         "F-044"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-240"
     },
     {
@@ -647,7 +648,7 @@
         "F-330"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-241"
     },
     {
@@ -658,7 +659,7 @@
       "section": "§3.8",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-242"
     },
     {
@@ -671,7 +672,7 @@
         "F-050"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-243"
     },
     {
@@ -684,7 +685,7 @@
         "F-050"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-244"
     },
     {
@@ -747,7 +748,7 @@
       "section": "§3.10",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-250"
     },
     {
@@ -760,7 +761,7 @@
         "F-057"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-249"
     },
     {
@@ -773,7 +774,7 @@
         "F-057"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-251"
     },
     {
@@ -786,7 +787,7 @@
         "F-057"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-252"
     },
     {
@@ -799,7 +800,7 @@
         "F-042"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-253"
     },
     {
@@ -825,7 +826,7 @@
         "F-061"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-255"
     },
     {
@@ -838,7 +839,7 @@
         "F-061"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-256"
     },
     {
@@ -851,7 +852,7 @@
         "F-061"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-257"
     },
     {
@@ -864,7 +865,7 @@
         "F-005"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-258"
     },
     {
@@ -877,7 +878,7 @@
         "F-066"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-259"
     },
     {
@@ -929,7 +930,7 @@
         "F-066"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-263"
     },
     {
@@ -942,7 +943,7 @@
         "F-066"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-264"
     },
     {
@@ -955,7 +956,7 @@
         "F-030"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-265"
     },
     {
@@ -968,7 +969,7 @@
         "F-073"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-266"
     },
     {
@@ -978,11 +979,11 @@
       "sourceVersion": "v7.1.0",
       "section": "§3.14",
       "dependencies": [
-        "F-073",
-        "F-024"
+        "F-024",
+        "F-073"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-267"
     },
     {
@@ -995,7 +996,7 @@
         "F-075"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-268"
     },
     {
@@ -1008,7 +1009,7 @@
         "F-075"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-269"
     },
     {
@@ -1019,7 +1020,7 @@
       "section": "§4.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-270"
     },
     {
@@ -1043,7 +1044,7 @@
         "F-006"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-272"
     },
     {
@@ -1057,7 +1058,7 @@
         "F-080"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-273"
     },
     {
@@ -1070,7 +1071,7 @@
         "F-079"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-274"
     },
     {
@@ -1080,6 +1081,7 @@
       "sourceVersion": "v6.0.0",
       "section": "§4.3.1",
       "dependencies": [
+        "F-003",
         "F-079"
       ],
       "disposition": "executable",
@@ -1161,7 +1163,7 @@
       "section": "§4.3.7",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-211"
     },
     {
@@ -1187,7 +1189,7 @@
         "F-083"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-213"
     },
     {
@@ -1200,7 +1202,7 @@
         "F-083"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-214"
     },
     {
@@ -1213,7 +1215,7 @@
         "F-092"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-215"
     },
     {
@@ -1226,7 +1228,7 @@
         "F-093"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-276"
     },
     {
@@ -1278,7 +1280,7 @@
         "F-414"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "BUY-216"
     },
     {
@@ -1304,7 +1306,7 @@
         "F-099"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-281"
     },
     {
@@ -1417,7 +1419,7 @@
         "F-105"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R1",
       "issueId": "PLA-290"
     },
     {
@@ -1430,7 +1432,7 @@
         "F-105"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "SEL-77"
     },
     {
@@ -1489,7 +1491,7 @@
       "section": "§4.5.9",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-223"
     },
     {
@@ -1561,7 +1563,7 @@
         "F-120"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-295"
     },
     {
@@ -1574,7 +1576,7 @@
         "F-002"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-296"
     },
     {
@@ -1622,7 +1624,7 @@
         "F-125"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-299"
     },
     {
@@ -1648,7 +1650,7 @@
         "F-123"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-301"
     },
     {
@@ -1659,7 +1661,7 @@
       "section": "§4.8.6",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-302"
     },
     {
@@ -1685,7 +1687,7 @@
         "F-125"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-304"
     },
     {
@@ -1707,7 +1709,7 @@
       "section": "§4.8.10",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-306"
     },
     {
@@ -1729,7 +1731,7 @@
       "section": "§4.8.12",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R3",
       "issueId": "BUY-225"
     },
     {
@@ -1742,7 +1744,7 @@
         "F-127"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-308"
     },
     {
@@ -1756,7 +1758,7 @@
         "F-125"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-309"
     },
     {
@@ -1780,7 +1782,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-311"
     },
     {
@@ -1793,7 +1795,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-312"
     },
     {
@@ -1806,7 +1808,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-313"
     },
     {
@@ -1819,7 +1821,7 @@
         "F-137"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-314"
     },
     {
@@ -1829,11 +1831,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§5.2.1.4",
       "dependencies": [
-        "F-142",
-        "F-117"
+        "F-117",
+        "F-142"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-315"
     },
     {
@@ -1846,7 +1848,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-316"
     },
     {
@@ -1859,7 +1861,7 @@
         "F-144"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-317"
     },
     {
@@ -1872,7 +1874,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-318"
     },
     {
@@ -1885,7 +1887,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-319"
     },
     {
@@ -1898,7 +1900,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-320"
     },
     {
@@ -1911,7 +1913,7 @@
         "F-148"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-321"
     },
     {
@@ -1924,7 +1926,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-322"
     },
     {
@@ -1937,7 +1939,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-323"
     },
     {
@@ -1950,7 +1952,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-324"
     },
     {
@@ -1989,7 +1991,7 @@
         "F-088"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-327"
     },
     {
@@ -2000,7 +2002,7 @@
       "section": "§5.8",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-328"
     },
     {
@@ -2065,7 +2067,7 @@
         "F-006"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-333"
     },
     {
@@ -2104,7 +2106,7 @@
         "F-161"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-336"
     },
     {
@@ -2117,7 +2119,7 @@
         "F-164"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-337"
     },
     {
@@ -2130,7 +2132,7 @@
         "F-161"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R5",
       "issueId": "PLA-338"
     },
     {
@@ -2156,7 +2158,7 @@
         "F-138"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-340"
     },
     {
@@ -2195,7 +2197,7 @@
         "F-170"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-343"
     },
     {
@@ -2219,7 +2221,7 @@
         "F-170"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-345"
     },
     {
@@ -2245,7 +2247,7 @@
         "F-173"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-347"
     },
     {
@@ -2258,7 +2260,7 @@
         "F-175"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-348"
     },
     {
@@ -2271,7 +2273,7 @@
         "F-173"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-349"
     },
     {
@@ -2284,7 +2286,7 @@
         "F-079"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-350"
     },
     {
@@ -2297,7 +2299,7 @@
         "F-079"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-351"
     },
     {
@@ -2310,7 +2312,7 @@
         "F-079"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-352"
     },
     {
@@ -2323,7 +2325,7 @@
         "F-180"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R5",
       "issueId": "PLA-353"
     },
     {
@@ -2334,7 +2336,7 @@
       "section": "§7.3",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-354"
     },
     {
@@ -2347,7 +2349,7 @@
         "F-005"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-355"
     },
     {
@@ -2360,7 +2362,7 @@
         "F-183"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-356"
     },
     {
@@ -2386,7 +2388,7 @@
         "F-185"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R1",
       "issueId": "PLA-358"
     },
     {
@@ -2542,7 +2544,7 @@
         "F-197"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R1",
       "issueId": "PLA-370"
     },
     {
@@ -2555,7 +2557,7 @@
         "F-197"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R1",
       "issueId": "PLA-371"
     },
     {
@@ -2568,7 +2570,7 @@
         "F-197"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R1",
       "issueId": "PLA-372"
     },
     {
@@ -2682,7 +2684,10 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.1",
       "dependencies": [
-        "F-013"
+        "F-013",
+        "F-047",
+        "F-084",
+        "F-160"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2708,10 +2713,15 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.2",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-210",
+        "F-235",
+        "F-236",
+        "F-237",
+        "F-238"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R0",
       "issueId": "BUY-228"
     },
     {
@@ -2721,7 +2731,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.3",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-211"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2734,10 +2745,11 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.4",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-212"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R0",
       "issueId": "BUY-230"
     },
     {
@@ -2747,10 +2759,12 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.5",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-213",
+        "F-791"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R0",
       "issueId": "BUY-231"
     },
     {
@@ -2760,7 +2774,12 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.6",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-214",
+        "F-397",
+        "F-409",
+        "F-774",
+        "F-775"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2786,10 +2805,11 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.7",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-215"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R0",
       "issueId": "BUY-234"
     },
     {
@@ -2799,7 +2819,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.8",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-217"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2812,7 +2833,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.9",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-218"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2825,8 +2847,10 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.10",
       "dependencies": [
+        "F-088",
         "F-209",
-        "F-088"
+        "F-219",
+        "F-260"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2855,7 +2879,7 @@
         "F-088"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-239"
     },
     {
@@ -2865,10 +2889,11 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.11",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-220"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R0",
       "issueId": "BUY-240"
     },
     {
@@ -2881,7 +2906,7 @@
         "F-223"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R0",
       "issueId": "BUY-241"
     },
     {
@@ -2891,7 +2916,10 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.12",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-221",
+        "F-223",
+        "F-224"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2920,7 +2948,7 @@
         "F-226"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-244"
     },
     {
@@ -2930,7 +2958,10 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.13",
       "dependencies": [
-        "F-209"
+        "F-209",
+        "F-225",
+        "F-226",
+        "F-776"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2943,7 +2974,10 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.13",
       "dependencies": [
-        "F-228"
+        "F-170",
+        "F-228",
+        "F-593",
+        "F-607"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -2959,7 +2993,7 @@
         "F-209"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "BUY-247"
     },
     {
@@ -2972,7 +3006,7 @@
         "F-230"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R2",
       "issueId": "BUY-248"
     },
     {
@@ -2985,7 +3019,7 @@
         "F-230"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "BUY-249"
     },
     {
@@ -3011,7 +3045,7 @@
         "F-209"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "BUY-251"
     },
     {
@@ -3047,8 +3081,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§10.16.3",
       "dependencies": [
-        "F-235",
-        "F-170"
+        "F-170",
+        "F-235"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -3074,11 +3108,11 @@
       "sourceVersion": "v7.1.0",
       "section": "§10.16",
       "dependencies": [
-        "F-235",
-        "F-023"
+        "F-023",
+        "F-235"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-256"
     },
     {
@@ -3089,7 +3123,7 @@
       "section": "§11.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-257"
     },
     {
@@ -3115,7 +3149,7 @@
         "F-240"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-260"
     },
     {
@@ -3129,7 +3163,7 @@
         "F-289"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-259"
     },
     {
@@ -3140,7 +3174,7 @@
       "section": "§12.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-261"
     },
     {
@@ -3153,7 +3187,7 @@
         "F-244"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-262"
     },
     {
@@ -3166,7 +3200,7 @@
         "F-245"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-263"
     },
     {
@@ -3179,7 +3213,7 @@
         "F-246"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-264"
     },
     {
@@ -3192,7 +3226,7 @@
         "F-247"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-265"
     },
     {
@@ -3206,7 +3240,7 @@
         "F-248"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-266"
     },
     {
@@ -3220,7 +3254,7 @@
         "F-249"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-267"
     },
     {
@@ -3233,7 +3267,7 @@
         "F-244"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "BUY-268"
     },
     {
@@ -3257,7 +3291,7 @@
         "F-252"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-270"
     },
     {
@@ -3270,7 +3304,7 @@
         "F-252"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-271"
     },
     {
@@ -3283,7 +3317,7 @@
         "F-253"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-272"
     },
     {
@@ -3296,7 +3330,7 @@
         "F-252"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-273"
     },
     {
@@ -3310,7 +3344,7 @@
         "F-256"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-274"
     },
     {
@@ -3325,7 +3359,7 @@
         "F-257"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-275"
     },
     {
@@ -3338,7 +3372,7 @@
         "F-252"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-276"
     },
     {
@@ -3365,7 +3399,7 @@
         "F-258"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-278"
     },
     {
@@ -3375,11 +3409,11 @@
       "sourceVersion": "v7.1.0",
       "section": "§13.11.5",
       "dependencies": [
-        "F-261",
-        "F-124"
+        "F-124",
+        "F-261"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-279"
     },
     {
@@ -3392,7 +3426,7 @@
         "F-261"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-381"
     },
     {
@@ -3406,7 +3440,7 @@
         "F-252"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-280"
     },
     {
@@ -3456,8 +3490,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§14.4",
       "dependencies": [
-        "F-265",
-        "F-258"
+        "F-258",
+        "F-265"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -3561,8 +3595,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§15.4",
       "dependencies": [
-        "F-273",
-        "F-258"
+        "F-258",
+        "F-273"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -3603,7 +3637,7 @@
       "section": "§16.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "BUY-295"
     },
     {
@@ -3652,8 +3686,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§16.5",
       "dependencies": [
-        "F-279",
-        "F-257"
+        "F-257",
+        "F-279"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -3719,7 +3753,7 @@
       "section": "§17.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-304"
     },
     {
@@ -3732,7 +3766,7 @@
         "F-288"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-305"
     },
     {
@@ -3899,7 +3933,7 @@
       "section": "§19.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "BUY-318"
     },
     {
@@ -3999,7 +4033,7 @@
       "section": "§20.3",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-326"
     },
     {
@@ -4012,7 +4046,7 @@
         "F-310"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-327"
     },
     {
@@ -4022,11 +4056,11 @@
       "sourceVersion": "v6.0.0",
       "section": "§20.5",
       "dependencies": [
-        "F-310",
-        "F-243"
+        "F-243",
+        "F-310"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-328"
     },
     {
@@ -4040,7 +4074,7 @@
         "F-311"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-329"
     },
     {
@@ -4053,7 +4087,7 @@
         "F-011"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "INT-49"
     },
     {
@@ -4076,11 +4110,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§21.4",
       "dependencies": [
-        "F-314",
-        "F-124"
+        "F-124",
+        "F-314"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "INT-51"
     },
     {
@@ -4090,8 +4124,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§21.5",
       "dependencies": [
-        "F-316",
-        "F-125"
+        "F-125",
+        "F-316"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4131,11 +4165,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§21.4.5",
       "dependencies": [
-        "F-316",
-        "F-127"
+        "F-127",
+        "F-316"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "INT-55"
     },
     {
@@ -4209,7 +4243,7 @@
         "F-325"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-85"
     },
     {
@@ -4248,7 +4282,7 @@
         "F-325"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "SEL-88"
     },
     {
@@ -4262,7 +4296,7 @@
         "F-327"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-89"
     },
     {
@@ -4288,7 +4322,7 @@
         "F-327"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "SEL-91"
     },
     {
@@ -4311,8 +4345,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§22.6",
       "dependencies": [
-        "F-324",
-        "F-010"
+        "F-010",
+        "F-324"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -4328,7 +4362,7 @@
         "F-321"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-94"
     },
     {
@@ -4392,8 +4426,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.8.4.3",
       "dependencies": [
-        "F-336",
-        "F-335"
+        "F-335",
+        "F-336"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4406,8 +4440,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.8.4.4",
       "dependencies": [
-        "F-336",
-        "F-335"
+        "F-335",
+        "F-336"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4433,8 +4467,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.8.4.6",
       "dependencies": [
-        "F-336",
-        "F-205"
+        "F-205",
+        "F-336"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4447,8 +4481,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.8.4.7",
       "dependencies": [
-        "F-336",
-        "F-325"
+        "F-325",
+        "F-336"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -4461,8 +4495,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.8.4.8",
       "dependencies": [
-        "F-336",
-        "F-327"
+        "F-327",
+        "F-336"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -4514,8 +4548,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.9",
       "dependencies": [
-        "F-336",
-        "F-325"
+        "F-325",
+        "F-336"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4568,9 +4602,9 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.10.2",
       "dependencies": [
-        "F-352",
         "F-338",
-        "F-344"
+        "F-344",
+        "F-352"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -4583,9 +4617,9 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.10.3",
       "dependencies": [
-        "F-352",
         "F-334",
-        "F-345"
+        "F-345",
+        "F-352"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -4598,8 +4632,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.10.4",
       "dependencies": [
-        "F-352",
-        "F-338"
+        "F-338",
+        "F-352"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4612,8 +4646,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.10.5",
       "dependencies": [
-        "F-352",
-        "F-343"
+        "F-343",
+        "F-352"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4626,11 +4660,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.10.6",
       "dependencies": [
-        "F-352",
-        "F-345"
+        "F-345",
+        "F-352"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "SEL-116"
     },
     {
@@ -4744,8 +4778,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.16.1",
       "dependencies": [
-        "F-353",
         "F-344",
+        "F-353",
         "F-359"
       ],
       "disposition": "executable",
@@ -4759,8 +4793,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§22.16.3",
       "dependencies": [
-        "F-352",
-        "F-349"
+        "F-349",
+        "F-352"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -4789,7 +4823,7 @@
         "F-324"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "SEL-128"
     },
     {
@@ -4932,11 +4966,11 @@
       "sourceVersion": "v7.1.0",
       "section": "§22.19",
       "dependencies": [
-        "F-120",
-        "F-077"
+        "F-077",
+        "F-120"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-139"
     },
     {
@@ -4949,7 +4983,7 @@
         "F-380"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-140"
     },
     {
@@ -4987,8 +5021,8 @@
       "sourceVersion": "v7.1.0",
       "section": "§22.20.4",
       "dependencies": [
-        "F-403",
-        "F-381"
+        "F-381",
+        "F-403"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -5044,7 +5078,7 @@
         "F-387"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "SEL-147"
     },
     {
@@ -5172,7 +5206,7 @@
         "F-396"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-384"
     },
     {
@@ -5185,7 +5219,7 @@
         "F-396"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-385"
     },
     {
@@ -5211,7 +5245,7 @@
         "F-396"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-387"
     },
     {
@@ -5224,7 +5258,7 @@
         "F-396"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "PLA-388"
     },
     {
@@ -5238,7 +5272,7 @@
         "F-396"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-389"
     },
     {
@@ -5251,7 +5285,7 @@
         "F-403"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R1",
       "issueId": "PLA-390"
     },
     {
@@ -5264,7 +5298,7 @@
         "F-403"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-391"
     },
     {
@@ -5290,7 +5324,7 @@
         "F-403"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-393"
     },
     {
@@ -5313,8 +5347,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§25.5",
       "dependencies": [
-        "F-396",
-        "F-387"
+        "F-387",
+        "F-396"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -5330,7 +5364,7 @@
         "F-409"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-396"
     },
     {
@@ -5343,7 +5377,7 @@
         "F-396"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-397"
     },
     {
@@ -5354,7 +5388,7 @@
       "section": "§25.7",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-398"
     },
     {
@@ -5380,7 +5414,7 @@
         "F-412"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-400"
     },
     {
@@ -5454,11 +5488,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§26.7.2",
       "dependencies": [
-        "F-419",
-        "F-334"
+        "F-334",
+        "F-419"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R3",
       "issueId": "SEL-160"
     },
     {
@@ -5471,7 +5505,7 @@
         "F-419"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R3",
       "issueId": "SEL-161"
     },
     {
@@ -5510,7 +5544,7 @@
         "F-423"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R3",
       "issueId": "SEL-164"
     },
     {
@@ -5550,7 +5584,7 @@
         "F-419"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R3",
       "issueId": "SEL-167"
     },
     {
@@ -5575,7 +5609,7 @@
       "section": "§27.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "BUY-330"
     },
     {
@@ -5599,8 +5633,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§27.4",
       "dependencies": [
-        "F-417",
-        "F-332"
+        "F-332",
+        "F-417"
       ],
       "disposition": "executable",
       "release": "R3",
@@ -5656,7 +5690,7 @@
         "F-429"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "SEL-170"
     },
     {
@@ -5682,7 +5716,7 @@
         "F-435"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "BUY-336"
     },
     {
@@ -5695,7 +5729,7 @@
         "F-435"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "SEL-171"
     },
     {
@@ -5913,8 +5947,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§27.9.5",
       "dependencies": [
-        "F-453",
-        "F-440"
+        "F-440",
+        "F-453"
       ],
       "disposition": "executable",
       "release": "R3",
@@ -5940,8 +5974,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§27.9.8",
       "dependencies": [
-        "F-453",
-        "F-446"
+        "F-446",
+        "F-453"
       ],
       "disposition": "executable",
       "release": "R3",
@@ -6020,7 +6054,7 @@
       "section": "§28.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-401"
     },
     {
@@ -6033,7 +6067,7 @@
         "F-463"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-402"
     },
     {
@@ -6046,7 +6080,7 @@
         "F-463"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-403"
     },
     {
@@ -6187,7 +6221,7 @@
         "F-044"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "PLA-414"
     },
     {
@@ -6198,7 +6232,7 @@
       "section": "§30.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-415"
     },
     {
@@ -6211,7 +6245,7 @@
         "F-477"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-416"
     },
     {
@@ -6224,7 +6258,7 @@
         "F-477"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-417"
     },
     {
@@ -6237,7 +6271,7 @@
         "F-477"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-418"
     },
     {
@@ -6250,7 +6284,7 @@
         "F-478"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-419"
     },
     {
@@ -6263,7 +6297,7 @@
         "F-477"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-420"
     },
     {
@@ -6274,7 +6308,7 @@
       "section": "§31.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-421"
     },
     {
@@ -6353,7 +6387,7 @@
         "F-505"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-427"
     },
     {
@@ -6442,7 +6476,7 @@
       "section": "§32.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R5",
       "issueId": "PLA-434"
     },
     {
@@ -6557,7 +6591,7 @@
         "F-006"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-443"
     },
     {
@@ -6601,7 +6635,7 @@
       "section": "§34.1.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-447"
     },
     {
@@ -6623,7 +6657,7 @@
       "section": "§34.1.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-449"
     },
     {
@@ -6634,7 +6668,7 @@
       "section": "§34.1.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-450"
     },
     {
@@ -6645,7 +6679,7 @@
       "section": "§34.1.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-451"
     },
     {
@@ -6689,7 +6723,7 @@
       "section": "§34.1.2",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-455"
     },
     {
@@ -6700,7 +6734,7 @@
       "section": "§34.1.2",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-456"
     },
     {
@@ -6711,7 +6745,7 @@
       "section": "§34.1.2",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-457"
     },
     {
@@ -6749,7 +6783,7 @@
         "F-131"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-460"
     },
     {
@@ -6814,7 +6848,7 @@
         "F-528"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-465"
     },
     {
@@ -6827,7 +6861,7 @@
         "F-133"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-466"
     },
     {
@@ -6850,8 +6884,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§34.8",
       "dependencies": [
-        "F-130",
-        "F-125"
+        "F-125",
+        "F-130"
       ],
       "disposition": "executable",
       "release": "R2",
@@ -6903,11 +6937,11 @@
       "sourceVersion": "v6.0.0",
       "section": "§34.9.2",
       "dependencies": [
-        "F-354",
-        "F-353"
+        "F-353",
+        "F-354"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-472"
     },
     {
@@ -6930,8 +6964,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§34.10",
       "dependencies": [
-        "F-523",
-        "F-125"
+        "F-125",
+        "F-523"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -6973,7 +7007,7 @@
         "F-007"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-477"
     },
     {
@@ -6983,11 +7017,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§34.11",
       "dependencies": [
-        "F-127",
-        "F-123"
+        "F-123",
+        "F-127"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-478"
     },
     {
@@ -7154,7 +7188,7 @@
         "F-552"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R2",
       "issueId": "PLA-491"
     },
     {
@@ -7225,11 +7259,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§35.2",
       "dependencies": [
-        "F-321",
-        "F-545",
-        "F-392",
+        "F-006",
         "F-010",
-        "F-006"
+        "F-321",
+        "F-392",
+        "F-545"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -7242,8 +7276,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§35.2.3",
       "dependencies": [
-        "F-354",
-        "F-353"
+        "F-353",
+        "F-354"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -7256,8 +7290,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§35.2.6",
       "dependencies": [
-        "F-321",
-        "F-123"
+        "F-123",
+        "F-321"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -7283,8 +7317,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§35.2.9",
       "dependencies": [
-        "F-545",
-        "F-528"
+        "F-528",
+        "F-545"
       ],
       "disposition": "executable",
       "release": "R2",
@@ -7324,7 +7358,7 @@
         "F-179"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "BUY-357"
     },
     {
@@ -7421,7 +7455,7 @@
         "F-005"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-503"
     },
     {
@@ -7434,7 +7468,7 @@
         "F-583"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-504"
     },
     {
@@ -7445,7 +7479,7 @@
       "section": "§38.6",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-505"
     },
     {
@@ -7458,7 +7492,7 @@
         "F-576"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-506"
     },
     {
@@ -7471,7 +7505,7 @@
         "F-577"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-507"
     },
     {
@@ -7484,7 +7518,7 @@
         "F-576"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-508"
     },
     {
@@ -7497,7 +7531,7 @@
         "F-040"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-509"
     },
     {
@@ -7510,7 +7544,7 @@
         "F-582"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-510"
     },
     {
@@ -7521,7 +7555,7 @@
       "section": "§38.7.4",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-511"
     },
     {
@@ -7532,7 +7566,7 @@
       "section": "§38.8",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-512"
     },
     {
@@ -7545,7 +7579,7 @@
         "F-577"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-513"
     },
     {
@@ -7568,11 +7602,11 @@
       "sourceVersion": "v7.1.0",
       "section": "§38.8.5",
       "dependencies": [
-        "F-582",
-        "F-579"
+        "F-579",
+        "F-582"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-515"
     },
     {
@@ -7583,7 +7617,7 @@
       "section": "§38.9",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-516"
     },
     {
@@ -7594,7 +7628,7 @@
       "section": "§38.10",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-517"
     },
     {
@@ -7653,7 +7687,7 @@
       "section": "§40.2",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R0",
       "issueId": "PLA-522"
     },
     {
@@ -7690,7 +7724,7 @@
         "F-009"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-525"
     },
     {
@@ -7716,7 +7750,7 @@
         "F-596"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-527"
     },
     {
@@ -7749,7 +7783,7 @@
       "section": "§42.3",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-530"
     },
     {
@@ -7786,7 +7820,7 @@
       "section": "§42.5",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-533"
     },
     {
@@ -7810,7 +7844,7 @@
         "F-605"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-535"
     },
     {
@@ -7850,7 +7884,7 @@
         "F-161"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-897"
     },
     {
@@ -7897,8 +7931,8 @@
       "sourceVersion": "v6.0.0",
       "section": "§44.2",
       "dependencies": [
-        "F-536",
-        "F-011"
+        "F-011",
+        "F-536"
       ],
       "disposition": "executable",
       "release": "R4",
@@ -7912,7 +7946,7 @@
       "section": "§44.3",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-539"
     },
     {
@@ -7937,7 +7971,7 @@
         "F-540"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-541"
     },
     {
@@ -7950,7 +7984,7 @@
         "F-616"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-542"
     },
     {
@@ -7963,7 +7997,7 @@
         "F-616"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-543"
     },
     {
@@ -7989,7 +8023,7 @@
         "F-616"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-545"
     },
     {
@@ -8002,7 +8036,7 @@
         "F-124"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-546"
     },
     {
@@ -8015,7 +8049,7 @@
         "F-483"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-547"
     },
     {
@@ -8041,7 +8075,7 @@
         "F-616"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-549"
     },
     {
@@ -8052,7 +8086,7 @@
       "section": "§45.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-550"
     },
     {
@@ -8108,7 +8142,13 @@
       "sourceVersion": "v6.0.0",
       "section": "§46.3",
       "dependencies": [
-        "F-008"
+        "F-008",
+        "F-572",
+        "F-600",
+        "F-603",
+        "F-605",
+        "F-612",
+        "F-628"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -8135,7 +8175,7 @@
       "section": "§47.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R2",
       "issueId": "PLA-557"
     },
     {
@@ -8148,7 +8188,7 @@
         "F-631"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R2",
       "issueId": "PLA-558"
     },
     {
@@ -8184,7 +8224,7 @@
         "F-099"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-561"
     },
     {
@@ -8194,11 +8234,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§48.1.1",
       "dependencies": [
-        "F-636",
-        "F-527"
+        "F-527",
+        "F-636"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-562"
     },
     {
@@ -8234,8 +8274,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§48.1.5",
       "dependencies": [
-        "F-559",
-        "F-354"
+        "F-354",
+        "F-559"
       ],
       "disposition": "executable",
       "release": "R3",
@@ -8291,7 +8331,7 @@
         "F-606"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-569"
     },
     {
@@ -8301,11 +8341,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§48.2.2",
       "dependencies": [
-        "F-440",
-        "F-329"
+        "F-329",
+        "F-440"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-570"
     },
     {
@@ -8471,7 +8511,7 @@
       "section": "§48.4",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-583"
     },
     {
@@ -8519,7 +8559,7 @@
         "F-369"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-587"
     },
     {
@@ -8532,7 +8572,7 @@
         "F-302"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-588"
     },
     {
@@ -8567,7 +8607,7 @@
       "section": "§48.4.8",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R3",
       "issueId": "PLA-591"
     },
     {
@@ -8580,7 +8620,7 @@
         "F-658"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-592"
     },
     {
@@ -8593,7 +8633,7 @@
         "F-435"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-593"
     },
     {
@@ -8658,7 +8698,7 @@
         "F-645"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-598"
     },
     {
@@ -8671,7 +8711,7 @@
         "F-166"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R5",
       "issueId": "PLA-599"
     },
     {
@@ -8697,7 +8737,7 @@
         "F-279"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-601"
     },
     {
@@ -8785,7 +8825,7 @@
         "F-538"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-608"
     },
     {
@@ -8814,7 +8854,7 @@
         "F-335"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-610"
     },
     {
@@ -8825,7 +8865,7 @@
       "section": "§48.8.7",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-611"
     },
     {
@@ -8835,7 +8875,14 @@
       "sourceVersion": "v7.0.0",
       "section": "§49.1",
       "dependencies": [
-        "F-559"
+        "F-559",
+        "F-630",
+        "F-751",
+        "F-752",
+        "F-753",
+        "F-755",
+        "F-779",
+        "F-780"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -8861,11 +8908,12 @@
       "sourceVersion": "v7.0.0",
       "section": "§49.1.2",
       "dependencies": [
+        "F-334",
         "F-354",
-        "F-334"
+        "F-789"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R0",
       "issueId": "SEL-186"
     },
     {
@@ -8914,8 +8962,8 @@
       "sourceVersion": "v7.0.0",
       "section": "§49.1.6",
       "dependencies": [
-        "F-687",
-        "F-561"
+        "F-561",
+        "F-687"
       ],
       "disposition": "executable",
       "release": "R0",
@@ -8944,7 +8992,7 @@
         "F-686"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "SEL-192"
     },
     {
@@ -8954,11 +9002,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§50",
       "dependencies": [
-        "F-006",
-        "F-005"
+        "F-005",
+        "F-006"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-612"
     },
     {
@@ -8971,7 +9019,7 @@
         "F-696"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-613"
     },
     {
@@ -8984,7 +9032,7 @@
         "F-006"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-614"
     },
     {
@@ -8997,7 +9045,7 @@
         "F-119"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-615"
     },
     {
@@ -9010,7 +9058,7 @@
         "F-005"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-616"
     },
     {
@@ -9023,7 +9071,7 @@
         "F-696"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-617"
     },
     {
@@ -9036,7 +9084,7 @@
         "F-006"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-618"
     },
     {
@@ -9047,7 +9095,7 @@
       "section": "§50.3.5",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-619"
     },
     {
@@ -9060,7 +9108,7 @@
         "F-119"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-620"
     },
     {
@@ -9073,7 +9121,7 @@
         "F-704"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-621"
     },
     {
@@ -9086,7 +9134,7 @@
         "F-119"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-622"
     },
     {
@@ -9099,7 +9147,7 @@
         "F-704"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-623"
     },
     {
@@ -9112,7 +9160,7 @@
         "F-009"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "PLA-624"
     },
     {
@@ -9125,7 +9173,7 @@
         "F-119"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-625"
     },
     {
@@ -9138,7 +9186,7 @@
         "F-119"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-626"
     },
     {
@@ -9152,7 +9200,7 @@
         "F-123"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-627"
     },
     {
@@ -9165,7 +9213,7 @@
         "F-711"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-628"
     },
     {
@@ -9178,7 +9226,7 @@
         "F-601"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-629"
     },
     {
@@ -9191,7 +9239,7 @@
         "F-644"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-630"
     },
     {
@@ -9204,7 +9252,7 @@
         "F-435"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "PLA-631"
     },
     {
@@ -9217,7 +9265,7 @@
         "F-715"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "PLA-632"
     },
     {
@@ -9230,7 +9278,7 @@
         "F-438"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-633"
     },
     {
@@ -9243,7 +9291,7 @@
         "F-437"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "PLA-634"
     },
     {
@@ -9256,7 +9304,7 @@
         "F-718"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "PLA-635"
     },
     {
@@ -9269,7 +9317,7 @@
         "F-435"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-636"
     },
     {
@@ -9279,11 +9327,11 @@
       "sourceVersion": "v7.0.0",
       "section": "§50.11",
       "dependencies": [
-        "F-663",
-        "F-302"
+        "F-302",
+        "F-663"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-637"
     },
     {
@@ -9296,7 +9344,7 @@
         "F-721"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-638"
     },
     {
@@ -9309,7 +9357,7 @@
         "F-721"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-639"
     },
     {
@@ -9322,7 +9370,7 @@
         "F-722"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-640"
     },
     {
@@ -9332,10 +9380,28 @@
       "sourceVersion": "v7.0.0",
       "section": "§50.12",
       "dependencies": [
-        "F-132"
+        "F-008",
+        "F-117",
+        "F-119",
+        "F-123",
+        "F-124",
+        "F-132",
+        "F-160",
+        "F-483",
+        "F-499",
+        "F-600",
+        "F-697",
+        "F-701",
+        "F-726",
+        "F-727",
+        "F-728",
+        "F-729",
+        "F-730",
+        "F-779",
+        "F-780"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-641"
     },
     {
@@ -9348,7 +9414,7 @@
         "F-132"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-642"
     },
     {
@@ -9361,7 +9427,7 @@
         "F-726"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-643"
     },
     {
@@ -9400,7 +9466,7 @@
         "F-129"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-646"
     },
     {
@@ -9413,7 +9479,7 @@
         "F-100"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-647"
     },
     {
@@ -9426,7 +9492,7 @@
         "F-731"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-648"
     },
     {
@@ -9439,7 +9505,7 @@
         "F-732"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-649"
     },
     {
@@ -9512,7 +9578,7 @@
         "F-725"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-655"
     },
     {
@@ -9538,7 +9604,7 @@
         "F-667"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-657"
     },
     {
@@ -9551,7 +9617,7 @@
         "F-667"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-658"
     },
     {
@@ -9564,7 +9630,7 @@
         "F-742"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-659"
     },
     {
@@ -9577,7 +9643,7 @@
         "F-742"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-660"
     },
     {
@@ -9590,7 +9656,7 @@
         "F-644"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-661"
     },
     {
@@ -9603,7 +9669,7 @@
         "F-741"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-663"
     },
     {
@@ -9616,7 +9682,7 @@
         "F-743"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "PLA-664"
     },
     {
@@ -9629,7 +9695,7 @@
         "F-668"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-662"
     },
     {
@@ -9640,7 +9706,7 @@
       "section": "§50.17.4",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-665"
     },
     {
@@ -9651,7 +9717,7 @@
       "section": "§50.17.5",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-666"
     },
     {
@@ -9703,7 +9769,7 @@
         "F-751"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-670"
     },
     {
@@ -9755,7 +9821,7 @@
         "F-008"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-674"
     },
     {
@@ -9768,7 +9834,7 @@
         "F-099"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-675"
     },
     {
@@ -9807,7 +9873,7 @@
         "F-760"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-678"
     },
     {
@@ -9833,7 +9899,7 @@
         "F-123"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-680"
     },
     {
@@ -9872,7 +9938,7 @@
         "F-731"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-683"
     },
     {
@@ -9885,7 +9951,7 @@
         "F-731"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-684"
     },
     {
@@ -9898,7 +9964,7 @@
         "F-732"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-685"
     },
     {
@@ -9911,7 +9977,7 @@
         "F-593"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-686"
     },
     {
@@ -9924,7 +9990,7 @@
         "F-755"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-687"
     },
     {
@@ -9937,7 +10003,7 @@
         "F-770"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-688"
     },
     {
@@ -10003,7 +10069,7 @@
         "F-483"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-690"
     },
     {
@@ -10013,11 +10079,11 @@
       "sourceVersion": "v7.0.0",
       "section": "Appendix F.2",
       "dependencies": [
-        "F-777",
-        "F-489"
+        "F-489",
+        "F-777"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-691"
     },
     {
@@ -10070,7 +10136,7 @@
         "F-496"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R5",
       "issueId": "PLA-695"
     },
     {
@@ -10081,7 +10147,7 @@
       "section": "Appendix J",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-696"
     },
     {
@@ -10092,7 +10158,7 @@
       "section": "Appendix K",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-697"
     },
     {
@@ -10146,7 +10212,7 @@
         "F-667"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-699"
     },
     {
@@ -10172,7 +10238,7 @@
         "F-329"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "SEL-196"
     },
     {
@@ -10198,7 +10264,7 @@
         "F-073"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-700"
     },
     {
@@ -10211,7 +10277,7 @@
         "F-792"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-701"
     },
     {
@@ -10224,7 +10290,7 @@
         "F-793"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-702"
     },
     {
@@ -10250,7 +10316,7 @@
         "F-795"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-703"
     },
     {
@@ -10263,7 +10329,7 @@
         "F-795"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-704"
     },
     {
@@ -10276,7 +10342,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-705"
     },
     {
@@ -10289,7 +10355,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-706"
     },
     {
@@ -10302,7 +10368,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-707"
     },
     {
@@ -10315,7 +10381,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-708"
     },
     {
@@ -10328,7 +10394,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-709"
     },
     {
@@ -10419,7 +10485,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-711"
     },
     {
@@ -10432,7 +10498,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-712"
     },
     {
@@ -10445,7 +10511,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-713"
     },
     {
@@ -10484,7 +10550,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-714"
     },
     {
@@ -10497,7 +10563,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-715"
     },
     {
@@ -10510,7 +10576,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-716"
     },
     {
@@ -10536,7 +10602,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-718"
     },
     {
@@ -10588,7 +10654,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-719"
     },
     {
@@ -10705,7 +10771,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-721"
     },
     {
@@ -10757,7 +10823,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-723"
     },
     {
@@ -10783,7 +10849,7 @@
         "F-074"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-724"
     },
     {
@@ -10936,8 +11002,8 @@
       "sourceVersion": "v3",
       "section": "Seller Pricing §Forced Signup",
       "dependencies": [
-        "F-645",
-        "F-559"
+        "F-559",
+        "F-645"
       ],
       "disposition": "narrative_context",
       "release": null,
@@ -11066,7 +11132,7 @@
       "section": "UX Design §Tokens.Color",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-725"
     },
     {
@@ -11077,7 +11143,7 @@
       "section": "UX Design §Tokens.Typography",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-726"
     },
     {
@@ -11088,7 +11154,7 @@
       "section": "UX Design §Tokens.Spacing",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-727"
     },
     {
@@ -11099,7 +11165,7 @@
       "section": "UX Design §Tokens.Radius",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-728"
     },
     {
@@ -11110,7 +11176,7 @@
       "section": "UX Design §Tokens.Elevation",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-729"
     },
     {
@@ -11121,7 +11187,7 @@
       "section": "UX Design §Tokens.Motion",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-730"
     },
     {
@@ -11134,7 +11200,7 @@
         "F-859"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-731"
     },
     {
@@ -11147,7 +11213,7 @@
         "F-860"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-732"
     },
     {
@@ -11160,7 +11226,7 @@
         "F-866"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-733"
     },
     {
@@ -11173,7 +11239,7 @@
         "F-863"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-734"
     },
     {
@@ -11186,7 +11252,7 @@
         "F-863"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-735"
     },
     {
@@ -11199,7 +11265,7 @@
         "F-864"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "PLA-736"
     },
     {
@@ -11212,7 +11278,7 @@
         "F-864"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-737"
     },
     {
@@ -11223,7 +11289,7 @@
       "section": "UX Design §Components.Tabs",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-738"
     },
     {
@@ -11234,7 +11300,7 @@
       "section": "UX Design §Components.Table",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-739"
     },
     {
@@ -11247,7 +11313,7 @@
         "F-873"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R2",
       "issueId": "PLA-740"
     },
     {
@@ -11260,7 +11326,7 @@
         "F-882"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-741"
     },
     {
@@ -11273,7 +11339,7 @@
         "F-864"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-742"
     },
     {
@@ -11286,7 +11352,7 @@
         "F-047"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-743"
     },
     {
@@ -11299,7 +11365,7 @@
         "F-866"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-744"
     },
     {
@@ -11312,7 +11378,7 @@
         "F-240"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-745"
     },
     {
@@ -11325,7 +11391,7 @@
         "F-002"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-746"
     },
     {
@@ -11338,7 +11404,7 @@
         "F-864"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-747"
     },
     {
@@ -11349,7 +11415,7 @@
       "section": "UX Design §Iconography",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-748"
     },
     {
@@ -11362,7 +11428,7 @@
         "F-875"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-749"
     },
     {
@@ -11375,7 +11441,7 @@
         "F-861"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-750"
     },
     {
@@ -11388,7 +11454,7 @@
         "F-061"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-751"
     },
     {
@@ -11539,13 +11605,13 @@
       "sourceVersion": "v7.0.0",
       "section": "§35.2",
       "dependencies": [
-        "F-559",
-        "F-685",
+        "F-099",
         "F-534",
-        "F-099"
+        "F-559",
+        "F-685"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-362"
     },
     {
@@ -11555,12 +11621,12 @@
       "sourceVersion": "v7.1.0",
       "section": "§13.12",
       "dependencies": [
-        "F-264",
         "F-115",
+        "F-264",
         "F-AE-037"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-364"
     },
     {
@@ -11573,7 +11639,7 @@
         "F-175"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-900"
     },
     {
@@ -11586,7 +11652,7 @@
         "F-176"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-901"
     },
     {
@@ -11599,7 +11665,7 @@
         "F-182"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-903"
     },
     {
@@ -11612,7 +11678,7 @@
         "F-183"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R1",
       "issueId": "PLA-902"
     },
     {
@@ -11651,7 +11717,7 @@
         "F-749"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-906"
     },
     {
@@ -11677,7 +11743,7 @@
         "F-554"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R2",
       "issueId": "PLA-908"
     },
     {
@@ -11690,7 +11756,7 @@
         "F-279"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R4",
       "issueId": "BUY-386"
     },
     {
@@ -11781,7 +11847,7 @@
         "F-606"
       ],
       "disposition": "executable",
-      "release": "R4",
+      "release": "R2",
       "issueId": "PLA-909"
     },
     {
@@ -11794,7 +11860,7 @@
         "F-777"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-910"
     },
     {
@@ -11820,7 +11886,7 @@
         "F-320"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "INT-56"
     },
     {
@@ -11833,7 +11899,7 @@
         "F-159"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-912"
     },
     {
@@ -11859,7 +11925,7 @@
         "F-239"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "BUY-392"
     },
     {
@@ -11885,7 +11951,7 @@
         "F-262"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-394"
     },
     {
@@ -11898,7 +11964,7 @@
         "F-261"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R4",
       "issueId": "BUY-395"
     },
     {
@@ -11911,7 +11977,7 @@
         "F-261"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-396"
     },
     {
@@ -11937,7 +12003,7 @@
         "F-075"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-914"
     },
     {
@@ -11950,7 +12016,7 @@
         "F-859"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-915"
     },
     {
@@ -11963,7 +12029,7 @@
         "F-076"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-916"
     },
     {
@@ -11976,7 +12042,7 @@
         "F-264"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-397"
     },
     {
@@ -11989,7 +12055,7 @@
         "F-115"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R4",
       "issueId": "BUY-398"
     },
     {
@@ -12002,7 +12068,7 @@
         "F-115"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "BUY-399"
     },
     {
@@ -12028,7 +12094,7 @@
         "F-264"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-401"
     },
     {
@@ -12041,7 +12107,7 @@
         "F-115"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-402"
     },
     {
@@ -12093,7 +12159,7 @@
         "F-381"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-252"
     },
     {
@@ -12145,7 +12211,7 @@
         "F-685"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-918"
     },
     {
@@ -12198,7 +12264,7 @@
         "F-544"
       ],
       "disposition": "executable",
-      "release": "R5",
+      "release": "R2",
       "issueId": "PLA-922"
     },
     {
@@ -12224,7 +12290,7 @@
         "F-539"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-924"
     },
     {
@@ -12276,7 +12342,7 @@
         "F-516"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R3",
       "issueId": "PLA-928"
     },
     {
@@ -12302,7 +12368,7 @@
         "F-621"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-929"
     },
     {
@@ -12328,7 +12394,7 @@
         "F-621"
       ],
       "disposition": "executable",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-931"
     },
     {
@@ -12341,7 +12407,7 @@
         "F-123"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-932"
     },
     {
@@ -12354,7 +12420,7 @@
         "F-622"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-933"
     },
     {
@@ -12367,7 +12433,7 @@
         "F-616"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-934"
     },
     {
@@ -12380,7 +12446,7 @@
         "F-621"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-935"
     },
     {
@@ -12393,7 +12459,7 @@
         "F-622"
       ],
       "disposition": "executable",
-      "release": "R1",
+      "release": "R4",
       "issueId": "PLA-936"
     },
     {
@@ -12419,7 +12485,7 @@
         "F-685"
       ],
       "disposition": "executable",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-937"
     },
     {
@@ -12432,7 +12498,7 @@
         "F-239"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R5",
       "issueId": "BUY-403"
     },
     {
@@ -12445,7 +12511,7 @@
         "F-797"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-938"
     },
     {
@@ -12458,7 +12524,7 @@
         "F-AE-069"
       ],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-939"
     },
     {
@@ -12469,7 +12535,7 @@
       "section": "_integration/RECONCILIATION.md → Phase 14.0.1",
       "dependencies": [],
       "disposition": "executable",
-      "release": "R0",
+      "release": "R3",
       "issueId": "PLA-940"
     },
     {
@@ -12503,7 +12569,7 @@
       "outcome": "Prove runtime gate accessibility_settings_preference_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71938",
+      "section": "line:71950",
       "dependencies": [
         "F-062"
       ],
@@ -12516,7 +12582,7 @@
       "outcome": "Prove runtime gate agent_budget_breach",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72890",
+      "section": "line:72902",
       "dependencies": [
         "F-613",
         "F-318"
@@ -12530,13 +12596,13 @@
       "outcome": "Prove runtime gate agent_feedback_no_model_training",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72685",
+      "section": "line:72697",
       "dependencies": [
         "F-315",
         "F-625"
       ],
       "disposition": "proof_only",
-      "release": "R4",
+      "release": "R5",
       "issueId": "PLA-830"
     },
     {
@@ -12544,7 +12610,7 @@
       "outcome": "Prove runtime gate ai_response_generation_billing_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73172",
+      "section": "line:73184",
       "dependencies": [
         "F-207"
       ],
@@ -12557,7 +12623,7 @@
       "outcome": "Prove runtime gate ai_wallet_state_machine_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73268",
+      "section": "line:73280",
       "dependencies": [
         "F-125",
         "F-536"
@@ -12571,7 +12637,7 @@
       "outcome": "Prove runtime gate aiwallet_response_excludes_solo_envelope",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71796",
+      "section": "line:71808",
       "dependencies": [
         "F-125",
         "F-385",
@@ -12586,7 +12652,7 @@
       "outcome": "Prove runtime gate api_latency_p95_regression",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72888",
+      "section": "line:72900",
       "dependencies": [
         "F-612"
       ],
@@ -12599,7 +12665,7 @@
       "outcome": "Prove runtime gate api_multistatus_schema_registration",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73247",
+      "section": "line:73259",
       "dependencies": [
         "F-498"
       ],
@@ -12612,7 +12678,7 @@
       "outcome": "Prove runtime gate api_rate_limit_plan_quota_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73250",
+      "section": "line:73262",
       "dependencies": [
         "F-497"
       ],
@@ -12625,7 +12691,7 @@
       "outcome": "Prove runtime gate api_standard_retry_after_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73248",
+      "section": "line:73260",
       "dependencies": [
         "F-496",
         "F-497",
@@ -12640,12 +12706,12 @@
       "outcome": "Prove runtime gate appendix_g_legacy_alias_retirement_enforced",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72976",
+      "section": "line:72988",
       "dependencies": [
         "F-754"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-853"
     },
     {
@@ -12653,12 +12719,12 @@
       "outcome": "Prove runtime gate appendix_m_coverage_on_diff",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71914",
+      "section": "line:71926",
       "dependencies": [
         "F-796"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-797"
     },
     {
@@ -12666,12 +12732,12 @@
       "outcome": "Prove runtime gate attachment_dsar_72h_binary_detach_sla",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71909",
+      "section": "line:71921",
       "dependencies": [
         "F-177"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-796"
     },
     {
@@ -12679,7 +12745,7 @@
       "outcome": "Prove runtime gate audit_event_break_glass_integrity_scan_triggered",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71857",
+      "section": "line:71869",
       "dependencies": [
         "F-607"
       ],
@@ -12692,12 +12758,12 @@
       "outcome": "Prove runtime gate audit_event_hash_chain_full_corpus_coverage",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71856",
+      "section": "line:71868",
       "dependencies": [
         "F-405"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-766"
     },
     {
@@ -12705,12 +12771,12 @@
       "outcome": "Prove runtime gate audit_event_residency_partitioning_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72960",
+      "section": "line:72972",
       "dependencies": [
         "F-772"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-850"
     },
     {
@@ -12718,12 +12784,12 @@
       "outcome": "Prove runtime gate audit_events_export_ready_delivery_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73641",
+      "section": "line:73653",
       "dependencies": [
         "F-171"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-894"
     },
     {
@@ -12731,12 +12797,12 @@
       "outcome": "Prove runtime gate audit_integrity_exemption_redaction_path_correctness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73517",
+      "section": "line:73529",
       "dependencies": [
         "F-176"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-870"
     },
     {
@@ -12744,7 +12810,7 @@
       "outcome": "Prove runtime gate auth_audit_event_emission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71858",
+      "section": "line:71870",
       "dependencies": [
         "F-117"
       ],
@@ -12757,13 +12823,13 @@
       "outcome": "Prove runtime gate backup_dsar_repseudonymization_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71906",
+      "section": "line:71918",
       "dependencies": [
         "F-175",
         "F-603"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-793"
     },
     {
@@ -12771,7 +12837,7 @@
       "outcome": "Prove runtime gate backup_residency_partition_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71903",
+      "section": "line:71915",
       "dependencies": [
         "F-012",
         "F-603"
@@ -12785,12 +12851,12 @@
       "outcome": "Prove runtime gate bid_disqualification_cascade_active",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71922",
+      "section": "line:71934",
       "dependencies": [
         "F-403"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-799"
     },
     {
@@ -12798,7 +12864,7 @@
       "outcome": "Prove runtime gate bid_response_bulk_submit_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73215",
+      "section": "line:73227",
       "dependencies": [
         "F-389"
       ],
@@ -12811,7 +12877,7 @@
       "outcome": "Prove runtime gate bid_response_editor_lock_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73214",
+      "section": "line:73226",
       "dependencies": [
         "F-106"
       ],
@@ -12824,7 +12890,7 @@
       "outcome": "Prove runtime gate bid_workspace_buyer_purge_orphan_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73627",
+      "section": "line:73639",
       "dependencies": [
         "F-105"
       ],
@@ -12837,7 +12903,7 @@
       "outcome": "Prove runtime gate bid_workspace_deal_size_band_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72913",
+      "section": "line:72925",
       "dependencies": [
         "F-105"
       ],
@@ -12850,7 +12916,7 @@
       "outcome": "Prove runtime gate bid_workspace_surface_state_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73217",
+      "section": "line:73229",
       "dependencies": [
         "F-776"
       ],
@@ -12863,7 +12929,7 @@
       "outcome": "Prove runtime gate bid_workspace_voluntary_withdrawal_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73216",
+      "section": "line:73228",
       "dependencies": [
         "F-390"
       ],
@@ -12876,7 +12942,7 @@
       "outcome": "Prove runtime gate billing_async_failure_state_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73249",
+      "section": "line:73261",
       "dependencies": [
         "F-126",
         "F-500",
@@ -12891,12 +12957,12 @@
       "outcome": "Prove runtime gate billing_organization_suspended_webhook_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73561",
+      "section": "line:73573",
       "dependencies": [
         "F-489"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-877"
     },
     {
@@ -12904,7 +12970,7 @@
       "outcome": "Prove runtime gate bridge_payload_body_pii_sweep_buyer_seller_parity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71892",
+      "section": "line:71904",
       "dependencies": [
         "F-409"
       ],
@@ -12917,13 +12983,13 @@
       "outcome": "Prove runtime gate bundle_size_budget_in_app",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72892",
+      "section": "line:72904",
       "dependencies": [
         "F-612",
         "F-614"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-842"
     },
     {
@@ -12931,13 +12997,13 @@
       "outcome": "Prove runtime gate buyer_activation_metric_canonical_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72107",
+      "section": "line:72119",
       "dependencies": [
         "F-637",
         "F-752"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-808"
     },
     {
@@ -12945,7 +13011,7 @@
       "outcome": "Prove runtime gate buyer_console_role_permission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72430",
+      "section": "line:72442",
       "dependencies": [
         "F-144",
         "F-145",
@@ -12954,7 +13020,7 @@
         "F-148"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-825"
     },
     {
@@ -12962,12 +13028,12 @@
       "outcome": "Prove runtime gate buyer_evaluation_funnel_derivation_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73575",
+      "section": "line:73587",
       "dependencies": [
         "F-637"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-881"
     },
     {
@@ -12975,7 +13041,7 @@
       "outcome": "Prove runtime gate buyer_pulse_interactive_render_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73588",
+      "section": "line:73600",
       "dependencies": [
         "F-308",
         "F-612"
@@ -12989,7 +13055,7 @@
       "outcome": "Prove runtime gate capability_declaration_reuse_count_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73171",
+      "section": "line:73183",
       "dependencies": [
         "F-206"
       ],
@@ -13002,7 +13068,7 @@
       "outcome": "Prove runtime gate cmek_rotation_runtime_evidence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73047",
+      "section": "line:73059",
       "dependencies": [
         "F-502",
         "F-634"
@@ -13016,7 +13082,7 @@
       "outcome": "Prove runtime gate committed_spend_console_scope_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71926",
+      "section": "line:71938",
       "dependencies": [
         "F-002"
       ],
@@ -13029,12 +13095,12 @@
       "outcome": "Prove runtime gate committed_spend_single_auto_renew_invariant",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71925",
+      "section": "line:71937",
       "dependencies": [
         "F-522"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-802"
     },
     {
@@ -13042,12 +13108,12 @@
       "outcome": "Prove runtime gate committed_spend_single_pool_invariant",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71924",
+      "section": "line:71936",
       "dependencies": [
         "F-522"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-801"
     },
     {
@@ -13055,7 +13121,7 @@
       "outcome": "Prove runtime gate console_bridge_failure_storm_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73618",
+      "section": "line:73630",
       "dependencies": [
         "F-400"
       ],
@@ -13068,7 +13134,7 @@
       "outcome": "Prove runtime gate console_bridge_no_defense_view_event_kinds",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71769",
+      "section": "line:71781",
       "dependencies": [
         "F-120"
       ],
@@ -13081,7 +13147,7 @@
       "outcome": "Prove runtime gate console_isolation_violation_no_data_path_use",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71819",
+      "section": "line:71831",
       "dependencies": [
         "F-002"
       ],
@@ -13094,7 +13160,7 @@
       "outcome": "Prove runtime gate contest_window_db_trigger_present",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72647",
+      "section": "line:72659",
       "dependencies": [
         "F-541"
       ],
@@ -13107,12 +13173,12 @@
       "outcome": "Prove runtime gate convex_reactivity_slo_regression",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72889",
+      "section": "line:72901",
       "dependencies": [
         "F-184"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-839"
     },
     {
@@ -13120,7 +13186,7 @@
       "outcome": "Prove runtime gate core_web_vitals_in_app_lighthouse_ci",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72887",
+      "section": "line:72899",
       "dependencies": [
         "F-612"
       ],
@@ -13133,7 +13199,7 @@
       "outcome": "Prove runtime gate cost_base_recalc_notice_window_trajectory_gate",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71918",
+      "section": "line:71930",
       "dependencies": [
         "F-524"
       ],
@@ -13146,12 +13212,12 @@
       "outcome": "Prove runtime gate cross_console_shared_ui_preference_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72874",
+      "section": "line:72886",
       "dependencies": [
         "F-122"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-836"
     },
     {
@@ -13159,7 +13225,7 @@
       "outcome": "Prove runtime gate cross_org_guest_sso_bypass_blocked",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71867",
+      "section": "line:71879",
       "dependencies": [
         "F-167"
       ],
@@ -13172,12 +13238,12 @@
       "outcome": "Prove runtime gate defense_view_engagement_event_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73572",
+      "section": "line:73584",
       "dependencies": [
         "F-263"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-382"
     },
     {
@@ -13185,12 +13251,12 @@
       "outcome": "Prove runtime gate defense_view_regeneration_throttle_5min",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71772",
+      "section": "line:71784",
       "dependencies": [
         "F-263"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-368"
     },
     {
@@ -13198,7 +13264,7 @@
       "outcome": "Prove runtime gate dns_failover_target_residency_match",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71899",
+      "section": "line:71911",
       "dependencies": [
         "F-012",
         "F-603"
@@ -13212,7 +13278,7 @@
       "outcome": "Prove runtime gate dr_failover_no_cross_residency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71900",
+      "section": "line:71912",
       "dependencies": [
         "F-012",
         "F-603"
@@ -13226,7 +13292,7 @@
       "outcome": "Prove runtime gate dr_failover_residency_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71898",
+      "section": "line:71910",
       "dependencies": [
         "F-012",
         "F-603"
@@ -13240,7 +13306,7 @@
       "outcome": "Prove runtime gate dr_game_day_overdue",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71902",
+      "section": "line:71914",
       "dependencies": [
         "F-603"
       ],
@@ -13253,13 +13319,13 @@
       "outcome": "Prove runtime gate dr_restore_test_residency_partition",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71901",
+      "section": "line:71913",
       "dependencies": [
         "F-603",
         "F-772"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-788"
     },
     {
@@ -13267,12 +13333,12 @@
       "outcome": "Prove runtime gate dsar_30d_sla_observability",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73518",
+      "section": "line:73530",
       "dependencies": [
         "F-177"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-871"
     },
     {
@@ -13280,12 +13346,12 @@
       "outcome": "Prove runtime gate dsar_cascade_aggregate_recompute_backstop_drift",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71888",
+      "section": "line:71900",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-778"
     },
     {
@@ -13293,12 +13359,12 @@
       "outcome": "Prove runtime gate dsar_cascade_aggregate_recompute_suppression_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71887",
+      "section": "line:71899",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-777"
     },
     {
@@ -13306,12 +13372,12 @@
       "outcome": "Prove runtime gate dsar_cascade_aggregate_recompute_synchronous",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71886",
+      "section": "line:71898",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-776"
     },
     {
@@ -13319,12 +13385,12 @@
       "outcome": "Prove runtime gate dsar_cascade_audit_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73516",
+      "section": "line:73528",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-869"
     },
     {
@@ -13332,12 +13398,12 @@
       "outcome": "Prove runtime gate dsar_cascade_bridge_payload_body_pii_sweep_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71889",
+      "section": "line:71901",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-779"
     },
     {
@@ -13345,7 +13411,7 @@
       "outcome": "Prove runtime gate dsar_cascade_bridge_redaction_hash_recompute",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71890",
+      "section": "line:71902",
       "dependencies": [
         "F-397"
       ],
@@ -13358,12 +13424,12 @@
       "outcome": "Prove runtime gate dsar_cascade_partial_failure_pagerduty_sla",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71893",
+      "section": "line:71905",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-781"
     },
     {
@@ -13371,12 +13437,12 @@
       "outcome": "Prove runtime gate dsar_cascade_partial_failure_resume_sla_24h",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71894",
+      "section": "line:71906",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-782"
     },
     {
@@ -13384,12 +13450,12 @@
       "outcome": "Prove runtime gate dsar_cascade_pseudonym_epoch_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71897",
+      "section": "line:71909",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-784"
     },
     {
@@ -13397,12 +13463,12 @@
       "outcome": "Prove runtime gate dsar_cascade_residency_partition_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71859",
+      "section": "line:71871",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-769"
     },
     {
@@ -13410,12 +13476,12 @@
       "outcome": "Prove runtime gate dsar_cascade_statutory_ceiling_auto_escalation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71895",
+      "section": "line:71907",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-783"
     },
     {
@@ -13423,12 +13489,12 @@
       "outcome": "Prove runtime gate dsar_erased_buyer_excluded_from_recovery_cadence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72138",
+      "section": "line:72150",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-813"
     },
     {
@@ -13436,12 +13502,12 @@
       "outcome": "Prove runtime gate dsar_erased_seller_excluded_from_recovery_cadence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72137",
+      "section": "line:72149",
       "dependencies": [
         "F-175"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "SEL-204"
     },
     {
@@ -13449,7 +13515,7 @@
       "outcome": "Prove runtime gate dsar_excluded_snapshot_restore_blocked",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71907",
+      "section": "line:71919",
       "dependencies": [
         "F-503",
         "F-603"
@@ -13463,7 +13529,7 @@
       "outcome": "Prove runtime gate dsar_export_delivery_residency_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72961",
+      "section": "line:72973",
       "dependencies": [
         "F-503",
         "F-772"
@@ -13477,7 +13543,7 @@
       "outcome": "Prove runtime gate dsar_manifestly_unfounded_appeal_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73610",
+      "section": "line:73622",
       "dependencies": [
         "F-177",
         "F-503"
@@ -13491,7 +13557,7 @@
       "outcome": "Prove runtime gate dsar_manifestly_unfounded_rejection_audit_emission",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71866",
+      "section": "line:71878",
       "dependencies": [
         "F-117",
         "F-503"
@@ -13505,7 +13571,7 @@
       "outcome": "Prove runtime gate dsar_pseudonym_epoch_content_scrub_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73609",
+      "section": "line:73621",
       "dependencies": [
         "F-175",
         "F-503"
@@ -13519,12 +13585,12 @@
       "outcome": "Prove runtime gate dsar_sla_window_breached",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73519",
+      "section": "line:73531",
       "dependencies": [
         "F-177"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-872"
     },
     {
@@ -13532,7 +13598,7 @@
       "outcome": "Prove runtime gate email_bounce_complaint_suppression_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72630",
+      "section": "line:72642",
       "dependencies": [
         "F-597"
       ],
@@ -13545,7 +13611,7 @@
       "outcome": "Prove runtime gate entitlement_matrix_non_ai_runtime_branching",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72754",
+      "section": "line:72766",
       "dependencies": [
         "F-531"
       ],
@@ -13558,7 +13624,7 @@
       "outcome": "Prove runtime gate entitlement_matrix_registry_binding_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72178",
+      "section": "line:72190",
       "dependencies": [
         "F-531"
       ],
@@ -13571,7 +13637,7 @@
       "outcome": "Prove runtime gate featured_placement_funnel_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73574",
+      "section": "line:73586",
       "dependencies": [
         "F-460"
       ],
@@ -13584,13 +13650,13 @@
       "outcome": "Prove runtime gate field_encryption_plaintext_egress_guard",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73048",
+      "section": "line:73060",
       "dependencies": [
         "F-502",
         "F-625"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-856"
     },
     {
@@ -13598,7 +13664,7 @@
       "outcome": "Prove runtime gate firecrawl_outage_progress_line_substitution",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72105",
+      "section": "line:72117",
       "dependencies": [
         "F-560"
       ],
@@ -13611,7 +13677,7 @@
       "outcome": "Prove runtime gate firecrawl_status_line_variant_materialization",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73200",
+      "section": "line:73212",
       "dependencies": [
         "F-AE-043"
       ],
@@ -13624,7 +13690,7 @@
       "outcome": "Prove runtime gate first_pass_high_stakes_band_only",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72914",
+      "section": "line:72926",
       "dependencies": [
         "F-353"
       ],
@@ -13637,7 +13703,7 @@
       "outcome": "Prove runtime gate first_pass_rfp_draft_outcome_contract_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72232",
+      "section": "line:72244",
       "dependencies": [
         "F-353"
       ],
@@ -13650,7 +13716,7 @@
       "outcome": "Prove runtime gate free_allowance_plan_entitlement_partitioning",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72648",
+      "section": "line:72660",
       "dependencies": [
         "F-530",
         "F-531"
@@ -13664,7 +13730,7 @@
       "outcome": "Prove runtime gate free_allowance_quota_decrease_guard",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73541",
+      "section": "line:73553",
       "dependencies": [
         "F-729"
       ],
@@ -13677,7 +13743,7 @@
       "outcome": "Prove runtime gate ghost_ingestion_mcp_allowlist_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73628",
+      "section": "line:73640",
       "dependencies": [
         "F-345"
       ],
@@ -13690,7 +13756,7 @@
       "outcome": "Prove runtime gate global_ban_reversal_core_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73530",
+      "section": "line:73542",
       "dependencies": [
         "F-407",
         "F-447",
@@ -13705,7 +13771,7 @@
       "outcome": "Prove runtime gate global_ban_reversal_marketplace_restoration_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73531",
+      "section": "line:73543",
       "dependencies": [
         "F-429",
         "F-447",
@@ -13720,13 +13786,13 @@
       "outcome": "Prove runtime gate growth_loop_l1_delivery_reputation_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73619",
+      "section": "line:73631",
       "dependencies": [
         "F-009",
         "F-645"
       ],
       "disposition": "proof_only",
-      "release": "R3",
+      "release": "R4",
       "issueId": "PLA-892"
     },
     {
@@ -13734,7 +13800,7 @@
       "outcome": "Prove runtime gate inbox_mutation_idempotency_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72671",
+      "section": "line:72683",
       "dependencies": [
         "F-035",
         "F-041",
@@ -13749,7 +13815,7 @@
       "outcome": "Prove runtime gate integration_export_payload_allowlist",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73020",
+      "section": "line:73032",
       "dependencies": [
         "F-484"
       ],
@@ -13762,7 +13828,7 @@
       "outcome": "Prove runtime gate kb_bootstrap_allowance_compensation_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72106",
+      "section": "line:72118",
       "dependencies": [
         "F-354"
       ],
@@ -13775,7 +13841,7 @@
       "outcome": "Prove runtime gate kb_bootstrap_per_org_concurrency_lock_active",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71921",
+      "section": "line:71933",
       "dependencies": [
         "F-354"
       ],
@@ -13788,12 +13854,12 @@
       "outcome": "Prove runtime gate kb_injection_scanner_registry_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73198",
+      "section": "line:73210",
       "dependencies": [
         "F-369"
       ],
       "disposition": "proof_only",
-      "release": "R3",
+      "release": "R4",
       "issueId": "SEL-228"
     },
     {
@@ -13801,7 +13867,7 @@
       "outcome": "Prove runtime gate kb_mcp_webhook_alert_catalog_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72830",
+      "section": "line:72842",
       "dependencies": [
         "F-336"
       ],
@@ -13814,12 +13880,12 @@
       "outcome": "Prove runtime gate kb_state_persisting_audit_event_coverage",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73199",
+      "section": "line:73211",
       "dependencies": [
         "F-AE-042"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-229"
     },
     {
@@ -13827,7 +13893,7 @@
       "outcome": "Prove runtime gate kb_suggestion_alias_console_resolution_integrity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72208",
+      "section": "line:72220",
       "dependencies": [
         "F-356"
       ],
@@ -13840,7 +13906,7 @@
       "outcome": "Prove runtime gate kb_suggestion_family_cardinality",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72206",
+      "section": "line:72218",
       "dependencies": [
         "F-356"
       ],
@@ -13853,12 +13919,12 @@
       "outcome": "Prove runtime gate kb_suggestion_family_outcome_contract_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72207",
+      "section": "line:72219",
       "dependencies": [
         "F-540"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "SEL-208"
     },
     {
@@ -13866,7 +13932,7 @@
       "outcome": "Prove runtime gate kb_value_meter_estimated_value_guard_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73197",
+      "section": "line:73209",
       "dependencies": [
         "F-376"
       ],
@@ -13879,12 +13945,12 @@
       "outcome": "Prove runtime gate legal_entity_residency_change_revenue_leak_test",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72267",
+      "section": "line:72279",
       "dependencies": [
         "F-539"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-819"
     },
     {
@@ -13892,7 +13958,7 @@
       "outcome": "Prove runtime gate load_test_sla_breach",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72891",
+      "section": "line:72903",
       "dependencies": [
         "F-615"
       ],
@@ -13905,7 +13971,7 @@
       "outcome": "Prove runtime gate locale_resolution_engine_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71943",
+      "section": "line:71955",
       "dependencies": [
         "F-570"
       ],
@@ -13918,12 +13984,12 @@
       "outcome": "Prove runtime gate m16_same_domain_enforcement_dual_point_canonical",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72113",
+      "section": "line:72125",
       "dependencies": [
         "F-674"
       ],
       "disposition": "proof_only",
-      "release": "R3",
+      "release": "R5",
       "issueId": "PLA-810"
     },
     {
@@ -13931,12 +13997,12 @@
       "outcome": "Prove runtime gate m3_signed_payload_anonymity_binding",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72119",
+      "section": "line:72131",
       "dependencies": [
         "F-483"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-811"
     },
     {
@@ -13944,7 +14010,7 @@
       "outcome": "Prove runtime gate marketplace_match_score_snapshot_tuple_uniqueness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72798",
+      "section": "line:72810",
       "dependencies": [
         "F-431"
       ],
@@ -13957,12 +14023,12 @@
       "outcome": "Prove runtime gate marketplace_proactive_offer_lifecycle_state_machine",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72813",
+      "section": "line:72825",
       "dependencies": [
         "F-429"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R3",
       "issueId": "BUY-379"
     },
     {
@@ -13970,7 +14036,7 @@
       "outcome": "Prove runtime gate marketplace_proactive_offer_pre_acceptance_redaction",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72812",
+      "section": "line:72824",
       "dependencies": [
         "F-456"
       ],
@@ -13983,7 +14049,7 @@
       "outcome": "Prove runtime gate mcp_session_token_record_entity_home",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72829",
+      "section": "line:72841",
       "dependencies": [
         "F-337"
       ],
@@ -13996,12 +14062,12 @@
       "outcome": "Prove runtime gate member_role_permission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72428",
+      "section": "line:72440",
       "dependencies": [
         "F-141"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-823"
     },
     {
@@ -14009,12 +14075,12 @@
       "outcome": "Prove runtime gate mobile_full_parity_closure",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73054",
+      "section": "line:73066",
       "dependencies": [
         "F-575"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-858"
     },
     {
@@ -14022,7 +14088,7 @@
       "outcome": "Prove runtime gate nda_lifecycle_notification_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73231",
+      "section": "line:73243",
       "dependencies": [
         "F-392",
         "F-466"
@@ -14036,7 +14102,7 @@
       "outcome": "Prove runtime gate negative_network_effects_monitoring_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72144",
+      "section": "line:72156",
       "dependencies": [
         "F-653"
       ],
@@ -14049,7 +14115,7 @@
       "outcome": "Prove runtime gate network_effect_attribution_window_canonical_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72143",
+      "section": "line:72155",
       "dependencies": [
         "F-655"
       ],
@@ -14062,7 +14128,7 @@
       "outcome": "Prove runtime gate network_effects_dashboard_outage_render_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72141",
+      "section": "line:72153",
       "dependencies": [
         "F-655"
       ],
@@ -14075,7 +14141,7 @@
       "outcome": "Prove runtime gate network_effects_residency_partition_canonical_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72142",
+      "section": "line:72154",
       "dependencies": [
         "F-655"
       ],
@@ -14088,12 +14154,12 @@
       "outcome": "Prove runtime gate observability_residency_routing_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72962",
+      "section": "line:72974",
       "dependencies": [
         "F-772"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-852"
     },
     {
@@ -14101,12 +14167,12 @@
       "outcome": "Prove runtime gate ops_console_accessibility_compliance",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73563",
+      "section": "line:73575",
       "dependencies": [
         "F-696"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-879"
     },
     {
@@ -14114,7 +14180,7 @@
       "outcome": "Prove runtime gate ops_read_audit_event_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73560",
+      "section": "line:73572",
       "dependencies": [
         "F-117"
       ],
@@ -14127,12 +14193,12 @@
       "outcome": "Prove runtime gate ops_session_notification_partial_success_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73562",
+      "section": "line:73574",
       "dependencies": [
         "F-708"
       ],
       "disposition": "proof_only",
-      "release": "R1",
+      "release": "R2",
       "issueId": "PLA-878"
     },
     {
@@ -14140,7 +14206,7 @@
       "outcome": "Prove runtime gate ops_session_numerical_caps_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73564",
+      "section": "line:73576",
       "dependencies": [
         "F-364"
       ],
@@ -14153,13 +14219,13 @@
       "outcome": "Prove runtime gate org_admin_billing_read_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72429",
+      "section": "line:72441",
       "dependencies": [
         "F-140",
         "F-142"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-824"
     },
     {
@@ -14167,7 +14233,7 @@
       "outcome": "Prove runtime gate org_custom_residency_label_required",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72269",
+      "section": "line:72281",
       "dependencies": [
         "F-780"
       ],
@@ -14180,12 +14246,12 @@
       "outcome": "Prove runtime gate outcome_contract_signal_subject_enum_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73542",
+      "section": "line:73554",
       "dependencies": [
         "F-320"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-875"
     },
     {
@@ -14193,7 +14259,7 @@
       "outcome": "Prove runtime gate outcome_resolver_free_allowance_settlement_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73598",
+      "section": "line:73610",
       "dependencies": [
         "F-530",
         "F-540"
@@ -14207,12 +14273,12 @@
       "outcome": "Prove runtime gate outcome_resolver_liveness_backlog_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73600",
+      "section": "line:73612",
       "dependencies": [
         "F-540"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-887"
     },
     {
@@ -14220,12 +14286,12 @@
       "outcome": "Prove runtime gate pipeline_surface_compression_seller_always_compressed",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71778",
+      "section": "line:71790",
       "dependencies": [
         "F-075"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-369"
     },
     {
@@ -14233,12 +14299,12 @@
       "outcome": "Prove runtime gate pipeline_surface_compression_soft_gate_solo_only",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71779",
+      "section": "line:71791",
       "dependencies": [
         "F-075"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-370"
     },
     {
@@ -14246,7 +14312,7 @@
       "outcome": "Prove runtime gate policy_ingestion_buyer_console_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72706",
+      "section": "line:72718",
       "dependencies": [
         "F-002",
         "F-104",
@@ -14261,12 +14327,12 @@
       "outcome": "Prove runtime gate policy_ingestion_parent_child_settlement",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72704",
+      "section": "line:72716",
       "dependencies": [
         "F-156"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-377"
     },
     {
@@ -14274,12 +14340,12 @@
       "outcome": "Prove runtime gate policy_ingestion_partial_resume_idempotency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72702",
+      "section": "line:72714",
       "dependencies": [
         "F-156"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "BUY-375"
     },
     {
@@ -14287,7 +14353,7 @@
       "outcome": "Prove runtime gate posthog_event_contract_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73576",
+      "section": "line:73588",
       "dependencies": [
         "F-779"
       ],
@@ -14300,7 +14366,7 @@
       "outcome": "Prove runtime gate pro_trial_day_31_contextual_cta_entitlement_fit",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72936",
+      "section": "line:72948",
       "dependencies": [
         "F-563"
       ],
@@ -14313,12 +14379,12 @@
       "outcome": "Prove runtime gate pro_trial_hero_moment_slo_precedence_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73587",
+      "section": "line:73599",
       "dependencies": [
         "F-897"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-883"
     },
     {
@@ -14326,7 +14392,7 @@
       "outcome": "Prove runtime gate pro_trial_no_refund_after_vendor_notification",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72915",
+      "section": "line:72927",
       "dependencies": [
         "F-546"
       ],
@@ -14339,12 +14405,12 @@
       "outcome": "Prove runtime gate pulse_digest_summary_firewall",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72668",
+      "section": "line:72680",
       "dependencies": [
         "F-311"
       ],
       "disposition": "proof_only",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-373"
     },
     {
@@ -14352,7 +14418,7 @@
       "outcome": "Prove runtime gate qa_attachment_cross_console_content_scan_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73529",
+      "section": "line:73541",
       "dependencies": [
         "F-118"
       ],
@@ -14365,7 +14431,7 @@
       "outcome": "Prove runtime gate qa_suggestion_cross_console_firewall_boundary",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72784",
+      "section": "line:72796",
       "dependencies": [
         "F-122",
         "F-298"
@@ -14379,7 +14445,7 @@
       "outcome": "Prove runtime gate qa_suggestion_family_cardinality",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72179",
+      "section": "line:72191",
       "dependencies": [
         "F-418"
       ],
@@ -14392,12 +14458,12 @@
       "outcome": "Prove runtime gate qa_suggestion_family_outcome_contract_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72180",
+      "section": "line:72192",
       "dependencies": [
         "F-540"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "SEL-206"
     },
     {
@@ -14405,7 +14471,7 @@
       "outcome": "Prove runtime gate requirement_reopening_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73639",
+      "section": "line:73651",
       "dependencies": [
         "F-086",
         "F-774"
@@ -14419,12 +14485,12 @@
       "outcome": "Prove runtime gate responsive_conformance_suite",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72866",
+      "section": "line:72878",
       "dependencies": [
         "F-579"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-834"
     },
     {
@@ -14432,12 +14498,12 @@
       "outcome": "Prove runtime gate retention_table_residency_default_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73608",
+      "section": "line:73620",
       "dependencies": [
         "F-593"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R0",
       "issueId": "PLA-888"
     },
     {
@@ -14445,7 +14511,7 @@
       "outcome": "Prove runtime gate rtl_directionality_runtime_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71942",
+      "section": "line:71954",
       "dependencies": [
         "F-589"
       ],
@@ -14458,7 +14524,7 @@
       "outcome": "Prove runtime gate s3_cross_region_replica_dpa_approval_required",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71905",
+      "section": "line:71917",
       "dependencies": [
         "F-012",
         "F-504",
@@ -14473,7 +14539,7 @@
       "outcome": "Prove runtime gate s3_replication_policy_residency_bound",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71904",
+      "section": "line:71916",
       "dependencies": [
         "F-012",
         "F-603"
@@ -14487,7 +14553,7 @@
       "outcome": "Prove runtime gate scenario_modeling_aioperation_settlement",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72738",
+      "section": "line:72750",
       "dependencies": [
         "F-265"
       ],
@@ -14500,7 +14566,7 @@
       "outcome": "Prove runtime gate selection_report_v2_watermark_grandfathering",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72934",
+      "section": "line:72946",
       "dependencies": [
         "F-670"
       ],
@@ -14513,14 +14579,14 @@
       "outcome": "Prove runtime gate seller_bid_workspace_mobile_accessibility_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73218",
+      "section": "line:73230",
       "dependencies": [
         "F-387",
         "F-569",
         "F-583"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "SEL-235"
     },
     {
@@ -14528,7 +14594,7 @@
       "outcome": "Prove runtime gate seller_console_phase24_firewall_state_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73232",
+      "section": "line:73244",
       "dependencies": [
         "F-120"
       ],
@@ -14541,7 +14607,7 @@
       "outcome": "Prove runtime gate seller_console_phase24_mobile_accessibility_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73233",
+      "section": "line:73245",
       "dependencies": [
         "F-111",
         "F-569",
@@ -14556,7 +14622,7 @@
       "outcome": "Prove runtime gate seller_console_phase24_plan_authority_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73234",
+      "section": "line:73246",
       "dependencies": [
         "F-515",
         "F-516",
@@ -14575,12 +14641,12 @@
       "outcome": "Prove runtime gate seller_console_role_permission_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72431",
+      "section": "line:72443",
       "dependencies": [
         "F-148"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "SEL-211"
     },
     {
@@ -14588,7 +14654,7 @@
       "outcome": "Prove runtime gate seller_direct_signup_value_activation_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73589",
+      "section": "line:73601",
       "dependencies": [
         "F-559"
       ],
@@ -14601,7 +14667,7 @@
       "outcome": "Prove runtime gate seller_kb_first_entry_indexed_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73573",
+      "section": "line:73585",
       "dependencies": [
         "F-789"
       ],
@@ -14614,7 +14680,7 @@
       "outcome": "Prove runtime gate seller_kb_v2_cutover_grandfathering",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72935",
+      "section": "line:72947",
       "dependencies": [
         "F-515"
       ],
@@ -14627,7 +14693,7 @@
       "outcome": "Prove runtime gate seller_maya_billing_detail_plan_guard",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73201",
+      "section": "line:73213",
       "dependencies": [
         "F-500",
         "F-515",
@@ -14642,7 +14708,7 @@
       "outcome": "Prove runtime gate seller_maya_chip_list_auto_publish_state_machine",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71789",
+      "section": "line:71801",
       "dependencies": [
         "F-382"
       ],
@@ -14655,7 +14721,7 @@
       "outcome": "Prove runtime gate seller_maya_match_score_three_label_compression",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71790",
+      "section": "line:71802",
       "dependencies": [
         "F-384"
       ],
@@ -14668,12 +14734,12 @@
       "outcome": "Prove runtime gate seller_maya_solo_free_copy_string_lint",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71788",
+      "section": "line:71800",
       "dependencies": [
         "F-381"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-197"
     },
     {
@@ -14681,7 +14747,7 @@
       "outcome": "Prove runtime gate seller_onboarding_provider_outage_visible",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72940",
+      "section": "line:72952",
       "dependencies": [
         "F-687"
       ],
@@ -14694,7 +14760,7 @@
       "outcome": "Prove runtime gate seller_onboarding_reactivation_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72451",
+      "section": "line:72463",
       "dependencies": [
         "F-688"
       ],
@@ -14707,7 +14773,7 @@
       "outcome": "Prove runtime gate seller_onboarding_stage3_abandonment_allowance_not_debited",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72941",
+      "section": "line:72953",
       "dependencies": [
         "F-559"
       ],
@@ -14720,7 +14786,7 @@
       "outcome": "Prove runtime gate seller_onboarding_staleness_window_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72452",
+      "section": "line:72464",
       "dependencies": [
         "F-559"
       ],
@@ -14733,12 +14799,12 @@
       "outcome": "Prove runtime gate seller_pulse_surface_engine_mapping",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71952",
+      "section": "line:71964",
       "dependencies": [
         "F-792"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "SEL-202"
     },
     {
@@ -14746,7 +14812,7 @@
       "outcome": "Prove runtime gate seller_qa_phase8_readonly_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73629",
+      "section": "line:73641",
       "dependencies": [
         "F-391"
       ],
@@ -14759,13 +14825,13 @@
       "outcome": "Prove runtime gate seller_software_transfer_request_entity_home",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72846",
+      "section": "line:72858",
       "dependencies": [
         "F-330",
         "F-423"
       ],
       "disposition": "proof_only",
-      "release": "R3",
+      "release": "R4",
       "issueId": "SEL-218"
     },
     {
@@ -14773,12 +14839,12 @@
       "outcome": "Prove runtime gate seller_solo_onboarding_consumption_invisibility",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72931",
+      "section": "line:72943",
       "dependencies": [
         "F-616"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "SEL-220"
     },
     {
@@ -14786,7 +14852,7 @@
       "outcome": "Prove runtime gate seller_solo_per_bid_charge_stage_binding",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72932",
+      "section": "line:72944",
       "dependencies": [
         "F-521"
       ],
@@ -14799,7 +14865,7 @@
       "outcome": "Prove runtime gate seller_solo_per_bid_election_authorization_binding",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72933",
+      "section": "line:72945",
       "dependencies": [
         "F-516"
       ],
@@ -14812,7 +14878,7 @@
       "outcome": "Prove runtime gate seller_stake_reveal_outcome_targets_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73586",
+      "section": "line:73598",
       "dependencies": [
         "F-378"
       ],
@@ -14825,13 +14891,13 @@
       "outcome": "Prove runtime gate snapshot_catalog_residency_partition",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71908",
+      "section": "line:71920",
       "dependencies": [
         "F-603",
         "F-772"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R5",
       "issueId": "PLA-795"
     },
     {
@@ -14839,13 +14905,13 @@
       "outcome": "Prove runtime gate solo_absorption_cap_counter_state_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72897",
+      "section": "line:72909",
       "dependencies": [
         "F-619",
         "F-620"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-844"
     },
     {
@@ -14853,7 +14919,7 @@
       "outcome": "Prove runtime gate solo_absorption_cap_enforced",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72895",
+      "section": "line:72907",
       "dependencies": [
         "F-619"
       ],
@@ -14866,7 +14932,7 @@
       "outcome": "Prove runtime gate solo_charge_kind_registered",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71793",
+      "section": "line:71805",
       "dependencies": [
         "F-AE-048"
       ],
@@ -14879,12 +14945,12 @@
       "outcome": "Prove runtime gate solo_deadline_countdown_renders_in_user_timezone",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71765",
+      "section": "line:71777",
       "dependencies": [
         "F-AE-068"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "BUY-363"
     },
     {
@@ -14892,12 +14958,12 @@
       "outcome": "Prove runtime gate solo_dual_console_independent_invoicing",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71794",
+      "section": "line:71806",
       "dependencies": [
         "F-AE-050"
       ],
       "disposition": "proof_only",
-      "release": "R5",
+      "release": "R2",
       "issueId": "PLA-755"
     },
     {
@@ -14905,13 +14971,13 @@
       "outcome": "Prove runtime gate solo_engine_metering_parity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71800",
+      "section": "line:71812",
       "dependencies": [
         "F-540",
         "F-616"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-759"
     },
     {
@@ -14919,13 +14985,13 @@
       "outcome": "Prove runtime gate solo_envelope_per_console_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71806",
+      "section": "line:71818",
       "dependencies": [
         "F-002",
         "F-620"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-763"
     },
     {
@@ -14933,13 +14999,13 @@
       "outcome": "Prove runtime gate solo_envelope_throttling_targets_low_priority_background_only",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71808",
+      "section": "line:71820",
       "dependencies": [
         "F-620",
         "F-621"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-764"
     },
     {
@@ -14947,12 +15013,12 @@
       "outcome": "Prove runtime gate solo_mode_chip_ribbon_suppression_buyer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71767",
+      "section": "line:71779",
       "dependencies": [
         "F-076"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-366"
     },
     {
@@ -14960,7 +15026,7 @@
       "outcome": "Prove runtime gate solo_mode_team_to_solo_blocked_with_stakeholders",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71766",
+      "section": "line:71778",
       "dependencies": [
         "F-AE-025"
       ],
@@ -14973,7 +15039,7 @@
       "outcome": "Prove runtime gate solo_per_charge_dispute_disambiguation_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73599",
+      "section": "line:73611",
       "dependencies": [
         "F-AE-051"
       ],
@@ -14986,7 +15052,7 @@
       "outcome": "Prove runtime gate solo_plan_change_console_isolation",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71795",
+      "section": "line:71807",
       "dependencies": [
         "F-002",
         "F-510",
@@ -15001,7 +15067,7 @@
       "outcome": "Prove runtime gate solo_subscription_blocks_per_charge",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71797",
+      "section": "line:71809",
       "dependencies": [
         "F-AE-051"
       ],
@@ -15014,12 +15080,12 @@
       "outcome": "Prove runtime gate solo_telemetry_no_customer_routing",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71801",
+      "section": "line:71813",
       "dependencies": [
         "F-622"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-760"
     },
     {
@@ -15027,12 +15093,12 @@
       "outcome": "Prove runtime gate solo_telemetry_property_schema_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71802",
+      "section": "line:71814",
       "dependencies": [
         "F-622"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-761"
     },
     {
@@ -15040,12 +15106,12 @@
       "outcome": "Prove runtime gate solo_throttling_class_change_takes_effect_at_next_envelope_rollover",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71805",
+      "section": "line:71817",
       "dependencies": [
         "F-621"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-762"
     },
     {
@@ -15053,12 +15119,12 @@
       "outcome": "Prove runtime gate solo_tier_buyer_hero_moment_slo_single_source",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72135",
+      "section": "line:72147",
       "dependencies": [
         "F-897"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-812"
     },
     {
@@ -15066,7 +15132,7 @@
       "outcome": "Prove runtime gate solo_trial_one_per_org_lifetime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72354",
+      "section": "line:72366",
       "dependencies": [
         "F-521"
       ],
@@ -15079,7 +15145,7 @@
       "outcome": "Prove runtime gate solo_upgrade_cta_threshold_3_events_30d_subscription_immediate_per_eval_bid",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72364",
+      "section": "line:72376",
       "dependencies": [
         "F-521"
       ],
@@ -15092,12 +15158,12 @@
       "outcome": "Prove runtime gate tap_count_probe",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72867",
+      "section": "line:72879",
       "dependencies": [
         "F-582"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-835"
     },
     {
@@ -15105,7 +15171,7 @@
       "outcome": "Prove runtime gate usage_dashboard_plan_gating_canonical_6_tier_consumer",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72110",
+      "section": "line:72122",
       "dependencies": [
         "F-760"
       ],
@@ -15118,12 +15184,12 @@
       "outcome": "Prove runtime gate vendor_disqualification_phase_aware_reversal_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73640",
+      "section": "line:73652",
       "dependencies": [
         "F-121"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "BUY-385"
     },
     {
@@ -15131,7 +15197,7 @@
       "outcome": "Prove runtime gate vendor_opt_out_capability_layer_enforcement",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71820",
+      "section": "line:71832",
       "dependencies": [
         "F-443"
       ],
@@ -15144,12 +15210,12 @@
       "outcome": "Prove runtime gate video_demo_transcript_pii_redaction",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73052",
+      "section": "line:73064",
       "dependencies": [
         "F-182"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R5",
       "issueId": "PLA-857"
     },
     {
@@ -15157,12 +15223,12 @@
       "outcome": "Prove runtime gate wallet_auto_topup_daily_frequency_runtime",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73597",
+      "section": "line:73609",
       "dependencies": [
         "F-126"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-884"
     },
     {
@@ -15170,12 +15236,12 @@
       "outcome": "Prove runtime gate wallet_auto_topup_period_cap_counter_completeness",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72651",
+      "section": "line:72663",
       "dependencies": [
         "F-126"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R4",
       "issueId": "PLA-829"
     },
     {
@@ -15183,7 +15249,7 @@
       "outcome": "Prove runtime gate wallet_autotopup_ops_override_bounds",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72916",
+      "section": "line:72928",
       "dependencies": [
         "F-125"
       ],
@@ -15196,7 +15262,7 @@
       "outcome": "Prove runtime gate wallet_free_free_additive_pool",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72918",
+      "section": "line:72930",
       "dependencies": [
         "F-537"
       ],
@@ -15209,7 +15275,7 @@
       "outcome": "Prove runtime gate wallet_free_paid_additive_pool_solo_exception",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72919",
+      "section": "line:72931",
       "dependencies": [
         "F-537"
       ],
@@ -15222,7 +15288,7 @@
       "outcome": "Prove runtime gate wallet_read_role_gate_scope",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71923",
+      "section": "line:71935",
       "dependencies": [
         "F-125",
         "F-138",
@@ -15231,7 +15297,7 @@
         "F-142"
       ],
       "disposition": "proof_only",
-      "release": "R2",
+      "release": "R4",
       "issueId": "PLA-800"
     },
     {
@@ -15239,7 +15305,7 @@
       "outcome": "Prove runtime gate webhook_dlq_observability_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73267",
+      "section": "line:73279",
       "dependencies": [
         "F-488"
       ],
@@ -15252,7 +15318,7 @@
       "outcome": "Prove runtime gate webhook_dlq_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73265",
+      "section": "line:73277",
       "dependencies": [
         "F-488"
       ],
@@ -15265,7 +15331,7 @@
       "outcome": "Prove runtime gate webhook_endpoint_pool_runtime_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:73266",
+      "section": "line:73278",
       "dependencies": [
         "F-486"
       ],
@@ -15278,7 +15344,7 @@
       "outcome": "Prove runtime gate webhook_payload_no_selection_record_body",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71770",
+      "section": "line:71782",
       "dependencies": [
         "F-487"
       ],
@@ -15291,12 +15357,12 @@
       "outcome": "Prove runtime gate workos_directory_group_role_assignment_precedence",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71879",
+      "section": "line:71891",
       "dependencies": [
         "F-702"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R2",
       "issueId": "PLA-775"
     },
     {
@@ -15304,12 +15370,12 @@
       "outcome": "Prove runtime gate workos_groups_api_membership_consistency",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71878",
+      "section": "line:71890",
       "dependencies": [
         "F-081"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-774"
     },
     {
@@ -15317,12 +15383,12 @@
       "outcome": "Prove runtime gate workos_predefined_attributes_consumed",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71877",
+      "section": "line:71889",
       "dependencies": [
         "F-080"
       ],
       "disposition": "proof_only",
-      "release": "R0",
+      "release": "R1",
       "issueId": "PLA-773"
     },
     {
@@ -15330,7 +15396,7 @@
       "outcome": "Prove runtime gate workos_raw_attributes_not_consumed",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71876",
+      "section": "line:71888",
       "dependencies": [
         "F-006"
       ],
@@ -15343,12 +15409,12 @@
       "outcome": "Prove runtime gate workspace_pulse_health_persistence_contract",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:71948",
+      "section": "line:71960",
       "dependencies": [
         "F-310"
       ],
       "disposition": "proof_only",
-      "release": "R1",
+      "release": "R2",
       "issueId": "BUY-372"
     },
     {
@@ -15356,7 +15422,7 @@
       "outcome": "Prove runtime gate workspace_template_idempotency_atomicity",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "sourceVersion": "live",
-      "section": "line:72721",
+      "section": "line:72733",
       "dependencies": [
         "F-306"
       ],

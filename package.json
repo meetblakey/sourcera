@@ -14,13 +14,21 @@
     "build": "next build",
     "build:all": "npm run build && npm run build --workspace @sourcera/buyer && npm run build --workspace @sourcera/seller",
     "clean:generated": "tsx scripts/clean-generated-output.ts",
+    "convex:bootstrap:production": "tsx scripts/bootstrap-convex-production.ts",
     "convex:build": "tsx scripts/validate-convex-env.ts --phase full --write-github-env && npm run build:all",
     "convex:codegen": "convex codegen",
     "convex:deploy:production": "tsx scripts/deploy-convex-production.ts",
     "convex:probe": "tsx scripts/run-convex-foundation-probe.ts",
+    "convex:rollback:production": "tsx scripts/rollback-convex-production.ts",
     "convex:validate:predeploy": "tsx scripts/validate-convex-env.ts --phase predeploy",
     "dev": "next dev",
     "lint": "eslint . --max-warnings=0",
+    "release:production": "tsx scripts/release-production.ts",
+    "release:production:blocked": "tsx scripts/production-release-blocked.ts",
+    "release:production:github": "tsx scripts/production-release-github.ts",
+    "release:production:no-authority": "tsx scripts/production-release-no-authority.ts",
+    "release:production:preflight": "tsx scripts/production-release-preflight.ts",
+    "release:vercel-baseline:github": "tsx scripts/vercel-production-baseline-github.ts",
     "start": "next start",
     "test": "tsx --test tests/**/*.spec.ts",
     "pretypecheck": "npm run clean:generated",
@@ -30,6 +38,8 @@
     "validate:convex-client": "tsx scripts/validate-convex-env.ts --phase client",
     "validate:deploy": "tsx scripts/validate-deploy-env.ts --domain marketplace",
     "vercel-build": "npm run validate:deploy && npm run validate:boundaries && tsx scripts/run-convex-vercel-build.ts",
+    "vercel:baseline:activate": "tsx scripts/activate-vercel-production-baseline.ts",
+    "vercel:baseline:stage": "tsx scripts/stage-vercel-production-baseline.ts",
     "vercel:stage:production": "tsx scripts/stage-vercel-production.ts",
     "verify": "npm run lint && npm run validate:boundaries && npm run typecheck:all && npm test && npm run build:all"
   },
@@ -56,9 +66,22 @@
     "eslint-config-next": "16.2.10",
     "tailwindcss": "4.3.2",
     "tsx": "4.23.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vercel": "56.2.0"
   },
   "overrides": {
-    "postcss": "8.5.10"
+    "postcss": "8.5.10",
+    "@tootallnate/once@2.0.0": "2.0.1",
+    "ajv@8.6.3": "8.20.0",
+    "js-yaml@4.1.1": "4.3.0",
+    "minimatch@10.1.1": "10.2.5",
+    "path-to-regexp@>=6.0.0 <6.3.0": "6.3.0",
+    "path-to-regexp@>=8.0.0 <8.4.0": "8.4.2",
+    "smol-toml@1.5.2": "1.6.1",
+    "tar@7.5.7": "7.5.20",
+    "tsx@4.21.0": {
+      "esbuild": "0.27.0"
+    },
+    "undici@>=5.28.4 <6.27.0": "6.27.0"
   }
 }

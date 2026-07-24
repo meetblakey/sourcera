@@ -1,3 +1,12 @@
 {
-  "findings": []
+  "findings": [
+    {
+      "code": "operating_model_priority_missing",
+      "message": "Tracked Linear work has a missing or invalid live priority fingerprint"
+    },
+    {
+      "code": "ready_queue_under_minimum",
+      "message": "Ready queue has 1; minimum is 5"
+    }
+  ]
 }

@@ -2,6 +2,69 @@
   "schemaVersion": 1,
   "sources": [
     {
+      "sourceId": "F-209",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.1 Pipeline Overview {#10.1-pipeline-overview}",
+      "endHeading": "## 10.2 Phase 1: Stakeholder Alignment & Discovery (1-3 weeks) {#10.2-phase-1-stakeholder-alignment-and-discovery}",
+      "sha256": "fb15f9a801f2d935517b0a130ce5ea2c59bc82e8cb744a4bc62191bc9a7ace2d"
+    },
+    {
+      "sourceId": "F-223",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}",
+      "endHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "sha256": "8c511a80f53a919c63f6eec7389ebb5f445764e4feeb579945b83949b1dafa46"
+    },
+    {
+      "sourceId": "F-224",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.11 Phase 11: Score Review & Consensus (1-2 weeks) {#10.11-phase-11-score-review-and-consensus}",
+      "endHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "sha256": "8c511a80f53a919c63f6eec7389ebb5f445764e4feeb579945b83949b1dafa46"
+    },
+    {
+      "sourceId": "F-225",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.12 Phase 12: Selection & Recommendation (2-5 business days) {#10.12-phase-12-selection-and-recommendation}",
+      "endHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}",
+      "sha256": "9d9c979919c49afcf5ba6378c1e27154f855980915bcec2ec576ceefe8cc885b"
+    },
+    {
+      "sourceId": "F-228",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.13 Phase 13: Contract & Closure (Terminal) {#10.13-phase-13-contract-and-closure}",
+      "endHeading": "### 10.13.7 Solo Per-Evaluation Charge — Phase 13 Stripe Charge Failure Path {#10.13.7-solo-per-evaluation-charge-phase-13-stripe-charge-failure-path}",
+      "sha256": "fad5890530cef8c1286dcf045533bdecd38cc54e81b6335b44d5c97306a0e9a4"
+    },
+    {
+      "sourceId": "F-229",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 4.3.24 Selection Record (Immutable Closure Bundle, Workspace-Scoped, Buyer) {#4.3.24-selection-record}",
+      "endHeading": "### 4.3.25 Approval Workflow (Workspace-Scoped, Buyer) {#4.3.25-approval-workflow}",
+      "sha256": "fd8c344882800a94d2d12776af074f429d67665e4ad2a874a3679f293ae5f14c"
+    },
+    {
+      "sourceId": "F-235",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "## 10.16 Phase Advancement API {#10.16-phase-advancement-api}",
+      "endHeading": "## 10.17 Cross-Phase State Preservation Under Plan Change {#10.17-cross-phase-state-preservation-under-plan-change}",
+      "sha256": "04a8ddb383f5887fc40b1e22cdbe67d76eb578ad91bcf147a9466b19d373a323"
+    },
+    {
+      "sourceId": "F-236",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 10.16.2 Idempotency",
+      "endHeading": "### 10.16.3 Phase Advancement Audit",
+      "sha256": "ef4073a56d0d3ba380951b248c804340bf054e1ce4e516bffaf941e0641ed568"
+    },
+    {
+      "sourceId": "F-238",
+      "sourceDoc": "Sourcera_Master_Spec.md",
+      "startHeading": "### 10.16.1 API Endpoint (§32-canonical)",
+      "endHeading": "### 10.16.2 Idempotency",
+      "sha256": "389cb52c663646475c30195f73c5b5961f7476746a2b3f849b10fd12c5768fc4"
+    },
+    {
       "sourceId": "F-725",
       "sourceDoc": "Sourcera_Master_Spec.md",
       "startHeading": "## 50.12 Pricing Admin Surface {#50.12-pricing-admin-surface}",

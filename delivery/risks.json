@@ -69,6 +69,55 @@
       "owner": "Blake Rowley",
       "trigger": "Production staging or promotion is attempted while any DEC-PROD-001 prerequisite is absent.",
       "response": "Fail before provider mutation, provision or separately approve the bootstrap, and prove the live rollback anchor before customer traffic or domain promotion; historical receipts alone never authorize release."
+    },
+    {
+      "id": "RISK-011",
+      "statement": "Waiting for invited-human release proof while candidate Convex code is live can expose unproved behavior or strand a release after the runner exits.",
+      "owner": "Blake Rowley",
+      "trigger": "A release attempts to collect customer or operational proof without the isolated candidate target and durable coordinator required by DEC-PROD-002.",
+      "response": "Block promotion, restore and prove the known-good Convex release, and collect proof only after the isolated candidate, authenticated durable handoff, expiry compensation, and single-use finalizer are operational."
+    },
+    {
+      "id": "RISK-012",
+      "statement": "The first Vercel production activation has no predecessor and cannot provide atomic cross-project rollback.",
+      "owner": "Blake Rowley",
+      "trigger": "Baseline activation stops after one or more applications receive traffic but before all three exact candidates are proved live and healthy.",
+      "response": "Stop new mutations, re-read every project and domain, retain the immutable stage receipt, mark recovery_required, and resume only the remaining exact candidates from that receipt. Never label the partial state rolled back; strict rollback requires a separately provisioned healthy maintenance predecessor for every project."
+    },
+    {
+      "id": "RISK-013",
+      "statement": "A later GitHub rerun can change the latest workflow-run record and invalidate an otherwise immutable successful baseline artifact.",
+      "owner": "Blake Rowley",
+      "trigger": "Baseline provenance is read from the mutable run endpoint instead of the exact successful attempt endpoint.",
+      "response": "Bind the artifact, run, SHA, and conclusion to the attempt-specific GitHub readback and reject any proof that depends on the latest mutable attempt."
+    },
+    {
+      "id": "RISK-014",
+      "statement": "A reason-only bootstrap can mint recovery authority without proving first genesis or an expired anchor.",
+      "owner": "Blake Rowley",
+      "trigger": "Bootstrap is requested without an exhaustive, receipt-bound inventory of prior production and bootstrap anchors.",
+      "response": "Allow only machine-proven initial genesis or exact expired-anchor recovery, keep the authority non-promotable, and require the DEC-PROD-002 single-use finalizer before mutation."
+    },
+    {
+      "id": "RISK-015",
+      "statement": "Cancellation during a Vercel mutation can outlive the runner grace period and lose recovery evidence.",
+      "owner": "Blake Rowley",
+      "trigger": "A baseline provider command remains active after a cancellation signal or any pinned production domain is not proved on the promoted deployment.",
+      "response": "Terminate promptly, persist recovery_required with traffic unknown, and reconcile only through the same immutable receipt; promotion passes only when every pinned production domain is assigned."
+    },
+    {
+      "id": "RISK-016",
+      "statement": "Co-locating Vercel and Convex write credentials gives one process unnecessary cross-provider mutation authority.",
+      "owner": "Blake Rowley",
+      "trigger": "A job or process receives both provider credential classes before the durable phase coordinator is operational.",
+      "response": "Fail closed and split stage, mutation, promotion, and compensation into receipt-bound provider-specific jobs before enabling production mutation."
+    },
+    {
+      "id": "RISK-017",
+      "statement": "Artifact retention, deletion, or workflow identity changes can erase the GitHub evidence needed to distinguish first genesis from recovery.",
+      "owner": "Blake Rowley",
+      "trigger": "A production authority approaches expiry, an authority artifact or run is deleted, or an authority-producing workflow is renamed, copied, or removed.",
+      "response": "Keep every artifact-derived anchor non-promotable and block provider mutation until a protected non-expiring genesis sentinel and single-use finalizer preserve authority history independently of Actions retention."
     }
   ]
 }
