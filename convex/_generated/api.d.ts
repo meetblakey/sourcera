@@ -9,6 +9,7 @@
  */
 
 import type * as foundation from "../foundation.js";
+import type * as releaseIdentity from "../releaseIdentity.js";
 
 import type {
   ApiFromModules,
@@ -18,6 +19,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   foundation: typeof foundation;
+  releaseIdentity: typeof releaseIdentity;
 }>;
 
 /**
