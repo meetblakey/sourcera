@@ -268,18 +268,24 @@ test("builds the release readback only from a complete receipt-bound native capt
   }
 });
 
-test("refuses the current incomplete legacy snapshot before output", () => {
-  const dir = mkdtempSync(join(tmpdir(), "sourcera-release-incomplete-"));
+test("refuses an incomplete snapshot before output", () => {
+  const value = fixture();
   try {
-    const out = join(dir, "release-plan.json");
-    const complete = fixture();
-    const result = run("delivery/linear-snapshot.json", out, complete.stamp);
+    value.snapshot.linearFingerprint.projects = [];
+    const fingerprint = canonicalLinearFingerprint(
+      value.snapshot.linearFingerprint,
+    );
+    value.snapshot.linearCapture.fingerprintSha256 = createHash("sha256")
+      .update(`${JSON.stringify(fingerprint, null, 2)}\n`)
+      .digest("hex");
+    writeFileSync(value.linear, `${JSON.stringify(value.snapshot, null, 2)}\n`);
+
+    const result = run(value.linear, value.out, value.stamp);
     assert.equal(result.status, 1);
     assert.match(result.stderr, /complete projects fingerprint inventory/);
-    assert.equal(existsSync(out), false);
-    rmSync(complete.dir, { recursive: true, force: true });
+    assert.equal(existsSync(value.out), false);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmSync(value.dir, { recursive: true, force: true });
   }
 });
 
