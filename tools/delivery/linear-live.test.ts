@@ -844,13 +844,18 @@ test("paginates native cycles and binds issue due dates to stable cycle IDs", as
 });
 
 test("fingerprints the complete canonical planning document contract", async () => {
-  const parentId = "68b43674-ef5a-431e-8105-431ba60892bd";
   const projectId = "22222222-2222-4222-8222-222222222222";
   const documentId = "3fd8304b-547e-48e2-bc76-5a9ebecaa389";
+  const teamId = "477029a4-9e0a-44ca-9816-5a169b6baafa";
   const outcomes = Array.from({ length: 6 }, (_, index) => ({
     id: `00000000-0000-4000-8000-00000000000${index}`,
     name: `Outcome ${index}`,
   }));
+  const projectIds = outcomes.map((_, index) =>
+    index === 0
+      ? projectId
+      : `33333333-3333-4333-8333-33333333333${index}`
+  );
   const content = `# Planning authority
 
 ## Binding authority
@@ -864,16 +869,15 @@ Authority.
 Completion.
 `;
   const programScope: LinearProgramScope = {
-    schemaVersion: 1,
-    parentInitiative: { id: parentId, name: "Program" },
+    schemaVersion: 2,
     outcomeInitiatives: outcomes,
     planningDocument: {
       id: documentId,
       title: "Planning authority",
       contentFingerprint: createHash("sha256").update(content).digest("hex"),
-      initiativeId: parentId,
+      initiativeId: null,
       projectId: null,
-      teamId: null,
+      teamId,
       issueId: null,
       requiredSections: [
         "Binding authority",
@@ -881,27 +885,28 @@ Completion.
         "Program completion",
       ],
     },
-    projectDescriptionFingerprints: [{
-      projectId,
+    projectDescriptionFingerprints: projectIds.map((currentProjectId) => ({
+      projectId: currentProjectId,
       descriptionFingerprint: createHash("sha256")
         .update("Project body")
         .digest("hex"),
       milestones: [],
-    }],
-    projectInitiatives: [{
-      projectId,
-      initiativeIds: [parentId, outcomes[0].id],
-    }],
+    })),
+    projectInitiatives: projectIds.map((currentProjectId, index) => ({
+      projectId: currentProjectId,
+      initiativeIds: [outcomes[index].id],
+    })),
   };
   const empty = completeConnection([]);
+  let extraInitiative: Record<string, unknown> | null = null;
   const fetcher: typeof fetch = async (_input, init) => {
     const query = (JSON.parse(String(init?.body)) as { query: string }).query;
     if (query.includes("DeliveryProjects")) {
       return response({
         data: {
-          projects: completeConnection([{
-            id: projectId,
-            name: "Project",
+          projects: completeConnection(projectIds.map((currentProjectId, index) => ({
+            id: currentProjectId,
+            name: `Project ${index + 1}`,
             content: "Project body",
             updatedAt: "2026-07-23T00:00:00.000Z",
             archivedAt: null,
@@ -912,11 +917,8 @@ Completion.
             startDateResolution: null,
             targetDate: null,
             targetDateResolution: null,
-            initiatives: completeConnection([
-              { id: parentId, name: "Program" },
-              outcomes[0],
-            ]),
-          }]),
+            initiatives: completeConnection([outcomes[index]]),
+          }))),
         },
       });
     }
@@ -927,12 +929,14 @@ Completion.
       return response({
         data: {
           initiatives: completeConnection([
-            { id: parentId, name: "Program" },
             ...outcomes,
+            ...(extraInitiative ? [extraInitiative] : []),
           ].map((initiative) => ({
             ...initiative,
             updatedAt: "2026-07-23T00:00:00.000Z",
-            archivedAt: null,
+            archivedAt: "archivedAt" in initiative
+              ? initiative.archivedAt
+              : null,
             owner: null,
             status: "Planned",
             priority: 2,
@@ -963,9 +967,9 @@ Completion.
             content,
             updatedAt: "2026-07-23T00:00:00.000Z",
             archivedAt: null,
-            initiative: { id: parentId, name: "Program" },
+            initiative: null,
             project: null,
-            team: null,
+            team: { id: teamId, key: "PLA" },
             issue: null,
           }]),
         },
@@ -986,7 +990,13 @@ Completion.
   const fingerprint = await fetchLinearFingerprint(
     fetcher,
     "secret",
-    { schemaVersion: 1, projects: [{ id: projectId, name: "Project" }] },
+    {
+      schemaVersion: 1,
+      projects: projectIds.map((id, index) => ({
+        id,
+        name: `Project ${index + 1}`,
+      })),
+    },
     programScope,
   );
 
@@ -995,9 +1005,9 @@ Completion.
     title: "Planning authority",
     updatedAt: "2026-07-23T00:00:00.000Z",
     archivedAt: null,
-    initiativeId: parentId,
+    initiativeId: null,
     projectId: null,
-    teamId: null,
+    teamId,
     issueId: null,
     contentFingerprint: createHash("sha256").update(content).digest("hex"),
     sectionHeadings: [
@@ -1010,13 +1020,14 @@ Completion.
       uxDesignSha256: "b".repeat(64),
     },
   }]);
+  assert.equal(fingerprint.program?.initiatives.length, 6);
   assert.deepEqual(
     fingerprint.program?.initiatives.find((initiative) =>
-      initiative.id === parentId
+      initiative.id === outcomes[0].id
     ),
     {
-      id: parentId,
-      name: "Program",
+      id: outcomes[0].id,
+      name: outcomes[0].name,
       updatedAt: "2026-07-23T00:00:00.000Z",
       archivedAt: null,
       owner: null,
@@ -1030,6 +1041,45 @@ Completion.
       parentInitiativeId: null,
       parentInitiative: null,
     },
+  );
+  extraInitiative = {
+    id: "77777777-7777-4777-8777-777777777777",
+    name: "Completed duplicate wrapper",
+    archivedAt: null,
+  };
+  await assert.rejects(
+    fetchLinearFingerprint(
+      fetcher,
+      "secret",
+      {
+        schemaVersion: 1,
+        projects: projectIds.map((id, index) => ({
+          id,
+          name: `Project ${index + 1}`,
+        })),
+      },
+      programScope,
+    ),
+    /inventory differs/,
+  );
+  extraInitiative = {
+    id: "77777777-7777-4777-8777-777777777777",
+    name: "Archived historical initiative",
+    archivedAt: "2026-07-23T00:00:00.000Z",
+  };
+  await assert.doesNotReject(
+    fetchLinearFingerprint(
+      fetcher,
+      "secret",
+      {
+        schemaVersion: 1,
+        projects: projectIds.map((id, index) => ({
+          id,
+          name: `Project ${index + 1}`,
+        })),
+      },
+      programScope,
+    ),
   );
 });
 

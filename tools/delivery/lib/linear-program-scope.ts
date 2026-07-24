@@ -1,14 +1,13 @@
 import type { Finding } from "./model.js";
 
 export interface LinearProgramScope {
-  schemaVersion: 1;
-  parentInitiative: { id: string; name: string };
+  schemaVersion: 2;
   outcomeInitiatives: Array<{ id: string; name: string }>;
   planningDocument: {
     id: string;
     title: string;
     contentFingerprint: string;
-    initiativeId: string;
+    initiativeId: null;
     projectId: string | null;
     teamId: string | null;
     issueId: string | null;
@@ -162,10 +161,8 @@ export function linearProgramScopeFindings(
 ): Finding[] {
   const findings: Finding[] = [];
   if (
-    scope?.schemaVersion !== 1 ||
-    !scope.parentInitiative ||
-    !UUID.test(scope.parentInitiative.id ?? "") ||
-    !text(scope.parentInitiative.name) ||
+    scope?.schemaVersion !== 2 ||
+    Object.hasOwn(scope ?? {}, "parentInitiative") ||
     !Array.isArray(scope.outcomeInitiatives) ||
     scope.outcomeInitiatives.length !== 6 ||
     scope.outcomeInitiatives.some(
@@ -175,13 +172,10 @@ export function linearProgramScopeFindings(
     !UUID.test(scope.planningDocument.id ?? "") ||
     !text(scope.planningDocument.title) ||
     !SHA256.test(scope.planningDocument.contentFingerprint ?? "") ||
-    scope.planningDocument.initiativeId !== scope.parentInitiative.id ||
-    (scope.planningDocument.projectId !== null &&
-      !UUID.test(scope.planningDocument.projectId ?? "")) ||
-    (scope.planningDocument.teamId !== null &&
-      !UUID.test(scope.planningDocument.teamId ?? "")) ||
-    (scope.planningDocument.issueId !== null &&
-      !UUID.test(scope.planningDocument.issueId ?? "")) ||
+    scope.planningDocument.initiativeId !== null ||
+    scope.planningDocument.projectId !== null ||
+    !UUID.test(scope.planningDocument.teamId ?? "") ||
+    scope.planningDocument.issueId !== null ||
     !Array.isArray(scope.planningDocument.requiredSections) ||
     !scope.planningDocument.requiredSections.length ||
     scope.planningDocument.requiredSections.some((section) => !text(section)) ||
@@ -198,10 +192,7 @@ export function linearProgramScopeFindings(
     return findings;
   }
 
-  const initiativeScope = [
-    scope.parentInitiative,
-    ...scope.outcomeInitiatives,
-  ];
+  const initiativeScope = scope.outcomeInitiatives;
   const initiativeIds = initiativeScope.map((initiative) => initiative.id);
   if (duplicate(initiativeIds)) {
     add(
@@ -217,11 +208,10 @@ export function linearProgramScopeFindings(
       (project) =>
         !UUID.test(project?.projectId ?? "") ||
         !Array.isArray(project.initiativeIds) ||
-        project.initiativeIds.length !== 2 ||
+        project.initiativeIds.length !== 1 ||
         duplicate(project.initiativeIds) ||
-        project.initiativeIds[0] !== scope.parentInitiative.id ||
         !scope.outcomeInitiatives.some(
-          (initiative) => initiative.id === project.initiativeIds[1],
+          (initiative) => initiative.id === project.initiativeIds[0],
         ),
     )
   ) {
@@ -230,6 +220,19 @@ export function linearProgramScopeFindings(
       "linear_program_scope_project_mapping_invalid",
       "Linear program scope project initiative mappings are incomplete or invalid",
     );
+  }
+  for (const initiative of scope.outcomeInitiatives) {
+    if (
+      !scope.projectInitiatives.some((project) =>
+        project.initiativeIds.includes(initiative.id)
+      )
+    ) {
+      add(
+        findings,
+        "linear_program_scope_initiative_unowned",
+        `Linear initiative ${initiative.id} owns no project`,
+      );
+    }
   }
   const descriptionProjectIds = scope.projectDescriptionFingerprints.map(
     (project) => project.projectId,

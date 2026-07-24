@@ -165,10 +165,7 @@ function fixture() {
     ),
     cycles: [],
     program: {
-      initiatives: [
-        programScope.parentInitiative,
-        ...programScope.outcomeInitiatives,
-      ].map((initiative) => ({
+      initiatives: programScope.outcomeInitiatives.map((initiative) => ({
         ...initiative,
         updatedAt: CAPTURED_AT,
         archivedAt: null,

@@ -9,6 +9,6 @@ This stable path is retained as a pointer. The former milestone-pack strategy is
 - Native Linear fields and relations own planning structure and dependency state.
 - Repository delivery policy and verification inputs live in `delivery/`; they do not form a parallel plan.
 - Generated verification output lives in `reports/delivery/`; never hand edit it.
-- The active Linear program initiative, outcome initiatives, projects, milestones, releases, native relations, and canonical planning document are the only execution plan.
+- The six native Linear outcome initiatives, projects, milestones, releases, native relations, and canonical planning document are the only execution plan. The Master Spec is source authority, not a duplicate initiative.
 
 Implementation follows the issue contract, repository instructions, and current code. Delivery readiness comes only from the verifier and live release scanners defined in `AGENTS.md`.

@@ -946,12 +946,7 @@ export async function fetchLinearCapture(
   const program = programScope
     ? {
         initiatives: initiativeNodes
-          .filter((initiative) =>
-            [
-              programScope.parentInitiative.id,
-              ...programScope.outcomeInitiatives.map((row) => row.id),
-            ].includes(initiative.id),
-          )
+          .filter((initiative) => initiative.archivedAt === null)
           .map((initiative) => ({
             id: initiative.id,
             name: initiative.name,

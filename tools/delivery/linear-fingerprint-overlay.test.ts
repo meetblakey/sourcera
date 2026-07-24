@@ -232,16 +232,25 @@ function fixture(options: FixtureOptions = {}) {
         updatedAt: "2026-07-14T00:00:00.000Z",
       },
     ],
-    projects: [
-      {
-        id: "22222222-2222-4222-8222-222222222222",
-        name: "Sourcera Production",
+    projects: options.programScope
+      ? live.projects.map((project) => ({
+        id: project.id,
+        name: project.name,
         priority: 4,
         targetDate: "2025-07-31",
         state: "deprecated",
         updatedAt: "2026-07-14T00:00:00.000Z",
-      },
-    ],
+      }))
+      : [
+        {
+          id: "22222222-2222-4222-8222-222222222222",
+          name: "Sourcera Production",
+          priority: 4,
+          targetDate: "2025-07-31",
+          state: "deprecated",
+          updatedAt: "2026-07-14T00:00:00.000Z",
+        },
+      ],
     milestones: [
       {
         id: "33333333-3333-4333-8333-333333333333",
@@ -274,12 +283,17 @@ function fixture(options: FixtureOptions = {}) {
     `${JSON.stringify(
       {
         schemaVersion: 1,
-        projects: [
-          {
-            id: "22222222-2222-4222-8222-222222222222",
-            name: "Sourcera Production",
-          },
-        ],
+        projects: options.programScope
+          ? live.projects.map((project) => ({
+            id: project.id,
+            name: project.name,
+          }))
+          : [
+            {
+              id: "22222222-2222-4222-8222-222222222222",
+              name: "Sourcera Production",
+            },
+          ],
       },
       null,
       2,
@@ -469,10 +483,21 @@ test("projects native cycle fields and rejects orphaned cycle assignments", () =
 
 test("replaces stale initiatives with the exact native program fingerprint", () => {
   const live = cloneFingerprint();
-  const parentId = "10101010-1010-4010-8010-101010101010";
   const outcomes = Array.from({ length: 6 }, (_, index) => ({
     id: `20202020-2020-4020-8020-20202020202${index}`,
     name: `Outcome ${index + 1}`,
+  }));
+  const primaryInitiativeId = outcomes[0].id;
+  const projectIds = outcomes.map((_, index) =>
+    index === 0
+      ? live.projects[0].id
+      : `40404040-4040-4040-8040-40404040404${index}`
+  );
+  const baseProject = live.projects[0];
+  live.projects = projectIds.map((id, index) => ({
+    ...structuredClone(baseProject),
+    id,
+    name: index === 0 ? baseProject.name : `Project ${index + 1}`,
   }));
   const masterSpecSha256 = createHash("sha256")
     .update(readFileSync("Sourcera_Master_Spec.md"))
@@ -488,73 +513,74 @@ test("replaces stale initiatives with the exact native program fingerprint", () 
     name,
     updatedAt: "2026-07-15T15:00:00.000Z",
     archivedAt: null,
-    owner: id === parentId ? "Blake Rowley" : null,
-    ownerId: id === parentId
+    owner: id === primaryInitiativeId ? "Blake Rowley" : null,
+    ownerId: id === primaryInitiativeId
       ? "e7e65e19-33ee-445e-9be4-7e9e734a5463"
       : null,
     status: "Planned",
     priority: 2,
-    health: id === parentId ? "onTrack" : null,
-    healthUpdatedAt: id === parentId
+    health: id === primaryInitiativeId ? "onTrack" : null,
+    healthUpdatedAt: id === primaryInitiativeId
       ? "2026-07-15T14:00:00.000Z"
       : null,
-    targetDate: id === parentId ? "2026-12-31" : null,
-    targetDateResolution: id === parentId ? "quarter" : null,
+    targetDate: id === primaryInitiativeId ? "2026-12-31" : null,
+    targetDateResolution: id === primaryInitiativeId ? "quarter" : null,
     parentInitiativeId: null,
     parentInitiative: null,
   });
   const documentId = "30303030-3030-4030-8030-303030303030";
+  const teamId = "477029a4-9e0a-44ca-9816-5a169b6baafa";
   const documentFingerprint = "f".repeat(64);
   live.program = {
-    initiatives: [
-      initiative(parentId, "Sourcera program"),
-      ...outcomes.map((outcome) => initiative(outcome.id, outcome.name)),
-    ],
+    initiatives: outcomes.map((outcome) =>
+      initiative(outcome.id, outcome.name)
+    ),
     documents: [{
       id: documentId,
       title: "Planning authority",
       updatedAt: "2026-07-15T15:00:00.000Z",
       archivedAt: null,
-      initiativeId: parentId,
+      initiativeId: null,
       projectId: null,
-      teamId: null,
+      teamId,
       issueId: null,
       contentFingerprint: documentFingerprint,
       sectionHeadings: ["Binding authority"],
       sourceFingerprints: { masterSpecSha256, uxDesignSha256 },
     }],
-    projectInitiatives: [{
-      projectId: live.projects[0].id,
-      initiativeIds: [parentId, outcomes[0].id],
-    }],
+    projectInitiatives: projectIds.map((projectId, index) => ({
+      projectId,
+      initiativeIds: [outcomes[index].id],
+    })),
   };
   const programScope: LinearProgramScope = {
-    schemaVersion: 1,
-    parentInitiative: { id: parentId, name: "Sourcera program" },
+    schemaVersion: 2,
     outcomeInitiatives: outcomes,
     planningDocument: {
       id: documentId,
       title: "Planning authority",
       contentFingerprint: documentFingerprint,
-      initiativeId: parentId,
+      initiativeId: null,
       projectId: null,
-      teamId: null,
+      teamId,
       issueId: null,
       requiredSections: ["Binding authority"],
     },
-    projectDescriptionFingerprints: [{
-      projectId: live.projects[0].id,
-      descriptionFingerprint: live.projects[0].descriptionFingerprint,
-      milestones: [{
-        milestoneId: live.projectMilestones[0].id,
-        descriptionFingerprint:
-          live.projectMilestones[0].descriptionFingerprint,
-      }],
-    }],
-    projectInitiatives: [{
-      projectId: live.projects[0].id,
-      initiativeIds: [parentId, outcomes[0].id],
-    }],
+    projectDescriptionFingerprints: projectIds.map((projectId, index) => ({
+      projectId,
+      descriptionFingerprint: live.projects[index].descriptionFingerprint,
+      milestones: index === 0
+        ? [{
+          milestoneId: live.projectMilestones[0].id,
+          descriptionFingerprint:
+            live.projectMilestones[0].descriptionFingerprint,
+        }]
+        : [],
+    })),
+    projectInitiatives: projectIds.map((projectId, index) => ({
+      projectId,
+      initiativeIds: [outcomes[index].id],
+    })),
   };
   const current = fixture({ fingerprint: live, programScope });
   try {
