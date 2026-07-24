@@ -1,12 +1,12 @@
 {
   "categories": {
-    "planning": 5,
-    "releases": 10,
+    "planning": 20,
+    "releases": 20,
     "ownership": 0,
     "validation": 0,
     "execution": 0
   },
-  "total": 15,
+  "total": 40,
   "tenOfTen": false,
   "journeyTargets": {
     "R2": {

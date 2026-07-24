@@ -5514,7 +5514,7 @@
     },
     {
       "from": "RG:appendix_m_coverage_on_diff",
-      "to": "F-796"
+      "to": "F-792"
     },
     {
       "from": "RG:attachment_dsar_72h_binary_detach_sla",
@@ -6597,31 +6597,5 @@
       "to": "F-306"
     }
   ],
-  "findings": [
-    {
-      "code": "cross_release_inversion",
-      "requirementId": "F-211",
-      "message": "F-211 R1 depends on F-237 R2"
-    },
-    {
-      "code": "cross_release_inversion",
-      "requirementId": "F-214",
-      "message": "F-214 R0 depends on F-213 R4"
-    },
-    {
-      "code": "cross_release_inversion",
-      "requirementId": "F-220",
-      "message": "F-220 R0 depends on F-219 R1"
-    },
-    {
-      "code": "cross_release_inversion",
-      "requirementId": "F-225",
-      "message": "F-225 R0 depends on F-223 R1"
-    },
-    {
-      "code": "cross_release_inversion",
-      "requirementId": "F-225",
-      "message": "F-225 R0 depends on F-224 R2"
-    }
-  ]
+  "findings": []
 }

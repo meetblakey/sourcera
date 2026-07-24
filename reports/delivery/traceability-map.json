@@ -97,7 +97,10 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-218"
+      "PLA-218",
+      "PLA-1013",
+      "PLA-1014",
+      "PLA-1015"
     ],
     "executableIssues": [
       {
@@ -105,9 +108,57 @@
         "milestone": "Platform contract ready",
         "dependencies": [
           "F-001",
-          "F-005",
-          "F-006"
+          "F-005"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1013",
+        "milestone": "Platform contract ready",
+        "dependencies": [
+          "F-001"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1014",
+        "milestone": "Platform contract ready",
+        "dependencies": [
+          "F-005"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1015",
+        "milestone": "Platform contract ready",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -146,7 +197,10 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-219"
+      "PLA-219",
+      "PLA-1016",
+      "PLA-1017",
+      "PLA-1018"
     ],
     "executableIssues": [
       {
@@ -155,6 +209,53 @@
         "dependencies": [
           "F-002"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1016",
+        "milestone": "Platform contract ready",
+        "dependencies": [
+          "F-002"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1017",
+        "milestone": "Platform contract ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1018",
+        "milestone": "Platform contract ready",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -278,7 +379,8 @@
     "telemetry": "convex_foundation_health_result with deployment reference, commit, environment, observation latency, assertion, result, and timestamp; no key or probe payload.",
     "proof": "reports/evidence/r0-convex-foundation.json plus commit-bound deployment, transactional/reactive probe, rollback, restore, and CI receipts.",
     "executableIssueIds": [
-      "PLA-282"
+      "PLA-282",
+      "PLA-1049"
     ],
     "executableIssues": [
       {
@@ -325,6 +427,21 @@
         "rollback": "redeploy the immediately prior verified Git commit to the same Preview deployment, rerun the probe, then restore the latest verified commit.",
         "telemetry": "convex_foundation_health_result with deployment reference, commit, environment, observation latency, assertion, result, and timestamp; no key or probe payload.",
         "proof": "reports/evidence/r0-convex-foundation.json plus commit-bound deployment, transactional/reactive probe, rollback, restore, and CI receipts."
+      },
+      {
+        "issueId": "PLA-1049",
+        "milestone": "Production evidence closed",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
       }
     ]
   },
@@ -336,24 +453,49 @@
       "section": "§1.5"
     },
     "disposition": "executable",
-    "issueId": "PLA-283",
+    "issueId": "PLA-942",
     "release": "R0",
-    "milestone": "Permissioned journeys ready",
+    "milestone": "Identity and tenancy ready",
     "dependencies": [
       "F-001",
       "F-005",
       "F-502"
     ],
-    "paths": [],
+    "paths": [
+      ".env.example",
+      "package.json",
+      "package-lock.json",
+      "convex/auth.config.ts",
+      "convex/authSession.ts",
+      "packages/domain/package.json",
+      "packages/domain/src/auth.ts",
+      "proxy.ts",
+      "app/auth/callback/route.ts",
+      "app/sign-in/route.ts",
+      "app/providers.tsx",
+      "apps/buyer/proxy.ts",
+      "apps/buyer/app/auth/callback/route.ts",
+      "apps/buyer/app/sign-in/route.ts",
+      "apps/buyer/app/providers.tsx",
+      "apps/buyer/package.json",
+      "apps/seller/proxy.ts",
+      "apps/seller/app/auth/callback/route.ts",
+      "apps/seller/app/sign-in/route.ts",
+      "apps/seller/app/providers.tsx",
+      "apps/seller/package.json",
+      "tests/integration/workos-auth-session.spec.ts",
+      "docs/runbooks/workos-auth.md",
+      "reports/evidence/r0-workos-auth-session.json"
+    ],
     "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
+      "success": "a WorkOS test identity completes PKCE sign-in and callback in each shell, reaches an authenticated Convex function with the expected subject and active Organization claim, then signs out and loses access.",
+      "failure": "invalid provider, callback, claim, redirect, cookie, or secret configuration fails before session issuance and exposes no identity or credential value.",
+      "recovery": "redeploy the prior verified protected Previews, confirm public health, restore the candidate, and repeat sign-in, authenticated query, and sign-out proof."
     },
-    "rollout": null,
-    "rollback": null,
-    "telemetry": null,
-    "proof": null,
+    "rollout": "three protected Vercel and Convex Previews using one synthetic WorkOS test identity and no customer traffic or production credentials.",
+    "rollback": "redeploy the immediately prior verified commit to the same protected Previews, verify public health, then restore and re-prove the candidate.",
+    "telemetry": "workos_auth_session_result with shell, commit, environment, assertion, result, failure class, and timestamp; no identity or credential values.",
+    "proof": "reports/evidence/r0-workos-auth-session.json plus three callbacks, authenticated query, post-sign-out denial, rollback, restore, and CI receipts.",
     "executableIssueIds": [
       "PLA-942",
       "PLA-943"
@@ -361,7 +503,7 @@
     "executableIssues": [
       {
         "issueId": "PLA-942",
-        "milestone": "Permissioned journeys ready",
+        "milestone": "Identity and tenancy ready",
         "dependencies": [
           "F-005"
         ],
@@ -403,10 +545,8 @@
       },
       {
         "issueId": "PLA-943",
-        "milestone": "Permissioned journeys ready",
-        "dependencies": [
-          "PLA-942"
-        ],
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
         "paths": [
           ".env.example",
           "package.json",
@@ -470,7 +610,12 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-284"
+      "PLA-284",
+      "PLA-1000",
+      "PLA-1001",
+      "PLA-997",
+      "PLA-998",
+      "PLA-999"
     ],
     "executableIssues": [
       {
@@ -480,6 +625,95 @@
         "paths": [
           "get_issue"
         ],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1000",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [
+          "F-630"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1001",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-997",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [
+          "F-005",
+          "F-132",
+          "F-593",
+          "F-630",
+          "F-917"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-998",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-999",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [
+          "F-139",
+          "F-160",
+          "F-529",
+          "F-537",
+          "F-569"
+        ],
+        "paths": [],
         "tests": {
           "success": null,
           "failure": null,
@@ -643,7 +877,7 @@
     "disposition": "executable",
     "issueId": "INT-48",
     "release": "R4",
-    "milestone": "Agent capabilities ready",
+    "milestone": "AI platform ready",
     "dependencies": [],
     "paths": [
       "get_issue"
@@ -663,7 +897,7 @@
     "executableIssues": [
       {
         "issueId": "INT-48",
-        "milestone": "Agent capabilities ready",
+        "milestone": "AI platform ready",
         "dependencies": [],
         "paths": [
           "get_issue"
@@ -2503,6 +2737,7 @@
         "issueId": "PLA-241",
         "milestone": "Application shell ready",
         "dependencies": [
+          "F-044",
           "F-330"
         ],
         "paths": [],
@@ -3909,7 +4144,7 @@
     "disposition": "executable",
     "issueId": "PLA-271",
     "release": "R0",
-    "milestone": "Billing contracts ready",
+    "milestone": "Identity and tenancy ready",
     "dependencies": [
       "F-005",
       "F-628"
@@ -3925,13 +4160,258 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-271"
+      "PLA-271",
+      "PLA-1019",
+      "PLA-1020",
+      "PLA-1021",
+      "PLA-1022",
+      "PLA-1023",
+      "PLA-959",
+      "PLA-960",
+      "PLA-961",
+      "PLA-962",
+      "PLA-963",
+      "PLA-964",
+      "PLA-965",
+      "PLA-966",
+      "PLA-967",
+      "PLA-968"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-271",
-        "milestone": "Billing contracts ready",
+        "milestone": "Identity and tenancy ready",
         "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1019",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1020",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1021",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1022",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1023",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-959",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [
+          "F-005",
+          "F-628"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-960",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-961",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-962",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-963",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-964",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-965",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-966",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-967",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-968",
+        "milestone": "Identity and tenancy ready",
+        "dependencies": [
+          "F-117"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -3954,7 +4434,7 @@
     },
     "disposition": "executable",
     "issueId": "PLA-272",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Identity and tenancy ready",
     "dependencies": [
       "F-006"
@@ -4005,7 +4485,7 @@
     },
     "disposition": "executable",
     "issueId": "PLA-273",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Identity and tenancy ready",
     "dependencies": [
       "F-079",
@@ -4110,7 +4590,7 @@
     "disposition": "executable",
     "issueId": "PLA-288",
     "release": "R0",
-    "milestone": "Security controls ready",
+    "milestone": "Core data contracts ready",
     "dependencies": [
       "F-003",
       "F-079",
@@ -4133,9 +4613,11 @@
     "executableIssues": [
       {
         "issueId": "PLA-288",
-        "milestone": "Security controls ready",
+        "milestone": "Core data contracts ready",
         "dependencies": [
-          "F-079"
+          "F-003",
+          "F-079",
+          "F-910"
         ],
         "paths": [],
         "tests": {
@@ -4205,15 +4687,13 @@
       "section": "§4.3.3"
     },
     "disposition": "executable",
-    "issueId": "SEL-71",
+    "issueId": "BUY-411",
     "release": "R0",
-    "milestone": "Seller knowledge ready",
+    "milestone": "Requirement contracts ready",
     "dependencies": [
       "F-083"
     ],
-    "paths": [
-      "get_issue"
-    ],
+    "paths": [],
     "tests": {
       "success": null,
       "failure": null,
@@ -4224,18 +4704,37 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "SEL-71"
+      "BUY-411",
+      "BUY-412"
     ],
     "executableIssues": [
       {
-        "issueId": "SEL-71",
-        "milestone": "Seller knowledge ready",
+        "issueId": "BUY-411",
+        "milestone": "Requirement contracts ready",
         "dependencies": [
           "F-083"
         ],
-        "paths": [
-          "get_issue"
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-412",
+        "milestone": "Requirement contracts ready",
+        "dependencies": [
+          "F-003",
+          "F-083",
+          "F-086",
+          "F-117"
         ],
+        "paths": [],
         "tests": {
           "success": null,
           "failure": null,
@@ -4333,7 +4832,12 @@
         "milestone": "Core data contracts ready",
         "dependencies": [
           "F-086",
-          "F-119"
+          "F-106",
+          "F-119",
+          "F-120",
+          "F-389",
+          "F-396",
+          "F-397"
         ],
         "paths": [],
         "tests": {
@@ -5732,7 +6236,12 @@
       {
         "issueId": "BUY-224",
         "milestone": "Marketplace catalog ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-005",
+          "F-117",
+          "F-120",
+          "F-429"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -6362,7 +6871,7 @@
     },
     "disposition": "executable",
     "issueId": "PLA-303",
-    "release": "R2",
+    "release": "R0",
     "milestone": "Billing contracts ready",
     "dependencies": [
       "F-125"
@@ -6482,7 +6991,11 @@
       {
         "issueId": "PLA-305",
         "milestone": "Billing contracts ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-005",
+          "F-124",
+          "F-524"
+        ],
         "paths": [
           "get_issue"
         ],
@@ -6813,7 +7326,8 @@
         "issueId": "PLA-311",
         "milestone": "Permissioned journeys ready",
         "dependencies": [
-          "F-138"
+          "F-138",
+          "F-160"
         ],
         "paths": [
           "get_issue"
@@ -7853,6 +8367,7 @@
         "issueId": "PLA-332",
         "milestone": "Identity and tenancy ready",
         "dependencies": [
+          "F-117",
           "F-159"
         ],
         "paths": [],
@@ -7899,9 +8414,7 @@
       {
         "issueId": "PLA-333",
         "milestone": "Identity and tenancy ready",
-        "dependencies": [
-          "F-006"
-        ],
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -8955,7 +9468,8 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-355"
+      "PLA-355",
+      "PLA-1050"
     ],
     "executableIssues": [
       {
@@ -8964,6 +9478,21 @@
         "dependencies": [
           "F-005"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1050",
+        "milestone": "Production evidence closed",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -9710,48 +10239,20 @@
       "section": "§9.1.2"
     },
     "disposition": "superseded",
-    "issueId": "PLA-371",
-    "release": "R1",
-    "milestone": "Permissioned journeys ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-197"
     ],
-    "paths": [
-      "get_issue"
-    ],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-371"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-371",
-        "milestone": "Permissioned journeys ready",
-        "dependencies": [
-          "F-197"
-        ],
-        "paths": [
-          "get_issue"
-        ],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-200",
@@ -10231,7 +10732,10 @@
         "issueId": "BUY-226",
         "milestone": "Workspace setup ready",
         "dependencies": [
-          "F-013"
+          "F-013",
+          "F-047",
+          "F-084",
+          "F-160"
         ],
         "paths": [],
         "tests": {
@@ -10255,7 +10759,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-227",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Workspace setup ready",
     "dependencies": [
       "F-209"
@@ -10302,7 +10806,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-228",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-209",
@@ -10332,7 +10836,12 @@
         "issueId": "BUY-228",
         "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-210",
+          "F-235",
+          "F-236",
+          "F-237",
+          "F-238"
         ],
         "paths": [
           "get_issue"
@@ -10358,7 +10867,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-229",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-209",
@@ -10384,7 +10893,8 @@
         "issueId": "BUY-229",
         "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-211"
         ],
         "paths": [
           "get_issue"
@@ -10410,7 +10920,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-230",
-    "release": "R4",
+    "release": "R0",
     "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-209",
@@ -10434,7 +10944,8 @@
         "issueId": "BUY-230",
         "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-212"
         ],
         "paths": [],
         "tests": {
@@ -10459,7 +10970,7 @@
     "disposition": "executable",
     "issueId": "BUY-231",
     "release": "R0",
-    "milestone": "Invitation and NDA journeys ready",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-209",
       "F-213",
@@ -10483,9 +10994,12 @@
     "executableIssues": [
       {
         "issueId": "BUY-231",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-213",
+          "F-673",
+          "F-791"
         ],
         "paths": [
           "get_issue"
@@ -10512,7 +11026,7 @@
     "disposition": "executable",
     "issueId": "BUY-232",
     "release": "R0",
-    "milestone": "Invitation and NDA journeys ready",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-209",
       "F-214",
@@ -10537,9 +11051,14 @@
     "executableIssues": [
       {
         "issueId": "BUY-232",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-214",
+          "F-397",
+          "F-409",
+          "F-774",
+          "F-775"
         ],
         "paths": [],
         "tests": {
@@ -10564,7 +11083,7 @@
     "disposition": "executable",
     "issueId": "BUY-233",
     "release": "R1",
-    "milestone": "Vendor records ready",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-215"
     ],
@@ -10584,7 +11103,7 @@
     "executableIssues": [
       {
         "issueId": "BUY-233",
-        "milestone": "Vendor records ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
           "F-215"
         ],
@@ -10610,8 +11129,8 @@
     },
     "disposition": "executable",
     "issueId": "BUY-234",
-    "release": "R1",
-    "milestone": "Invitation and NDA journeys ready",
+    "release": "R0",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-209",
       "F-215"
@@ -10632,9 +11151,10 @@
     "executableIssues": [
       {
         "issueId": "BUY-234",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-215"
         ],
         "paths": [],
         "tests": {
@@ -10658,8 +11178,8 @@
     },
     "disposition": "executable",
     "issueId": "BUY-235",
-    "release": "R1",
-    "milestone": "Invitation and NDA journeys ready",
+    "release": "R0",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-209",
       "F-217"
@@ -10680,9 +11200,10 @@
     "executableIssues": [
       {
         "issueId": "BUY-235",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-217"
         ],
         "paths": [],
         "tests": {
@@ -10706,8 +11227,8 @@
     },
     "disposition": "executable",
     "issueId": "BUY-236",
-    "release": "R1",
-    "milestone": "Invitation and NDA journeys ready",
+    "release": "R0",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-209",
       "F-218"
@@ -10728,9 +11249,10 @@
     "executableIssues": [
       {
         "issueId": "BUY-236",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-218"
         ],
         "paths": [],
         "tests": {
@@ -10781,7 +11303,9 @@
         "milestone": "Evaluation journey ready",
         "dependencies": [
           "F-088",
-          "F-209"
+          "F-209",
+          "F-219",
+          "F-260"
         ],
         "paths": [],
         "tests": {
@@ -10903,7 +11427,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-240",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-209",
@@ -10927,7 +11451,8 @@
         "issueId": "BUY-240",
         "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-220"
         ],
         "paths": [],
         "tests": {
@@ -10951,8 +11476,8 @@
     },
     "disposition": "executable",
     "issueId": "BUY-241",
-    "release": "R2",
-    "milestone": "Invitation and NDA journeys ready",
+    "release": "R0",
+    "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-223"
     ],
@@ -10972,7 +11497,7 @@
     "executableIssues": [
       {
         "issueId": "BUY-241",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Evaluation journey ready",
         "dependencies": [
           "F-223"
         ],
@@ -10999,7 +11524,7 @@
     "disposition": "executable",
     "issueId": "BUY-242",
     "release": "R0",
-    "milestone": "Invitation and NDA journeys ready",
+    "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-209",
       "F-221",
@@ -11022,9 +11547,12 @@
     "executableIssues": [
       {
         "issueId": "BUY-242",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-221",
+          "F-223",
+          "F-224"
         ],
         "paths": [],
         "tests": {
@@ -11049,7 +11577,7 @@
     "disposition": "executable",
     "issueId": "BUY-243",
     "release": "R0",
-    "milestone": "Vendor records ready",
+    "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-225"
     ],
@@ -11064,12 +11592,30 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "BUY-243"
+      "BUY-243",
+      "BUY-410"
     ],
     "executableIssues": [
       {
         "issueId": "BUY-243",
-        "milestone": "Vendor records ready",
+        "milestone": "Evaluation journey ready",
+        "dependencies": [
+          "F-225"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-410",
+        "milestone": "Evaluation journey ready",
         "dependencies": [
           "F-225"
         ],
@@ -11172,7 +11718,10 @@
         "issueId": "BUY-245",
         "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-209"
+          "F-209",
+          "F-225",
+          "F-226",
+          "F-776"
         ],
         "paths": [],
         "tests": {
@@ -11222,7 +11771,10 @@
         "issueId": "BUY-246",
         "milestone": "Workspace setup ready",
         "dependencies": [
-          "F-228"
+          "F-170",
+          "F-228",
+          "F-593",
+          "F-607"
         ],
         "paths": [],
         "tests": {
@@ -11489,7 +12041,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-252",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Evaluation journey ready",
     "dependencies": [
       "F-209"
@@ -11536,7 +12088,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-253",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Workspace setup ready",
     "dependencies": [
       "F-235"
@@ -11587,7 +12139,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-254",
-    "release": "R2",
+    "release": "R0",
     "milestone": "Workspace setup ready",
     "dependencies": [
       "F-170",
@@ -11640,7 +12192,7 @@
     },
     "disposition": "executable",
     "issueId": "BUY-255",
-    "release": "R1",
+    "release": "R0",
     "milestone": "Workspace setup ready",
     "dependencies": [
       "F-235"
@@ -11784,7 +12336,7 @@
     "disposition": "executable",
     "issueId": "BUY-258",
     "release": "R1",
-    "milestone": "Invitation and NDA journeys ready",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-240"
     ],
@@ -11804,7 +12356,7 @@
     "executableIssues": [
       {
         "issueId": "BUY-258",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
           "F-240"
         ],
@@ -11831,7 +12383,7 @@
     "disposition": "executable",
     "issueId": "BUY-260",
     "release": "R1",
-    "milestone": "Invitation and NDA journeys ready",
+    "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
     "dependencies": [
       "F-240"
     ],
@@ -11853,7 +12405,7 @@
     "executableIssues": [
       {
         "issueId": "BUY-260",
-        "milestone": "Invitation and NDA journeys ready",
+        "milestone": "Invitation, NDA, bidding & vendor participation journeys ready",
         "dependencies": [
           "F-240"
         ],
@@ -13093,7 +13645,8 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "BUY-284"
+      "BUY-284",
+      "BUY-409"
     ],
     "executableIssues": [
       {
@@ -13102,6 +13655,24 @@
         "dependencies": [
           "F-258",
           "F-265"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-409",
+        "milestone": "Scoring contracts ready",
+        "dependencies": [
+          "F-088",
+          "F-213"
         ],
         "paths": [],
         "tests": {
@@ -14401,7 +14972,9 @@
       {
         "issueId": "BUY-311",
         "milestone": "Reporting journey ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-215"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -15283,7 +15856,7 @@
     "disposition": "executable",
     "issueId": "INT-49",
     "release": "R4",
-    "milestone": "AI platform ready",
+    "milestone": "Agent capabilities ready",
     "dependencies": [
       "F-011"
     ],
@@ -15303,7 +15876,7 @@
     "executableIssues": [
       {
         "issueId": "INT-49",
-        "milestone": "AI platform ready",
+        "milestone": "Agent capabilities ready",
         "dependencies": [
           "F-011"
         ],
@@ -15345,7 +15918,8 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "INT-50"
+      "INT-50",
+      "INT-58"
     ],
     "executableIssues": [
       {
@@ -15354,6 +15928,21 @@
         "dependencies": [
           "F-314"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "INT-58",
+        "milestone": "Production evidence closed",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -18557,7 +19146,8 @@
         "milestone": "Profile and capability journeys ready",
         "dependencies": [
           "F-356",
-          "F-381"
+          "F-381",
+          "F-658"
         ],
         "paths": [],
         "tests": {
@@ -18800,7 +19390,9 @@
         "issueId": "SEL-146",
         "milestone": "Bid workspace ready",
         "dependencies": [
-          "F-120"
+          "F-120",
+          "F-910",
+          "F-911"
         ],
         "paths": [],
         "tests": {
@@ -19032,7 +19624,8 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "SEL-152"
+      "SEL-152",
+      "BUY-415"
     ],
     "executableIssues": [
       {
@@ -19041,6 +19634,21 @@
         "dependencies": [
           "F-387"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-415",
+        "milestone": "Production evidence closed",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -19133,7 +19741,8 @@
         "issueId": "SEL-153",
         "milestone": "Submission journey ready",
         "dependencies": [
-          "F-387"
+          "F-387",
+          "F-409"
         ],
         "paths": [],
         "tests": {
@@ -19837,6 +20446,7 @@
         "issueId": "PLA-395",
         "milestone": "Core data contracts ready",
         "dependencies": [
+          "F-086",
           "F-387",
           "F-396"
         ],
@@ -20797,9 +21407,9 @@
       "section": "§27.3"
     },
     "disposition": "executable",
-    "issueId": "SEL-169",
+    "issueId": "BUY-405",
     "release": "R3",
-    "milestone": "Promotion journeys ready",
+    "milestone": "Discovery and matching ready",
     "dependencies": [
       "F-429",
       "F-435"
@@ -20815,15 +21425,83 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "SEL-169"
+      "BUY-405",
+      "BUY-406",
+      "BUY-407",
+      "BUY-408"
     ],
     "executableIssues": [
       {
-        "issueId": "SEL-169",
-        "milestone": "Promotion journeys ready",
+        "issueId": "BUY-405",
+        "milestone": "Discovery and matching ready",
         "dependencies": [
+          "F-107",
+          "F-108",
+          "F-429",
+          "F-435",
+          "F-440",
+          "F-443",
+          "F-447"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-406",
+        "milestone": "Discovery and matching ready",
+        "dependencies": [
+          "F-108",
           "F-429",
           "F-435"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-407",
+        "milestone": "Discovery and matching ready",
+        "dependencies": [
+          "F-107",
+          "F-108",
+          "F-429",
+          "F-435",
+          "F-440",
+          "F-443",
+          "F-447"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-408",
+        "milestone": "Discovery and matching ready",
+        "dependencies": [
+          "F-429",
+          "F-628"
         ],
         "paths": [],
         "tests": {
@@ -21290,7 +21968,8 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "BUY-338"
+      "BUY-338",
+      "BUY-413"
     ],
     "executableIssues": [
       {
@@ -21299,6 +21978,21 @@
         "dependencies": [
           "F-429"
         ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "BUY-413",
+        "milestone": "Marketplace catalog ready",
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -22379,7 +23073,9 @@
       {
         "issueId": "PLA-401",
         "milestone": "Tokens and primitives ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-910"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -23047,7 +23743,9 @@
       {
         "issueId": "PLA-415",
         "milestone": "Search and collaboration ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-864"
+        ],
         "paths": [
           "get_issue"
         ],
@@ -23338,7 +24036,10 @@
       {
         "issueId": "PLA-421",
         "milestone": "Interface contracts ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-466",
+          "F-471"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -23681,6 +24382,7 @@
         "issueId": "PLA-428",
         "milestone": "Integration journeys ready",
         "dependencies": [
+          "F-116",
           "F-483"
         ],
         "paths": [],
@@ -23954,13 +24656,108 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-434"
+      "PLA-434",
+      "PLA-955",
+      "PLA-956",
+      "PLA-957",
+      "PLA-958"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-434",
         "milestone": "Interface contracts ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-002",
+          "F-004",
+          "F-138",
+          "F-168",
+          "F-169",
+          "F-170",
+          "F-628"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-955",
+        "milestone": "Interface contracts ready",
+        "dependencies": [
+          "F-002",
+          "F-004",
+          "F-138",
+          "F-168",
+          "F-169",
+          "F-170",
+          "F-628",
+          "F-910",
+          "F-911"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-956",
+        "milestone": "Interface contracts ready",
+        "dependencies": [
+          "F-628",
+          "F-910",
+          "F-911"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-957",
+        "milestone": "Interface contracts ready",
+        "dependencies": [
+          "F-628",
+          "F-910",
+          "F-911"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-958",
+        "milestone": "Production evidence closed",
+        "dependencies": [
+          "F-497",
+          "F-498",
+          "F-782",
+          "RG:api_standard_retry_after_runtime_consistency"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -24317,7 +25114,7 @@
     "disposition": "executable",
     "issueId": "PLA-442",
     "release": "R5",
-    "milestone": "Security controls ready",
+    "milestone": "Privacy and compliance ready",
     "dependencies": [],
     "paths": [
       "get_issue"
@@ -24337,7 +25134,7 @@
     "executableIssues": [
       {
         "issueId": "PLA-442",
-        "milestone": "Security controls ready",
+        "milestone": "Privacy and compliance ready",
         "dependencies": [],
         "paths": [
           "get_issue"
@@ -24387,9 +25184,7 @@
       {
         "issueId": "PLA-443",
         "milestone": "Security controls ready",
-        "dependencies": [
-          "F-006"
-        ],
+        "dependencies": [],
         "paths": [
           "get_issue"
         ],
@@ -24415,7 +25210,7 @@
     "disposition": "executable",
     "issueId": "PLA-444",
     "release": "R5",
-    "milestone": "Privacy and compliance ready",
+    "milestone": "Security controls ready",
     "dependencies": [],
     "paths": [
       "get_issue"
@@ -24435,7 +25230,7 @@
     "executableIssues": [
       {
         "issueId": "PLA-444",
-        "milestone": "Privacy and compliance ready",
+        "milestone": "Security controls ready",
         "dependencies": [],
         "paths": [
           "get_issue"
@@ -24637,7 +25432,7 @@
     },
     "disposition": "executable",
     "issueId": "PLA-449",
-    "release": "R2",
+    "release": "R0",
     "milestone": "Billing contracts ready",
     "dependencies": [],
     "paths": [],
@@ -25378,6 +26173,8 @@
         "issueId": "PLA-465",
         "milestone": "Billing contracts ready",
         "dependencies": [
+          "F-007",
+          "F-079",
           "F-528"
         ],
         "paths": [],
@@ -25665,7 +26462,10 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-471"
+      "PLA-471",
+      "PLA-978",
+      "PLA-979",
+      "PLA-980"
     ],
     "executableIssues": [
       {
@@ -25673,6 +26473,73 @@
         "milestone": "Purchase and settlement ready",
         "dependencies": [
           "F-527"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-978",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [
+          "F-466",
+          "F-468",
+          "F-527",
+          "F-628",
+          "F-916"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-979",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [
+          "F-466",
+          "F-468",
+          "F-509",
+          "F-527",
+          "F-528",
+          "F-628",
+          "F-916"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-980",
+        "milestone": "Purchase and settlement ready",
+        "dependencies": [
+          "F-466",
+          "F-467",
+          "F-468",
+          "F-470",
+          "F-473",
+          "F-628",
+          "F-916"
         ],
         "paths": [],
         "tests": {
@@ -25866,7 +26733,9 @@
         "issueId": "PLA-475",
         "milestone": "Billing contracts ready",
         "dependencies": [
-          "F-536"
+          "F-132",
+          "F-536",
+          "F-630"
         ],
         "paths": [],
         "tests": {
@@ -26103,7 +26972,8 @@
         "issueId": "PLA-480",
         "milestone": "Billing contracts ready",
         "dependencies": [
-          "F-536"
+          "F-536",
+          "F-537"
         ],
         "paths": [],
         "tests": {
@@ -26746,7 +27616,9 @@
       {
         "issueId": "PLA-494",
         "milestone": "Billing contracts ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-079"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -26894,7 +27766,6 @@
         "issueId": "BUY-350",
         "milestone": "Evaluation journey ready",
         "dependencies": [
-          "F-006",
           "F-010",
           "F-321",
           "F-392",
@@ -27221,9 +28092,9 @@
       "section": "§35.3"
     },
     "disposition": "executable",
-    "issueId": "BUY-357",
+    "issueId": "SEL-258",
     "release": "R5",
-    "milestone": "Evaluation journey ready",
+    "milestone": "Onboarding journey ready",
     "dependencies": [
       "F-179",
       "F-687",
@@ -27240,14 +28111,16 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "BUY-357"
+      "SEL-258"
     ],
     "executableIssues": [
       {
-        "issueId": "BUY-357",
-        "milestone": "Evaluation journey ready",
+        "issueId": "SEL-258",
+        "milestone": "Onboarding journey ready",
         "dependencies": [
-          "F-179"
+          "F-179",
+          "F-687",
+          "F-693"
         ],
         "paths": [],
         "tests": {
@@ -28501,12 +29374,30 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-522"
+      "PLA-522",
+      "PLA-1048"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-522",
         "milestone": "Portability contracts ready",
+        "dependencies": [
+          "F-005"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1048",
+        "milestone": "Production evidence closed",
         "dependencies": [],
         "paths": [],
         "tests": {
@@ -28795,13 +29686,73 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-528"
+      "PLA-528",
+      "PLA-969",
+      "PLA-970",
+      "PLA-971"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-528",
         "milestone": "Observability ready",
         "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-969",
+        "milestone": "Observability ready",
+        "dependencies": [
+          "F-474",
+          "F-514",
+          "F-520",
+          "F-543"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-970",
+        "milestone": "Observability ready",
+        "dependencies": [
+          "F-012",
+          "F-600"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-971",
+        "milestone": "Observability ready",
+        "dependencies": [
+          "F-466",
+          "F-471",
+          "F-483"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -28885,13 +29836,34 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-530"
+      "PLA-530",
+      "PLA-1024"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-530",
         "milestone": "Observability ready",
         "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1024",
+        "milestone": "Observability ready",
+        "dependencies": [
+          "F-117",
+          "F-474",
+          "F-605",
+          "F-606"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -29199,50 +30171,21 @@
       "section": "§43.1"
     },
     "disposition": "superseded",
-    "issueId": "PLA-896",
-    "release": "R2",
-    "milestone": "Support workflows ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-007",
       "F-008"
     ],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-896"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-896",
-        "milestone": "Support workflows ready",
-        "dependencies": [
-          "F-007",
-          "F-008"
-        ],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-609",
@@ -29252,48 +30195,20 @@
       "section": "§43.2"
     },
     "disposition": "superseded",
-    "issueId": "PLA-897",
-    "release": "R5",
-    "milestone": "Ops controls ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-161"
     ],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": "the cited contract produ… (truncated, use `get_issue` for full description)",
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-897"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-897",
-        "milestone": "Ops controls ready",
-        "dependencies": [
-          "F-161"
-        ],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": "the cited contract produ… (truncated, use `get_issue` for full description)",
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-610",
@@ -29303,44 +30218,18 @@
       "section": "§43.3"
     },
     "disposition": "superseded",
-    "issueId": "PLA-898",
-    "release": "R2",
-    "milestone": "Support workflows ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-898"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-898",
-        "milestone": "Support workflows ready",
-        "dependencies": [],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-611",
@@ -29350,48 +30239,20 @@
       "section": "§43.4"
     },
     "disposition": "superseded",
-    "issueId": "PLA-899",
-    "release": "R2",
-    "milestone": "Ops controls ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-117"
     ],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": "… (truncated, use `get_issue` for full description)",
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-899"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-899",
-        "milestone": "Ops controls ready",
-        "dependencies": [
-          "F-117"
-        ],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": "… (truncated, use `get_issue` for full description)",
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-612",
@@ -29711,6 +30572,7 @@
         "issueId": "PLA-543",
         "milestone": "Reliability and performance ready",
         "dependencies": [
+          "F-007",
           "F-616"
         ],
         "paths": [],
@@ -30022,7 +30884,7 @@
     "disposition": "executable",
     "issueId": "PLA-550",
     "release": "R5",
-    "milestone": "Security controls ready",
+    "milestone": "Privacy and compliance ready",
     "dependencies": [],
     "paths": [],
     "tests": {
@@ -30040,7 +30902,7 @@
     "executableIssues": [
       {
         "issueId": "PLA-550",
-        "milestone": "Security controls ready",
+        "milestone": "Privacy and compliance ready",
         "dependencies": [],
         "paths": [],
         "tests": {
@@ -30172,16 +31034,338 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-553"
+      "PLA-553",
+      "PLA-981",
+      "PLA-982",
+      "PLA-983",
+      "PLA-984",
+      "PLA-985",
+      "PLA-986",
+      "PLA-987",
+      "PLA-988",
+      "PLA-989",
+      "PLA-990",
+      "PLA-991",
+      "PLA-992",
+      "PLA-993",
+      "PLA-994",
+      "PLA-995",
+      "PLA-996"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-553",
         "milestone": "Quality gates ready",
-        "dependencies": [],
+        "dependencies": [
+          "F-005"
+        ],
         "paths": [
           "get_issue"
         ],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-981",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-005"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-982",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-983",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-984",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-985",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-986",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-002",
+          "F-003",
+          "F-120"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-987",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-120"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-988",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-002",
+          "F-003",
+          "F-116",
+          "F-117",
+          "F-429"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-989",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-120"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-990",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-003",
+          "F-116"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-991",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-992",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-993",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-994",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-116",
+          "F-429"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-995",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-414",
+          "F-466",
+          "F-471",
+          "F-483"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-996",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-002",
+          "F-003",
+          "F-006",
+          "F-210",
+          "F-211",
+          "F-212",
+          "F-213",
+          "F-214",
+          "F-215",
+          "F-217",
+          "F-218",
+          "F-219",
+          "F-220",
+          "F-221",
+          "F-223",
+          "F-224",
+          "F-225",
+          "F-226",
+          "F-228",
+          "F-229",
+          "F-235",
+          "F-236",
+          "F-237",
+          "F-238",
+          "F-387",
+          "F-389",
+          "F-392",
+          "F-687",
+          "F-688",
+          "F-689",
+          "F-690",
+          "F-691",
+          "F-692",
+          "F-693",
+          "F-916",
+          "F-917"
+        ],
+        "paths": [],
         "tests": {
           "success": null,
           "failure": null,
@@ -30276,7 +31460,14 @@
         "issueId": "PLA-555",
         "milestone": "Quality gates ready",
         "dependencies": [
-          "F-008"
+          "F-005",
+          "F-008",
+          "F-572",
+          "F-600",
+          "F-603",
+          "F-605",
+          "F-612",
+          "F-628"
         ],
         "paths": [],
         "tests": {
@@ -30324,7 +31515,8 @@
         "issueId": "PLA-556",
         "milestone": "Quality gates ready",
         "dependencies": [
-          "F-008"
+          "F-008",
+          "F-531"
         ],
         "paths": [],
         "tests": {
@@ -31466,7 +32658,10 @@
         "issueId": "PLA-580",
         "milestone": "Growth loops ready",
         "dependencies": [
-          "F-608"
+          "F-653",
+          "F-654",
+          "F-696",
+          "F-701"
         ],
         "paths": [
           "get_issue"
@@ -32297,7 +33492,8 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-598"
+      "PLA-598",
+      "PLA-1002"
     ],
     "executableIssues": [
       {
@@ -32309,6 +33505,24 @@
         "paths": [
           "get_issue"
         ],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1002",
+        "milestone": "Core data contracts ready",
+        "dependencies": [
+          "F-120",
+          "F-397"
+        ],
+        "paths": [],
         "tests": {
           "success": null,
           "failure": null,
@@ -32975,7 +34189,14 @@
         "issueId": "SEL-184",
         "milestone": "Seller shell ready",
         "dependencies": [
-          "F-559"
+          "F-559",
+          "F-630",
+          "F-751",
+          "F-752",
+          "F-753",
+          "F-755",
+          "F-779",
+          "F-780"
         ],
         "paths": [],
         "tests": {
@@ -33072,7 +34293,8 @@
         "milestone": "Onboarding journey ready",
         "dependencies": [
           "F-334",
-          "F-354"
+          "F-354",
+          "F-789"
         ],
         "paths": [],
         "tests": {
@@ -33407,19 +34629,78 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-612"
+      "PLA-612",
+      "PLA-1003",
+      "PLA-1028",
+      "PLA-1039"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-612",
         "milestone": "Support workflows ready",
         "dependencies": [
-          "F-005",
-          "F-006"
+          "F-005"
         ],
         "paths": [
           "get_issue"
         ],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1003",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1028",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-083",
+          "F-117",
+          "F-119",
+          "F-160",
+          "F-593",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-701",
+          "F-711",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1039",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
         "tests": {
           "success": null,
           "failure": null,
@@ -33510,9 +34791,7 @@
       {
         "issueId": "PLA-614",
         "milestone": "Ops controls ready",
-        "dependencies": [
-          "F-006"
-        ],
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -33698,9 +34977,7 @@
       {
         "issueId": "PLA-618",
         "milestone": "Ops controls ready",
-        "dependencies": [
-          "F-006"
-        ],
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -34830,7 +36107,25 @@
         "issueId": "PLA-641",
         "milestone": "Support workflows ready",
         "dependencies": [
-          "F-132"
+          "F-008",
+          "F-117",
+          "F-119",
+          "F-123",
+          "F-124",
+          "F-132",
+          "F-160",
+          "F-483",
+          "F-499",
+          "F-600",
+          "F-697",
+          "F-701",
+          "F-726",
+          "F-727",
+          "F-728",
+          "F-729",
+          "F-730",
+          "F-779",
+          "F-780"
         ],
         "paths": [],
         "tests": {
@@ -38069,44 +39364,20 @@
       "section": "Appendix M.3"
     },
     "disposition": "superseded",
-    "issueId": "PLA-702",
-    "release": "R2",
-    "milestone": "Quality gates ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-793"
     ],
     "paths": [],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-702"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-702",
-        "milestone": "Quality gates ready",
-        "dependencies": [
-          "F-793"
-        ],
-        "paths": [],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-795",
@@ -38162,7 +39433,9 @@
       {
         "issueId": "PLA-703",
         "milestone": "Quality gates ready",
-        "dependencies": [],
+        "dependencies": [
+          "RG:appendix_m_coverage_on_diff"
+        ],
         "paths": [],
         "tests": {
           "success": null,
@@ -38201,11 +39474,29 @@
     "telemetry": null,
     "proof": null,
     "executableIssueIds": [
-      "PLA-704"
+      "PLA-704",
+      "PLA-895"
     ],
     "executableIssues": [
       {
         "issueId": "PLA-704",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "RG:appendix_m_coverage_on_diff"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-895",
         "milestone": "Quality gates ready",
         "dependencies": [],
         "paths": [],
@@ -40448,7 +41739,15 @@
         "issueId": "PLA-732",
         "milestone": "Application shell ready",
         "dependencies": [
-          "F-860"
+          "F-042",
+          "F-043",
+          "F-569",
+          "F-859",
+          "F-860",
+          "F-861",
+          "F-862",
+          "F-863",
+          "F-864"
         ],
         "paths": [],
         "tests": {
@@ -40495,6 +41794,7 @@
         "issueId": "PLA-733",
         "milestone": "Application shell ready",
         "dependencies": [
+          "F-864",
           "F-866"
         ],
         "paths": [],
@@ -40542,7 +41842,8 @@
         "issueId": "PLA-734",
         "milestone": "Application shell ready",
         "dependencies": [
-          "F-863"
+          "F-863",
+          "F-864"
         ],
         "paths": [],
         "tests": {
@@ -40589,7 +41890,8 @@
         "issueId": "PLA-735",
         "milestone": "Application shell ready",
         "dependencies": [
-          "F-863"
+          "F-863",
+          "F-864"
         ],
         "paths": [],
         "tests": {
@@ -41654,7 +42956,8 @@
         "dependencies": [
           "F-099",
           "F-534",
-          "F-559"
+          "F-559",
+          "F-685"
         ],
         "paths": [],
         "tests": {
@@ -41728,9 +43031,9 @@
       "section": "UX Design §4.3.1"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "SEL-259",
+    "release": "R4",
+    "milestone": "Seller shell ready",
     "dependencies": [
       "F-001",
       "F-112",
@@ -41749,13 +43052,51 @@
       "F-879"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "SEL-259"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "SEL-259",
+        "milestone": "Seller shell ready",
+        "dependencies": [
+          "F-001",
+          "F-112",
+          "F-113",
+          "F-117",
+          "F-183",
+          "F-332",
+          "F-333",
+          "F-387",
+          "F-393",
+          "F-429",
+          "F-873",
+          "F-875",
+          "F-876",
+          "F-877",
+          "F-879"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-910",
@@ -41765,9 +43106,9 @@
       "section": "§1.5.1"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-946",
+    "release": "R0",
+    "milestone": "Security controls ready",
     "dependencies": [
       "F-002",
       "F-004",
@@ -41775,13 +43116,40 @@
       "F-911"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-946"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-946",
+        "milestone": "Security controls ready",
+        "dependencies": [
+          "F-002",
+          "F-004",
+          "F-005",
+          "F-911"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-911",
@@ -41791,21 +43159,46 @@
       "section": "§32.1.1"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-944",
+    "release": "R0",
+    "milestone": "Security controls ready",
     "dependencies": [
       "F-002",
       "F-004"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-944"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-944",
+        "milestone": "Security controls ready",
+        "dependencies": [
+          "F-002",
+          "F-004"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-912",
@@ -41815,9 +43208,9 @@
       "section": "§34.1.1"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-945",
+    "release": "R5",
+    "milestone": "Permissioned journeys ready",
     "dependencies": [
       "F-006",
       "F-063",
@@ -41830,13 +43223,113 @@
       "F-859"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-945",
+      "PLA-947",
+      "PLA-948",
+      "PLA-949"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-945",
+        "milestone": "Permissioned journeys ready",
+        "dependencies": [
+          "F-063",
+          "F-119",
+          "F-170",
+          "F-179",
+          "F-569",
+          "F-628",
+          "F-701",
+          "F-859"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-947",
+        "milestone": "Permissioned journeys ready",
+        "dependencies": [
+          "F-063",
+          "F-119",
+          "F-170",
+          "F-179",
+          "F-569",
+          "F-628",
+          "F-701",
+          "F-859"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-948",
+        "milestone": "Permissioned journeys ready",
+        "dependencies": [
+          "F-063",
+          "F-179",
+          "F-569",
+          "F-628",
+          "F-859"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-949",
+        "milestone": "Permissioned journeys ready",
+        "dependencies": [
+          "F-063",
+          "F-179",
+          "F-569",
+          "F-628",
+          "F-859"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-913",
@@ -41846,9 +43339,9 @@
       "section": "§50.33"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-950",
+    "release": "R4",
+    "milestone": "Quality gates ready",
     "dependencies": [
       "F-119",
       "F-132",
@@ -41859,13 +43352,130 @@
       "F-725"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-950",
+      "PLA-951",
+      "PLA-952",
+      "PLA-953",
+      "PLA-954"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-950",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-119",
+          "F-132",
+          "F-302",
+          "F-628",
+          "F-701",
+          "F-706",
+          "F-725"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-951",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-119",
+          "F-132",
+          "F-302",
+          "F-628",
+          "F-701",
+          "F-706",
+          "F-725"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-952",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-119",
+          "F-302",
+          "F-628",
+          "F-701",
+          "F-706"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-953",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-119",
+          "F-132",
+          "F-628",
+          "F-701",
+          "F-706",
+          "F-725"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-954",
+        "milestone": "Quality gates ready",
+        "dependencies": [
+          "F-628"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-916",
@@ -41875,9 +43485,9 @@
       "section": "§34.9.1"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-975",
+    "release": "R0",
+    "milestone": "Billing contracts ready",
     "dependencies": [
       "F-006",
       "F-008",
@@ -41896,13 +43506,85 @@
       "F-917"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-975",
+      "PLA-976",
+      "PLA-977"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-975",
+        "milestone": "Billing contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-976",
+        "milestone": "Billing contracts ready",
+        "dependencies": [
+          "F-079",
+          "F-117",
+          "F-125",
+          "F-130",
+          "F-511",
+          "F-628",
+          "F-917"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-977",
+        "milestone": "Billing contracts ready",
+        "dependencies": [
+          "F-008",
+          "F-080",
+          "F-081",
+          "F-099",
+          "F-628",
+          "F-755",
+          "F-779",
+          "F-780",
+          "F-917"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-917",
@@ -41912,9 +43594,9 @@
       "section": "§34.10.5.A"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-972",
+    "release": "R0",
+    "milestone": "Billing contracts ready",
     "dependencies": [
       "F-079",
       "F-117",
@@ -41922,13 +43604,71 @@
       "F-628"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-972",
+      "PLA-973",
+      "PLA-974"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-972",
+        "milestone": "Billing contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-973",
+        "milestone": "Billing contracts ready",
+        "dependencies": [
+          "F-079",
+          "F-502",
+          "F-628"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-974",
+        "milestone": "Billing contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-922",
@@ -41938,9 +43678,9 @@
       "section": "§4.4.27"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1025",
+    "release": "R2",
+    "milestone": "Core data contracts ready",
     "dependencies": [
       "F-117",
       "F-119",
@@ -41956,13 +43696,80 @@
       "F-780"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1004",
+      "PLA-1005",
+      "PLA-1025"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1004",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1005",
+        "milestone": "Core data contracts ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1025",
+        "milestone": "Core data contracts ready",
+        "dependencies": [
+          "F-117",
+          "F-119",
+          "F-160",
+          "F-593",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-779",
+          "F-780"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-923",
@@ -41972,9 +43779,9 @@
       "section": "§50.20"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1030",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-007",
       "F-079",
@@ -42001,13 +43808,108 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1006",
+      "PLA-1007",
+      "PLA-1008",
+      "PLA-1030"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1006",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1007",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1008",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1030",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-007",
+          "F-079",
+          "F-117",
+          "F-119",
+          "F-132",
+          "F-160",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-725",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922",
+          "F-927"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-924",
@@ -42017,9 +43919,9 @@
       "section": "§50.21"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1029",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-002",
       "F-079",
@@ -42049,13 +43951,126 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1009",
+      "PLA-1010",
+      "PLA-1011",
+      "PLA-1012",
+      "PLA-1029"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1009",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1010",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1011",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1012",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1029",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-002",
+          "F-079",
+          "F-083",
+          "F-117",
+          "F-119",
+          "F-160",
+          "F-175",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-502",
+          "F-592",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-925",
@@ -42065,9 +44080,9 @@
       "section": "§50.22"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1031",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-007",
       "F-117",
@@ -42094,13 +44109,75 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1031",
+      "PLA-1038"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1031",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-007",
+          "F-117",
+          "F-119",
+          "F-125",
+          "F-128",
+          "F-160",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1038",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-926",
@@ -42110,9 +44187,9 @@
       "section": "§50.23"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1032",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-007",
       "F-117",
@@ -42139,13 +44216,75 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1032",
+      "PLA-1037"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1032",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-007",
+          "F-117",
+          "F-119",
+          "F-125",
+          "F-126",
+          "F-160",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1037",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-927",
@@ -42155,9 +44294,9 @@
       "section": "§50.24"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1033",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-007",
       "F-079",
@@ -42186,13 +44325,93 @@
       "F-923"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1027",
+      "PLA-1033",
+      "PLA-1040"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1027",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1033",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-007",
+          "F-079",
+          "F-117",
+          "F-119",
+          "F-160",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-533",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-916",
+          "F-922",
+          "F-923"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1040",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-928",
@@ -42202,9 +44421,9 @@
       "section": "§50.25"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1034",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-117",
       "F-119",
@@ -42233,13 +44452,78 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1034",
+      "PLA-1042"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1034",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-112",
+          "F-117",
+          "F-119",
+          "F-160",
+          "F-429",
+          "F-447",
+          "F-449",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-602",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-746",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1042",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-929",
@@ -42249,9 +44533,9 @@
       "section": "§50.26"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1035",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-007",
       "F-117",
@@ -42280,13 +44564,77 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1035",
+      "PLA-1041"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1035",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-007",
+          "F-117",
+          "F-119",
+          "F-123",
+          "F-125",
+          "F-128",
+          "F-160",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-539",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1041",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-930",
@@ -42296,9 +44644,9 @@
       "section": "§50.27"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1036",
+    "release": "R5",
+    "milestone": "Ops controls ready",
     "dependencies": [
       "F-006",
       "F-079",
@@ -42329,13 +44677,78 @@
       "F-922"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1036",
+      "PLA-1043"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1036",
+        "milestone": "Ops controls ready",
+        "dependencies": [
+          "F-079",
+          "F-117",
+          "F-119",
+          "F-138",
+          "F-160",
+          "F-161",
+          "F-164",
+          "F-168",
+          "F-169",
+          "F-466",
+          "F-471",
+          "F-483",
+          "F-496",
+          "F-593",
+          "F-596",
+          "F-600",
+          "F-697",
+          "F-698",
+          "F-699",
+          "F-700",
+          "F-701",
+          "F-777",
+          "F-779",
+          "F-780",
+          "F-782",
+          "F-922"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      },
+      {
+        "issueId": "PLA-1043",
+        "milestone": "Ops controls ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-931",
@@ -42345,18 +44758,40 @@
       "section": "Authenticated planning mirror publication"
     },
     "disposition": "executable",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1044",
+    "release": "R0",
+    "milestone": "Quality gates ready",
     "dependencies": [],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1044"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1044",
+        "milestone": "Quality gates ready",
+        "dependencies": [],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "F-AE-001",
@@ -45785,48 +48220,20 @@
       "section": "Appendix M.5"
     },
     "disposition": "superseded",
-    "issueId": "PLA-938",
-    "release": "R2",
-    "milestone": "Quality gates ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-797"
     ],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-938"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-938",
-        "milestone": "Quality gates ready",
-        "dependencies": [
-          "F-797"
-        ],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-AE-070",
@@ -45862,7 +48269,7 @@
         "issueId": "PLA-939",
         "milestone": "Quality gates ready",
         "dependencies": [
-          "F-AE-069"
+          "F-797"
         ],
         "paths": [
           "Sourcera_Master_Spec.md"
@@ -45887,44 +48294,18 @@
       "section": "_integration/RECONCILIATION.md → Phase 14.0.1"
     },
     "disposition": "narrative_context",
-    "issueId": "PLA-940",
-    "release": "R3",
-    "milestone": "Growth loops ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "PLA-940"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "PLA-940",
-        "milestone": "Growth loops ready",
-        "dependencies": [],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-AE-072",
@@ -45934,48 +48315,20 @@
       "section": "§27"
     },
     "disposition": "narrative_context",
-    "issueId": "BUY-404",
-    "release": "R3",
-    "milestone": "Marketplace catalog ready",
+    "issueId": null,
+    "release": null,
+    "milestone": null,
     "dependencies": [
       "F-429"
     ],
-    "paths": [
-      "Sourcera_Master_Spec.md"
-    ],
-    "tests": {
-      "success": null,
-      "failure": null,
-      "recovery": null
-    },
+    "paths": [],
+    "tests": null,
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [
-      "BUY-404"
-    ],
-    "executableIssues": [
-      {
-        "issueId": "BUY-404",
-        "milestone": "Marketplace catalog ready",
-        "dependencies": [
-          "F-429"
-        ],
-        "paths": [
-          "Sourcera_Master_Spec.md"
-        ],
-        "tests": {
-          "success": null,
-          "failure": null,
-          "recovery": null
-        },
-        "rollout": null,
-        "rollback": null,
-        "telemetry": null,
-        "proof": null
-      }
-    ]
+    "executableIssueIds": [],
+    "executableIssues": []
   },
   {
     "requirementId": "F-BC-001",
@@ -46033,7 +48386,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72491"
+      "section": "line:72645"
     },
     "disposition": "proof_only",
     "issueId": "PLA-804",
@@ -46080,7 +48433,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73445"
+      "section": "line:73599"
     },
     "disposition": "proof_only",
     "issueId": "PLA-840",
@@ -46129,7 +48482,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73240"
+      "section": "line:73394"
     },
     "disposition": "proof_only",
     "issueId": "PLA-830",
@@ -46178,7 +48531,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73727"
+      "section": "line:73881"
     },
     "disposition": "proof_only",
     "issueId": "PLA-859",
@@ -46225,7 +48578,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73823"
+      "section": "line:73977"
     },
     "disposition": "proof_only",
     "issueId": "PLA-868",
@@ -46274,7 +48627,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72349"
+      "section": "line:72503"
     },
     "disposition": "proof_only",
     "issueId": "PLA-757",
@@ -46325,7 +48678,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73443"
+      "section": "line:73597"
     },
     "disposition": "proof_only",
     "issueId": "PLA-838",
@@ -46372,7 +48725,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73802"
+      "section": "line:73956"
     },
     "disposition": "proof_only",
     "issueId": "PLA-861",
@@ -46419,7 +48772,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73805"
+      "section": "line:73959"
     },
     "disposition": "proof_only",
     "issueId": "PLA-864",
@@ -46466,7 +48819,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73803"
+      "section": "line:73957"
     },
     "disposition": "proof_only",
     "issueId": "PLA-862",
@@ -46517,7 +48870,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73531"
+      "section": "line:73685"
     },
     "disposition": "proof_only",
     "issueId": "PLA-853",
@@ -46564,14 +48917,14 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72467"
+      "section": "line:72621"
     },
     "disposition": "proof_only",
     "issueId": "PLA-797",
     "release": "R2",
     "milestone": "Production evidence closed",
     "dependencies": [
-      "F-796"
+      "F-792"
     ],
     "paths": [],
     "tests": {
@@ -46591,7 +48944,7 @@
         "issueId": "PLA-797",
         "milestone": "Production evidence closed",
         "dependencies": [
-          "F-796"
+          "F-792"
         ],
         "paths": [],
         "tests": {
@@ -46611,7 +48964,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72462"
+      "section": "line:72616"
     },
     "disposition": "proof_only",
     "issueId": "PLA-796",
@@ -46658,7 +49011,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72410"
+      "section": "line:72564"
     },
     "disposition": "proof_only",
     "issueId": "PLA-767",
@@ -46705,7 +49058,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72409"
+      "section": "line:72563"
     },
     "disposition": "proof_only",
     "issueId": "PLA-766",
@@ -46752,7 +49105,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73515"
+      "section": "line:73669"
     },
     "disposition": "proof_only",
     "issueId": "PLA-850",
@@ -46799,7 +49152,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74196"
+      "section": "line:74350"
     },
     "disposition": "proof_only",
     "issueId": "PLA-894",
@@ -46846,7 +49199,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74072"
+      "section": "line:74226"
     },
     "disposition": "proof_only",
     "issueId": "PLA-870",
@@ -46893,7 +49246,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72411"
+      "section": "line:72565"
     },
     "disposition": "proof_only",
     "issueId": "PLA-768",
@@ -46940,7 +49293,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72459"
+      "section": "line:72613"
     },
     "disposition": "proof_only",
     "issueId": "PLA-793",
@@ -46989,7 +49342,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72456"
+      "section": "line:72610"
     },
     "disposition": "proof_only",
     "issueId": "PLA-790",
@@ -47038,7 +49391,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72475"
+      "section": "line:72629"
     },
     "disposition": "proof_only",
     "issueId": "PLA-799",
@@ -47085,7 +49438,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73770"
+      "section": "line:73924"
     },
     "disposition": "proof_only",
     "issueId": "SEL-232",
@@ -47132,7 +49485,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73769"
+      "section": "line:73923"
     },
     "disposition": "proof_only",
     "issueId": "SEL-231",
@@ -47179,7 +49532,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74182"
+      "section": "line:74336"
     },
     "disposition": "proof_only",
     "issueId": "SEL-246",
@@ -47226,7 +49579,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73468"
+      "section": "line:73622"
     },
     "disposition": "proof_only",
     "issueId": "SEL-219",
@@ -47273,7 +49626,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73772"
+      "section": "line:73926"
     },
     "disposition": "proof_only",
     "issueId": "SEL-234",
@@ -47320,7 +49673,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73771"
+      "section": "line:73925"
     },
     "disposition": "proof_only",
     "issueId": "SEL-233",
@@ -47367,7 +49720,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73804"
+      "section": "line:73958"
     },
     "disposition": "proof_only",
     "issueId": "PLA-863",
@@ -47418,7 +49771,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74116"
+      "section": "line:74270"
     },
     "disposition": "proof_only",
     "issueId": "PLA-877",
@@ -47465,7 +49818,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72445"
+      "section": "line:72599"
     },
     "disposition": "proof_only",
     "issueId": "SEL-200",
@@ -47512,7 +49865,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73447"
+      "section": "line:73601"
     },
     "disposition": "proof_only",
     "issueId": "PLA-842",
@@ -47561,7 +49914,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72660"
+      "section": "line:72814"
     },
     "disposition": "proof_only",
     "issueId": "PLA-808",
@@ -47610,7 +49963,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72985"
+      "section": "line:73139"
     },
     "disposition": "proof_only",
     "issueId": "PLA-825",
@@ -47665,7 +50018,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74130"
+      "section": "line:74284"
     },
     "disposition": "proof_only",
     "issueId": "PLA-881",
@@ -47712,7 +50065,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74143"
+      "section": "line:74297"
     },
     "disposition": "proof_only",
     "issueId": "BUY-383",
@@ -47761,32 +50114,58 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74206"
+      "section": "line:74360"
     },
     "disposition": "proof_only",
-    "issueId": null,
-    "release": null,
-    "milestone": null,
+    "issueId": "PLA-1026",
+    "release": "R2",
+    "milestone": "Production evidence closed",
     "dependencies": [
       "F-117",
       "F-533",
       "F-916"
     ],
     "paths": [],
-    "tests": null,
+    "tests": {
+      "success": null,
+      "failure": null,
+      "recovery": null
+    },
     "rollout": null,
     "rollback": null,
     "telemetry": null,
     "proof": null,
-    "executableIssueIds": [],
-    "executableIssues": []
+    "executableIssueIds": [
+      "PLA-1026"
+    ],
+    "executableIssues": [
+      {
+        "issueId": "PLA-1026",
+        "milestone": "Production evidence closed",
+        "dependencies": [
+          "F-117",
+          "F-533",
+          "F-916"
+        ],
+        "paths": [],
+        "tests": {
+          "success": null,
+          "failure": null,
+          "recovery": null
+        },
+        "rollout": null,
+        "rollback": null,
+        "telemetry": null,
+        "proof": null
+      }
+    ]
   },
   {
     "requirementId": "RG:capability_declaration_reuse_count_consistency",
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73726"
+      "section": "line:73880"
     },
     "disposition": "proof_only",
     "issueId": "SEL-226",
@@ -47833,7 +50212,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73602"
+      "section": "line:73756"
     },
     "disposition": "proof_only",
     "issueId": "PLA-855",
@@ -47882,7 +50261,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72479"
+      "section": "line:72633"
     },
     "disposition": "proof_only",
     "issueId": "PLA-803",
@@ -47929,7 +50308,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72478"
+      "section": "line:72632"
     },
     "disposition": "proof_only",
     "issueId": "PLA-802",
@@ -47976,7 +50355,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72477"
+      "section": "line:72631"
     },
     "disposition": "proof_only",
     "issueId": "PLA-801",
@@ -48023,7 +50402,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74173"
+      "section": "line:74327"
     },
     "disposition": "proof_only",
     "issueId": "PLA-891",
@@ -48070,7 +50449,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72322"
+      "section": "line:72476"
     },
     "disposition": "proof_only",
     "issueId": "BUY-367",
@@ -48117,7 +50496,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72372"
+      "section": "line:72526"
     },
     "disposition": "proof_only",
     "issueId": "PLA-765",
@@ -48164,7 +50543,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73202"
+      "section": "line:73356"
     },
     "disposition": "proof_only",
     "issueId": "PLA-827",
@@ -48211,7 +50590,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73444"
+      "section": "line:73598"
     },
     "disposition": "proof_only",
     "issueId": "PLA-839",
@@ -48258,7 +50637,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73442"
+      "section": "line:73596"
     },
     "disposition": "proof_only",
     "issueId": "PLA-837",
@@ -48305,7 +50684,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72471"
+      "section": "line:72625"
     },
     "disposition": "proof_only",
     "issueId": "PLA-798",
@@ -48352,7 +50731,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73429"
+      "section": "line:73583"
     },
     "disposition": "proof_only",
     "issueId": "PLA-836",
@@ -48399,7 +50778,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72420"
+      "section": "line:72574"
     },
     "disposition": "proof_only",
     "issueId": "PLA-771",
@@ -48446,7 +50825,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74127"
+      "section": "line:74281"
     },
     "disposition": "proof_only",
     "issueId": "BUY-382",
@@ -48493,7 +50872,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72325"
+      "section": "line:72479"
     },
     "disposition": "proof_only",
     "issueId": "BUY-368",
@@ -48540,7 +50919,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72452"
+      "section": "line:72606"
     },
     "disposition": "proof_only",
     "issueId": "PLA-786",
@@ -48589,7 +50968,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72453"
+      "section": "line:72607"
     },
     "disposition": "proof_only",
     "issueId": "PLA-787",
@@ -48638,7 +51017,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72451"
+      "section": "line:72605"
     },
     "disposition": "proof_only",
     "issueId": "PLA-785",
@@ -48687,7 +51066,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72455"
+      "section": "line:72609"
     },
     "disposition": "proof_only",
     "issueId": "PLA-789",
@@ -48734,7 +51113,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72454"
+      "section": "line:72608"
     },
     "disposition": "proof_only",
     "issueId": "PLA-788",
@@ -48783,7 +51162,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74073"
+      "section": "line:74227"
     },
     "disposition": "proof_only",
     "issueId": "PLA-871",
@@ -48830,7 +51209,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72441"
+      "section": "line:72595"
     },
     "disposition": "proof_only",
     "issueId": "PLA-778",
@@ -48877,7 +51256,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72440"
+      "section": "line:72594"
     },
     "disposition": "proof_only",
     "issueId": "PLA-777",
@@ -48924,7 +51303,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72439"
+      "section": "line:72593"
     },
     "disposition": "proof_only",
     "issueId": "PLA-776",
@@ -48971,7 +51350,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74071"
+      "section": "line:74225"
     },
     "disposition": "proof_only",
     "issueId": "PLA-869",
@@ -49018,7 +51397,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72442"
+      "section": "line:72596"
     },
     "disposition": "proof_only",
     "issueId": "PLA-779",
@@ -49065,7 +51444,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72443"
+      "section": "line:72597"
     },
     "disposition": "proof_only",
     "issueId": "PLA-780",
@@ -49112,7 +51491,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72446"
+      "section": "line:72600"
     },
     "disposition": "proof_only",
     "issueId": "PLA-781",
@@ -49159,7 +51538,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72447"
+      "section": "line:72601"
     },
     "disposition": "proof_only",
     "issueId": "PLA-782",
@@ -49206,7 +51585,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72450"
+      "section": "line:72604"
     },
     "disposition": "proof_only",
     "issueId": "PLA-784",
@@ -49253,7 +51632,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72412"
+      "section": "line:72566"
     },
     "disposition": "proof_only",
     "issueId": "PLA-769",
@@ -49300,7 +51679,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72448"
+      "section": "line:72602"
     },
     "disposition": "proof_only",
     "issueId": "PLA-783",
@@ -49347,7 +51726,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72691"
+      "section": "line:72845"
     },
     "disposition": "proof_only",
     "issueId": "PLA-813",
@@ -49394,7 +51773,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72690"
+      "section": "line:72844"
     },
     "disposition": "proof_only",
     "issueId": "SEL-204",
@@ -49441,7 +51820,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72460"
+      "section": "line:72614"
     },
     "disposition": "proof_only",
     "issueId": "PLA-794",
@@ -49490,7 +51869,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73516"
+      "section": "line:73670"
     },
     "disposition": "proof_only",
     "issueId": "PLA-851",
@@ -49539,7 +51918,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74165"
+      "section": "line:74319"
     },
     "disposition": "proof_only",
     "issueId": "PLA-890",
@@ -49588,7 +51967,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72419"
+      "section": "line:72573"
     },
     "disposition": "proof_only",
     "issueId": "PLA-770",
@@ -49637,7 +52016,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74164"
+      "section": "line:74318"
     },
     "disposition": "proof_only",
     "issueId": "PLA-889",
@@ -49686,7 +52065,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74074"
+      "section": "line:74228"
     },
     "disposition": "proof_only",
     "issueId": "PLA-872",
@@ -49733,7 +52112,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73185"
+      "section": "line:73339"
     },
     "disposition": "proof_only",
     "issueId": "PLA-826",
@@ -49780,7 +52159,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73309"
+      "section": "line:73463"
     },
     "disposition": "proof_only",
     "issueId": "PLA-832",
@@ -49827,7 +52206,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72731"
+      "section": "line:72885"
     },
     "disposition": "proof_only",
     "issueId": "PLA-818",
@@ -49874,7 +52253,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74129"
+      "section": "line:74283"
     },
     "disposition": "proof_only",
     "issueId": "SEL-243",
@@ -49921,7 +52300,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73603"
+      "section": "line:73757"
     },
     "disposition": "proof_only",
     "issueId": "PLA-856",
@@ -49970,7 +52349,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72658"
+      "section": "line:72812"
     },
     "disposition": "proof_only",
     "issueId": "PLA-807",
@@ -50017,7 +52396,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73755"
+      "section": "line:73909"
     },
     "disposition": "proof_only",
     "issueId": "PLA-860",
@@ -50064,7 +52443,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73469"
+      "section": "line:73623"
     },
     "disposition": "proof_only",
     "issueId": "BUY-380",
@@ -50111,7 +52490,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72785"
+      "section": "line:72939"
     },
     "disposition": "proof_only",
     "issueId": "SEL-210",
@@ -50158,7 +52537,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73203"
+      "section": "line:73357"
     },
     "disposition": "proof_only",
     "issueId": "PLA-828",
@@ -50207,7 +52586,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74096"
+      "section": "line:74250"
     },
     "disposition": "proof_only",
     "issueId": "PLA-874",
@@ -50254,7 +52633,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74183"
+      "section": "line:74337"
     },
     "disposition": "proof_only",
     "issueId": "PLA-893",
@@ -50301,7 +52680,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74085"
+      "section": "line:74239"
     },
     "disposition": "proof_only",
     "issueId": "PLA-873",
@@ -50352,7 +52731,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74086"
+      "section": "line:74240"
     },
     "disposition": "proof_only",
     "issueId": "SEL-241",
@@ -50403,7 +52782,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74174"
+      "section": "line:74328"
     },
     "disposition": "proof_only",
     "issueId": "PLA-892",
@@ -50452,7 +52831,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73226"
+      "section": "line:73380"
     },
     "disposition": "proof_only",
     "issueId": "BUY-374",
@@ -50503,7 +52882,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73575"
+      "section": "line:73729"
     },
     "disposition": "proof_only",
     "issueId": "PLA-854",
@@ -50550,7 +52929,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72659"
+      "section": "line:72813"
     },
     "disposition": "proof_only",
     "issueId": "SEL-203",
@@ -50597,7 +52976,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72474"
+      "section": "line:72628"
     },
     "disposition": "proof_only",
     "issueId": "SEL-201",
@@ -50644,7 +53023,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73753"
+      "section": "line:73907"
     },
     "disposition": "proof_only",
     "issueId": "SEL-228",
@@ -50691,7 +53070,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73385"
+      "section": "line:73539"
     },
     "disposition": "proof_only",
     "issueId": "SEL-217",
@@ -50738,7 +53117,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73754"
+      "section": "line:73908"
     },
     "disposition": "proof_only",
     "issueId": "SEL-229",
@@ -50785,7 +53164,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72761"
+      "section": "line:72915"
     },
     "disposition": "proof_only",
     "issueId": "SEL-209",
@@ -50832,7 +53211,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72759"
+      "section": "line:72913"
     },
     "disposition": "proof_only",
     "issueId": "SEL-207",
@@ -50879,7 +53258,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72760"
+      "section": "line:72914"
     },
     "disposition": "proof_only",
     "issueId": "SEL-208",
@@ -50926,7 +53305,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73752"
+      "section": "line:73906"
     },
     "disposition": "proof_only",
     "issueId": "SEL-227",
@@ -50973,7 +53352,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72820"
+      "section": "line:72974"
     },
     "disposition": "proof_only",
     "issueId": "PLA-819",
@@ -51000,7 +53379,7 @@
         "issueId": "PLA-819",
         "milestone": "Production evidence closed",
         "dependencies": [
-          "F-539"
+          "F-917"
         ],
         "paths": [],
         "tests": {
@@ -51020,7 +53399,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73446"
+      "section": "line:73600"
     },
     "disposition": "proof_only",
     "issueId": "PLA-841",
@@ -51067,7 +53446,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72496"
+      "section": "line:72650"
     },
     "disposition": "proof_only",
     "issueId": "PLA-806",
@@ -51114,7 +53493,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72666"
+      "section": "line:72820"
     },
     "disposition": "proof_only",
     "issueId": "PLA-810",
@@ -51161,7 +53540,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72672"
+      "section": "line:72826"
     },
     "disposition": "proof_only",
     "issueId": "PLA-811",
@@ -51208,7 +53587,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73353"
+      "section": "line:73507"
     },
     "disposition": "proof_only",
     "issueId": "SEL-215",
@@ -51255,7 +53634,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73368"
+      "section": "line:73522"
     },
     "disposition": "proof_only",
     "issueId": "BUY-379",
@@ -51302,7 +53681,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73367"
+      "section": "line:73521"
     },
     "disposition": "proof_only",
     "issueId": "SEL-216",
@@ -51349,7 +53728,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73384"
+      "section": "line:73538"
     },
     "disposition": "proof_only",
     "issueId": "PLA-833",
@@ -51396,7 +53775,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72983"
+      "section": "line:73137"
     },
     "disposition": "proof_only",
     "issueId": "PLA-823",
@@ -51443,7 +53822,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73609"
+      "section": "line:73763"
     },
     "disposition": "proof_only",
     "issueId": "PLA-858",
@@ -51490,7 +53869,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73786"
+      "section": "line:73940"
     },
     "disposition": "proof_only",
     "issueId": "SEL-236",
@@ -51539,7 +53918,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72697"
+      "section": "line:72851"
     },
     "disposition": "proof_only",
     "issueId": "PLA-817",
@@ -51586,7 +53965,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72696"
+      "section": "line:72850"
     },
     "disposition": "proof_only",
     "issueId": "PLA-816",
@@ -51633,7 +54012,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72694"
+      "section": "line:72848"
     },
     "disposition": "proof_only",
     "issueId": "PLA-814",
@@ -51680,7 +54059,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72695"
+      "section": "line:72849"
     },
     "disposition": "proof_only",
     "issueId": "PLA-815",
@@ -51727,7 +54106,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73517"
+      "section": "line:73671"
     },
     "disposition": "proof_only",
     "issueId": "PLA-852",
@@ -51774,7 +54153,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74118"
+      "section": "line:74272"
     },
     "disposition": "proof_only",
     "issueId": "PLA-879",
@@ -51821,7 +54200,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74115"
+      "section": "line:74269"
     },
     "disposition": "proof_only",
     "issueId": "PLA-876",
@@ -51868,7 +54247,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74117"
+      "section": "line:74271"
     },
     "disposition": "proof_only",
     "issueId": "PLA-878",
@@ -51915,7 +54294,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74119"
+      "section": "line:74273"
     },
     "disposition": "proof_only",
     "issueId": "PLA-880",
@@ -51962,7 +54341,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72984"
+      "section": "line:73138"
     },
     "disposition": "proof_only",
     "issueId": "PLA-824",
@@ -52011,7 +54390,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72822"
+      "section": "line:72976"
     },
     "disposition": "proof_only",
     "issueId": "PLA-820",
@@ -52058,7 +54437,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74097"
+      "section": "line:74251"
     },
     "disposition": "proof_only",
     "issueId": "PLA-875",
@@ -52105,7 +54484,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74153"
+      "section": "line:74307"
     },
     "disposition": "proof_only",
     "issueId": "PLA-885",
@@ -52154,7 +54533,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74155"
+      "section": "line:74309"
     },
     "disposition": "proof_only",
     "issueId": "PLA-887",
@@ -52201,7 +54580,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72331"
+      "section": "line:72485"
     },
     "disposition": "proof_only",
     "issueId": "BUY-369",
@@ -52248,7 +54627,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72332"
+      "section": "line:72486"
     },
     "disposition": "proof_only",
     "issueId": "BUY-370",
@@ -52295,7 +54674,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73261"
+      "section": "line:73415"
     },
     "disposition": "proof_only",
     "issueId": "BUY-376",
@@ -52346,7 +54725,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73259"
+      "section": "line:73413"
     },
     "disposition": "proof_only",
     "issueId": "BUY-377",
@@ -52393,7 +54772,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73257"
+      "section": "line:73411"
     },
     "disposition": "proof_only",
     "issueId": "BUY-375",
@@ -52440,7 +54819,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74131"
+      "section": "line:74285"
     },
     "disposition": "proof_only",
     "issueId": "PLA-882",
@@ -52487,7 +54866,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73491"
+      "section": "line:73645"
     },
     "disposition": "proof_only",
     "issueId": "PLA-849",
@@ -52534,7 +54913,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74142"
+      "section": "line:74296"
     },
     "disposition": "proof_only",
     "issueId": "PLA-883",
@@ -52581,7 +54960,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73470"
+      "section": "line:73624"
     },
     "disposition": "proof_only",
     "issueId": "PLA-845",
@@ -52628,7 +55007,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73223"
+      "section": "line:73377"
     },
     "disposition": "proof_only",
     "issueId": "BUY-373",
@@ -52675,7 +55054,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74084"
+      "section": "line:74238"
     },
     "disposition": "proof_only",
     "issueId": "SEL-240",
@@ -52722,7 +55101,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73339"
+      "section": "line:73493"
     },
     "disposition": "proof_only",
     "issueId": "SEL-214",
@@ -52771,7 +55150,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72732"
+      "section": "line:72886"
     },
     "disposition": "proof_only",
     "issueId": "SEL-205",
@@ -52818,7 +55197,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72733"
+      "section": "line:72887"
     },
     "disposition": "proof_only",
     "issueId": "SEL-206",
@@ -52865,7 +55244,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74194"
+      "section": "line:74348"
     },
     "disposition": "proof_only",
     "issueId": "BUY-384",
@@ -52914,7 +55293,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73421"
+      "section": "line:73575"
     },
     "disposition": "proof_only",
     "issueId": "PLA-834",
@@ -52961,7 +55340,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74163"
+      "section": "line:74317"
     },
     "disposition": "proof_only",
     "issueId": "PLA-888",
@@ -53008,7 +55387,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72495"
+      "section": "line:72649"
     },
     "disposition": "proof_only",
     "issueId": "PLA-805",
@@ -53055,7 +55434,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72458"
+      "section": "line:72612"
     },
     "disposition": "proof_only",
     "issueId": "PLA-792",
@@ -53106,7 +55485,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72457"
+      "section": "line:72611"
     },
     "disposition": "proof_only",
     "issueId": "PLA-791",
@@ -53155,7 +55534,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73293"
+      "section": "line:73447"
     },
     "disposition": "proof_only",
     "issueId": "PLA-831",
@@ -53202,7 +55581,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73489"
+      "section": "line:73643"
     },
     "disposition": "proof_only",
     "issueId": "BUY-381",
@@ -53249,7 +55628,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73773"
+      "section": "line:73927"
     },
     "disposition": "proof_only",
     "issueId": "SEL-235",
@@ -53300,7 +55679,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73787"
+      "section": "line:73941"
     },
     "disposition": "proof_only",
     "issueId": "SEL-237",
@@ -53347,7 +55726,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73788"
+      "section": "line:73942"
     },
     "disposition": "proof_only",
     "issueId": "SEL-238",
@@ -53398,7 +55777,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73789"
+      "section": "line:73943"
     },
     "disposition": "proof_only",
     "issueId": "SEL-239",
@@ -53457,7 +55836,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72986"
+      "section": "line:73140"
     },
     "disposition": "proof_only",
     "issueId": "SEL-211",
@@ -53504,7 +55883,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74144"
+      "section": "line:74298"
     },
     "disposition": "proof_only",
     "issueId": "SEL-245",
@@ -53551,7 +55930,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74128"
+      "section": "line:74282"
     },
     "disposition": "proof_only",
     "issueId": "SEL-242",
@@ -53598,7 +55977,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73490"
+      "section": "line:73644"
     },
     "disposition": "proof_only",
     "issueId": "SEL-223",
@@ -53645,7 +56024,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73756"
+      "section": "line:73910"
     },
     "disposition": "proof_only",
     "issueId": "SEL-230",
@@ -53696,7 +56075,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72342"
+      "section": "line:72496"
     },
     "disposition": "proof_only",
     "issueId": "SEL-198",
@@ -53743,7 +56122,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72343"
+      "section": "line:72497"
     },
     "disposition": "proof_only",
     "issueId": "SEL-199",
@@ -53790,7 +56169,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72341"
+      "section": "line:72495"
     },
     "disposition": "proof_only",
     "issueId": "SEL-197",
@@ -53837,7 +56216,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73495"
+      "section": "line:73649"
     },
     "disposition": "proof_only",
     "issueId": "SEL-224",
@@ -53884,7 +56263,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73006"
+      "section": "line:73160"
     },
     "disposition": "proof_only",
     "issueId": "SEL-212",
@@ -53931,7 +56310,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73496"
+      "section": "line:73650"
     },
     "disposition": "proof_only",
     "issueId": "SEL-225",
@@ -53978,7 +56357,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73007"
+      "section": "line:73161"
     },
     "disposition": "proof_only",
     "issueId": "SEL-213",
@@ -54025,7 +56404,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72505"
+      "section": "line:72659"
     },
     "disposition": "proof_only",
     "issueId": "SEL-202",
@@ -54072,7 +56451,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74184"
+      "section": "line:74338"
     },
     "disposition": "proof_only",
     "issueId": "SEL-247",
@@ -54119,7 +56498,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73401"
+      "section": "line:73555"
     },
     "disposition": "proof_only",
     "issueId": "SEL-218",
@@ -54168,7 +56547,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73486"
+      "section": "line:73640"
     },
     "disposition": "proof_only",
     "issueId": "SEL-220",
@@ -54215,7 +56594,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73487"
+      "section": "line:73641"
     },
     "disposition": "proof_only",
     "issueId": "SEL-221",
@@ -54262,7 +56641,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73488"
+      "section": "line:73642"
     },
     "disposition": "proof_only",
     "issueId": "SEL-222",
@@ -54309,7 +56688,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74141"
+      "section": "line:74295"
     },
     "disposition": "proof_only",
     "issueId": "SEL-244",
@@ -54356,7 +56735,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72461"
+      "section": "line:72615"
     },
     "disposition": "proof_only",
     "issueId": "PLA-795",
@@ -54405,7 +56784,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73452"
+      "section": "line:73606"
     },
     "disposition": "proof_only",
     "issueId": "PLA-844",
@@ -54454,7 +56833,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73450"
+      "section": "line:73604"
     },
     "disposition": "proof_only",
     "issueId": "PLA-843",
@@ -54501,7 +56880,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72346"
+      "section": "line:72500"
     },
     "disposition": "proof_only",
     "issueId": "PLA-754",
@@ -54548,7 +56927,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72318"
+      "section": "line:72472"
     },
     "disposition": "proof_only",
     "issueId": "BUY-363",
@@ -54595,7 +56974,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72347"
+      "section": "line:72501"
     },
     "disposition": "proof_only",
     "issueId": "PLA-755",
@@ -54642,7 +57021,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72353"
+      "section": "line:72507"
     },
     "disposition": "proof_only",
     "issueId": "PLA-759",
@@ -54691,7 +57070,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72359"
+      "section": "line:72513"
     },
     "disposition": "proof_only",
     "issueId": "PLA-763",
@@ -54740,7 +57119,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72361"
+      "section": "line:72515"
     },
     "disposition": "proof_only",
     "issueId": "PLA-764",
@@ -54789,7 +57168,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72320"
+      "section": "line:72474"
     },
     "disposition": "proof_only",
     "issueId": "BUY-366",
@@ -54836,7 +57215,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72319"
+      "section": "line:72473"
     },
     "disposition": "proof_only",
     "issueId": "BUY-365",
@@ -54883,7 +57262,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74154"
+      "section": "line:74308"
     },
     "disposition": "proof_only",
     "issueId": "PLA-886",
@@ -54930,7 +57309,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72348"
+      "section": "line:72502"
     },
     "disposition": "proof_only",
     "issueId": "PLA-756",
@@ -54981,7 +57360,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72350"
+      "section": "line:72504"
     },
     "disposition": "proof_only",
     "issueId": "PLA-758",
@@ -55028,7 +57407,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72354"
+      "section": "line:72508"
     },
     "disposition": "proof_only",
     "issueId": "PLA-760",
@@ -55075,7 +57454,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72355"
+      "section": "line:72509"
     },
     "disposition": "proof_only",
     "issueId": "PLA-761",
@@ -55122,7 +57501,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72358"
+      "section": "line:72512"
     },
     "disposition": "proof_only",
     "issueId": "PLA-762",
@@ -55169,7 +57548,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72688"
+      "section": "line:72842"
     },
     "disposition": "proof_only",
     "issueId": "PLA-812",
@@ -55216,7 +57595,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72909"
+      "section": "line:73063"
     },
     "disposition": "proof_only",
     "issueId": "PLA-821",
@@ -55263,7 +57642,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72919"
+      "section": "line:73073"
     },
     "disposition": "proof_only",
     "issueId": "PLA-822",
@@ -55310,7 +57689,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73422"
+      "section": "line:73576"
     },
     "disposition": "proof_only",
     "issueId": "PLA-835",
@@ -55357,7 +57736,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72663"
+      "section": "line:72817"
     },
     "disposition": "proof_only",
     "issueId": "PLA-809",
@@ -55404,7 +57783,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74195"
+      "section": "line:74349"
     },
     "disposition": "proof_only",
     "issueId": "BUY-385",
@@ -55451,7 +57830,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72373"
+      "section": "line:72527"
     },
     "disposition": "proof_only",
     "issueId": "BUY-371",
@@ -55498,7 +57877,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73607"
+      "section": "line:73761"
     },
     "disposition": "proof_only",
     "issueId": "PLA-857",
@@ -55545,7 +57924,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:74152"
+      "section": "line:74306"
     },
     "disposition": "proof_only",
     "issueId": "PLA-884",
@@ -55592,7 +57971,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73206"
+      "section": "line:73360"
     },
     "disposition": "proof_only",
     "issueId": "PLA-829",
@@ -55639,7 +58018,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73471"
+      "section": "line:73625"
     },
     "disposition": "proof_only",
     "issueId": "PLA-846",
@@ -55686,7 +58065,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73473"
+      "section": "line:73627"
     },
     "disposition": "proof_only",
     "issueId": "PLA-847",
@@ -55733,7 +58112,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73474"
+      "section": "line:73628"
     },
     "disposition": "proof_only",
     "issueId": "PLA-848",
@@ -55780,7 +58159,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72476"
+      "section": "line:72630"
     },
     "disposition": "proof_only",
     "issueId": "PLA-800",
@@ -55835,7 +58214,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73822"
+      "section": "line:73976"
     },
     "disposition": "proof_only",
     "issueId": "PLA-867",
@@ -55882,7 +58261,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73820"
+      "section": "line:73974"
     },
     "disposition": "proof_only",
     "issueId": "PLA-865",
@@ -55929,7 +58308,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73821"
+      "section": "line:73975"
     },
     "disposition": "proof_only",
     "issueId": "PLA-866",
@@ -55976,7 +58355,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72323"
+      "section": "line:72477"
     },
     "disposition": "proof_only",
     "issueId": "PLA-753",
@@ -56023,7 +58402,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72432"
+      "section": "line:72586"
     },
     "disposition": "proof_only",
     "issueId": "PLA-775",
@@ -56070,7 +58449,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72431"
+      "section": "line:72585"
     },
     "disposition": "proof_only",
     "issueId": "PLA-774",
@@ -56117,7 +58496,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72430"
+      "section": "line:72584"
     },
     "disposition": "proof_only",
     "issueId": "PLA-773",
@@ -56164,7 +58543,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72429"
+      "section": "line:72583"
     },
     "disposition": "proof_only",
     "issueId": "PLA-772",
@@ -56190,9 +58569,7 @@
       {
         "issueId": "PLA-772",
         "milestone": "Production evidence closed",
-        "dependencies": [
-          "F-006"
-        ],
+        "dependencies": [],
         "paths": [],
         "tests": {
           "success": null,
@@ -56211,7 +58588,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:72501"
+      "section": "line:72655"
     },
     "disposition": "proof_only",
     "issueId": "BUY-372",
@@ -56258,7 +58635,7 @@
     "source": {
       "document": "Sourcera_Master_Spec.md",
       "version": "live",
-      "section": "line:73276"
+      "section": "line:73430"
     },
     "disposition": "proof_only",
     "issueId": "BUY-378",
