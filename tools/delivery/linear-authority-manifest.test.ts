@@ -1937,7 +1937,10 @@ test("offline CLI validates files and emits only a concise JSON summary", () => 
       "--allocation", join(root, "allocation.json"),
       "--allocation-sha256", sha256(allocationRaw),
       ...inputArgs,
-    ], { encoding: "utf8", env: { PATH: process.env.PATH ?? "" } });
+    ], {
+      encoding: "utf8",
+      env: { NODE_ENV: "test", PATH: process.env.PATH ?? "" },
+    });
     assert.equal(run.status, 0, run.stderr);
     const summary = JSON.parse(run.stdout) as Record<string, unknown>;
     assert.deepEqual(Object.keys(summary).sort(), [
