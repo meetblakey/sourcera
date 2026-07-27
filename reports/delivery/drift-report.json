@@ -6,6 +6,10 @@
   },
   "findings": [
     {
+      "code": "ready_queue_under_minimum",
+      "message": "Ready queue has 4; minimum is 5"
+    },
+    {
       "code": "validation_plan_invalid",
       "message": "F-007 approval is pending"
     }

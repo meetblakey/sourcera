@@ -2,11 +2,11 @@
   "categories": {
     "planning": 20,
     "releases": 20,
-    "ownership": 15,
+    "ownership": 5,
     "validation": 0,
     "execution": 20
   },
-  "total": 75,
+  "total": 65,
   "tenOfTen": false,
   "journeyTargets": {
     "R2": {

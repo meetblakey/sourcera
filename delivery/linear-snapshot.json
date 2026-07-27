@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T06:25:37.300Z",
+  "generatedAt": "2026-07-27T09:46:12.470Z",
   "authority": {
     "repo": "Sourcera_Master_Spec.md",
     "runtime": [
@@ -967,7 +967,7 @@
       "updatedAt": "2026-07-22T23:35:43.430Z",
       "archivedAt": null,
       "targetDate": null,
-      "status": "unstarted"
+      "status": "done"
     },
     {
       "id": "8809df46-e7ee-4072-97ab-bc30b44fecf6",
@@ -16932,7 +16932,6 @@
       "title": "Typed Convex Preview foundation and reactive proof",
       "kind": "executable",
       "labels": [
-        "codex-ready",
         "integration",
         "platform"
       ],
@@ -16989,11 +16988,11 @@
       "sourceFamilyId": "F-005",
       "linearId": "52d10add-6e70-4b5e-a5d0-883cba41ca4b",
       "parentLinearId": "61b556cb-9a76-488e-8de7-7f5f0824c3ba",
-      "priority": 1,
+      "priority": 0,
       "dueDate": null,
-      "stateId": "5aecdd5b-58b5-4c78-b35d-86fa21e76f83",
-      "state": "In Progress",
-      "stateType": "started",
+      "stateId": "79f13ec1-e526-46cd-8680-e8ecd41e5f39",
+      "state": "Done",
+      "stateType": "completed",
       "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
       "team": "PLA",
       "cycleId": null,
@@ -90216,7 +90215,7 @@
           "sourceBinding": "b1257e0e39e57ca010d2eeb5608182adbc853f3997e1d680f93f9349bdccf284",
           "sourceChecksum": "f4482c08912f914d23e2fe3cf6865922a3032dc794eeb25285c6a40c7eb9bbae"
         },
-        "updatedAt": "2026-07-23T02:10:06.918Z",
+        "updatedAt": "2026-07-27T06:40:40.698Z",
         "estimate": 3,
         "priority": 2,
         "dueDate": null,
@@ -99839,7 +99838,7 @@
         "linearId": "52d10add-6e70-4b5e-a5d0-883cba41ca4b",
         "identifier": "PLA-282",
         "title": "Typed Convex Preview foundation and reactive proof",
-        "descriptionFingerprint": "ab26543de0b6026f95218fd8ec206048643b42fee81a6dea781013bd2beabbdd",
+        "descriptionFingerprint": "e976491942bdc9a1587019749bbe9c08df96cf4f1f1d5efb51062061d57877a6",
         "sourceProvenance": {
           "sourceId": "F-005",
           "sourceDocument": null,
@@ -99851,16 +99850,15 @@
           "sourceBinding": "ad386b9b14bb35fdbfea890d2591abf88630ee200d63cd07068a838f84dc5733",
           "sourceChecksum": "17ff8fd3fc32375a8502c9b93dbdea500065e2ea1b1a5d6a5f1e96170a1d69d0"
         },
-        "updatedAt": "2026-07-27T05:45:01.427Z",
+        "updatedAt": "2026-07-27T09:39:10.969Z",
         "estimate": 5,
-        "priority": 1,
+        "priority": 0,
         "dueDate": null,
         "archivedAt": null,
-        "stateId": "5aecdd5b-58b5-4c78-b35d-86fa21e76f83",
-        "state": "In Progress",
-        "stateType": "started",
+        "stateId": "79f13ec1-e526-46cd-8680-e8ecd41e5f39",
+        "state": "Done",
+        "stateType": "completed",
         "labels": [
-          "codex-ready",
           "integration",
           "platform"
         ],
@@ -152648,7 +152646,7 @@
         "updatedAt": "2026-07-22T23:35:43.430Z",
         "archivedAt": null,
         "targetDate": null,
-        "status": "unstarted"
+        "status": "done"
       },
       {
         "id": "8809df46-e7ee-4072-97ab-bc30b44fecf6",
@@ -155082,14 +155080,14 @@
   },
   "linearCapture": {
     "schemaVersion": 1,
-    "capturedAt": "2026-07-27T06:25:37.300Z",
-    "fingerprintSha256": "a7115faff7f02f6856879067174eccb7cbaa4631df82ab7e037c55e779e75b7b",
+    "capturedAt": "2026-07-27T09:46:12.470Z",
+    "fingerprintSha256": "5beb6fd3fd67c0b20aa2effcbc1735a1e3d7ab06d6d21bdc4aa6745b38de5f39",
     "source": {
       "repository": "meetblakey/sourcera",
-      "commit": "51758e90f976c25dd56dec2c063ea70381fae4f4",
+      "commit": "da97a3c3d784dce2232a28d14f298178008c0589",
       "ref": "refs/heads/main",
-      "runId": "30242176710",
-      "runAttempt": "1"
+      "runId": "30253780228",
+      "runAttempt": "2"
     }
   },
   "linearTicketIntegrity": {
@@ -155097,8 +155095,8 @@
     "findings": [],
     "readinessFindings": [],
     "passed": true,
-    "fingerprintSha256": "a7115faff7f02f6856879067174eccb7cbaa4631df82ab7e037c55e779e75b7b",
-    "descriptionCaptureSha256": "8c6ebecd4590299621e0e346ce45630e28d2ff594d8e210f02d79f159d77e998",
+    "fingerprintSha256": "5beb6fd3fd67c0b20aa2effcbc1735a1e3d7ab06d6d21bdc4aa6745b38de5f39",
+    "descriptionCaptureSha256": "cd083f8c5947a1019a3a4c9e29a3848434b167108926a93e37746f022b1cf074",
     "checkedIssueCount": 1280
   },
   "cycles": [
