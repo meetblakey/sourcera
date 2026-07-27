@@ -487,6 +487,14 @@ export interface LinearFingerprint {
 export type LinearFingerprintScope = LinearProjectScope;
 
 const SHA256 = /^[a-f0-9]{64}$/;
+const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+function isCanonicalUtcTimestamp(value: unknown): value is string {
+  return typeof value === "string" &&
+    ISO_UTC.test(value) &&
+    !Number.isNaN(Date.parse(value)) &&
+    new Date(value).toISOString() === value;
+}
 
 export function assertLinearPlanningDescriptionFingerprints(
   fingerprint: LinearFingerprint,
@@ -1380,6 +1388,51 @@ export function fingerprintDiff(
   const canonicalActual = canonicalLinearFingerprint(actual);
   for (const key of [
     "issues",
+    "releasePipelines",
+    "releases",
+    "projects",
+    "projectMilestones",
+    "cycles",
+    "program",
+  ] as const) {
+    if (
+      JSON.stringify(canonicalExpected[key]) !==
+        JSON.stringify(canonicalActual[key])
+    ) {
+      findings.push(`${key} differ from the committed Linear snapshot`);
+    }
+  }
+  return findings;
+}
+
+function committedIssueFingerprint(
+  issues: LinearFingerprint["issues"],
+): Array<Omit<LinearFingerprint["issues"][number], "updatedAt">> {
+  return issues.map((row) => {
+    if (!isCanonicalUtcTimestamp(row.updatedAt)) {
+      throw new Error(
+        `Linear issue ${row.identifier || "unknown"} updatedAt is invalid`,
+      );
+    }
+    const { updatedAt: _updatedAt, ...issue } = row;
+    return issue;
+  });
+}
+
+export function committedLinearDriftDiff(
+  expected: LinearFingerprint,
+  actual: LinearFingerprint,
+): string[] {
+  const findings: string[] = [];
+  const canonicalExpected = canonicalLinearFingerprint(expected);
+  const canonicalActual = canonicalLinearFingerprint(actual);
+  if (
+    JSON.stringify(committedIssueFingerprint(canonicalExpected.issues)) !==
+      JSON.stringify(committedIssueFingerprint(canonicalActual.issues))
+  ) {
+    findings.push("issues differ from the committed Linear snapshot");
+  }
+  for (const key of [
     "releasePipelines",
     "releases",
     "projects",

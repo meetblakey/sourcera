@@ -5,8 +5,8 @@ import { dirname, join, resolve } from "node:path";
 import {
   assertLinearPlanningContractFingerprints,
   canonicalLinearFingerprint,
+  committedLinearDriftDiff,
   fetchConsistentLinearCapture,
-  fingerprintDiff,
   type LinearFingerprint,
 } from "./lib/linear-live.js";
 import type { LinearIssueDescriptionCapture } from "./lib/ticket-integrity.js";
@@ -134,7 +134,10 @@ async function main(): Promise<void> {
     throw new Error("Linear snapshot lacks tracked projects");
   }
   assertLinearProjectScope(projectScope, snapshot.projects);
-  const differences = fingerprintDiff(snapshot.linearFingerprint, actual);
+  const differences = committedLinearDriftDiff(
+    snapshot.linearFingerprint,
+    actual,
+  );
   if (differences.length) {
     for (const difference of differences) console.error(difference);
     process.exitCode = 1;
