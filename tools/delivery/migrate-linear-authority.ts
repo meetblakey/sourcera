@@ -305,7 +305,7 @@ async function main(): Promise<void> {
     process.stdout.write(`${JSON.stringify({ status: "recovery_checkpoint_verified", mappings: recoveryMappings.length, labelIdentityVerified: false, relationIdentityVerified: false, freshPatchedCaptureRequired: true, ...recoveryAudit(plan, capture, mappings) })}\n`);
     return;
   }
-  throw new Error("Mode must be plan or recovery-check; execution and compensation modes are intentionally unavailable");
+  throw new Error("Mode must be plan or recovery-check; all other modes are unavailable");
 }
 
 main().catch((error: unknown) => {
