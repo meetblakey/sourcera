@@ -15,6 +15,45 @@ import {
   assertLinearPlanningSourceFingerprints,
   type LinearProgramScopeV3,
 } from "./linear-program-scope.js";
+import {
+  validateLinearAuthoritySourceLineage,
+  type LinearAuthoritySourceLineage,
+  type LinearAuthoritySourceLineageSlice,
+  type LinearAuthoritySourceLineageValidationSummary,
+} from "./linear-authority-source-lineage.js";
+import { resolveExactGitCommit, verifyExactGitCommitProvenance } from "./git-commit-provenance.js";
+import {
+  buildLinearAuthoritySemanticPlanV4FromCapture,
+  canonicalLinearAuthoritySemanticPlanV4Json,
+  parseLinearAuthoritySemanticPlanV4,
+} from "./linear-authority-semantic-plan-v4.js";
+import { assertLinearAuthorityRequirementAdoptionArtifacts } from "./linear-authority-requirement-adoption.js";
+import {
+  canonicalLinearAuthorityRequirementPublicationSequenceJson,
+  validateLinearAuthorityRequirementPublicationSequence,
+} from "./linear-authority-publication-sequence.js";
+
+const LINEAR_AUTHORITY_PHASE3_COMMIT_PATHS = [
+  "Sourcera_Master_Spec.md",
+  "UX_Design_of_Sourcera.md",
+  "Sourcera_Buyer_Pricing_Strategy.md",
+  "Sourcera_Seller_Pricing_Strategy.md",
+  "Audit_Prompts.md",
+  "Research_MPP.md",
+  "Research_MPP_Implementation_Gaps.md",
+  "_audit/FEATURE_INVENTORY.md",
+  "delivery/decisions.jsonl",
+  "delivery/dispositions.json",
+  "delivery/linear-authority-requirement-bootstrap-map.json",
+  "delivery/linear-authority-requirement-baseline.json",
+  "delivery/feature-dependencies.json",
+  "delivery/linear-program-scope.json",
+  "delivery/linear-project-scope.json",
+  "delivery/linear-snapshot.json",
+  "delivery/linear-source-policy.json",
+  "delivery/risks.json",
+  "delivery/ticket-source-checksums.json",
+] as const;
 
 export const LINEAR_AUTHORITY_COMPILER_INPUT_NAMES = [
   "extraction-seed",
@@ -38,6 +77,37 @@ export const LINEAR_AUTHORITY_COMPILER_INPUT_NAMES = [
   "document-canary-receipt",
 ] as const;
 
+export const LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2 = [
+  "source-lineage",
+  "semantic-plan",
+  "requirement-baseline",
+  "requirement-recovery-mapping",
+  "requirement-publication",
+  "feature-inventory",
+  "disposition-register",
+  "source-checksums",
+  "source-routing",
+  "risk-routing",
+  "uuid-mapping",
+  "allocation-lock",
+  "linear-fingerprint",
+  "native-identity",
+  "raw-documents",
+  "issue-descriptions",
+  "capture-receipt",
+  "github-execution",
+  "project-scope",
+  "program-scope",
+  "source-contract",
+  "dependency-contract",
+  "decision-adjudication",
+  "document-canary-receipt",
+] as const;
+
+export type LinearAuthorityCompilerInputName =
+  | typeof LINEAR_AUTHORITY_COMPILER_INPUT_NAMES[number]
+  | typeof LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2[number];
+
 export type AuthorityTargetKind = "issue" | "decision" | "risk" | "document" | "relation_target" | "relation";
 export type AuthorityDispositionKind = "proof_only" | "narrative_context" | "superseded" | "retired_source";
 export type AuthorityRelationType = "blocks" | "related" | "duplicate";
@@ -51,7 +121,7 @@ export interface AuthoritySource {
   normalizedSha256: string;
 }
 
-export interface AuthorityBlock {
+export interface AuthorityBlockV1 {
   key: string;
   sourcePath: string;
   byteStart: number;
@@ -65,9 +135,12 @@ export interface AuthorityBlock {
   disposition: { kind: AuthorityDispositionKind; decisionPlanKey: string } | null;
 }
 
+export type AuthorityBlockV2 = LinearAuthoritySourceLineageSlice;
+export type AuthorityBlock = AuthorityBlockV1 | AuthorityBlockV2;
+
 export interface AuthorityManagedTarget {
   kind: "requirement" | "decision" | "risk";
-  origin: "source" | "live";
+  origin: "source" | "registry" | "live" | "retired_source_disposition";
   planKey: string;
   title: string;
   expectedCurrentIssueUuid: string | null;
@@ -131,17 +204,21 @@ export interface AuthorityIssueDescriptionRepair {
 }
 
 export interface LinearAuthorityManifest {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   sourceCommit: string;
   preCutoverTag: string;
+  preCutoverCommit?: string;
   workspace: { id: string; name: string; urlKey: string };
   rawDocumentIds: string[];
   planRoot: string;
   sourceSetRoot: string;
   liveCaptureRoot: string;
   compilerInputRoot: string;
+  semanticRoot?: string;
+  sourceCoverageRoot?: string;
+  sourceLineageRoot?: string;
   inputs: Array<{
-    name: typeof LINEAR_AUTHORITY_COMPILER_INPUT_NAMES[number];
+    name: LinearAuthorityCompilerInputName;
     byteLength: number;
     sha256: string;
   }>;
@@ -169,6 +246,8 @@ export interface LinearAuthorityManifest {
       id: string;
       semanticRole: "requirement" | "decision" | "risk" | "other";
       name: string;
+      color: string;
+      description: string | null;
       teamPlanKey: string | null;
       parentId: string | null;
       parentName: string | null;
@@ -218,6 +297,7 @@ export interface LinearAuthorityValidationInput {
   expectedLiveCaptureSha256: string;
   allocationRaw: string;
   expectedAllocationSha256: string;
+  repositoryRoot?: string;
 }
 
 export interface LinearAuthorityStructuralValidationSummary {
@@ -232,6 +312,12 @@ export interface LinearAuthorityStructuralValidationSummary {
   semanticCoverageValidated: false;
   mutationAuthorized: false;
   sourceSetRoot: string;
+  semanticPlanInternalsValidated?: true;
+  sourcePartitionValidated?: true;
+  sourceExtractionCoverageValidated?: boolean;
+  captureEvidenceValidated?: true;
+  sourceCoverageRoot?: string;
+  sourceLineageRoot?: string;
 }
 
 type JsonRecord = Record<string, unknown>;
@@ -252,13 +338,14 @@ const SOURCE_PATH = /^(?!\/)(?!.*(?:^|\/)\.\.?\/(?:|$))(?!.*\\)[^\0]+$/;
 const PLAN_KEY = /^[a-z][a-z0-9-]*:[A-Za-z0-9][A-Za-z0-9._-]*(?::[A-Za-z0-9][A-Za-z0-9._-]*)*$/;
 const DISPOSITIONS = new Set<AuthorityDispositionKind>(["proof_only", "narrative_context", "superseded", "retired_source"]);
 const RELATION_TYPES = new Set<AuthorityRelationType>(["blocks", "related", "duplicate"]);
-const CAPTURE_INPUT_NAMES = new Set<typeof LINEAR_AUTHORITY_COMPILER_INPUT_NAMES[number]>([
+const CAPTURE_INPUT_NAMES = new Set<LinearAuthorityCompilerInputName>([
   "linear-fingerprint",
   "native-identity",
   "raw-documents",
   "issue-descriptions",
   "capture-receipt",
   "github-artifact",
+  "github-execution",
 ]);
 const CANONICAL_REPOSITORY = "meetblakey/sourcera";
 const CANONICAL_REF = "refs/heads/main";
@@ -281,6 +368,8 @@ const CANONICAL_SOURCE_ROLES = new Map<string, { precedence: number; role: strin
   ["Research_MPP_Implementation_Gaps.md", { precedence: 7, role: "research_context" }],
 ]);
 const CANONICAL_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+const PRE_CUTOVER_TAG = "pre-linear-authority-2026-07-27";
+const PRE_CUTOVER_COMMIT = "8c4e00e377ddc3cce404589aaf256f0f254ea6c1";
 const MANUAL_NATIVE_REFERENCE = /\bREQ-\d+\b/i;
 const MANUAL_RELATION_METADATA = /^(?:#{1,6}\s+(?:dependencies?|blockers?|blocked\s+by|parent(?:\s+issue)?|related\s+issues?)\s*|(?:dependencies?|blockers?|blocked\s+by|parent(?:\s+issue)?|related\s+issues?)\s*:.*)$/im;
 
@@ -301,7 +390,7 @@ function canonicalJson(value: unknown): string {
 const byPlanKey = <T extends { planKey: string }>(rows: readonly T[]): T[] => [...rows].sort((left, right) => left.planKey.localeCompare(right.planKey));
 
 export function computeLinearAuthorityPlanRoot(manifest: LinearAuthorityManifest): string {
-  return sha256(canonicalJson({
+  const projection: JsonRecord = {
     schemaVersion: manifest.schemaVersion,
     sourceCommit: manifest.sourceCommit,
     preCutoverTag: manifest.preCutoverTag,
@@ -328,7 +417,14 @@ export function computeLinearAuthorityPlanRoot(manifest: LinearAuthorityManifest
       states: byPlanKey(manifest.nativeCatalog.states),
       labels: byPlanKey(manifest.nativeCatalog.labels),
     },
-  }));
+  };
+  if (manifest.schemaVersion === 2) {
+    projection.preCutoverCommit = manifest.preCutoverCommit;
+    projection.semanticRoot = manifest.semanticRoot;
+    projection.sourceCoverageRoot = manifest.sourceCoverageRoot;
+    projection.sourceLineageRoot = manifest.sourceLineageRoot;
+  }
+  return sha256(canonicalJson(projection));
 }
 
 function record(value: unknown, label: string): JsonRecord {
@@ -382,6 +478,10 @@ function assertUnique(values: readonly string[], label: string): void {
 
 function assertExactArray(actual: readonly string[], expected: readonly string[], label: string): void {
   if (JSON.stringify(actual) !== JSON.stringify(sort(expected))) throw new Error(`${label} differs from canonical computed coverage`);
+}
+
+function isAuthorityBlockV1(block: AuthorityBlock): block is AuthorityBlockV1 {
+  return "classification" in block;
 }
 
 export function normalizeAuthorityMarkdown(value: string): string {
@@ -463,14 +563,20 @@ function computedManagedPayload(target: AuthorityManagedTarget): string {
 }
 
 function assertManifestShape(value: unknown): asserts value is LinearAuthorityManifest {
+  const candidate = record(value, "authority manifest");
+  const schemaVersion = candidate.schemaVersion;
+  if (schemaVersion !== 1 && schemaVersion !== 2) throw new Error("Authority manifest schemaVersion must be 1 or 2");
   const manifest = exactKeys(value, [
     "schemaVersion", "sourceCommit", "preCutoverTag", "workspace", "rawDocumentIds", "planRoot", "sourceSetRoot", "liveCaptureRoot", "compilerInputRoot", "inputs",
     "sources", "blocks", "requirements", "decisions", "risks", "documents", "references", "nativeRelations", "issueDescriptionRepairs", "nativeCatalog",
     "coverage",
+    ...(schemaVersion === 2 ? ["preCutoverCommit", "semanticRoot", "sourceCoverageRoot", "sourceLineageRoot"] : []),
   ], "authority manifest");
-  if (manifest.schemaVersion !== 1) throw new Error("Authority manifest schemaVersion must be 1");
   if (typeof manifest.sourceCommit !== "string" || !/^[a-f0-9]{40,64}$/.test(manifest.sourceCommit)) throw new Error("Authority manifest source commit is invalid");
   assertString(manifest.preCutoverTag, "Authority manifest pre-cutover tag");
+  if (schemaVersion === 2 && (manifest.preCutoverTag !== PRE_CUTOVER_TAG || manifest.preCutoverCommit !== PRE_CUTOVER_COMMIT)) {
+    throw new Error("Authority manifest pre-cutover tag or resolved commit differs from the approved checkpoint");
+  }
   const workspace = exactKeys(manifest.workspace, ["id", "name", "urlKey"], "Authority manifest workspace");
   assertUuidV4(workspace.id, "Authority manifest workspace ID");
   assertString(workspace.name, "Authority manifest workspace name");
@@ -479,6 +585,11 @@ function assertManifestShape(value: unknown): asserts value is LinearAuthorityMa
   assertUnique(manifest.rawDocumentIds, "Authority manifest raw document IDs");
   for (const id of manifest.rawDocumentIds) assertUuidV4(id, "Authority manifest raw document UUID");
   for (const field of ["planRoot", "sourceSetRoot", "liveCaptureRoot", "compilerInputRoot"] as const) assertDigest(manifest[field], `Authority manifest ${field}`);
+  if (schemaVersion === 2) {
+    for (const field of ["semanticRoot", "sourceCoverageRoot", "sourceLineageRoot"] as const) {
+      assertDigest(manifest[field], `Authority manifest ${field}`);
+    }
+  }
   for (const field of ["inputs", "sources", "blocks", "requirements", "decisions", "risks", "documents", "references", "nativeRelations", "issueDescriptionRepairs"] as const) {
     if (!Array.isArray(manifest[field])) throw new Error(`Authority manifest ${field} must be an array`);
   }
@@ -491,7 +602,9 @@ function validateCompilerInputs(
   compilerInputs: ReadonlyMap<string, Buffer>,
   liveCaptureRaw: string,
 ): void {
-  const expectedNames = [...LINEAR_AUTHORITY_COMPILER_INPUT_NAMES];
+  const expectedNames: LinearAuthorityCompilerInputName[] = manifest.schemaVersion === 2
+    ? [...LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2]
+    : [...LINEAR_AUTHORITY_COMPILER_INPUT_NAMES];
   const rows = manifest.inputs;
   for (const row of rows) {
     exactKeys(row, ["name", "byteLength", "sha256"], "Compiler input row");
@@ -516,6 +629,196 @@ function validateCompilerInputs(
   validateCaptureProvenance(manifest, compilerInputs, liveCaptureRaw);
 }
 
+function validatePhase3SourceLineage(
+  manifest: LinearAuthorityManifest,
+  input: LinearAuthorityValidationInput,
+): LinearAuthoritySourceLineageValidationSummary | null {
+  if (manifest.schemaVersion !== 2) return null;
+  if (!input.repositoryRoot) throw new Error("Phase 3 authority validation requires an exact repository root");
+  if (resolveExactGitCommit(input.repositoryRoot, `${manifest.preCutoverTag}^{commit}`) !== manifest.preCutoverCommit) {
+    throw new Error("Authority manifest pre-cutover tag does not resolve to its pinned commit");
+  }
+  verifyExactGitCommitProvenance({
+    repositoryRoot: input.repositoryRoot,
+    sourceCommit: manifest.sourceCommit,
+    paths: LINEAR_AUTHORITY_PHASE3_COMMIT_PATHS,
+  });
+  const required = (name: typeof LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2[number]): Buffer => {
+    const bytes = input.compilerInputs.get(name);
+    if (!bytes) throw new Error(`Phase 3 compiler input ${name} is missing`);
+    return bytes;
+  };
+  const semanticPlan = required("semantic-plan");
+  const requirementBaseline = required("requirement-baseline");
+  const recoveryMapping = required("requirement-recovery-mapping");
+  const requirementPublication = required("requirement-publication");
+  const featureInventory = required("feature-inventory");
+  const dispositions = required("disposition-register");
+  const sourceChecksums = required("source-checksums");
+  assertLinearAuthorityRequirementAdoptionArtifacts({
+    rootDir: input.repositoryRoot,
+    workspaceId: manifest.workspace.id,
+    fingerprintJson: required("linear-fingerprint"),
+    descriptionsJson: required("issue-descriptions"),
+    baselineJson: requirementBaseline,
+    publicationRaw: requirementPublication.toString("utf8"),
+    recoveryRaw: recoveryMapping.toString("utf8"),
+  });
+  const rebuiltSemantic = buildLinearAuthoritySemanticPlanV4FromCapture({
+    rootDir: input.repositoryRoot,
+    fingerprintJson: required("linear-fingerprint"),
+    descriptionsJson: required("issue-descriptions"),
+    recoveryMappingJson: recoveryMapping,
+    publicationJson: requirementPublication,
+  });
+  const publication = validateLinearAuthorityRequirementPublicationSequence(
+    requirementPublication,
+    rebuiltSemantic.plan.publicationSequence,
+  );
+  if (
+    requirementPublication.toString("utf8") !==
+      canonicalLinearAuthorityRequirementPublicationSequenceJson(publication)
+  ) {
+    throw new Error("Phase 3 requirement publication bytes are not canonical");
+  }
+  const suppliedSemantic = parseLinearAuthoritySemanticPlanV4(semanticPlan);
+  if (
+    canonicalLinearAuthoritySemanticPlanV4Json(rebuiltSemantic.plan) !==
+      canonicalLinearAuthoritySemanticPlanV4Json(suppliedSemantic.plan) ||
+    rebuiltSemantic.semanticRoot !== suppliedSemantic.semanticRoot ||
+    rebuiltSemantic.captureEvidenceValidated !== true
+  ) {
+    throw new Error("Phase 3 semantic plan differs from the exact capture-derived v4 plan");
+  }
+  const summary = validateLinearAuthoritySourceLineage({
+    lineageRaw: required("source-lineage"),
+    authority: {
+      workspaceId: manifest.workspace.id,
+      sourceCommit: manifest.sourceCommit,
+      planRoot: manifest.planRoot,
+      sourceSetRoot: manifest.sourceSetRoot,
+      semanticPlanSha256: sha256(semanticPlan),
+      semanticRoot: manifest.semanticRoot!,
+      featureInventorySha256: sha256(featureInventory),
+    },
+    repositoryRoot: input.repositoryRoot,
+    semanticPlanRaw: semanticPlan,
+    featureInventoryRaw: featureInventory,
+    dispositionsRaw: dispositions,
+    sourceChecksumsRaw: sourceChecksums,
+    sourceFiles: input.sourceFiles,
+  });
+  if (
+    summary.sourceCommit !== manifest.sourceCommit ||
+    summary.planRoot !== manifest.planRoot ||
+    summary.sourceSetRoot !== manifest.sourceSetRoot ||
+    summary.semanticRoot !== manifest.semanticRoot ||
+    summary.sourceCoverageRoot !== manifest.sourceCoverageRoot ||
+    summary.sourceLineageRoot !== manifest.sourceLineageRoot
+  ) {
+    throw new Error("Phase 3 source-lineage roots differ from the authority manifest");
+  }
+  if (
+    summary.requirements !== 926 ||
+    summary.decisions !== 61 ||
+    summary.retiredSourceDecisions !== 10 ||
+    summary.unresolved !== 0 ||
+    summary.sourcePartitionValidated !== true ||
+    summary.sourceExtractionCoverageValidated !== true ||
+    summary.semanticPlanInternalsValidated !== true ||
+    summary.captureEvidenceValidated !== true ||
+    summary.semanticCoverageValidated !== false ||
+    summary.mutationAuthorized !== false
+  ) {
+    throw new Error("Phase 3 source-lineage coverage is incomplete or overclaims authority");
+  }
+  const lineage = JSON.parse(required("source-lineage").toString("utf8")) as LinearAuthoritySourceLineage;
+  if (
+    canonicalJson([...lineage.sources].sort((left, right) => left.path.localeCompare(right.path))) !==
+      canonicalJson([...manifest.sources].sort((left, right) => left.path.localeCompare(right.path))) ||
+    canonicalJson([...lineage.sourceSlices].sort((left, right) => left.key.localeCompare(right.key))) !==
+      canonicalJson([...manifest.blocks].sort((left, right) => left.key.localeCompare(right.key)))
+  ) {
+    throw new Error("Phase 3 manifest sources or physical slices differ from source-lineage");
+  }
+  const requirementPlanKeys = lineage.targetBindings
+    .filter((row) => row.semanticRole === "requirement")
+    .map((row) => row.targetPlanKey);
+  const decisionPlanKeys = lineage.targetBindings
+    .filter((row) => row.semanticRole === "decision")
+    .map((row) => row.targetPlanKey);
+  const sourceDecisionPlanKeys = manifest.decisions
+    .filter((row) =>
+      row.origin === "source" || row.origin === "retired_source_disposition"
+    )
+    .map((row) => row.planKey);
+  if (
+    JSON.stringify(sort(requirementPlanKeys)) !== JSON.stringify(sort(manifest.requirements.map((row) => row.planKey))) ||
+    JSON.stringify(sort(decisionPlanKeys)) !== JSON.stringify(sort(sourceDecisionPlanKeys))
+  ) {
+    throw new Error("Phase 3 source-lineage target bindings differ from manifest Requirements or Decisions");
+  }
+  const bindings = new Map(lineage.targetBindings.map((row) => [row.targetPlanKey, row]));
+  for (const target of [
+    ...manifest.requirements,
+    ...manifest.decisions.filter((row) =>
+      row.origin === "source" || row.origin === "retired_source_disposition"
+    ),
+  ]) {
+    const binding = bindings.get(target.planKey)!;
+    if (binding.resolution === "retired_source_disposition") {
+      if (target.kind !== "decision" || target.origin !== "retired_source_disposition" || target.blockKeys.length !== 0 || binding.supportSliceKeys.length !== 0) {
+        throw new Error(`Retired source Decision ${target.planKey} must remain source-slice free`);
+      }
+      continue;
+    }
+    if (target.origin !== "source" || JSON.stringify(sort(target.blockKeys)) !== JSON.stringify(sort(binding.supportSliceKeys))) {
+      throw new Error(`Phase 3 target ${target.planKey} source claims differ from source-lineage`);
+    }
+  }
+  return summary;
+}
+
+function validatePhase3Inventory(manifest: LinearAuthorityManifest): void {
+  if (manifest.schemaVersion !== 2) return;
+  const sourceDecisions = manifest.decisions.filter((target) =>
+    target.origin === "source" || target.origin === "retired_source_disposition"
+  );
+  const registryDecisions = manifest.decisions.filter(
+    (target) => target.origin === "registry",
+  );
+  const liveDecisions = manifest.decisions.filter(
+    (target) => target.origin === "live",
+  );
+  if (
+    manifest.requirements.length !== 926 ||
+    manifest.requirements.some((target) => target.origin !== "source") ||
+    manifest.decisions.length !== 148 ||
+    sourceDecisions.length !== 61 ||
+    registryDecisions.length !== 85 ||
+    liveDecisions.length !== 2 ||
+    manifest.risks.length !== 24 ||
+    manifest.risks.some((target) => target.origin !== "registry") ||
+    manifest.documents.length !== 30
+  ) {
+    throw new Error(
+      "Phase 3 authority inventory must contain exactly 926 Requirements, 61 source Decisions, 85 registry Decisions, 2 live Decisions, 24 registry Risks, and 30 documents",
+    );
+  }
+  if (
+    JSON.stringify(sort(liveDecisions.map((target) => target.expectedIdentifier ?? ""))) !==
+      JSON.stringify(["PLA-1058", "PLA-1059"])
+  ) {
+    throw new Error("Phase 3 live Decision identities must be PLA-1058 and PLA-1059");
+  }
+  if (
+    manifest.issueDescriptionRepairs.length !== 1 ||
+    manifest.issueDescriptionRepairs[0]?.identifier !== "SEL-122"
+  ) {
+    throw new Error("Phase 3 authority must contain exactly one SEL-122 description repair");
+  }
+}
+
 function validateCaptureProvenance(
   manifest: LinearAuthorityManifest,
   compilerInputs: ReadonlyMap<string, Buffer>,
@@ -535,6 +838,20 @@ function validateCaptureProvenance(
   const source = exactKeys(receipt.source, ["repository", "commit", "ref", "runId", "runAttempt"], "Capture receipt source");
   if (source.repository !== CANONICAL_REPOSITORY || source.commit !== manifest.sourceCommit || source.ref !== CANONICAL_REF || typeof source.runId !== "string" || !/^[1-9]\d*$/.test(source.runId) || typeof source.runAttempt !== "string" || !/^[1-9]\d*$/.test(source.runAttempt)) throw new Error("Capture receipt source does not match the canonical repository, main commit, and run identity");
 
+  if (manifest.schemaVersion === 2) {
+    const executionValue = parseJson<unknown>(compilerInputs.get("github-execution")!.toString("utf8"), "GitHub execution provenance");
+    const execution = exactKeys(executionValue, ["schemaVersion", "kind", "repository", "commit", "ref", "runId", "runAttempt"], "GitHub execution provenance");
+    if (
+      execution.schemaVersion !== 1 ||
+      execution.kind !== "github-execution" ||
+      execution.repository !== source.repository ||
+      execution.commit !== source.commit ||
+      execution.ref !== source.ref ||
+      execution.runId !== source.runId ||
+      execution.runAttempt !== source.runAttempt
+    ) throw new Error("GitHub execution provenance differs from the capture receipt source");
+    return;
+  }
   const metadataValue = parseJson<unknown>(compilerInputs.get("github-artifact")!.toString("utf8"), "GitHub artifact metadata");
   const metadata = exactKeys(metadataValue, ["schemaVersion", "artifact"], "GitHub artifact metadata");
   if (metadata.schemaVersion !== 1) throw new Error("GitHub artifact metadata schemaVersion must be 1");
@@ -579,13 +896,61 @@ function validateSources(
   return sources;
 }
 
+function validatePhase3Blocks(
+  manifest: LinearAuthorityManifest,
+  sources: ReadonlyMap<string, Buffer>,
+): Map<string, AuthorityBlock> {
+  const blocks = new Map<string, AuthorityBlock>();
+  for (const block of manifest.blocks) {
+    const row = exactKeys(block, [
+      "key", "sourcePath", "byteStart", "byteEnd", "startAnchor", "endAnchor",
+      "rawSha256", "normalizedSha256", "contextRole",
+    ], "Phase 3 authority source slice");
+    assertString(row.key, "Phase 3 source slice key");
+    assertString(row.sourcePath, `Phase 3 source slice ${String(row.key)} source path`);
+    if (blocks.has(row.key)) throw new Error(`Phase 3 authority has duplicate source slice ${row.key}`);
+    const source = sources.get(row.sourcePath);
+    if (!source) throw new Error(`Phase 3 source slice ${row.key} references an unknown source`);
+    if (!Number.isInteger(row.byteStart) || !Number.isInteger(row.byteEnd) || (row.byteStart as number) < 0 || (row.byteEnd as number) <= (row.byteStart as number) || (row.byteEnd as number) > source.length) {
+      throw new Error(`Phase 3 source slice ${row.key} range is invalid`);
+    }
+    if (row.startAnchor !== null) assertString(row.startAnchor, `Phase 3 source slice ${row.key} start anchor`);
+    if (row.endAnchor !== null) assertString(row.endAnchor, `Phase 3 source slice ${row.key} end anchor`);
+    if (row.contextRole !== "target_support" && row.contextRole !== "canonical_document_context") {
+      throw new Error(`Phase 3 source slice ${row.key} context role is invalid`);
+    }
+    assertDigest(row.rawSha256, `Phase 3 source slice ${row.key} raw digest`);
+    assertDigest(row.normalizedSha256, `Phase 3 source slice ${row.key} normalized digest`);
+    const slice = source.subarray(row.byteStart as number, row.byteEnd as number);
+    if (sha256(slice) !== row.rawSha256) throw new Error(`Phase 3 source slice ${row.key} raw digest mismatch`);
+    if (sha256(normalizeAuthorityMarkdown(decodeUtf8(slice, `Phase 3 source slice ${row.key}`))) !== row.normalizedSha256) {
+      throw new Error(`Phase 3 source slice ${row.key} normalized digest mismatch`);
+    }
+    blocks.set(row.key, block);
+  }
+  for (const [sourcePath, bytes] of sources) {
+    const slices = manifest.blocks
+      .filter((block) => block.sourcePath === sourcePath)
+      .sort((left, right) => left.byteStart - right.byteStart);
+    let cursor = 0;
+    for (const slice of slices) {
+      if (slice.byteStart !== cursor) throw new Error(`Phase 3 source ${sourcePath} slices do not form an exact byte partition`);
+      cursor = slice.byteEnd;
+    }
+    if (cursor !== bytes.length) throw new Error(`Phase 3 source ${sourcePath} slices leave a gap`);
+  }
+  return blocks;
+}
+
 function validateBlocks(
   manifest: LinearAuthorityManifest,
   sources: ReadonlyMap<string, Buffer>,
 ): Map<string, AuthorityBlock> {
+  if (manifest.schemaVersion === 2) return validatePhase3Blocks(manifest, sources);
   if (manifest.blocks.length === 0) throw new Error("Authority manifest has no classified blocks");
   const blocks = new Map<string, AuthorityBlock>();
   for (const block of manifest.blocks) {
+    if (!isAuthorityBlockV1(block)) throw new Error("Phase 2 authority block uses the wrong contract");
     exactKeys(block, ["key", "sourcePath", "byteStart", "byteEnd", "heading", "rawSha256", "normalizedSha256", "type", "classification", "targetPlanKey", "disposition"], "Authority block");
     assertPlanKey(block.key, "block", "Authority block key");
     if (blocks.has(block.key)) throw new Error(`Authority manifest has duplicate block ${block.key}`);
@@ -610,7 +975,10 @@ function validateBlocks(
     blocks.set(block.key, block);
   }
   for (const [path, bytes] of sources) {
-    const sourceBlocks = manifest.blocks.filter((block) => block.sourcePath === path).sort((left, right) => left.byteStart - right.byteStart);
+    const sourceBlocks = manifest.blocks
+      .filter(isAuthorityBlockV1)
+      .filter((block) => block.sourcePath === path)
+      .sort((left, right) => left.byteStart - right.byteStart);
     let cursor = 0;
     for (const block of sourceBlocks) {
       if (block.byteStart !== cursor || block.byteEnd > bytes.length) throw new Error(`Authority source ${path} block ranges do not form an exact byte partition`);
@@ -668,6 +1036,7 @@ function validateAuthorityScopes(
   const programRecord = exactKeys(programValue, [
     "schemaVersion", "outcomeInitiatives", "planningDocument", "projectDescriptionFingerprints", "projectInitiatives",
     "canonicalProjectDocuments", "supplementaryDocuments", "projectDocumentDecisionContract",
+    "authorityIssueLabelContract",
   ], "Canonical program scope");
   if (programRecord.schemaVersion !== 3 || !Array.isArray(programRecord.outcomeInitiatives) || !Array.isArray(programRecord.projectDescriptionFingerprints) || !Array.isArray(programRecord.projectInitiatives) || !Array.isArray(programRecord.canonicalProjectDocuments) || !Array.isArray(programRecord.supplementaryDocuments)) throw new Error("Canonical program scope v3 contract is invalid");
   const initiatives = programRecord.outcomeInitiatives.map((value) => {
@@ -840,9 +1209,11 @@ function validateManifestCatalog(manifest: LinearAuthorityManifest): CatalogMaps
     assertPlanKey(row.teamPlanKey, "team", `Workflow state ${row.planKey} team`);
   });
   const labels = keyedCatalog(catalog.labels, "label", "Label", (row) => {
-    exactKeys(row, ["planKey", "id", "semanticRole", "name", "teamPlanKey", "parentId", "parentName"], "Label catalog row");
+    exactKeys(row, ["planKey", "id", "semanticRole", "name", "color", "description", "teamPlanKey", "parentId", "parentName"], "Label catalog row");
     if (!["requirement", "decision", "risk", "other"].includes(row.semanticRole)) throw new Error(`Label ${row.planKey} semantic role is invalid`);
     assertString(row.name, `Label ${row.planKey} name`);
+    if (!/^#[0-9a-f]{6}$/i.test(row.color)) throw new Error(`Label ${row.planKey} color is invalid`);
+    if (row.description !== null && typeof row.description !== "string") throw new Error(`Label ${row.planKey} description is invalid`);
     if (row.teamPlanKey !== null) assertPlanKey(row.teamPlanKey, "team", `Label ${row.planKey} team`);
     if ((row.parentId === null) !== (row.parentName === null)) throw new Error(`Label ${row.planKey} parent identity is incomplete`);
     if (row.parentId !== null) {
@@ -882,7 +1253,7 @@ function addTarget(targets: Map<string, ExpectedTarget>, target: ExpectedTarget)
 
 function assertManagedSourceBinding(
   target: AuthorityManagedTarget,
-  blocksByKey: ReadonlyMap<string, AuthorityBlock>,
+  blocksByKey: ReadonlyMap<string, AuthorityBlockV1>,
 ): void {
   if (target.origin !== "source") return;
   const expectedLines = [...target.blockKeys]
@@ -914,7 +1285,7 @@ function validateManagedTargets(
     for (const target of rows) {
       exactKeys(target, ["kind", "origin", "planKey", "title", "expectedCurrentIssueUuid", "expectedCurrentDescriptionSha256", "expectedCurrentNativeSha256", "expectedIdentifier", "blockKeys", "description", "descriptionSha256", "payloadSha256", "teamPlanKey", "projectPlanKey", "statePlanKey", "labelPlanKeys", "priority", "estimate", "dueDate", "cyclePlanKey", "milestonePlanKey", "releasePlanKeys", "parentPlanKey", "assigneePlanKey"], `Managed ${expectedKind} target`);
       if (target.kind !== expectedKind) throw new Error(`${target.planKey} managed target kind differs from its family`);
-      if (target.origin !== "source" && target.origin !== "live") throw new Error(`${target.planKey} managed target origin is invalid`);
+      if (target.origin !== "source" && target.origin !== "registry" && target.origin !== "live" && target.origin !== "retired_source_disposition") throw new Error(`${target.planKey} managed target origin is invalid`);
       assertPlanKey(target.planKey, prefix, `Managed ${expectedKind} target`);
       assertString(target.title, `Managed ${expectedKind} ${target.planKey} title`);
       if (target.expectedCurrentIssueUuid !== null) assertUuidV4(target.expectedCurrentIssueUuid, `Managed ${expectedKind} ${target.planKey} current issue UUID`);
@@ -924,11 +1295,13 @@ function validateManagedTargets(
       assertNullableString(target.expectedIdentifier, `Managed ${expectedKind} ${target.planKey} identifier`);
       assertStringArray(target.blockKeys, `Managed ${expectedKind} ${target.planKey} blocks`);
       if (target.origin === "source" && target.blockKeys.length === 0) throw new Error(`Managed ${expectedKind} ${target.planKey} has no source blocks`);
+      if (target.origin === "registry" && (manifest.schemaVersion !== 2 || (expectedKind !== "decision" && expectedKind !== "risk") || target.blockKeys.length !== 0)) throw new Error(`Registry-origin ${expectedKind} ${target.planKey} must be one Phase 3 Decision or Risk with no canonical source blocks`);
       if (target.origin === "live" && (target.blockKeys.length !== 0 || target.expectedCurrentIssueUuid === null || target.expectedIdentifier === null || target.expectedCurrentDescriptionSha256 === null || target.expectedCurrentNativeSha256 === null)) throw new Error(`Live-origin ${expectedKind} ${target.planKey} must bind one captured issue and no source blocks`);
+      if (target.origin === "retired_source_disposition" && (manifest.schemaVersion !== 2 || expectedKind !== "decision" || target.blockKeys.length !== 0)) throw new Error(`Retired-source ${expectedKind} ${target.planKey} must be one Phase 3 Decision with no canonical source blocks`);
       assertUnique(target.blockKeys, `Managed ${expectedKind} ${target.planKey} blocks`);
       if (typeof target.description !== "string" || target.description.length === 0) throw new Error(`Managed ${expectedKind} ${target.planKey} description is empty`);
       if (MANUAL_NATIVE_REFERENCE.test(target.description) || MANUAL_RELATION_METADATA.test(target.description)) throw new Error(`Managed ${expectedKind} ${target.planKey} violates native reference prose hygiene`);
-      assertManagedSourceBinding(target, blocksByKey);
+      if (manifest.schemaVersion === 1) assertManagedSourceBinding(target, blocksByKey as ReadonlyMap<string, AuthorityBlockV1>);
       assertDigest(target.descriptionSha256, `Managed ${expectedKind} ${target.planKey} description digest`);
       if (sha256(target.description) !== target.descriptionSha256) throw new Error(`Managed ${expectedKind} ${target.planKey} description digest mismatch`);
       assertDigest(target.payloadSha256, `Managed ${expectedKind} ${target.planKey} payload digest`);
@@ -965,16 +1338,40 @@ function validateManagedTargets(
       addTarget(targets, { planKey: target.planKey, kind: allocationKind, title: target.title, expectedIdentifier: target.expectedIdentifier, managed: target });
     }
   }
-  for (const target of [...manifest.requirements, ...manifest.decisions, ...manifest.risks]) {
-    if (target.parentPlanKey !== null) {
-      const parent = targets.get(target.parentPlanKey);
-      if (!parent || !parent.managed || parent.planKey === target.planKey) throw new Error(`Managed target ${target.planKey} has an invalid parent selector`);
-    }
+  const usedLabelPlanKeys = new Set(
+    [...manifest.requirements, ...manifest.decisions, ...manifest.risks]
+      .flatMap((target) => target.labelPlanKeys),
+  );
+  if (
+    JSON.stringify(sort([...usedLabelPlanKeys])) !==
+      JSON.stringify(sort([...catalog.labels.keys()]))
+  ) {
+    throw new Error("Native label catalog must exactly cover every used label selector");
   }
   const managed = [...manifest.requirements, ...manifest.decisions, ...manifest.risks];
   const titleKeys = managed.map((target) => target.title.normalize("NFC").toLocaleLowerCase("en-US"));
   if (new Set(titleKeys).size !== titleKeys.length) throw new Error("Managed authority targets contain a duplicate title");
-  const parentByPlanKey = new Map(managed.map((target) => [target.planKey, target.parentPlanKey]));
+}
+
+function validateManagedParents(
+  manifest: LinearAuthorityManifest,
+  targets: ReadonlyMap<string, ExpectedTarget>,
+): void {
+  const managed = [...manifest.requirements, ...manifest.decisions, ...manifest.risks];
+  for (const target of managed) {
+    if (target.parentPlanKey === null) continue;
+    const parent = targets.get(target.parentPlanKey);
+    if (
+      !parent ||
+      parent.planKey === target.planKey ||
+      (!parent.managed && parent.kind !== "relation_target")
+    ) {
+      throw new Error(`Managed target ${target.planKey} has an invalid parent selector`);
+    }
+  }
+  const parentByPlanKey = new Map(
+    managed.map((target) => [target.planKey, target.parentPlanKey]),
+  );
   const visiting = new Set<string>();
   const visited = new Set<string>();
   const visit = (planKey: string): void => {
@@ -982,7 +1379,9 @@ function validateManagedTargets(
     if (visited.has(planKey)) return;
     visiting.add(planKey);
     const parent = parentByPlanKey.get(planKey);
-    if (parent !== null && parent !== undefined) visit(parent);
+    if (parent !== null && parent !== undefined && parentByPlanKey.has(parent)) {
+      visit(parent);
+    }
     visiting.delete(planKey);
     visited.add(planKey);
   };
@@ -1136,12 +1535,24 @@ function validateBlockOwnership(
   blocks: ReadonlyMap<string, AuthorityBlock>,
   targets: ReadonlyMap<string, ExpectedTarget>,
 ): void {
+  if (manifest.schemaVersion === 2) {
+    for (const owner of [...manifest.requirements, ...manifest.decisions]) {
+      for (const blockKey of owner.blockKeys) {
+        if (!blocks.has(blockKey)) throw new Error(`Phase 3 target ${owner.planKey} claims unknown source slice ${blockKey}`);
+      }
+    }
+    for (const owner of [...manifest.risks, ...manifest.documents]) {
+      if (owner.blockKeys.length !== 0) throw new Error(`Phase 3 ${owner.planKey} cannot claim semantic source-lineage slices`);
+    }
+    return;
+  }
   const claims = new Map<string, string>();
   const owners = [...manifest.requirements, ...manifest.decisions, ...manifest.risks, ...manifest.documents];
   for (const owner of owners) {
     for (const blockKey of owner.blockKeys) {
       const block = blocks.get(blockKey);
       if (!block) throw new Error(`Authority target ${owner.planKey} claims unknown block ${blockKey}`);
+      if (!isAuthorityBlockV1(block)) throw new Error(`Phase 2 target ${owner.planKey} claims a Phase 3 source slice`);
       if (claims.has(blockKey)) throw new Error(`Authority block ${blockKey} is classified more than once`);
       claims.set(blockKey, owner.planKey);
       if (block.targetPlanKey !== null && block.targetPlanKey !== owner.planKey) throw new Error(`Authority block ${blockKey} target differs from its owner`);
@@ -1150,6 +1561,7 @@ function validateBlockOwnership(
   }
   if (claims.size !== blocks.size) throw new Error("Authority block classification coverage is incomplete");
   for (const block of blocks.values()) {
+    if (!isAuthorityBlockV1(block)) throw new Error("Phase 2 block ownership received a Phase 3 source slice");
     if (block.targetPlanKey !== null && !targets.has(block.targetPlanKey)) throw new Error(`Authority block ${block.key} has an unknown canonical target`);
     if (block.disposition !== null) {
       const decision = targets.get(block.disposition.decisionPlanKey);
@@ -1202,21 +1614,26 @@ function targetEvidencePayload(manifest: LinearAuthorityManifest): EvidencePaylo
 }
 
 function evidencePayloads(manifest: LinearAuthorityManifest): ReadonlyMap<string, EvidencePayload> {
-  const dispositions = manifest.blocks.filter((block) => block.disposition !== null).sort((left, right) => left.key.localeCompare(right.key));
+  const dispositions = manifest.blocks
+    .filter((block): block is AuthorityBlockV1 => isAuthorityBlockV1(block) && block.disposition !== null)
+    .sort((left, right) => left.key.localeCompare(right.key));
   const extractionRows = [
     ...manifest.sources.map((source) => ({ family: "sources", key: source.path, value: source })),
     ...manifest.blocks.map((block) => ({ family: "blocks", key: block.key, value: block })),
   ].sort((left, right) => left.key.localeCompare(right.key));
-  return new Map([
-    ["extraction-seed", { keys: extractionRows.map((row) => row.key), rows: extractionRows }],
-    ["semantic-plan", targetEvidencePayload(manifest)],
+  const payloads = new Map<string, EvidencePayload>([
     ["source-routing", { keys: manifest.blocks.map((row) => row.key).sort(), rows: [...manifest.blocks].sort((left, right) => left.key.localeCompare(right.key)) }],
     ["risk-routing", { keys: manifest.risks.map((row) => row.planKey).sort(), rows: byPlanKey(manifest.risks) }],
     ["source-contract", { keys: sort(manifest.sources.map((row) => row.path)), rows: [...manifest.sources].sort((left, right) => left.path.localeCompare(right.path)) }],
-    ["disposition-contract", { keys: dispositions.map((row) => row.key), rows: dispositions }],
     ["dependency-contract", { keys: manifest.nativeRelations.map((row) => row.planKey).sort(), rows: byPlanKey(manifest.nativeRelations) }],
     ["decision-adjudication", { keys: manifest.decisions.map((row) => row.planKey).sort(), rows: byPlanKey(manifest.decisions) }],
   ]);
+  if (manifest.schemaVersion === 1) {
+    payloads.set("disposition-contract", { keys: dispositions.map((row) => row.key), rows: dispositions });
+    payloads.set("extraction-seed", { keys: extractionRows.map((row) => row.key), rows: extractionRows });
+    payloads.set("semantic-plan", targetEvidencePayload(manifest));
+  }
+  return payloads;
 }
 
 function evidenceRoot(payload: EvidencePayload): string {
@@ -1376,9 +1793,17 @@ function validateNativeCapture(value: unknown): NativeIndexes {
     assertUnique(row.relationIds, `Native issue ${row.issueUuid} relation UUIDs`);
   }
   for (const row of capture.labels) {
-    exactKeys(row, ["id", "name", "color", "archivedAt", "inheritedFromId", "isGroup", "parentId", "parentName", "teamId", "teamKey"], "Native label");
+    exactKeys(row, ["id", "name", "color", "description", "archivedAt", "inheritedFromId", "isGroup", "parentId", "parentName", "teamId", "teamKey"], "Native label");
     reserve(row.id, "Native label UUID");
     assertString(row.name, `Native label ${row.id} name`);
+    if (!/^#[0-9a-f]{6}$/i.test(row.color)) throw new Error(`Native label ${row.id} color is invalid`);
+    if (row.description !== null && typeof row.description !== "string") throw new Error(`Native label ${row.id} description is invalid`);
+    if (typeof row.isGroup !== "boolean") throw new Error(`Native label ${row.id} group identity is invalid`);
+    if ((row.teamId === null) !== (row.teamKey === null)) throw new Error(`Native label ${row.id} team scope is incomplete`);
+    if ((row.parentId === null) !== (row.parentName === null)) throw new Error(`Native label ${row.id} parent identity is incomplete`);
+    if (row.teamId !== null) assertUuidV4(row.teamId, `Native label ${row.id} team UUID`);
+    if (row.parentId !== null) assertUuidV4(row.parentId, `Native label ${row.id} parent UUID`);
+    if (row.inheritedFromId !== null) assertUuidV4(row.inheritedFromId, `Native label ${row.id} inherited-from UUID`);
   }
   for (const row of capture.relations) {
     exactKeys(row, ["relationId", "canonicalKey", "type", "archivedAt", "issueId", "issueIdentifier", "relatedIssueId", "relatedIssueIdentifier"], "Native relation");
@@ -1474,9 +1899,28 @@ function validateNativeCapture(value: unknown): NativeIndexes {
   const milestonesById = buildUniqueMap(capture.projectMilestones, (row) => row.id, "project milestone UUID");
   const cyclesById = buildUniqueMap(capture.cycles, (row) => row.id, "cycle UUID");
   const documentsById = buildUniqueMap(capture.documents, (row) => row.id, "document UUID");
+  for (const label of capture.labels) {
+    const team = label.teamId === null ? null : teamsById.get(label.teamId);
+    const parent = label.parentId === null ? null : labelsById.get(label.parentId);
+    if (
+      (label.teamId !== null && (!team || team.key !== label.teamKey)) ||
+      (label.parentId !== null &&
+        (!parent ||
+          parent.name !== label.parentName ||
+          parent.isGroup !== true)) ||
+      (label.isGroup && label.parentId !== null) ||
+      (label.inheritedFromId !== null && !labelsById.has(label.inheritedFromId))
+    ) {
+      throw new Error(`Native label ${label.id} has invalid scope or group identity`);
+    }
+  }
   for (const issue of capture.issues) {
     if (!teamsById.has(issue.teamId) || !statesById.has(issue.stateId) || (issue.projectId !== null && !projectsById.has(issue.projectId)) || (issue.cycleId !== null && !cyclesById.has(issue.cycleId)) || (issue.milestoneId !== null && !milestonesById.has(issue.milestoneId)) || issue.releaseIds.some((id) => !releasesById.has(id)) || (issue.parentIssueUuid !== null && !issuesByUuid.has(issue.parentIssueUuid)) || (issue.assigneeId !== null && !usersById.has(issue.assigneeId))) throw new Error(`Native issue ${issue.identifier} has an unresolved native selector`);
-    for (const id of issue.labelIds) if (!labelsById.has(id)) throw new Error(`Native issue ${issue.identifier} references unknown label ${id}`);
+    for (const id of issue.labelIds) {
+      const label = labelsById.get(id);
+      if (!label) throw new Error(`Native issue ${issue.identifier} references unknown label ${id}`);
+      if (label.isGroup) throw new Error(`Native issue ${issue.identifier} assigns label group ${id}`);
+    }
     for (const id of issue.relationIds) if (!relationsById.has(id)) throw new Error(`Native issue ${issue.identifier} references unknown relation ${id}`);
   }
   for (const relation of capture.relations) {
@@ -1705,7 +2149,7 @@ function validateCatalogAgainstCapture(
   for (const expected of catalog.labels.values()) {
     const actual = native.labelsById.get(expected.id);
     const team = expected.teamPlanKey === null ? null : catalog.teams.get(expected.teamPlanKey)!;
-    if (!actual || actual.archivedAt !== null || actual.name !== expected.name || actual.isGroup !== false || actual.inheritedFromId !== null || actual.parentId !== expected.parentId || actual.parentName !== expected.parentName || actual.teamId !== (team?.id ?? null) || actual.teamKey !== (team?.key ?? null)) throw new Error(`${expected.name} label differs from its pinned scope or must be active, non-group, and non-inherited`);
+    if (!actual || actual.archivedAt !== null || actual.name !== expected.name || actual.color !== expected.color || actual.description !== expected.description || actual.isGroup !== false || actual.inheritedFromId !== null || actual.parentId !== expected.parentId || actual.parentName !== expected.parentName || actual.teamId !== (team?.id ?? null) || actual.teamKey !== (team?.key ?? null)) throw new Error(`${expected.name} label differs from its pinned color, description, scope, or must be active, non-group, and non-inherited`);
     if (capture.labels.filter((row) => row.name === expected.name).length !== 1) throw new Error(`Native capture has a competing ${expected.name} label`);
     if (expected.parentId !== null) {
       const parent = native.labelsById.get(expected.parentId);
@@ -1732,7 +2176,6 @@ function capturedIssueNativeSha(issue: LinearNativeIdentityCapture["issues"][num
     parentIssueUuid: issue.parentIssueUuid,
     assigneeId: issue.assigneeId,
     labelIds: sort(issue.labelIds),
-    relationIds: sort(issue.relationIds),
   }));
 }
 
@@ -1765,7 +2208,16 @@ function liveCandidate(
   if (target.managed) {
     if (target.managed.expectedCurrentIssueUuid) return native.issuesByUuid.get(target.managed.expectedCurrentIssueUuid) ?? null;
     if (target.expectedIdentifier) return native.issuesByIdentifier.get(target.expectedIdentifier) ?? null;
-    const candidates = native.capture.issues.filter((row) => row.archivedAt === null && row.title === target.title);
+    const adoptedRelationTargetUuids = new Set(
+      [...allocations.values()]
+        .filter((row) => row.kind === "relation_target" && row.source === "adopted")
+        .map((row) => row.uuid.toLowerCase()),
+    );
+    const candidates = native.capture.issues.filter((row) =>
+      row.archivedAt === null &&
+      row.title === target.title &&
+      !adoptedRelationTargetUuids.has(row.issueUuid.toLowerCase())
+    );
     if (candidates.length > 1) throw new Error(`Live issue title ${target.title} is ambiguous`);
     return candidates[0] ?? null;
   }
@@ -1990,7 +2442,13 @@ function validateIssueDescriptionHygieneAndRepairs(
       continue;
     }
     if (!violates) {
-      if (repair) throw new Error(`Issue-description repair ${issue.identifier} is not justified by captured prose drift`);
+      if (repair) {
+        if (repair.expectedCurrentDescriptionSha256 !== repair.desiredDescriptionSha256 ||
+          repair.desiredDescriptionSha256 !== issue.descriptionSha256 || issue.relationIds.length !== 0) {
+          throw new Error(`Issue-description repair ${issue.identifier} is not a proved completed desired state`);
+        }
+        accountedRepairs.add(issue.issueUuid);
+      }
       continue;
     }
     if (!repair || repair.identifier !== issue.identifier || repair.expectedCurrentDescriptionSha256 !== issue.descriptionSha256) throw new Error(`Active issue ${issue.identifier} has unresolved native reference prose drift`);
@@ -2017,9 +2475,11 @@ export function validateLinearAuthorityStructure(
   const manifestValue = parseJson<unknown>(input.manifestRaw, "Authority manifest");
   assertManifestShape(manifestValue);
   const manifest = manifestValue;
+  validatePhase3Inventory(manifest);
   if (computeLinearAuthorityPlanRoot(manifest) !== manifest.planRoot) throw new Error("Authority manifest plan root mismatch");
   validateCompilerInputs(manifest, input.compilerInputs, input.liveCaptureRaw);
   const sources = validateSources(manifest, input.sourceFiles);
+  const phase3Lineage = validatePhase3SourceLineage(manifest, input);
   const blocks = validateBlocks(manifest, sources);
   const catalog = validateManifestCatalog(manifest);
   const scopes = validateAuthorityScopes(manifest, input.compilerInputs, catalog);
@@ -2028,6 +2488,7 @@ export function validateLinearAuthorityStructure(
   validateDocuments(manifest, catalog, targets);
   validateDocumentAuthority(manifest, catalog, scopes);
   validateReferencesAndRelations(manifest, targets);
+  validateManagedParents(manifest, targets);
   for (const document of manifest.documents) {
     if (document.attachmentKind === "issue") {
       const target = targets.get(document.attachmentPlanKey);
@@ -2066,5 +2527,13 @@ export function validateLinearAuthorityStructure(
     semanticCoverageValidated: false,
     mutationAuthorized: false,
     sourceSetRoot: manifest.sourceSetRoot,
+    ...(phase3Lineage === null ? {} : {
+      semanticPlanInternalsValidated: true as const,
+      sourcePartitionValidated: true as const,
+      sourceExtractionCoverageValidated: true,
+      captureEvidenceValidated: true as const,
+      sourceCoverageRoot: phase3Lineage.sourceCoverageRoot,
+      sourceLineageRoot: phase3Lineage.sourceLineageRoot,
+    }),
   };
 }

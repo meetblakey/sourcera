@@ -1,5 +1,12 @@
 {
   "schemaVersion": 3,
+  "authorityIssueLabelContract": {
+    "schemaVersion": 1,
+    "initialized": false,
+    "labels": [],
+    "groups": [],
+    "root": null
+  },
   "outcomeInitiatives": [
     {
       "id": "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10",

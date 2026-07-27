@@ -72,6 +72,7 @@ function main(): void {
     expectedLiveCaptureSha256: values.get("--capture-sha256")!,
     allocationRaw: readFileSync(values.get("--allocation")!, "utf8"),
     expectedAllocationSha256: values.get("--allocation-sha256")!,
+    repositoryRoot: sourceRoot,
   });
   process.stdout.write(`${JSON.stringify(summary)}\n`);
 }

@@ -33,6 +33,8 @@ const NESTED_PROJECT_TEAM_PAGE_LIMIT = 20;
 const NESTED_PROJECT_TEAM_TOTAL_REQUEST_LIMIT = 1_000;
 const NESTED_PROJECT_INITIATIVE_PAGE_LIMIT = 20;
 const NESTED_PROJECT_INITIATIVE_TOTAL_REQUEST_LIMIT = 1_000;
+const LINEAR_REQUEST_TIMEOUT_MS = 30_000;
+const LINEAR_RESPONSE_BYTE_LIMIT = 32 * 1024 * 1024;
 
 const ISSUE_QUERY = `
   query DeliveryIssues($after: String) {
@@ -121,6 +123,7 @@ const ISSUE_LABEL_CATALOG_QUERY = `
         id
         name
         color
+        description
         archivedAt
         inheritedFrom { id }
         isGroup
@@ -481,6 +484,7 @@ interface IssueLabelCatalogNode {
   id: string;
   name: string;
   color: string;
+  description: string | null;
   archivedAt: string | null;
   inheritedFrom: { id: string } | null;
   isGroup: boolean;
@@ -678,6 +682,7 @@ export interface LinearNativeIdentityCapture {
     id: string;
     name: string;
     color: string;
+    description: string | null;
     archivedAt: string | null;
     inheritedFromId: string | null;
     isGroup: boolean;
@@ -1272,6 +1277,11 @@ async function requestWithVariables<T>(
   for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
     beforeAttempt?.();
     let response: Response;
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      LINEAR_REQUEST_TIMEOUT_MS,
+    );
     try {
       response = await fetcher(ENDPOINT, {
         method: "POST",
@@ -1280,8 +1290,10 @@ async function requestWithVariables<T>(
           authorization: token,
         },
         body: JSON.stringify({ query, variables }),
+        signal: controller.signal,
       });
     } catch (error) {
+      clearTimeout(timeout);
       if (attempt === maximumAttempts) throw error;
       await new Promise((resolveDelay) => setTimeout(resolveDelay, attempt * 250));
       continue;
@@ -1291,8 +1303,46 @@ async function requestWithVariables<T>(
       errors?: Array<{ message: string }>;
     };
     try {
-      payload = (await response.json()) as typeof payload;
-    } catch {
+      const declaredLength = response.headers.get("content-length");
+      if (
+        declaredLength !== null &&
+        Number.isFinite(Number(declaredLength)) &&
+        Number(declaredLength) > LINEAR_RESPONSE_BYTE_LIMIT
+      ) {
+        throw new Error("Linear response exceeds the bounded byte limit");
+      }
+      if (!response.body) {
+        throw new Error("Linear returned an empty response body");
+      }
+      const reader = response.body.getReader();
+      const chunks: Uint8Array[] = [];
+      let byteLength = 0;
+      while (true) {
+        const chunk = await reader.read();
+        if (chunk.done) break;
+        byteLength += chunk.value.byteLength;
+        if (byteLength > LINEAR_RESPONSE_BYTE_LIMIT) {
+          await reader.cancel();
+          throw new Error("Linear response exceeds the bounded byte limit");
+        }
+        chunks.push(chunk.value);
+      }
+      const bytes = new Uint8Array(byteLength);
+      let offset = 0;
+      for (const chunk of chunks) {
+        bytes.set(chunk, offset);
+        offset += chunk.byteLength;
+      }
+      payload = JSON.parse(new TextDecoder().decode(bytes)) as typeof payload;
+      clearTimeout(timeout);
+    } catch (error) {
+      clearTimeout(timeout);
+      if (
+        error instanceof Error &&
+        error.message === "Linear response exceeds the bounded byte limit"
+      ) {
+        throw error;
+      }
       if (attempt === maximumAttempts) {
         throw new Error("Linear returned invalid JSON after bounded retries");
       }
@@ -2074,14 +2124,17 @@ export function assertLinearNativeIdentityCapture(
   for (const label of identity.labels) {
     if (
       !label.name?.trim() ||
-      !label.color?.trim() ||
+      !/^#[0-9a-f]{6}$/i.test(label.color) ||
+      (label.description !== null && typeof label.description !== "string") ||
       typeof label.isGroup !== "boolean" ||
       (label.teamId === null) !== (label.teamKey === null) ||
       (label.teamId !== null &&
         teamById.get(label.teamId)?.key !== label.teamKey) ||
       (label.parentId === null) !== (label.parentName === null) ||
       (label.parentId !== null &&
-        labelById.get(label.parentId)?.name !== label.parentName) ||
+        (labelById.get(label.parentId)?.name !== label.parentName ||
+          labelById.get(label.parentId)?.isGroup !== true)) ||
+      (label.isGroup && label.parentId !== null) ||
       (label.inheritedFromId !== null &&
         !labelById.has(label.inheritedFromId))
     ) {
@@ -2345,6 +2398,11 @@ export function assertLinearNativeIdentityCapture(
     if (issue.labelIds.some((id) => !labelById.has(id))) {
       throw new Error(
         `Linear native issue ${issue.identifier} has invalid labels`,
+      );
+    }
+    if (issue.labelIds.some((id) => labelById.get(id)?.isGroup === true)) {
+      throw new Error(
+        `Linear native issue ${issue.identifier} assigns a label group`,
       );
     }
     assertExactStringSet(
@@ -3126,10 +3184,14 @@ function buildNativeCaptureArtifacts(
   const cycleById = new Map(cycleNodes.map((cycle) => [cycle.id, cycle]));
   for (const label of labelNodes) {
     if (
+      !/^#[0-9a-f]{6}$/i.test(label.color) ||
+      (label.description !== null && typeof label.description !== "string") ||
       (label.team &&
         (teamById.get(label.team.id)?.key !== label.team.key)) ||
       (label.parent &&
-        labelById.get(label.parent.id)?.name !== label.parent.name) ||
+        (labelById.get(label.parent.id)?.name !== label.parent.name ||
+          labelById.get(label.parent.id)?.isGroup !== true)) ||
+      (label.isGroup && label.parent !== null) ||
       (label.inheritedFrom && !labelById.has(label.inheritedFrom.id))
     ) {
       throw new Error(`Linear label ${label.id} has orphaned native identity`);
@@ -3270,7 +3332,9 @@ function buildNativeCaptureArtifacts(
       if (
         new Set(labelIds).size !== labelIds.length ||
         issue.labels.nodes.some(
-          (label) => labelById.get(label.id)?.name !== label.name,
+          (label) =>
+            labelById.get(label.id)?.name !== label.name ||
+            labelById.get(label.id)?.isGroup === true,
         )
       ) {
         throw new Error(
@@ -3338,6 +3402,7 @@ function buildNativeCaptureArtifacts(
       id: label.id,
       name: label.name,
       color: label.color,
+      description: label.description,
       archivedAt: label.archivedAt,
       inheritedFromId: label.inheritedFrom?.id ?? null,
       isGroup: label.isGroup,
