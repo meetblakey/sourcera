@@ -3,14 +3,12 @@
 // This bootstrap is not a Linear-only authority cutover and cannot authorize
 // deletion of frozen repository migration inputs.
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { applyFeatureDependencies, type FeatureDependencyRepair } from "./lib/dependencies.js";
 import {
   adoptStableMappings,
   assertPhase1WriteModeAllowed,
-  buildCompensationPlan,
   validateRecoveryCheckpoint,
-  type JournalRecord,
   type ManagedLiveIssue,
   type ManagedPlanRow,
   type StableMapping,
@@ -19,8 +17,6 @@ import { canonicalLinearRelationKey, type LinearCapture } from "./lib/linear-liv
 import { parseFeatureInventory } from "./lib/sources.js";
 
 const TEAM_ID = "ee9dd198-4816-4836-9226-42765878d793";
-const REQUIREMENT_LABEL_ID = "5b058b32-9655-442e-bcdb-a5ca0479c311";
-const DECISION_LABEL_ID = "df2bcb0f-2fca-41cb-a45c-37770a01aac2";
 const STATE_IDS = {
   Approved: "f7372f4e-b2ef-4740-896a-5a213d7517be",
   Superseded: "c1b10439-5c3a-4ff9-b2cf-52bfdfb34a41",
@@ -34,7 +30,6 @@ const RECOVERY_DESIRED_RELATIONS = 473;
 const RECOVERY_MISSING_RELATIONS = 78;
 const RECOVERY_DESCRIPTION_UPDATES = 61;
 const RECOVERY_FIELD_UPDATES = 1;
-const BACKUP_PATH = "/tmp/linear-authority-migration-backup.jsonl";
 const compare = (left: string, right: string): number => left.localeCompare(right, undefined, { numeric: true });
 const unique = (values: string[]): string[] => [...new Set(values)].sort(compare);
 const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex");
@@ -65,7 +60,6 @@ interface PlannedIssue {
   projectId: string;
   state: keyof typeof STATE_IDS;
   label: "Requirement" | "Decision";
-  labelId: string;
   priority: number;
   primaryExecutionIdentifier: string | null;
   executionIdentifiers: string[];
@@ -181,7 +175,6 @@ function buildPlan(): MigrationPlan {
       projectId: primary[0].projectId,
       state: "Approved",
       label: "Requirement",
-      labelId: REQUIREMENT_LABEL_ID,
       priority: primary[0].priority,
       primaryExecutionIdentifier: primary[0].id,
       executionIdentifiers: execution.map((issue) => issue.id),
@@ -213,7 +206,7 @@ function buildPlan(): MigrationPlan {
       targetPlanKey: `issue:${disposition.requirementId}`,
       title: `${config.prefix} ${cleanTitle(row.title)} ${config.suffix}`,
       description: `## Decision\n\n${cleanText(disposition.rationale)}\n\n## Effect\n\nThis item does not create a standalone binding product requirement. The archived migration receipt preserves its former registry mapping. Current behavior, execution, and proof remain with the native related Linear entities.`,
-      project, projectId, state: config.state, label: "Decision", labelId: DECISION_LABEL_ID, priority: 3,
+      project, projectId, state: config.state, label: "Decision", priority: 3,
       primaryExecutionIdentifier: null, executionIdentifiers: [], requirementDependencies: [], requirementRelations, proofRelations,
       disposition: disposition.disposition,
     };
@@ -295,7 +288,7 @@ async function main(): Promise<void> {
   const plan = buildPlan();
   const mode = process.argv.includes("--mode") ? process.argv[process.argv.indexOf("--mode") + 1] : "plan";
   if (mode === "plan") {
-    process.stdout.write(`${JSON.stringify({ scope: "phase_1_requirement_bootstrap", cutoverReady: false, preflightEnabled: false, applyEnabled: false, allocationManifestRequired: true, allocationContract: "external digest-pinned UUIDv4 targets keyed by the exact plan", requirements: plan.requirements.length, decisions: plan.decisions.length, sequence: plan.sequence.length, planDigest: planDigest(plan), recoveryMapSha256: RECOVERY_MAP_SHA256, recoveryFingerprintSha256: RECOVERY_FINGERPRINT_SHA256, nextPhase: "preallocate UUIDv4 targets, add live-header capacity reservation plus bounded checkpoint/resume, then generate the lossless normative-block and document manifest" })}\n`);
+    process.stdout.write(`${JSON.stringify({ scope: "phase_1_requirement_bootstrap", cutoverReady: false, preflightEnabled: false, applyEnabled: false, auditedPlanManifestRequired: true, auditedPlanValidated: false, allocationManifestRequired: true, allocationContract: "external digest-pinned UUIDv4 targets keyed by the exact audited plan", requirements: plan.requirements.length, decisions: plan.decisions.length, sequence: plan.sequence.length, planDigest: planDigest(plan), recoveryMapSha256: RECOVERY_MAP_SHA256, recoveryFingerprintSha256: RECOVERY_FINGERPRINT_SHA256, nextPhase: "supply and validate the audited semantic plan manifest, preallocate UUIDv4 targets, add live-header capacity reservation plus bounded checkpoint/resume, then generate the lossless normative-block and document manifest" })}\n`);
     return;
   }
   if (mode === "recovery-check") {
@@ -313,14 +306,8 @@ async function main(): Promise<void> {
     process.stdout.write(`${JSON.stringify({ status: "recovery_checkpoint_verified", mappings: recoveryMappings.length, ...recoveryAudit(plan, capture, mappings) })}\n`);
     return;
   }
-  if (mode === "compensation-plan") {
-    if (!existsSync(BACKUP_PATH)) throw new Error("Migration backup is missing");
-    const records = readFileSync(BACKUP_PATH, "utf8").trim().split("\n").filter(Boolean).map((line) => JSON.parse(line) as JournalRecord & { before?: unknown; after?: unknown });
-    process.stdout.write(`${JSON.stringify({ compensation: buildCompensationPlan(records) })}\n`);
-    return;
-  }
   assertPhase1WriteModeAllowed(mode);
-  throw new Error("Mode must be plan, recovery-check, or compensation-plan; execution modes are intentionally unavailable");
+  throw new Error("Mode must be plan or recovery-check; execution and compensation modes are intentionally unavailable");
 }
 
 main().catch((error: unknown) => {

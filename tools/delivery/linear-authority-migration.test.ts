@@ -1,4 +1,5 @@
 import { strict as assert } from "node:assert";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -24,13 +25,14 @@ import {
   validateUuidV4AllocationManifest,
   type JournalRecord,
   type JournalSink,
+  type RedactedJournalRecord,
 } from "./lib/linear-authority-migration.js";
 
 class MemoryJournal implements JournalSink {
-  redacted: JournalRecord[] = [];
+  redacted: RedactedJournalRecord[] = [];
   backups: Array<JournalRecord & { before: unknown; after: unknown }> = [];
   checkpoints: Array<[string, string]> = [];
-  async appendRedacted(record: JournalRecord) { this.redacted.push(record); }
+  async appendRedacted(record: RedactedJournalRecord) { this.redacted.push(record); }
   async appendBackup(record: JournalRecord & { before: unknown; after: unknown }) { this.backups.push(record); }
   async checkpoint(operationId: string, fingerprint: string) { this.checkpoints.push([operationId, fingerprint]); }
 }
@@ -56,15 +58,15 @@ test("external target allocation requires exact digest, plan, coverage, and UUID
   });
   const digest = createHash("sha256").update(manifest).digest("hex");
   const expected = new Map([["issue:F-001", "issue" as const], ["relation:blocks:F-001:F-002", "relation" as const]]);
-  assert.deepEqual(validateUuidV4AllocationManifest(manifest, digest, "plan-sha", expected).allocations.length, 2);
-  assert.throws(() => validateUuidV4AllocationManifest(`${manifest}\n`, digest, "plan-sha", expected), /digest/);
+  assert.deepEqual(validateUuidV4AllocationManifest(manifest, digest, "plan-sha", expected, new Set()).allocations.length, 2);
+  assert.throws(() => validateUuidV4AllocationManifest(`${manifest}\n`, digest, "plan-sha", expected, new Set()), /digest/);
 });
 
 test("external target allocation rejects UUIDv5, duplicate UUIDs, and incomplete coverage", () => {
   const expected = new Map([["issue:F-001", "issue" as const], ["relation:one", "relation" as const]]);
   const validate = (value: unknown) => {
     const raw = JSON.stringify(value);
-    return validateUuidV4AllocationManifest(raw, createHash("sha256").update(raw).digest("hex"), "plan-sha", expected);
+    return validateUuidV4AllocationManifest(raw, createHash("sha256").update(raw).digest("hex"), "plan-sha", expected, new Set());
   };
   assert.throws(() => validate({ schemaVersion: 1, planDigest: "plan-sha", allocations: [
     { planKey: "issue:F-001", kind: "issue", uuid: "00000000-0000-5000-8000-000000000001" },
@@ -85,6 +87,17 @@ test("external target allocation rejects UUIDv5, duplicate UUIDs, and incomplete
     { planKey: "issue:F-001", kind: "issue", uuid: V4_ONE, extra: true },
     { planKey: "relation:one", kind: "relation", uuid: V4_TWO },
   ] }), /row is invalid/);
+  const collision = JSON.stringify({ schemaVersion: 1, planDigest: "plan-sha", allocations: [
+    { planKey: "issue:F-001", kind: "issue", uuid: V4_ONE },
+    { planKey: "relation:one", kind: "relation", uuid: V4_TWO },
+  ] });
+  assert.throws(() => validateUuidV4AllocationManifest(
+    collision,
+    createHash("sha256").update(collision).digest("hex"),
+    "plan-sha",
+    expected,
+    new Set([V4_TWO]),
+  ), /collides with an adopted or live UUID/);
 });
 
 test("ambiguous create is attempted once and stops", async () => {
@@ -150,6 +163,14 @@ test("stable receipt mismatch fails closed", () => {
   ]), /Stable mapping mismatch/);
 });
 
+test("stable receipt identifier substitution fails closed", () => {
+  assert.throws(() => adoptStableMappings([
+    { legacyId: "one", targetPlanKey: "issue:one", title: "One", primaryExecutionUuid: "exec", desiredRelationKeys: [] },
+  ], [{ id: V4_ONE, identifier: "REQ-2", title: "One", teamId: "team", relationKeys: [] }], "team", [
+    { legacyId: "one", targetPlanKey: "issue:one", issueUuid: V4_ONE, issueIdentifier: "REQ-1", source: "receipt" },
+  ]), /Stable mapping mismatch/);
+});
+
 test("same title on a different UUID is rejected", () => {
   assert.throws(() => adoptStableMappings([
     { legacyId: "one", targetPlanKey: "issue:one", title: "Same", primaryExecutionUuid: "PLA-1", desiredRelationKeys: [] },
@@ -180,12 +201,21 @@ test("recovery checkpoint is digest-pinned and yields UUID mappings", () => {
   assert.throws(() => validateRecoveryCheckpoint(uuidV5, createHash("sha256").update(uuidV5).digest("hex"), new Set(["F-001"])), /non-v4/);
 });
 
-test("stale managed relations are removed and unowned extras block", () => {
+test("normal relation reconciliation is additive-only and blocks every unexpected edge", () => {
+  const current = [{ id: "keep", key: "related:req:exec", endpointIds: ["req", "exec"] as [string, string] }];
+  assert.deepEqual(diffManagedRelations(["related:req:exec", "blocks:req:next"], current, new Set(["req", "exec", "next"])), {
+    add: ["blocks:req:next"], remove: [], preserve: [], desired: ["blocks:req:next", "related:req:exec"],
+  });
   assert.throws(() => diffManagedRelations(["related:req:exec"], [
     { id: "keep", key: "related:req:exec", endpointIds: ["req", "exec"] },
     { id: "remove", key: "related:req:old", endpointIds: ["req", "old"] },
+  ], new Set(["req", "exec", "old"])), /additive-only/);
+  assert.throws(() => diffManagedRelations(["related:req:exec"], [
+    { id: "keep", key: "related:req:exec", endpointIds: ["req", "exec"] },
     { id: "preserve", key: "related:req:external", endpointIds: ["req", "external"] },
-  ], new Set(["req", "exec", "old"])), /unowned relation/);
+  ], new Set(["req", "exec"])), /additive-only/);
+  assert.throws(() => diffManagedRelations(["related:req:exec", "related:req:exec"], [], new Set(["req", "exec"])), /duplicate desired relation/);
+  assert.throws(() => diffManagedRelations(["related:outside:external"], [], new Set(["req"])), /no managed endpoint/);
 });
 
 const validCatalog = {
@@ -232,6 +262,22 @@ test("redacted journal records exclude compensation and full content", () => {
   assert.equal(serialized.includes("compensation"), false);
 });
 
+test("mutation executor cannot pass compensation or full errors to the redacted sink", async () => {
+  const journal = new MemoryJournal();
+  await assert.rejects(() => executeGuardedMutation({
+    operationId: "op", action: "issue_update", targetUuid: V4_ONE,
+    expectedFingerprint: "expected", before: { description: "before" }, compensation: { description: "full secret description" },
+    mutateOnce: async () => { throw new Error("full secret description"); },
+    readAfter: async () => ({ description: "changed" }),
+    fingerprintAfter: () => "changed",
+  }, journal, 1), AmbiguousMutationError);
+  const serialized = JSON.stringify(journal.redacted);
+  assert.equal(serialized.includes("full secret description"), false);
+  assert.equal(serialized.includes("compensation"), false);
+  assert.equal(serialized.includes('"error"'), false);
+  assert.equal(journal.redacted.every((row) => row.errorFingerprint === null || /^[a-f0-9]{64}$/.test(row.errorFingerprint)), true);
+});
+
 test("both relation directions paginate to exhaustion", async () => {
   const calls: string[] = [];
   const rows = await collectPaginatedRelations(async (direction, cursor) => {
@@ -263,6 +309,8 @@ test("global relation projection adds later inverse edges to earlier issues", ()
   const projected = projectGlobalRelationKeys(new Set(["REQ-1", "REQ-2"]), ["related:BUY-1:REQ-1", "blocks:REQ-1:REQ-2"]);
   assert.deepEqual(projected.get("REQ-1"), ["blocks:REQ-1:REQ-2", "related:BUY-1:REQ-1"]);
   assert.deepEqual(projected.get("REQ-2"), ["blocks:REQ-1:REQ-2"]);
+  assert.throws(() => projectGlobalRelationKeys(new Set(["REQ-1"]), ["related:BUY-1:REQ-1", "related:BUY-1:REQ-1"]), /duplicate desired relation/);
+  assert.throws(() => projectGlobalRelationKeys(new Set(["REQ-1"]), ["related:BUY-1:SELL-1"]), /no managed endpoint/);
 });
 
 test("write context pins repository, main ref, SHA, plan, environment, and confirmation", () => {
@@ -278,11 +326,24 @@ test("phase-1 execution preflight, apply, and compensation stay unreachable", ()
   assert.throws(() => assertPhase1WriteModeAllowed("preflight"), /UUIDv4 allocation manifest/);
   assert.throws(() => assertPhase1WriteModeAllowed("apply"), /header-budgeted chunk\/resume/);
   assert.throws(() => assertPhase1WriteModeAllowed("compensate"), /header-budgeted chunk\/resume/);
+  assert.throws(() => assertPhase1WriteModeAllowed("apply"), /audited semantic plan manifest/);
+});
+
+test("runner exposes only offline plan and recovery modes", () => {
+  const planRun = spawnSync("tools/spec-lint/node_modules/.bin/tsx", ["tools/delivery/migrate-linear-authority.ts", "--mode", "plan"], { encoding: "utf8" });
+  assert.equal(planRun.status, 0, planRun.stderr);
+  const plan = JSON.parse(planRun.stdout) as { auditedPlanManifestRequired: boolean; auditedPlanValidated: boolean; applyEnabled: boolean };
+  assert.deepEqual(plan, { ...plan, auditedPlanManifestRequired: true, auditedPlanValidated: false, applyEnabled: false });
+  const compensationRun = spawnSync("tools/spec-lint/node_modules/.bin/tsx", ["tools/delivery/migrate-linear-authority.ts", "--mode", "compensation-plan"], { encoding: "utf8" });
+  assert.notEqual(compensationRun.status, 0);
+  assert.match(compensationRun.stderr, /Mode must be plan or recovery-check/);
 });
 
 test("delivery workflow is write-free and rejects the former feature-branch trigger", () => {
   const actual = readFileSync(".github/workflows/delivery-integrity.yml", "utf8");
   assert.doesNotThrow(() => assertWorkflowWriteFree(actual));
+  assert.match(actual, /group: delivery-integrity-\$\{\{ github\.workflow \}\}-\$\{\{ github\.ref \}\}/);
+  assert.doesNotMatch(actual, /group: sourcera-linear-control-plane-global/);
   assert.throws(() => assertWorkflowWriteFree("linear-authority-migration:\n  run: migrate-linear-authority.ts\n  LINEAR_API_KEY: secret"), /write trigger/);
 });
 

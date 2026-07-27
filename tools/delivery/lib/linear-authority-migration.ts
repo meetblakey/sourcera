@@ -108,7 +108,7 @@ export interface JournalRecord {
 }
 
 export interface JournalSink {
-  appendRedacted(record: JournalRecord): Promise<void>;
+  appendRedacted(record: RedactedJournalRecord): Promise<void>;
   appendBackup(record: JournalRecord & { before: unknown; after: unknown }): Promise<void>;
   checkpoint(operationId: string, fingerprint: string): Promise<void>;
 }
@@ -147,6 +147,7 @@ export function validateUuidV4AllocationManifest(
   expectedDigest: string,
   expectedPlanDigest: string,
   expectedTargets: Map<string, LinearTargetKind>,
+  adoptedOrLiveUuids: Set<string>,
 ): LinearTargetAllocationManifest {
   if (createHash("sha256").update(raw).digest("hex") !== expectedDigest) throw new Error("UUIDv4 allocation manifest digest mismatch");
   const parsed = JSON.parse(raw) as Partial<LinearTargetAllocationManifest> | null;
@@ -156,6 +157,7 @@ export function validateUuidV4AllocationManifest(
   if (parsed.allocations.length !== expectedTargets.size) throw new Error("UUIDv4 allocation manifest coverage is incomplete");
   const seenPlanKeys = new Set<string>();
   const seenUuids = new Set<string>();
+  const reservedUuids = new Set([...adoptedOrLiveUuids].map((uuid) => uuid.toLowerCase()));
   for (const allocation of parsed.allocations) {
     if (!allocation || Array.isArray(allocation) || Object.keys(allocation).sort().join(",") !== "kind,planKey,uuid" || typeof allocation.planKey !== "string" || typeof allocation.kind !== "string" || typeof allocation.uuid !== "string") {
       throw new Error("UUIDv4 allocation manifest row is invalid");
@@ -165,6 +167,7 @@ export function validateUuidV4AllocationManifest(
     if (!expectedKind || allocation.kind !== expectedKind) throw new Error(`UUIDv4 allocation manifest contains unexpected target ${allocation.planKey}`);
     if (!isUuidV4(allocation.uuid)) throw new Error(`UUIDv4 allocation manifest contains a non-v4 UUID for ${allocation.planKey}`);
     const normalizedUuid = allocation.uuid.toLowerCase();
+    if (reservedUuids.has(normalizedUuid)) throw new Error(`UUIDv4 allocation ${allocation.planKey} collides with an adopted or live UUID`);
     if (seenUuids.has(normalizedUuid)) throw new Error(`UUIDv4 allocation manifest duplicates UUID ${allocation.uuid}`);
     seenPlanKeys.add(allocation.planKey);
     seenUuids.add(normalizedUuid);
@@ -212,7 +215,7 @@ export function adoptStableMappings(
   for (const mapping of receipt) {
     const plan = planByLegacy.get(mapping.legacyId);
     const live = mapping.issueUuid ? liveById.get(mapping.issueUuid) : undefined;
-    if (!plan || !live || live.teamId !== teamId || live.title !== plan.title) {
+    if (!plan || !live || live.teamId !== teamId || live.title !== plan.title || mapping.issueIdentifier !== live.identifier) {
       throw new Error(`Stable mapping mismatch for ${mapping.legacyId}`);
     }
     if (claimedLive.has(live.id)) throw new Error(`Live issue ${live.id} is mapped more than once`);
@@ -277,12 +280,25 @@ export function validateRecoveryCheckpoint(raw: string, expectedDigest: string, 
   return mappings;
 }
 
+function parseCanonicalRelationKey(key: string): [string, string, string] {
+  const [type, left, right, ...rest] = key.split(":");
+  if (rest.length || !left || !right || !new Set(["blocks", "related", "similar", "duplicate"]).has(type)) {
+    throw new Error(`Invalid canonical relation key ${key}`);
+  }
+  return [type, left, right];
+}
+
 export function diffManagedRelations(
   desiredKeys: string[],
   current: ManagedRelation[],
   managedEndpointIds: Set<string>,
 ): RelationDiff {
+  if (new Set(desiredKeys).size !== desiredKeys.length) throw new Error("Relation plan contains a duplicate desired relation key");
   const desired = [...new Set(desiredKeys)].sort();
+  for (const key of desired) {
+    const [, left, right] = parseCanonicalRelationKey(key);
+    if (!managedEndpointIds.has(left) && !managedEndpointIds.has(right)) throw new Error(`Desired relation ${key} has no managed endpoint`);
+  }
   const desiredSet = new Set(desired);
   const currentByKey = new Map<string, ManagedRelation>();
   for (const relation of current) {
@@ -290,10 +306,9 @@ export function diffManagedRelations(
     currentByKey.set(relation.key, relation);
   }
   const add = desired.filter((key) => !currentByKey.has(key));
-  const remove = current.filter((relation) => !desiredSet.has(relation.key) && relation.endpointIds.every((id) => managedEndpointIds.has(id)));
-  const preserve = current.filter((relation) => !desiredSet.has(relation.key) && !remove.some((candidate) => candidate.id === relation.id));
-  if (preserve.length) throw new Error(`Refusing to alter unowned relation ${preserve[0].key}`);
-  return { add, remove, preserve, desired };
+  const unexpected = current.filter((relation) => !desiredSet.has(relation.key));
+  if (unexpected.length) throw new Error(`Normal relation reconciliation is additive-only; unexpected live relation ${unexpected[0].key} requires an explicit compensation plan`);
+  return { add, remove: [], preserve: [], desired };
 }
 
 export async function executeGuardedMutation<TBefore, TAfter>(
@@ -313,7 +328,7 @@ export async function executeGuardedMutation<TBefore, TAfter>(
     error: null,
   };
   await journal.appendBackup({ ...beforeRecord, before: operation.before, after: null });
-  await journal.appendRedacted(beforeRecord);
+  await journal.appendRedacted(redactJournalRecord(beforeRecord));
 
   let mutationError: unknown = null;
   try {
@@ -332,14 +347,14 @@ export async function executeGuardedMutation<TBefore, TAfter>(
   if (!readError && actualFingerprint === operation.expectedFingerprint && (after !== null || operation.allowNullAfter === true)) {
     const verified: JournalRecord = { ...beforeRecord, phase: "verified", actualFingerprint, error: mutationError ? String(mutationError) : null };
     await journal.appendBackup({ ...verified, before: operation.before, after });
-    await journal.appendRedacted(verified);
+    await journal.appendRedacted(redactJournalRecord(verified));
     await journal.checkpoint(operation.operationId, actualFingerprint);
     return after as TAfter;
   }
   const message = readError ? String(readError) : mutationError ? String(mutationError) : "post-write fingerprint mismatch";
   const ambiguous: JournalRecord = { ...beforeRecord, phase: "ambiguous", actualFingerprint, error: message };
   await journal.appendBackup({ ...ambiguous, before: operation.before, after });
-  await journal.appendRedacted(ambiguous);
+  await journal.appendRedacted(redactJournalRecord(ambiguous));
   throw new AmbiguousMutationError(`${operation.operationId} stopped after one mutation attempt: ${message}`);
 }
 
@@ -399,10 +414,11 @@ export function assertExactTwoPassReadback<T>(expected: T, first: T, second: T):
 }
 
 export function projectGlobalRelationKeys(managedIdentifiers: Set<string>, relationKeys: string[]): Map<string, string[]> {
+  if (new Set(relationKeys).size !== relationKeys.length) throw new Error("Relation plan contains a duplicate desired relation key");
   const projected = new Map([...managedIdentifiers].map((identifier) => [identifier, new Set<string>()]));
-  for (const key of new Set(relationKeys)) {
-    const [type, left, right, ...rest] = key.split(":");
-    if (rest.length || !left || !right || !["blocks", "related", "similar", "duplicate"].includes(type)) throw new Error(`Invalid canonical relation key ${key}`);
+  for (const key of relationKeys) {
+    const [, left, right] = parseCanonicalRelationKey(key);
+    if (!managedIdentifiers.has(left) && !managedIdentifiers.has(right)) throw new Error(`Desired relation ${key} has no managed endpoint`);
     if (managedIdentifiers.has(left)) projected.get(left)!.add(key);
     if (managedIdentifiers.has(right)) projected.get(right)!.add(key);
   }
@@ -439,7 +455,7 @@ export function assertWorkflowWriteFree(workflow: string): void {
 
 export function assertPhase1WriteModeAllowed(mode: string): void {
   if (["preflight", "apply", "compensate"].includes(mode)) {
-    throw new Error("Phase-1 execution is disabled until an external digest-pinned UUIDv4 allocation manifest and bounded header-budgeted chunk/resume are implemented and reviewed");
+    throw new Error("Phase-1 execution is disabled until an audited semantic plan manifest, an external digest-pinned UUIDv4 allocation manifest, and bounded header-budgeted chunk/resume are implemented and reviewed");
   }
 }
 
