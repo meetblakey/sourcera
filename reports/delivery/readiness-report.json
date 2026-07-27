@@ -1,3 +1,8 @@
 {
-  "findings": []
+  "findings": [
+    {
+      "code": "ready_queue_under_minimum",
+      "message": "Ready queue has 4; minimum is 5"
+    }
+  ]
 }
