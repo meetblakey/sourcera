@@ -305,6 +305,26 @@ test("fails readiness for manual title/body references and wildcard body paths",
   assert.equal(report.passed, false);
 });
 
+test("rejects issue identifiers using team keys discovered from native issues", () => {
+  const captured = issue(
+    "Use REQ-1 and REQ-2 as placeholders.",
+    { id: "REQ-9" },
+  );
+
+  const { result, report } = runScanner(snapshotFor(captured), {
+    schemaVersion: 1,
+    issues: [captured],
+  });
+
+  assert.equal(result.status, 1, result.stderr);
+  assert.ok(
+    report.findings.some(
+      (finding: { code: string }) =>
+        finding.code === "ticket_manual_reference_duplicated",
+    ),
+  );
+});
+
 test("allows only the matching canonical requirement in source provenance", () => {
   const matching = issue(
     [
