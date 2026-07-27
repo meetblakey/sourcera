@@ -7,7 +7,6 @@ import { readFileSync } from "node:fs";
 import { applyFeatureDependencies, type FeatureDependencyRepair } from "./lib/dependencies.js";
 import {
   adoptStableMappings,
-  assertPhase1WriteModeAllowed,
   validateRecoveryCheckpoint,
   type ManagedLiveIssue,
   type ManagedPlanRow,
@@ -233,7 +232,7 @@ function buildPlan(): MigrationPlan {
 }
 
 function managedPlans(plan: MigrationPlan): ManagedPlanRow[] {
-  return [...plan.requirements, ...plan.decisions].map((row) => ({ legacyId: row.legacyId, targetPlanKey: row.targetPlanKey, title: row.title, primaryExecutionUuid: row.primaryExecutionIdentifier, desiredRelationKeys: [] }));
+  return [...plan.requirements, ...plan.decisions].map((row) => ({ legacyId: row.legacyId, targetPlanKey: row.targetPlanKey, title: row.title, primaryExecutionIdentifier: row.primaryExecutionIdentifier }));
 }
 
 function managedLive(capture: LinearCapture): ManagedLiveIssue[] {
@@ -288,7 +287,7 @@ async function main(): Promise<void> {
   const plan = buildPlan();
   const mode = process.argv.includes("--mode") ? process.argv[process.argv.indexOf("--mode") + 1] : "plan";
   if (mode === "plan") {
-    process.stdout.write(`${JSON.stringify({ scope: "phase_1_requirement_bootstrap", cutoverReady: false, preflightEnabled: false, applyEnabled: false, auditedPlanManifestRequired: true, auditedPlanValidated: false, allocationManifestRequired: true, allocationContract: "external digest-pinned UUIDv4 targets keyed by the exact audited plan", requirements: plan.requirements.length, decisions: plan.decisions.length, sequence: plan.sequence.length, planDigest: planDigest(plan), recoveryMapSha256: RECOVERY_MAP_SHA256, recoveryFingerprintSha256: RECOVERY_FINGERPRINT_SHA256, nextPhase: "supply and validate the audited semantic plan manifest, preallocate UUIDv4 targets, add live-header capacity reservation plus bounded checkpoint/resume, then generate the lossless normative-block and document manifest" })}\n`);
+    process.stdout.write(`${JSON.stringify({ scope: "phase_1_requirement_bootstrap", cutoverReady: false, preflightEnabled: false, applyEnabled: false, auditedPlanManifestRequired: true, auditedPlanValidated: false, requirements: plan.requirements.length, decisions: plan.decisions.length, sequence: plan.sequence.length, planDigest: planDigest(plan), recoveryMapSha256: RECOVERY_MAP_SHA256, recoveryFingerprintSha256: RECOVERY_FINGERPRINT_SHA256, nextPhase: "refresh the patched live capture, then supply and validate the audited semantic plan manifest; any publisher belongs in a separate reviewed change" })}\n`);
     return;
   }
   if (mode === "recovery-check") {
@@ -303,10 +302,9 @@ async function main(): Promise<void> {
     const recoveryMappings = validateRecoveryCheckpoint(recoveryRaw, RECOVERY_MAP_SHA256, new Set([...plan.requirements, ...plan.decisions].map((row) => row.legacyId)));
     const capture = { fingerprint: JSON.parse(fingerprintRaw) as LinearCapture["fingerprint"], issueDescriptions: [] };
     const mappings = adoptStableMappings(managedPlans(plan), managedLive(capture), TEAM_ID, recoveryMappings);
-    process.stdout.write(`${JSON.stringify({ status: "recovery_checkpoint_verified", mappings: recoveryMappings.length, ...recoveryAudit(plan, capture, mappings) })}\n`);
+    process.stdout.write(`${JSON.stringify({ status: "recovery_checkpoint_verified", mappings: recoveryMappings.length, labelIdentityVerified: false, relationIdentityVerified: false, freshPatchedCaptureRequired: true, ...recoveryAudit(plan, capture, mappings) })}\n`);
     return;
   }
-  assertPhase1WriteModeAllowed(mode);
   throw new Error("Mode must be plan or recovery-check; execution and compensation modes are intentionally unavailable");
 }
 
