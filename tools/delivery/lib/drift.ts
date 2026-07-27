@@ -143,7 +143,7 @@ export function driftFindings(
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, " ")
       .trim();
-    const sourceFamilyId = issue.sourceFamilyId ?? issue.sourceId;
+    const sourceFamilyId = familyByIssue.get(issue.id) ?? null;
     const prior = outcomes.get(key);
     if (prior && (!sourceFamilyId || prior.sourceFamilyId !== sourceFamilyId)) {
       findings.push({

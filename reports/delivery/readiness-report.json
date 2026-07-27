@@ -1,9 +1,3 @@
 {
-  "findings": [
-    {
-      "code": "started_issue_not_ready",
-      "message": "PLA-1044 is started without codex-ready",
-      "issueId": "PLA-1044"
-    }
-  ]
+  "findings": []
 }
