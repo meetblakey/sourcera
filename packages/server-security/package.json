@@ -1,0 +1,13 @@
+{
+  "name": "@sourcera/server-security",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "browser": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./envelope": "./src/envelope.ts",
+    "./presigned-download-policy": "./src/presigned-download-policy.ts"
+  },
+  "types": "./src/index.ts"
+}
