@@ -31,13 +31,18 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
+          required=true
+          schema_v3_activation=false
           if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
-            echo "required=true" >> "$GITHUB_OUTPUT"
+            :
           elif ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
             echo "PR base commit unavailable" >&2
             exit 1
           elif ! git cat-file -e "${BASE_SHA}:delivery/linear-snapshot.json" 2>/dev/null; then
             echo "PR base Linear mirror unavailable" >&2
+            exit 1
+          elif ! git cat-file -e "${BASE_SHA}:delivery/linear-program-scope.json" 2>/dev/null; then
+            echo "PR base Linear program scope unavailable" >&2
             exit 1
           elif ! git diff --quiet "${BASE_SHA}" -- \
             delivery/linear-snapshot.json \
@@ -49,23 +54,32 @@ jobs:
             reports/delivery/readiness-report.json \
             reports/delivery/release-scorecard.json \
             reports/delivery/traceability-map.json; then
-            echo "required=true" >> "$GITHUB_OUTPUT"
+            :
           else
-            git show "${BASE_SHA}:delivery/linear-snapshot.json" > /tmp/base-linear-snapshot.json
-            if jq -e '
-              (.linearCapture == null) and
-              (.linearFingerprint.issues | arrays | length > 0) and
-              (.linearFingerprint.releasePipelines | arrays | length > 0) and
-              (.linearFingerprint.releases | arrays | length > 0) and
-              ((.linearFingerprint.projects == null) or (.linearFingerprint.projects == [])) and
-              ((.linearFingerprint.projectMilestones == null) or (.linearFingerprint.projectMilestones == [])) and
-              (.linearFingerprint.program == null)
-            ' /tmp/base-linear-snapshot.json >/dev/null; then
-              echo "required=false" >> "$GITHUB_OUTPUT"
+            git show "${BASE_SHA}:delivery/linear-program-scope.json" > /tmp/base-linear-program-scope.json
+            if jq -e '.schemaVersion == 2' /tmp/base-linear-program-scope.json >/dev/null &&
+              jq -e '.schemaVersion == 3' delivery/linear-program-scope.json >/dev/null; then
+              # One-time bootstrap: the trusted main-only capture must republish
+              # untouched attested mirrors after the exact v2 -> v3 activation.
+              required=false
+              schema_v3_activation=true
             else
-              echo "required=true" >> "$GITHUB_OUTPUT"
+              git show "${BASE_SHA}:delivery/linear-snapshot.json" > /tmp/base-linear-snapshot.json
+              if jq -e '
+                (.linearCapture == null) and
+                (.linearFingerprint.issues | arrays | length > 0) and
+                (.linearFingerprint.releasePipelines | arrays | length > 0) and
+                (.linearFingerprint.releases | arrays | length > 0) and
+                ((.linearFingerprint.projects == null) or (.linearFingerprint.projects == [])) and
+                ((.linearFingerprint.projectMilestones == null) or (.linearFingerprint.projectMilestones == [])) and
+                (.linearFingerprint.program == null)
+              ' /tmp/base-linear-snapshot.json >/dev/null; then
+                required=false
+              fi
             fi
           fi
+          echo "required=${required}" >> "$GITHUB_OUTPUT"
+          echo "schema_v3_activation=${schema_v3_activation}" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
@@ -145,6 +159,7 @@ jobs:
             --fingerprint /tmp/linear-fingerprint.json \
             --capture /tmp/linear-ticket-descriptions.json \
             --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
             --source-policy delivery/linear-source-policy.json \
             --inventory _audit/FEATURE_INVENTORY.md \
             --source-checksums delivery/ticket-source-checksums.json \
@@ -176,7 +191,7 @@ jobs:
         name: Fail invalid live ticket contracts
         run: exit 1
       - name: Build receipt-bound Linear snapshot candidate
-        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-fingerprint-overlay.ts --snapshot delivery/linear-snapshot.json --fingerprint /tmp/linear-fingerprint.json --receipt /tmp/linear-capture-receipt.json --ticket-integrity /tmp/linear-ticket-integrity.json --linear-project-scope delivery/linear-project-scope.json --dispositions delivery/dispositions.json --stamp /tmp/linear-runtime-stamp.json --runtime-dependencies delivery/runtime-gate-dependencies.json --releases delivery/releases.json --out /tmp/linear-snapshot-candidate.json --candidate-receipt-out /tmp/linear-candidate-receipt.json
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-fingerprint-overlay.ts --snapshot delivery/linear-snapshot.json --fingerprint /tmp/linear-fingerprint.json --receipt /tmp/linear-capture-receipt.json --ticket-integrity /tmp/linear-ticket-integrity.json --linear-project-scope delivery/linear-project-scope.json --linear-program-scope delivery/linear-program-scope.json --dispositions delivery/dispositions.json --stamp /tmp/linear-runtime-stamp.json --runtime-dependencies delivery/runtime-gate-dependencies.json --releases delivery/releases.json --out /tmp/linear-snapshot-candidate.json --candidate-receipt-out /tmp/linear-candidate-receipt.json
       - name: Validate Linear snapshot candidate semantics
         run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/validate-linear-candidate.ts --candidate /tmp/linear-snapshot-candidate.json --releases delivery/releases.json
       - name: Validate guarded promotion in ephemeral checkout
@@ -293,6 +308,7 @@ jobs:
           --fingerprint /tmp/linear-fingerprint.json
           --capture /tmp/linear-ticket-descriptions.json
           --linear-project-scope delivery/linear-project-scope.json
+          --linear-program-scope delivery/linear-program-scope.json
           --source-policy delivery/linear-source-policy.json
           --inventory _audit/FEATURE_INVENTORY.md
           --source-checksums delivery/ticket-source-checksums.json

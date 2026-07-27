@@ -1,6 +1,7 @@
 import { realpathSync } from "node:fs";
 import { isAbsolute, relative, resolve } from "node:path";
 import type { LinearFingerprint } from "./linear-live.js";
+import type { LinearProgramScope } from "./linear-program-scope.js";
 import type { SourceRequirement } from "./model.js";
 import { parseRuntimeGate } from "./sources.js";
 import {
@@ -407,6 +408,7 @@ export function deriveLinearPlanningIssues(
   sourceRequirements: readonly SourceRequirement[],
   repositoryRoot: string,
   checksumContract: SourceChecksumContract,
+  programScope?: LinearProgramScope,
 ): SourceDerivedSnapshotIssue[] {
   assertLinearSourcePolicyContracts(policy, sourceRequirements);
   const checksumFindings = verifySourceChecksumContract(
@@ -422,6 +424,16 @@ export function deriveLinearPlanningIssues(
   }
   const liveById = new Map(liveIssues.map((issue) => [issue.identifier, issue]));
   const coordination = new Set(policy.coordinationIssueIds);
+  const planningDecisions = new Map(
+    programScope?.schemaVersion === 3
+      ? programScope.projectDocumentDecisionContract.trackedDecisions.map(
+          (decision) => [decision.decisionIdentifier, decision] as const,
+        )
+      : [],
+  );
+  if ([...planningDecisions.keys()].some((id) => coordination.has(id))) {
+    throw new Error("Planning Decision issue cannot also be a coordination issue");
+  }
   const sourceById = new Map(
     sourceRequirements.map((source) => [source.requirementId, source]),
   );
@@ -492,6 +504,25 @@ export function deriveLinearPlanningIssues(
   const derivedBySource = new Map<string, string[]>();
   for (const live of activeScoped) {
     if (coordination.has(live.identifier)) continue;
+    const planningDecision = planningDecisions.get(live.identifier);
+    if (planningDecision) {
+      if (
+        live.title !== planningDecision.decisionTitle ||
+        live.projectId !== planningDecision.decisionProjectId ||
+        (planningDecision.resolution === "completed"
+          ? live.stateType !== "completed"
+          : ["completed", "canceled", "duplicate"].includes(live.stateType))
+      ) {
+        throw new Error(
+          `Planning Decision ${live.identifier} differs from its tracked identity or lifecycle`,
+        );
+      }
+      const planned = issueById.get(live.identifier)!;
+      planned.kind = "decision";
+      planned.sourceId = null;
+      planned.sourceFamilyId = null;
+      continue;
+    }
     const provenance = live.sourceProvenance;
     if (
       !provenance?.sourceId ||

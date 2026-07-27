@@ -13,7 +13,10 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { canonicalLinearFingerprint } from "./lib/linear-live.js";
+import {
+  canonicalLinearFingerprint,
+  type LinearFingerprint,
+} from "./lib/linear-live.js";
 import type { LinearProgramScope } from "./lib/linear-program-scope.js";
 import type { LinearProjectScope } from "./lib/linear-project-scope.js";
 import type { Disposition } from "./lib/model.js";
@@ -35,6 +38,9 @@ function fixture() {
   const projectNameById = new Map(
     projectScope.projects.map((project) => [project.id, project.name]),
   );
+  const masterSpecSha256 = createHash("sha256")
+    .update(readFileSync("Sourcera_Master_Spec.md"))
+    .digest("hex");
   const firstProject = programScope.projectDescriptionFingerprints[0];
   const firstMilestone = firstProject.milestones[0];
   const dispositions = JSON.parse(
@@ -70,9 +76,12 @@ function fixture() {
     }),
   );
   const expectedSources = [...featureSources, ...runtimeSources];
-  const issueFingerprint = (sourceId: string, index: number) => ({
+  const issueFingerprint = (
+    sourceId: string,
+    index: number,
+  ): LinearFingerprint["issues"][number] => ({
     linearId: `10000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
-    identifier: `PLA-${index + 1}`,
+    identifier: `PLA-${index + 2000}`,
     title: sourceId,
     descriptionFingerprint: "0".repeat(64),
     updatedAt: CAPTURED_AT,
@@ -100,8 +109,60 @@ function fixture() {
     releases: ["R1"],
     relations: [],
   });
+  const planningIssueFingerprints = expectedSources.map(issueFingerprint);
+  const decisionContract = programScope.schemaVersion === 3
+    ? programScope.projectDocumentDecisionContract
+    : null;
+  const decisionReferences = decisionContract?.references ?? [];
+  const trackedDecisions = decisionContract?.trackedDecisions ?? [];
+  const labelDefinitionById = new Map(
+    (decisionContract?.labelDefinitions ?? []).map((label) => [label.id, label]),
+  );
+  const contractIssueByIdentifier = new Map<string, ReturnType<typeof issueFingerprint>>();
+  let contractSequence = trackedDecisions.length;
+  for (const [index, tracked] of trackedDecisions.entries()) {
+    const decision = {
+      ...issueFingerprint(tracked.decisionIdentifier, expectedSources.length + index),
+      identifier: tracked.decisionIdentifier,
+      title: tracked.decisionTitle,
+      labels: tracked.labelIds.map((id) => labelDefinitionById.get(id)!.name),
+      projectId: tracked.decisionProjectId,
+      project: projectNameById.get(tracked.decisionProjectId)!,
+      milestoneId: null,
+      milestone: null,
+      releases: [],
+      state: tracked.resolution === "completed" ? "Completed" : "Backlog",
+      stateType: tracked.resolution === "completed" ? "completed" : "backlog",
+      relations: tracked.blockedIssues.map(
+        (target) =>
+          `blocks:${tracked.decisionIdentifier}:${target.identifier}`,
+      ),
+    };
+    contractIssueByIdentifier.set(tracked.decisionIdentifier, decision);
+    for (const target of tracked.blockedIssues) {
+      if (contractIssueByIdentifier.has(target.identifier)) continue;
+      contractIssueByIdentifier.set(target.identifier, {
+        ...issueFingerprint(
+          target.identifier,
+          expectedSources.length + contractSequence++,
+        ),
+        identifier: target.identifier,
+        title: target.identifier,
+        projectId: target.projectId,
+        project: projectNameById.get(target.projectId)!,
+        milestoneId: null,
+        milestone: null,
+        releases: [],
+        relations: [
+          `blocks:${tracked.decisionIdentifier}:${target.identifier}`,
+        ],
+      });
+    }
+  }
+  const contractIssueFingerprints = [...contractIssueByIdentifier.values()]
+    .sort((left, right) => left.identifier.localeCompare(right.identifier));
   const fingerprint = canonicalLinearFingerprint({
-    issues: expectedSources.map(issueFingerprint),
+    issues: [...planningIssueFingerprints, ...contractIssueFingerprints],
     releasePipelines: [{
       id: "30000000-0000-4000-8000-000000000001",
       name: "Sourcera Product Delivery",
@@ -193,6 +254,56 @@ function fixture() {
         sectionHeadings: programScope.planningDocument.requiredSections,
         sourceFingerprints: { masterSpecSha256: null, uxDesignSha256: null },
       }],
+      ...(programScope.schemaVersion === 3
+        ? {
+            projectDocuments: [
+              ...programScope.canonicalProjectDocuments,
+              ...programScope.supplementaryDocuments,
+            ].map((document) => ({
+              id: document.id,
+              title: document.title,
+              updatedAt: CAPTURED_AT,
+              archivedAt: null,
+              initiativeId: null,
+              projectId: document.projectId,
+              projectName: projectNameById.get(document.projectId)!,
+              teamId: null,
+              issueId: null,
+              contentFingerprint: document.contentFingerprint,
+              sectionHeadings: document.requiredSections,
+              masterSpecSha256,
+              masterSpecSections: document.masterSpecSections,
+              unresolvedDecisionReferences: decisionReferences
+                .filter((reference) => reference.documentId === document.id)
+                .map((reference) => ({
+                  identifier: reference.decisionIdentifier,
+                  url: trackedDecisions.find(
+                    (decision) =>
+                      decision.decisionIdentifier === reference.decisionIdentifier,
+                  )!.decisionUrl,
+                })),
+              contentPolicyFindings: [],
+            })),
+            projectDocumentConflicts: [],
+            decisionIssues: trackedDecisions.map((decision) => ({
+              identifier: decision.decisionIdentifier,
+              title: decision.decisionTitle,
+              url: decision.decisionUrl,
+              descriptionFingerprint: decision.descriptionFingerprint,
+              sectionHeadings: decision.requiredSections,
+              archivedAt: null,
+              stateType: decision.resolution === "completed"
+                ? "completed"
+                : "backlog",
+              labels: decision.labelIds.map((id) => labelDefinitionById.get(id)!),
+              projectId: decision.decisionProjectId,
+              relations: decision.blockedIssues.map(
+                (target) =>
+                  `blocks:${decision.decisionIdentifier}:${target.identifier}`,
+              ),
+            })),
+          }
+        : {}),
       projectInitiatives: programScope.projectInitiatives,
     },
   });
@@ -211,11 +322,18 @@ function fixture() {
         runAttempt: "1",
       },
     },
-    issues: expectedSources.map((sourceId, index) => ({
-      id: `PLA-${index + 1}`,
-      sourceId,
-      release: "R1" as const,
-    })),
+    issues: [
+      ...expectedSources.map((sourceId, index) => ({
+        id: `PLA-${index + 2000}`,
+        sourceId,
+        release: "R1" as const,
+      })),
+      ...contractIssueFingerprints.map((issue) => ({
+        id: issue.identifier,
+        sourceId: null,
+        release: null,
+      })),
+    ],
     linearFingerprint: fingerprint,
   };
   writeFileSync(linear, `${JSON.stringify(snapshot, null, 2)}\n`);
@@ -343,7 +461,10 @@ test("replaces an existing readback atomically without temporary residue", () =>
 test("refuses a partial mapped source set even when the capture receipt is valid", () => {
   const value = fixture();
   try {
-    value.snapshot.issues.pop();
+    const mappedIndex = value.snapshot.issues.findIndex(
+      (issue) => issue.sourceId !== null,
+    );
+    value.snapshot.issues.splice(mappedIndex, 1);
     writeFileSync(value.linear, `${JSON.stringify(value.snapshot, null, 2)}\n`);
     const result = run(value.linear, value.out, value.stamp);
     assert.equal(result.status, 1);

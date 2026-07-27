@@ -4,6 +4,8 @@ Linear is the sole planning source. Its native initiatives, projects, milestones
 
 `Sourcera_Master_Spec.md` is the product source. The canonical Linear planning document carries the current full Master and UX SHA-256 fingerprints. Each executable Linear issue carries its source ID, ordered document set, exact single section or registered slice count, binding digest, and content checksum. `delivery/ticket-source-checksums.json` owns the ordered slices; multi-slice issue prose does not repeat every heading. Source IDs identify Master requirements; they are not Linear issue references.
 
+Each governed project has one native Linear PRD or engineering/readiness brief. It binds the current Master Spec checksum and sections, defines the durable product or readiness contract, and omits native planning fields. Approved R0 supplements may narrow the release-wide journey, pilot targets, and production runbook. An unresolved choice has one native Decision issue in its owning project with exact native blocking edges to affected work. Completed Decisions retain those native history edges, leave unresolved-document sections, and no longer block execution.
+
 ## Generated state
 
 - `delivery/linear-snapshot.json` is generated from a complete live readback. Never hand edit it.
@@ -12,8 +14,9 @@ Linear is the sole planning source. Its native initiatives, projects, milestones
 
 ## Repository policy
 
-- `delivery/linear-program-scope.json` pins the six approved outcome initiatives, the team-level planning document, and each project's single initiative membership. The Master Spec remains source authority and is never represented as an initiative.
-- The capture receipt binds the planning document's full body hash, required headings, native attachment IDs, and full project and milestone description hashes.
+- `delivery/linear-program-scope.json` pins the approved outcome initiatives, the team-level planning document, each project's single initiative membership, every canonical project document, and approved R0 supplements. The Master Spec remains source authority and is never represented as an initiative.
+- The capture receipt binds planning and project-document body hashes, required headings, native attachment IDs, exact Master Spec bindings, and full project and milestone description hashes.
+- Project documents cannot copy issue IDs, Linear URLs, workflow fields, releases, initiatives, milestones, leads, assignments, estimates, dates, priority, or relations. Native Decision mentions are the only issue references permitted and must resolve to the exact open owning issue and its native blocking targets. Completed Decision identity, labels, body, lifecycle, and native history remain attested without an unresolved document reference.
 - `delivery/linear-project-scope.json` pins the governed project set.
 - `delivery/linear-source-policy.json` contains only coordination-parent identities and reviewed ambiguity, supersession, clearing, or split exceptions. It is not a second plan.
 - `delivery/linear-normalization-source-map.json` is historical normalization and audit input only. Its enforced marker grants no product, planning, or publication authority; it cannot satisfy promotion or override current Master Spec provenance or live Linear fields.

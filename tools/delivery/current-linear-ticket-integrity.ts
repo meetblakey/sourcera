@@ -6,11 +6,18 @@ import {
   applyLinearDispositions,
   parseLinearDispositions,
 } from "./lib/linear-dispositions.js";
-import type { LinearFingerprint } from "./lib/linear-live.js";
+import {
+  assertLinearPlanningContractFingerprints,
+  type LinearFingerprint,
+} from "./lib/linear-live.js";
 import {
   assertLinearProjectScope,
   type LinearProjectScope,
 } from "./lib/linear-project-scope.js";
+import {
+  assertLinearProgramScope,
+  type LinearProgramScope,
+} from "./lib/linear-program-scope.js";
 import {
   deriveLinearPlanningIssues,
   parseLinearRuntimeInventory,
@@ -36,6 +43,7 @@ interface CurrentTicketIntegrityInput {
   fingerprint: LinearFingerprint;
   capture: TicketIntegrityCapture;
   projectScope: LinearProjectScope;
+  programScope: LinearProgramScope;
   sourcePolicy: LinearSourcePolicy;
   sourceRequirements: ReturnType<typeof parseFeatureInventory>;
   repositoryRoot: string;
@@ -50,6 +58,11 @@ interface CurrentTicketIntegrityScan {
 export function scanCurrentLinearTicketIntegrity(
   input: CurrentTicketIntegrityInput,
 ): CurrentTicketIntegrityScan {
+  if (!input.fingerprint.program) {
+    throw new Error("Linear fingerprint program topology is required");
+  }
+  assertLinearProgramScope(input.programScope, input.fingerprint.program);
+  assertLinearPlanningContractFingerprints(input.programScope, input.fingerprint);
   const scopedProjectIds = new Set(
     assertLinearProjectScope(input.projectScope, input.fingerprint.projects),
   );
@@ -61,6 +74,7 @@ export function scanCurrentLinearTicketIntegrity(
     input.sourceRequirements,
     input.repositoryRoot,
     input.checksumContract,
+    input.programScope,
   ) as unknown as LinearIssueSnapshot[];
   return {
     report: scanTicketIntegrity(
@@ -81,6 +95,7 @@ function argumentsByName(): Map<string, string> {
     "--fingerprint",
     "--capture",
     "--linear-project-scope",
+    "--linear-program-scope",
     "--source-policy",
     "--inventory",
     "--source-checksums",
@@ -130,6 +145,9 @@ function main(): void {
   const projectScope = JSON.parse(
     readFileSync(required(values, "--linear-project-scope"), "utf8"),
   ) as LinearProjectScope;
+  const programScope = JSON.parse(
+    readFileSync(required(values, "--linear-program-scope"), "utf8"),
+  ) as LinearProgramScope;
   const sourcePolicy = JSON.parse(
     readFileSync(required(values, "--source-policy"), "utf8"),
   ) as LinearSourcePolicy;
@@ -159,6 +177,7 @@ function main(): void {
     fingerprint,
     capture,
     projectScope,
+    programScope,
     sourcePolicy,
     sourceRequirements,
     repositoryRoot,

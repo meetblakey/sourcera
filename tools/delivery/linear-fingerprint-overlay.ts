@@ -701,7 +701,16 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
   if (fingerprint.program) {
     assertExactKeys(
       fingerprint.program,
-      ["initiatives", "documents", "projectInitiatives"],
+      [
+        "initiatives",
+        "documents",
+        "projectInitiatives",
+        ...(fingerprint.program.projectDocuments ? ["projectDocuments"] : []),
+        ...(fingerprint.program.projectDocumentConflicts
+          ? ["projectDocumentConflicts"]
+          : []),
+        ...(fingerprint.program.decisionIssues ? ["decisionIssues"] : []),
+      ],
       "Linear program fingerprint",
     );
     for (const initiative of fingerprint.program.initiatives) {
@@ -748,6 +757,68 @@ export function assertExactFingerprintShape(fingerprint: LinearFingerprint): voi
         document.sourceFingerprints,
         ["masterSpecSha256", "uxDesignSha256"],
         `Linear document ${document.id ?? "unknown"} source fingerprints`,
+      );
+    }
+    for (const document of fingerprint.program.projectDocuments ?? []) {
+      assertExactKeys(
+        document,
+        [
+          "id",
+          "title",
+          "updatedAt",
+          "archivedAt",
+          "initiativeId",
+          "projectId",
+          "projectName",
+          "teamId",
+          "issueId",
+          "contentFingerprint",
+          "sectionHeadings",
+          "masterSpecSha256",
+          "masterSpecSections",
+          "unresolvedDecisionReferences",
+          "contentPolicyFindings",
+        ],
+        `Linear project document ${document.id ?? "unknown"}`,
+      );
+      for (const reference of document.unresolvedDecisionReferences) {
+        assertExactKeys(
+          reference,
+          ["identifier", "url"],
+          `Linear project document ${document.id ?? "unknown"} Decision reference`,
+        );
+      }
+    }
+    for (const issue of fingerprint.program.decisionIssues ?? []) {
+      assertExactKeys(
+        issue,
+        [
+          "identifier",
+          "title",
+          "url",
+          "descriptionFingerprint",
+          "sectionHeadings",
+          "archivedAt",
+          "stateType",
+          "labels",
+          "projectId",
+          "relations",
+        ],
+        `Linear project-document Decision ${issue.identifier ?? "unknown"}`,
+      );
+      for (const label of issue.labels) {
+        assertExactKeys(
+          label,
+          ["id", "name", "groupId", "groupName"],
+          `Linear project-document Decision ${issue.identifier ?? "unknown"} label`,
+        );
+      }
+    }
+    for (const conflict of fingerprint.program.projectDocumentConflicts ?? []) {
+      assertExactKeys(
+        conflict,
+        ["id", "title", "projectId", "projectName"],
+        `Linear project-document collision ${conflict.id ?? "unknown"}`,
       );
     }
     for (const project of fingerprint.program.projectInitiatives) {
@@ -1121,6 +1192,21 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
       "Linear document",
     );
     assertUnique(
+      fingerprint.program.projectDocuments ?? [],
+      (document) => document.id,
+      "Linear project document",
+    );
+    assertUnique(
+      fingerprint.program.projectDocumentConflicts ?? [],
+      (document) => document.id,
+      "Linear project-document collision",
+    );
+    assertUnique(
+      fingerprint.program.decisionIssues ?? [],
+      (issue) => issue.identifier,
+      "Linear project-document Decision",
+    );
+    assertUnique(
       fingerprint.program.projectInitiatives,
       (project) => project.projectId,
       "Linear project initiative membership",
@@ -1187,6 +1273,97 @@ export function assertFingerprintTopology(fingerprint: LinearFingerprint): void 
           !SHA256.test(document.sourceFingerprints.uxDesignSha256))
       ) {
         throw new Error(`Linear document ${document.id} is invalid`);
+      }
+    }
+    for (const document of fingerprint.program.projectDocuments ?? []) {
+      if (
+        !UUID.test(document.id) ||
+        !document.title.trim() ||
+        !strictUtcTimestamp(document.updatedAt) ||
+        !validArchiveState(document.archivedAt) ||
+        document.initiativeId !== null ||
+        !UUID.test(document.projectId ?? "") ||
+        !document.projectName?.trim() ||
+        fingerprint.projects.find(
+          (project) => project.id === document.projectId,
+        )?.name !== document.projectName ||
+        document.teamId !== null ||
+        document.issueId !== null ||
+        !SHA256.test(document.contentFingerprint) ||
+        !Array.isArray(document.sectionHeadings) ||
+        document.sectionHeadings.some(
+          (heading) => typeof heading !== "string" || !heading.trim(),
+        ) ||
+        new Set(document.sectionHeadings).size !== document.sectionHeadings.length ||
+        (document.masterSpecSha256 !== null &&
+          !SHA256.test(document.masterSpecSha256)) ||
+        !Array.isArray(document.masterSpecSections) ||
+        new Set(document.masterSpecSections).size !== document.masterSpecSections.length ||
+        document.masterSpecSections.some((section) => !section.trim()) ||
+        !Array.isArray(document.unresolvedDecisionReferences) ||
+        new Set(
+          document.unresolvedDecisionReferences.map((reference) =>
+            reference.identifier
+          ),
+        ).size !== document.unresolvedDecisionReferences.length ||
+        document.unresolvedDecisionReferences.some(
+          (reference) =>
+            !/^(?:PLA|BUY|SEL|INT)-\d+$/.test(reference.identifier) ||
+            !reference.url.startsWith("https://linear.app/"),
+        ) ||
+        !Array.isArray(document.contentPolicyFindings) ||
+        document.contentPolicyFindings.some(
+          (finding) => typeof finding !== "string" || !finding.trim(),
+        )
+      ) {
+        throw new Error(`Linear project document ${document.id} is invalid`);
+      }
+    }
+    for (const issue of fingerprint.program.decisionIssues ?? []) {
+      if (
+        !/^(?:PLA|BUY|SEL|INT)-\d+$/.test(issue.identifier) ||
+        !issue.title.trim() ||
+        !issue.url.startsWith("https://linear.app/") ||
+        !SHA256.test(issue.descriptionFingerprint) ||
+        !Array.isArray(issue.sectionHeadings) ||
+        new Set(issue.sectionHeadings).size !== issue.sectionHeadings.length ||
+        issue.sectionHeadings.some((heading) => !heading.trim()) ||
+        !validArchiveState(issue.archivedAt) ||
+        !ISSUE_STATE_TYPES.has(issue.stateType) ||
+        !Array.isArray(issue.labels) ||
+        !issue.labels.length ||
+        new Set(issue.labels.map((label) => label.id)).size !==
+          issue.labels.length ||
+        issue.labels.some(
+          (label) =>
+            !UUID.test(label.id) ||
+            !label.name.trim() ||
+            !UUID.test(label.groupId) ||
+            !label.groupName.trim(),
+        ) ||
+        !UUID.test(issue.projectId ?? "") ||
+        !Array.isArray(issue.relations) ||
+        new Set(issue.relations).size !== issue.relations.length ||
+        issue.relations.some((relation) => !relation.trim())
+      ) {
+        throw new Error(
+          `Linear project-document Decision ${issue.identifier} is invalid`,
+        );
+      }
+    }
+    for (const conflict of fingerprint.program.projectDocumentConflicts ?? []) {
+      if (
+        !UUID.test(conflict.id) ||
+        !conflict.title.trim() ||
+        !UUID.test(conflict.projectId ?? "") ||
+        !conflict.projectName?.trim() ||
+        fingerprint.projects.find(
+          (project) => project.id === conflict.projectId,
+        )?.name !== conflict.projectName
+      ) {
+        throw new Error(
+          `Linear project-document collision ${conflict.id} is invalid`,
+        );
       }
     }
     const projectIds = new Set(fingerprint.projects.map((project) => project.id));
@@ -1278,6 +1455,7 @@ function buildCandidate(
         sourceRequirements,
         repositoryRoot,
         sourceChecksumContract,
+        programScope,
       )
     : snapshot.issues;
   const snapshotIssueById = indexById(plannedIssues, "Snapshot issue");

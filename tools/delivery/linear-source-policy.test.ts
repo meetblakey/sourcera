@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import type { LinearFingerprint } from "./lib/linear-live.js";
+import type { LinearProgramScope } from "./lib/linear-program-scope.js";
 import {
   assertLinearSourcePolicy,
   assertLinearSourcePolicyContracts,
@@ -574,6 +575,157 @@ test("removes inactive baseline issues from the active planning candidate", () =
       value.contract,
     );
     assert.deepEqual(derived.map((issue) => issue.id), ["PLA-1"]);
+  } finally {
+    rmSync(value.root, { recursive: true, force: true });
+  }
+});
+
+test("exempts only schema-pinned planning Decision issues from source provenance", () => {
+  const value = fixture();
+  try {
+    const owner = liveIssue(value.source, value.checksum);
+    const decision = liveIssue(value.source, value.checksum, {
+      linearId: "10000000-0000-4000-8000-000000000002",
+      identifier: "PLA-2",
+      title: "Approve target",
+      labels: ["decision"],
+      releases: [],
+      sourceProvenance: undefined,
+    });
+    const programScope = {
+      schemaVersion: 3,
+      projectDocumentDecisionContract: {
+        trackedDecisions: [{
+          decisionIdentifier: "PLA-2",
+          decisionTitle: "Approve target",
+          decisionProjectId: decision.projectId,
+          resolution: "open",
+        }],
+      },
+    } as unknown as LinearProgramScope;
+    const derived = deriveLinearPlanningIssues(
+      [planned(), planned("PLA-2")],
+      [owner, decision],
+      new Set([owner.projectId!]),
+      policy,
+      [value.source],
+      value.root,
+      value.contract,
+      programScope,
+    );
+    assert.deepEqual(
+      derived.map(({ id, kind, sourceId, sourceFamilyId }) => ({
+        id,
+        kind,
+        sourceId,
+        sourceFamilyId,
+      })),
+      [
+        {
+          id: "PLA-1",
+          kind: "executable",
+          sourceId: "F-001",
+          sourceFamilyId: "F-001",
+        },
+        {
+          id: "PLA-2",
+          kind: "decision",
+          sourceId: null,
+          sourceFamilyId: null,
+        },
+      ],
+    );
+    assert.throws(
+      () =>
+        deriveLinearPlanningIssues(
+          [planned(), planned("PLA-2")],
+          [owner, decision],
+          new Set([owner.projectId!]),
+          policy,
+          [value.source],
+          value.root,
+          value.contract,
+          {
+            ...programScope,
+            projectDocumentDecisionContract: {
+              trackedDecisions: [{
+                decisionIdentifier: "PLA-3",
+                decisionTitle: "Other Decision",
+                decisionProjectId: decision.projectId,
+                resolution: "open",
+              }],
+            },
+          } as unknown as LinearProgramScope,
+        ),
+      /PLA-2 lacks exact source provenance/,
+    );
+    for (const trackedDecision of [
+      {
+        decisionIdentifier: "PLA-2",
+        decisionTitle: "Renamed Decision",
+        decisionProjectId: decision.projectId,
+        resolution: "open",
+      },
+      {
+        decisionIdentifier: "PLA-2",
+        decisionTitle: "Approve target",
+        decisionProjectId: "99999999-9999-4999-8999-999999999999",
+        resolution: "open",
+      },
+      {
+        decisionIdentifier: "PLA-2",
+        decisionTitle: "Approve target",
+        decisionProjectId: decision.projectId,
+        resolution: "completed",
+      },
+    ]) {
+      assert.throws(
+        () =>
+          deriveLinearPlanningIssues(
+            [planned(), planned("PLA-2")],
+            [owner, decision],
+            new Set([owner.projectId!]),
+            policy,
+            [value.source],
+            value.root,
+            value.contract,
+            {
+              ...programScope,
+              projectDocumentDecisionContract: {
+                trackedDecisions: [trackedDecision],
+              },
+            } as unknown as LinearProgramScope,
+          ),
+        /differs from its tracked identity or lifecycle/,
+      );
+    }
+    const completedDecision = {
+      ...decision,
+      state: "Completed",
+      stateType: "completed",
+    };
+    assert.doesNotThrow(() =>
+      deriveLinearPlanningIssues(
+        [planned(), planned("PLA-2")],
+        [owner, completedDecision],
+        new Set([owner.projectId!]),
+        policy,
+        [value.source],
+        value.root,
+        value.contract,
+        {
+          ...programScope,
+          projectDocumentDecisionContract: {
+            trackedDecisions: [{
+              decisionIdentifier: "PLA-2",
+              decisionTitle: "Approve target",
+              decisionProjectId: decision.projectId,
+              resolution: "completed",
+            }],
+          },
+        } as unknown as LinearProgramScope,
+      )
+    );
   } finally {
     rmSync(value.root, { recursive: true, force: true });
   }
