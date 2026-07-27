@@ -441,11 +441,13 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 relations: {
                   nodes: [
                     {
+                      id: "relation-blocks",
                       type: "blocks",
                       issue: { identifier: "PLA-1" },
                       relatedIssue: { identifier: "PLA-2" },
                     },
                     {
+                      id: "relation-related",
                       type: "related",
                       issue: { identifier: "PLA-1" },
                       relatedIssue: { identifier: "PLA-3" },
@@ -455,6 +457,7 @@ test("paginates Linear issues and sorts a stable fingerprint", async () => {
                 },
                 inverseRelations: completeConnection([
                   {
+                    id: "relation-related",
                     type: "related",
                     issue: { identifier: "PLA-3" },
                     relatedIssue: { identifier: "PLA-1" },
@@ -1472,6 +1475,104 @@ test("description changes after character 400 change the fingerprint", async () 
   );
 });
 
+test("paginates both nested issue relation directions", async () => {
+  const relation = (type: string) => ({ id: `relation-${type}`, type, issue: { identifier: "PLA-1" }, relatedIssue: { identifier: "PLA-1" } });
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as { query: string; variables: { after?: string } };
+    if (body.query.includes("DeliveryIssueInverseRelations")) {
+      assert.equal(body.variables.after, "inverse-next");
+      return response({ data: { issue: { inverseRelations: completeConnection([relation("duplicate")]) } } });
+    }
+    if (body.query.includes("DeliveryIssueRelations")) {
+      assert.equal(body.variables.after, "forward-next");
+      return response({ data: { issue: { relations: completeConnection([relation("blocks")]) } } });
+    }
+    if (body.query.includes("DeliveryIssues")) {
+      return response({ data: { issues: completeConnection([{
+        id: "uuid-1", identifier: "PLA-1", title: "First", description: "Description", updatedAt: "2026-07-14T01:00:00.000Z",
+        estimate: 1, priority: 2, dueDate: null, archivedAt: null, state: { id: "state", name: "Backlog", type: "backlog" },
+        labels: completeConnection([]), assignee: null, team: { id: "team", key: "PLA" }, cycle: null, project: null,
+        projectMilestone: null, parent: null, releases: completeConnection([]),
+        relations: { nodes: [relation("related")], pageInfo: { hasNextPage: true, endCursor: "forward-next" } },
+        inverseRelations: { nodes: [relation("similar")], pageInfo: { hasNextPage: true, endCursor: "inverse-next" } },
+      }]) } });
+    }
+    if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: completeConnection([]) } });
+    return response({ data: { releases: completeConnection([]) } });
+  };
+  const issue = (await fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret")).issues[0];
+  assert.deepEqual(issue.relations, ["blocks:PLA-1:PLA-1", "duplicate:PLA-1:PLA-1", "related:PLA-1:PLA-1", "similar:PLA-1:PLA-1"]);
+});
+
+test("bounds pages for each nested relation connection", async () => {
+  let relationPages = 0;
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as { query: string; variables: { after?: string } };
+    if (body.query.includes("DeliveryIssueRelations")) {
+      relationPages += 1;
+      return response({ data: { issue: { relations: {
+        nodes: [],
+        pageInfo: { hasNextPage: relationPages < 21, endCursor: relationPages < 21 ? `page-${relationPages}` : null },
+      } } } });
+    }
+    if (body.query.includes("DeliveryIssues")) {
+      return response({ data: { issues: completeConnection([{
+        id: "uuid-1", identifier: "PLA-1", title: "First", description: "Description", updatedAt: "2026-07-14T01:00:00.000Z",
+        estimate: 1, priority: 2, dueDate: null, archivedAt: null, state: { id: "state", name: "Backlog", type: "backlog" },
+        labels: completeConnection([]), assignee: null, team: { id: "team", key: "PLA" }, cycle: null, project: null,
+        projectMilestone: null, parent: null, releases: completeConnection([]),
+        relations: { nodes: [], pageInfo: { hasNextPage: true, endCursor: "page-0" } }, inverseRelations: completeConnection([]),
+      }]) } });
+    }
+    if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: completeConnection([]) } });
+    return response({ data: { releases: completeConnection([]) } });
+  };
+  await assert.rejects(() => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"), /page limit/);
+});
+
+test("bounds total nested relation pagination requests", async () => {
+  const issues = Array.from({ length: 1_001 }, (_, index) => ({
+    id: `uuid-${index}`, identifier: `PLA-${index + 1}`, title: `Issue ${index + 1}`, description: "Description", updatedAt: "2026-07-14T01:00:00.000Z",
+    estimate: 1, priority: 2, dueDate: null, archivedAt: null, state: { id: "state", name: "Backlog", type: "backlog" },
+    labels: completeConnection([]), assignee: null, team: { id: "team", key: "PLA" }, cycle: null, project: null,
+    projectMilestone: null, parent: null, releases: completeConnection([]),
+    relations: { nodes: [], pageInfo: { hasNextPage: true, endCursor: "next" } }, inverseRelations: completeConnection([]),
+  }));
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as { query: string };
+    if (body.query.includes("DeliveryIssueRelations")) return response({ data: { issue: { relations: completeConnection([]) } } });
+    if (body.query.includes("DeliveryIssues")) return response({ data: { issues: completeConnection(issues) } });
+    if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: completeConnection([]) } });
+    return response({ data: { releases: completeConnection([]) } });
+  };
+  await assert.rejects(() => fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret"), /total request limit/);
+});
+
+test("deduplicates one relation UUID across directions and rejects distinct UUIDs for one canonical key", async () => {
+  const capture = async (inverseId: string) => {
+    const relation = (id: string) => ({ id, type: "related", issue: { identifier: "PLA-1" }, relatedIssue: { identifier: "PLA-1" } });
+    const fetcher: typeof fetch = async (_input, init) => {
+      const body = JSON.parse(String(init?.body)) as { query: string };
+      if (body.query.includes("DeliveryIssues")) {
+        assert.match(body.query, /relations\(first: 100\)[\s\S]*nodes \{ id type/);
+        assert.match(body.query, /inverseRelations\(first: 100\)[\s\S]*nodes \{ id type/);
+        return response({ data: { issues: completeConnection([{
+          id: "uuid-1", identifier: "PLA-1", title: "First", description: "Description", updatedAt: "2026-07-14T01:00:00.000Z",
+          estimate: 1, priority: 2, dueDate: null, archivedAt: null, state: { id: "state", name: "Backlog", type: "backlog" },
+          labels: completeConnection([]), assignee: null, team: { id: "team", key: "PLA" }, cycle: null, project: null,
+          projectMilestone: null, parent: null, releases: completeConnection([]),
+          relations: completeConnection([relation("relation-one")]), inverseRelations: completeConnection([relation(inverseId)]),
+        }]) } });
+      }
+      if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: completeConnection([]) } });
+      return response({ data: { releases: completeConnection([]) } });
+    };
+    return fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret");
+  };
+  assert.deepEqual((await capture("relation-one")).issues[0].relations, ["related:PLA-1:PLA-1"]);
+  await assert.rejects(() => capture("relation-two"), /distinct relation UUIDs map to canonical key/);
+});
+
 for (const field of [
   "labels",
   "releases",
@@ -1691,6 +1792,7 @@ test("rejects a GraphQL relation whose endpoint was not captured", async () => {
                 releases: completeConnection([]),
                 relations: completeConnection([
                   {
+                    id: "relation-blocks",
                     type: "blocks",
                     issue: { identifier: "PLA-1" },
                     relatedIssue: { identifier: "PLA-2" },
