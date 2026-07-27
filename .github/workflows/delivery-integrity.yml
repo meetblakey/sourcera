@@ -5,6 +5,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      linear_authority_migration:
+        description: Run the one-time guarded Linear authority migration
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: "17 9 * * *"
 
@@ -107,6 +113,37 @@ jobs:
       - run: npm --prefix tools/spec-lint run all
       - run: tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
       - run: tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
+
+  linear-authority-migration:
+    name: One-time Linear authority migration
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.linear_authority_migration == 'true' &&
+      github.ref == 'refs/heads/codex/linear-sole-authority'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - name: Publish requirements and disposition decisions with exact readback
+        run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/migrate-linear-authority.ts
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+      - name: Upload protected migration receipt
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-authority-migration-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/linear-authority-migration-receipt.json
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 90
 
   linear-capture:
     name: Linear snapshot validation-only handoff
