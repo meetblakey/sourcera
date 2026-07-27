@@ -7,6 +7,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   canonicalLinearRelationKey,
+  committedLinearDriftDiff,
   confirmLinearCaptureConsistency,
   fetchLinearCapture,
   fetchLinearFingerprint,
@@ -64,6 +65,68 @@ function consistencyCapture(marker: string): LinearCapture {
     ],
   };
 }
+
+function trackedIssue(
+  updatedAt = "2026-07-23T00:00:00.000Z",
+): LinearFingerprint["issues"][number] {
+  return {
+    linearId: "issue-1",
+    identifier: "PLA-1",
+    title: "Tracked issue",
+    descriptionFingerprint: "a".repeat(64),
+    updatedAt,
+    estimate: 3,
+    priority: 2,
+    dueDate: null,
+    archivedAt: null,
+    stateId: "state-1",
+    state: "Backlog",
+    stateType: "backlog",
+    labels: ["platform"],
+    assignee: "Blake",
+    assigneeId: "user-1",
+    team: "PLA",
+    teamId: "team-1",
+    cycleId: null,
+    cycleNumber: null,
+    cycle: null,
+    projectId: "project-1",
+    project: "Sourcera Production",
+    milestoneId: "milestone-1",
+    milestone: "Production evidence closed",
+    parentLinearId: null,
+    parent: null,
+    releases: ["R0"],
+    relations: [],
+  };
+}
+
+test("committed drift ignores issue timestamp-only touches", () => {
+  const baseline = consistencyCapture("baseline").fingerprint;
+  baseline.issues = [trackedIssue()];
+  const timestampOnly = structuredClone(baseline);
+  timestampOnly.issues[0].updatedAt = "2026-07-27T06:40:40.698Z";
+
+  assert.deepEqual(fingerprintDiff(baseline, timestampOnly), [
+    "issues differ from the committed Linear snapshot",
+  ]);
+  assert.deepEqual(committedLinearDriftDiff(baseline, timestampOnly), []);
+
+  const semantic = structuredClone(timestampOnly);
+  semantic.issues[0].relations = ["blocks:PLA-1:PLA-2"];
+  assert.deepEqual(committedLinearDriftDiff(baseline, semantic), [
+    "issues differ from the committed Linear snapshot",
+  ]);
+
+  for (const invalid of [undefined, null, "not-a-timestamp"] as const) {
+    const malformed = structuredClone(timestampOnly);
+    (malformed.issues[0] as { updatedAt: unknown }).updatedAt = invalid;
+    assert.throws(
+      () => committedLinearDriftDiff(baseline, malformed),
+      /PLA-1 updatedAt is invalid/,
+    );
+  }
+});
 
 test("bounded consistency capture returns only the matching second read", async () => {
   const first = consistencyCapture("first");
@@ -1670,7 +1733,7 @@ test("rejects a GraphQL relation whose endpoint was not captured", async () => {
 test("CLI compares a fixture with the committed snapshot", () => {
   const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-live-"));
   const empty = {
-    issues: [],
+    issues: [trackedIssue()],
     releasePipelines: [],
     releases: [],
     projects: [
@@ -1727,6 +1790,37 @@ test("CLI compares a fixture with the committed snapshot", () => {
         { cwd: process.cwd(), encoding: "utf8" },
       );
     assert.equal(run().status, 0);
+    writeFileSync(
+      fixture,
+      JSON.stringify({
+        ...empty,
+        issues: [trackedIssue("2026-07-27T06:40:40.698Z")],
+      }),
+    );
+    assert.equal(run().status, 0);
+    writeFileSync(
+      fixture,
+      JSON.stringify({
+        ...empty,
+        issues: [{ ...trackedIssue(), title: "Semantic change" }],
+      }),
+    );
+    const semantic = run();
+    assert.equal(semantic.status, 1);
+    assert.match(semantic.stderr, /issues differ/);
+    writeFileSync(
+      fixture,
+      JSON.stringify({
+        ...empty,
+        projects: empty.projects.map((project) => ({
+          ...project,
+          updatedAt: "2026-07-27T06:40:40.698Z",
+        })),
+      }),
+    );
+    const projectTimestamp = run();
+    assert.equal(projectTimestamp.status, 1);
+    assert.match(projectTimestamp.stderr, /projects differ/);
     writeFileSync(
       fixture,
       JSON.stringify({ ...empty, releases: [{ id: "release-1" }] }),
