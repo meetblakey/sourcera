@@ -281,6 +281,15 @@ async function main(): Promise<void> {
   const catalogs = await graphql<CatalogData>(token, CATALOG_QUERY);
   if (catalogs.issueLabels.pageInfo.hasNextPage || catalogs.workflowStates.pageInfo.hasNextPage) throw new Error("Linear catalog truncated");
   const labels = new Map(catalogs.issueLabels.nodes.map((row) => [row.name, row.id]));
+  for (const name of ["Requirement", "Decision"] as const) {
+    if (labels.has(name)) continue;
+    const labeled = capture.fingerprint.issues.find((issue) => issue.labels.includes(name) && issue.linearId);
+    if (!labeled?.linearId) throw new Error(`Label missing ${name}`);
+    const readback = await graphql<ReadData>(token, ISSUE_READ, { id: labeled.linearId });
+    const label = readback.issue?.labels.nodes.find((candidate) => candidate.name === name);
+    if (!label) throw new Error(`Label missing ${name}`);
+    labels.set(name, label.id);
+  }
   const states = new Map(catalogs.workflowStates.nodes.filter((row) => row.team.key === TEAM_KEY).map((row) => [row.name, row.id]));
   const requirementTeam = reqIssues[0]?.teamId;
   if (!requirementTeam) throw new Error("Requirements team missing");
