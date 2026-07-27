@@ -1,6 +1,7 @@
 export type ConvexEnvironment = Record<string, string | undefined>;
 
 const FULL_GIT_COMMIT_SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
+const PREVIEW_GIT_COMMIT_SHA = /^[a-f0-9]{40}$/;
 const PREVIEW_DEPLOY_KEY =
   /^preview:([a-z0-9](?:[a-z0-9-]{0,62})):([a-z0-9](?:[a-z0-9-]{0,62}))\|(.+)$/;
 const PRODUCTION_DEPLOY_KEY =
@@ -141,7 +142,7 @@ export function createCommitBoundConvexPreviewName(
   source: string,
   commitSha: string,
 ): string {
-  if (!FULL_GIT_COMMIT_SHA.test(commitSha)) {
+  if (!PREVIEW_GIT_COMMIT_SHA.test(commitSha)) {
     throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
   }
   const suffix = commitSha.toLowerCase();
@@ -185,8 +186,21 @@ export function readConvexProductionTarget(
   deploymentName: string,
   deploymentUrl: string,
 ): ConvexProductionTarget {
+  return {
+    deploymentName,
+    deploymentUrl: assertConvexDeploymentUrlNamesDeployment(
+      deploymentName,
+      deploymentUrl,
+    ),
+  };
+}
+
+export function assertConvexDeploymentUrlNamesDeployment(
+  deploymentName: string,
+  deploymentUrl: string,
+): string {
   if (!PREVIEW_NAME.test(deploymentName)) {
-    throw new Error("Pinned Convex production deployment name is invalid");
+    throw new Error("Convex deployment name is invalid");
   }
   const normalizedUrl = readConvexDeploymentUrl(deploymentUrl);
   const hostname = new URL(normalizedUrl).hostname;
@@ -195,9 +209,9 @@ export function readConvexProductionTarget(
     `^${escapedName}(?:\\.[a-z]{2}(?:-[a-z0-9]+)+-[0-9]+)?\\.convex\\.cloud$`,
   );
   if (!productionHostname.test(hostname)) {
-    throw new Error("Pinned Convex production URL must exactly name its deployment");
+    throw new Error("Convex deployment URL must exactly name its deployment");
   }
-  return { deploymentName, deploymentUrl: normalizedUrl };
+  return normalizedUrl;
 }
 
 export function readRequiredConvexPreviewKeyIdentity(
@@ -237,7 +251,7 @@ export function readRequiredConvexPreviewKeyIdentity(
     );
   }
 
-  if (!FULL_GIT_COMMIT_SHA.test(commitSha!)) {
+  if (!PREVIEW_GIT_COMMIT_SHA.test(commitSha!)) {
     throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
   }
   validateCommitBoundPreviewName(environment.CONVEX_PREVIEW_NAME!, commitSha!);
@@ -294,7 +308,7 @@ export function readRequiredConvexPreviewClientIdentity(
       "CONVEX_PREVIEW_NAME must be a lowercase deployment name",
     );
   }
-  if (!FULL_GIT_COMMIT_SHA.test(commitSha!)) {
+  if (!PREVIEW_GIT_COMMIT_SHA.test(commitSha!)) {
     throw new Error("SOURCERA_COMMIT_SHA must be a Git commit SHA");
   }
   validateCommitBoundPreviewName(environment.CONVEX_PREVIEW_NAME!, commitSha!);

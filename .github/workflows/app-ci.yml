@@ -12,17 +12,30 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      generated-client-sha256: ${{ steps.generated.outputs.generated-client-sha256 }}
+      generated-model-sha256: ${{ steps.generated.outputs.generated-model-sha256 }}
+      schema-registry-sha256: ${{ steps.generated.outputs.schema-registry-sha256 }}
+      verified-sha: ${{ steps.verified.outputs.sha }}
     env:
-      SOURCERA_COMMIT_SHA: ${{ github.sha }}
+      SOURCERA_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       SOURCERA_ENV: ci
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Bind verification to the exact source commit
+        id: verified
+        run: |
+          test "$(git rev-parse HEAD)" = "$SOURCERA_COMMIT_SHA"
+          printf 'sha=%s\n' "$SOURCERA_COMMIT_SHA" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           cache: npm
           node-version: 24
       - run: npm ci
-      - name: Generate Convex clients locally and reject drift before cloud deploy
+      - name: Generate Convex clients locally and attest the exact generated set
+        id: generated
         env:
           CONVEX_AGENT_MODE: anonymous
           CONVEX_DEPLOY_KEY: ""
@@ -30,7 +43,46 @@ jobs:
           set -e
           trap 'rm -f .env.local' EXIT
           npx convex dev --once
-          git diff --exit-code -- convex/_generated
+          npm run --silent convex:verify:generated -- --write-github-output
+      - name: Validate Marketplace deployment
+        run: npm run validate:deploy
+        env:
+          SOURCERA_DOMAIN: marketplace
+      - name: Validate Buyer deployment
+        run: npm run validate:deploy --workspace @sourcera/buyer
+        env:
+          SOURCERA_DOMAIN: buyer
+      - name: Validate Seller deployment
+        run: npm run validate:deploy --workspace @sourcera/seller
+        env:
+          SOURCERA_DOMAIN: seller
+      - run: npm run verify
+
+  merge-compatibility:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SOURCERA_COMMIT_SHA: ${{ github.sha }}
+      SOURCERA_ENV: ci
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Bind verification to GitHub's current merge result
+        run: test "$(git rev-parse HEAD)" = "$SOURCERA_COMMIT_SHA"
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          cache: npm
+          node-version: 24
+      - run: npm ci
+      - name: Generate Convex clients and reject tracked or untracked drift
+        env:
+          CONVEX_AGENT_MODE: anonymous
+          CONVEX_DEPLOY_KEY: ""
+        run: |
+          set -e
+          trap 'rm -f .env.local' EXIT
+          npx convex dev --once
+          npm run --silent convex:verify:generated
       - name: Validate Marketplace deployment
         run: npm run validate:deploy
         env:
@@ -46,38 +98,115 @@ jobs:
       - run: npm run verify
 
   convex-preview:
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
-    needs: verify
+    if: >-
+      always() &&
+      needs.verify.result == 'success' &&
+      (github.event_name == 'push' || needs.merge-compatibility.result == 'success') &&
+      (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+    needs: [verify, merge-compatibility]
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment:
+      name: convex-preview
+    concurrency:
+      group: convex-preview-${{ github.event.pull_request.head.ref || github.ref_name }}-${{ needs.verify.outputs.verified-sha }}
+      cancel-in-progress: false
     env:
-      CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_PREVIEW_DEPLOY_KEY }}
-      CONVEX_EXPECTED_PROJECT: ${{ vars.CONVEX_EXPECTED_PROJECT }}
-      CONVEX_PREVIEW_NAME: sourcera-${{ github.event.pull_request.number || 'main' }}-${{ github.sha }}
-      SOURCERA_COMMIT_SHA: ${{ github.sha }}
+      SOURCERA_COMMIT_SHA: ${{ needs.verify.outputs.verified-sha }}
       SOURCERA_ENV: preview
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.verify.outputs.verified-sha }}
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           cache: npm
           node-version: 24
       - run: npm ci
-      - name: Validate Preview target
-        run: npm run convex:validate:predeploy
+      - name: Derive the commit-bound Preview name
+        env:
+          SOURCERA_PREVIEW_SOURCE: ${{ github.head_ref || github.ref_name }}
+        run: |
+          preview_name="$(npm run --silent convex:name:preview)"
+          printf 'CONVEX_PREVIEW_NAME=%s\n' "$preview_name" >> "$GITHUB_ENV"
+      - name: Prepare the commit-bound probe capability
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_PREVIEW_DEPLOY_KEY }}
+          CONVEX_EXPECTED_PROJECT: ${{ vars.CONVEX_EXPECTED_PROJECT }}
+          SOURCERA_CONVEX_PREVIEW_PROBE_SEED: ${{ secrets.SOURCERA_CONVEX_PREVIEW_PROBE_SEED }}
+        run: >-
+          npm run --silent convex:prepare:preview-probe --
+          --out "$RUNNER_TEMP/convex-preview-probe-token"
+          --write-github-env
+      - name: Validate and stamp the Preview target
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_PREVIEW_DEPLOY_KEY }}
+          CONVEX_EXPECTED_PROJECT: ${{ vars.CONVEX_EXPECTED_PROJECT }}
+          SOURCERA_CONVEX_PREVIEW_PROBE_SEED: ${{ secrets.SOURCERA_CONVEX_PREVIEW_PROBE_SEED }}
+        run: |
+          npm run convex:validate:predeploy
+          npm run --silent convex:stamp:preview
       - name: Deploy Convex Preview and build all applications
+        id: preview-build
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_PREVIEW_DEPLOY_KEY }}
+          CONVEX_EXPECTED_PROJECT: ${{ vars.CONVEX_EXPECTED_PROJECT }}
         run: >-
           npx convex deploy
           --preview-name "$CONVEX_PREVIEW_NAME"
           --cmd "npm run convex:build"
           --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL
           --message "$SOURCERA_COMMIT_SHA"
+      - name: Re-attest the exact source and generated build
+        id: build-integrity
+        env:
+          SOURCERA_VERIFIED_GENERATED_CLIENT_SHA256: ${{ needs.verify.outputs.generated-client-sha256 }}
+          SOURCERA_VERIFIED_GENERATED_MODEL_SHA256: ${{ needs.verify.outputs.generated-model-sha256 }}
+          SOURCERA_VERIFIED_SCHEMA_REGISTRY_SHA256: ${{ needs.verify.outputs.schema-registry-sha256 }}
+        run: npm run --silent convex:verify:build-integrity
       - name: Prove transactional reactivity
+        id: probe
         run: |
-          set -o pipefail
-          npm run convex:probe | tee "$RUNNER_TEMP/convex-foundation.json"
+          set -e
+          probe_path="$RUNNER_TEMP/convex-probe.json"
+          probe_token="$(sed -n '1p' "$SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN_FILE")"
+          echo "::add-mask::$probe_token"
+          set +e
+          CONVEX_DEPLOY_KEY="" SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN="$probe_token" npm run --silent convex:probe > "$probe_path"
+          probe_status=$?
+          set -e
+          probe_result=failed
+          if [ "$probe_status" -eq 0 ] && jq -e '.outcome == "passed" and .attemptedSampleCount == 20 and .sampleCount == 20 and .zeroCustomerData == true and .cleanup.result == "passed" and .cleanup.clearedSampleCount == 20' "$probe_path" >/dev/null 2>&1; then
+            probe_result=passed
+          fi
+          printf 'result=%s\n' "$probe_result" >> "$GITHUB_OUTPUT"
+          test "$probe_result" = passed
+      - name: Remove the local commit-bound probe capability
+        if: always()
+        run: rm -f "$RUNNER_TEMP/convex-preview-probe-token"
+      - name: Write commit-bound foundation evidence
+        if: always()
+        env:
+          CONVEX_EXPECTED_PROJECT: ${{ vars.CONVEX_EXPECTED_PROJECT }}
+          SOURCERA_BUILD_RESULT: ${{ steps.preview-build.outcome == 'success' && steps.build-integrity.outcome == 'success' && 'passed' || 'failed' }}
+          SOURCERA_PROBE_RESULT: ${{ steps.probe.outputs.result || 'failed' }}
+          SOURCERA_VERIFIED_GENERATED_CLIENT_SHA256: ${{ needs.verify.outputs.generated-client-sha256 }}
+          SOURCERA_VERIFIED_GENERATED_MODEL_SHA256: ${{ needs.verify.outputs.generated-model-sha256 }}
+          SOURCERA_VERIFIED_SCHEMA_REGISTRY_SHA256: ${{ needs.verify.outputs.schema-registry-sha256 }}
+          SOURCERA_VERIFY_RESULT: passed
+        run: |
+          receipt_directory="$RUNNER_TEMP/reports/evidence"
+          mkdir -p "$receipt_directory"
+          CONVEX_DEPLOY_KEY="" npm run --silent convex:evidence -- --probe "$RUNNER_TEMP/convex-probe.json" --out "$receipt_directory/r0-convex-foundation.json"
+      - name: Gate on the canonical foundation evidence
+        if: always()
+        run: >-
+          jq -e
+          '.outcome == "passed" and (.builds | length) == 3 and .probe.attemptedSampleCount == 20 and .probe.sampleCount == 20 and .probe.zeroCustomerData == true and .probe.runtimeIdentity.buildCommitSha == .identity.commitSha and .probe.runtimeIdentity.buildEnvironment == .identity.environment and .probe.runtimeIdentity.buildPreviewName == .identity.previewName and .ci.result == "passed"'
+          "$RUNNER_TEMP/reports/evidence/r0-convex-foundation.json"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
-          name: convex-foundation-${{ github.sha }}
-          path: ${{ runner.temp }}/convex-foundation.json
+          name: convex-foundation-${{ env.SOURCERA_COMMIT_SHA }}
+          path: ${{ runner.temp }}/reports/evidence/r0-convex-foundation.json
+          if-no-files-found: error

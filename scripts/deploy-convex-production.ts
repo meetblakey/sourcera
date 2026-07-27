@@ -32,6 +32,7 @@ import {
 import {
   assertControlledConvexReleaseIdentityChange,
   assertConvexReleaseIdentityPlaceholder,
+  assertConvexRollbackReleaseIdentityPlaceholder,
   CONVEX_RELEASE_IDENTITY_PATH,
   renderConvexReleaseIdentity,
 } from "./lib/convex-release-identity";
@@ -511,12 +512,15 @@ try {
           releaseWorktree,
           CONVEX_RELEASE_IDENTITY_PATH,
         );
-        assertConvexReleaseIdentityPlaceholder(
-          readFileSync(identityPath, "utf8"),
-        );
+        const identitySource = readFileSync(identityPath, "utf8");
+        if (release.approvedSha === plan.knownGoodSha) {
+          assertConvexRollbackReleaseIdentityPlaceholder(identitySource);
+        } else {
+          assertConvexReleaseIdentityPlaceholder(identitySource);
+        }
         writeFileSync(
           identityPath,
-          renderConvexReleaseIdentity(release.approvedSha),
+          renderConvexReleaseIdentity(release.approvedSha, "production"),
           "utf8",
         );
         assertControlledConvexReleaseIdentityChange(

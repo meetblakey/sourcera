@@ -6,16 +6,18 @@ import { ConvexClient } from "convex/browser";
 import productionTargets from "../config/production-targets.json";
 import { api } from "../convex/_generated/api";
 import {
+  assertConvexDeploymentUrlNamesDeployment,
   createConvexProductionProbePayload,
   type ConvexProductionProbeOperation,
   createConvexFoundationHealthResult,
   readRequiredConvexDeploymentClientIdentity,
-  readRequiredConvexDeploymentIdentity,
 } from "../packages/domain/src/convex";
+import { withConvexNetworkTimeout } from "./lib/convex-network-timeout";
 import { readPinnedConvexProductionTarget } from "./lib/convex-production-target";
 
 const SAMPLE_COUNT = 20;
 const SAMPLE_TIMEOUT_MS = 5_000;
+const SHA256 = /^[a-f0-9]{64}$/;
 
 function percentile(values: number[], percentileValue: number) {
   const sorted = [...values].sort((left, right) => left - right);
@@ -55,6 +57,25 @@ function productionProbeAuthorization(
     .digest("hex");
 }
 
+function previewProbeCapability(
+  identity: {
+    commitSha: string;
+    environment: string;
+    previewName?: string;
+  },
+): string {
+  const token = process.env.SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN;
+  if (!token || !SHA256.test(token)) {
+    throw new Error(
+      "SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN must be a short-lived commit-bound token",
+    );
+  }
+  if (!identity.previewName) {
+    throw new Error("Preview probe requires the commit-bound Preview name");
+  }
+  return token;
+}
+
 async function observeSample(
   client: ConvexClient,
   identity: {
@@ -62,24 +83,46 @@ async function observeSample(
     deploymentName?: string;
     deploymentUrl: string;
     environment: string;
+    previewName?: string;
   },
   sample: number,
+  onCleanupConfirmed: () => void,
 ) {
   const nonceHash = createHash("sha256")
     .update(`${identity.commitSha}:${randomUUID()}`)
     .digest("hex");
   const issuedAt = Date.now();
-  const startedAt = performance.now();
   const productionDeploymentName =
     identity.environment === "production" ? identity.deploymentName : undefined;
   if (identity.environment === "production" && !productionDeploymentName) {
     throw new Error("Production probe requires the pinned deployment name");
   }
 
+  let observation:
+    | {
+        latencyMs: number;
+        runtimeIdentity?:
+          | { buildCommitSha: string; deploymentName: string }
+          | {
+              buildCommitSha: string;
+              buildEnvironment: string;
+              buildPreviewName: string;
+              deploymentName: string;
+            };
+      }
+    | undefined;
+  let recordCompletion: Promise<unknown> | undefined;
   try {
-    return await new Promise<{
+    observation = await new Promise<{
       latencyMs: number;
-      runtimeIdentity?: { buildCommitSha: string; deploymentName: string };
+      runtimeIdentity?:
+        | { buildCommitSha: string; deploymentName: string }
+        | {
+            buildCommitSha: string;
+            buildEnvironment: string;
+            buildPreviewName: string;
+            deploymentName: string;
+          };
     }>((resolve, reject) => {
       let settled = false;
       let unsubscribe = () => {};
@@ -91,16 +134,24 @@ async function observeSample(
       const onProbe = (
         probe: {
           buildCommitSha?: string;
+          buildEnvironment?: string;
+          buildPreviewName?: string;
           commitSha: string;
           deploymentName?: string;
+          environment: string;
+          issuedAt: number;
           nonceHash: string;
+          sample: number;
         } | null,
       ) => {
         if (
           settled ||
           !probe ||
           probe.commitSha !== identity.commitSha ||
-          probe.nonceHash !== nonceHash
+          probe.environment !== identity.environment ||
+          probe.issuedAt !== issuedAt ||
+          probe.nonceHash !== nonceHash ||
+          probe.sample !== sample
         ) {
           return;
         }
@@ -117,6 +168,31 @@ async function observeSample(
           );
           return;
         }
+        if (identity.environment !== "production") {
+          try {
+            if (
+              !identity.previewName ||
+              probe.buildCommitSha !== identity.commitSha ||
+              probe.buildEnvironment !== identity.environment ||
+              probe.buildPreviewName !== identity.previewName ||
+              !probe.deploymentName
+            ) {
+              throw new Error("Convex Preview runtime identity does not match");
+            }
+            assertConvexDeploymentUrlNamesDeployment(
+              probe.deploymentName,
+              identity.deploymentUrl,
+            );
+          } catch {
+            settled = true;
+            clearTimeout(timeout);
+            unsubscribe();
+            reject(
+              new Error("Convex runtime identity does not match the release"),
+            );
+            return;
+          }
+        }
         settled = true;
         clearTimeout(timeout);
         unsubscribe();
@@ -129,7 +205,14 @@ async function observeSample(
                   deploymentName: probe.deploymentName!,
                 },
               }
-            : {}),
+            : {
+                runtimeIdentity: {
+                  buildCommitSha: probe.buildCommitSha!,
+                  buildEnvironment: probe.buildEnvironment!,
+                  buildPreviewName: probe.buildPreviewName!,
+                  deploymentName: probe.deploymentName!,
+                },
+              }),
         });
       };
       const onError = (error: Error) => {
@@ -167,16 +250,72 @@ async function observeSample(
             )
           : client.onUpdate(
               api.foundation.observeProbe,
-              { commitSha: identity.commitSha, nonceHash },
+              {
+                commitSha: identity.commitSha,
+                environment: identity.environment,
+                issuedAt,
+                nonceHash,
+                sample,
+              },
               onProbe,
               onError,
             );
 
-      const record =
+      const startedAt = performance.now();
+      recordCompletion =
         identity.environment === "production"
-          ? client.mutation(api.foundation.recordProductionProbe, {
+          ? withConvexNetworkTimeout(
+              client.mutation(api.foundation.recordProductionProbe, {
+                authorization: productionProbeAuthorization(
+                  "record",
+                  {
+                    ...identity,
+                    deploymentName: productionDeploymentName!,
+                  },
+                  issuedAt,
+                  nonceHash,
+                  sample,
+                ),
+                commitSha: identity.commitSha,
+                deploymentName: productionDeploymentName!,
+                environment: identity.environment,
+                issuedAt,
+                nonceHash,
+                releaseApprovedSha: identity.commitSha,
+                sample,
+              }),
+              SAMPLE_TIMEOUT_MS,
+              "Convex production probe record",
+            )
+          : withConvexNetworkTimeout(
+              client.mutation(api.foundation.recordProbe, {
+                authorization: previewProbeCapability(identity),
+                commitSha: identity.commitSha,
+                environment: identity.environment,
+                issuedAt,
+                nonceHash,
+                previewName: identity.previewName!,
+                sample,
+              }),
+              SAMPLE_TIMEOUT_MS,
+              "Convex Preview probe record",
+            );
+      void recordCompletion.catch((error: unknown) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        unsubscribe();
+        reject(error);
+      });
+    });
+  } finally {
+    await recordCompletion?.catch(() => undefined);
+    const cleared =
+      identity.environment === "production"
+        ? await withConvexNetworkTimeout(
+            client.mutation(api.foundation.clearProductionProbe, {
               authorization: productionProbeAuthorization(
-                "record",
+                "clear",
                 {
                   ...identity,
                   deploymentName: productionDeploymentName!,
@@ -192,50 +331,30 @@ async function observeSample(
               nonceHash,
               releaseApprovedSha: identity.commitSha,
               sample,
-            })
-          : client.mutation(api.foundation.recordProbe, {
+            }),
+            SAMPLE_TIMEOUT_MS,
+            "Convex production probe cleanup",
+          )
+        : await withConvexNetworkTimeout(
+            client.mutation(api.foundation.clearProbe, {
+              authorization: previewProbeCapability(identity),
               commitSha: identity.commitSha,
               environment: identity.environment,
               issuedAt,
               nonceHash,
+              previewName: identity.previewName!,
               sample,
-            });
-      void record.catch((error: unknown) => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timeout);
-        unsubscribe();
-        reject(error);
-      });
-    });
-  } finally {
-    if (identity.environment === "production") {
-      await client.mutation(api.foundation.clearProductionProbe, {
-        authorization: productionProbeAuthorization(
-          "clear",
-          {
-            ...identity,
-            deploymentName: productionDeploymentName!,
-          },
-          issuedAt,
-          nonceHash,
-          sample,
-        ),
-        commitSha: identity.commitSha,
-        deploymentName: productionDeploymentName!,
-        environment: identity.environment,
-        issuedAt,
-        nonceHash,
-        releaseApprovedSha: identity.commitSha,
-        sample,
-      });
-    } else {
-      await client.mutation(api.foundation.clearProbe, {
-        commitSha: identity.commitSha,
-        nonceHash,
-      });
+            }),
+            SAMPLE_TIMEOUT_MS,
+            "Convex Preview probe cleanup",
+          );
+    if (!cleared) {
+      throw new Error("Convex foundation probe cleanup was not confirmed");
     }
+    onCleanupConfirmed();
   }
+  if (!observation) throw new Error("Convex foundation probe returned no result");
+  return { ...observation, cleanupConfirmed: true as const };
 }
 
 const runtimeEnvironment =
@@ -246,37 +365,50 @@ const productionTarget =
   runtimeEnvironment === "production"
     ? readPinnedConvexProductionTarget(productionTargets)
     : undefined;
-const identity =
-  runtimeEnvironment === "production"
-    ? readRequiredConvexDeploymentClientIdentity(process.env, productionTarget)
-    : readRequiredConvexDeploymentIdentity(process.env);
+const identity = readRequiredConvexDeploymentClientIdentity(
+  process.env,
+  productionTarget,
+);
 const client = new ConvexClient(identity.deploymentUrl, {
   unsavedChangesWarning: false,
 });
 
 void (async () => {
+  const observations: number[] = [];
+  let attemptedSampleCount = 0;
+  let clearedSampleCount = 0;
+  let runtimeIdentity:
+    | { buildCommitSha: string; deploymentName: string }
+    | {
+        buildCommitSha: string;
+        buildEnvironment: string;
+        buildPreviewName: string;
+        deploymentName: string;
+      }
+    | undefined;
   try {
-    const observations: number[] = [];
-    let runtimeIdentity:
-      { buildCommitSha: string; deploymentName: string } | undefined;
     for (let sample = 1; sample <= SAMPLE_COUNT; sample += 1) {
-      const observation = await observeSample(client, identity, sample);
+      attemptedSampleCount += 1;
+      const observation = await observeSample(client, identity, sample, () => {
+        clearedSampleCount += 1;
+      });
+      if (!observation.cleanupConfirmed) {
+        throw new Error("Convex foundation probe cleanup was not confirmed");
+      }
       observations.push(observation.latencyMs);
       if (observation.runtimeIdentity) {
         if (
           runtimeIdentity &&
-          (runtimeIdentity.buildCommitSha !==
-            observation.runtimeIdentity.buildCommitSha ||
-            runtimeIdentity.deploymentName !==
-              observation.runtimeIdentity.deploymentName)
+          JSON.stringify(runtimeIdentity) !==
+            JSON.stringify(observation.runtimeIdentity)
         ) {
           throw new Error("Convex runtime identity changed during the canary");
         }
         runtimeIdentity = observation.runtimeIdentity;
       }
     }
-    if (identity.environment === "production" && !runtimeIdentity) {
-      throw new Error("Convex production canary returned no runtime identity");
+    if (!runtimeIdentity) {
+      throw new Error("Convex canary returned no runtime identity");
     }
 
     const p95 = percentile(observations, 0.95);
@@ -306,6 +438,11 @@ void (async () => {
           productionTarget,
         ),
       ],
+      cleanup: {
+        clearedSampleCount,
+        result: "passed" as const,
+      },
+      attemptedSampleCount,
       outcome: passed ? "passed" : "failed",
       ...(runtimeIdentity ? { runtimeIdentity } : {}),
       sampleCount: observations.length,
@@ -340,8 +477,17 @@ void (async () => {
               productionTarget,
             ),
           ],
+          attemptedSampleCount,
+          cleanup: {
+            clearedSampleCount,
+            result:
+              clearedSampleCount === attemptedSampleCount
+                ? ("passed" as const)
+                : ("failed" as const),
+          },
+          ...(runtimeIdentity ? { runtimeIdentity } : {}),
           outcome: "failed",
-          sampleCount: 0,
+          sampleCount: observations.length,
           zeroCustomerData: true,
         },
         null,
@@ -353,6 +499,17 @@ void (async () => {
     );
     process.exitCode = 1;
   } finally {
-    await client.close();
+    try {
+      await withConvexNetworkTimeout(
+        client.close(),
+        SAMPLE_TIMEOUT_MS,
+        "Convex client close",
+      );
+    } catch {
+      process.stderr.write(
+        "Convex foundation probe client shutdown timed out or failed.\n",
+      );
+      process.exitCode = 1;
+    }
   }
 })();
