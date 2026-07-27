@@ -74,7 +74,7 @@ test("runner exposes only offline plan and recovery modes", () => {
   assert.equal(plan.auditedPlanValidated, false);
   assert.equal(plan.applyEnabled, false);
   assert.equal(plan.preflightEnabled, false);
-  const disabledRun = spawnSync("tools/spec-lint/node_modules/.bin/tsx", ["tools/delivery/migrate-linear-authority.ts", "--mode", "compensation-plan"], { encoding: "utf8" });
+  const disabledRun = spawnSync("tools/spec-lint/node_modules/.bin/tsx", ["tools/delivery/migrate-linear-authority.ts", "--mode", "apply"], { encoding: "utf8" });
   assert.notEqual(disabledRun.status, 0);
   assert.match(disabledRun.stderr, /Mode must be plan or recovery-check/);
 });
