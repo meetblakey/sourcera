@@ -135,6 +135,7 @@ function assertGeneratedPlanning(
   baselineIssues: SourceDerivedSnapshotIssue[],
   sourcePolicy: LinearSourcePolicy,
   projectScope: LinearProjectScope,
+  programScope: LinearProgramScope,
   inventoryJson: string,
   repositoryRoot: string,
   sourceChecksumContract: SourceChecksumContract,
@@ -163,6 +164,7 @@ function assertGeneratedPlanning(
     ),
     repositoryRoot,
     sourceChecksumContract,
+    programScope,
   );
   const derivedById = new Map(sourceDerived.map((issue) => [issue.id, issue]));
   const liveById = new Map(
@@ -414,6 +416,7 @@ export function main(): void {
     baseline.issues,
     sourcePolicy,
     JSON.parse(projectScopeJson) as LinearProjectScope,
+    JSON.parse(programScopeJson) as LinearProgramScope,
     inventoryJson,
     repositoryRoot,
     JSON.parse(sourceChecksumContractJson) as SourceChecksumContract,

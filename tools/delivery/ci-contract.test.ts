@@ -1,5 +1,15 @@
 import { strict as assert } from "node:assert";
-import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
 import test from "node:test";
 
 const officialActionPins = new Map([
@@ -74,7 +84,10 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     "git cat-file -e \"${BASE_SHA}^{commit}\"",
     "git cat-file -e \"${BASE_SHA}:delivery/linear-snapshot.json\"",
     "PR base Linear mirror unavailable",
+    "git cat-file -e \"${BASE_SHA}:delivery/linear-program-scope.json\"",
+    "PR base Linear program scope unavailable",
     "/tmp/base-linear-snapshot.json",
+    "/tmp/base-linear-program-scope.json",
     "Verify committed delivery mirror",
     "steps.linear_mirror.outputs.required == 'true'",
   ]) {
@@ -135,6 +148,34 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     mirrorClassification,
     /git diff --quiet "\$\{BASE_SHA\}" --/,
   );
+  const mirrorDiffGuard = mirrorClassification.indexOf(
+    'elif ! git diff --quiet "${BASE_SHA}" --',
+  );
+  const baseScopeRead = mirrorClassification.indexOf(
+    'git show "${BASE_SHA}:delivery/linear-program-scope.json" > /tmp/base-linear-program-scope.json',
+  );
+  const exactMigrationGuard = mirrorClassification.indexOf(
+    "jq -e '.schemaVersion == 2' /tmp/base-linear-program-scope.json >/dev/null &&",
+  );
+  const exactHeadGuard = mirrorClassification.indexOf(
+    "jq -e '.schemaVersion == 3' delivery/linear-program-scope.json >/dev/null",
+  );
+  assert.ok(mirrorDiffGuard >= 0);
+  assert.ok(baseScopeRead > mirrorDiffGuard);
+  assert.ok(exactMigrationGuard > baseScopeRead);
+  assert.ok(exactHeadGuard > exactMigrationGuard);
+  assert.equal(
+    [...mirrorClassification.matchAll(/schema_v3_activation=true/g)].length,
+    1,
+  );
+  assert.equal(
+    [...mirrorClassification.matchAll(/required=false/g)].length,
+    2,
+  );
+  assert.doesNotMatch(
+    mirrorClassification,
+    /schemaVersion\s*(?:>=|<=|>|<|!=)/,
+  );
   const mirrorVerification = deliveryIntegrity.slice(
     deliveryIntegrity.indexOf("      - name: Verify committed delivery mirror"),
     deliveryIntegrity.indexOf("      - run: npm --prefix tools/spec-lint run typecheck"),
@@ -143,6 +184,123 @@ test("delivery workflow enforces every repository and Linear gate", () => {
     mirrorVerification,
     /if: steps\.linear_mirror\.outputs\.required == 'true'/,
   );
+  assert.doesNotMatch(
+    deliveryIntegrity.slice(
+      deliveryIntegrity.indexOf("      - uses: actions/setup-node@"),
+    ),
+    /schema_v3_activation/,
+  );
+});
+
+test("the one-time v2 to v3 mirror exception cannot bypass another generated change", () => {
+  const workflow = readFileSync(
+    ".github/workflows/delivery-integrity.yml",
+    "utf8",
+  );
+  const classification = workflow.slice(
+    workflow.indexOf("      - name: Classify committed Linear mirror"),
+    workflow.indexOf("      - uses: actions/setup-node@"),
+  );
+  const runMarker = "        run: |\n";
+  const runStart = classification.indexOf(runMarker);
+  assert.ok(runStart >= 0);
+  const script = classification
+    .slice(runStart + runMarker.length)
+    .split("\n")
+    .map((line) => line.startsWith("          ") ? line.slice(10) : line)
+    .join("\n");
+  const root = mkdtempSync(join(tmpdir(), "linear-mirror-v3-contract-"));
+  const mirrorPaths = [
+    "delivery/linear-snapshot.json",
+    "delivery/release-plan.json",
+    "reports/delivery/delivery-manifest.json",
+    "reports/delivery/dependency-graph.json",
+    "reports/delivery/drift-report.json",
+    "reports/delivery/journey-readiness.json",
+    "reports/delivery/readiness-report.json",
+    "reports/delivery/release-scorecard.json",
+    "reports/delivery/traceability-map.json",
+  ];
+  const write = (path: string, content: string): void => {
+    const absolute = join(root, path);
+    mkdirSync(dirname(absolute), { recursive: true });
+    writeFileSync(absolute, content);
+  };
+  const git = (...arguments_: string[]): string =>
+    execFileSync("git", arguments_, { cwd: root, encoding: "utf8" }).trim();
+  const classify = (baseSha: string): Map<string, string> => {
+    const output = join(root, "github-output.txt");
+    writeFileSync(output, "");
+    const result = spawnSync("bash", ["-c", script], {
+      cwd: root,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        BASE_SHA: baseSha,
+        GITHUB_EVENT_NAME: "pull_request",
+        GITHUB_OUTPUT: output,
+      },
+    });
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    return new Map(
+      readFileSync(output, "utf8")
+        .trim()
+        .split(/\r?\n/)
+        .filter(Boolean)
+        .map((line) => {
+          const separator = line.indexOf("=");
+          return [line.slice(0, separator), line.slice(separator + 1)];
+        }),
+    );
+  };
+
+  try {
+    git("init", "-q");
+    git("config", "user.email", "ci@example.invalid");
+    git("config", "user.name", "CI Contract");
+    write("delivery/linear-program-scope.json", '{"schemaVersion":2}\n');
+    write(
+      "delivery/linear-snapshot.json",
+      '{"linearCapture":{},"linearFingerprint":{}}\n',
+    );
+    for (const path of mirrorPaths.slice(1)) write(path, "{}\n");
+    git("add", ".");
+    git("commit", "-qm", "schema v2 baseline");
+    const v2Base = git("rev-parse", "HEAD");
+
+    write("delivery/linear-program-scope.json", '{"schemaVersion":3}\n');
+    assert.deepEqual(Object.fromEntries(classify(v2Base)), {
+      required: "false",
+      schema_v3_activation: "true",
+    });
+
+    write("delivery/linear-snapshot.json", '{"changed":true}\n');
+    assert.deepEqual(Object.fromEntries(classify(v2Base)), {
+      required: "true",
+      schema_v3_activation: "false",
+    });
+
+    write(
+      "delivery/linear-snapshot.json",
+      '{"linearCapture":{},"linearFingerprint":{}}\n',
+    );
+    write("delivery/linear-program-scope.json", '{"schemaVersion":4}\n');
+    assert.deepEqual(Object.fromEntries(classify(v2Base)), {
+      required: "true",
+      schema_v3_activation: "false",
+    });
+
+    write("delivery/linear-program-scope.json", '{"schemaVersion":3}\n');
+    git("add", "delivery/linear-program-scope.json");
+    git("commit", "-qm", "schema v3 active");
+    const v3Base = git("rev-parse", "HEAD");
+    assert.deepEqual(Object.fromEntries(classify(v3Base)), {
+      required: "true",
+      schema_v3_activation: "false",
+    });
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("delivery workflow exposes a read-only manual Linear capture artifact", () => {
@@ -236,6 +394,21 @@ test("delivery workflow exposes a read-only manual Linear capture artifact", () 
     manualCapture.indexOf("tools/delivery/current-linear-ticket-integrity.ts") <
       manualCapture.indexOf("tools/delivery/linear-fingerprint-overlay.ts"),
   );
+  const currentIntegrity = manualCapture.slice(
+    manualCapture.indexOf("tools/delivery/current-linear-ticket-integrity.ts"),
+    manualCapture.indexOf("tools/delivery/linear-fingerprint-overlay.ts"),
+  );
+  assert.match(
+    currentIntegrity,
+    /--linear-program-scope delivery\/linear-program-scope\.json/,
+  );
+  assert.match(
+    manualCapture.slice(
+      manualCapture.indexOf("tools/delivery/linear-fingerprint-overlay.ts"),
+      manualCapture.indexOf("tools/delivery/validate-linear-candidate.ts"),
+    ),
+    /--linear-program-scope delivery\/linear-program-scope\.json/,
+  );
   assert.ok(
     manualCapture.indexOf("name: Remove raw Linear descriptions") <
       manualCapture.indexOf("name: Upload safe Linear ticket diagnostics"),
@@ -285,6 +458,7 @@ test("Linear drift validates current tickets before enforcing its committed mirr
     "--runtime-dependencies delivery/runtime-gate-dependencies.json",
     "--source-checksums delivery/ticket-source-checksums.json",
     "--capture /tmp/linear-ticket-descriptions.json",
+    "--linear-program-scope delivery/linear-program-scope.json",
     "if: always()",
     officialUploadArtifact,
     "if-no-files-found: error",
@@ -325,6 +499,7 @@ test("Linear drift validates current tickets before enforcing its committed mirr
     "--snapshot delivery/linear-snapshot.json",
     "--fingerprint /tmp/linear-fingerprint.json",
     "--capture /tmp/linear-ticket-descriptions.json",
+    "--linear-program-scope delivery/linear-program-scope.json",
     "--source-policy delivery/linear-source-policy.json",
     "--inventory _audit/FEATURE_INVENTORY.md",
     "--source-checksums delivery/ticket-source-checksums.json",

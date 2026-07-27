@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "outcomeInitiatives": [
     {
       "id": "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10",
@@ -29,7 +29,7 @@
   "planningDocument": {
     "id": "3fd8304b-547e-48e2-bc76-5a9ebecaa389",
     "title": "Sourcera Planning Authority — Master Spec Control Plane",
-    "contentFingerprint": "7e8641dfc12a682c7c18bce602493ce3bf338dd74b5f260e9c15713970fbeeba",
+    "contentFingerprint": "1f9b74fd434afd35cea638e2217f85c95e75a029495251f65712f1730fc69463",
     "initiativeId": null,
     "projectId": null,
     "teamId": "477029a4-9e0a-44ca-9816-5a169b6baafa",
@@ -38,6 +38,7 @@
       "Binding authority",
       "Canonical source fingerprints",
       "Native planning model",
+      "Project document layer",
       "Coverage and traceability",
       "UX fidelity control",
       "Change control",
@@ -516,31 +517,1110 @@
     }
   ],
   "projectInitiatives": [
-    { "projectId": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819", "initiativeIds": ["f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
-    { "projectId": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc", "initiativeIds": ["dd9b8931-9d3b-42ed-854f-e46248c5bb9e"] },
-    { "projectId": "32d9c20f-fe88-40e3-8a86-53712a91db58", "initiativeIds": ["35daace4-7825-4ecd-bd85-90351d43e7ea"] },
-    { "projectId": "3754aadb-fb17-4931-abf3-a0aa42c5924f", "initiativeIds": ["35daace4-7825-4ecd-bd85-90351d43e7ea"] },
-    { "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d", "initiativeIds": ["b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
-    { "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0", "initiativeIds": ["6310a6b6-634c-4603-aa34-e4e7f067c4d8"] },
-    { "projectId": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15", "initiativeIds": ["f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
-    { "projectId": "532e0956-047a-4f09-b811-2971892f62ee", "initiativeIds": ["b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
-    { "projectId": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9", "initiativeIds": ["b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
-    { "projectId": "609d8e2e-4543-4cdb-89b4-281986f93a85", "initiativeIds": ["f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
-    { "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51", "initiativeIds": ["8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
-    { "projectId": "6fe48bc4-c830-4e10-8a44-390facb9063f", "initiativeIds": ["6310a6b6-634c-4603-aa34-e4e7f067c4d8"] },
-    { "projectId": "848dee0f-1121-4ad0-a877-e08629f5b99c", "initiativeIds": ["8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
-    { "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c", "initiativeIds": ["f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
-    { "projectId": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f", "initiativeIds": ["b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
-    { "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182", "initiativeIds": ["35daace4-7825-4ecd-bd85-90351d43e7ea"] },
-    { "projectId": "bb989aab-436a-4e7e-9819-aad9f7136d8c", "initiativeIds": ["6310a6b6-634c-4603-aa34-e4e7f067c4d8"] },
-    { "projectId": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd", "initiativeIds": ["dd9b8931-9d3b-42ed-854f-e46248c5bb9e"] },
-    { "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1", "initiativeIds": ["dd9b8931-9d3b-42ed-854f-e46248c5bb9e"] },
-    { "projectId": "cd7ce280-06f2-4ace-bce6-101141f7d098", "initiativeIds": ["8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
-    { "projectId": "ce76b69c-2ba9-47f5-ae97-75475f6ca593", "initiativeIds": ["8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
-    { "projectId": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d", "initiativeIds": ["b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
-    { "projectId": "da7ece7a-14a3-41da-b8c8-b30d06383d29", "initiativeIds": ["8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"] },
-    { "projectId": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7", "initiativeIds": ["f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"] },
-    { "projectId": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89", "initiativeIds": ["b5ae2103-1f20-4763-9090-cb0fb0a7d74b"] },
-    { "projectId": "f8aa9e2a-76a7-4403-910e-e8862c6b593a", "initiativeIds": ["6310a6b6-634c-4603-aa34-e4e7f067c4d8"] }
-  ]
+    {
+      "projectId": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
+      "initiativeIds": [
+        "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
+      ]
+    },
+    {
+      "projectId": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
+      "initiativeIds": [
+        "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"
+      ]
+    },
+    {
+      "projectId": "32d9c20f-fe88-40e3-8a86-53712a91db58",
+      "initiativeIds": [
+        "35daace4-7825-4ecd-bd85-90351d43e7ea"
+      ]
+    },
+    {
+      "projectId": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
+      "initiativeIds": [
+        "35daace4-7825-4ecd-bd85-90351d43e7ea"
+      ]
+    },
+    {
+      "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+      "initiativeIds": [
+        "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
+      ]
+    },
+    {
+      "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
+      "initiativeIds": [
+        "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
+      ]
+    },
+    {
+      "projectId": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
+      "initiativeIds": [
+        "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
+      ]
+    },
+    {
+      "projectId": "532e0956-047a-4f09-b811-2971892f62ee",
+      "initiativeIds": [
+        "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
+      ]
+    },
+    {
+      "projectId": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
+      "initiativeIds": [
+        "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
+      ]
+    },
+    {
+      "projectId": "609d8e2e-4543-4cdb-89b4-281986f93a85",
+      "initiativeIds": [
+        "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
+      ]
+    },
+    {
+      "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
+      "initiativeIds": [
+        "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
+      ]
+    },
+    {
+      "projectId": "6fe48bc4-c830-4e10-8a44-390facb9063f",
+      "initiativeIds": [
+        "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
+      ]
+    },
+    {
+      "projectId": "848dee0f-1121-4ad0-a877-e08629f5b99c",
+      "initiativeIds": [
+        "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
+      ]
+    },
+    {
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "initiativeIds": [
+        "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
+      ]
+    },
+    {
+      "projectId": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
+      "initiativeIds": [
+        "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
+      ]
+    },
+    {
+      "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+      "initiativeIds": [
+        "35daace4-7825-4ecd-bd85-90351d43e7ea"
+      ]
+    },
+    {
+      "projectId": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
+      "initiativeIds": [
+        "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
+      ]
+    },
+    {
+      "projectId": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
+      "initiativeIds": [
+        "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"
+      ]
+    },
+    {
+      "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
+      "initiativeIds": [
+        "dd9b8931-9d3b-42ed-854f-e46248c5bb9e"
+      ]
+    },
+    {
+      "projectId": "cd7ce280-06f2-4ace-bce6-101141f7d098",
+      "initiativeIds": [
+        "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
+      ]
+    },
+    {
+      "projectId": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
+      "initiativeIds": [
+        "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
+      ]
+    },
+    {
+      "projectId": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
+      "initiativeIds": [
+        "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
+      ]
+    },
+    {
+      "projectId": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
+      "initiativeIds": [
+        "8c0d20da-a8e5-4cfe-9323-0b2f0ac49f9f"
+      ]
+    },
+    {
+      "projectId": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
+      "initiativeIds": [
+        "f9bd5bfb-8c88-4b85-977a-fbd72a99fc10"
+      ]
+    },
+    {
+      "projectId": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
+      "initiativeIds": [
+        "b5ae2103-1f20-4763-9090-cb0fb0a7d74b"
+      ]
+    },
+    {
+      "projectId": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
+      "initiativeIds": [
+        "6310a6b6-634c-4603-aa34-e4e7f067c4d8"
+      ]
+    }
+  ],
+  "canonicalProjectDocuments": [
+    {
+      "id": "9cb6ebd0-3f11-4f25-9dd9-3a77dc63c14b",
+      "projectId": "4ed63e06-8d37-4ffc-bbd8-02c95d13ff15",
+      "projectName": "Accessibility, Localization & Responsive UX",
+      "kind": "prd",
+      "title": "PRD — Accessibility, Localization & Responsive UX",
+      "contentFingerprint": "108e2f374103aa11abaae9f2155704fe0ffcf0c568898cea1e610c06241fa219",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§3",
+        "§37",
+        "§38",
+        "§44",
+        "§46"
+      ]
+    },
+    {
+      "id": "cd1171a4-56f2-4da9-a3ad-068b9adc5be4",
+      "projectId": "f8aa9e2a-76a7-4403-910e-e8862c6b593a",
+      "projectName": "Agent & Intelligence Capabilities",
+      "kind": "prd",
+      "title": "PRD — Agent & Intelligence Capabilities",
+      "contentFingerprint": "683f1c5d2a172b79d41b50059ac888da0e4fd303a53ccc1857dd958ea3aeb5c0",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§16",
+        "§21",
+        "§22",
+        "§34.10",
+        "§34.11",
+        "§42",
+        "§44.6",
+        "§45"
+      ]
+    },
+    {
+      "id": "a7b130f8-dcda-46ca-b688-d0ea20d370ff",
+      "projectId": "4e2ce61c-405d-46f0-820c-f2e3eba1b0f0",
+      "projectName": "Billing, Pricing & Entitlements",
+      "kind": "prd",
+      "title": "PRD — Billing, Pricing & Entitlements",
+      "contentFingerprint": "c226b8012fa6531bbf170e7f336675c96eff43e4a4757c07aaecbb5873477b4d",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix H",
+        "Appendix J",
+        "Appendix M",
+        "§31.8",
+        "§34",
+        "§39",
+        "§4.8",
+        "§44.6",
+        "§50"
+      ]
+    },
+    {
+      "id": "54f94ec8-6e8b-4899-8ee4-1fc44d4a63d9",
+      "projectId": "cd7ce280-06f2-4ace-bce6-101141f7d098",
+      "projectName": "Buyer Collaboration, Inbox & Reporting",
+      "kind": "prd",
+      "title": "PRD — Buyer Collaboration, Inbox & Reporting",
+      "contentFingerprint": "906326f9f5832008af60f923b31973c7152ce6376a7caaa60b723c953ada3017",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix L.1",
+        "Appendix M",
+        "§16",
+        "§17",
+        "§18",
+        "§20",
+        "§25",
+        "§29",
+        "§30",
+        "§4.3.21",
+        "§4.3.28"
+      ]
+    },
+    {
+      "id": "f0760548-4337-45d7-9eae-c2a2994f2d3f",
+      "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
+      "projectName": "Buyer Workspaces & Evaluation Pipeline",
+      "kind": "prd",
+      "title": "PRD — Buyer Workspaces & Evaluation Pipeline",
+      "contentFingerprint": "bd196a51609a1f1041231455ca873f2ecec4bd14e14b4e0616af17cb423eec0a",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix E",
+        "Appendix L",
+        "Appendix M",
+        "§10",
+        "§11",
+        "§2",
+        "§35",
+        "§4.3"
+      ]
+    },
+    {
+      "id": "d170025c-d952-4958-b57c-bd134a92e636",
+      "projectId": "2056bb11-b23c-4cc8-b1b2-7a3e0ea46819",
+      "projectName": "Data Portability, Retention & Migration",
+      "kind": "prd",
+      "title": "PRD — Data Portability, Retention & Migration",
+      "contentFingerprint": "7f2643525b7b2c3aec82f407cd556584ce30d1e0f3fca82fec4d858964abb4b2",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§1.6.1",
+        "§4",
+        "§40",
+        "§42",
+        "§45",
+        "§6.8"
+      ]
+    },
+    {
+      "id": "f092c8f8-a499-4a96-a6cd-a403ecd8feb4",
+      "projectId": "d04d1beb-6f63-4e8f-b4af-817dd0d63f7d",
+      "projectName": "Data, Audit & Cross-Console Foundations",
+      "kind": "engineering_readiness_brief",
+      "title": "Engineering/Readiness Brief — Data, Audit & Cross-Console Foundations",
+      "contentFingerprint": "5b38b7535acc21a3058d678451222cd401a43ef27e99f3de6499878423bd1eb8",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix J",
+        "Appendix L",
+        "Appendix M",
+        "§1.3",
+        "§1.4",
+        "§25",
+        "§4",
+        "§40",
+        "§45",
+        "§50"
+      ]
+    },
+    {
+      "id": "34ca8329-e44b-49d3-9922-76ce7c78e2d8",
+      "projectId": "57587adc-c6ab-4a6a-8cd0-f293b2a914f9",
+      "projectName": "Design System & Application Shell",
+      "kind": "prd",
+      "title": "PRD — Design System & Application Shell",
+      "contentFingerprint": "94f01fedbcea252ce61cc3502f8cd9e2503f7a380bb63404b70233b6c62c2759",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§11",
+        "§28",
+        "§3",
+        "§35",
+        "§36",
+        "§37",
+        "§38",
+        "§44"
+      ]
+    },
+    {
+      "id": "e23efa5f-1751-440a-869e-d161526c18e2",
+      "projectId": "45d4d9d7-f851-41f7-9f0c-640304a62c8d",
+      "projectName": "Identity, Organizations & Permissions",
+      "kind": "prd",
+      "title": "PRD — Identity, Organizations & Permissions",
+      "contentFingerprint": "24dbc145553f71adeec76584f16483c359b7a003b984ed16d4c9dd70a0d99a2b",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix L",
+        "Appendix M",
+        "§1.3",
+        "§33",
+        "§34.1",
+        "§35",
+        "§36",
+        "§4.2",
+        "§5",
+        "§6",
+        "§7",
+        "§8"
+      ]
+    },
+    {
+      "id": "92865434-1a1f-43f4-834f-fa241662238f",
+      "projectId": "6fe48bc4-c830-4e10-8a44-390facb9063f",
+      "projectName": "Integrations, API, Webhooks & MCP",
+      "kind": "prd",
+      "title": "PRD — Integrations, API, Webhooks & MCP",
+      "contentFingerprint": "95dad4d6b2fc263aeac6d8ac18d0b847fc2291dd1ee53584e9d175aed4e0c3ee",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix F",
+        "Appendix M",
+        "§22.8",
+        "§25",
+        "§31",
+        "§32",
+        "§40",
+        "§42",
+        "§45"
+      ]
+    },
+    {
+      "id": "994b6a8d-bc33-4b4e-b47b-38ac12c361df",
+      "projectId": "32d9c20f-fe88-40e3-8a86-53712a91db58",
+      "projectName": "Marketplace Discovery, Matching & Trust",
+      "kind": "prd",
+      "title": "PRD — Marketplace Discovery, Matching & Trust",
+      "contentFingerprint": "1d023bf2af0be312b50ad88a185e1f113d7a72a2fabe24751f4d85846c34cea2",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§27",
+        "§34.16",
+        "§4.5",
+        "§45",
+        "§48",
+        "§51"
+      ]
+    },
+    {
+      "id": "89b450cb-65ec-4f6f-99d1-113aa52b9ad7",
+      "projectId": "3754aadb-fb17-4931-abf3-a0aa42c5924f",
+      "projectName": "Marketplace Seller Supply & Promotions",
+      "kind": "prd",
+      "title": "PRD — Marketplace Seller Supply & Promotions",
+      "contentFingerprint": "802f7dd7e39a7b9833cb573213ff7f56e5cb7ac1582aca4964352e2d3b3003db",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§26",
+        "§27",
+        "§34.16",
+        "§4.4.19",
+        "§4.4.22",
+        "§45",
+        "§48",
+        "§49"
+      ]
+    },
+    {
+      "id": "3323c964-8861-48fe-9fc0-9ceb68dd6128",
+      "projectId": "b40f1fd0-a9da-4cbf-bcf7-1f581a8f355f",
+      "projectName": "Notifications & Email",
+      "kind": "prd",
+      "title": "PRD — Notifications & Email",
+      "contentFingerprint": "0fa65100c225e6c8980c8e8df499b525cfdbf7a7ef98d24b570cb5d69823ea0e",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix C",
+        "Appendix G",
+        "Appendix M",
+        "§29",
+        "§31",
+        "§4.9",
+        "§41",
+        "§42",
+        "§45"
+      ]
+    },
+    {
+      "id": "b323288d-1288-45c9-a0f9-d8637e6779d6",
+      "projectId": "e36047fc-cf6b-429a-8c2d-d1f16a800ab7",
+      "projectName": "Observability, Reliability & Performance",
+      "kind": "engineering_readiness_brief",
+      "title": "Engineering/Readiness Brief — Observability, Reliability & Performance",
+      "contentFingerprint": "d36c089ed893e51b86f5f71c19dcfd19f28286b2f7ddf76af33acebe1cce15f5",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix C",
+        "Appendix I",
+        "Appendix M",
+        "§29.3",
+        "§42",
+        "§44",
+        "§46"
+      ]
+    },
+    {
+      "id": "680b88c0-4357-4ae0-95aa-6be3b1aef99d",
+      "projectId": "bb989aab-436a-4e7e-9819-aad9f7136d8c",
+      "projectName": "Operations & Support Console",
+      "kind": "prd",
+      "title": "PRD — Operations & Support Console",
+      "contentFingerprint": "35c26d3489ad281eb276c4dca5310768d1011bc984bc77df41dcc893538979c4",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§4.6",
+        "§4.7",
+        "§42",
+        "§45",
+        "§47",
+        "§50"
+      ]
+    },
+    {
+      "id": "a11b83c0-2b04-4f68-adb3-35df5702f0e5",
+      "projectId": "532e0956-047a-4f09-b811-2971892f62ee",
+      "projectName": "Platform & Delivery Foundations",
+      "kind": "engineering_readiness_brief",
+      "title": "Engineering/Readiness Brief — Platform & Delivery Foundations",
+      "contentFingerprint": "01293c2b9a08598e1621cbdedcc78089a13f802a2a73670a8053b45cf8527c50",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§1.1",
+        "§1.4",
+        "§1.5",
+        "§4",
+        "§42",
+        "§46",
+        "§47"
+      ]
+    },
+    {
+      "id": "d86ea1cf-4c2d-4134-a75a-e45bea0c2e4f",
+      "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+      "projectName": "Product Analytics, Growth & Network Effects",
+      "kind": "prd",
+      "title": "PRD — Product Analytics, Growth & Network Effects",
+      "contentFingerprint": "00edf8da5e0be929d89ca2660d71be5a99e9a88a1194157ea6e3ddb16a831fd9",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix G",
+        "Appendix L",
+        "Appendix M",
+        "§17",
+        "§42",
+        "§45",
+        "§48",
+        "§51"
+      ]
+    },
+    {
+      "id": "170d7f26-7cee-4911-ac1e-fc4b988b3276",
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "projectName": "QA, Release, Deployment & Launch",
+      "kind": "engineering_readiness_brief",
+      "title": "Engineering/Readiness Brief — QA, Release, Deployment & Launch",
+      "contentFingerprint": "a1e066975340ddad0b191f221bd4deb3dc851f8f47b61705aab330d840d0c210",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§1.5",
+        "§42",
+        "§46",
+        "§47",
+        "§50.33"
+      ]
+    },
+    {
+      "id": "bdcb83e9-8061-47bb-96a5-03cddf9c80c4",
+      "projectId": "f5cde798-54b2-4a7f-9d5b-c4bdca8d3d89",
+      "projectName": "Realtime, Search & Collaboration Infrastructure",
+      "kind": "engineering_readiness_brief",
+      "title": "Engineering/Readiness Brief — Realtime, Search & Collaboration Infrastructure",
+      "contentFingerprint": "c133fa75e4ab2a9c2c9ec88a19a4884bfa608cc2a90864c8e4ffb7f39953c4d0",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§25.7",
+        "§3.12",
+        "§3.9",
+        "§30",
+        "§42",
+        "§44",
+        "§7.5"
+      ]
+    },
+    {
+      "id": "7a3cfb27-8e65-4a68-b7db-d03444aa4ccf",
+      "projectId": "ce76b69c-2ba9-47f5-ae97-75475f6ca593",
+      "projectName": "Requirements, Policies & Templates",
+      "kind": "prd",
+      "title": "PRD — Requirements, Policies & Templates",
+      "contentFingerprint": "ab5d29612e073da6295580feb601ebabd4d671a71fe3dbabf6facade20d79894",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix A",
+        "Appendix I",
+        "Appendix L",
+        "Appendix M",
+        "§10",
+        "§12",
+        "§19",
+        "§2.2",
+        "§28"
+      ]
+    },
+    {
+      "id": "eadf5ac2-5481-45ec-9f90-dd899cb3090e",
+      "projectId": "848dee0f-1121-4ad0-a877-e08629f5b99c",
+      "projectName": "Scoring, Scenarios & TCO",
+      "kind": "prd",
+      "title": "PRD — Scoring, Scenarios & TCO",
+      "contentFingerprint": "c88600cd0be558376afe79b12e23947b3d0d4ce38ed08a05fec10ce9b040056a",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix I",
+        "Appendix L",
+        "Appendix M",
+        "§13",
+        "§14",
+        "§15",
+        "§17",
+        "§2.3",
+        "§39",
+        "§44"
+      ]
+    },
+    {
+      "id": "3f948b35-e3f0-474d-9f85-416864249547",
+      "projectId": "609d8e2e-4543-4cdb-89b4-281986f93a85",
+      "projectName": "Security, Privacy, Compliance & Residency",
+      "kind": "engineering_readiness_brief",
+      "title": "Engineering/Readiness Brief — Security, Privacy, Compliance & Residency",
+      "contentFingerprint": "b16a332746df92ebff23da056ced5fc70ae5cd1046eb2d516c1362e627a57b05",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§1.5.1",
+        "§1.6",
+        "§32.1.1",
+        "§33",
+        "§40",
+        "§45",
+        "§5",
+        "§6"
+      ]
+    },
+    {
+      "id": "820df51c-dafc-40bd-beb3-1b65d8083588",
+      "projectId": "3115c5d6-dc48-4ef4-8125-071e6dad8ecc",
+      "projectName": "Seller Bids, Responses, Q&A & NDA",
+      "kind": "prd",
+      "title": "PRD — Seller Bids, Responses, Q&A & NDA",
+      "contentFingerprint": "ddd75bf14d1de0a6a869538e7fa9b2a5bf0a07b26ab05be99adbfca7a0824edf",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix D",
+        "Appendix M",
+        "§18",
+        "§23",
+        "§24",
+        "§25",
+        "§3.14.2",
+        "§49",
+        "§9"
+      ]
+    },
+    {
+      "id": "6cfaf2a6-db37-4d6d-babb-01621560027e",
+      "projectId": "c7ec310e-6b29-4a89-83c6-d655d27f22f1",
+      "projectName": "Seller Console & Onboarding",
+      "kind": "prd",
+      "title": "PRD — Seller Console & Onboarding",
+      "contentFingerprint": "b30d4f30f3ef0ca3da7cb6cf7d4664ae55326c38160830512e79bcc638839712",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§22",
+        "§23",
+        "§24",
+        "§3",
+        "§35",
+        "§38",
+        "§49"
+      ]
+    },
+    {
+      "id": "eb24b1ad-492a-4292-8f7f-85fb48bab3bd",
+      "projectId": "bf39e1f0-c93a-4ee6-a73d-d4b560f89fdd",
+      "projectName": "Seller Knowledge, Profile & Capabilities",
+      "kind": "prd",
+      "title": "PRD — Seller Knowledge, Profile & Capabilities",
+      "contentFingerprint": "092e8c7f03caa1f086fcfd13838e005b8c96ac39b3731a830ac19b2a513286c2",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix J",
+        "Appendix L",
+        "Appendix M",
+        "§21",
+        "§22",
+        "§26",
+        "§34.10",
+        "§45",
+        "§49"
+      ]
+    },
+    {
+      "id": "311da27e-80c4-421a-b796-ea70dd04c88a",
+      "projectId": "da7ece7a-14a3-41da-b8c8-b30d06383d29",
+      "projectName": "Vendors, Invitations & NDA",
+      "kind": "prd",
+      "title": "PRD — Vendors, Invitations & NDA",
+      "contentFingerprint": "9201bc972680f40505ec1888ece25e626e500ec35690786a546cff715696531f",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "Scope and explicit non-goals",
+        "Journeys, failure states and recovery",
+        "Security, privacy, accessibility and localization",
+        "Success thresholds",
+        "Rollout, rollback, migration and support",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix M",
+        "§10",
+        "§18",
+        "§2.4",
+        "§24.2",
+        "§25",
+        "§27",
+        "§35"
+      ]
+    }
+  ],
+  "supplementaryDocuments": [
+    {
+      "id": "b146935b-bda4-4bf8-9826-92b513bc06ae",
+      "projectId": "6e939b24-3b1a-4b96-9fc3-666c8d01ed51",
+      "title": "R0 Defensible Evaluation PRD",
+      "contentFingerprint": "920d8aaf8260389309c6c29d80b884c451d723baa5860e872188c95883b8de73",
+      "requiredSections": [
+        "Problem, users and measurable outcome",
+        "R0 journey and exclusions",
+        "Actors, access and entry",
+        "Invitation and seller participation",
+        "Scoring, Selection Report and export",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix D",
+        "Appendix E",
+        "Appendix L",
+        "Appendix M",
+        "§10",
+        "§10.10",
+        "§13",
+        "§13.6",
+        "§18",
+        "§2",
+        "§2.8",
+        "§22.20",
+        "§23",
+        "§24",
+        "§25",
+        "§3.13",
+        "§34.1.1",
+        "§35",
+        "§35.5.2",
+        "§4.3",
+        "§41",
+        "§44",
+        "§46",
+        "§51.0.1",
+        "§5",
+        "§6"
+      ]
+    },
+    {
+      "id": "c10f74a2-0b16-4804-ae05-d51efef4c25d",
+      "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+      "title": "R0 Pilot Target Set",
+      "contentFingerprint": "095792e8e0e37a0f5badfb2df6d5f84019fa700736415d6558bd22075ab8dc7d",
+      "requiredSections": [
+        "Pilot cohort and observation windows",
+        "Activation and time-to-value thresholds",
+        "Completion and abandonment thresholds",
+        "Trust, reliability and support thresholds",
+        "Measurement and approval",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix G",
+        "Appendix M",
+        "§10",
+        "§10.15",
+        "§2.8",
+        "§34.1.1",
+        "§35.5.2",
+        "§42",
+        "§44",
+        "§46",
+        "§51.0.1"
+      ]
+    },
+    {
+      "id": "2f61395f-87f2-4235-854b-c2b01882d5f1",
+      "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c",
+      "title": "R0 Production Readiness Runbook",
+      "contentFingerprint": "1a6343ef5daa0b5f6b36a583c8cf09c9bd8ca1f51d2a3b6a9ac4a471e78ea7c4",
+      "requiredSections": [
+        "Production targets and domains",
+        "Provider readiness and degraded operation",
+        "Checkpoints C1-C8 and evidence",
+        "Canary, rollback and recovery",
+        "Support ownership and approval",
+        "Master Spec binding",
+        "Unresolved decisions"
+      ],
+      "masterSpecSections": [
+        "Appendix C",
+        "Appendix G",
+        "Appendix I",
+        "Appendix M",
+        "§1.5",
+        "§10.10",
+        "§13.6",
+        "§32",
+        "§41",
+        "§42",
+        "§44",
+        "§45",
+        "§46",
+        "§47",
+        "§50.33"
+      ]
+    }
+  ],
+  "projectDocumentDecisionContract": {
+    "workspaceSlug": "sourcera-production",
+    "decisionLabelId": "df2bcb0f-2fca-41cb-a45c-37770a01aac2",
+    "labelDefinitions": [
+      {
+        "id": "df2bcb0f-2fca-41cb-a45c-37770a01aac2",
+        "name": "decision",
+        "groupId": "b11e20d5-df7e-4e8b-a710-294827ff9b40",
+        "groupName": "Type"
+      },
+      {
+        "id": "b29617b2-d787-4feb-b351-386df3286e87",
+        "name": "human-only",
+        "groupId": "121eeb45-5276-441e-82b0-f85567f816db",
+        "groupName": "Agent"
+      },
+      {
+        "id": "70aedffb-e40d-4688-b723-99a3d4002565",
+        "name": "platform",
+        "groupId": "2da596c3-1be9-494b-bf81-5ce1dd4d753b",
+        "groupName": "Domain"
+      },
+      {
+        "id": "4dafcf74-e922-48aa-9dab-19f80516e2ee",
+        "name": "marketplace",
+        "groupId": "2da596c3-1be9-494b-bf81-5ce1dd4d753b",
+        "groupName": "Domain"
+      }
+    ],
+    "trackedDecisions": [
+      {
+        "decisionIdentifier": "PLA-1058",
+        "decisionTitle": "Approve the R0 pilot target and cohort set",
+        "decisionUrl": "https://linear.app/sourcera-production/issue/PLA-1058/approve-the-r0-pilot-target-and-cohort-set",
+        "descriptionFingerprint": "26587e19e051d6454f0044f5e34dc2d392f57181cac50f319dd76d4aeac4cae5",
+        "requiredSections": [
+          "Outcome",
+          "Decision required",
+          "Decision states",
+          "Safety and evidence",
+          "Exclusions"
+        ],
+        "decisionProjectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+        "labelIds": [
+          "df2bcb0f-2fca-41cb-a45c-37770a01aac2",
+          "b29617b2-d787-4feb-b351-386df3286e87",
+          "70aedffb-e40d-4688-b723-99a3d4002565"
+        ],
+        "resolution": "open",
+        "blockedIssues": [
+          {
+            "identifier": "PLA-996",
+            "projectId": "aa2e125b-1678-4369-b0d2-1f6d7ad5738c"
+          }
+        ]
+      },
+      {
+        "decisionIdentifier": "PLA-1059",
+        "decisionTitle": "Decide the L2 EOI value-weighting formula",
+        "decisionUrl": "https://linear.app/sourcera-production/issue/PLA-1059/decide-the-l2-eoi-value-weighting-formula",
+        "descriptionFingerprint": "18ee9a7acfccd3a8f4b6cd13233083460ae012a69a463d0704efff881689b971",
+        "requiredSections": [
+          "Outcome",
+          "Decision required",
+          "Review criteria",
+          "Exclusions"
+        ],
+        "decisionProjectId": "b8085a88-9679-447b-9b3d-9b6ca201e182",
+        "labelIds": [
+          "df2bcb0f-2fca-41cb-a45c-37770a01aac2",
+          "b29617b2-d787-4feb-b351-386df3286e87",
+          "4dafcf74-e922-48aa-9dab-19f80516e2ee"
+        ],
+        "resolution": "open",
+        "blockedIssues": [
+          {
+            "identifier": "PLA-571",
+            "projectId": "b8085a88-9679-447b-9b3d-9b6ca201e182"
+          }
+        ]
+      }
+    ],
+    "references": [
+      {
+        "documentId": "b146935b-bda4-4bf8-9826-92b513bc06ae",
+        "decisionIdentifier": "PLA-1058"
+      },
+      {
+        "documentId": "c10f74a2-0b16-4804-ae05-d51efef4c25d",
+        "decisionIdentifier": "PLA-1058"
+      },
+      {
+        "documentId": "d86ea1cf-4c2d-4134-a75a-e45bea0c2e4f",
+        "decisionIdentifier": "PLA-1058"
+      },
+      {
+        "documentId": "d86ea1cf-4c2d-4134-a75a-e45bea0c2e4f",
+        "decisionIdentifier": "PLA-1059"
+      }
+    ]
+  }
 }

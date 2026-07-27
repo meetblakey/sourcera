@@ -9,6 +9,7 @@ import {
   type LinearPlanningSourceFingerprints,
   type LinearProgramFingerprint,
   type LinearProgramScope,
+  type LinearProgramScopeV3,
 } from "./lib/linear-program-scope.js";
 import { assertLinearPlanningContractFingerprints } from "./lib/linear-live.js";
 
@@ -90,6 +91,70 @@ test("rejects missing or stale planning source fingerprints", () => {
         { masterSpecSha256: MASTER, uxDesignSha256: UX },
       ),
     /differ from canonical sources/,
+  );
+});
+
+test("requires every governed schema v3 project document to bind the current Master Spec", () => {
+  const programScope = {
+    ...scope(),
+    schemaVersion: 3,
+    canonicalProjectDocuments: [],
+    supplementaryDocuments: [],
+    projectDocumentDecisionContract: {
+      workspaceSlug: "sourcera-production",
+      decisionLabelId: "df2bcb0f-2fca-41cb-a45c-37770a01aac2",
+      labelDefinitions: [{
+        id: "df2bcb0f-2fca-41cb-a45c-37770a01aac2",
+        name: "decision",
+        groupId: "b11e20d5-df7e-4e8b-a710-294827ff9b40",
+        groupName: "Type",
+      }],
+      trackedDecisions: [],
+      references: [],
+    },
+  } as LinearProgramScopeV3;
+  const programFingerprint = fingerprint();
+  programFingerprint.projectDocuments = Array.from({ length: 29 }, (_, index) => ({
+    id: `00000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+    title: `Document ${index + 1}`,
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    initiativeId: null,
+    projectId: "22222222-2222-4222-8222-222222222222",
+    projectName: "Project",
+    teamId: null,
+    issueId: null,
+    contentFingerprint: "c".repeat(64),
+    sectionHeadings: ["Master Spec binding", "Unresolved decisions"],
+    masterSpecSha256: MASTER,
+    masterSpecSections: ["§10.1"],
+    unresolvedDecisionReferences: [],
+    contentPolicyFindings: [],
+  }));
+  programScope.canonicalProjectDocuments = [{
+    id: programFingerprint.projectDocuments[0].id,
+    projectId: programFingerprint.projectDocuments[0].projectId!,
+    projectName: "Project",
+    kind: "prd",
+    title: programFingerprint.projectDocuments[0].title,
+    contentFingerprint: programFingerprint.projectDocuments[0].contentFingerprint,
+    requiredSections: ["Master Spec binding", "Unresolved decisions"],
+    masterSpecSections: ["§10.1"],
+  }];
+  assert.doesNotThrow(() =>
+    assertLinearPlanningSourceFingerprints(programScope, programFingerprint, {
+      masterSpecSha256: MASTER,
+      uxDesignSha256: UX,
+    })
+  );
+  programFingerprint.projectDocuments[0].masterSpecSha256 = "c".repeat(64);
+  assert.throws(
+    () =>
+      assertLinearPlanningSourceFingerprints(programScope, programFingerprint, {
+        masterSpecSha256: MASTER,
+        uxDesignSha256: UX,
+      }),
+    /project documents differ from the canonical Master Spec fingerprint/,
   );
 });
 

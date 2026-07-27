@@ -1,7 +1,16 @@
 import type { Finding } from "./model.js";
+import {
+  linearProjectDocumentFingerprintFindings,
+  linearProjectDocumentScopeFindings,
+  type LinearDecisionIssueFingerprint,
+  type LinearProjectDocumentConflictFingerprint,
+  type LinearProjectDocumentDecisionContract,
+  type LinearProjectDocumentFingerprint,
+  type LinearProjectDocumentScopeRow,
+  type LinearSupplementaryDocumentScopeRow,
+} from "./linear-project-documents.js";
 
-export interface LinearProgramScope {
-  schemaVersion: 2;
+interface LinearProgramScopeBase {
   outcomeInitiatives: Array<{ id: string; name: string }>;
   planningDocument: {
     id: string;
@@ -26,6 +35,19 @@ export interface LinearProgramScope {
     initiativeIds: string[];
   }>;
 }
+
+export interface LinearProgramScopeV2 extends LinearProgramScopeBase {
+  schemaVersion: 2;
+}
+
+export interface LinearProgramScopeV3 extends LinearProgramScopeBase {
+  schemaVersion: 3;
+  canonicalProjectDocuments: LinearProjectDocumentScopeRow[];
+  supplementaryDocuments: LinearSupplementaryDocumentScopeRow[];
+  projectDocumentDecisionContract: LinearProjectDocumentDecisionContract;
+}
+
+export type LinearProgramScope = LinearProgramScopeV2 | LinearProgramScopeV3;
 
 export interface LinearProgramFingerprint {
   initiatives: Array<{
@@ -61,6 +83,9 @@ export interface LinearProgramFingerprint {
     projectId: string;
     initiativeIds: string[];
   }>;
+  projectDocuments?: LinearProjectDocumentFingerprint[];
+  projectDocumentConflicts?: LinearProjectDocumentConflictFingerprint[];
+  decisionIssues?: LinearDecisionIssueFingerprint[];
 }
 
 export interface LinearPlanningSourceFingerprints {
@@ -141,6 +166,26 @@ export function assertLinearPlanningSourceFingerprints(
       "Linear planning document source fingerprints differ from canonical sources",
     );
   }
+  if (
+    scope.schemaVersion === 3 &&
+    (() => {
+      const expectedIds = new Set([
+        ...scope.canonicalProjectDocuments,
+        ...scope.supplementaryDocuments,
+      ].map((row) => row.id));
+      const expectedDocuments = (fingerprint.projectDocuments ?? []).filter(
+        (row) => expectedIds.has(row.id),
+      );
+      return expectedDocuments.length !== expectedIds.size ||
+        expectedDocuments.some(
+          (row) => row.masterSpecSha256 !== expected.masterSpecSha256,
+        );
+    })()
+  ) {
+    throw new Error(
+      "Linear project documents differ from the canonical Master Spec fingerprint",
+    );
+  }
 }
 
 function text(value: unknown): value is string {
@@ -161,7 +206,11 @@ export function linearProgramScopeFindings(
 ): Finding[] {
   const findings: Finding[] = [];
   if (
-    scope?.schemaVersion !== 2 ||
+    (scope?.schemaVersion !== 2 && scope?.schemaVersion !== 3) ||
+    (scope?.schemaVersion === 3 &&
+      (!Array.isArray(scope.canonicalProjectDocuments) ||
+        !Array.isArray(scope.supplementaryDocuments) ||
+        !scope.projectDocumentDecisionContract)) ||
     Object.hasOwn(scope ?? {}, "parentInitiative") ||
     !Array.isArray(scope.outcomeInitiatives) ||
     scope.outcomeInitiatives.length !== 6 ||
@@ -202,6 +251,16 @@ export function linearProgramScopeFindings(
     );
   }
   const projectIds = scope.projectInitiatives.map((project) => project.projectId);
+  if (scope.schemaVersion === 3) {
+    findings.push(
+      ...linearProjectDocumentScopeFindings(
+        scope.canonicalProjectDocuments,
+        scope.supplementaryDocuments,
+        projectIds,
+        scope.projectDocumentDecisionContract,
+      ),
+    );
+  }
   if (
     duplicate(projectIds) ||
     scope.projectInitiatives.some(
@@ -393,6 +452,53 @@ export function linearProgramScopeFindings(
         `Linear project ${expected.projectId} initiative memberships differ from canonical scope`,
       );
     }
+  }
+  if (scope.schemaVersion === 3) {
+    if (!Array.isArray(fingerprint.projectDocuments)) {
+      add(
+        findings,
+        "linear_project_document_fingerprint_missing",
+        "Linear fingerprint lacks project documents",
+      );
+    } else {
+      findings.push(
+        ...linearProjectDocumentFingerprintFindings(
+          scope.canonicalProjectDocuments,
+          scope.supplementaryDocuments,
+          fingerprint.projectDocuments,
+          fingerprint.projectDocumentConflicts ?? [],
+        ),
+      );
+    }
+    if (!Array.isArray(fingerprint.projectDocumentConflicts)) {
+      add(
+        findings,
+        "linear_project_document_conflict_fingerprint_missing",
+        "Linear fingerprint lacks project-document collision inventory",
+      );
+    }
+    if (!Array.isArray(fingerprint.decisionIssues)) {
+      add(
+        findings,
+        "linear_project_document_decision_fingerprint_missing",
+        "Linear fingerprint lacks project-document Decision issues",
+      );
+    }
+  } else if (
+    fingerprint.projectDocuments !== undefined ||
+    fingerprint.projectDocumentConflicts !== undefined
+  ) {
+    add(
+      findings,
+      "linear_project_document_fingerprint_unexpected",
+      "Schema v2 Linear fingerprint unexpectedly contains project documents",
+    );
+  } else if (fingerprint.decisionIssues !== undefined) {
+    add(
+      findings,
+      "linear_project_document_decision_fingerprint_unexpected",
+      "Schema v2 Linear fingerprint unexpectedly contains project-document Decisions",
+    );
   }
   return findings;
 }

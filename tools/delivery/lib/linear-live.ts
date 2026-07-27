@@ -10,6 +10,11 @@ import {
   type LinearProgramFingerprint,
   type LinearProgramScope,
 } from "./linear-program-scope.js";
+import {
+  linearProjectDocumentDecisionFindings,
+  linearProjectDocumentCaptureSelection,
+  linearProjectDocumentFingerprint,
+} from "./linear-project-documents.js";
 import { sourceSectionReferences } from "./source-checksums.js";
 
 const ENDPOINT = "https://api.linear.app/graphql";
@@ -27,6 +32,7 @@ const ISSUE_QUERY = `
         id
         identifier
         title
+        url
         description
         updatedAt
         estimate
@@ -35,7 +41,7 @@ const ISSUE_QUERY = `
         archivedAt
         state { id name type }
         labels(first: ${NESTED_CONNECTION_LIMIT}) {
-          nodes { name }
+          nodes { id name parent { id name } }
           pageInfo { hasNextPage }
         }
         assignee { id name }
@@ -232,6 +238,7 @@ interface IssueNode {
   id: string;
   identifier: string;
   title: string;
+  url: string;
   description: string | null;
   updatedAt: string;
   estimate: number | null;
@@ -239,7 +246,11 @@ interface IssueNode {
   dueDate: string | null;
   archivedAt: string | null;
   state: { id: string; name: string; type: string };
-  labels: NestedConnection<{ name: string }>;
+  labels: NestedConnection<{
+    id: string;
+    name: string;
+    parent: { id: string; name: string } | null;
+  }>;
   assignee: { id: string; name: string } | null;
   team: { id: string; key: string };
   cycle: { id: string; number: number; name: string | null } | null;
@@ -561,6 +572,21 @@ export function assertLinearPlanningContractFingerprints(
     throw new Error(
       "Linear project milestone descriptions differ from the approved fingerprints",
     );
+  }
+  if (scope.schemaVersion === 3) {
+    const decisionFindings = linearProjectDocumentDecisionFindings(
+      fingerprint.program.projectDocuments ?? [],
+      fingerprint.program.decisionIssues ?? [],
+      fingerprint.issues,
+      scope.projectDocumentDecisionContract,
+      [
+        ...scope.canonicalProjectDocuments,
+        ...scope.supplementaryDocuments,
+      ].map((document) => document.id),
+    );
+    if (decisionFindings.length) {
+      throw new Error(decisionFindings[0].message);
+    }
   }
 }
 
@@ -943,6 +969,33 @@ export async function fetchLinearCapture(
     projectMilestoneNodes,
     scope,
   );
+  const governedProjectIds = new Set(
+    programScope?.projectInitiatives.map((project) => project.projectId) ?? [],
+  );
+  const expectedProjectDocumentIds = new Set(
+    programScope?.schemaVersion === 3
+      ? [
+          ...programScope.canonicalProjectDocuments,
+          ...programScope.supplementaryDocuments,
+        ].map((document) => document.id)
+      : [],
+  );
+  const expectedDecisionIdentifiers = new Set(
+    programScope?.schemaVersion === 3
+      ? programScope.projectDocumentDecisionContract.trackedDecisions.map(
+          (decision) => decision.decisionIdentifier,
+        )
+      : [],
+  );
+  const projectDocumentSelection = programScope?.schemaVersion === 3
+    ? linearProjectDocumentCaptureSelection(
+      documentNodes,
+      expectedProjectDocumentIds,
+      governedProjectIds,
+      programScope.canonicalProjectDocuments,
+      programScope.supplementaryDocuments,
+    )
+    : { governed: [], conflicts: [] };
   const program = programScope
     ? {
         initiatives: initiativeNodes
@@ -989,6 +1042,46 @@ export async function fetchLinearCapture(
               .sort(),
           }))
           .sort((left, right) => left.projectId.localeCompare(right.projectId)),
+        ...(programScope.schemaVersion === 3
+          ? {
+              projectDocuments: projectDocumentSelection.governed
+                .map((document) =>
+                  linearProjectDocumentFingerprint(
+                    { ...document, content: document.content ?? null },
+                    descriptionFingerprint,
+                    linearPlanningSectionHeadings,
+                  )
+                )
+                .sort((left, right) => left.id.localeCompare(right.id)),
+              projectDocumentConflicts: projectDocumentSelection.conflicts
+                .sort((left, right) => left.id.localeCompare(right.id)),
+              decisionIssues: issueNodes
+                .filter((issue) => expectedDecisionIdentifiers.has(issue.identifier))
+                .map((issue) => ({
+                  identifier: issue.identifier,
+                  title: issue.title,
+                  url: issue.url,
+                  descriptionFingerprint: descriptionFingerprint(issue.description),
+                  sectionHeadings: linearPlanningSectionHeadings(issue.description),
+                  archivedAt: issue.archivedAt,
+                  stateType: issue.state.type,
+                  labels: issue.labels.nodes
+                    .map((label) => ({
+                      id: label.id,
+                      name: label.name,
+                      groupId: label.parent?.id ?? "",
+                      groupName: label.parent?.name ?? "",
+                    }))
+                    .sort((left, right) => left.id.localeCompare(right.id)),
+                  projectId: issue.project?.id ?? null,
+                  relations: [...(relationsByIssue.get(issue.identifier) ?? [])]
+                    .sort(),
+                }))
+                .sort((left, right) =>
+                  left.identifier.localeCompare(right.identifier)
+                ),
+            }
+          : {}),
       }
     : undefined;
   if (programScope && program) assertLinearProgramScope(programScope, program);
@@ -1110,6 +1203,9 @@ export async function fetchLinearCapture(
       .sort((left, right) => left.id.localeCompare(right.id)),
     ...(program ? { program } : {}),
   };
+  if (programScope) {
+    assertLinearPlanningContractFingerprints(programScope, fingerprint);
+  }
   return {
     fingerprint,
     issueDescriptions: issueNodes
@@ -1222,6 +1318,47 @@ export function canonicalLinearFingerprint(
             documents: [...fingerprint.program.documents].sort((left, right) =>
               left.id.localeCompare(right.id)
             ),
+            ...(fingerprint.program.projectDocuments
+              ? {
+                  projectDocuments: [...fingerprint.program.projectDocuments]
+                    .map((document) => ({
+                      ...document,
+                      masterSpecSections: [...document.masterSpecSections].sort(),
+                      unresolvedDecisionReferences: [
+                        ...document.unresolvedDecisionReferences,
+                      ].sort((left, right) =>
+                        left.identifier.localeCompare(right.identifier)
+                      ),
+                      contentPolicyFindings: [
+                        ...document.contentPolicyFindings,
+                      ].sort(),
+                    }))
+                    .sort((left, right) => left.id.localeCompare(right.id)),
+                }
+              : {}),
+            ...(fingerprint.program.projectDocumentConflicts
+              ? {
+                  projectDocumentConflicts: [
+                    ...fingerprint.program.projectDocumentConflicts,
+                  ].sort((left, right) => left.id.localeCompare(right.id)),
+                }
+              : {}),
+            ...(fingerprint.program.decisionIssues
+              ? {
+                  decisionIssues: [...fingerprint.program.decisionIssues]
+                    .map((issue) => ({
+                      ...issue,
+                      sectionHeadings: [...issue.sectionHeadings],
+                      labels: [...issue.labels].sort((left, right) =>
+                        left.id.localeCompare(right.id)
+                      ),
+                      relations: [...issue.relations].sort(),
+                    }))
+                    .sort((left, right) =>
+                      left.identifier.localeCompare(right.identifier)
+                    ),
+                }
+              : {}),
             projectInitiatives: [...fingerprint.program.projectInitiatives]
               .map((project) => ({
                 ...project,

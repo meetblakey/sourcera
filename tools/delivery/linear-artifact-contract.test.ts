@@ -20,7 +20,7 @@ test("keeps raw Linear descriptions runner-local and uploads only proof artifact
   );
   assert.match(
     workflow,
-    /tools\/delivery\/linear-fingerprint-overlay\.ts --snapshot delivery\/linear-snapshot\.json --fingerprint \/tmp\/linear-fingerprint\.json --receipt \/tmp\/linear-capture-receipt\.json --ticket-integrity \/tmp\/linear-ticket-integrity\.json --linear-project-scope delivery\/linear-project-scope\.json --dispositions delivery\/dispositions\.json --stamp \/tmp\/linear-runtime-stamp\.json --runtime-dependencies delivery\/runtime-gate-dependencies\.json --releases delivery\/releases\.json --out \/tmp\/linear-snapshot-candidate\.json --candidate-receipt-out \/tmp\/linear-candidate-receipt\.json/,
+    /tools\/delivery\/linear-fingerprint-overlay\.ts --snapshot delivery\/linear-snapshot\.json --fingerprint \/tmp\/linear-fingerprint\.json --receipt \/tmp\/linear-capture-receipt\.json --ticket-integrity \/tmp\/linear-ticket-integrity\.json --linear-project-scope delivery\/linear-project-scope\.json --linear-program-scope delivery\/linear-program-scope\.json --dispositions delivery\/dispositions\.json --stamp \/tmp\/linear-runtime-stamp\.json --runtime-dependencies delivery\/runtime-gate-dependencies\.json --releases delivery\/releases\.json --out \/tmp\/linear-snapshot-candidate\.json --candidate-receipt-out \/tmp\/linear-candidate-receipt\.json/,
   );
   assert.match(
     workflow,
