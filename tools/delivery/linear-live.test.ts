@@ -1,11 +1,23 @@
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  chmodSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  assertLinearNativeIdentityMatchesFingerprint,
   canonicalLinearRelationKey,
   committedLinearDriftDiff,
   confirmLinearCaptureConsistency,
@@ -172,6 +184,69 @@ test("bounded consistency capture rejects fingerprint drift explicitly", async (
   assert.equal(calls, 2);
 });
 
+test("bounded consistency capture rejects native identity drift", async () => {
+  const first = consistencyCapture("first");
+  const second = consistencyCapture("second");
+  (first as unknown as { nativeIdentity: unknown }).nativeIdentity = {
+    schemaVersion: 1,
+    issues: [],
+    labels: [],
+    relations: [{ id: "relation-1", canonicalKey: "related:PLA-1:PLA-2" }],
+    teams: [],
+    workflowStates: [],
+    users: [],
+    initiatives: [],
+    documents: [],
+    coverage: {},
+  };
+  (second as unknown as { nativeIdentity: unknown }).nativeIdentity = {
+    ...structuredClone(
+      (first as unknown as { nativeIdentity: object }).nativeIdentity,
+    ),
+    relations: [{ id: "relation-2", canonicalKey: "related:PLA-1:PLA-2" }],
+  };
+  (first as unknown as { documents: unknown }).documents = {
+    schemaVersion: 1,
+    documents: [],
+  };
+  (second as unknown as { documents: unknown }).documents = structuredClone(
+    (first as unknown as { documents: object }).documents,
+  );
+
+  let calls = 0;
+  await assert.rejects(
+    () =>
+      confirmLinearCaptureConsistency(async () =>
+        calls++ === 0 ? first : second
+      ),
+    /native identity changed between bounded consistency reads/,
+  );
+  assert.equal(calls, 2);
+});
+
+test("bounded consistency capture rejects raw document drift", async () => {
+  const first = consistencyCapture("first");
+  const second = consistencyCapture("second");
+  (first as unknown as { documents: unknown }).documents = {
+    schemaVersion: 1,
+    documents: [{ id: "document-1", content: "first" }],
+  };
+  (second as unknown as { documents: unknown }).documents = {
+    schemaVersion: 1,
+    documents: [{ id: "document-1", content: "second" }],
+  };
+
+  let calls = 0;
+  await assert.rejects(
+    () =>
+      confirmLinearCaptureConsistency(async () =>
+        calls++ === 0 ? first : second
+      ),
+    /raw documents changed between bounded consistency reads/,
+  );
+  assert.equal(calls, 2);
+});
+
 test("bounded consistency capture names the failed read", async () => {
   await assert.rejects(
     () =>
@@ -215,6 +290,1313 @@ test("uses one canonical key for GraphQL and OAuth relation names", () => {
   assert.equal(
     canonicalLinearRelationKey("similar", "PLA-2", "PLA-1"),
     "similar:PLA-1:PLA-2",
+  );
+});
+
+test("enhanced capture paginates native catalogs and preserves UUID assignments", async () => {
+  const labelCursors: Array<string | null> = [];
+  const teamCursors: Array<string | null> = [];
+  const stateCursors: Array<string | null> = [];
+  const userCursors: Array<string | null> = [];
+  const initiativeCursors: Array<string | null> = [];
+  const projectCursors: Array<string | null> = [];
+  const documentCursors: Array<string | null> = [];
+  const relation = {
+    id: "relation-1",
+    type: "related",
+    archivedAt: null,
+    issue: { id: "issue-1", identifier: "PLA-1" },
+    relatedIssue: { id: "issue-2", identifier: "PLA-2" },
+  };
+  const label = (id: string, name: string) => ({
+    id,
+    name,
+    color: "#123456",
+    archivedAt: null,
+    inheritedFrom: null,
+    isGroup: false,
+    parent: null,
+    team: { id: "team-1", key: "PLA" },
+  });
+  const issue = (
+    id: string,
+    identifier: string,
+    labels: {
+      nodes: ReturnType<typeof label>[];
+      pageInfo: { hasNextPage: boolean; endCursor: string | null };
+    },
+    relations: typeof relation[],
+    inverseRelations: typeof relation[],
+  ) => ({
+    id,
+    identifier,
+    title: identifier,
+    url: `https://linear.app/issue/${identifier}`,
+    description: `${identifier} description`,
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    estimate: 1,
+    priority: 2,
+    dueDate: null,
+    archivedAt: null,
+    state: { id: "state-1", name: "Backlog", type: "backlog" },
+    labels,
+    assignee: id === "issue-1"
+      ? { id: "user-1", name: "Blake Rowley" }
+      : null,
+    team: { id: "team-1", key: "PLA" },
+    cycle: null,
+    project: null,
+    projectMilestone: null,
+    parent: null,
+    releases: completeConnection([]),
+    relations: completeConnection(relations),
+    inverseRelations: completeConnection(inverseRelations),
+  });
+  const fetcher: typeof fetch = withEmptyProjectInventories(
+    async (_input, init) => {
+      const body = JSON.parse(String(init?.body)) as {
+        query: string;
+        variables: { id?: string; after?: string | null };
+      };
+      if (body.query.includes("DeliveryOrganization")) {
+        return response({
+          data: {
+            organization: {
+              id: "workspace-1",
+              name: "Sourcera",
+              urlKey: "sourcera",
+              archivedAt: null,
+            },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryIssueLabelAssignments")) {
+        assert.equal(body.variables.id, "issue-1");
+        assert.equal(body.variables.after, "issue-labels-next");
+        return response({
+          data: {
+            issue: {
+              labels: completeConnection([label("label-2", "human-only")]),
+            },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryIssues")) {
+        return response({
+          data: {
+            issues: completeConnection([
+              issue(
+                "issue-1",
+                "PLA-1",
+                {
+                  nodes: [label("label-1", "codex-ready")],
+                  pageInfo: {
+                    hasNextPage: true,
+                    endCursor: "issue-labels-next",
+                  },
+                },
+                [relation],
+                [],
+              ),
+              issue(
+                "issue-2",
+                "PLA-2",
+                completeConnection([label("label-2", "human-only")]),
+                [],
+                [relation],
+              ),
+            ]),
+          },
+        });
+      }
+      if (body.query.includes("DeliveryIssueLabels")) {
+        labelCursors.push(body.variables.after ?? null);
+        return response({
+          data: {
+            issueLabels: body.variables.after
+              ? completeConnection([label("label-2", "human-only")])
+              : {
+                  nodes: [label("label-1", "codex-ready")],
+                  pageInfo: { hasNextPage: true, endCursor: "labels-next" },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryTeams")) {
+        teamCursors.push(body.variables.after ?? null);
+        return response({
+          data: {
+            teams: body.variables.after
+              ? completeConnection([
+                  {
+                    id: "team-2",
+                    key: "BUY",
+                    name: "Buyer",
+                    archivedAt: null,
+                  },
+                ])
+              : {
+                  nodes: [
+                    {
+                      id: "team-1",
+                      key: "PLA",
+                      name: "Platform",
+                      archivedAt: null,
+                    },
+                  ],
+                  pageInfo: { hasNextPage: true, endCursor: "teams-next" },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryWorkflowStates")) {
+        stateCursors.push(body.variables.after ?? null);
+        return response({
+          data: {
+            workflowStates: body.variables.after
+              ? completeConnection([
+                  {
+                    id: "state-2",
+                    name: "Done",
+                    type: "completed",
+                    color: "#00ff00",
+                    position: 2,
+                    archivedAt: null,
+                    team: { id: "team-1", key: "PLA" },
+                  },
+                ])
+              : {
+                  nodes: [
+                    {
+                      id: "state-1",
+                      name: "Backlog",
+                      type: "backlog",
+                      color: "#cccccc",
+                      position: 1,
+                      archivedAt: null,
+                      team: { id: "team-1", key: "PLA" },
+                    },
+                  ],
+                  pageInfo: { hasNextPage: true, endCursor: "states-next" },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryUsers")) {
+        userCursors.push(body.variables.after ?? null);
+        return response({
+          data: {
+            users: body.variables.after
+              ? completeConnection([
+                  {
+                    id: "user-2",
+                    name: "Linear",
+                    displayName: "Linear",
+                    active: true,
+                    app: true,
+                    guest: false,
+                    archivedAt: null,
+                  },
+                ])
+              : {
+                  nodes: [
+                    {
+                      id: "user-1",
+                      name: "Blake Rowley",
+                      displayName: "Blake",
+                      active: true,
+                      app: false,
+                      guest: false,
+                      archivedAt: null,
+                    },
+                  ],
+                  pageInfo: { hasNextPage: true, endCursor: "users-next" },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryInitiatives")) {
+        initiativeCursors.push(body.variables.after ?? null);
+        return response({
+          data: {
+            initiatives: body.variables.after
+              ? completeConnection([
+                  {
+                    id: "initiative-2",
+                    name: "Buyer outcome",
+                    content: "Buyer initiative",
+                    description: "Buyer outcome",
+                    updatedAt: "2026-07-27T00:00:00.000Z",
+                    archivedAt: null,
+                    owner: null,
+                    status: "planned",
+                    priority: 2,
+                    health: null,
+                    healthUpdatedAt: null,
+                    startedAt: null,
+                    targetDate: null,
+                    targetDateResolution: null,
+                    parentInitiative: {
+                      id: "initiative-1",
+                      name: "Platform outcome",
+                    },
+                  },
+                ])
+              : {
+                  nodes: [
+                    {
+                      id: "initiative-1",
+                      name: "Platform outcome",
+                      content: "Platform initiative",
+                      description: "Platform outcome",
+                      updatedAt: "2026-07-27T00:00:00.000Z",
+                      archivedAt: null,
+                      owner: { id: "user-1", name: "Blake Rowley" },
+                      status: "started",
+                      priority: 1,
+                      health: "onTrack",
+                      healthUpdatedAt: "2026-07-27T00:00:00.000Z",
+                      startedAt: "2026-07-01T00:00:00.000Z",
+                      targetDate: null,
+                      targetDateResolution: null,
+                      parentInitiative: null,
+                    },
+                  ],
+                  pageInfo: {
+                    hasNextPage: true,
+                    endCursor: "initiatives-next",
+                  },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryProjectCatalog")) {
+        projectCursors.push(body.variables.after ?? null);
+        const project = (
+          id: string,
+          name: string,
+          teamId: string,
+          key: string,
+          initiativeId: string,
+          initiativeName: string,
+        ) => ({
+          id,
+          name,
+          content: `${name} project`,
+          updatedAt: "2026-07-27T00:00:00.000Z",
+          archivedAt: null,
+          status: { id: `status-${id}`, name: "Planned", type: "planned" },
+          priority: 2,
+          lead: id === "project-1"
+            ? { id: "user-1", name: "Blake Rowley" }
+            : null,
+          startDate: "2026-07-01",
+          startDateResolution: null,
+          targetDate: "2026-09-30",
+          targetDateResolution: "quarter",
+          teams: completeConnection([{ id: teamId, key }]),
+          initiatives: completeConnection([
+            { id: initiativeId, name: initiativeName },
+          ]),
+        });
+        return response({
+          data: {
+            projects: body.variables.after
+              ? completeConnection([
+                  project(
+                    "project-2",
+                    "Buyer",
+                    "team-2",
+                    "BUY",
+                    "initiative-2",
+                    "Buyer outcome",
+                  ),
+                ])
+              : {
+                  nodes: [
+                    project(
+                      "project-1",
+                      "Platform",
+                      "team-1",
+                      "PLA",
+                      "initiative-1",
+                      "Platform outcome",
+                    ),
+                  ],
+                  pageInfo: {
+                    hasNextPage: true,
+                    endCursor: "project-catalog-next",
+                  },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryDocuments")) {
+        documentCursors.push(body.variables.after ?? null);
+        const document = (id: string, title: string, content: string) => ({
+          id,
+          title,
+          content,
+          updatedAt: "2026-07-27T00:00:00.000Z",
+          archivedAt: null,
+          initiative: null,
+          project: null,
+          team: { id: "team-1", key: "PLA" },
+          issue: null,
+          release: null,
+          cycle: null,
+        });
+        return response({
+          data: {
+            documents: body.variables.after
+              ? completeConnection([
+                  document("document-2", "Second", "Second body"),
+                ])
+              : {
+                  nodes: [document("document-1", "First", "First body")],
+                  pageInfo: {
+                    hasNextPage: true,
+                    endCursor: "documents-next",
+                  },
+                },
+          },
+        });
+      }
+      if (body.query.includes("DeliveryPipelines")) {
+        return response({
+          data: { releasePipelines: completeConnection([]) },
+        });
+      }
+      return response({ data: { releases: completeConnection([]) } });
+    },
+  );
+
+  const capture = await fetchLinearCapture(
+    fetcher,
+    "secret",
+    undefined,
+    undefined,
+    { nativeIdentity: true },
+  );
+
+  assert.deepEqual(labelCursors, [null, "labels-next"]);
+  assert.deepEqual(teamCursors, [null, "teams-next"]);
+  assert.deepEqual(stateCursors, [null, "states-next"]);
+  assert.deepEqual(userCursors, [null, "users-next"]);
+  assert.deepEqual(initiativeCursors, [null, "initiatives-next"]);
+  assert.deepEqual(projectCursors, [null, "project-catalog-next"]);
+  assert.deepEqual(documentCursors, [null, "documents-next"]);
+  assert.deepEqual(capture.nativeIdentity, {
+    schemaVersion: 1,
+    workspace: {
+      id: "workspace-1",
+      name: "Sourcera",
+      urlKey: "sourcera",
+      archivedAt: null,
+    },
+    rawDocumentIds: ["document-1", "document-2"],
+    issues: [
+      {
+        issueUuid: "issue-1",
+        identifier: "PLA-1",
+        title: "PLA-1",
+        archivedAt: null,
+        descriptionSha256: createHash("sha256")
+          .update("PLA-1 description")
+          .digest("hex"),
+        teamId: "team-1",
+        stateId: "state-1",
+        projectId: null,
+        estimate: 1,
+        priority: 2,
+        dueDate: null,
+        cycleId: null,
+        milestoneId: null,
+        parentIssueUuid: null,
+        assigneeId: "user-1",
+        labelIds: ["label-1", "label-2"],
+        releaseIds: [],
+        relationIds: ["relation-1"],
+      },
+      {
+        issueUuid: "issue-2",
+        identifier: "PLA-2",
+        title: "PLA-2",
+        archivedAt: null,
+        descriptionSha256: createHash("sha256")
+          .update("PLA-2 description")
+          .digest("hex"),
+        teamId: "team-1",
+        stateId: "state-1",
+        projectId: null,
+        estimate: 1,
+        priority: 2,
+        dueDate: null,
+        cycleId: null,
+        milestoneId: null,
+        parentIssueUuid: null,
+        assigneeId: null,
+        labelIds: ["label-2"],
+        releaseIds: [],
+        relationIds: ["relation-1"],
+      },
+    ],
+    labels: [
+      {
+        id: "label-1",
+        name: "codex-ready",
+        color: "#123456",
+        archivedAt: null,
+        inheritedFromId: null,
+        isGroup: false,
+        parentId: null,
+        parentName: null,
+        teamId: "team-1",
+        teamKey: "PLA",
+      },
+      {
+        id: "label-2",
+        name: "human-only",
+        color: "#123456",
+        archivedAt: null,
+        inheritedFromId: null,
+        isGroup: false,
+        parentId: null,
+        parentName: null,
+        teamId: "team-1",
+        teamKey: "PLA",
+      },
+    ],
+    relations: [
+      {
+        relationId: "relation-1",
+        canonicalKey: "related:PLA-1:PLA-2",
+        type: "related",
+        archivedAt: null,
+        issueId: "issue-1",
+        issueIdentifier: "PLA-1",
+        relatedIssueId: "issue-2",
+        relatedIssueIdentifier: "PLA-2",
+      },
+    ],
+    projects: [
+      {
+        id: "project-1",
+        name: "Platform",
+        contentSha256: createHash("sha256")
+          .update("Platform project")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "status-project-1",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        leadId: "user-1",
+        startDate: "2026-07-01",
+        startDateResolution: null,
+        targetDate: "2026-09-30",
+        targetDateResolution: "quarter",
+        teamIds: ["team-1"],
+        initiativeIds: ["initiative-1"],
+      },
+      {
+        id: "project-2",
+        name: "Buyer",
+        contentSha256: createHash("sha256")
+          .update("Buyer project")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "status-project-2",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        leadId: null,
+        startDate: "2026-07-01",
+        startDateResolution: null,
+        targetDate: "2026-09-30",
+        targetDateResolution: "quarter",
+        teamIds: ["team-2"],
+        initiativeIds: ["initiative-2"],
+      },
+    ],
+    teams: [
+      {
+        id: "team-1",
+        key: "PLA",
+        name: "Platform",
+        archivedAt: null,
+      },
+      {
+        id: "team-2",
+        key: "BUY",
+        name: "Buyer",
+        archivedAt: null,
+      },
+    ],
+    workflowStates: [
+      {
+        id: "state-1",
+        name: "Backlog",
+        type: "backlog",
+        color: "#cccccc",
+        position: 1,
+        archivedAt: null,
+        teamId: "team-1",
+        teamKey: "PLA",
+      },
+      {
+        id: "state-2",
+        name: "Done",
+        type: "completed",
+        color: "#00ff00",
+        position: 2,
+        archivedAt: null,
+        teamId: "team-1",
+        teamKey: "PLA",
+      },
+    ],
+    users: [
+      {
+        id: "user-1",
+        name: "Blake Rowley",
+        displayName: "Blake",
+        active: true,
+        app: false,
+        guest: false,
+        archivedAt: null,
+      },
+      {
+        id: "user-2",
+        name: "Linear",
+        displayName: "Linear",
+        active: true,
+        app: true,
+        guest: false,
+        archivedAt: null,
+      },
+    ],
+    initiatives: [
+      {
+        id: "initiative-1",
+        name: "Platform outcome",
+        contentSha256: createHash("sha256")
+          .update("Platform initiative")
+          .digest("hex"),
+        descriptionSha256: createHash("sha256")
+          .update("Platform outcome")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        ownerId: "user-1",
+        status: "started",
+        priority: 1,
+        health: "onTrack",
+        healthUpdatedAt: "2026-07-27T00:00:00.000Z",
+        startedAt: "2026-07-01T00:00:00.000Z",
+        targetDate: null,
+        targetDateResolution: null,
+        parentInitiativeId: null,
+      },
+      {
+        id: "initiative-2",
+        name: "Buyer outcome",
+        contentSha256: createHash("sha256")
+          .update("Buyer initiative")
+          .digest("hex"),
+        descriptionSha256: createHash("sha256")
+          .update("Buyer outcome")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        ownerId: null,
+        status: "planned",
+        priority: 2,
+        health: null,
+        healthUpdatedAt: null,
+        startedAt: null,
+        targetDate: null,
+        targetDateResolution: null,
+        parentInitiativeId: "initiative-1",
+      },
+    ],
+    releasePipelines: [],
+    releases: [],
+    projectMilestones: [],
+    cycles: [],
+    documents: [
+      {
+        id: "document-1",
+        title: "First",
+        contentSha256: createHash("sha256")
+          .update("First body")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        initiativeId: null,
+        projectId: null,
+        teamId: "team-1",
+        issueId: null,
+        releaseId: null,
+        cycleId: null,
+      },
+      {
+        id: "document-2",
+        title: "Second",
+        contentSha256: createHash("sha256")
+          .update("Second body")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        initiativeId: null,
+        projectId: null,
+        teamId: "team-1",
+        issueId: null,
+        releaseId: null,
+        cycleId: null,
+      },
+    ],
+    coverage: {
+      complete: true,
+      totals: {
+        issues: 2,
+        labels: 2,
+        labelAssignments: 3,
+        relations: 1,
+        teams: 2,
+        workflowStates: 2,
+        users: 2,
+        initiatives: 2,
+        projects: 2,
+        releasePipelines: 0,
+        releases: 0,
+        projectMilestones: 0,
+        cycles: 0,
+        documents: 2,
+      },
+      topLevel: {
+        issues: {
+          terminal: true,
+          pages: 1,
+          rows: 2,
+          finalCursor: null,
+          attempts: 1,
+        },
+        labels: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+        teams: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+        workflowStates: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+        users: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+        initiatives: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+        projects: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+        releasePipelines: {
+          terminal: true,
+          pages: 1,
+          rows: 0,
+          finalCursor: null,
+          attempts: 1,
+        },
+        releases: {
+          terminal: true,
+          pages: 1,
+          rows: 0,
+          finalCursor: null,
+          attempts: 1,
+        },
+        projectMilestones: {
+          terminal: true,
+          pages: 1,
+          rows: 0,
+          finalCursor: null,
+          attempts: 1,
+        },
+        cycles: {
+          terminal: true,
+          pages: 1,
+          rows: 0,
+          finalCursor: null,
+          attempts: 1,
+        },
+        documents: {
+          terminal: true,
+          pages: 2,
+          rows: 2,
+          finalCursor: null,
+          attempts: 2,
+        },
+      },
+      perIssue: [
+        {
+          issueUuid: "issue-1",
+          identifier: "PLA-1",
+          labels: {
+            terminal: true,
+            pages: 2,
+            rows: 2,
+            finalCursor: null,
+            attempts: 2,
+          },
+          relations: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+          inverseRelations: {
+            terminal: true,
+            pages: 1,
+            rows: 0,
+            finalCursor: null,
+            attempts: 1,
+          },
+        },
+        {
+          issueUuid: "issue-2",
+          identifier: "PLA-2",
+          labels: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+          relations: {
+            terminal: true,
+            pages: 1,
+            rows: 0,
+            finalCursor: null,
+            attempts: 1,
+          },
+          inverseRelations: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+        },
+      ],
+      perProject: [
+        {
+          projectId: "project-1",
+          teams: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+          initiatives: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+        },
+        {
+          projectId: "project-2",
+          teams: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+          initiatives: {
+            terminal: true,
+            pages: 1,
+            rows: 1,
+            finalCursor: null,
+            attempts: 1,
+          },
+        },
+      ],
+    },
+  });
+  const withoutWorkspace = structuredClone(capture.nativeIdentity!);
+  delete (
+    withoutWorkspace as unknown as {
+      workspace?: unknown;
+    }
+  ).workspace;
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        withoutWorkspace,
+      ),
+    /workspace identity/,
+  );
+  assert.deepEqual(capture.documents, {
+    schemaVersion: 1,
+    documents: [
+      {
+        id: "document-1",
+        title: "First",
+        content: "First body",
+        contentSha256: createHash("sha256")
+          .update("First body")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        initiativeId: null,
+        projectId: null,
+        teamId: "team-1",
+        issueId: null,
+        releaseId: null,
+        cycleId: null,
+      },
+      {
+        id: "document-2",
+        title: "Second",
+        content: "Second body",
+        contentSha256: createHash("sha256")
+          .update("Second body")
+          .digest("hex"),
+        updatedAt: "2026-07-27T00:00:00.000Z",
+        archivedAt: null,
+        initiativeId: null,
+        projectId: null,
+        teamId: "team-1",
+        issueId: null,
+        releaseId: null,
+        cycleId: null,
+      },
+    ],
+  });
+});
+
+test("enhanced capture preserves governed planning metadata and native document parents", async () => {
+  const requested: string[] = [];
+  const project = {
+    id: "project-1",
+    name: "Platform",
+    content: "Project contract",
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    status: { id: "project-status-1", name: "In Progress", type: "started" },
+    priority: 1,
+    lead: { id: "user-1", name: "Blake" },
+    startDate: "2026-07-01",
+    startDateResolution: "month",
+    targetDate: "2026-09-30",
+    targetDateResolution: "quarter",
+  };
+  const initiative = {
+    id: "initiative-1",
+    name: "Platform outcome",
+    content: "Initiative contract",
+    description: "Strategic outcome",
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    owner: { id: "user-1", name: "Blake" },
+    status: "started",
+    priority: 1,
+    health: "onTrack",
+    healthUpdatedAt: "2026-07-26T00:00:00.000Z",
+    startedAt: "2026-07-01T00:00:00.000Z",
+    targetDate: "2026-09-30",
+    targetDateResolution: "quarter",
+    parentInitiative: null,
+  };
+  const pipeline = {
+    id: "pipeline-1",
+    name: "Production",
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    type: "scheduled",
+    isProduction: true,
+    teams: completeConnection([{ id: "team-1", key: "PLA" }]),
+    stages: completeConnection([{
+      id: "stage-1",
+      name: "Planned",
+      type: "planned",
+      archivedAt: null,
+      position: 0,
+      frozen: false,
+    }]),
+  };
+  const release = {
+    id: "release-1",
+    name: "R0",
+    description: "Release contract",
+    version: "R0",
+    commitSha: "0123456789abcdef0123456789abcdef01234567",
+    startDate: "2026-07-01",
+    startedAt: "2026-07-01T00:00:00.000Z",
+    targetDate: "2026-07-31",
+    completedAt: null,
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    pipeline: { id: "pipeline-1" },
+    stage: { id: "stage-1", name: "Planned", type: "planned" },
+  };
+  const milestone = {
+    id: "milestone-1",
+    name: "Evidence",
+    description: "Evidence contract",
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    targetDate: "2026-07-31",
+    status: "unstarted",
+    project: { id: "project-1", name: "Platform" },
+  };
+  const cycle = {
+    id: "cycle-1",
+    number: 1,
+    name: "Cycle 1",
+    description: "Cycle contract",
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    startsAt: "2026-07-01T00:00:00.000Z",
+    endsAt: "2026-07-14T00:00:00.000Z",
+    completedAt: null,
+    team: { id: "team-1", key: "PLA" },
+    inheritedFrom: null,
+  };
+  const fetcher: typeof fetch = async (_input, init) => {
+    const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+    requested.push(query);
+    if (query.includes("DeliveryOrganization")) {
+      return response({
+        data: {
+          organization: {
+            id: "workspace-1",
+            name: "Sourcera",
+            urlKey: "sourcera",
+            archivedAt: null,
+          },
+        },
+      });
+    }
+    if (query.includes("DeliveryIssues")) {
+      return response({ data: { issues: completeConnection([]) } });
+    }
+    if (query.includes("DeliveryIssueLabels")) {
+      return response({ data: { issueLabels: completeConnection([]) } });
+    }
+    if (query.includes("DeliveryTeams")) {
+      return response({
+        data: {
+          teams: completeConnection([{
+            id: "team-1",
+            key: "PLA",
+            name: "Platform",
+            archivedAt: null,
+          }]),
+        },
+      });
+    }
+    if (query.includes("DeliveryWorkflowStates")) {
+      return response({ data: { workflowStates: completeConnection([]) } });
+    }
+    if (query.includes("DeliveryUsers")) {
+      return response({
+        data: {
+          users: completeConnection([{
+            id: "user-1",
+            name: "Blake",
+            displayName: "Blake",
+            active: true,
+            app: false,
+            guest: false,
+            archivedAt: null,
+          }]),
+        },
+      });
+    }
+    if (query.includes("DeliveryInitiatives")) {
+      return response({ data: { initiatives: completeConnection([initiative]) } });
+    }
+    if (query.includes("DeliveryProjectCatalog")) {
+      return response({
+        data: {
+          projects: completeConnection([{
+            ...project,
+            teams: completeConnection([{ id: "team-1", key: "PLA" }]),
+            initiatives: completeConnection([{
+              id: "initiative-1",
+              name: "Platform outcome",
+            }]),
+          }]),
+        },
+      });
+    }
+    if (query.includes("DeliveryProjects")) {
+      return response({
+        data: {
+          projects: completeConnection([{
+            ...project,
+            initiatives: completeConnection([{
+              id: "initiative-1",
+              name: "Platform outcome",
+            }]),
+          }]),
+        },
+      });
+    }
+    if (query.includes("DeliveryProjectMilestones")) {
+      return response({ data: { projectMilestones: completeConnection([milestone]) } });
+    }
+    if (query.includes("DeliveryCycles")) {
+      return response({ data: { cycles: completeConnection([cycle]) } });
+    }
+    if (query.includes("DeliveryPipelines")) {
+      return response({ data: { releasePipelines: completeConnection([pipeline]) } });
+    }
+    if (query.includes("DeliveryReleases")) {
+      return response({ data: { releases: completeConnection([release]) } });
+    }
+    if (query.includes("DeliveryDocuments")) {
+      return response({
+        data: {
+          documents: completeConnection([
+            {
+              id: "document-release",
+              title: "",
+              content: "Release document",
+              updatedAt: "2026-07-27T00:00:00.000Z",
+              archivedAt: null,
+              initiative: null,
+              project: null,
+              team: null,
+              issue: null,
+              release: { id: "release-1", name: "R0", version: "R0" },
+              cycle: null,
+            },
+            {
+              id: "document-cycle",
+              title: "",
+              content: "Cycle document",
+              updatedAt: "2026-07-27T00:00:00.000Z",
+              archivedAt: null,
+              initiative: null,
+              project: null,
+              team: null,
+              issue: null,
+              release: null,
+              cycle: { id: "cycle-1", number: 1, name: "Cycle 1" },
+            },
+          ]),
+        },
+      });
+    }
+    throw new Error(`Unexpected query: ${query}`);
+  };
+
+  const capture = await fetchLinearCapture(
+    fetcher,
+    "secret",
+    undefined,
+    undefined,
+    { nativeIdentity: true },
+  );
+
+  assert.deepEqual(capture.nativeIdentity?.projects[0], {
+    id: "project-1",
+    name: "Platform",
+    contentSha256: createHash("sha256").update("Project contract").digest("hex"),
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    statusId: "project-status-1",
+    status: "In Progress",
+    statusType: "started",
+    priority: 1,
+    leadId: "user-1",
+    startDate: "2026-07-01",
+    startDateResolution: "month",
+    targetDate: "2026-09-30",
+    targetDateResolution: "quarter",
+    teamIds: ["team-1"],
+    initiativeIds: ["initiative-1"],
+  });
+  assert.deepEqual(
+    capture.nativeIdentity?.documents.map((document) => ({
+      title: document.title,
+      releaseId: document.releaseId,
+      cycleId: document.cycleId,
+    })),
+    [
+      { title: "", releaseId: null, cycleId: "cycle-1" },
+      { title: "", releaseId: "release-1", cycleId: null },
+    ],
+  );
+  assert.equal(capture.nativeIdentity?.releases[0].startedAt, release.startedAt);
+  assert.equal(capture.nativeIdentity?.cycles[0].teamId, "team-1");
+  const projectDrift = structuredClone(capture.nativeIdentity!);
+  projectDrift.projects[0].priority = 4;
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        projectDrift,
+      ),
+    /project project-1 does not match the accepted fingerprint/,
+  );
+  for (const [queryName, fields] of [
+    ["DeliveryProjectCatalog", ["status { id name type }", "startDateResolution", "targetDateResolution"]],
+    ["DeliveryInitiatives", ["content", "description", "startedAt", "targetDateResolution"]],
+    ["DeliveryReleases", ["startedAt", "completedAt", "stage { id name type }"]],
+    ["DeliveryCycles", ["completedAt", "team { id key }", "inheritedFrom { id }"]],
+  ] as const) {
+    const query = requested.find((candidate) => candidate.includes(queryName));
+    assert.ok(query);
+    for (const field of fields) assert.ok(query.includes(field), `${queryName} lacks ${field}`);
+  }
+});
+
+test("enhanced capture rejects duplicate or missing relation mirrors", async () => {
+  const relation = {
+    id: "relation-1",
+    type: "related",
+    archivedAt: null,
+    issue: { id: "issue-1", identifier: "PLA-1" },
+    relatedIssue: { id: "issue-2", identifier: "PLA-2" },
+  };
+  const issue = (
+    id: string,
+    identifier: string,
+    relations: typeof relation[],
+    inverseRelations: typeof relation[],
+  ) => ({
+    id,
+    identifier,
+    title: identifier,
+    url: `https://linear.app/issue/${identifier}`,
+    description: identifier,
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    estimate: 1,
+    priority: 2,
+    dueDate: null,
+    archivedAt: null,
+    state: { id: "state-1", name: "Backlog", type: "backlog" },
+    labels: completeConnection([]),
+    assignee: null,
+    team: { id: "team-1", key: "PLA" },
+    cycle: null,
+    project: null,
+    projectMilestone: null,
+    parent: null,
+    releases: completeConnection([]),
+    relations: completeConnection(relations),
+    inverseRelations: completeConnection(inverseRelations),
+  });
+  const fetcher: typeof fetch = withEmptyProjectInventories(
+    async (_input, init) => {
+      const query = (JSON.parse(String(init?.body)) as { query: string }).query;
+      if (query.includes("DeliveryIssues")) {
+        return response({
+          data: {
+            issues: completeConnection([
+              issue("issue-1", "PLA-1", [relation, relation], []),
+              issue("issue-2", "PLA-2", [], [relation]),
+            ]),
+          },
+        });
+      }
+      if (query.includes("DeliveryIssueLabels")) {
+        return response({ data: { issueLabels: completeConnection([]) } });
+      }
+      if (query.includes("DeliveryTeams")) {
+        return response({
+          data: {
+            teams: completeConnection([
+              {
+                id: "team-1",
+                key: "PLA",
+                name: "Platform",
+                archivedAt: null,
+              },
+            ]),
+          },
+        });
+      }
+      if (query.includes("DeliveryWorkflowStates")) {
+        return response({
+          data: {
+            workflowStates: completeConnection([
+              {
+                id: "state-1",
+                name: "Backlog",
+                type: "backlog",
+                color: "#cccccc",
+                position: 1,
+                archivedAt: null,
+                team: { id: "team-1", key: "PLA" },
+              },
+            ]),
+          },
+        });
+      }
+      if (query.includes("DeliveryUsers")) {
+        return response({ data: { users: completeConnection([]) } });
+      }
+      if (query.includes("DeliveryInitiatives")) {
+        return response({ data: { initiatives: completeConnection([]) } });
+      }
+      if (query.includes("DeliveryProjectCatalog")) {
+        return response({ data: { projects: completeConnection([]) } });
+      }
+      if (query.includes("DeliveryDocuments")) {
+        return response({ data: { documents: completeConnection([]) } });
+      }
+      if (query.includes("DeliveryPipelines")) {
+        return response({
+          data: { releasePipelines: completeConnection([]) },
+        });
+      }
+      return response({ data: { releases: completeConnection([]) } });
+    },
+  );
+
+  await assert.rejects(
+    () =>
+      fetchLinearCapture(
+        fetcher,
+        "secret",
+        undefined,
+        undefined,
+        { nativeIdentity: true },
+      ),
+    /relation-1.*exactly one forward\/inverse mirror pair/,
   );
 });
 
@@ -1022,6 +2404,8 @@ Completion.
         "project { id name }",
         "team { id key }",
         "issue { id identifier }",
+        "release { id name version }",
+        "cycle { id number name }",
       ]) {
         assert.match(query, new RegExp(field.replace(/[{}]/g, "\\$&")));
       }
@@ -1037,6 +2421,8 @@ Completion.
             project: null,
             team: { id: teamId, key: "PLA" },
             issue: null,
+            release: null,
+            cycle: null,
           }]),
         },
       });
@@ -1554,8 +2940,8 @@ test("deduplicates one relation UUID across directions and rejects distinct UUID
     const fetcher: typeof fetch = async (_input, init) => {
       const body = JSON.parse(String(init?.body)) as { query: string };
       if (body.query.includes("DeliveryIssues")) {
-        assert.match(body.query, /relations\(first: 100\)[\s\S]*nodes \{ id type/);
-        assert.match(body.query, /inverseRelations\(first: 100\)[\s\S]*nodes \{ id type/);
+        assert.match(body.query, /relations\(first: 100, includeArchived: true\)[\s\S]*nodes \{ id type/);
+        assert.match(body.query, /inverseRelations\(first: 100, includeArchived: true\)[\s\S]*nodes \{ id type/);
         return response({ data: { issues: completeConnection([{
           id: "uuid-1", identifier: "PLA-1", title: "First", description: "Description", updatedAt: "2026-07-14T01:00:00.000Z",
           estimate: 1, priority: 2, dueDate: null, archivedAt: null, state: { id: "state", name: "Backlog", type: "backlog" },
@@ -1612,7 +2998,10 @@ for (const field of [
           "relations",
           "inverseRelations",
         ]) {
-          assert.match(body.query, new RegExp(`${nestedField}\\(first: 100\\)`));
+          assert.match(
+            body.query,
+            new RegExp(`${nestedField}\\(first: 100, includeArchived: true\\)`),
+          );
         }
         return response({
           data: {
@@ -1685,8 +3074,8 @@ for (const field of ["teams", "stages"] as const) {
           });
         }
         if (body.query.includes("DeliveryPipelines")) {
-          assert.match(body.query, /teams\(first: 100\)/);
-          assert.match(body.query, /stages\(first: 100\)/);
+          assert.match(body.query, /teams\(first: 100, includeArchived: true\)/);
+          assert.match(body.query, /stages\(first: 100, includeArchived: true\)/);
           return response({
             data: {
               releasePipelines: {
@@ -1842,7 +3231,19 @@ test("CLI compares a fixture with the committed snapshot", () => {
       {
         id: "project-1",
         name: "Sourcera Production",
+        descriptionFingerprint: createHash("sha256").update("").digest("hex"),
         updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "project-status-1",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        lead: null,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
       },
     ],
     projectMilestones: [
@@ -1946,6 +3347,7 @@ test("CLI capture writes the exact fingerprint and a provenance receipt", () => 
         id: "project-1",
         name: "Sourcera Production",
         updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
       },
     ],
     projectMilestones: [
@@ -2023,6 +3425,832 @@ test("CLI capture writes the exact fingerprint and a provenance receipt", () => 
     assert.equal(run.stdout, "");
     assert.equal(run.stderr, "");
   } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+function prepareEnhancedCliFixture(dir: string) {
+  const fingerprint = {
+    issues: [],
+    releasePipelines: [],
+    releases: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        descriptionFingerprint: createHash("sha256").update("").digest("hex"),
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "project-status-1",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        lead: null,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
+      },
+    ],
+    projectMilestones: [],
+    cycles: [],
+  };
+  const coverage = (rows: number) => ({
+    terminal: true,
+    pages: 1,
+    rows,
+    finalCursor: null,
+    attempts: 1,
+  });
+  const nativeIdentity = {
+    schemaVersion: 1,
+    workspace: {
+      id: "workspace-1",
+      name: "Sourcera",
+      urlKey: "sourcera",
+      archivedAt: null,
+    },
+    rawDocumentIds: [],
+    issues: [],
+    labels: [],
+    relations: [],
+    teams: [],
+    workflowStates: [],
+    users: [],
+    initiatives: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        contentSha256: createHash("sha256").update("").digest("hex"),
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "project-status-1",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
+        teamIds: [],
+        initiativeIds: [],
+      },
+    ],
+    releasePipelines: [],
+    releases: [],
+    projectMilestones: [],
+    cycles: [],
+    documents: [],
+    coverage: {
+      complete: true,
+      totals: {
+        issues: 0,
+        labels: 0,
+        labelAssignments: 0,
+        relations: 0,
+        teams: 0,
+        workflowStates: 0,
+        users: 0,
+        initiatives: 0,
+        projects: 1,
+        releasePipelines: 0,
+        releases: 0,
+        projectMilestones: 0,
+        cycles: 0,
+        documents: 0,
+      },
+      topLevel: {
+        issues: coverage(0),
+        labels: coverage(0),
+        teams: coverage(0),
+        workflowStates: coverage(0),
+        users: coverage(0),
+        initiatives: coverage(0),
+        projects: coverage(1),
+        releasePipelines: coverage(0),
+        releases: coverage(0),
+        projectMilestones: coverage(0),
+        cycles: coverage(0),
+        documents: coverage(0),
+      },
+      perIssue: [],
+      perProject: [
+        {
+          projectId: "project-1",
+          teams: coverage(0),
+          initiatives: coverage(0),
+        },
+      ],
+    },
+  };
+  const documents = { schemaVersion: 1, documents: [] };
+  const fixture = join(dir, "fixture.json");
+  const scope = join(dir, "linear-project-scope.json");
+  const accepted = join(dir, "accepted-fingerprint.json");
+  const out = join(dir, "fingerprint.json");
+  const descriptionsOut = join(dir, "descriptions.json");
+  const nativeOut = join(dir, "native-identity.json");
+  const documentsOut = join(dir, "documents.json");
+  const receipt = join(dir, "receipt.json");
+  const fingerprintJson = `${JSON.stringify(fingerprint, null, 2)}\n`;
+  writeFileSync(
+    fixture,
+    JSON.stringify({
+      fingerprint,
+      issueDescriptions: [],
+      nativeIdentity,
+      documents,
+    }),
+  );
+  writeFileSync(
+    scope,
+    JSON.stringify({
+      schemaVersion: 1,
+      projects: [{ id: "project-1", name: "Sourcera Production" }],
+    }),
+  );
+  writeFileSync(accepted, fingerprintJson);
+  return {
+    accepted,
+    descriptionsOut,
+    documentsOut,
+    fixture,
+    nativeOut,
+    out,
+    receipt,
+    scope,
+  };
+}
+
+const enhancedCliEnvironment = {
+  GITHUB_REPOSITORY: "meetblakey/sourcera",
+  GITHUB_SHA: "0123456789abcdef0123456789abcdef01234567",
+  GITHUB_REF: "refs/heads/main",
+  GITHUB_RUN_ID: "123",
+  GITHUB_RUN_ATTEMPT: "2",
+};
+
+function enhancedCliArguments(
+  files: ReturnType<typeof prepareEnhancedCliFixture>,
+): string[] {
+  return [
+    "--import",
+    "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+    "tools/delivery/linear-live.ts",
+    "--fixture",
+    files.fixture,
+    "--linear-project-scope",
+    files.scope,
+    "--accepted-fingerprint",
+    files.accepted,
+    "--out",
+    files.out,
+    "--descriptions-out",
+    files.descriptionsOut,
+    "--native-identity-out",
+    files.nativeOut,
+    "--documents-out",
+    files.documentsOut,
+    "--receipt-out",
+    files.receipt,
+  ];
+}
+
+test("CLI enhanced capture writes native artifacts and a SHA-bound v2 receipt", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-native-capture-"));
+  const fingerprint = {
+    issues: [],
+    releasePipelines: [],
+    releases: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        descriptionFingerprint: createHash("sha256").update("").digest("hex"),
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "project-status-1",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        lead: null,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
+      },
+    ],
+    projectMilestones: [],
+    cycles: [],
+  };
+  const documentMetadata = {
+    id: "document-1",
+    title: "Master",
+    contentSha256: createHash("sha256").update("Raw body").digest("hex"),
+    updatedAt: "2026-07-27T00:00:00.000Z",
+    archivedAt: null,
+    initiativeId: null,
+    projectId: "project-1",
+    teamId: null,
+    issueId: null,
+    releaseId: null,
+    cycleId: null,
+  };
+  const connectionCoverage = (rows: number) => ({
+    terminal: true,
+    pages: 1,
+    rows,
+    finalCursor: null,
+    attempts: 1,
+  });
+  const nativeIdentity = {
+    schemaVersion: 1,
+    workspace: {
+      id: "workspace-1",
+      name: "Sourcera",
+      urlKey: "sourcera",
+      archivedAt: null,
+    },
+    rawDocumentIds: ["document-1"],
+    issues: [],
+    labels: [],
+    relations: [],
+    teams: [],
+    workflowStates: [],
+    users: [],
+    initiatives: [],
+    projects: [
+      {
+        id: "project-1",
+        name: "Sourcera Production",
+        contentSha256: createHash("sha256").update("").digest("hex"),
+        updatedAt: "2026-07-15T00:00:00.000Z",
+        archivedAt: null,
+        statusId: "project-status-1",
+        status: "Planned",
+        statusType: "planned",
+        priority: 2,
+        leadId: null,
+        startDate: null,
+        startDateResolution: null,
+        targetDate: null,
+        targetDateResolution: null,
+        teamIds: [],
+        initiativeIds: [],
+      },
+    ],
+    releasePipelines: [],
+    releases: [],
+    projectMilestones: [],
+    cycles: [],
+    documents: [documentMetadata],
+    coverage: {
+      complete: true,
+      totals: {
+        issues: 0,
+        labels: 0,
+        labelAssignments: 0,
+        relations: 0,
+        teams: 0,
+        workflowStates: 0,
+        users: 0,
+        initiatives: 0,
+        projects: 1,
+        releasePipelines: 0,
+        releases: 0,
+        projectMilestones: 0,
+        cycles: 0,
+        documents: 1,
+      },
+      topLevel: {
+        issues: connectionCoverage(0),
+        labels: connectionCoverage(0),
+        teams: connectionCoverage(0),
+        workflowStates: connectionCoverage(0),
+        users: connectionCoverage(0),
+        initiatives: connectionCoverage(0),
+        projects: connectionCoverage(1),
+        releasePipelines: connectionCoverage(0),
+        releases: connectionCoverage(0),
+        projectMilestones: connectionCoverage(0),
+        cycles: connectionCoverage(0),
+        documents: connectionCoverage(1),
+      },
+      perIssue: [],
+      perProject: [
+        {
+          projectId: "project-1",
+          teams: {
+            terminal: true,
+            pages: 1,
+            rows: 0,
+            finalCursor: null,
+            attempts: 1,
+          },
+          initiatives: {
+            terminal: true,
+            pages: 1,
+            rows: 0,
+            finalCursor: null,
+            attempts: 1,
+          },
+        },
+      ],
+    },
+  };
+  const documents = {
+    schemaVersion: 1,
+    documents: [{ ...documentMetadata, content: "Raw body" }],
+  };
+  try {
+    const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
+    const accepted = join(dir, "accepted-fingerprint.json");
+    const out = join(dir, "fingerprint.json");
+    const descriptionsOut = join(dir, "descriptions.json");
+    const nativeOut = join(dir, "native-identity.json");
+    const documentsOut = join(dir, "documents.json");
+    const receipt = join(dir, "receipt.json");
+    const fingerprintJson = `${JSON.stringify(fingerprint, null, 2)}\n`;
+    writeFileSync(
+      fixture,
+      JSON.stringify({ fingerprint, issueDescriptions: [], nativeIdentity, documents }),
+    );
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Sourcera Production" }],
+      }),
+    );
+    writeFileSync(accepted, fingerprintJson);
+
+    const run = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+        "--accepted-fingerprint",
+        accepted,
+        "--out",
+        out,
+        "--descriptions-out",
+        descriptionsOut,
+        "--native-identity-out",
+        nativeOut,
+        "--documents-out",
+        documentsOut,
+        "--receipt-out",
+        receipt,
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          GITHUB_REPOSITORY: "meetblakey/sourcera",
+          GITHUB_SHA: "0123456789abcdef0123456789abcdef01234567",
+          GITHUB_REF: "refs/heads/main",
+          GITHUB_RUN_ID: "123",
+          GITHUB_RUN_ATTEMPT: "2",
+        },
+      },
+    );
+
+    assert.equal(run.status, 0, run.stderr);
+    const nativeJson = `${JSON.stringify(nativeIdentity, null, 2)}\n`;
+    const documentsJson = `${JSON.stringify(documents, null, 2)}\n`;
+    const descriptionsJson = `${JSON.stringify(
+      { schemaVersion: 1, issues: [] },
+      null,
+      2,
+    )}\n`;
+    assert.equal(readFileSync(out, "utf8"), fingerprintJson);
+    assert.equal(readFileSync(descriptionsOut, "utf8"), descriptionsJson);
+    assert.equal(readFileSync(nativeOut, "utf8"), nativeJson);
+    assert.equal(readFileSync(documentsOut, "utf8"), documentsJson);
+    assert.deepEqual(JSON.parse(readFileSync(receipt, "utf8")), {
+      schemaVersion: 2,
+      captureMode: "fixture",
+      capturedAt: JSON.parse(readFileSync(receipt, "utf8")).capturedAt,
+      fingerprintSha256: createHash("sha256")
+        .update(fingerprintJson)
+        .digest("hex"),
+      acceptedFingerprintSha256: createHash("sha256")
+        .update(fingerprintJson)
+        .digest("hex"),
+      artifactSha256s: {
+        fingerprint: createHash("sha256")
+          .update(fingerprintJson)
+          .digest("hex"),
+        nativeIdentity: createHash("sha256").update(nativeJson).digest("hex"),
+        documents: createHash("sha256").update(documentsJson).digest("hex"),
+        issueDescriptions: createHash("sha256")
+          .update(descriptionsJson)
+          .digest("hex"),
+      },
+      source: {
+        repository: "meetblakey/sourcera",
+        commit: "0123456789abcdef0123456789abcdef01234567",
+        ref: "refs/heads/main",
+        runId: "123",
+        runAttempt: "2",
+      },
+    });
+    for (const path of [
+      out,
+      descriptionsOut,
+      nativeOut,
+      documentsOut,
+      receipt,
+    ]) {
+      assert.equal(statSync(path).mode & 0o777, 0o600);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI enhanced capture rejects a different accepted fingerprint", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-native-mismatch-"));
+  try {
+    const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
+    const accepted = join(dir, "accepted.json");
+    const out = join(dir, "fingerprint.json");
+    const fingerprint = {
+      issues: [],
+      releasePipelines: [],
+      releases: [],
+      projects: [
+        {
+          id: "project-1",
+          name: "Sourcera Production",
+          updatedAt: "2026-07-15T00:00:00.000Z",
+        },
+      ],
+      projectMilestones: [],
+      cycles: [],
+    };
+    writeFileSync(
+      fixture,
+      JSON.stringify({
+        fingerprint,
+        issueDescriptions: [],
+        nativeIdentity: {
+          schemaVersion: 1,
+          workspace: {
+            id: "workspace-1",
+            name: "Sourcera",
+            urlKey: "sourcera",
+            archivedAt: null,
+          },
+          rawDocumentIds: [],
+          issues: [],
+          labels: [],
+          relations: [],
+          teams: [],
+          workflowStates: [],
+          projects: [],
+          documents: [],
+          coverage: {},
+        },
+        documents: { schemaVersion: 1, documents: [] },
+      }),
+    );
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Sourcera Production" }],
+      }),
+    );
+    writeFileSync(accepted, "{}\n");
+    const run = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+        "--accepted-fingerprint",
+        accepted,
+        "--out",
+        out,
+        "--descriptions-out",
+        join(dir, "descriptions.json"),
+        "--native-identity-out",
+        join(dir, "native.json"),
+        "--documents-out",
+        join(dir, "documents.json"),
+        "--receipt-out",
+        join(dir, "receipt.json"),
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          GITHUB_REPOSITORY: "meetblakey/sourcera",
+          GITHUB_SHA: "0123456789abcdef0123456789abcdef01234567",
+          GITHUB_REF: "refs/heads/main",
+          GITHUB_RUN_ID: "123",
+          GITHUB_RUN_ATTEMPT: "2",
+        },
+      },
+    );
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /accepted Linear fingerprint differs/);
+    assert.equal(existsSync(out), false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI enhanced capture requires the complete artifact set and provenance", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-native-required-"));
+  try {
+    const fixture = join(dir, "fixture.json");
+    const scope = join(dir, "linear-project-scope.json");
+    const accepted = join(dir, "accepted.json");
+    const fingerprint = {
+      issues: [],
+      releasePipelines: [],
+      releases: [],
+      projects: [
+        {
+          id: "project-1",
+          name: "Sourcera Production",
+          updatedAt: "2026-07-15T00:00:00.000Z",
+        },
+      ],
+      projectMilestones: [],
+      cycles: [],
+    };
+    writeFileSync(
+      fixture,
+      JSON.stringify({
+        fingerprint,
+        issueDescriptions: [],
+        nativeIdentity: {
+          schemaVersion: 1,
+          workspace: {
+            id: "workspace-1",
+            name: "Sourcera",
+            urlKey: "sourcera",
+            archivedAt: null,
+          },
+          rawDocumentIds: [],
+          issues: [],
+          labels: [],
+          relations: [],
+          teams: [],
+          workflowStates: [],
+          users: [],
+          initiatives: [],
+          projects: [],
+          documents: [],
+          coverage: {},
+        },
+        documents: { schemaVersion: 1, documents: [] },
+      }),
+    );
+    writeFileSync(
+      scope,
+      JSON.stringify({
+        schemaVersion: 1,
+        projects: [{ id: "project-1", name: "Sourcera Production" }],
+      }),
+    );
+    writeFileSync(accepted, `${JSON.stringify(fingerprint, null, 2)}\n`);
+
+    const partial = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+        "--native-identity-out",
+        join(dir, "partial-native.json"),
+      ],
+      { cwd: process.cwd(), encoding: "utf8" },
+    );
+    assert.equal(partial.status, 1);
+    assert.match(partial.stderr, /complete enhanced capture set/);
+    assert.equal(existsSync(join(dir, "partial-native.json")), false);
+
+    const missingProvenance = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/linear-live.ts",
+        "--fixture",
+        fixture,
+        "--linear-project-scope",
+        scope,
+        "--accepted-fingerprint",
+        accepted,
+        "--out",
+        join(dir, "fingerprint.json"),
+        "--descriptions-out",
+        join(dir, "descriptions.json"),
+        "--native-identity-out",
+        join(dir, "native.json"),
+        "--documents-out",
+        join(dir, "documents.json"),
+        "--receipt-out",
+        join(dir, "receipt.json"),
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          GITHUB_REPOSITORY: "",
+          GITHUB_SHA: "",
+          GITHUB_REF: "",
+          GITHUB_RUN_ID: "",
+          GITHUB_RUN_ATTEMPT: "",
+        },
+      },
+    );
+    assert.equal(missingProvenance.status, 1);
+    assert.match(missingProvenance.stderr, /GitHub provenance is incomplete/);
+    assert.equal(existsSync(join(dir, "fingerprint.json")), false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI enhanced capture requires exact issue description bytes", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-descriptions-required-"));
+  try {
+    const files = prepareEnhancedCliFixture(dir);
+    const fixture = JSON.parse(readFileSync(files.fixture, "utf8")) as Record<
+      string,
+      unknown
+    >;
+    delete fixture.issueDescriptions;
+    writeFileSync(files.fixture, JSON.stringify(fixture));
+    const run = spawnSync(process.execPath, enhancedCliArguments(files), {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, ...enhancedCliEnvironment },
+    });
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /issue description capture is unavailable/);
+    for (const path of [
+      files.out,
+      files.descriptionsOut,
+      files.nativeOut,
+      files.documentsOut,
+      files.receipt,
+    ]) {
+      assert.equal(existsSync(path), false);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI rejects unknown and duplicate flags", () => {
+  const base = [
+    "--import",
+    "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+    "tools/delivery/linear-live.ts",
+  ];
+  const unknown = spawnSync(
+    process.execPath,
+    [...base, "--not-a-linear-live-flag", "value"],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  assert.equal(unknown.status, 1);
+  assert.match(unknown.stderr, /Unknown argument --not-a-linear-live-flag/);
+
+  const duplicate = spawnSync(
+    process.execPath,
+    [...base, "--out", "/tmp/first.json", "--out", "/tmp/second.json"],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  assert.equal(duplicate.status, 1);
+  assert.match(duplicate.stderr, /Duplicate argument --out/);
+});
+
+test("CLI live enhanced capture requires the independent program scope", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-program-required-"));
+  try {
+    const files = prepareEnhancedCliFixture(dir);
+    const args = enhancedCliArguments(files);
+    const fixtureIndex = args.indexOf("--fixture");
+    args.splice(fixtureIndex, 2);
+    const run = spawnSync(process.execPath, args, {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, ...enhancedCliEnvironment, LINEAR_API_KEY: "" },
+    });
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /Live enhanced capture requires .*program scope/i);
+    for (const path of [
+      files.out,
+      files.descriptionsOut,
+      files.nativeOut,
+      files.documentsOut,
+      files.receipt,
+    ]) {
+      assert.equal(existsSync(path), false);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI enhanced capture rejects canonical path aliases", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-path-alias-"));
+  try {
+    const files = prepareEnhancedCliFixture(dir);
+    const alias = join(dir, "alias");
+    symlinkSync(dir, alias, "dir");
+    const args = enhancedCliArguments(files);
+    args[args.indexOf("--receipt-out") + 1] = join(alias, "fingerprint.json");
+    const run = spawnSync(process.execPath, args, {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, ...enhancedCliEnvironment },
+    });
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /Enhanced capture paths must be distinct/);
+    assert.equal(existsSync(files.out), false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI enhanced capture refuses to overwrite an output", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-no-overwrite-"));
+  try {
+    const files = prepareEnhancedCliFixture(dir);
+    writeFileSync(files.out, "preserve me");
+    const run = spawnSync(process.execPath, enhancedCliArguments(files), {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, ...enhancedCliEnvironment },
+    });
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /Enhanced capture output already exists/);
+    assert.equal(readFileSync(files.out, "utf8"), "preserve me");
+    assert.equal(existsSync(files.receipt), false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("CLI enhanced capture cleans staged artifacts when the final receipt fails", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sourcera-linear-atomic-cleanup-"));
+  const locked = join(dir, "locked");
+  try {
+    const files = prepareEnhancedCliFixture(dir);
+    const receipt = join(locked, "receipt.json");
+    const args = enhancedCliArguments(files);
+    mkdirSync(locked);
+    chmodSync(locked, 0o500);
+    args[args.indexOf("--receipt-out") + 1] = receipt;
+    const run = spawnSync(process.execPath, args, {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, ...enhancedCliEnvironment },
+    });
+    assert.equal(run.status, 1);
+    for (const path of [
+      files.out,
+      files.descriptionsOut,
+      files.nativeOut,
+      files.documentsOut,
+    ]) {
+      assert.equal(existsSync(path), false);
+    }
+    assert.equal(
+      readdirSync(dir).some((name) => name.includes(".linear-capture-")),
+      false,
+    );
+  } finally {
+    if (existsSync(locked)) chmodSync(locked, 0o700);
     rmSync(dir, { recursive: true, force: true });
   }
 });

@@ -123,6 +123,7 @@ function descriptionFindings(
   checksumSourceId: string | null,
   expectedSourceChecksum: string | null,
   nativeRelatedTitles: string[],
+  nativeTeamKeys: ReadonlySet<string>,
 ): Finding[] {
   const issueId = issue.id;
   const description = captured.description ?? "";
@@ -178,7 +179,8 @@ function descriptionFindings(
   }
   const manualReferences = rawLines.flatMap((line, index) => {
     const references = [
-      ...line.matchAll(/\b(?:PLA|BUY|SEL|INT)-\d+\b/g),
+      ...[...line.matchAll(/\b([A-Z][A-Z0-9]*)-\d+\b/gi)]
+        .filter((match) => nativeTeamKeys.has(match[1].toUpperCase())),
       ...line.matchAll(/\bF-(?:AE-|BC-)?\d+(?:\.[A-Z0-9]+)*\b/g),
       ...line.matchAll(/\b(?:SG|SR)-[A-Z0-9-]+\b/g),
     ]
@@ -510,6 +512,15 @@ export function scanTicketIntegrity(
   const fingerprintById = new Map(
     snapshot.linearFingerprint.issues.map((issue) => [issue.identifier, issue]),
   );
+  const nativeTeamKeys = new Set(
+    [
+      ...fingerprintById.keys(),
+      ...capture.issues.map((issue) => issue.id),
+    ].flatMap((identifier) => {
+      const match = /^([A-Z][A-Z0-9]*)-\d+$/i.exec(identifier);
+      return match ? [match[1].toUpperCase()] : [];
+    }),
+  );
   const snapshotById = new Map(snapshot.issues.map((issue) => [issue.id, issue]));
   const checksumBySource = new Map<string, string>();
   if (
@@ -609,6 +620,7 @@ export function scanTicketIntegrity(
           })
           .map((identifier) => fingerprintById.get(identifier)?.title ?? "")
           .filter((title) => title.trim().length >= 32),
+        nativeTeamKeys,
       ),
     );
   }
