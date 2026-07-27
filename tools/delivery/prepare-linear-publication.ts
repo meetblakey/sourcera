@@ -122,7 +122,7 @@ function regularFile(path: string, label: string): void {
   }
 }
 
-function runTool(root: string, label: string, arguments_: string[]): void {
+export function runTool(root: string, label: string, arguments_: string[]): void {
   const result = spawnSync(
     process.execPath,
     [
@@ -133,8 +133,14 @@ function runTool(root: string, label: string, arguments_: string[]): void {
     { cwd: root, encoding: "utf8" },
   );
   if (result.status !== 0) {
+    const output = (result.stderr || result.stdout).trim();
+    const reason = output ||
+      result.error?.message ||
+      (result.signal
+        ? `terminated by signal ${result.signal}`
+        : `exited with status ${result.status ?? "unknown"}`);
     throw new Error(
-      `${label} failed:\n${(result.stderr || result.stdout || "unknown error").trim()}`,
+      `${label} failed:\n${reason}`,
     );
   }
 }

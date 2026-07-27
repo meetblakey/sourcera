@@ -57,6 +57,9 @@ function candidate(): LinearSnapshotCandidate {
       issues: [
         {
           identifier: "PLA-1",
+          stateType: "backlog",
+          labels: [],
+          priority: 2,
           projectId: "22222222-2222-4222-8222-222222222222",
           project: "Sourcera Production",
           milestoneId: "33333333-3333-4333-8333-333333333333",
@@ -66,6 +69,9 @@ function candidate(): LinearSnapshotCandidate {
         },
         {
           identifier: "PLA-2",
+          stateType: "backlog",
+          labels: [],
+          priority: 2,
           projectId: "22222222-2222-4222-8222-222222222222",
           project: "Sourcera Production",
           milestoneId: "33333333-3333-4333-8333-333333333333",
@@ -126,6 +132,63 @@ test("requires exactly one matching canonical live release", () => {
   );
 });
 
+for (const stateType of ["completed", "canceled"] as const) {
+  test(`rejects ${stateType} work that retains codex-ready`, () => {
+    const value = candidate();
+    Object.assign(value.linearFingerprint.issues[0], {
+      stateType,
+      labels: ["codex-ready", "platform"],
+    });
+    assert.ok(
+      linearCandidateFindings(value, releases).some(
+        (finding) =>
+          finding.code === "linear_candidate_terminal_ready_invalid" &&
+          finding.issueId === "PLA-1",
+      ),
+    );
+  });
+
+  test(`rejects ${stateType} work that retains Urgent priority`, () => {
+    const value = candidate();
+    Object.assign(value.linearFingerprint.issues[0], {
+      stateType,
+      priority: 1,
+    });
+    assert.ok(
+      linearCandidateFindings(value, releases).some(
+        (finding) =>
+          finding.code === "linear_candidate_terminal_urgent_invalid" &&
+          finding.issueId === "PLA-1",
+      ),
+    );
+  });
+}
+
+test("allows started work to remain codex-ready and Urgent", () => {
+  const value = candidate();
+  Object.assign(value.linearFingerprint.issues[0], {
+    stateType: "started",
+    labels: ["codex-ready", "platform"],
+    priority: 1,
+  });
+  assert.deepEqual(linearCandidateFindings(value, releases), []);
+});
+
+test("allows terminal work after queue metadata is cleared", () => {
+  for (const [stateType, priority] of [
+    ["completed", 2],
+    ["canceled", 0],
+  ] as const) {
+    const value = candidate();
+    Object.assign(value.linearFingerprint.issues[0], {
+      stateType,
+      labels: ["platform"],
+      priority,
+    });
+    assert.deepEqual(linearCandidateFindings(value, releases), []);
+  }
+});
+
 test("requires source-split executable children to retain native project and milestone", () => {
   const value = candidate();
   value.issues.push({
@@ -139,6 +202,9 @@ test("requires source-split executable children to retain native project and mil
   });
   value.linearFingerprint.issues.push({
     identifier: "PLA-3",
+    stateType: "backlog",
+    labels: [],
+    priority: 2,
     projectId: "22222222-2222-4222-8222-222222222222",
     project: "Sourcera Production",
     milestoneId: "33333333-3333-4333-8333-333333333333",
@@ -173,6 +239,9 @@ test("validates split-source dependencies at native issue level", () => {
   });
   value.linearFingerprint.issues.push({
     identifier: "PLA-3",
+    stateType: "backlog",
+    labels: [],
+    priority: 2,
     projectId: "22222222-2222-4222-8222-222222222222",
     project: "Sourcera Production",
     milestoneId: "33333333-3333-4333-8333-333333333333",
@@ -234,6 +303,46 @@ test("candidate validator CLI fails closed on semantic findings", () => {
     );
     assert.equal(result.status, 1, result.stderr);
     assert.match(result.stderr, /dependency_cycle|cross_release_inversion/);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("candidate validator CLI names terminal queue metadata drift", () => {
+  const directory = mkdtempSync(join(tmpdir(), "linear-candidate-terminal-"));
+  const candidatePath = join(directory, "candidate.json");
+  const releasesPath = join(directory, "releases.json");
+  try {
+    const value = candidate();
+    Object.assign(value.linearFingerprint.issues[0], {
+      stateType: "completed",
+      labels: ["codex-ready", "platform"],
+      priority: 1,
+    });
+    writeFileSync(candidatePath, JSON.stringify(value));
+    writeFileSync(releasesPath, JSON.stringify({ releases }));
+    const result = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "./tools/spec-lint/node_modules/tsx/dist/loader.mjs",
+        "tools/delivery/validate-linear-candidate.ts",
+        "--candidate",
+        candidatePath,
+        "--releases",
+        releasesPath,
+      ],
+      { cwd: process.cwd(), encoding: "utf8" },
+    );
+    assert.equal(result.status, 1, result.stderr);
+    assert.match(
+      result.stderr,
+      /linear_candidate_terminal_ready_invalid: PLA-1/,
+    );
+    assert.match(
+      result.stderr,
+      /linear_candidate_terminal_urgent_invalid: PLA-1/,
+    );
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

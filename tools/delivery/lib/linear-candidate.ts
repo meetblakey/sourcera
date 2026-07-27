@@ -18,6 +18,9 @@ interface CandidateIssue {
 
 interface CandidateFingerprintIssue {
   identifier: string;
+  stateType: string;
+  labels: string[];
+  priority: number;
   projectId: string | null;
   project: string | null;
   milestoneId: string | null;
@@ -79,6 +82,22 @@ export function linearCandidateFindings(
       issue.kind === "proof_only";
     const sourceFamilyId = issue.sourceFamilyId ?? issue.sourceId;
     const live = liveByIssue.get(issue.id);
+    const terminal =
+      live?.stateType === "completed" || live?.stateType === "canceled";
+    if (terminal && live.labels.includes("codex-ready")) {
+      findings.push({
+        code: "linear_candidate_terminal_ready_invalid",
+        issueId: issue.id,
+        message: `${issue.id} is ${live.stateType} but retains codex-ready`,
+      });
+    }
+    if (terminal && live.priority === 1) {
+      findings.push({
+        code: "linear_candidate_terminal_urgent_invalid",
+        issueId: issue.id,
+        message: `${issue.id} is ${live.stateType} but retains Urgent priority`,
+      });
+    }
     if (executable) {
       if (!nonempty(sourceFamilyId)) {
         findings.push({

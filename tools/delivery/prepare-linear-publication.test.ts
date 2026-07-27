@@ -12,7 +12,10 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { exactPublicationFiles } from "./prepare-linear-publication.js";
+import {
+  exactPublicationFiles,
+  runTool,
+} from "./prepare-linear-publication.js";
 
 const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], {
   encoding: "utf8",
@@ -115,6 +118,20 @@ test("publication enumerates only regular files and rejects symlinks", () => {
       join(root, "linked.json"),
     );
     assert.throws(() => exactPublicationFiles(root), /symlinks/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("publication reports a silent child-process exit status", () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-publication-silent-tool-"));
+  try {
+    const silentFailure = join(root, "silent-failure.mjs");
+    writeFileSync(silentFailure, "process.exitCode = 7;\n");
+    assert.throws(
+      () => runTool(repositoryRoot, "Silent tool", [silentFailure]),
+      /Silent tool failed:\nexited with status 7/,
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
