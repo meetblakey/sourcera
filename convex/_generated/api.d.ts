@@ -9,7 +9,10 @@
  */
 
 import type * as foundation from "../foundation.js";
+import type * as lib_foundationProbe from "../lib/foundationProbe.js";
 import type * as releaseIdentity from "../releaseIdentity.js";
+import type * as schema_foundationProbes from "../schema/foundationProbes.js";
+import type * as schema_registry from "../schema/registry.js";
 
 import type {
   ApiFromModules,
@@ -19,7 +22,10 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   foundation: typeof foundation;
+  "lib/foundationProbe": typeof lib_foundationProbe;
   releaseIdentity: typeof releaseIdentity;
+  "schema/foundationProbes": typeof schema_foundationProbes;
+  "schema/registry": typeof schema_registry;
 }>;
 
 /**
