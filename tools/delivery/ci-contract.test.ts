@@ -758,7 +758,11 @@ test("every release-required workflow runs on all main changes", () => {
   const application = readFileSync(".github/workflows/app-ci.yml", "utf8");
   const convexPreview = application.slice(application.indexOf("  convex-preview:"));
   assert.match(
+    application,
+    /on:\n  pull_request:\n  push:\n    branches: \[main\]/,
+  );
+  assert.match(
     convexPreview,
-    /github\.event_name == 'pull_request' \|\| github\.event_name == 'push'/,
+    /github\.event_name == 'push' \|\| needs\.merge-compatibility\.result == 'success'/,
   );
 });

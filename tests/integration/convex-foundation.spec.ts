@@ -39,6 +39,8 @@ import {
 import {
   assertControlledConvexReleaseIdentityChange,
   assertConvexReleaseIdentityPlaceholder,
+  assertConvexRollbackReleaseIdentityPlaceholder,
+  assertVercelConvexPreviewStampSource,
   renderConvexReleaseIdentity,
 } from "../../scripts/lib/convex-release-identity";
 import { readPinnedConvexProductionTarget } from "../../scripts/lib/convex-production-target";
@@ -59,6 +61,7 @@ const previewEnvironment = {
   CONVEX_PREVIEW_NAME: `sourcera-pr-1-${commitSha}`,
   NEXT_PUBLIC_CONVEX_URL: "https://careful-otter-123.convex.cloud",
   SOURCERA_COMMIT_SHA: commitSha,
+  SOURCERA_CONVEX_PREVIEW_PROBE_SEED: "9".repeat(64),
   SOURCERA_ENV: "staging",
 };
 const productionEnvironment = {
@@ -136,6 +139,61 @@ test("Vercel branch and commit metadata produce one safe Preview identity", () =
   );
 });
 
+test("GitHub and Vercel derive the same branch-bound Preview name", () => {
+  const execution = spawnSync(
+    "npx",
+    ["tsx", "scripts/derive-convex-preview-name.ts"],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        SOURCERA_COMMIT_SHA: commitSha,
+        SOURCERA_PREVIEW_SOURCE: "codex/pla-282-convex-foundation",
+      },
+    },
+  );
+
+  assert.equal(execution.status, 0, execution.stderr);
+  assert.equal(
+    execution.stdout.trim(),
+    `codex-pla-282-convex-f-${commitSha}`,
+  );
+});
+
+test("Preview runbook derives identity from the normalized head ref and exact head SHA", () => {
+  const runbook = readFileSync(
+    path.join(repositoryRoot, "docs/runbooks/convex-foundation.md"),
+    "utf8",
+  );
+
+  assert.match(
+    runbook,
+    /normalized head ref plus the exact 40-character lowercase head SHA/i,
+  );
+  assert.doesNotMatch(runbook, /sourcera-pr-<pull-request-number>/i);
+});
+
+test("Preview runbook rolls the prior commit back to its own commit-bound name", () => {
+  const runbook = readFileSync(
+    path.join(repositoryRoot, "docs/runbooks/convex-foundation.md"),
+    "utf8",
+  );
+
+  assert.match(
+    runbook,
+    /prior verified commit's own commit-bound Preview name/i,
+  );
+  assert.match(
+    runbook,
+    /never deploy the prior commit to the candidate commit's Preview name/i,
+  );
+  assert.doesNotMatch(
+    runbook,
+    /deploy it to the candidate commit's exact Preview name/i,
+  );
+});
+
 test("Vercel retries only transient Convex Preview provider failures", () => {
   assert.equal(
     isRetryableConvexPreviewDeploymentFailure(
@@ -168,6 +226,15 @@ test("Convex deployment validation fails closed without leaking secrets", () => 
     { ...previewEnvironment, CONVEX_DEPLOYMENT: "prod" },
     { ...previewEnvironment, NEXT_PUBLIC_CONVEX_URL: "http://localhost:3210" },
     { ...previewEnvironment, SOURCERA_COMMIT_SHA: "main" },
+    {
+      ...previewEnvironment,
+      SOURCERA_COMMIT_SHA: commitSha.toUpperCase(),
+    },
+    {
+      ...previewEnvironment,
+      SOURCERA_COMMIT_SHA: "a".repeat(64),
+      CONVEX_PREVIEW_NAME: `s-${"a".repeat(61)}`,
+    },
     {
       ...previewEnvironment,
       CONVEX_PREVIEW_NAME: `sourcera-pr-1-${"a".repeat(40)}`,
@@ -263,7 +330,8 @@ test("Vercel previews deploy Convex while production only builds pinned clients"
       CONVEX_PREVIEW_NAME: undefined,
       NEXT_PUBLIC_CONVEX_URL: undefined,
       VERCEL_GIT_COMMIT_SHA: commitSha,
-      VERCEL_GIT_PULL_REQUEST_ID: "1",
+      VERCEL_GIT_COMMIT_REF: "codex/pla-282-convex-foundation",
+      VERCEL_GIT_PULL_REQUEST_ID: "999",
       VERCEL: "1",
       VERCEL_ENV: "preview",
     },
@@ -272,10 +340,26 @@ test("Vercel previews deploy Convex while production only builds pinned clients"
     productionTarget,
   );
   assert.equal(previewPlan.mode, "preview");
-  assert.equal(previewPlan.target, `sourcera-pr-1-${commitSha}`);
+  assert.equal(
+    previewPlan.target,
+    `codex-pla-282-convex-f-${commitSha}`,
+  );
   assert.deepEqual(
-    previewPlan.steps[0].arguments.slice(0, 4),
-    ["convex", "deploy", "--preview-name", `sourcera-pr-1-${commitSha}`],
+    [previewPlan.steps[0].command, ...previewPlan.steps[0].arguments],
+    ["npm", "run", "validate:convex-schema"],
+  );
+  assert.deepEqual(
+    [previewPlan.steps[1].command, ...previewPlan.steps[1].arguments],
+    ["npm", "run", "--silent", "convex:stamp:preview"],
+  );
+  assert.deepEqual(
+    previewPlan.steps[2].arguments.slice(0, 4),
+    [
+      "convex",
+      "deploy",
+      "--preview-name",
+      `codex-pla-282-convex-f-${commitSha}`,
+    ],
   );
 
   const productionPlan = createConvexVercelDeploymentPlan(
@@ -352,6 +436,28 @@ test("Vercel production rejects backend keys, environment disagreement, and stal
         productionTarget,
       ),
     /VERCEL_GIT_COMMIT_SHA must match the checked-out Git commit/,
+  );
+});
+
+test("Vercel production rejects Preview probe authority", () => {
+  assert.throws(
+    () =>
+      createConvexVercelDeploymentPlan(
+        {
+          ...productionEnvironment,
+          CONVEX_DEPLOY_KEY: undefined,
+          SOURCERA_CONVEX_CANARY_SECRET: undefined,
+          SOURCERA_CONVEX_PREVIEW_PROBE_SEED: "9".repeat(64),
+          NEXT_PUBLIC_CONVEX_URL: undefined,
+          VERCEL: "1",
+          VERCEL_ENV: "production",
+          VERCEL_GIT_COMMIT_SHA: commitSha,
+        },
+        null,
+        commitSha,
+        productionTarget,
+      ),
+    /SOURCERA_CONVEX_PREVIEW_PROBE_SEED is forbidden in Vercel Production/,
   );
 });
 
@@ -774,12 +880,89 @@ test("production step environments expose only the credential required by that s
 });
 
 test("production deploy stamps only the controlled Convex build identity", () => {
+  const previewName = `codex-pla-282-${commitSha}`;
+  const previewProbeTokenSha256 = "a".repeat(64);
+  const previewProbeExpiresAt = 1_800_000_900_000;
   const placeholder =
-    'export const SOURCERA_CONVEX_BUILD_COMMIT_SHA =\n  "__UNSTAMPED_CONVEX_BUILD__";\n';
+    'export const SOURCERA_CONVEX_BUILD_COMMIT_SHA: string =\n  "__UNSTAMPED_CONVEX_BUILD__";\nexport const SOURCERA_CONVEX_BUILD_ENVIRONMENT: string =\n  "__UNSTAMPED_CONVEX_ENVIRONMENT__";\nexport const SOURCERA_CONVEX_BUILD_PREVIEW_NAME: string =\n  "__UNSTAMPED_CONVEX_PREVIEW_NAME__";\nexport const SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN_SHA256: string =\n  "__UNSTAMPED_CONVEX_PREVIEW_PROBE_TOKEN_SHA256__";\nexport const SOURCERA_CONVEX_PREVIEW_PROBE_EXPIRES_AT: number = 0;\n';
   assert.doesNotThrow(() => assertConvexReleaseIdentityPlaceholder(placeholder));
+  const legacyPlaceholder =
+    'export const SOURCERA_CONVEX_BUILD_COMMIT_SHA =\n  "__UNSTAMPED_CONVEX_BUILD__";\n';
+  const threeFieldLegacyPlaceholder =
+    'export const SOURCERA_CONVEX_BUILD_COMMIT_SHA: string =\n  "__UNSTAMPED_CONVEX_BUILD__";\nexport const SOURCERA_CONVEX_BUILD_ENVIRONMENT: string =\n  "__UNSTAMPED_CONVEX_ENVIRONMENT__";\nexport const SOURCERA_CONVEX_BUILD_PREVIEW_NAME: string =\n  "__UNSTAMPED_CONVEX_PREVIEW_NAME__";\n';
+  const fourFieldLegacyPlaceholder =
+    'export const SOURCERA_CONVEX_BUILD_COMMIT_SHA: string =\n  "__UNSTAMPED_CONVEX_BUILD__";\nexport const SOURCERA_CONVEX_BUILD_ENVIRONMENT: string =\n  "__UNSTAMPED_CONVEX_ENVIRONMENT__";\nexport const SOURCERA_CONVEX_BUILD_PREVIEW_NAME: string =\n  "__UNSTAMPED_CONVEX_PREVIEW_NAME__";\nexport const SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN_SHA256: string =\n  "__UNSTAMPED_CONVEX_PREVIEW_PROBE_TOKEN_SHA256__";\n';
+  assert.throws(() => assertConvexReleaseIdentityPlaceholder(legacyPlaceholder));
+  assert.throws(() =>
+    assertConvexReleaseIdentityPlaceholder(threeFieldLegacyPlaceholder),
+  );
+  assert.doesNotThrow(() =>
+    assertConvexRollbackReleaseIdentityPlaceholder(placeholder),
+  );
+  assert.doesNotThrow(() =>
+    assertConvexRollbackReleaseIdentityPlaceholder(legacyPlaceholder),
+  );
+  assert.doesNotThrow(() =>
+    assertConvexRollbackReleaseIdentityPlaceholder(threeFieldLegacyPlaceholder),
+  );
+  assert.doesNotThrow(() =>
+    assertConvexRollbackReleaseIdentityPlaceholder(fourFieldLegacyPlaceholder),
+  );
   assert.equal(
-    renderConvexReleaseIdentity(commitSha),
-    `export const SOURCERA_CONVEX_BUILD_COMMIT_SHA =\n  "${commitSha}";\n`,
+    renderConvexReleaseIdentity(commitSha, "production"),
+    `export const SOURCERA_CONVEX_BUILD_COMMIT_SHA: string =\n  "${commitSha}";\nexport const SOURCERA_CONVEX_BUILD_ENVIRONMENT: string =\n  "production";\nexport const SOURCERA_CONVEX_BUILD_PREVIEW_NAME: string =\n  "__NO_CONVEX_PREVIEW__";\nexport const SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN_SHA256: string =\n  "__NO_CONVEX_PREVIEW_PROBE_TOKEN__";\nexport const SOURCERA_CONVEX_PREVIEW_PROBE_EXPIRES_AT: number = 0;\n`,
+  );
+  assert.match(
+    renderConvexReleaseIdentity(
+      commitSha,
+      "preview",
+      previewName,
+      previewProbeTokenSha256,
+      previewProbeExpiresAt,
+    ),
+    new RegExp(`SOURCERA_CONVEX_BUILD_PREVIEW_NAME: string =\\n  "${previewName}"`),
+  );
+  assert.throws(() =>
+    renderConvexReleaseIdentity(
+      commitSha.toUpperCase(),
+      "preview",
+      previewName,
+      previewProbeTokenSha256,
+      previewProbeExpiresAt,
+    ),
+  );
+  assert.throws(() =>
+    renderConvexReleaseIdentity(
+      "a".repeat(64),
+      "preview",
+      previewName,
+      previewProbeTokenSha256,
+      previewProbeExpiresAt,
+    ),
+  );
+  assert.throws(() => renderConvexReleaseIdentity(commitSha, "preview"));
+  assert.throws(() =>
+    renderConvexReleaseIdentity(
+      commitSha,
+      "preview",
+      "wrong-preview",
+      previewProbeTokenSha256,
+      previewProbeExpiresAt,
+    ),
+  );
+  assert.throws(() =>
+    renderConvexReleaseIdentity(commitSha, "preview", previewName),
+  );
+  assert.throws(() =>
+    renderConvexReleaseIdentity(commitSha, "preview", previewName, "invalid"),
+  );
+  assert.throws(() =>
+    renderConvexReleaseIdentity(
+      commitSha,
+      "preview",
+      previewName,
+      previewProbeTokenSha256,
+    ),
   );
   assert.doesNotThrow(() =>
     assertControlledConvexReleaseIdentityChange(
@@ -792,7 +975,43 @@ test("production deploy stamps only the controlled Convex build identity", () =>
     ),
   );
   assert.throws(() =>
-    assertConvexReleaseIdentityPlaceholder(renderConvexReleaseIdentity(commitSha)),
+    assertConvexReleaseIdentityPlaceholder(
+      renderConvexReleaseIdentity(commitSha, "production"),
+    ),
+  );
+  assert.throws(() =>
+    assertConvexRollbackReleaseIdentityPlaceholder(
+      renderConvexReleaseIdentity(commitSha, "production"),
+    ),
+  );
+});
+
+test("Vercel Preview stamping relies on provider source metadata without Git", () => {
+  const previewName = createCommitBoundConvexPreviewName(
+    "codex/pla-282-convex-foundation",
+    commitSha,
+  );
+  assert.doesNotThrow(() =>
+    assertVercelConvexPreviewStampSource(
+      {
+        VERCEL: "1",
+        VERCEL_GIT_COMMIT_REF: "codex/pla-282-convex-foundation",
+        VERCEL_GIT_COMMIT_SHA: commitSha,
+      },
+      commitSha,
+      previewName,
+    ),
+  );
+  assert.throws(() =>
+    assertVercelConvexPreviewStampSource(
+      {
+        VERCEL: "1",
+        VERCEL_GIT_COMMIT_REF: "main",
+        VERCEL_GIT_COMMIT_SHA: commitSha,
+      },
+      commitSha,
+      previewName,
+    ),
   );
 });
 
@@ -1438,9 +1657,67 @@ test("Preview predeploy validation preserves its pinned metadata shape", () => {
     environment: "staging",
     phase: "predeploy",
     previewName: `sourcera-pr-1-${commitSha}`,
+    project: "sourcera-production/sourcera",
     result: "passed",
   });
   assert.doesNotMatch(execution.stdout + execution.stderr, /opaque-preview-secret/);
+});
+
+test("Preview build identity stamping validates safely before mutation", () => {
+  const probeExpiresAt = Date.now() + 15 * 60 * 1_000;
+  const execution = spawnSync(
+    "npx",
+    ["tsx", "scripts/stamp-convex-preview-identity.ts", "--dry-run"],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        ...previewEnvironment,
+        SOURCERA_CONVEX_PREVIEW_PROBE_EXPIRES_AT: String(probeExpiresAt),
+      },
+    },
+  );
+
+  assert.equal(execution.status, 0, execution.stderr);
+  assert.deepEqual(JSON.parse(execution.stdout), {
+    commitSha,
+    environment: "staging",
+    phase: "stamp-preview-build",
+    previewName: `sourcera-pr-1-${commitSha}`,
+    probeExpiresAt: new Date(probeExpiresAt).toISOString(),
+    project: "sourcera-production/sourcera",
+    result: "passed",
+  });
+  assert.doesNotMatch(execution.stdout + execution.stderr, /opaque-preview-secret/);
+  assert.match(
+    readFileSync(
+      path.join(repositoryRoot, "convex/releaseIdentity.ts"),
+      "utf8",
+    ),
+    /__UNSTAMPED_CONVEX_BUILD__/,
+  );
+
+  const mismatchedDigest = spawnSync(
+    "npx",
+    ["tsx", "scripts/stamp-convex-preview-identity.ts", "--dry-run"],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        ...previewEnvironment,
+        SOURCERA_CONVEX_PREVIEW_PROBE_EXPIRES_AT: String(probeExpiresAt),
+        SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN_SHA256: "f".repeat(64),
+      },
+    },
+  );
+  assert.notEqual(mismatchedDigest.status, 0);
+  assert.match(mismatchedDigest.stderr, /digest does not match/);
+  assert.doesNotMatch(
+    mismatchedDigest.stdout + mismatchedDigest.stderr,
+    /opaque-preview-secret/,
+  );
 });
 
 test("all three shells use the shared reactive Convex provider", async () => {
@@ -1511,15 +1788,61 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
 
   assert.match(packageJson, /"convex:codegen"/);
   assert.match(packageJson, /"convex:deploy:production"/);
+  assert.match(packageJson, /"convex:evidence"/);
+  assert.match(packageJson, /"convex:name:preview"/);
+  assert.match(packageJson, /"convex:prepare:preview-probe"/);
   assert.match(packageJson, /"convex:probe"/);
+  assert.match(packageJson, /"convex:stamp:preview"/);
   assert.match(packageJson, /run-convex-vercel-build\.ts/);
   assert.match(workflow, /CONVEX_DEPLOY_KEY/);
   assert.match(workflow, /convex deploy/);
   assert.match(workflow, /--preview-name/);
-  assert.match(workflow, /github\.sha/);
-  assert.match(workflow, /npm run convex:probe/);
+  assert.match(
+    workflow,
+    /github\.event\.pull_request\.head\.sha \|\| github\.sha/,
+  );
+  assert.match(workflow, /verified-sha: \$\{\{ steps\.verified\.outputs\.sha \}\}/);
+  assert.match(workflow, /SOURCERA_COMMIT_SHA: \$\{\{ needs\.verify\.outputs\.verified-sha \}\}/);
+  assert.match(workflow, /ref: \$\{\{ needs\.verify\.outputs\.verified-sha \}\}/);
+  assert.match(workflow, /github\.head_ref \|\| github\.ref_name/);
+  assert.match(workflow, /npm run --silent convex:name:preview/);
+  assert.match(workflow, /npm run --silent convex:prepare:preview-probe/);
+  assert.match(workflow, /npm run --silent convex:stamp:preview/);
+  assert.match(workflow, /npm run --silent convex:probe/);
+  assert.match(workflow, /npm run --silent convex:evidence/);
+  assert.match(workflow, /steps\.preview-build\.outcome == 'success'/);
+  assert.match(workflow, /SOURCERA_VERIFY_RESULT: passed/);
+  assert.match(workflow, /SOURCERA_PROBE_RESULT/);
+  assert.match(workflow, /SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN_FILE/);
+  assert.match(workflow, /SOURCERA_CONVEX_PREVIEW_PROBE_TOKEN=/);
+  assert.equal(
+    workflow.match(/secrets\.SOURCERA_CONVEX_PREVIEW_PROBE_SEED/g)?.length,
+    2,
+  );
+  assert.doesNotMatch(workflow, /SOURCERA_CONVEX_PREVIEW_PROBE_SECRET/);
+  assert.doesNotMatch(workflow, /convex env (?:set|remove)/);
+  assert.match(workflow, /environment:\s+name: convex-preview/);
+  assert.match(workflow, /merge-compatibility:/);
+  assert.match(workflow, /GitHub's current merge result/);
+  assert.match(workflow, /concurrency:/);
+  assert.match(workflow, /cancel-in-progress: false/);
+  assert.match(workflow, /convex:verify:generated -- --write-github-output/);
+  assert.match(workflow, /convex:verify:build-integrity/);
+  assert.match(workflow, /CONVEX_EXPECTED_PROJECT/);
+  assert.match(workflow, /convex-probe\.json/);
+  assert.match(workflow, /reports\/evidence\/r0-convex-foundation\.json/);
+  assert.match(workflow, /jq -e/);
+  assert.match(workflow, /if-no-files-found: error/);
+  assert.equal(
+    workflow.match(/secrets\.CONVEX_PREVIEW_DEPLOY_KEY/g)?.length,
+    3,
+  );
   assert.match(environmentExample, /^CONVEX_DEPLOY_KEY=$/m);
   assert.match(environmentExample, /^SOURCERA_CONVEX_CANARY_SECRET=$/m);
+  assert.match(
+    environmentExample,
+    /^SOURCERA_CONVEX_PREVIEW_PROBE_SEED=$/m,
+  );
   assert.match(environmentExample, /^CONVEX_EXPECTED_PROJECT=$/m);
   assert.match(environmentExample, /^SOURCERA_RELEASE_APPROVED_SHA=$/m);
   assert.match(environmentExample, /^SOURCERA_KNOWN_GOOD_SHA=$/m);
@@ -1527,11 +1850,13 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   assert.match(environmentExample, /^NEXT_PUBLIC_CONVEX_URL=$/m);
   assert.doesNotMatch(workflow, /CONVEX_DEPLOYMENT/);
   assert.ok(
-    workflow.indexOf("reject drift before cloud deploy") <
+    workflow.indexOf("attest the exact generated set") <
       workflow.indexOf("Deploy Convex Preview"),
   );
   assert.match(workflow, /CONVEX_AGENT_MODE: anonymous/);
-  assert.match(workflow, /set -o pipefail/);
+  assert.match(workflow, /npm run --silent convex:probe >/);
+  assert.doesNotMatch(workflow, /npm run convex:probe \| tee/);
+  assert.doesNotMatch(workflow, /cp \"\$probe_path\" \"\$receipt_path\"/);
   assert.match(workflow, /if: always\(\)/);
   assert.match(probe, /onUpdate/);
   assert.match(probe, /api\.foundation\.recordProductionProbe/);
@@ -1543,13 +1868,14 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   assert.match(vercelBuild, /isRetryableConvexPreviewDeploymentFailure/);
   assert.match(vercelBuild, /MAX_PREVIEW_DEPLOY_ATTEMPTS = 3/);
   assert.doesNotMatch(vercelBuild, /spawnSync\("git"/);
-  assert.match(vercelDeploymentPlanner, /VERCEL_GIT_PULL_REQUEST_ID/);
-  assert.match(vercelDeploymentPlanner, /sourcera-pr-/);
+  assert.doesNotMatch(vercelDeploymentPlanner, /VERCEL_GIT_PULL_REQUEST_ID/);
+  assert.match(vercelDeploymentPlanner, /VERCEL_GIT_COMMIT_REF/);
   assert.match(
     vercelDeploymentPlanner,
     /createCommitBoundConvexPreviewName/,
   );
   assert.match(vercelDeploymentPlanner, /NEXT_PUBLIC_CONVEX_URL/);
+  assert.match(vercelDeploymentPlanner, /validate:convex-schema/);
   assert.match(vercelDeploymentPlanner, /CONVEX_DEPLOY_KEY is forbidden/);
   assert.match(productionDeploy, /createConvexProductionDeploymentPlan/);
   assert.match(productionDeploy, /\["worktree", "add", "--detach"/);
@@ -1565,6 +1891,7 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   assert.match(productionFoundation, /SOURCERA_CONVEX_BUILD_COMMIT_SHA/);
   assert.match(productionFoundation, /getDeploymentMetadata/);
   assert.match(releaseIdentity, /__UNSTAMPED_CONVEX_BUILD__/);
+  assert.match(releaseIdentity, /SOURCERA_CONVEX_PREVIEW_PROBE_EXPIRES_AT/);
   assert.match(productionTargets, /"deploymentName": null/);
   assert.match(productionRunbook, /npm run vercel:stage:production/);
   assert.match(productionRunbook, /--known-good-receipt/);
@@ -1763,6 +2090,175 @@ test("predeploy rejects a named Convex query interval callback", () => {
     assert.match(execution.stderr, /convex_polling_watcher_violation/);
   } finally {
     rmSync(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects a wrapped Convex query interval callback", () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_wrapped_interval_test__.ts",
+  );
+  try {
+    writeFileSync(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nasync function refresh() {\n  await client.query(api.foundation.observeProbe, {});\n}\nsetInterval(() => refresh(), 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    rmSync(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects a wrapped recursive Convex query timeout", () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_wrapped_timeout_test__.ts",
+  );
+  try {
+    writeFileSync(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nasync function poll() {\n  await client.query(api.foundation.observeProbe, {});\n  setTimeout(() => poll(), 1000);\n}\nvoid poll();\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /convex_polling_watcher_violation/);
+  } finally {
+    rmSync(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects indirect recursive Convex query polling", () => {
+  const fixturePath = path.join(
+    repositoryRoot,
+    "app/__convex_indirect_recursive_polling_test__.ts",
+  );
+  try {
+    writeFileSync(
+      fixturePath,
+      `import { ConvexHttpClient } from "convex/browser";\nasync function poll() {\n  await client.query(api.foundation.observeProbe, {});\n  scheduleNextPoll();\n}\nfunction scheduleNextPoll() {\n  setTimeout(() => poll(), 1000);\n}\nvoid poll();\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(
+      execution.stderr,
+      /convex_polling_watcher_violation: app\/__convex_indirect_recursive_polling_test__\.ts/,
+    );
+  } finally {
+    rmSync(fixturePath, { force: true });
+  }
+});
+
+test("predeploy rejects an imported local Convex polling wrapper at its consumer", () => {
+  const consumerPath = path.join(
+    repositoryRoot,
+    "app/__convex_imported_wrapper_consumer_test__.ts",
+  );
+  const wrapperPath = path.join(
+    repositoryRoot,
+    "lib/__convex_imported_wrapper_test__.ts",
+  );
+  try {
+    writeFileSync(
+      wrapperPath,
+      `import { ConvexHttpClient } from "convex/browser";\nexport async function refresh() {\n  await client.query(api.foundation.observeProbe, {});\n}\n`,
+      "utf8",
+    );
+    writeFileSync(
+      consumerPath,
+      `import { refresh } from "../lib/__convex_imported_wrapper_test__";\nsetInterval(() => refresh(), 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.notEqual(execution.status, 0);
+    assert.match(
+      execution.stderr,
+      /convex_polling_watcher_violation: app\/__convex_imported_wrapper_consumer_test__\.ts/,
+    );
+    assert.doesNotMatch(
+      execution.stderr,
+      /lib\/__convex_imported_wrapper_test__\.ts/,
+    );
+  } finally {
+    rmSync(consumerPath, { force: true });
+    rmSync(wrapperPath, { force: true });
+  }
+});
+
+test("predeploy allows an imported non-Convex database query interval", () => {
+  const consumerPath = path.join(
+    repositoryRoot,
+    "app/__non_convex_imported_database_consumer_test__.ts",
+  );
+  const databasePath = path.join(
+    repositoryRoot,
+    "lib/__non_convex_imported_database_test__.ts",
+  );
+  try {
+    writeFileSync(
+      databasePath,
+      `export const database = { query: () => null };\n`,
+      "utf8",
+    );
+    writeFileSync(
+      consumerPath,
+      `import { database } from "../lib/__non_convex_imported_database_test__";\nsetInterval(() => database.query(), 1000);\n`,
+      "utf8",
+    );
+    const execution = spawnSync(
+      "npx",
+      ["tsx", "scripts/validate-convex-env.ts", "--phase", "predeploy"],
+      {
+        cwd: repositoryRoot,
+        encoding: "utf8",
+        env: { ...process.env, ...previewEnvironment },
+      },
+    );
+
+    assert.equal(execution.status, 0, execution.stderr);
+  } finally {
+    rmSync(consumerPath, { force: true });
+    rmSync(databasePath, { force: true });
   }
 });
 

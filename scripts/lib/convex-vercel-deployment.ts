@@ -13,7 +13,7 @@ export type ConvexVercelWorkspace =
 export interface ConvexExecutionStep {
   arguments: string[];
   command: "npm" | "npx";
-  name: "build" | "deploy" | "validate";
+  name: "build" | "deploy" | "stamp" | "validate";
 }
 
 export interface ConvexVercelDeploymentPlan {
@@ -104,6 +104,11 @@ export function createConvexVercelDeploymentPlan(
         "SOURCERA_CONVEX_CANARY_SECRET is forbidden in Vercel Production",
       );
     }
+    if (sourceEnvironment.SOURCERA_CONVEX_PREVIEW_PROBE_SEED) {
+      throw new Error(
+        "SOURCERA_CONVEX_PREVIEW_PROBE_SEED is forbidden in Vercel Production",
+      );
+    }
     const target = readConvexProductionTarget(
       pinnedProductionTarget.deploymentName,
       pinnedProductionTarget.deploymentUrl,
@@ -141,15 +146,9 @@ export function createConvexVercelDeploymentPlan(
     };
   }
 
-  const pullRequestId = sourceEnvironment.VERCEL_GIT_PULL_REQUEST_ID;
-  if (pullRequestId && !/^\d+$/.test(pullRequestId)) {
-    throw new Error("VERCEL_GIT_PULL_REQUEST_ID must be numeric");
-  }
-  const previewSource = pullRequestId
-    ? `sourcera-pr-${pullRequestId}`
-    : sourceEnvironment.VERCEL_GIT_COMMIT_REF;
+  const previewSource = sourceEnvironment.VERCEL_GIT_COMMIT_REF;
   if (!previewSource) {
-    throw new Error("A Vercel pull request or Git branch is required");
+    throw new Error("VERCEL_GIT_COMMIT_REF is required for Preview delivery");
   }
   const previewName = createCommitBoundConvexPreviewName(
     previewSource,
@@ -164,13 +163,23 @@ export function createConvexVercelDeploymentPlan(
     ...previewOverrides,
   });
   const buildCommand = workspace
-    ? `tsx scripts/validate-convex-env.ts --phase full && npm run build --workspace ${workspace}`
-    : "tsx scripts/validate-convex-env.ts --phase full && npm run build";
+    ? `npm run validate:convex-schema && tsx scripts/validate-convex-env.ts --phase full && npm run build --workspace ${workspace}`
+    : "npm run validate:convex-schema && tsx scripts/validate-convex-env.ts --phase full && npm run build";
 
   return {
     environmentOverrides: previewOverrides,
     mode: "preview",
     steps: [
+      {
+        arguments: ["run", "validate:convex-schema"],
+        command: "npm",
+        name: "validate",
+      },
+      {
+        arguments: ["run", "--silent", "convex:stamp:preview"],
+        command: "npm",
+        name: "stamp",
+      },
       {
         arguments: [
           "convex",

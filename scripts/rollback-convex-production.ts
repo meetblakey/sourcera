@@ -25,7 +25,7 @@ import {
 } from "./lib/convex-production-deployment";
 import {
   assertControlledConvexReleaseIdentityChange,
-  assertConvexReleaseIdentityPlaceholder,
+  assertConvexRollbackReleaseIdentityPlaceholder,
   CONVEX_RELEASE_IDENTITY_PATH,
   renderConvexReleaseIdentity,
 } from "./lib/convex-release-identity";
@@ -255,12 +255,12 @@ async function main() {
             releaseWorktree,
             CONVEX_RELEASE_IDENTITY_PATH,
           );
-          assertConvexReleaseIdentityPlaceholder(
+          assertConvexRollbackReleaseIdentityPlaceholder(
             readFileSync(identityPath, "utf8"),
           );
           writeFileSync(
             identityPath,
-            renderConvexReleaseIdentity(release.knownGoodSha),
+            renderConvexReleaseIdentity(release.knownGoodSha, "production"),
             "utf8",
           );
           assertControlledConvexReleaseIdentityChange(
