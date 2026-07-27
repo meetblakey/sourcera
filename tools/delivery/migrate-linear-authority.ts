@@ -1,78 +1,87 @@
 #!/usr/bin/env node
+// Phase 1 only: harden and reconcile canonical requirement identities.
+// This bootstrap is not a Linear-only authority cutover and cannot authorize
+// deletion of frozen repository migration inputs.
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { applyFeatureDependencies, type FeatureDependencyRepair } from "./lib/dependencies.js";
-import { canonicalLinearRelationKey, fetchLinearCapture } from "./lib/linear-live.js";
+import {
+  adoptStableMappings,
+  assertPhase1WriteModeAllowed,
+  buildCompensationPlan,
+  validateRecoveryCheckpoint,
+  type JournalRecord,
+  type ManagedLiveIssue,
+  type ManagedPlanRow,
+  type StableMapping,
+} from "./lib/linear-authority-migration.js";
+import { canonicalLinearRelationKey, type LinearCapture } from "./lib/linear-live.js";
 import { parseFeatureInventory } from "./lib/sources.js";
 
-const ENDPOINT = "https://api.linear.app/graphql";
-const TEAM_KEY = "REQ";
-const RECEIPT_PATH = "/tmp/linear-authority-migration-receipt.json";
+const TEAM_ID = "ee9dd198-4816-4836-9226-42765878d793";
+const REQUIREMENT_LABEL_ID = "5b058b32-9655-442e-bcdb-a5ca0479c311";
+const DECISION_LABEL_ID = "df2bcb0f-2fca-41cb-a45c-37770a01aac2";
+const STATE_IDS = {
+  Approved: "f7372f4e-b2ef-4740-896a-5a213d7517be",
+  Superseded: "c1b10439-5c3a-4ff9-b2cf-52bfdfb34a41",
+  Retired: "9e749881-8f52-4df2-8326-c8bbce0377b7",
+} as const;
+const RECOVERY_MAP_SHA256 = "249864f1345fa80768d3c4cd4ad24d41c0be583449855a92dc7771237e53c6eb";
+const RECOVERY_FINGERPRINT_SHA256 = "ce4ce37149c6cef508fa6d3d720d45edb0e895e18a5e4567b87f085bce0a0ac0";
+const RECOVERY_MAP_COUNT = 186;
+const RECOVERY_CURRENT_RELATIONS = 395;
+const RECOVERY_DESIRED_RELATIONS = 473;
+const RECOVERY_MISSING_RELATIONS = 78;
+const RECOVERY_DESCRIPTION_UPDATES = 61;
+const RECOVERY_FIELD_UPDATES = 1;
+const BACKUP_PATH = "/tmp/linear-authority-migration-backup.jsonl";
 const compare = (left: string, right: string): number => left.localeCompare(right, undefined, { numeric: true });
 const unique = (values: string[]): string[] => [...new Set(values)].sort(compare);
 const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex");
+const fingerprint = (value: unknown): string => sha256(JSON.stringify(value));
 
-interface InventoryRow {
-  legacyId: string;
-  title: string;
-  summary: string;
-  primaryAnchor: string;
-  dependencies: string[];
-}
-
+interface InventoryRow { legacyId: string; title: string; summary: string; primaryAnchor: string; dependencies: string[]; }
 interface DispositionRow {
   requirementId: string;
   disposition: "proof_only" | "narrative_context" | "superseded" | "retired_source";
   replacementId?: string;
   rationale: string;
 }
-
 interface SnapshotIssue {
   id: string;
   linearId: string;
   sourceId: string | null;
   sourceFamilyId?: string | null;
   project: string;
+  projectId: string;
   priority: number;
 }
-
 interface PlannedIssue {
   legacyId: string;
+  targetPlanKey: string;
   title: string;
   description: string;
   project: string;
-  state: string;
+  projectId: string;
+  state: keyof typeof STATE_IDS;
   label: "Requirement" | "Decision";
+  labelId: string;
   priority: number;
-  executionIds: string[];
+  primaryExecutionIdentifier: string | null;
+  executionIdentifiers: string[];
   requirementDependencies: string[];
   requirementRelations: string[];
   proofRelations: string[];
   disposition?: DispositionRow["disposition"];
 }
-
-interface LiveIssue {
-  uuid: string;
-  identifier: string;
-  title: string;
-}
-
-interface GraphqlResult<T> { data?: T; errors?: Array<{ message: string }>; }
-
-async function graphql<T>(token: string, query: string, variables: Record<string, unknown> = {}): Promise<T> {
-  for (let attempt = 1; attempt <= 5; attempt += 1) {
-    const response = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "content-type": "application/json", authorization: token },
-      body: JSON.stringify({ query, variables }),
-    });
-    const payload = await response.json() as GraphqlResult<T>;
-    if (response.ok && !payload.errors?.length && payload.data) return payload.data;
-    const message = payload.errors?.map((error) => error.message).join("; ") || `HTTP ${response.status}`;
-    if (attempt === 5 || (response.status !== 429 && response.status < 500)) throw new Error(`Linear GraphQL: ${message}`);
-    await new Promise((resolve) => setTimeout(resolve, attempt * 500));
-  }
-  throw new Error("Linear GraphQL retry bound exhausted");
+interface MigrationPlan { requirements: PlannedIssue[]; decisions: PlannedIssue[]; sequence: string[]; }
+interface RecoveryAudit {
+  currentRelations: number;
+  desiredRelations: number;
+  missingRelations: number;
+  extraRelations: number;
+  descriptionUpdates: number;
+  fieldUpdates: number;
 }
 
 function cells(line: string): string[] {
@@ -93,18 +102,13 @@ function inventoryRows(markdown: string): InventoryRow[] {
   });
 }
 
-const cleanTitle = (value: string): string => value
-  .replace(/Appendix M/gi, "Surface and engine mapping")
-  .replace(/§M\.5/gi, "Runtime gate catalog")
-  .trim();
+const cleanTitle = (value: string): string => value.replace(/Appendix M/gi, "Surface and engine mapping").replace(/§M\.5/gi, "Runtime gate catalog").trim();
 const cleanText = (value: string): string => value
   .replace(/Sourcera_Master_Spec\.md|Master Spec/gi, "canonical specification")
   .replace(/\s*\[verify[^\]]*\]/gi, "")
   .replace(/\s*\[AE:\s*pending\]/gi, "")
   .replace(/\b(?:F-(?:AE-|BC-)?\d+|RG:[a-z0-9_]+|AE-(?:V|\d)[A-Za-z0-9.-]*|D-(?:\d|[A-Z]{2,}-)[A-Za-z0-9.-]*)\b/gi, "the related canonical Linear entity")
-  .replace(/\s+/g, " ")
-  .trim();
-
+  .replace(/\s+/g, " ").trim();
 const titleOverrides = new Map<string, string>([
   ["F-AE-001", "DSAR Cascade Acceptance Criteria"],
   ["F-AE-003", "Cross-Org PII Handling Acceptance Gates"],
@@ -112,7 +116,6 @@ const titleOverrides = new Map<string, string>([
   ["F-AE-026", "Defense View Generation Capability Contract Extension"],
   ["F-AE-018", "External Provider Health Detector Routing Catalog"],
 ]);
-
 const fallbackProjects = new Map<string, string>([
   ["F-199", "Seller Console & Onboarding"], ["F-608", "Operations & Support Console"],
   ["F-609", "Operations & Support Console"], ["F-610", "Operations & Support Console"],
@@ -134,7 +137,7 @@ function fallbackProject(legacyId: string): string | null {
   return null;
 }
 
-function buildPlan(): { requirements: PlannedIssue[]; decisions: PlannedIssue[]; sequence: string[] } {
+function buildPlan(): MigrationPlan {
   const inventoryMarkdown = readFileSync("_audit/FEATURE_INVENTORY.md", "utf8");
   const sourceRows = parseFeatureInventory(inventoryMarkdown);
   const rows = inventoryRows(inventoryMarkdown);
@@ -143,12 +146,11 @@ function buildPlan(): { requirements: PlannedIssue[]; decisions: PlannedIssue[];
   const dispositionRows = (JSON.parse(readFileSync("delivery/dispositions.json", "utf8")) as { overrides: DispositionRow[] }).overrides;
   const dispositions = new Map(dispositionRows.map((row) => [row.requirementId, row]));
   const repairs = (JSON.parse(readFileSync("delivery/feature-dependencies.json", "utf8")) as { repairs: FeatureDependencyRepair[] }).repairs;
-  const repaired = applyFeatureDependencies(sourceRows, repairs);
-  const dependencies = new Map(repaired.map((row) => [row.requirementId, row.dependencies]));
+  const dependencies = new Map(applyFeatureDependencies(sourceRows, repairs).map((row) => [row.requirementId, row.dependencies]));
   const executableIds = new Set(rows.filter((row) => !dispositions.has(row.legacyId)).map((row) => row.legacyId));
   const issueBySource = new Map(snapshot.issues.filter((issue) => issue.sourceId).map((issue) => [issue.sourceId!, issue]));
   const executionFor = (id: string): SnapshotIssue[] => snapshot.issues.filter((issue) => issue.sourceId === id || issue.sourceFamilyId === id).sort((a, b) => compare(a.id, b.id));
-  const resolvedDependencies = (id: string): { requirements: string[]; proofs: string[] } => {
+  const resolveDependencies = (id: string): { requirements: string[]; proofs: string[] } => {
     const requirements: string[] = [];
     const proofs: string[] = [];
     for (const dependency of dependencies.get(id) ?? []) {
@@ -165,64 +167,59 @@ function buildPlan(): { requirements: PlannedIssue[]; decisions: PlannedIssue[];
     }
     return { requirements: unique(requirements), proofs: unique(proofs) };
   };
-
   const requirements = rows.filter((row) => executableIds.has(row.legacyId)).map((row): PlannedIssue => {
     const execution = executionFor(row.legacyId);
     const primary = execution.filter((issue) => issue.sourceId === row.legacyId);
     if (primary.length !== 1) throw new Error(`${row.legacyId} has ${primary.length} primary execution owners`);
-    const resolved = resolvedDependencies(row.legacyId);
+    const resolved = resolveDependencies(row.legacyId);
     return {
       legacyId: row.legacyId,
+      targetPlanKey: `issue:${row.legacyId}`,
       title: titleOverrides.get(row.legacyId) ?? cleanTitle(row.title),
       description: `## Binding outcome\n\n${cleanText(row.summary)}\n\n## Authority\n\nThis issue is the canonical requirement identity and lifecycle record. Detailed structured contracts and acceptance rules are linked from canonical Linear documents.\n\n## Verification\n\nImplementation evidence must satisfy the related execution work and current runtime gates. Requirement approval does not itself prove runtime readiness.`,
       project: primary[0].project,
+      projectId: primary[0].projectId,
       state: "Approved",
       label: "Requirement",
+      labelId: REQUIREMENT_LABEL_ID,
       priority: primary[0].priority,
-      executionIds: execution.map((issue) => issue.id),
+      primaryExecutionIdentifier: primary[0].id,
+      executionIdentifiers: execution.map((issue) => issue.id),
       requirementDependencies: resolved.requirements,
       requirementRelations: [],
       proofRelations: resolved.proofs,
     };
   });
   const requirementById = new Map(requirements.map((row) => [row.legacyId, row]));
-
+  const projectScope = JSON.parse(readFileSync("delivery/linear-project-scope.json", "utf8")) as { projects: Array<{ id: string; name: string }> };
+  const projectIdByName = new Map(projectScope.projects.map((row) => [row.name, row.id]));
   const decisions = dispositionRows.map((disposition): PlannedIssue => {
     const row = rowById.get(disposition.requirementId);
     if (!row) throw new Error(`Missing disposition row ${disposition.requirementId}`);
     const config = {
-      proof_only: { prefix: "Classify", suffix: "as runtime proof only", state: "Approved" },
-      narrative_context: { prefix: "Retire", suffix: "as non-binding context", state: "Retired" },
-      superseded: { prefix: "Supersede", suffix: "with its canonical successor", state: "Superseded" },
-      retired_source: { prefix: "Retire", suffix: "as duplicated historical source", state: "Retired" },
+      proof_only: { prefix: "Classify", suffix: "as runtime proof only", state: "Approved" as const },
+      narrative_context: { prefix: "Retire", suffix: "as non-binding context", state: "Retired" as const },
+      superseded: { prefix: "Supersede", suffix: "with its canonical successor", state: "Superseded" as const },
+      retired_source: { prefix: "Retire", suffix: "as duplicated historical source", state: "Retired" as const },
     }[disposition.disposition];
     const normalized = dependencies.get(disposition.requirementId) ?? [];
-    const requirementRelations = unique([
-      ...normalized.filter((id) => executableIds.has(id)),
-      ...(disposition.replacementId && executableIds.has(disposition.replacementId) ? [disposition.replacementId] : []),
-    ]);
-    const proofRelations = disposition.replacementId?.startsWith("RG:") && issueBySource.has(disposition.replacementId)
-      ? [issueBySource.get(disposition.replacementId)!.id] : [];
+    const requirementRelations = unique([...normalized.filter((id) => executableIds.has(id)), ...(disposition.replacementId && executableIds.has(disposition.replacementId) ? [disposition.replacementId] : [])]);
+    const proofRelations = disposition.replacementId?.startsWith("RG:") && issueBySource.has(disposition.replacementId) ? [issueBySource.get(disposition.replacementId)!.id] : [];
     const project = fallbackProject(disposition.requirementId);
-    if (!project) throw new Error(`Missing disposition project ${disposition.requirementId}`);
+    const projectId = project ? projectIdByName.get(project) : null;
+    if (!project || !projectId) throw new Error(`Missing disposition project ${disposition.requirementId}`);
     return {
       legacyId: disposition.requirementId,
+      targetPlanKey: `issue:${disposition.requirementId}`,
       title: `${config.prefix} ${cleanTitle(row.title)} ${config.suffix}`,
       description: `## Decision\n\n${cleanText(disposition.rationale)}\n\n## Effect\n\nThis item does not create a standalone binding product requirement. The archived migration receipt preserves its former registry mapping. Current behavior, execution, and proof remain with the native related Linear entities.`,
-      project,
-      state: config.state,
-      label: "Decision",
-      priority: 3,
-      executionIds: [],
-      requirementDependencies: [],
-      requirementRelations,
-      proofRelations,
+      project, projectId, state: config.state, label: "Decision", labelId: DECISION_LABEL_ID, priority: 3,
+      primaryExecutionIdentifier: null, executionIdentifiers: [], requirementDependencies: [], requirementRelations, proofRelations,
       disposition: disposition.disposition,
     };
   });
-
-  const titles = [...requirements, ...decisions].map((row) => row.title);
-  if (new Set(titles).size !== titles.length) throw new Error("Active title collision");
+  const all = [...requirements, ...decisions];
+  if (new Set(all.map((row) => row.title)).size !== all.length) throw new Error("Active title collision");
   const sequence: string[] = [];
   const visiting = new Set<string>();
   const visited = new Set<string>();
@@ -235,154 +232,95 @@ function buildPlan(): { requirements: PlannedIssue[]; decisions: PlannedIssue[];
   };
   for (const row of requirements.sort((a, b) => compare(a.legacyId, b.legacyId))) visit(row.legacyId);
   if (requirements.length !== 926 || decisions.length !== 61 || sequence.length !== 926) throw new Error("Migration plan count mismatch");
+  const splitRows = requirements.filter((row) => row.executionIdentifiers.length > 1);
+  const splitRelations = splitRows.reduce((total, row) => total + row.executionIdentifiers.length - 1, 0);
+  const normalizedDependencyEdges = [...dependencies.values()].reduce((total, row) => total + row.length, 0);
+  if (splitRows.length !== 37 || splitRelations !== 102 || normalizedDependencyEdges !== 1_360) throw new Error("Migration plan relation coverage mismatch");
   return { requirements, decisions, sequence };
 }
 
-const CATALOG_QUERY = `query AuthorityCatalogs { issueLabels(first: 250) { nodes { id name } pageInfo { hasNextPage } } workflowStates(first: 250) { nodes { id name team { id key } } pageInfo { hasNextPage } } }`;
-const ISSUE_CREATE = `mutation AuthorityIssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { success issue { id identifier title } } }`;
-const ISSUE_UPDATE = `mutation AuthorityIssueUpdate($id: String!, $input: IssueUpdateInput!) { issueUpdate(id: $id, input: $input) { success issue { id identifier title } } }`;
-const RELATION_CREATE = `mutation AuthorityRelationCreate($input: IssueRelationCreateInput!) { issueRelationCreate(input: $input) { success issueRelation { id type } } }`;
-const ISSUE_READ = `query AuthorityIssueRead($id: String!) { issue(id: $id) { id identifier title description priority archivedAt state { id name } team { id key } project { id name } labels(first: 100) { nodes { id name } pageInfo { hasNextPage } } relations(first: 100) { nodes { type issue { id identifier } relatedIssue { id identifier } } pageInfo { hasNextPage } } inverseRelations(first: 100) { nodes { type issue { id identifier } relatedIssue { id identifier } } pageInfo { hasNextPage } } } }`;
-
-interface CatalogData { issueLabels: { nodes: Array<{ id: string; name: string }>; pageInfo: { hasNextPage: boolean } }; workflowStates: { nodes: Array<{ id: string; name: string; team: { id: string; key: string } }>; pageInfo: { hasNextPage: boolean } }; }
-interface MutationData { issueCreate?: { success: boolean; issue: { id: string; identifier: string; title: string } | null }; issueUpdate?: { success: boolean; issue: { id: string; identifier: string; title: string } | null }; issueRelationCreate?: { success: boolean; issueRelation: { id: string; type: string } | null }; }
-interface ReadData { issue: { id: string; identifier: string; title: string; description: string | null; priority: number; archivedAt: string | null; state: { id: string; name: string }; team: { id: string; key: string }; project: { id: string; name: string } | null; labels: { nodes: Array<{ id: string; name: string }>; pageInfo: { hasNextPage: boolean } }; relations: { nodes: Array<{ type: string; issue: { id: string; identifier: string }; relatedIssue: { id: string; identifier: string } }>; pageInfo: { hasNextPage: boolean } }; inverseRelations: { nodes: Array<{ type: string; issue: { id: string; identifier: string }; relatedIssue: { id: string; identifier: string } }>; pageInfo: { hasNextPage: boolean } }; } | null; }
-
-function relationKeys(issue: NonNullable<ReadData["issue"]>): Set<string> {
-  if (issue.relations.pageInfo.hasNextPage || issue.inverseRelations.pageInfo.hasNextPage) throw new Error(`${issue.identifier} relations truncated`);
-  return new Set([...issue.relations.nodes, ...issue.inverseRelations.nodes].map((relation) => canonicalLinearRelationKey(relation.type, relation.issue.identifier, relation.relatedIssue.identifier)));
+function managedPlans(plan: MigrationPlan): ManagedPlanRow[] {
+  return [...plan.requirements, ...plan.decisions].map((row) => ({ legacyId: row.legacyId, targetPlanKey: row.targetPlanKey, title: row.title, primaryExecutionUuid: row.primaryExecutionIdentifier, desiredRelationKeys: [] }));
 }
 
-async function pool<T>(rows: T[], concurrency: number, work: (row: T) => Promise<void>): Promise<void> {
-  const pending = [...rows];
-  const workers = Array.from({ length: Math.min(concurrency, pending.length) }, async () => {
-    while (pending.length) await work(pending.shift()!);
-  });
-  await Promise.all(workers);
+function managedLive(capture: LinearCapture): ManagedLiveIssue[] {
+  return capture.fingerprint.issues.filter((issue) => issue.teamId === TEAM_ID).map((issue) => ({ id: issue.linearId!, identifier: issue.identifier, title: issue.title, teamId: issue.teamId, relationKeys: issue.relations, archivedAt: issue.archivedAt }));
+}
+
+function planDigest(plan: MigrationPlan): string {
+  return fingerprint({ requirements: plan.requirements, decisions: plan.decisions, sequence: plan.sequence });
+}
+
+function recoveryAudit(plan: MigrationPlan, capture: LinearCapture, mappings: StableMapping[]): RecoveryAudit {
+  if (mappings.filter((row) => row.issueIdentifier !== null).length !== RECOVERY_MAP_COUNT) throw new Error("Recovery mapping count differs from the verified checkpoint");
+  const planByLegacy = new Map([...plan.requirements, ...plan.decisions].map((row) => [row.legacyId, row]));
+  const mappingByLegacy = new Map(mappings.map((row) => [row.legacyId, row]));
+  const currentMappings = mappings.filter((row): row is StableMapping & { issueIdentifier: string } => row.issueIdentifier !== null);
+  const desiredRelations = new Set<string>();
+  for (const mapping of currentMappings) {
+    const row = planByLegacy.get(mapping.legacyId)!;
+    for (const identifier of unique([...row.executionIdentifiers, ...row.proofRelations])) desiredRelations.add(canonicalLinearRelationKey("related", mapping.issueIdentifier, identifier));
+    for (const dependency of row.requirementDependencies) {
+      const related = mappingByLegacy.get(dependency)?.issueIdentifier;
+      if (related) desiredRelations.add(canonicalLinearRelationKey("blocks", related, mapping.issueIdentifier));
+    }
+    for (const relation of row.requirementRelations) {
+      const related = mappingByLegacy.get(relation)?.issueIdentifier;
+      if (related) desiredRelations.add(canonicalLinearRelationKey("related", mapping.issueIdentifier, related));
+    }
+  }
+  const currentIdentifiers = new Set(currentMappings.map((row) => row.issueIdentifier));
+  const currentIssues = capture.fingerprint.issues.filter((row) => currentIdentifiers.has(row.identifier));
+  const currentRelations = new Set(currentIssues.flatMap((row) => row.relations));
+  const missingRelations = [...desiredRelations].filter((key) => !currentRelations.has(key));
+  const extraRelations = [...currentRelations].filter((key) => !desiredRelations.has(key));
+  let descriptionUpdates = 0;
+  let fieldUpdates = 0;
+  for (const mapping of currentMappings) {
+    const row = planByLegacy.get(mapping.legacyId)!;
+    const live = currentIssues.find((issue) => issue.identifier === mapping.issueIdentifier);
+    if (!live) throw new Error(`Recovery issue ${mapping.issueIdentifier} is missing`);
+    if (live.descriptionFingerprint !== sha256(row.description)) descriptionUpdates += 1;
+    const expected = { title: row.title, priority: row.priority, stateId: STATE_IDS[row.state], projectId: row.projectId, labels: [row.label] };
+    const actual = { title: live.title, priority: live.priority, stateId: live.stateId, projectId: live.projectId, labels: [...live.labels].sort() };
+    if (fingerprint(expected) !== fingerprint(actual)) fieldUpdates += 1;
+  }
+  const audit = { currentRelations: currentRelations.size, desiredRelations: desiredRelations.size, missingRelations: missingRelations.length, extraRelations: extraRelations.length, descriptionUpdates, fieldUpdates };
+  const expected = { currentRelations: RECOVERY_CURRENT_RELATIONS, desiredRelations: RECOVERY_DESIRED_RELATIONS, missingRelations: RECOVERY_MISSING_RELATIONS, extraRelations: 0, descriptionUpdates: RECOVERY_DESCRIPTION_UPDATES, fieldUpdates: RECOVERY_FIELD_UPDATES };
+  if (fingerprint(audit) !== fingerprint(expected)) throw new Error(`Recovery delta differs from the independently audited checkpoint: ${JSON.stringify(audit)}`);
+  return audit;
 }
 
 async function main(): Promise<void> {
   const plan = buildPlan();
-  if (process.argv.includes("--plan-only")) {
-    process.stdout.write(`${JSON.stringify({ requirements: plan.requirements.length, decisions: plan.decisions.length, sequence: plan.sequence.length })}\n`);
+  const mode = process.argv.includes("--mode") ? process.argv[process.argv.indexOf("--mode") + 1] : "plan";
+  if (mode === "plan") {
+    process.stdout.write(`${JSON.stringify({ scope: "phase_1_requirement_bootstrap", cutoverReady: false, preflightEnabled: false, applyEnabled: false, allocationManifestRequired: true, allocationContract: "external digest-pinned UUIDv4 targets keyed by the exact plan", requirements: plan.requirements.length, decisions: plan.decisions.length, sequence: plan.sequence.length, planDigest: planDigest(plan), recoveryMapSha256: RECOVERY_MAP_SHA256, recoveryFingerprintSha256: RECOVERY_FINGERPRINT_SHA256, nextPhase: "preallocate UUIDv4 targets, add live-header capacity reservation plus bounded checkpoint/resume, then generate the lossless normative-block and document manifest" })}\n`);
     return;
   }
-  const token = process.env.LINEAR_API_KEY?.trim();
-  if (!token) throw new Error("LINEAR_API_KEY is required");
-  const capture = await fetchLinearCapture(fetch, token);
-  const reqIssues = capture.fingerprint.issues.filter((issue) => issue.team === TEAM_KEY && issue.archivedAt === null);
-  const byTitle = new Map<string, LiveIssue>();
-  for (const issue of reqIssues) {
-    if (byTitle.has(issue.title)) throw new Error(`Duplicate Requirements title ${issue.title}`);
-    byTitle.set(issue.title, { uuid: issue.linearId!, identifier: issue.identifier, title: issue.title });
+  if (mode === "recovery-check") {
+    const recoveryIndex = process.argv.indexOf("--recovery-map");
+    const fingerprintIndex = process.argv.indexOf("--fingerprint");
+    const recoveryPath = recoveryIndex >= 0 ? process.argv[recoveryIndex + 1] : "";
+    const fingerprintPath = fingerprintIndex >= 0 ? process.argv[fingerprintIndex + 1] : "";
+    if (!recoveryPath || !fingerprintPath) throw new Error("recovery-check requires --recovery-map and --fingerprint");
+    const recoveryRaw = readFileSync(recoveryPath, "utf8");
+    const fingerprintRaw = readFileSync(fingerprintPath, "utf8");
+    if (sha256(fingerprintRaw) !== RECOVERY_FINGERPRINT_SHA256) throw new Error("Recovery fingerprint digest mismatch");
+    const recoveryMappings = validateRecoveryCheckpoint(recoveryRaw, RECOVERY_MAP_SHA256, new Set([...plan.requirements, ...plan.decisions].map((row) => row.legacyId)));
+    const capture = { fingerprint: JSON.parse(fingerprintRaw) as LinearCapture["fingerprint"], issueDescriptions: [] };
+    const mappings = adoptStableMappings(managedPlans(plan), managedLive(capture), TEAM_ID, recoveryMappings);
+    process.stdout.write(`${JSON.stringify({ status: "recovery_checkpoint_verified", mappings: recoveryMappings.length, ...recoveryAudit(plan, capture, mappings) })}\n`);
+    return;
   }
-  const executionByIdentifier = new Map(capture.fingerprint.issues.map((issue) => [issue.identifier, issue]));
-  const projects = new Map(capture.fingerprint.projects.filter((project) => project.archivedAt === null).map((project) => [project.name, project.id]));
-  const catalogs = await graphql<CatalogData>(token, CATALOG_QUERY);
-  if (catalogs.issueLabels.pageInfo.hasNextPage || catalogs.workflowStates.pageInfo.hasNextPage) throw new Error("Linear catalog truncated");
-  const labels = new Map(catalogs.issueLabels.nodes.map((row) => [row.name, row.id]));
-  for (const name of ["Requirement", "Decision"] as const) {
-    if (labels.has(name)) continue;
-    const labeled = capture.fingerprint.issues.find((issue) => issue.labels.includes(name) && issue.linearId);
-    if (!labeled?.linearId) throw new Error(`Label missing ${name}`);
-    const readback = await graphql<ReadData>(token, ISSUE_READ, { id: labeled.linearId });
-    const label = readback.issue?.labels.nodes.find((candidate) => candidate.name === name);
-    if (!label) throw new Error(`Label missing ${name}`);
-    labels.set(name, label.id);
+  if (mode === "compensation-plan") {
+    if (!existsSync(BACKUP_PATH)) throw new Error("Migration backup is missing");
+    const records = readFileSync(BACKUP_PATH, "utf8").trim().split("\n").filter(Boolean).map((line) => JSON.parse(line) as JournalRecord & { before?: unknown; after?: unknown });
+    process.stdout.write(`${JSON.stringify({ compensation: buildCompensationPlan(records) })}\n`);
+    return;
   }
-  const states = new Map(catalogs.workflowStates.nodes.filter((row) => row.team.key === TEAM_KEY).map((row) => [row.name, row.id]));
-  const requirementTeam = reqIssues[0]?.teamId;
-  if (!requirementTeam) throw new Error("Requirements team missing");
-  for (const name of ["Requirement", "Decision"]) if (!labels.has(name)) throw new Error(`Label missing ${name}`);
-  for (const name of ["Approved", "Superseded", "Retired"]) if (!states.has(name)) throw new Error(`State missing ${name}`);
-
-  const liveByLegacy = new Map<string, LiveIssue>();
-  const planByLegacy = new Map(plan.requirements.map((row) => [row.legacyId, row]));
-  const receipt: Array<Record<string, unknown>> = [];
-
-  const upsert = async (row: PlannedIssue): Promise<LiveIssue> => {
-    const projectId = projects.get(row.project);
-    const stateId = states.get(row.state);
-    const labelId = labels.get(row.label);
-    if (!projectId || !stateId || !labelId) throw new Error(`Native field unavailable ${row.title}`);
-    const input = { title: row.title, description: row.description, teamId: requirementTeam, projectId, stateId, labelIds: [labelId], priority: row.priority };
-    const existing = byTitle.get(row.title);
-    let live: LiveIssue;
-    if (existing) {
-      const data = await graphql<MutationData>(token, ISSUE_UPDATE, { id: existing.uuid, input });
-      const issue = data.issueUpdate?.issue;
-      if (!data.issueUpdate?.success || !issue) throw new Error(`Update failed ${row.title}`);
-      live = { uuid: issue.id, identifier: issue.identifier, title: issue.title };
-    } else {
-      const data = await graphql<MutationData>(token, ISSUE_CREATE, { input });
-      const issue = data.issueCreate?.issue;
-      if (!data.issueCreate?.success || !issue) throw new Error(`Create failed ${row.title}`);
-      live = { uuid: issue.id, identifier: issue.identifier, title: issue.title };
-      byTitle.set(row.title, live);
-    }
-    return live;
-  };
-
-  const applyRelationsAndRead = async (row: PlannedIssue, live: LiveIssue): Promise<void> => {
-    const desired: Array<{ key: string; input: { issueId: string; relatedIssueId: string; type: string } }> = [];
-    for (const identifier of unique([...row.executionIds, ...row.proofRelations])) {
-      const related = executionByIdentifier.get(identifier);
-      if (!related?.linearId) throw new Error(`Missing execution ${identifier}`);
-      desired.push({ key: canonicalLinearRelationKey("related", live.identifier, identifier), input: { issueId: live.uuid, relatedIssueId: related.linearId, type: "related" } });
-    }
-    for (const dependency of row.requirementDependencies) {
-      const prerequisite = liveByLegacy.get(dependency);
-      if (!prerequisite) throw new Error(`Missing prerequisite ${row.legacyId} -> ${dependency}`);
-      desired.push({ key: canonicalLinearRelationKey("blocks", prerequisite.identifier, live.identifier), input: { issueId: prerequisite.uuid, relatedIssueId: live.uuid, type: "blocks" } });
-    }
-    for (const relation of row.requirementRelations) {
-      const related = liveByLegacy.get(relation);
-      if (!related) throw new Error(`Missing requirement relation ${row.legacyId} -> ${relation}`);
-      desired.push({ key: canonicalLinearRelationKey("related", live.identifier, related.identifier), input: { issueId: live.uuid, relatedIssueId: related.uuid, type: "related" } });
-    }
-    const before = await graphql<ReadData>(token, ISSUE_READ, { id: live.uuid });
-    if (!before.issue) throw new Error(`Read failed ${live.identifier}`);
-    const existingRelations = relationKeys(before.issue);
-    await pool(desired.filter((relation) => !existingRelations.has(relation.key)), 12, async (relation) => {
-      const data = await graphql<MutationData>(token, RELATION_CREATE, { input: relation.input });
-      if (!data.issueRelationCreate?.success || !data.issueRelationCreate.issueRelation) throw new Error(`Relation create failed ${live.identifier}`);
-    });
-    const after = await graphql<ReadData>(token, ISSUE_READ, { id: live.uuid });
-    const issue = after.issue;
-    if (!issue || issue.archivedAt !== null || issue.title !== row.title || issue.description !== row.description || issue.priority !== row.priority || issue.team.key !== TEAM_KEY || issue.project?.name !== row.project || issue.state.name !== row.state || issue.labels.pageInfo.hasNextPage || JSON.stringify(issue.labels.nodes.map((label) => label.name).sort()) !== JSON.stringify([row.label])) throw new Error(`Field readback mismatch ${live.identifier}`);
-    const afterRelations = relationKeys(issue);
-    for (const relation of desired) if (!afterRelations.has(relation.key)) throw new Error(`Relation readback mismatch ${live.identifier}: ${relation.key}`);
-    receipt.push({ legacyId: row.legacyId, issueUuid: live.uuid, issueIdentifier: live.identifier, title: live.title, state: row.state, label: row.label, descriptionSha256: sha256(row.description), relationCount: desired.length, disposition: row.disposition ?? "executable" });
-  };
-
-  for (const legacyId of plan.sequence) {
-    const row = planByLegacy.get(legacyId)!;
-    const live = await upsert(row);
-    liveByLegacy.set(legacyId, live);
-    await applyRelationsAndRead(row, live);
-    if (receipt.length % 25 === 0) process.stdout.write(`published ${receipt.length}/${plan.requirements.length + plan.decisions.length}\n`);
-  }
-  for (const row of plan.decisions) {
-    const live = await upsert(row);
-    await applyRelationsAndRead(row, live);
-  }
-
-  const unexpected = [...byTitle.keys()].filter((title) => ![...plan.requirements, ...plan.decisions].some((row) => row.title === title));
-  if (unexpected.length) throw new Error(`Unexpected Requirements issues: ${unexpected.join(", ")}`);
-  const finalCapture = await fetchLinearCapture(fetch, token);
-  const activeRequirements = finalCapture.fingerprint.issues.filter((issue) => issue.team === TEAM_KEY && issue.archivedAt === null);
-  if (activeRequirements.length !== 987) throw new Error(`Expected 987 authority issues, found ${activeRequirements.length}`);
-  const output = {
-    schemaVersion: 1,
-    capturedAt: new Date().toISOString(),
-    requirements: plan.requirements.length,
-    decisions: plan.decisions.length,
-    activeAuthorityIssues: activeRequirements.length,
-    mappings: receipt.sort((a, b) => String(a.legacyId).localeCompare(String(b.legacyId), undefined, { numeric: true })),
-    readbackSha256: sha256(JSON.stringify(activeRequirements.map((issue) => ({ id: issue.linearId, identifier: issue.identifier, title: issue.title, state: issue.state, project: issue.project, labels: issue.labels, relations: issue.relations })).sort((a, b) => a.identifier.localeCompare(b.identifier)))),
-  };
-  writeFileSync(RECEIPT_PATH, `${JSON.stringify(output)}\n`, { mode: 0o600 });
-  process.stdout.write(`${JSON.stringify({ status: "complete", requirements: 926, decisions: 61, authorityIssues: 987, receipt: RECEIPT_PATH, readbackSha256: output.readbackSha256 })}\n`);
+  assertPhase1WriteModeAllowed(mode);
+  throw new Error("Mode must be plan, recovery-check, or compensation-plan; execution modes are intentionally unavailable");
 }
 
 main().catch((error: unknown) => {

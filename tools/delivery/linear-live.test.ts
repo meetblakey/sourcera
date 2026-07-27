@@ -1472,6 +1472,35 @@ test("description changes after character 400 change the fingerprint", async () 
   );
 });
 
+test("paginates both nested issue relation directions", async () => {
+  const relation = (type: string) => ({ type, issue: { identifier: "PLA-1" }, relatedIssue: { identifier: "PLA-1" } });
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as { query: string; variables: { after?: string } };
+    if (body.query.includes("DeliveryIssueInverseRelations")) {
+      assert.equal(body.variables.after, "inverse-next");
+      return response({ data: { issue: { inverseRelations: completeConnection([relation("duplicate")]) } } });
+    }
+    if (body.query.includes("DeliveryIssueRelations")) {
+      assert.equal(body.variables.after, "forward-next");
+      return response({ data: { issue: { relations: completeConnection([relation("blocks")]) } } });
+    }
+    if (body.query.includes("DeliveryIssues")) {
+      return response({ data: { issues: completeConnection([{
+        id: "uuid-1", identifier: "PLA-1", title: "First", description: "Description", updatedAt: "2026-07-14T01:00:00.000Z",
+        estimate: 1, priority: 2, dueDate: null, archivedAt: null, state: { id: "state", name: "Backlog", type: "backlog" },
+        labels: completeConnection([]), assignee: null, team: { id: "team", key: "PLA" }, cycle: null, project: null,
+        projectMilestone: null, parent: null, releases: completeConnection([]),
+        relations: { nodes: [relation("related")], pageInfo: { hasNextPage: true, endCursor: "forward-next" } },
+        inverseRelations: { nodes: [relation("similar")], pageInfo: { hasNextPage: true, endCursor: "inverse-next" } },
+      }]) } });
+    }
+    if (body.query.includes("DeliveryPipelines")) return response({ data: { releasePipelines: completeConnection([]) } });
+    return response({ data: { releases: completeConnection([]) } });
+  };
+  const issue = (await fetchLinearFingerprint(withEmptyProjectInventories(fetcher), "secret")).issues[0];
+  assert.deepEqual(issue.relations, ["blocks:PLA-1:PLA-1", "duplicate:PLA-1:PLA-1", "related:PLA-1:PLA-1", "similar:PLA-1:PLA-1"]);
+});
+
 for (const field of [
   "labels",
   "releases",

@@ -42,7 +42,7 @@ const ISSUE_QUERY = `
         state { id name type }
         labels(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { id name parent { id name } }
-          pageInfo { hasNextPage }
+          pageInfo { hasNextPage endCursor }
         }
         assignee { id name }
         team { id key }
@@ -52,18 +52,40 @@ const ISSUE_QUERY = `
         parent { id identifier }
         releases(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { id version }
-          pageInfo { hasNextPage }
+          pageInfo { hasNextPage endCursor }
         }
         relations(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { type issue { identifier } relatedIssue { identifier } }
-          pageInfo { hasNextPage }
+          pageInfo { hasNextPage endCursor }
         }
         inverseRelations(first: ${NESTED_CONNECTION_LIMIT}) {
           nodes { type issue { identifier } relatedIssue { identifier } }
-          pageInfo { hasNextPage }
+          pageInfo { hasNextPage endCursor }
         }
       }
       pageInfo { hasNextPage endCursor }
+    }
+  }
+`;
+
+const ISSUE_RELATIONS_QUERY = `
+  query DeliveryIssueRelations($id: String!, $after: String!) {
+    issue(id: $id) {
+      relations(first: ${NESTED_CONNECTION_LIMIT}, after: $after) {
+        nodes { type issue { identifier } relatedIssue { identifier } }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  }
+`;
+
+const ISSUE_INVERSE_RELATIONS_QUERY = `
+  query DeliveryIssueInverseRelations($id: String!, $after: String!) {
+    issue(id: $id) {
+      inverseRelations(first: ${NESTED_CONNECTION_LIMIT}, after: $after) {
+        nodes { type issue { identifier } relatedIssue { identifier } }
+        pageInfo { hasNextPage endCursor }
+      }
     }
   }
 `;
@@ -231,7 +253,7 @@ interface Connection<T> {
 
 interface NestedConnection<T> {
   nodes: T[];
-  pageInfo: Pick<PageInfo, "hasNextPage">;
+  pageInfo: PageInfo;
 }
 
 interface IssueNode {
@@ -715,6 +737,15 @@ async function request<T>(
   query: string,
   after: string | null,
 ): Promise<T> {
+  return requestWithVariables<T>(fetcher, token, query, { after });
+}
+
+async function requestWithVariables<T>(
+  fetcher: typeof fetch,
+  token: string,
+  query: string,
+  variables: Record<string, unknown>,
+): Promise<T> {
   const maximumAttempts = 3;
   for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
     let response: Response;
@@ -725,7 +756,7 @@ async function request<T>(
           "content-type": "application/json",
           authorization: token,
         },
-        body: JSON.stringify({ query, variables: { after } }),
+        body: JSON.stringify({ query, variables }),
       });
     } catch (error) {
       if (attempt === maximumAttempts) throw error;
@@ -866,6 +897,29 @@ function assertIssueConnectionsComplete(issue: IssueNode): void {
   }
 }
 
+async function completeIssueRelationConnections(
+  fetcher: typeof fetch,
+  token: string,
+  issues: IssueNode[],
+): Promise<void> {
+  for (const issue of issues) {
+    for (const field of ["relations", "inverseRelations"] as const) {
+      const query = field === "relations" ? ISSUE_RELATIONS_QUERY : ISSUE_INVERSE_RELATIONS_QUERY;
+      const seenCursors = new Set<string>();
+      while (issue[field].pageInfo.hasNextPage) {
+        const cursor = issue[field].pageInfo.endCursor;
+        if (!cursor || seenCursors.has(cursor)) throw new Error(`Linear issue ${issue.identifier} ${field} connection is truncated because pagination did not advance`);
+        seenCursors.add(cursor);
+        const data = await requestWithVariables<{ issue: Pick<IssueNode, typeof field> | null }>(fetcher, token, query, { id: issue.id, after: cursor });
+        const page = data.issue?.[field];
+        if (!page) throw new Error(`Linear issue ${issue.identifier} ${field} pagination response is missing`);
+        issue[field].nodes.push(...page.nodes);
+        issue[field].pageInfo = page.pageInfo;
+      }
+    }
+  }
+}
+
 function canonicalRelationsByIssue(
   issues: IssueNode[],
 ): Map<string, Set<string>> {
@@ -962,6 +1016,7 @@ export async function fetchLinearCapture(
       ? paginate<DocumentNode>(fetcher, token, DOCUMENT_QUERY, "documents")
       : Promise.resolve([]),
   ]);
+  await completeIssueRelationConnections(fetcher, token, issueNodes);
   for (const issue of issueNodes) assertIssueConnectionsComplete(issue);
   const relationsByIssue = canonicalRelationsByIssue(issueNodes);
   for (const pipeline of pipelineNodes) {
