@@ -20,7 +20,9 @@ import { sourceSectionReferences } from "./source-checksums.js";
 const ENDPOINT = "https://api.linear.app/graphql";
 const ISSUE_PAGE_LIMIT = 10;
 const PIPELINE_PAGE_LIMIT = 10;
-const PROJECT_PAGE_LIMIT = 10;
+const PROJECT_PAGE_LIMIT = 5;
+const PROJECT_ASSIGNMENT_PAGE_LIMIT = 10;
+const PROJECT_CATALOG_PAGE_LIMIT = 5;
 const INITIATIVE_PAGE_LIMIT = 10;
 const CYCLE_PAGE_LIMIT = 50;
 const CATALOG_PAGE_LIMIT = 50;
@@ -205,7 +207,7 @@ const ORGANIZATION_QUERY = `
 const PROJECT_CATALOG_QUERY = `
   query DeliveryProjectCatalog($after: String) {
     projects(
-      first: ${CATALOG_PAGE_LIMIT}
+      first: ${PROJECT_CATALOG_PAGE_LIMIT}
       after: $after
       includeArchived: true
     ) {
@@ -222,11 +224,11 @@ const PROJECT_CATALOG_QUERY = `
         startDateResolution
         targetDate
         targetDateResolution
-        teams(first: ${NESTED_CONNECTION_LIMIT}, includeArchived: true) {
+        teams(first: ${PROJECT_ASSIGNMENT_PAGE_LIMIT}, includeArchived: true) {
           nodes { id key }
           pageInfo { hasNextPage endCursor }
         }
-        initiatives(first: ${NESTED_CONNECTION_LIMIT}, includeArchived: true) {
+        initiatives(first: ${PROJECT_ASSIGNMENT_PAGE_LIMIT}, includeArchived: true) {
           nodes { id name }
           pageInfo { hasNextPage endCursor }
         }
@@ -239,7 +241,7 @@ const PROJECT_CATALOG_QUERY = `
 const PROJECT_INITIATIVE_ASSIGNMENTS_QUERY = `
   query DeliveryProjectInitiativeAssignments($id: String!, $after: String!) {
     project(id: $id) {
-      initiatives(first: ${NESTED_CONNECTION_LIMIT}, after: $after, includeArchived: true) {
+      initiatives(first: ${PROJECT_ASSIGNMENT_PAGE_LIMIT}, after: $after, includeArchived: true) {
         nodes { id name }
         pageInfo { hasNextPage endCursor }
       }
@@ -250,7 +252,7 @@ const PROJECT_INITIATIVE_ASSIGNMENTS_QUERY = `
 const PROJECT_TEAM_ASSIGNMENTS_QUERY = `
   query DeliveryProjectTeamAssignments($id: String!, $after: String!) {
     project(id: $id) {
-      teams(first: ${NESTED_CONNECTION_LIMIT}, after: $after, includeArchived: true) {
+      teams(first: ${PROJECT_ASSIGNMENT_PAGE_LIMIT}, after: $after, includeArchived: true) {
         nodes { id key }
         pageInfo { hasNextPage endCursor }
       }
@@ -321,9 +323,9 @@ const PROJECT_QUERY = `
         startDateResolution
         targetDate
         targetDateResolution
-        initiatives(first: ${NESTED_CONNECTION_LIMIT}, includeArchived: true) {
+        initiatives(first: ${PROJECT_ASSIGNMENT_PAGE_LIMIT}, includeArchived: true) {
           nodes { id name }
-          pageInfo { hasNextPage }
+          pageInfo { hasNextPage endCursor }
         }
       }
       pageInfo { hasNextPage endCursor }
@@ -590,7 +592,7 @@ interface ProjectNode {
   startDateResolution: string | null;
   targetDate: string | null;
   targetDateResolution: string | null;
-  initiatives?: NestedConnection<{ id: string; name: string }>;
+  initiatives: NestedConnection<{ id: string; name: string }>;
 }
 
 interface InitiativeNode {
@@ -1589,7 +1591,10 @@ async function completeProjectTeamConnections(
 async function completeProjectInitiativeConnections(
   fetcher: typeof fetch,
   token: string,
-  projects: ProjectCatalogNode[],
+  projects: Array<{
+    id: string;
+    initiatives: NestedConnection<{ id: string; name: string }>;
+  }>,
   coverage?: Map<string, MutableNestedConnectionCoverage>,
 ): Promise<void> {
   let totalRequests = 0;
@@ -3935,6 +3940,7 @@ export async function fetchLinearCapture(
         )
       : Promise.resolve([]),
   ]);
+  await completeProjectInitiativeConnections(fetcher, token, projectNodes);
   if (coverageState) {
     for (const issue of issueNodes) {
       coverageState.perIssue.set(issue.id, {
