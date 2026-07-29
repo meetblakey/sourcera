@@ -1919,7 +1919,7 @@ function nativeRelationCatalog(
 
 function assertNativeCoverageRow(
   value: LinearConnectionCoverage | LinearNestedConnectionCoverage,
-  expectedRows: number,
+  expectedRows: number | null,
   label: string,
   maximumPages = 1_000,
 ): void {
@@ -1930,7 +1930,8 @@ function assertNativeCoverageRow(
     value.pages < 1 ||
     value.pages > maximumPages ||
     !Number.isInteger(value.rows) ||
-    value.rows !== expectedRows ||
+    value.rows < 0 ||
+    (expectedRows !== null && value.rows !== expectedRows) ||
     !Number.isInteger(value.attempts) ||
     value.attempts < value.pages ||
     value.attempts > value.pages * 3 ||
@@ -2573,18 +2574,37 @@ export function assertLinearNativeIdentityCapture(
     );
     assertNativeCoverageRow(
       row.relations,
-      identity.relations.filter((relation) => relation.issueId === issue.issueUuid)
-        .length,
+      null,
       `issue ${issue.identifier} relations`,
       NESTED_RELATION_PAGE_LIMIT + 1,
     );
     assertNativeCoverageRow(
       row.inverseRelations,
-      identity.relations.filter(
-        (relation) => relation.relatedIssueId === issue.issueUuid,
-      ).length,
+      null,
       `issue ${issue.identifier} inverse relations`,
       NESTED_RELATION_PAGE_LIMIT + 1,
+    );
+    if (
+      row.relations.rows + row.inverseRelations.rows !==
+        issue.relationIds.length
+    ) {
+      throw new Error(
+        `Linear native issue ${issue.identifier} relation coverage is invalid`,
+      );
+    }
+  }
+  if (
+    coverage.perIssue.reduce(
+      (total, row) => total + row.relations.rows,
+      0,
+    ) !== identity.relations.length ||
+    coverage.perIssue.reduce(
+      (total, row) => total + row.inverseRelations.rows,
+      0,
+    ) !== identity.relations.length
+  ) {
+    throw new Error(
+      "Linear native relation connection coverage totals are invalid",
     );
   }
   if (!Array.isArray(coverage.perProject)) {
