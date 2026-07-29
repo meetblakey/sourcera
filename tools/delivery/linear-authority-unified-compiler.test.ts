@@ -92,20 +92,20 @@ function unifiedInput(repositoryRoot = process.cwd()): LinearAuthorityUnifiedCom
   for (const [name, id] of programGroupNames) groupIds.set(name, id);
   for (const [name, id] of groupIds) {
     if (capture.labels.some((row) => row.id === id)) continue;
-    capture.labels.push({ id, name, color: "#777777", description: null, archivedAt: null, inheritedFromId: null, isGroup: true, parentId: null, parentName: null, teamId: null, teamKey: null });
+    capture.labels.push({ id, name, color: "#777777", description: null, archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: true, parentId: null, parentName: null, teamId: null, teamKey: null });
   }
   for (const definition of programScope.projectDocumentDecisionContract.labelDefinitions) {
     const existing = capture.labels.find((row) => row.id === definition.id);
     if (existing) {
-      Object.assign(existing, { name: definition.name, parentId: definition.groupId, parentName: definition.groupName, teamId: null, teamKey: null, archivedAt: null, inheritedFromId: null, isGroup: false });
+      Object.assign(existing, { name: definition.name, parentId: definition.groupId, parentName: definition.groupName, teamId: null, teamKey: null, archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false });
     } else {
-      capture.labels.push({ id: definition.id, name: definition.name, color: "#336699", description: null, archivedAt: null, inheritedFromId: null, isGroup: false, parentId: definition.groupId, parentName: definition.groupName, teamId: null, teamKey: null });
+      capture.labels.push({ id: definition.id, name: definition.name, color: "#336699", description: null, archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false, parentId: definition.groupId, parentName: definition.groupName, teamId: null, teamKey: null });
     }
   }
   riskLabels.forEach(([name, parentName, color, description], index) => {
     const desired = {
       id: `94000000-0000-4000-8000-${(index + 1).toString(16).padStart(12, "0")}`,
-      name, color, description, archivedAt: null, inheritedFromId: null, isGroup: false,
+      name, color, description, archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false,
       parentId: groupIds.get(parentName)!, parentName, teamId: null, teamKey: null,
     };
     const existing = capture.labels.find((row) => row.id === desired.id);

@@ -646,10 +646,10 @@ function fixture(): Fixture {
       { issueUuid: V4_UNRELATED_LIVE, identifier: "PLA-999", title: "Unrelated", archivedAt: null, descriptionSha256: sha256("Unrelated body"), teamId: V4_TEAM, stateId: V4_STATE, projectId: V4_PROJECT, estimate: null, priority: 2, dueDate: null, cycleId: null, milestoneId: null, releaseIds: [], parentIssueUuid: null, assigneeId: null, labelIds: [], relationIds: [] },
     ],
     labels: [
-      { id: V4_REQUIREMENT_LABEL, name: "Requirement", color: "#123456", description: "Canonical requirement.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" },
-      { id: V4_DECISION_LABEL, name: "decision", color: "#654321", description: "Canonical decision.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
-      { id: V4_TYPE_GROUP, name: "Type", color: "#888888", description: null, archivedAt: null, inheritedFromId: null, isGroup: true, parentId: null, parentName: null, teamId: null, teamKey: null },
-      { id: V4_RISK_LABEL, name: "risk", color: "#ff0000", description: "Canonical risk.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
+      { id: V4_REQUIREMENT_LABEL, name: "Requirement", color: "#123456", description: "Canonical requirement.", archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" },
+      { id: V4_DECISION_LABEL, name: "decision", color: "#654321", description: "Canonical decision.", archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
+      { id: V4_TYPE_GROUP, name: "Type", color: "#888888", description: null, archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: true, parentId: null, parentName: null, teamId: null, teamKey: null },
+      { id: V4_RISK_LABEL, name: "risk", color: "#ff0000", description: "Canonical risk.", archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
     ],
     relations: [],
     teams: [{ id: V4_TEAM, key: "PLA", name: "Platform", archivedAt: null }],
@@ -1688,7 +1688,7 @@ test("Requirement is team-scoped while decision reuses the canonical grouped Typ
   assert.throws(() => validate(wrongScope), /decision.*scope|team|pinned/i);
 
   const substitute = fixture();
-  substitute.capture.labels.push({ id: V4_REPLACEMENT, name: "Decision", color: "#654321", description: "Substitute decision.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" });
+  substitute.capture.labels.push({ id: V4_REPLACEMENT, name: "Decision", color: "#654321", description: "Substitute decision.", archivedAt: null, retiredAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" });
   substitute.capture.coverage.totals.labels += 1;
   substitute.capture.coverage.topLevel.labels.rows += 1;
   rebindCapture(substitute);

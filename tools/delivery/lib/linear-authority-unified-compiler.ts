@@ -258,7 +258,7 @@ function selectedRiskLabels(
   for (const [name, expected] of definitions) {
     const pinned = one(contract.labels.filter((row) => row.name === name), `${name} risk label contract`);
     const label = one((capture.labels as CapturedLabel[]).filter((row) =>
-      row.id === pinned.id && row.archivedAt === null && row.isGroup === false && row.name === name), `${name} risk label`);
+      row.id === pinned.id && row.archivedAt === null && row.retiredAt === null && row.isGroup === false && row.name === name), `${name} risk label`);
     if (label.teamId !== null || label.parentName !== expected.parent ||
       label.color.toLocaleUpperCase("en-US") !== expected.color.toLocaleUpperCase("en-US") ||
       label.description !== expected.description) {
@@ -292,7 +292,7 @@ function validateProgramLabelDefinitions(
     }
     const label = one((capture.labels as CapturedLabel[]).filter((row) => row.id === definition.id), `program label ${definition.id}`);
     const parent = one((capture.labels as CapturedLabel[]).filter((row) => row.id === definition.groupId), `program label group ${definition.groupId}`);
-    if (label.archivedAt !== null || label.inheritedFromId !== null || label.isGroup !== false ||
+    if (label.archivedAt !== null || label.retiredAt !== null || label.inheritedFromId !== null || label.isGroup !== false ||
       label.name !== definition.name || label.parentId !== definition.groupId ||
       label.parentName !== definition.groupName || label.teamId !== null || label.teamKey !== null ||
       typeof label.color !== "string" || (label.description !== null && typeof label.description !== "string")) {
@@ -421,7 +421,7 @@ function riskSnapshot(input: {
     row.teamId === input.requirementTeam.id && row.name === "Approved" && row.type === "completed"), "Requirements Approved state");
   const groups = ["Type", "Risk"].map((name) => {
     const row = one((input.capture.labels as CapturedLabel[]).filter((label) =>
-      label.archivedAt === null && label.isGroup === true && label.name === name), `${name} label group`);
+      label.archivedAt === null && label.retiredAt === null && label.isGroup === true && label.name === name), `${name} label group`);
     return { id: row.id, name: row.name, teamId: row.teamId, archivedAt: row.archivedAt };
   });
   const requirementById = new Map(input.semantic.plan.requirements.map((row) => [row.canonicalLegacyId, row]));

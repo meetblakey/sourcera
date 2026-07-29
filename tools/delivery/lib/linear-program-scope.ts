@@ -77,6 +77,7 @@ export type LinearAuthorityIssueLabelContract = {
 
 export interface LinearAuthorityIssueLabelCapture extends LinearAuthorityIssueLabelContractEntry {
   archivedAt: string | null;
+  retiredAt: string | null;
   inheritedFromId: string | null;
   isGroup: boolean;
 }
@@ -251,7 +252,7 @@ export function buildLinearAuthorityIssueLabelContract(
     const matches = labels.filter((label) => label.name === name && label.isGroup);
     if (matches.length !== 1) throw new Error(`Authority label group ${name} must resolve exactly once`);
     const group = matches[0]!;
-    if (!UUID.test(group.id) || group.archivedAt !== null || group.inheritedFromId !== null ||
+    if (!UUID.test(group.id) || group.archivedAt !== null || group.retiredAt !== null || group.inheritedFromId !== null ||
       !group.isGroup || group.parentId !== null || group.parentName !== null ||
       group.teamId !== null || group.teamKey !== null ||
       !text(group.color) || (group.description !== null && typeof group.description !== "string")) {
@@ -274,7 +275,7 @@ export function buildLinearAuthorityIssueLabelContract(
     if (matches.length !== 1) throw new Error(`Authority label ${name} must resolve exactly once`);
     const label = matches[0]!;
     const expectedParentName = LABEL_PARENT_NAMES.get(name)!;
-    if (!UUID.test(label.id) || label.archivedAt !== null || label.inheritedFromId !== null ||
+    if (!UUID.test(label.id) || label.archivedAt !== null || label.retiredAt !== null || label.inheritedFromId !== null ||
       label.isGroup || label.parentName !== expectedParentName ||
       (expectedParentName === null) !== (label.parentId === null) ||
       (name === "Requirement"

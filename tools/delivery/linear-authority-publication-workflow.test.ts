@@ -12,10 +12,10 @@ test("authority workflow is manual, main-only, bounded, and single-flight", () =
   assert.doesNotMatch(workflow, /^  (?:push|pull_request|schedule):/m);
   assert.match(workflow, /github\.repository == 'meetblakey\/sourcera'/);
   assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
-  assert.match(workflow, /group: linear-authority-publication-main/);
+  assert.match(workflow, /group: linear-authority-writes-main/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /timeout-minutes: 120/);
-  assert.match(workflow, /permissions:\n  contents: read/);
+  assert.match(workflow, /permissions:\n  actions: read\n  contents: read/);
   assert.doesNotMatch(workflow, /contents: write/);
   assert.match(workflow, /Re-verify exact main checkout after gates/);
   assert.match(workflow, /git ls-files --others --exclude-standard/);
@@ -47,6 +47,12 @@ test("authority workflow captures and validates before obtaining a write credent
   assert.match(workflow, /\.readyForBaseline == true and \.createLabels == \[\]/);
   assert.match(workflow, /\.requirements == 186/);
   assert.match(workflow, /\.labelContractRoot \| test\("\^\[a-f0-9\]\{64\}\$"\)/);
+  assert.match(workflow, /Verify pinned Requirement migration finalize artifact metadata/);
+  assert.match(workflow, /expected_migration_artifact_digest/);
+  assert.match(workflow, /expected_migration_candidate_root/);
+  assert.match(workflow, /expected_migration_finalize_receipt_root/);
+  assert.match(workflow, /--migration-candidate \/tmp\/linear-authority\/migration\/linear-requirement-label-replacement-candidate\.json/);
+  assert.match(workflow, /--migration-finalize-receipt \/tmp\/linear-authority\/migration\/phase-receipt\.json/);
 });
 
 test("authority workflow proves a fresh stable readback with zero applied writes", () => {

@@ -1,0 +1,529 @@
+name: Linear Requirement label replacement
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Run exactly one guarded replacement phase
+        required: true
+        type: choice
+        default: plan
+        options:
+          - plan
+          - rename
+          - create
+          - replace
+          - verify
+          - retire
+          - finalize
+      direction:
+        description: Forward execution or guarded compensation
+        required: true
+        type: choice
+        default: forward
+        options:
+          - forward
+          - compensation
+      candidate_run_id:
+        description: Pinned plan run containing the exact candidate
+        required: false
+        type: string
+      candidate_run_attempt:
+        description: Pinned plan run attempt
+        required: false
+        type: string
+      expected_candidate_artifact_digest:
+        description: Exact GitHub sha256 artifact digest from the plan run
+        required: false
+        type: string
+      expected_candidate_root:
+        description: Exact candidate Merkle root
+        required: false
+        type: string
+      prior_receipt_run_id:
+        description: Pinned immediately preceding phase run
+        required: false
+        type: string
+      prior_receipt_run_attempt:
+        description: Pinned immediately preceding phase run attempt
+        required: false
+        type: string
+      expected_prior_receipt_artifact_digest:
+        description: Exact GitHub sha256 artifact digest from the preceding phase
+        required: false
+        type: string
+      expected_previous_receipt_root:
+        description: Exact preceding phase receipt root
+        required: false
+        type: string
+      resume_journal_run_id:
+        description: Optional pinned failed mutation run to resume
+        required: false
+        type: string
+      resume_journal_run_attempt:
+        description: Optional pinned failed mutation run attempt
+        required: false
+        type: string
+      expected_resume_journal_artifact_digest:
+        description: Exact GitHub sha256 artifact digest containing the resume journal
+        required: false
+        type: string
+      expected_resume_journal_sha256:
+        description: Exact sha256 of the resume journal file
+        required: false
+        type: string
+      expected_resume_receipts_sha256:
+        description: Exact sha256 of the durable resume receipt stream
+        required: false
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: linear-authority-writes-main
+  cancel-in-progress: false
+
+jobs:
+  replace-label:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'meetblakey/sourcera' &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Prepare isolated migration directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          install -d -m 0700 \
+            /tmp/linear-requirement-label-replacement/raw \
+            /tmp/linear-requirement-label-replacement/safe \
+            /tmp/linear-requirement-label-replacement/candidate \
+            /tmp/linear-requirement-label-replacement/prior \
+            /tmp/linear-requirement-label-replacement/resume
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - name: Verify exact main checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$GITHUB_REF" = "refs/heads/main"
+          git diff --exit-code
+          git diff --cached --exit-code
+      - name: Verify delivery code and source contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+          tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/source-checksums.ts --contract delivery/ticket-source-checksums.json
+          npm --prefix tools/spec-lint run typecheck
+          npm --prefix tools/spec-lint run all
+          tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
+          tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
+      - name: Re-verify exact main checkout after gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --exit-code
+          git diff --cached --exit-code
+          untracked="$(git ls-files --others --exclude-standard)"
+          if [[ -n "$untracked" ]]; then
+            printf '%s\n' "$untracked" >&2
+            exit 1
+          fi
+      - name: Validate phase handoff pins
+        shell: bash
+        env:
+          MODE: ${{ inputs.mode }}
+          DIRECTION: ${{ inputs.direction }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+          CANDIDATE_RUN_ATTEMPT: ${{ inputs.candidate_run_attempt }}
+          EXPECTED_CANDIDATE_ARTIFACT_DIGEST: ${{ inputs.expected_candidate_artifact_digest }}
+          EXPECTED_CANDIDATE_ROOT: ${{ inputs.expected_candidate_root }}
+          PRIOR_RECEIPT_RUN_ID: ${{ inputs.prior_receipt_run_id }}
+          PRIOR_RECEIPT_RUN_ATTEMPT: ${{ inputs.prior_receipt_run_attempt }}
+          EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST: ${{ inputs.expected_prior_receipt_artifact_digest }}
+          EXPECTED_PREVIOUS_RECEIPT_ROOT: ${{ inputs.expected_previous_receipt_root }}
+          RESUME_JOURNAL_RUN_ID: ${{ inputs.resume_journal_run_id }}
+          RESUME_JOURNAL_RUN_ATTEMPT: ${{ inputs.resume_journal_run_attempt }}
+          EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST: ${{ inputs.expected_resume_journal_artifact_digest }}
+          EXPECTED_RESUME_JOURNAL_SHA256: ${{ inputs.expected_resume_journal_sha256 }}
+          EXPECTED_RESUME_RECEIPTS_SHA256: ${{ inputs.expected_resume_receipts_sha256 }}
+        run: |
+          set -euo pipefail
+          require_empty() {
+            local name="$1" value="$2"
+            [[ -z "$value" ]] || { echo "$name is not valid for $MODE" >&2; exit 1; }
+          }
+          require_number() {
+            local name="$1" value="$2"
+            [[ "$value" =~ ^[1-9][0-9]*$ ]] || { echo "$name must be a positive integer" >&2; exit 1; }
+          }
+          require_root() {
+            local name="$1" value="$2"
+            [[ "$value" =~ ^[a-f0-9]{64}$ ]] || { echo "$name must be an exact 64-character lowercase root" >&2; exit 1; }
+          }
+          require_artifact_digest() {
+            local name="$1" value="$2"
+            [[ "$value" =~ ^sha256:[a-f0-9]{64}$ ]] || { echo "$name must be an exact GitHub sha256 digest" >&2; exit 1; }
+          }
+
+          if [[ "$MODE" == "plan" ]]; then
+            [[ "$DIRECTION" == "forward" ]] || { echo "plan is forward-only" >&2; exit 1; }
+            for value in \
+              "$CANDIDATE_RUN_ID" "$CANDIDATE_RUN_ATTEMPT" \
+              "$EXPECTED_CANDIDATE_ARTIFACT_DIGEST" "$EXPECTED_CANDIDATE_ROOT" \
+              "$PRIOR_RECEIPT_RUN_ID" "$PRIOR_RECEIPT_RUN_ATTEMPT" \
+              "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST" "$EXPECTED_PREVIOUS_RECEIPT_ROOT" \
+              "$RESUME_JOURNAL_RUN_ID" "$RESUME_JOURNAL_RUN_ATTEMPT" \
+              "$EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST" "$EXPECTED_RESUME_JOURNAL_SHA256" \
+              "$EXPECTED_RESUME_RECEIPTS_SHA256"; do
+              require_empty "handoff input" "$value"
+            done
+            exit 0
+          fi
+
+          require_number candidate_run_id "$CANDIDATE_RUN_ID"
+          require_number candidate_run_attempt "$CANDIDATE_RUN_ATTEMPT"
+          require_artifact_digest expected_candidate_artifact_digest "$EXPECTED_CANDIDATE_ARTIFACT_DIGEST"
+          require_root expected_candidate_root "$EXPECTED_CANDIDATE_ROOT"
+
+          if [[ "$DIRECTION" == "compensation" ]]; then
+            [[ "$MODE" =~ ^(rename|create|replace|retire)$ ]] || { echo "compensation is valid only for mutation phases" >&2; exit 1; }
+          fi
+
+          if [[ "$MODE" == "rename" && "$DIRECTION" == "forward" ]]; then
+            require_empty prior_receipt_run_id "$PRIOR_RECEIPT_RUN_ID"
+            require_empty prior_receipt_run_attempt "$PRIOR_RECEIPT_RUN_ATTEMPT"
+            require_empty expected_prior_receipt_artifact_digest "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST"
+            require_empty expected_previous_receipt_root "$EXPECTED_PREVIOUS_RECEIPT_ROOT"
+          elif [[ "$MODE" == "rename" && "$DIRECTION" == "compensation" && -z "$PRIOR_RECEIPT_RUN_ID" ]]; then
+            require_empty prior_receipt_run_attempt "$PRIOR_RECEIPT_RUN_ATTEMPT"
+            require_empty expected_prior_receipt_artifact_digest "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST"
+            require_empty expected_previous_receipt_root "$EXPECTED_PREVIOUS_RECEIPT_ROOT"
+            [[ -n "$RESUME_JOURNAL_RUN_ID" ]] || { echo "rename compensation requires a forward receipt or failed-run resume" >&2; exit 1; }
+          else
+            require_number prior_receipt_run_id "$PRIOR_RECEIPT_RUN_ID"
+            require_number prior_receipt_run_attempt "$PRIOR_RECEIPT_RUN_ATTEMPT"
+            require_artifact_digest expected_prior_receipt_artifact_digest "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST"
+            require_root expected_previous_receipt_root "$EXPECTED_PREVIOUS_RECEIPT_ROOT"
+          fi
+
+          if [[ "$MODE" =~ ^(rename|create|replace|retire)$ && -n "$RESUME_JOURNAL_RUN_ID" ]]; then
+            require_number resume_journal_run_id "$RESUME_JOURNAL_RUN_ID"
+            require_number resume_journal_run_attempt "$RESUME_JOURNAL_RUN_ATTEMPT"
+            require_artifact_digest expected_resume_journal_artifact_digest "$EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST"
+            require_root expected_resume_journal_sha256 "$EXPECTED_RESUME_JOURNAL_SHA256"
+            require_root expected_resume_receipts_sha256 "$EXPECTED_RESUME_RECEIPTS_SHA256"
+          else
+            require_empty resume_journal_run_id "$RESUME_JOURNAL_RUN_ID"
+            require_empty resume_journal_run_attempt "$RESUME_JOURNAL_RUN_ATTEMPT"
+            require_empty expected_resume_journal_artifact_digest "$EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST"
+            require_empty expected_resume_journal_sha256 "$EXPECTED_RESUME_JOURNAL_SHA256"
+            require_empty expected_resume_receipts_sha256 "$EXPECTED_RESUME_RECEIPTS_SHA256"
+          fi
+      - name: Capture fresh accepted Linear state
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --out /tmp/linear-requirement-label-replacement/raw/accepted-fingerprint.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --accepted-fingerprint /tmp/linear-requirement-label-replacement/raw/accepted-fingerprint.json \
+            --out /tmp/linear-requirement-label-replacement/raw/fingerprint.json \
+            --descriptions-out /tmp/linear-requirement-label-replacement/raw/issue-descriptions.json \
+            --native-identity-out /tmp/linear-requirement-label-replacement/raw/native-identity.json \
+            --documents-out /tmp/linear-requirement-label-replacement/raw/documents.json \
+            --receipt-out /tmp/linear-requirement-label-replacement/raw/capture-receipt.json
+      - name: Capture second stable final Linear state
+        if: inputs.mode == 'finalize'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --out /tmp/linear-requirement-label-replacement/raw/second-accepted-fingerprint.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --accepted-fingerprint /tmp/linear-requirement-label-replacement/raw/second-accepted-fingerprint.json \
+            --out /tmp/linear-requirement-label-replacement/raw/second-fingerprint.json \
+            --descriptions-out /tmp/linear-requirement-label-replacement/raw/second-issue-descriptions.json \
+            --native-identity-out /tmp/linear-requirement-label-replacement/raw/second-native-identity.json \
+            --documents-out /tmp/linear-requirement-label-replacement/raw/second-documents.json \
+            --receipt-out /tmp/linear-requirement-label-replacement/raw/second-capture-receipt.json
+      - name: Bind GitHub execution identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          jq -n \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg commit "$GITHUB_SHA" \
+            --arg ref "$GITHUB_REF" \
+            --arg runId "$GITHUB_RUN_ID" \
+            --arg runAttempt "$GITHUB_RUN_ATTEMPT" \
+            '{schemaVersion: 1, kind: "github-execution", repository: $repository, commit: $commit, ref: $ref, runId: $runId, runAttempt: $runAttempt}' \
+            > /tmp/linear-requirement-label-replacement/raw/github-execution.json
+      - name: Build mutation-disabled replacement candidate
+        if: inputs.mode == 'plan'
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          new_label_id="$(env -u LINEAR_API_KEY node -e 'const { randomUUID } = require("node:crypto"); process.stdout.write(randomUUID())')"
+          [[ "$new_label_id" =~ ^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$ ]]
+          env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx \
+            tools/delivery/build-linear-requirement-label-replacement.ts \
+            --fingerprint /tmp/linear-requirement-label-replacement/raw/fingerprint.json \
+            --issue-descriptions /tmp/linear-requirement-label-replacement/raw/issue-descriptions.json \
+            --native-identity /tmp/linear-requirement-label-replacement/raw/native-identity.json \
+            --capture-receipt /tmp/linear-requirement-label-replacement/raw/capture-receipt.json \
+            --program-scope delivery/linear-program-scope.json \
+            --github-execution /tmp/linear-requirement-label-replacement/raw/github-execution.json \
+            --new-label-id "$new_label_id" \
+            --repository-root "$GITHUB_WORKSPACE" \
+            --out /tmp/linear-requirement-label-replacement/safe/linear-requirement-label-replacement-candidate.json \
+            > /tmp/linear-requirement-label-replacement/safe/plan-summary.json
+          candidate_root="$(jq -er '.root | select(test("^[a-f0-9]{64}$"))' /tmp/linear-requirement-label-replacement/safe/linear-requirement-label-replacement-candidate.json)"
+          jq -e '.mutationAuthorized == false' /tmp/linear-requirement-label-replacement/safe/linear-requirement-label-replacement-candidate.json >/dev/null
+          printf '%s\n' "$candidate_root" > /tmp/linear-requirement-label-replacement/safe/candidate-root.txt
+          sha256sum /tmp/linear-requirement-label-replacement/safe/linear-requirement-label-replacement-candidate.json \
+            > /tmp/linear-requirement-label-replacement/safe/candidate.sha256
+      - name: Verify pinned candidate artifact metadata
+        if: inputs.mode != 'plan'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+          CANDIDATE_RUN_ATTEMPT: ${{ inputs.candidate_run_attempt }}
+          EXPECTED_CANDIDATE_ARTIFACT_DIGEST: ${{ inputs.expected_candidate_artifact_digest }}
+        run: |
+          set -euo pipefail
+          artifact_name="linear-requirement-label-replacement-${CANDIDATE_RUN_ID}-${CANDIDATE_RUN_ATTEMPT}"
+          mapfile -t digests < <(
+            gh api --paginate --slurp \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${CANDIDATE_RUN_ID}/artifacts?per_page=100" |
+              jq -r --arg name "$artifact_name" '.[] | .artifacts[] | select(.name == $name and .expired == false) | .digest'
+          )
+          [[ "${#digests[@]}" -eq 1 ]] || { echo "candidate artifact identity is not unique" >&2; exit 1; }
+          [[ "${digests[0]}" == "$EXPECTED_CANDIDATE_ARTIFACT_DIGEST" ]] || { echo "candidate artifact digest mismatch" >&2; exit 1; }
+      - name: Download pinned candidate artifact
+        if: inputs.mode != 'plan'
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ format('linear-requirement-label-replacement-{0}-{1}', inputs.candidate_run_id, inputs.candidate_run_attempt) }}
+          path: /tmp/linear-requirement-label-replacement/candidate/
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.candidate_run_id }}
+      - name: Validate exact downloaded candidate
+        if: inputs.mode != 'plan'
+        shell: bash
+        env:
+          EXPECTED_CANDIDATE_ROOT: ${{ inputs.expected_candidate_root }}
+        run: |
+          set -euo pipefail
+          candidate=/tmp/linear-requirement-label-replacement/candidate/linear-requirement-label-replacement-candidate.json
+          test -s "$candidate"
+          candidate_root="$(jq -er '.root | select(test("^[a-f0-9]{64}$"))' "$candidate")"
+          test "$candidate_root" = "$EXPECTED_CANDIDATE_ROOT"
+          jq -e '.mutationAuthorized == false' "$candidate" >/dev/null
+          cp "$candidate" /tmp/linear-requirement-label-replacement/safe/linear-requirement-label-replacement-candidate.json
+          printf '%s\n' "$candidate_root" > /tmp/linear-requirement-label-replacement/safe/candidate-root.txt
+      - name: Verify pinned predecessor artifact metadata
+        if: inputs.prior_receipt_run_id != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRIOR_RECEIPT_RUN_ID: ${{ inputs.prior_receipt_run_id }}
+          PRIOR_RECEIPT_RUN_ATTEMPT: ${{ inputs.prior_receipt_run_attempt }}
+          EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST: ${{ inputs.expected_prior_receipt_artifact_digest }}
+        run: |
+          set -euo pipefail
+          artifact_name="linear-requirement-label-replacement-${PRIOR_RECEIPT_RUN_ID}-${PRIOR_RECEIPT_RUN_ATTEMPT}"
+          mapfile -t digests < <(
+            gh api --paginate --slurp \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${PRIOR_RECEIPT_RUN_ID}/artifacts?per_page=100" |
+              jq -r --arg name "$artifact_name" '.[] | .artifacts[] | select(.name == $name and .expired == false) | .digest'
+          )
+          [[ "${#digests[@]}" -eq 1 ]] || { echo "predecessor artifact identity is not unique" >&2; exit 1; }
+          [[ "${digests[0]}" == "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST" ]] || { echo "predecessor artifact digest mismatch" >&2; exit 1; }
+      - name: Download pinned predecessor receipt
+        if: inputs.prior_receipt_run_id != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ format('linear-requirement-label-replacement-{0}-{1}', inputs.prior_receipt_run_id, inputs.prior_receipt_run_attempt) }}
+          path: /tmp/linear-requirement-label-replacement/prior/
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.prior_receipt_run_id }}
+      - name: Verify pinned resume artifact metadata
+        if: inputs.resume_journal_run_id != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESUME_JOURNAL_RUN_ID: ${{ inputs.resume_journal_run_id }}
+          RESUME_JOURNAL_RUN_ATTEMPT: ${{ inputs.resume_journal_run_attempt }}
+          EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST: ${{ inputs.expected_resume_journal_artifact_digest }}
+        run: |
+          set -euo pipefail
+          artifact_name="linear-requirement-label-replacement-${RESUME_JOURNAL_RUN_ID}-${RESUME_JOURNAL_RUN_ATTEMPT}"
+          mapfile -t digests < <(
+            gh api --paginate --slurp \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${RESUME_JOURNAL_RUN_ID}/artifacts?per_page=100" |
+              jq -r --arg name "$artifact_name" '.[] | .artifacts[] | select(.name == $name and .expired == false) | .digest'
+          )
+          [[ "${#digests[@]}" -eq 1 ]] || { echo "resume artifact identity is not unique" >&2; exit 1; }
+          [[ "${digests[0]}" == "$EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST" ]] || { echo "resume artifact digest mismatch" >&2; exit 1; }
+      - name: Download pinned mutation resume evidence
+        if: inputs.resume_journal_run_id != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ format('linear-requirement-label-replacement-{0}-{1}', inputs.resume_journal_run_id, inputs.resume_journal_run_attempt) }}
+          path: /tmp/linear-requirement-label-replacement/resume/
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.resume_journal_run_id }}
+      - name: Validate exact mutation resume evidence
+        if: inputs.resume_journal_run_id != ''
+        shell: bash
+        env:
+          EXPECTED_RESUME_JOURNAL_SHA256: ${{ inputs.expected_resume_journal_sha256 }}
+          EXPECTED_RESUME_RECEIPTS_SHA256: ${{ inputs.expected_resume_receipts_sha256 }}
+        run: |
+          set -euo pipefail
+          journal=/tmp/linear-requirement-label-replacement/resume/phase-journal.jsonl
+          test -s "$journal"
+          actual="$(sha256sum "$journal" | awk '{print $1}')"
+          test "$actual" = "$EXPECTED_RESUME_JOURNAL_SHA256"
+          receipts=/tmp/linear-requirement-label-replacement/resume/phase-core-receipts.jsonl
+          test -f "$receipts"
+          actual_receipts="$(sha256sum "$receipts" | awk '{print $1}')"
+          test "$actual_receipts" = "$EXPECTED_RESUME_RECEIPTS_SHA256"
+      - name: Apply exactly one mutation phase
+        if: contains(fromJSON('["rename","create","replace","retire"]'), inputs.mode)
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          MODE: ${{ inputs.mode }}
+          DIRECTION: ${{ inputs.direction }}
+          PRIOR_RECEIPT_RUN_ID: ${{ inputs.prior_receipt_run_id }}
+          EXPECTED_CANDIDATE_ROOT: ${{ inputs.expected_candidate_root }}
+          EXPECTED_PREVIOUS_RECEIPT_ROOT: ${{ inputs.expected_previous_receipt_root }}
+          EXPECTED_RESUME_JOURNAL_SHA256: ${{ inputs.expected_resume_journal_sha256 }}
+          EXPECTED_RESUME_RECEIPTS_SHA256: ${{ inputs.expected_resume_receipts_sha256 }}
+          RESUME_JOURNAL_RUN_ID: ${{ inputs.resume_journal_run_id }}
+        run: |
+          set -euo pipefail
+          umask 077
+          args=(
+            --candidate /tmp/linear-requirement-label-replacement/candidate/linear-requirement-label-replacement-candidate.json
+            --phase "$MODE"
+            --expected-root "$EXPECTED_CANDIDATE_ROOT"
+            --native-identity /tmp/linear-requirement-label-replacement/raw/native-identity.json
+            --capture-receipt /tmp/linear-requirement-label-replacement/raw/capture-receipt.json
+            --run-id "$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT.$MODE.$DIRECTION"
+            --journal-out /tmp/linear-requirement-label-replacement/safe/phase-journal.jsonl
+            --receipt-out /tmp/linear-requirement-label-replacement/safe/phase-receipt.json
+            --chunk-receipts-out /tmp/linear-requirement-label-replacement/safe/phase-core-receipts.jsonl
+            --apply
+          )
+          if [[ -n "$PRIOR_RECEIPT_RUN_ID" ]]; then
+            args+=(
+              --previous-receipt /tmp/linear-requirement-label-replacement/prior/phase-receipt.json
+              --previous-journal /tmp/linear-requirement-label-replacement/prior/phase-journal.jsonl
+              --expected-previous-receipt-root "$EXPECTED_PREVIOUS_RECEIPT_ROOT"
+            )
+          fi
+          if [[ -n "$RESUME_JOURNAL_RUN_ID" ]]; then
+            args+=(
+              --resume-journal /tmp/linear-requirement-label-replacement/resume/phase-journal.jsonl
+              --expected-resume-journal-sha256 "$EXPECTED_RESUME_JOURNAL_SHA256"
+              --resume-receipts /tmp/linear-requirement-label-replacement/resume/phase-core-receipts.jsonl
+              --expected-resume-receipts-sha256 "$EXPECTED_RESUME_RECEIPTS_SHA256"
+            )
+          fi
+          if [[ "$DIRECTION" == "compensation" ]]; then
+            args+=(--compensate)
+          fi
+          tools/spec-lint/node_modules/.bin/tsx \
+            tools/delivery/run-linear-requirement-label-replacement.ts "${args[@]}" \
+            > /tmp/linear-requirement-label-replacement/safe/phase-summary.json
+      - name: Verify exactly one credential-free phase
+        if: contains(fromJSON('["verify","finalize"]'), inputs.mode)
+        shell: bash
+        env:
+          MODE: ${{ inputs.mode }}
+          EXPECTED_CANDIDATE_ROOT: ${{ inputs.expected_candidate_root }}
+          EXPECTED_PREVIOUS_RECEIPT_ROOT: ${{ inputs.expected_previous_receipt_root }}
+        run: |
+          set -euo pipefail
+          umask 077
+          args=(
+            --candidate /tmp/linear-requirement-label-replacement/candidate/linear-requirement-label-replacement-candidate.json
+            --phase "$MODE"
+            --expected-root "$EXPECTED_CANDIDATE_ROOT"
+            --native-identity /tmp/linear-requirement-label-replacement/raw/native-identity.json
+            --capture-receipt /tmp/linear-requirement-label-replacement/raw/capture-receipt.json
+            --previous-receipt /tmp/linear-requirement-label-replacement/prior/phase-receipt.json
+            --previous-journal /tmp/linear-requirement-label-replacement/prior/phase-journal.jsonl
+            --expected-previous-receipt-root "$EXPECTED_PREVIOUS_RECEIPT_ROOT"
+            --run-id "$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT.$MODE"
+            --journal-out /tmp/linear-requirement-label-replacement/safe/phase-journal.jsonl
+            --receipt-out /tmp/linear-requirement-label-replacement/safe/phase-receipt.json
+            --chunk-receipts-out /tmp/linear-requirement-label-replacement/safe/phase-core-receipts.jsonl
+          )
+          if [[ "$MODE" == "finalize" ]]; then
+            args+=(
+              --second-native-identity /tmp/linear-requirement-label-replacement/raw/second-native-identity.json
+              --second-capture-receipt /tmp/linear-requirement-label-replacement/raw/second-capture-receipt.json
+            )
+          fi
+          env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx \
+            tools/delivery/run-linear-requirement-label-replacement.ts "${args[@]}" \
+            > /tmp/linear-requirement-label-replacement/safe/phase-summary.json
+      - name: Remove raw migration material
+        if: always()
+        shell: bash
+        run: |
+          rm -rf /tmp/linear-requirement-label-replacement/raw
+          rm -rf /tmp/linear-requirement-label-replacement/candidate
+          rm -rf /tmp/linear-requirement-label-replacement/prior
+          rm -rf /tmp/linear-requirement-label-replacement/resume
+      - name: Upload safe migration evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-requirement-label-replacement-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/linear-requirement-label-replacement/safe/
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 90

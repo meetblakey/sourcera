@@ -16,12 +16,33 @@ on:
         description: Exact dry-run plan root required for apply
         required: false
         type: string
+      migration_finalize_run_id:
+        description: Pinned Requirement-label finalize run
+        required: false
+        type: string
+      migration_finalize_run_attempt:
+        description: Pinned Requirement-label finalize run attempt
+        required: false
+        type: string
+      expected_migration_artifact_digest:
+        description: Exact GitHub sha256 digest of the finalize artifact
+        required: false
+        type: string
+      expected_migration_candidate_root:
+        description: Exact finalized Requirement-label candidate root
+        required: false
+        type: string
+      expected_migration_finalize_receipt_root:
+        description: Exact finalize runner receipt root
+        required: false
+        type: string
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
-  group: linear-authority-publication-main
+  group: linear-authority-writes-main
   cancel-in-progress: false
 
 jobs:
@@ -71,6 +92,31 @@ jobs:
           if [[ -n "$untracked" ]]; then
             printf '%s\n' "$untracked" >&2
             exit 1
+          fi
+      - name: Validate finalized Requirement migration handoff pins
+        shell: bash
+        env:
+          AUTHORITY_MODE: ${{ inputs.mode }}
+          MIGRATION_FINALIZE_RUN_ID: ${{ inputs.migration_finalize_run_id }}
+          MIGRATION_FINALIZE_RUN_ATTEMPT: ${{ inputs.migration_finalize_run_attempt }}
+          EXPECTED_MIGRATION_ARTIFACT_DIGEST: ${{ inputs.expected_migration_artifact_digest }}
+          EXPECTED_MIGRATION_CANDIDATE_ROOT: ${{ inputs.expected_migration_candidate_root }}
+          EXPECTED_MIGRATION_FINALIZE_RECEIPT_ROOT: ${{ inputs.expected_migration_finalize_receipt_root }}
+        run: |
+          set -euo pipefail
+          if [[ "$AUTHORITY_MODE" == "baseline" ]]; then
+            [[ "$MIGRATION_FINALIZE_RUN_ID" =~ ^[1-9][0-9]*$ ]] || { echo "migration finalize run ID is invalid" >&2; exit 1; }
+            [[ "$MIGRATION_FINALIZE_RUN_ATTEMPT" =~ ^[1-9][0-9]*$ ]] || { echo "migration finalize run attempt is invalid" >&2; exit 1; }
+            [[ "$EXPECTED_MIGRATION_ARTIFACT_DIGEST" =~ ^sha256:[a-f0-9]{64}$ ]] || { echo "migration finalize artifact digest is invalid" >&2; exit 1; }
+            [[ "$EXPECTED_MIGRATION_CANDIDATE_ROOT" =~ ^[a-f0-9]{64}$ ]] || { echo "migration candidate root is invalid" >&2; exit 1; }
+            [[ "$EXPECTED_MIGRATION_FINALIZE_RECEIPT_ROOT" =~ ^[a-f0-9]{64}$ ]] || { echo "migration finalize receipt root is invalid" >&2; exit 1; }
+          else
+            [[ -z "$MIGRATION_FINALIZE_RUN_ID" && -z "$MIGRATION_FINALIZE_RUN_ATTEMPT" &&
+               -z "$EXPECTED_MIGRATION_ARTIFACT_DIGEST" && -z "$EXPECTED_MIGRATION_CANDIDATE_ROOT" &&
+               -z "$EXPECTED_MIGRATION_FINALIZE_RECEIPT_ROOT" ]] || {
+              echo "Requirement migration handoff inputs are baseline-only" >&2
+              exit 1
+            }
           fi
       - name: Capture current runtime inventory
         shell: bash
@@ -126,9 +172,36 @@ jobs:
             --arg runAttempt "$GITHUB_RUN_ATTEMPT" \
             '{schemaVersion: 1, kind: "github-execution", repository: $repository, commit: $commit, ref: $ref, runId: $runId, runAttempt: $runAttempt}' \
             > /tmp/linear-authority/raw/github-execution.json
+      - name: Verify pinned Requirement migration finalize artifact metadata
+        if: inputs.mode == 'baseline'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MIGRATION_FINALIZE_RUN_ID: ${{ inputs.migration_finalize_run_id }}
+          MIGRATION_FINALIZE_RUN_ATTEMPT: ${{ inputs.migration_finalize_run_attempt }}
+          EXPECTED_MIGRATION_ARTIFACT_DIGEST: ${{ inputs.expected_migration_artifact_digest }}
+        run: |
+          set -euo pipefail
+          umask 077
+          install -d -m 0700 /tmp/linear-authority/migration
+          artifact_name="linear-requirement-label-replacement-${MIGRATION_FINALIZE_RUN_ID}-${MIGRATION_FINALIZE_RUN_ATTEMPT}"
+          mapfile -t digests < <(
+            gh api --paginate --slurp \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${MIGRATION_FINALIZE_RUN_ID}/artifacts?per_page=100" |
+              jq -r --arg name "$artifact_name" '.[] | .artifacts[] | select(.name == $name and .expired == false) | .digest'
+          )
+          [[ "${#digests[@]}" -eq 1 ]] || { echo "migration finalize artifact identity is not unique" >&2; exit 1; }
+          [[ "${digests[0]}" == "$EXPECTED_MIGRATION_ARTIFACT_DIGEST" ]] || { echo "migration finalize artifact digest mismatch" >&2; exit 1; }
+      - name: Download pinned Requirement migration finalize artifact
+        if: inputs.mode == 'baseline'
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with: { name: "${{ format('linear-requirement-label-replacement-{0}-{1}', inputs.migration_finalize_run_id, inputs.migration_finalize_run_attempt) }}", path: /tmp/linear-authority/migration/, github-token: "${{ github.token }}", repository: "${{ github.repository }}", run-id: "${{ inputs.migration_finalize_run_id }}" }
       - name: Plan governed labels and build safe Requirement identity baseline
         if: inputs.mode == 'baseline'
         shell: bash
+        env:
+          EXPECTED_MIGRATION_CANDIDATE_ROOT: ${{ inputs.expected_migration_candidate_root }}
+          EXPECTED_MIGRATION_FINALIZE_RECEIPT_ROOT: ${{ inputs.expected_migration_finalize_receipt_root }}
         run: |
           set -euo pipefail
           umask 077
@@ -136,6 +209,10 @@ jobs:
             --native-identity /tmp/linear-authority/raw/native-identity.json \
             --capture-receipt /tmp/linear-authority/raw/capture-receipt.json \
             --program-scope delivery/linear-program-scope.json \
+            --migration-candidate /tmp/linear-authority/migration/linear-requirement-label-replacement-candidate.json \
+            --migration-finalize-receipt /tmp/linear-authority/migration/phase-receipt.json \
+            --expected-migration-candidate-root "$EXPECTED_MIGRATION_CANDIDATE_ROOT" \
+            --expected-migration-finalize-receipt-root "$EXPECTED_MIGRATION_FINALIZE_RECEIPT_ROOT" \
             --out /tmp/linear-authority/safe/linear-authority-label-bootstrap-candidate.json \
             > /tmp/linear-authority/safe/label-bootstrap-summary.json
           if jq -e '.readyForBaseline == false and (.createLabels | length) > 0' \
@@ -160,6 +237,12 @@ jobs:
             > /tmp/linear-authority/safe/baseline-summary.json
           jq -e '.initialized == true and .requirements == 186 and (.labelContractRoot | test("^[a-f0-9]{64}$"))' \
             /tmp/linear-authority/safe/baseline-summary.json >/dev/null
+          migration_requirement_id="$(jq -er '.requirementLabelMigration.requirementLabelId | select(test("^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$"))' \
+            /tmp/linear-authority/safe/linear-authority-label-bootstrap-candidate.json)"
+          baseline_requirement_id="$(jq -er \
+            '[.authorityIssueLabelContract.labels[] | select(.name == "Requirement") | .id] | if length == 1 then .[0] else error("Requirement label contract identity is not unique") end' \
+            /tmp/linear-authority/safe/linear-program-scope-candidate.json)"
+          test "$baseline_requirement_id" = "$migration_requirement_id"
       - name: Compile guarded authority package
         if: inputs.mode != 'baseline'
         shell: bash
@@ -352,6 +435,7 @@ jobs:
         shell: bash
         run: |
           rm -rf /tmp/linear-authority/raw
+          rm -rf /tmp/linear-authority/migration
           rm -rf /tmp/linear-authority/package
           rm -rf /tmp/linear-authority/post-package
           rm -rf /tmp/linear-authority/final-package

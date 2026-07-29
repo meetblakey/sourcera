@@ -16,7 +16,11 @@ function fail(message: string): never {
 }
 
 function args(argv: string[]): Map<string, string> {
-  const allowed = new Set(["--repository-root", "--native-identity", "--capture-receipt", "--program-scope", "--out"]);
+  const allowed = new Set([
+    "--repository-root", "--native-identity", "--capture-receipt", "--program-scope",
+    "--migration-candidate", "--migration-finalize-receipt", "--expected-migration-candidate-root",
+    "--expected-migration-finalize-receipt-root", "--out",
+  ]);
   const result = new Map<string, string>();
   for (let index = 0; index < argv.length; index += 2) {
     const key = argv[index];
@@ -24,7 +28,11 @@ function args(argv: string[]): Map<string, string> {
     if (!key || !allowed.has(key) || !value || value.startsWith("--") || result.has(key)) fail("arguments are invalid or duplicated");
     result.set(key, value);
   }
-  for (const key of ["--native-identity", "--capture-receipt", "--program-scope", "--out"]) {
+  for (const key of [
+    "--native-identity", "--capture-receipt", "--program-scope", "--migration-candidate",
+    "--migration-finalize-receipt", "--expected-migration-candidate-root",
+    "--expected-migration-finalize-receipt-root", "--out",
+  ]) {
     if (!result.has(key)) fail(`${key} is required`);
   }
   return result;
@@ -41,10 +49,20 @@ function sha256(value: Buffer): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
+function parsedJson(raw: Buffer, label: string): unknown {
+  try {
+    return JSON.parse(raw.toString("utf8")) as unknown;
+  } catch {
+    fail(`${label} is not valid JSON`);
+  }
+}
+
 const values = args(process.argv.slice(2));
 const root = resolve(values.get("--repository-root") ?? process.cwd());
 const nativeRaw = readFileSync(resolve(values.get("--native-identity")!));
 const receiptRaw = readFileSync(resolve(values.get("--capture-receipt")!));
+const migrationCandidateRaw = readFileSync(resolve(values.get("--migration-candidate")!));
+const migrationFinalizeReceiptRaw = readFileSync(resolve(values.get("--migration-finalize-receipt")!));
 const programPath = resolve(values.get("--program-scope")!);
 const canonicalProgramPath = join(root, "delivery/linear-program-scope.json");
 if (programPath !== canonicalProgramPath) fail("program scope must be the canonical repository path");
@@ -91,6 +109,10 @@ const candidate = buildLinearAuthorityLabelBootstrapCandidate({
   sourceCommit: source.commit,
   nativeIdentitySha256: sha256(nativeRaw),
   captureReceiptSha256: sha256(receiptRaw),
+  migrationCandidate: parsedJson(migrationCandidateRaw, "migration candidate"),
+  migrationFinalizeReceipt: parsedJson(migrationFinalizeReceiptRaw, "migration finalize receipt"),
+  expectedMigrationCandidateRoot: values.get("--expected-migration-candidate-root")!,
+  expectedMigrationFinalizeReceiptRoot: values.get("--expected-migration-finalize-receipt-root")!,
 });
 writeFileSync(resolve(values.get("--out")!), canonicalLinearAuthorityLabelBootstrapCandidateJson(candidate), { flag: "wx" });
 process.stdout.write(`${JSON.stringify({

@@ -1793,11 +1793,12 @@ function validateNativeCapture(value: unknown): NativeIndexes {
     assertUnique(row.relationIds, `Native issue ${row.issueUuid} relation UUIDs`);
   }
   for (const row of capture.labels) {
-    exactKeys(row, ["id", "name", "color", "description", "archivedAt", "inheritedFromId", "isGroup", "parentId", "parentName", "teamId", "teamKey"], "Native label");
+    exactKeys(row, ["id", "name", "color", "description", "archivedAt", "retiredAt", "inheritedFromId", "isGroup", "parentId", "parentName", "teamId", "teamKey"], "Native label");
     reserve(row.id, "Native label UUID");
     assertString(row.name, `Native label ${row.id} name`);
     if (!/^#[0-9a-f]{6}$/i.test(row.color)) throw new Error(`Native label ${row.id} color is invalid`);
     if (row.description !== null && typeof row.description !== "string") throw new Error(`Native label ${row.id} description is invalid`);
+    if (row.retiredAt !== null && typeof row.retiredAt !== "string") throw new Error(`Native label ${row.id} retirement state is invalid`);
     if (typeof row.isGroup !== "boolean") throw new Error(`Native label ${row.id} group identity is invalid`);
     if ((row.teamId === null) !== (row.teamKey === null)) throw new Error(`Native label ${row.id} team scope is incomplete`);
     if ((row.parentId === null) !== (row.parentName === null)) throw new Error(`Native label ${row.id} parent identity is incomplete`);
@@ -2149,15 +2150,15 @@ function validateCatalogAgainstCapture(
   for (const expected of catalog.labels.values()) {
     const actual = native.labelsById.get(expected.id);
     const team = expected.teamPlanKey === null ? null : catalog.teams.get(expected.teamPlanKey)!;
-    if (!actual || actual.archivedAt !== null || actual.name !== expected.name || actual.color !== expected.color || actual.description !== expected.description || actual.isGroup !== false || actual.inheritedFromId !== null || actual.parentId !== expected.parentId || actual.parentName !== expected.parentName || actual.teamId !== (team?.id ?? null) || actual.teamKey !== (team?.key ?? null)) throw new Error(`${expected.name} label differs from its pinned color, description, scope, or must be active, non-group, and non-inherited`);
+    if (!actual || actual.archivedAt !== null || actual.retiredAt !== null || actual.name !== expected.name || actual.color !== expected.color || actual.description !== expected.description || actual.isGroup !== false || actual.inheritedFromId !== null || actual.parentId !== expected.parentId || actual.parentName !== expected.parentName || actual.teamId !== (team?.id ?? null) || actual.teamKey !== (team?.key ?? null)) throw new Error(`${expected.name} label differs from its pinned color, description, scope, or must be active, non-group, and non-inherited`);
     if (capture.labels.filter((row) => row.name === expected.name).length !== 1) throw new Error(`Native capture has a competing ${expected.name} label`);
     if (expected.parentId !== null) {
       const parent = native.labelsById.get(expected.parentId);
-      if (!parent || parent.archivedAt !== null || parent.name !== expected.parentName || parent.isGroup !== true || parent.inheritedFromId !== null || parent.teamId !== (team?.id ?? null)) throw new Error(`${expected.name} label parent group differs from its pinned identity`);
+      if (!parent || parent.archivedAt !== null || parent.retiredAt !== null || parent.name !== expected.parentName || parent.isGroup !== true || parent.inheritedFromId !== null || parent.teamId !== (team?.id ?? null)) throw new Error(`${expected.name} label parent group differs from its pinned identity`);
     }
   }
   const expectedDecision = [...catalog.labels.values()].find((label) => label.semanticRole === "decision")!;
-  const liveDecisionCandidates = capture.labels.filter((label) => label.archivedAt === null && label.name.toLocaleLowerCase("en-US") === "decision");
+  const liveDecisionCandidates = capture.labels.filter((label) => label.archivedAt === null && label.retiredAt === null && label.name.toLocaleLowerCase("en-US") === "decision");
   if (liveDecisionCandidates.length !== 1 || liveDecisionCandidates[0].id !== expectedDecision.id) throw new Error("Native capture has a duplicate or substitute semantic decision label");
   if (manifest.risks.length > 0 && [...catalog.labels.values()].filter((row) => row.semanticRole === "risk").length !== 1) throw new Error("Risk targets require exactly one pinned risk label");
 }
