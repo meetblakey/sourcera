@@ -25,7 +25,7 @@ const LOADER = resolve("tools/spec-lint/node_modules/tsx/dist/loader.mjs");
 
 const SHA = (value: string | Buffer): string => createHash("sha256").update(value).digest("hex");
 
-function invoke(args: string[], env: NodeJS.ProcessEnv = {}, cwd = process.cwd()) {
+function invoke(args: string[], env: Partial<NodeJS.ProcessEnv> = {}, cwd = process.cwd()) {
   return spawnSync(process.execPath, ["--import", LOADER, RUNNER, ...args], {
     cwd,
     encoding: "utf8",
