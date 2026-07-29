@@ -92,6 +92,7 @@ jobs:
       github.repository == 'meetblakey/sourcera' &&
       github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment: linear-authority-migration
     timeout-minutes: 120
     steps:
       - name: Prepare isolated migration directories

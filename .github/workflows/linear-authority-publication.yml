@@ -52,11 +52,13 @@ jobs:
       github.repository == 'meetblakey/sourcera' &&
       github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment: linear-authority-migration
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
@@ -68,6 +70,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$GITHUB_REF" = "refs/heads/main"
           git diff --exit-code
           git diff --cached --exit-code
       - name: Verify delivery code and source contracts

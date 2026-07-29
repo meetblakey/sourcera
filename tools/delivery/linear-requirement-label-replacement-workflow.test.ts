@@ -16,6 +16,7 @@ test("Requirement-label replacement is manual, main-only, read-only to GitHub, a
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'/);
   assert.match(workflow, /github\.repository == 'meetblakey\/sourcera'/);
   assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
+  assert.match(workflow, /environment: linear-authority-migration/);
   assert.match(workflow, /group: linear-authority-writes-main/);
   assert.match(authorityWorkflow, /group: linear-authority-writes-main/);
   assert.match(workflow, /cancel-in-progress: false/);
