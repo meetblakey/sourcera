@@ -22,6 +22,11 @@ const IDENTIFIER = /^REQ-([1-9]\d*)$/;
 const SAFE_RUN_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,199}$/;
 const CANONICAL_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 const REPLACEMENT_RECEIPT_CHUNK = 25;
+const STABLE_CAPTURE_CATALOG_KEYS = [
+  "schemaVersion", "workspace", "issues", "labels", "relations", "teams", "workflowStates",
+  "users", "initiatives", "projects", "releasePipelines", "releases", "projectMilestones",
+  "cycles", "documents", "rawDocumentIds", "coverage",
+] as const;
 
 type JsonRecord = Record<string, unknown>;
 type CaptureIssue = LinearNativeIdentityCapture["issues"][number];
@@ -302,14 +307,65 @@ function protectedNativeRoot(native: LinearRequirementLabelCapture, newLabelId?:
 }
 
 function stableNativeProjection(native: LinearRequirementLabelCapture): unknown {
-  const { issues, labels, coverage, ...rest } = native;
+  if (!native || typeof native !== "object" ||
+    Object.keys(native).sort().join("\0") !== [...STABLE_CAPTURE_CATALOG_KEYS].sort().join("\0")) {
+    fail("stable capture catalogs differ from the exact allowlist");
+  }
+  const { issues, labels, coverage } = native;
   return {
-    ...rest,
+    schemaVersion: native.schemaVersion,
+    workspace: native.workspace,
     issues: issues
       .map((issue) => ({ ...issue, labelIds: sortedLabelIds(issue.labelIds, `${issue.identifier} label IDs`) }))
       .sort((left, right) => left.issueUuid.localeCompare(right.issueUuid)),
     labels: labels.map((label) => structuredClone(label)).sort((left, right) => left.id.localeCompare(right.id)),
+    relations: native.relations,
+    teams: native.teams,
+    workflowStates: native.workflowStates,
+    users: native.users,
+    initiatives: native.initiatives,
+    projects: native.projects,
+    releasePipelines: native.releasePipelines,
+    releases: native.releases,
+    projectMilestones: native.projectMilestones,
+    cycles: native.cycles,
+    documents: native.documents,
+    rawDocumentIds: native.rawDocumentIds,
     coverage: { complete: coverage.complete, totals: coverage.totals },
+  };
+}
+
+export interface LinearRequirementLabelStableCaptureComparison {
+  firstCaptureRoot: string;
+  secondCaptureRoot: string;
+  firstCatalogRoots: Record<string, string>;
+  secondCatalogRoots: Record<string, string>;
+  differingCatalogs: string[];
+}
+
+function stableCatalogRoots(native: LinearRequirementLabelCapture): Record<string, string> {
+  const projection = stableNativeProjection(native) as JsonRecord;
+  return Object.fromEntries(
+    STABLE_CAPTURE_CATALOG_KEYS.map((key) => [key, sha256(canonicalJson(projection[key]))]),
+  );
+}
+
+export function compareLinearRequirementLabelReplacementStableCaptures(
+  first: LinearRequirementLabelCapture,
+  second: LinearRequirementLabelCapture,
+): LinearRequirementLabelStableCaptureComparison {
+  const firstProjection = stableNativeProjection(first);
+  const secondProjection = stableNativeProjection(second);
+  const firstCatalogRoots = stableCatalogRoots(first);
+  const secondCatalogRoots = stableCatalogRoots(second);
+  const differingCatalogs = STABLE_CAPTURE_CATALOG_KEYS
+    .filter((key) => firstCatalogRoots[key] !== secondCatalogRoots[key]);
+  return {
+    firstCaptureRoot: sha256(canonicalJson(firstProjection)),
+    secondCaptureRoot: sha256(canonicalJson(secondProjection)),
+    firstCatalogRoots,
+    secondCatalogRoots,
+    differingCatalogs,
   };
 }
 
@@ -1605,8 +1661,10 @@ export function verifyLinearRequirementLabelReplacementFinal(input: {
   exactDigest(input.secondCaptureSha256, "second stable capture digest");
   verifyLinearRequirementLabelReplacementUsage(candidate, input.first, { oldRetired: true });
   verifyLinearRequirementLabelReplacementUsage(candidate, input.second, { oldRetired: true });
-  const firstCaptureRoot = sha256(canonicalJson(stableNativeProjection(input.first)));
-  const secondCaptureRoot = sha256(canonicalJson(stableNativeProjection(input.second)));
+  const { firstCaptureRoot, secondCaptureRoot } = compareLinearRequirementLabelReplacementStableCaptures(
+    input.first,
+    input.second,
+  );
   if (firstCaptureRoot !== secondCaptureRoot) fail("two final full captures are not stable");
   const body = {
     schemaVersion: 1 as const,

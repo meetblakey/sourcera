@@ -8,6 +8,13 @@ const workflow = readFileSync(
 );
 const authorityWorkflow = readFileSync(".github/workflows/linear-authority-publication.yml", "utf8");
 
+function namedStep(name: string): string {
+  const start = workflow.indexOf(`      - name: ${name}\n`);
+  assert.ok(start >= 0, `${name} step is missing`);
+  const end = workflow.indexOf("\n      - name:", start + 1);
+  return workflow.slice(start, end < 0 ? workflow.length : end);
+}
+
 test("Requirement-label replacement is manual, main-only, read-only to GitHub, and single-flight", () => {
   assert.match(workflow, /^on:\n  workflow_dispatch:/m);
   assert.doesNotMatch(workflow, /^  (?:push|pull_request|schedule):/m);
@@ -129,4 +136,48 @@ test("raw captures are removed before the only safe artifact upload", () => {
   );
   assert.deepEqual(artifactPaths, ["/tmp/linear-requirement-label-replacement/safe/"]);
   assert.doesNotMatch(uploadBlock, /path: .*\/(?:raw|candidate|prior|resume)(?:\/|$)/);
+});
+
+test("every executable phase always uploads a redacted failure category", () => {
+  assert.equal(
+    (workflow.match(/--failure-summary-out \/tmp\/linear-requirement-label-replacement\/safe\/failure-summary\.json/g) ?? []).length,
+    2,
+  );
+  assert.match(workflow, /if: always\(\)[\s\S]*path: \/tmp\/linear-requirement-label-replacement\/safe\//);
+  assert.match(workflow, /name: Persist redacted workflow failure summary/);
+  assert.match(workflow, /if: failure\(\)/);
+  assert.match(workflow, /test -e .*failure-summary\.json/);
+  for (const step of ["capture_first", "capture_second", "build_candidate", "validate_candidate", "apply_phase", "verify_phase"]) {
+    assert.match(workflow, new RegExp(`steps\\.${step}\\.outcome`));
+  }
+});
+
+test("later phases accept same-HEAD candidates or one exact diagnostic control transition", () => {
+  for (const input of [
+    "control_transition_source", "control_transition_head",
+    "control_transition_before_root", "control_transition_after_root",
+  ]) {
+    assert.match(workflow, new RegExp(`inputs\\.${input}`));
+  }
+  assert.equal((workflow.match(/--control-transition-source "\$CONTROL_TRANSITION_SOURCE"/g) ?? []).length, 2);
+  assert.equal((workflow.match(/--control-transition-candidate-root "\$EXPECTED_CANDIDATE_ROOT"/g) ?? []).length, 2);
+  assert.equal((workflow.match(/--control-transition-head "\$CONTROL_TRANSITION_HEAD"/g) ?? []).length, 2);
+  assert.equal((workflow.match(/--control-transition-before-root "\$CONTROL_TRANSITION_BEFORE_ROOT"/g) ?? []).length, 2);
+  assert.equal((workflow.match(/--control-transition-after-root "\$CONTROL_TRANSITION_AFTER_ROOT"/g) ?? []).length, 2);
+  assert.match(workflow, /transition_value_count" -eq 0 \|\| "\$transition_value_count" -eq 4/);
+  assert.match(workflow, /control transition inputs must be empty or one exact set/);
+  assert.equal((workflow.match(/if \[\[ -n "\$CONTROL_TRANSITION_SOURCE" \]\]; then/g) ?? []).length, 2);
+
+  for (const name of ["Apply exactly one mutation phase", "Verify exactly one credential-free phase"]) {
+    const block = namedStep(name);
+    const env = block.slice(block.indexOf("        env:\n"), block.indexOf("        run: |\n"));
+    for (const variable of [
+      "CONTROL_TRANSITION_SOURCE", "CONTROL_TRANSITION_HEAD",
+      "CONTROL_TRANSITION_BEFORE_ROOT", "CONTROL_TRANSITION_AFTER_ROOT",
+    ]) {
+      assert.match(env, new RegExp(`^          ${variable}: \\$\\{\\{ inputs\\.`, "m"));
+      assert.match(block, new RegExp(`\\$${variable}`));
+    }
+  }
+  assert.doesNotMatch(namedStep("Verify pinned resume artifact metadata"), /CONTROL_TRANSITION_/);
 });
