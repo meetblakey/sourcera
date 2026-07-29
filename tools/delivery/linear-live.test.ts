@@ -324,7 +324,7 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
   const documentCursors: Array<string | null> = [];
   const relation = {
     id: "relation-1",
-    type: "related",
+    type: "blockedBy",
     archivedAt: null,
     issue: { id: "issue-1", identifier: "PLA-1" },
     relatedIssue: { id: "issue-2", identifier: "PLA-2" },
@@ -798,13 +798,13 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
     relations: [
       {
         relationId: "relation-1",
-        canonicalKey: "related:PLA-1:PLA-2",
-        type: "related",
+        canonicalKey: "blocks:PLA-2:PLA-1",
+        type: "blocks",
         archivedAt: null,
-        issueId: "issue-1",
-        issueIdentifier: "PLA-1",
-        relatedIssueId: "issue-2",
-        relatedIssueIdentifier: "PLA-2",
+        issueId: "issue-2",
+        issueIdentifier: "PLA-2",
+        relatedIssueId: "issue-1",
+        relatedIssueIdentifier: "PLA-1",
       },
     ],
     projects: [
@@ -1235,6 +1235,20 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
         assignedGroup,
       ),
     /assigns a label group/,
+  );
+  const invalidRelationDirectionCoverage = structuredClone(
+    capture.nativeIdentity!,
+  );
+  invalidRelationDirectionCoverage.coverage.perIssue[1]!.relations.rows = 1;
+  invalidRelationDirectionCoverage.coverage.perIssue[1]!.inverseRelations.rows =
+    0;
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        invalidRelationDirectionCoverage,
+      ),
+    /native relation connection coverage totals are invalid/,
   );
   assert.deepEqual(capture.documents, {
     schemaVersion: 1,
