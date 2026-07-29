@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "repository": {
     "branch": "main",
     "name": "sourcera",
@@ -15,21 +15,9 @@
       {
         "authorityKind": "normal",
         "path": ".github/workflows/production-release.yml",
-        "workflowSha256": "fac2b17783fb9c4c572e1cbe9ccd811147fda5fbdde9e59a4e6f6d351b97ba22"
-      },
-      {
-        "authorityKind": "convex_anchor",
-        "path": ".github/workflows/production-bootstrap-recovery.yml",
-        "workflowSha256": "bb87b2a647d4b83a8fcc48a9ec1ffc589b6c0d521389db76def9dd279a485494"
-      },
-      {
-        "authorityKind": "vercel_baseline",
-        "path": ".github/workflows/vercel-production-baseline.yml",
-        "workflowSha256": "bf44f19dc13cd9d2195d4b4558704ed4fa9fd5459f27f57c7c5f927409dfaa56"
+        "workflowSha256": "d970437d2b037ad3f20c08f1b994b6d6b7ea0ba00716b673df37056664ec37b1"
       }
     ],
-    "baselineWorkflow": ".github/workflows/vercel-production-baseline.yml",
-    "bootstrapWorkflow": ".github/workflows/production-bootstrap-recovery.yml",
     "collaborators": [
       {
         "id": 15627406,
@@ -66,11 +54,13 @@
     ],
     "workflow": ".github/workflows/production-release.yml"
   },
-  "proofCollection": {
-    "coordinator": null,
-    "decision": "DEC-PROD-002",
-    "isolatedCandidateConvex": null,
-    "mode": "blocked"
+  "productionControl": {
+    "mode": "blocked",
+    "sourceProvenance": {
+      "decisionId": "DEC-PROD-001",
+      "decisionLedgerSha256": "fe41890b82e2fd8e99f3500e49b288989694b8581ee1ecca1dd7df889c8e609c",
+      "masterSpecSha256": "0ffce9b5412c982ad8eb4ebdac6cb96446e43f05fd8b7dad67214b8c8ae83672"
+    }
   },
   "tooling": {
     "vercelCli": "56.2.0"

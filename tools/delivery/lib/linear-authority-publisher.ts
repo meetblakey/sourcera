@@ -282,6 +282,32 @@ export interface LinearAuthorityPublicationResult {
   appendedJournalRaw: string;
 }
 
+export interface LinearAuthorityPublisherReceipt {
+  schemaVersion: 1;
+  event: "linear_authority_publisher_receipt";
+  mode: "dry-run" | "apply";
+  status: "validated_dry_run" | "applied";
+  sourceCommit: string;
+  workspaceId: string;
+  manifestSha256: string;
+  allocationSha256: string;
+  allocationRowsRoot: string;
+  operationsSha256: string;
+  captureReceiptSha256: string;
+  planRoot: string;
+  semanticRoot: string;
+  sourceSetRoot: string;
+  compilerInputRoot: string;
+  liveCaptureRoot: string;
+  programRoot: string;
+  masterSpecRoot: string;
+  operationCount: number;
+  applied: number;
+  alreadyApplied: number;
+  httpAttempts: number;
+  journalSha256: string;
+}
+
 export interface PreparedLinearAuthorityPublication {
   planRoot: string;
   semanticRoot: string;
@@ -373,6 +399,92 @@ function canonicalJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   const row = value as JsonRecord;
   return `{${Object.keys(row).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(row[key])}`).join(",")}}`;
+}
+
+export function createLinearAuthorityPublisherReceipt(input: {
+  allocationRaw: string;
+  fingerprintRaw: string;
+  journalSha256: string;
+  manifestRaw: string;
+  pins: LinearAuthorityPublicationPins;
+  result: LinearAuthorityPublicationResult;
+}): LinearAuthorityPublisherReceipt {
+  let manifest: LinearAuthorityManifest & { schemaVersion: 2 };
+  let allocation: LinearAuthorityAllocation;
+  let fingerprint: JsonRecord;
+  try {
+    manifest = JSON.parse(input.manifestRaw) as LinearAuthorityManifest & { schemaVersion: 2 };
+    allocation = JSON.parse(input.allocationRaw) as LinearAuthorityAllocation;
+    fingerprint = JSON.parse(input.fingerprintRaw) as JsonRecord;
+  } catch {
+    fail("publisher receipt inputs are not valid JSON");
+  }
+  const master = manifest.sources?.filter((row) => row.path === "Sourcera_Master_Spec.md") ?? [];
+  const fingerprintInput = manifest.inputs?.filter((row) => row.name === "linear-fingerprint") ?? [];
+  const fingerprintProgram = fingerprint.program;
+  if (
+    manifest.schemaVersion !== 2 ||
+    allocation.schemaVersion !== 1 ||
+    master.length !== 1 ||
+    fingerprintInput.length !== 1 ||
+    !fingerprintProgram ||
+    typeof fingerprintProgram !== "object" ||
+    Array.isArray(fingerprintProgram) ||
+    !COMMIT.test(manifest.sourceCommit) ||
+    !isUuidV4(manifest.workspace.id) ||
+    !DIGEST.test(manifest.planRoot) ||
+    !DIGEST.test(manifest.semanticRoot ?? "") ||
+    !DIGEST.test(manifest.sourceSetRoot) ||
+    !DIGEST.test(manifest.compilerInputRoot) ||
+    !DIGEST.test(manifest.liveCaptureRoot) ||
+    !DIGEST.test(master[0]?.rawSha256 ?? "") ||
+    Object.values(input.pins).some((value) => !DIGEST.test(value)) ||
+    sha256(input.manifestRaw) !== input.pins.manifestSha256 ||
+    sha256(input.allocationRaw) !== input.pins.allocationSha256 ||
+    sha256(input.fingerprintRaw) !== fingerprintInput[0]!.sha256 ||
+    Buffer.byteLength(input.fingerprintRaw) !== fingerprintInput[0]!.byteLength ||
+    allocation.planRoot !== manifest.planRoot ||
+    allocation.sourceSetRoot !== manifest.sourceSetRoot ||
+    allocation.liveCaptureRoot !== manifest.liveCaptureRoot ||
+    input.result.planRoot !== manifest.planRoot ||
+    input.result.semanticRoot !== manifest.semanticRoot ||
+    input.result.liveCaptureRoot !== manifest.liveCaptureRoot ||
+    !((input.result.mode === "apply" && input.result.status === "applied") ||
+      (input.result.mode === "dry-run" && input.result.status === "validated_dry_run")) ||
+    !DIGEST.test(input.journalSha256) ||
+    input.result.applied + input.result.alreadyApplied !==
+      (input.result.mode === "apply" ? input.result.operationCount : 0) ||
+    (input.result.mode === "dry-run" && input.result.httpAttempts !== 0)
+  ) {
+    fail("publisher receipt inputs differ from the validated authority result");
+  }
+  return {
+    schemaVersion: 1,
+    event: "linear_authority_publisher_receipt",
+    mode: input.result.mode,
+    status: input.result.status,
+    sourceCommit: manifest.sourceCommit,
+    workspaceId: manifest.workspace.id,
+    manifestSha256: input.pins.manifestSha256,
+    allocationSha256: input.pins.allocationSha256,
+    allocationRowsRoot: sha256(canonicalJson(
+      [...allocation.allocations].sort((left, right) => left.planKey.localeCompare(right.planKey)),
+    )),
+    operationsSha256: input.pins.operationsSha256,
+    captureReceiptSha256: input.pins.captureReceiptSha256,
+    planRoot: manifest.planRoot,
+    semanticRoot: manifest.semanticRoot!,
+    sourceSetRoot: manifest.sourceSetRoot,
+    compilerInputRoot: manifest.compilerInputRoot,
+    liveCaptureRoot: manifest.liveCaptureRoot,
+    programRoot: sha256(canonicalJson(fingerprintProgram)),
+    masterSpecRoot: master[0]!.rawSha256,
+    operationCount: input.result.operationCount,
+    applied: input.result.applied,
+    alreadyApplied: input.result.alreadyApplied,
+    httpAttempts: input.result.httpAttempts,
+    journalSha256: input.journalSha256,
+  };
 }
 
 const sortedIds = (values: readonly string[]): string[] => [...values].map((value) => value.toLowerCase()).sort();

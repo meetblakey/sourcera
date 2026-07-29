@@ -428,6 +428,9 @@ jobs:
           jq -e '.operations | length == 0' /tmp/linear-authority/final-package/operations.json >/dev/null
           env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx tools/delivery/publish-linear-authority.ts \
             --package-dir /tmp/linear-authority/final-package \
+            --publisher-package-dir /tmp/linear-authority/package \
+            --publisher-receipt /tmp/linear-authority/safe/apply-summary.json \
+            --production-decision-handoff-out /tmp/linear-authority/safe/production-decision-authority.json \
             > /tmp/linear-authority/safe/final-preflight-summary.json
           jq -e '.mode == "dry-run" and .status == "validated_dry_run" and .operationCount == 0' /tmp/linear-authority/safe/final-preflight-summary.json >/dev/null
       - name: Remove raw Linear authority material

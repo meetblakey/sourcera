@@ -74,6 +74,18 @@ test("authority workflow proves a fresh stable readback with zero applied writes
   assert.match(workflow, /final_desired_root/);
   assert.match(workflow, /final-package\/operations\.json/);
   assert.match(workflow, /\.operationCount == 0/);
+  assert.match(
+    workflow,
+    /--publisher-package-dir \/tmp\/linear-authority\/package/,
+  );
+  assert.match(
+    workflow,
+    /--publisher-receipt \/tmp\/linear-authority\/safe\/apply-summary\.json/,
+  );
+  assert.match(
+    workflow,
+    /--production-decision-handoff-out \/tmp\/linear-authority\/safe\/production-decision-authority\.json/,
+  );
   assert.equal(
     (workflow.match(/--bootstrap-map delivery\/linear-authority-requirement-bootstrap-map\.json/g) ?? []).length,
     3,
@@ -89,6 +101,7 @@ test("authority workflow never uploads raw capture or package material", () => {
   assert.match(workflow, /rm -rf \/tmp\/linear-authority\/package/);
   assert.match(workflow, /rm -rf \/tmp\/linear-authority\/post-package/);
   assert.match(workflow, /rm -rf \/tmp\/linear-authority\/final-package/);
+  assert.match(workflow, /production-decision-authority\.json/);
   const artifactPaths = [...workflow.matchAll(/^\s+path: (.+)$/gm)].map(
     (match) => match[1],
   );

@@ -418,7 +418,7 @@
           "endHeading": "## 8.8 Custom Branding (Enterprise)"
         }
       ],
-      "sha256": "04fb1c3e258c049a5e23adbc3d6649ee359d9f2253d1f0bc38b69fc19d130670"
+      "sha256": "5b4b1659af0c09ca714527178a7e5ec5bc49d7c3f68102b7af4b772401346380"
     },
     {
       "sourceId": "F-631",
@@ -573,7 +573,7 @@
           "endHeading": "## 8.2 Notifications & Delivery"
         }
       ],
-      "sha256": "2e2a9d08842d591f8a7b1d519ae6e3eec87b8e10914c0b75e897957ae1448b77"
+      "sha256": "2b117aa1f5a5dabc3d1ca77661e9f2c7e51e05591b47957c684e46e01454fe1a"
     },
     {
       "sourceId": "F-007.A",
@@ -862,7 +862,7 @@
           "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
         }
       ],
-      "sha256": "49bad9ed80269101af7bc8a9b3f0e4152a96b69b936921f80e32a5220b699abf"
+      "sha256": "007f27dfd4ab1cc9d3757dbfd94096f9f292c26f0ef340ee89c170bc81342ce4"
     },
     {
       "sourceId": "F-007.E",
@@ -918,7 +918,7 @@
           "endHeading": "### 8.1.2 Solo-Tier Billing Surface (Phase 14.10 — 2026-04-28)"
         }
       ],
-      "sha256": "2c5c5ee325708a4fb5d48279d0e0a05513cdc9efc8186f71485241ea1aa399f4"
+      "sha256": "786b354f71900fb276f66c94d62667da79b1694ef3bc8b629ed58197e79ca599"
     },
     {
       "sourceId": "F-005",

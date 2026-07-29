@@ -13,6 +13,11 @@ import {
 } from "node:fs";
 import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
 
+import {
+  createProductionDecisionAuthorityHandoff,
+  type ProductionDecisionAuthorityPublicationEvidence,
+} from "../../scripts/lib/production-decision-authority.js";
+
 import { LinearAuthorityHttpTransport } from "./lib/linear-authority-http-transport.js";
 import {
   combinedLinearAuthorityJournalRaw,
@@ -25,6 +30,7 @@ import type {
   LinearAuthorityValidationInput,
 } from "./lib/linear-authority-manifest.js";
 import {
+  createLinearAuthorityPublisherReceipt,
   executeLinearAuthorityPublication,
   type LinearAuthorityPublicationArtifacts,
   type LinearAuthorityPublicationPins,
@@ -47,6 +53,9 @@ interface CliArgs {
   runId?: string;
   journalOut?: string;
   maxHttpAttempts?: number;
+  productionDecisionHandoffOut?: string;
+  publisherPackageDir?: string;
+  publisherReceipt?: string;
 }
 
 function fail(message: string): never {
@@ -63,7 +72,11 @@ function parseArgs(argv: string[]): CliArgs {
       apply = true;
       continue;
     }
-    if (!flag || !["--package-dir", "--run-id", "--journal-out", "--max-http-attempts"].includes(flag)) fail(`unknown argument ${flag ?? ""}`);
+    if (!flag || ![
+      "--package-dir", "--run-id", "--journal-out", "--max-http-attempts",
+      "--production-decision-handoff-out", "--publisher-package-dir",
+      "--publisher-receipt",
+    ].includes(flag)) fail(`unknown argument ${flag ?? ""}`);
     const value = argv[index + 1];
     if (!value || value.startsWith("--")) fail(`${flag} requires a value`);
     if (values.has(flag)) fail(`${flag} is duplicated`);
@@ -74,14 +87,35 @@ function parseArgs(argv: string[]): CliArgs {
   if (!packageDir) fail("--package-dir is required");
   const runId = values.get("--run-id");
   const journalOut = values.get("--journal-out");
+  const productionDecisionHandoffOut = values.get("--production-decision-handoff-out");
+  const publisherPackageDir = values.get("--publisher-package-dir");
+  const publisherReceipt = values.get("--publisher-receipt");
   if (apply && (!runId || !journalOut)) fail("--apply requires --run-id and --journal-out");
   if (!apply && (runId || journalOut)) fail("--run-id and --journal-out require --apply");
+  const handoffInputs = [
+    productionDecisionHandoffOut,
+    publisherPackageDir,
+    publisherReceipt,
+  ].filter((value) => value !== undefined).length;
+  if (handoffInputs !== 0 && handoffInputs !== 3) {
+    fail("publisher package, receipt, and production Decision handoff output must be provided together");
+  }
+  if (apply && productionDecisionHandoffOut) fail("production Decision handoff requires a final dry-run");
   const rawBudget = values.get("--max-http-attempts");
   const maxHttpAttempts = rawBudget === undefined ? undefined : Number(rawBudget);
   if (maxHttpAttempts !== undefined && (!Number.isInteger(maxHttpAttempts) || maxHttpAttempts < 1 || maxHttpAttempts > 1_000)) {
     fail("--max-http-attempts must be an integer from 1 to 1000");
   }
-  return { apply, packageDir, runId, journalOut, maxHttpAttempts };
+  return {
+    apply,
+    packageDir,
+    runId,
+    journalOut,
+    maxHttpAttempts,
+    productionDecisionHandoffOut,
+    publisherPackageDir,
+    publisherReceipt,
+  };
 }
 
 function exactObject(value: unknown, keys: readonly string[], label: string): Record<string, unknown> {
@@ -139,12 +173,53 @@ function pins(raw: string): LinearAuthorityPublicationPins {
   return row as unknown as LinearAuthorityPublicationPins;
 }
 
-function newOutputPath(path: string): string {
+function newOutputPath(path: string, label = "journal output"): string {
   const absolute = resolve(path);
   const parent = realpathSync(dirname(absolute));
   const output = join(parent, basename(absolute));
-  if (existsSync(output)) fail("journal output must be a new path");
+  if (existsSync(output)) fail(`${label} must be a new path`);
   return output;
+}
+
+function isInside(root: string, candidate: string): boolean {
+  const within = relative(root, candidate);
+  return within === "" || (!within.startsWith("..") && !isAbsolute(within));
+}
+
+function safeExternalExistingFile(path: string, repository: string, label: string): string {
+  const absolute = resolve(path);
+  const stat = lstatSync(absolute);
+  if (stat.isSymbolicLink() || !stat.isFile()) fail(`${label} must be a regular non-symlink file`);
+  const real = realpathSync(absolute);
+  if (isInside(repository, real)) fail(`${label} must be external to the repository`);
+  return real;
+}
+
+function newExternalOutputPath(path: string, repository: string, label: string): string {
+  const output = newOutputPath(path, label);
+  if (isInside(repository, output)) fail(`${label} must be external to the repository`);
+  return output;
+}
+
+function writeNewEvidence(path: string, raw: string): void {
+  const descriptor = openSync(
+    path,
+    constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW,
+    0o600,
+  );
+  try {
+    writeAllLinearAuthorityJournalBytes(raw, (buffer, offset, length) =>
+      writeSync(descriptor, buffer, offset, length, null));
+    fsyncSync(descriptor);
+  } finally {
+    closeSync(descriptor);
+  }
+}
+
+function requiredRaw(map: ReadonlyMap<string, Buffer>, key: string, label: string): string {
+  const value = map.get(key);
+  if (!value) fail(`${label} is missing from the unified authority package`);
+  return value.toString("utf8");
 }
 
 function safeJournalSink(path: string, prefix: string): { append(line: string): void; close(): void; ensure(): void } {
@@ -232,6 +307,18 @@ async function main(): Promise<void> {
   const resume = optionalResume(root);
   const resumePrefix = normalizedLinearAuthorityJournalPrefix(resume.raw);
   const outputPath = args.apply ? newOutputPath(args.journalOut!) : undefined;
+  const publisherReceiptPath = args.publisherReceipt
+    ? safeExternalExistingFile(args.publisherReceipt, repo, "publisher receipt")
+    : undefined;
+  const publisherRoot = args.publisherPackageDir
+    ? packageRoot(args.publisherPackageDir)
+    : undefined;
+  if (publisherRoot && (isInside(repo, publisherRoot) || publisherRoot === root)) {
+    fail("publisher package must be an external package distinct from final readback");
+  }
+  const handoffOutputPath = args.productionDecisionHandoffOut
+    ? newExternalOutputPath(args.productionDecisionHandoffOut, repo, "production Decision handoff output")
+    : undefined;
   const sink = outputPath ? safeJournalSink(outputPath, resumePrefix) : undefined;
   try {
     const result = await executeLinearAuthorityPublication({
@@ -263,19 +350,41 @@ async function main(): Promise<void> {
       journalBytes = readFileSync(outputPath!);
       if (!journalBytes.equals(Buffer.from(combinedJournalRaw, "utf8"))) fail("journal output differs from the validated combined chain");
     }
-    const summary = {
-      mode: result.mode,
-      status: result.status,
-      planRoot: result.planRoot,
-      semanticRoot: result.semanticRoot,
-      liveCaptureRoot: result.liveCaptureRoot,
-      operationCount: result.operationCount,
-      applied: result.applied,
-      alreadyApplied: result.alreadyApplied,
-      httpAttempts: result.httpAttempts,
+    const receipt = createLinearAuthorityPublisherReceipt({
+      allocationRaw: artifacts.allocationRaw,
+      fingerprintRaw: requiredRaw(validationInput.compilerInputs, "linear-fingerprint", "linear fingerprint"),
       journalSha256: createHash("sha256").update(journalBytes).digest("hex"),
-    };
-    process.stdout.write(`${JSON.stringify(summary)}\n`);
+      manifestRaw: artifacts.manifestRaw,
+      pins: publicationPins,
+      result,
+    });
+    const receiptRaw = `${JSON.stringify(receipt)}\n`;
+    if (publisherReceiptPath && handoffOutputPath) {
+      const evidence: ProductionDecisionAuthorityPublicationEvidence = {
+        allocationRaw: artifacts.allocationRaw,
+        decisionLedgerRaw: requiredRaw(validationInput.sourceFiles, "delivery/decisions.jsonl", "Decision ledger"),
+        finalCaptureReceiptRaw: requiredRaw(validationInput.compilerInputs, "capture-receipt", "capture receipt"),
+        finalDocumentsRaw: requiredRaw(validationInput.compilerInputs, "raw-documents", "raw documents"),
+        finalFingerprintRaw: requiredRaw(validationInput.compilerInputs, "linear-fingerprint", "linear fingerprint"),
+        finalIssueDescriptionsRaw: requiredRaw(validationInput.compilerInputs, "issue-descriptions", "issue descriptions"),
+        finalManifestRaw: artifacts.manifestRaw,
+        finalNativeIdentityRaw: requiredRaw(validationInput.compilerInputs, "native-identity", "native identity"),
+        finalReadbackReceiptRaw: receiptRaw,
+        masterSpecRaw: requiredRaw(validationInput.sourceFiles, "Sourcera_Master_Spec.md", "Master Spec"),
+        publisherAllocationRaw: readPackageFile(publisherRoot!, "allocation.json"),
+        publisherCaptureReceiptRaw: readPackageFile(publisherRoot!, "capture-receipt.json"),
+        publisherDocumentsRaw: readPackageFile(publisherRoot!, join("inputs", "raw-documents")),
+        publisherFingerprintRaw: readPackageFile(publisherRoot!, join("inputs", "linear-fingerprint")),
+        publisherIssueDescriptionsRaw: readPackageFile(publisherRoot!, join("inputs", "issue-descriptions")),
+        publisherManifestRaw: readPackageFile(publisherRoot!, "manifest.json"),
+        publisherNativeIdentityRaw: readPackageFile(publisherRoot!, join("inputs", "native-identity")),
+        publisherOperationsRaw: readPackageFile(publisherRoot!, "operations.json"),
+        publisherReceiptRaw: readFileSync(publisherReceiptPath, "utf8"),
+      };
+      const handoff = createProductionDecisionAuthorityHandoff(evidence);
+      writeNewEvidence(handoffOutputPath, `${JSON.stringify(handoff)}\n`);
+    }
+    process.stdout.write(receiptRaw);
   } finally {
     sink?.close();
   }

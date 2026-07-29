@@ -2,15 +2,6 @@ name: Production release
 
 on:
   workflow_dispatch:
-    inputs:
-      known_good_sha:
-        description: Exact main SHA currently proven healthy in Convex production
-        required: true
-        type: string
-      known_good_receipt_run_id:
-        description: Requested prior authority run to record in the blocked receipt
-        required: true
-        type: number
 
 permissions:
   actions: read
@@ -23,19 +14,43 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  dispatch_guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Write the credential-free dispatch guard receipt
+        env:
+          RECEIPT_PATH: ${{ runner.temp }}/production-release-dispatch-guard-${{ github.run_id }}-${{ github.run_attempt }}.json
+          SOURCERA_DISPATCH_REF: ${{ github.ref }}
+          SOURCERA_DISPATCH_REPOSITORY: ${{ github.repository }}
+          SOURCERA_DISPATCH_RUN_ATTEMPT: ${{ github.run_attempt }}
+          SOURCERA_DISPATCH_RUN_ID: ${{ github.run_id }}
+          SOURCERA_DISPATCH_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node -e 'const fs=require("node:fs");const main=process.env.SOURCERA_DISPATCH_REF==="refs/heads/main";const receipt={schemaVersion:1,event:"production_release_dispatch_guard_receipt",result:main?"passed":"failed",reason:main?null:"dispatch_ref_not_main",promotionAllowed:false,providerCredentialCount:0,identity:{approvedSha:process.env.SOURCERA_DISPATCH_SHA,ref:process.env.SOURCERA_DISPATCH_REF,repository:process.env.SOURCERA_DISPATCH_REPOSITORY,runId:Number(process.env.SOURCERA_DISPATCH_RUN_ID),runAttempt:Number(process.env.SOURCERA_DISPATCH_RUN_ATTEMPT)}};fs.writeFileSync(process.env.RECEIPT_PATH,`${JSON.stringify(receipt)}\n`,{encoding:"utf8",flag:"wx",mode:0o600})'
+      - name: Upload the immutable non-main dispatch receipt
+        if: github.ref != 'refs/heads/main'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          if-no-files-found: error
+          name: production-release-dispatch-guard-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          overwrite: false
+          path: ${{ runner.temp }}/production-release-dispatch-guard-${{ github.run_id }}-${{ github.run_attempt }}.json
+          retention-days: 90
+      - name: Fail closed after publishing non-main receipt
+        if: github.ref != 'refs/heads/main'
+        shell: bash
+        run: exit 1
+
   preflight:
+    needs: dispatch_guard
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
       artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
     steps:
-      - name: Require a main-branch dispatch
-        env:
-          SOURCERA_RELEASE_DISPATCH_REF: ${{ github.ref }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$SOURCERA_RELEASE_DISPATCH_REF" = "refs/heads/main"
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
@@ -97,15 +112,13 @@ jobs:
         with:
           name: production-preflight-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/production-preflight
-      - name: Emit the immutable DEC-PROD-002 no-authority receipt
+      - name: Emit the immutable no-authority receipt
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
           GITHUB_RUN_ID: ${{ github.run_id }}
-          SOURCERA_KNOWN_GOOD_SHA: ${{ inputs.known_good_sha }}
           SOURCERA_PREFLIGHT_ARTIFACT_DIGEST: ${{ needs.preflight.outputs.artifact-digest }}
           SOURCERA_RELEASE_APPROVED_SHA: ${{ github.sha }}
-          SOURCERA_REQUESTED_AUTHORITY_RUN_ID: ${{ inputs.known_good_receipt_run_id }}
         run: >-
           npm run release:production:no-authority --
           --preflight-dir "$RUNNER_TEMP/production-preflight"
@@ -119,7 +132,7 @@ jobs:
         run: |
           set -euo pipefail
           test -s "$RECEIPT_PATH"
-          node -e 'const r=JSON.parse(require("node:fs").readFileSync(process.env.RECEIPT_PATH,"utf8"));if(r.event!=="production_release_no_authority_receipt"||r.result!=="blocked"||r.promotionAllowed!==false||r.providerCredentialCount!==0||r.authority?.historicalDownloadAttempted!==false)throw new Error("invalid no-authority receipt")'
+          node -e 'const r=JSON.parse(require("node:fs").readFileSync(process.env.RECEIPT_PATH,"utf8"));if(r.schemaVersion!==3||r.event!=="production_release_no_authority_receipt"||r.result!=="blocked"||r.promotionAllowed!==false||r.providerCredentialCount!==0||r.authority?.historicalDownloadAttempted!==false||r.authority?.providerMutationAuthorized!==false||r.authority?.status!=="pending_guarded_handoff"||!/^DEC-PROD-\d{3}$/.test(r.sourceProvenance?.decisionId)||!["failed","passed"].includes(r.preflight?.result))throw new Error("invalid no-authority receipt")'
       - id: upload
         if: always() && steps.receipt_check.outcome == 'success'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -129,6 +142,6 @@ jobs:
           overwrite: false
           path: ${{ runner.temp }}/production-release-no-authority-${{ github.run_id }}-${{ github.run_attempt }}.json
           retention-days: 90
-      - name: Fail closed until DEC-PROD-002 is resolved
+      - name: Fail closed until production prerequisites are proved
         shell: bash
         run: exit 1

@@ -10,7 +10,7 @@ import {
   readProductionWorkflowIdentity,
   type ProductionPreflightEvidence,
 } from "./lib/production-release-workflow";
-import { collectProductionRepositoryState } from "./lib/production-repository-evidence";
+import { collectProductionRepositoryEvidence } from "./lib/production-repository-evidence";
 
 const repositoryRoot = realpathSync(
   path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
@@ -42,6 +42,14 @@ const SAFE_ENVIRONMENT_KEYS = [
   "TMPDIR",
   "TZ",
 ] as const;
+const MAX_FAILURE_TEXT = 16_384;
+
+function bounded(value: unknown) {
+  const text = typeof value === "string" ? value : String(value ?? "");
+  return text.length <= MAX_FAILURE_TEXT
+    ? text
+    : `${text.slice(0, MAX_FAILURE_TEXT)}…`;
+}
 
 function requiredEnvironment(key: string) {
   const value = process.env[key];
@@ -119,25 +127,33 @@ function run(
   };
 }
 
-function requirePassingCommand(
-  command: string,
-  arguments_: string[],
-  environment: NodeJS.ProcessEnv,
-  context: string,
-) {
-  const result = run(command, arguments_, environment);
-  if (result.error || result.exitCode !== 0) {
-    throw new Error(`${context} failed`);
-  }
-  return result;
-}
-
 function commandProof(result: ReturnType<typeof run>) {
   return JSON.stringify({
     exitCode: result.exitCode,
     outcome: result.exitCode === 0 && !result.error ? "pass" : "fail",
-    stderr: result.stderr,
-    stdout: result.stdout,
+    stderr: bounded(result.stderr),
+    stdout: bounded(result.stdout),
+  });
+}
+
+export function createProductionJsonProof(
+  result: ReturnType<typeof run>,
+  context: string,
+) {
+  if (result.exitCode === 0 && !result.error && result.stdout.trim()) {
+    try {
+      JSON.parse(result.stdout);
+      return result.stdout;
+    } catch {
+      // Fall through to a bounded failure proof.
+    }
+  }
+  return JSON.stringify({
+    context,
+    error: result.error ? bounded(result.error) : null,
+    exitCode: result.exitCode,
+    outcome: "fail",
+    stderr: bounded(result.stderr),
   });
 }
 
@@ -147,7 +163,7 @@ function repositoryProof(
   environment: NodeJS.ProcessEnv,
 ) {
   return JSON.stringify(
-    collectProductionRepositoryState({
+    collectProductionRepositoryEvidence({
       approvedSha,
       dispatchRef,
       environment,
@@ -172,12 +188,7 @@ export async function main(arguments_ = process.argv.slice(2)) {
     environment,
   );
   const appVerification = commandProof(
-    requirePassingCommand(
-      "npm",
-      ["run", "verify"],
-      environment,
-      "application verification",
-    ),
+    run("npm", ["run", "verify"], environment),
   );
   const tsx = path.join(
     repositoryRoot,
@@ -187,17 +198,15 @@ export async function main(arguments_ = process.argv.slice(2)) {
     ".bin",
     "tsx",
   );
-  const stampResult = requirePassingCommand(
+  const stampResult = run(
     tsx,
     ["tools/release/stamp_gate.ts", "--json"],
     environment,
-    "stamp gate",
   );
-  const exactResult = requirePassingCommand(
+  const exactResult = run(
     tsx,
     ["tools/release/exact_status_scan.ts", "--json"],
     environment,
-    "exact status scan",
   );
   const temporaryEvidenceDirectory = path.join(
     path.dirname(outputDirectory),
@@ -209,10 +218,12 @@ export async function main(arguments_ = process.argv.slice(2)) {
   await mkdir(temporaryEvidenceDirectory, { mode: 0o700 });
   const stampPath = path.join(temporaryEvidenceDirectory, "stamp.json");
   const exactPath = path.join(temporaryEvidenceDirectory, "exact.json");
-  await writeFile(stampPath, stampResult.stdout, { flag: "wx", mode: 0o600 });
-  await writeFile(exactPath, exactResult.stdout, { flag: "wx", mode: 0o600 });
+  const stamp = createProductionJsonProof(stampResult, "stamp gate");
+  const exact = createProductionJsonProof(exactResult, "exact status scan");
+  await writeFile(stampPath, stamp, { flag: "wx", mode: 0o600 });
+  await writeFile(exactPath, exact, { flag: "wx", mode: 0o600 });
   const delivery = commandProof(
-    requirePassingCommand(
+    run(
       tsx,
       [
         "tools/delivery/verify.ts",
@@ -232,15 +243,14 @@ export async function main(arguments_ = process.argv.slice(2)) {
         "delivery/linear-project-scope.json",
       ],
       environment,
-      "delivery verification",
     ),
   );
   const evidence: ProductionPreflightEvidence = {
     appVerification,
     delivery,
-    exact: exactResult.stdout,
+    exact,
     repository,
-    stamp: stampResult.stdout,
+    stamp,
   };
   const receipt = createProductionPreflightReceipt({ evidence, identity });
   await mkdir(outputDirectory, { mode: 0o700 });

@@ -36,3 +36,48 @@ test("publisher CLI defaults safely and never emits package or credential conten
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("publisher CLI exposes the handoff only to a complete final dry-run", () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-authority-handoff-cli-"));
+  try {
+    const handoff = join(root, "handoff.json");
+    const receipt = join(root, "publisher-receipt.json");
+    const packageDir = join(root, "publisher-package");
+    const base = [
+      "--import",
+      resolve("tools/spec-lint/node_modules/tsx/dist/loader.mjs"),
+      resolve("tools/delivery/publish-linear-authority.ts"),
+      "--package-dir",
+      root,
+    ];
+    const incomplete = spawnSync(process.execPath, [
+      ...base,
+      "--production-decision-handoff-out",
+      handoff,
+    ], { cwd: process.cwd(), encoding: "utf8" });
+    assert.equal(incomplete.status, 1);
+    assert.equal(incomplete.stdout, "");
+    assert.equal(incomplete.stderr, "Linear authority publication failed\n");
+
+    const apply = spawnSync(process.execPath, [
+      ...base,
+      "--apply",
+      "--run-id",
+      "test:handoff-apply",
+      "--journal-out",
+      join(root, "journal.jsonl"),
+      "--publisher-package-dir",
+      packageDir,
+      "--publisher-receipt",
+      receipt,
+      "--production-decision-handoff-out",
+      handoff,
+    ], { cwd: process.cwd(), encoding: "utf8" });
+    assert.equal(apply.status, 1);
+    assert.equal(apply.stdout, "");
+    assert.equal(apply.stderr, "Linear authority publication failed\n");
+    assert.equal(existsSync(handoff), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

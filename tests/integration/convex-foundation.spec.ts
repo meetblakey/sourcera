@@ -7,7 +7,6 @@ import {
   readdirSync,
   rmSync,
   statSync,
-  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { readFile } from "node:fs/promises";
@@ -1184,202 +1183,6 @@ test("production target pins are complete, exact, and independent of credentials
   }
 });
 
-test("canonical production deploy stays blocked until live target evidence is pinned", () => {
-  const fixturePrefix = path.join(
-    tmpdir(),
-    `sourcera-convex-target-test-${process.pid}`,
-  );
-  const execution = spawnSync(
-    "npx",
-    [
-      "tsx",
-      "scripts/deploy-convex-production.ts",
-      "--known-good-receipt",
-      `${fixturePrefix}-known.json`,
-      "--receipt-out",
-      `${fixturePrefix}-out.json`,
-    ],
-    {
-      cwd: repositoryRoot,
-      encoding: "utf8",
-      env: { ...process.env, SOURCERA_ENV: "production" },
-    },
-  );
-
-  assert.notEqual(execution.status, 0);
-  assert.match(execution.stderr, /Convex production target is not repo-pinned/);
-});
-
-test("production deploy requires durable proof output and rejects unknown or duplicate arguments", () => {
-  const missingOutput = spawnSync(
-    "npx",
-    ["tsx", "scripts/deploy-convex-production.ts"],
-    {
-      cwd: repositoryRoot,
-      encoding: "utf8",
-      env: { ...process.env, SOURCERA_ENV: "production" },
-    },
-  );
-  assert.notEqual(missingOutput.status, 0);
-  assert.match(missingOutput.stderr, /--receipt-out is required/);
-
-  for (const arguments_ of [
-    ["--unknown", "/tmp/value"],
-    [
-      "--receipt-out",
-      "/tmp/first.json",
-      "--receipt-out",
-      "/tmp/second.json",
-    ],
-  ]) {
-    const execution = spawnSync(
-      "npx",
-      ["tsx", "scripts/deploy-convex-production.ts", ...arguments_],
-      {
-        cwd: repositoryRoot,
-        encoding: "utf8",
-        env: { ...process.env, SOURCERA_ENV: "production" },
-      },
-    );
-    assert.notEqual(execution.status, 0);
-    assert.match(execution.stderr, /Unknown production deploy option|only once/);
-  }
-});
-
-test("production deploy cannot write a passing receipt into its source checkout", () => {
-  const execution = spawnSync(
-    "npx",
-    [
-      "tsx",
-      "scripts/deploy-convex-production.ts",
-      "--receipt-out",
-      "reports/evidence/unsafe-production-receipt.json",
-    ],
-    {
-      cwd: repositoryRoot,
-      encoding: "utf8",
-      env: { ...process.env, SOURCERA_ENV: "production" },
-    },
-  );
-
-  assert.notEqual(execution.status, 0);
-  assert.match(execution.stderr, /must be outside the repository checkout/);
-});
-
-test("production deploy rejects a known-good receipt controlled by the candidate checkout", () => {
-  const execution = spawnSync(
-    "npx",
-    [
-      "tsx",
-      "scripts/deploy-convex-production.ts",
-      "--known-good-receipt",
-      "reports/evidence/untrusted-known-good-receipt.json",
-    ],
-    {
-      cwd: repositoryRoot,
-      encoding: "utf8",
-      env: { ...process.env, SOURCERA_ENV: "production" },
-    },
-  );
-
-  assert.notEqual(execution.status, 0);
-  assert.match(
-    execution.stderr,
-    /--known-good-receipt must be outside the repository checkout/,
-  );
-});
-
-test("production deploy rejects an external receipt symlink into the candidate checkout", () => {
-  const fixtureRoot = mkdtempSync(
-    path.join(tmpdir(), "sourcera-known-good-receipt-"),
-  );
-  const receiptLink = path.join(fixtureRoot, "known-good.json");
-  try {
-    symlinkSync(path.join(repositoryRoot, "package.json"), receiptLink);
-    const execution = spawnSync(
-      "npx",
-      [
-        "tsx",
-        "scripts/deploy-convex-production.ts",
-        "--known-good-receipt",
-        receiptLink,
-      ],
-      {
-        cwd: repositoryRoot,
-        encoding: "utf8",
-        env: { ...process.env, SOURCERA_ENV: "production" },
-      },
-    );
-
-    assert.notEqual(execution.status, 0);
-    assert.match(
-      execution.stderr,
-      /--known-good-receipt must be outside the repository checkout/,
-    );
-  } finally {
-    rmSync(fixtureRoot, { force: true, recursive: true });
-  }
-});
-
-test("production deploy preserves the independent known-good receipt", () => {
-  const receiptPath = path.join(
-    tmpdir(),
-    "sourcera-shared-convex-receipt.json",
-  );
-  const execution = spawnSync(
-    "npx",
-    [
-      "tsx",
-      "scripts/deploy-convex-production.ts",
-      "--known-good-receipt",
-      receiptPath,
-      "--receipt-out",
-      receiptPath,
-    ],
-    {
-      cwd: repositoryRoot,
-      encoding: "utf8",
-      env: { ...process.env, SOURCERA_ENV: "production" },
-    },
-  );
-
-  assert.notEqual(execution.status, 0);
-  assert.match(execution.stderr, /receipt paths must be distinct/);
-});
-
-test("production deploy never overwrites an existing evidence receipt", () => {
-  const fixtureRoot = mkdtempSync(
-    path.join(tmpdir(), "sourcera-convex-receipt-output-"),
-  );
-  const receiptPath = path.join(fixtureRoot, "existing.json");
-  try {
-    writeFileSync(receiptPath, "independent evidence\n", "utf8");
-    const execution = spawnSync(
-      "npx",
-      [
-        "tsx",
-        "scripts/deploy-convex-production.ts",
-        "--receipt-out",
-        receiptPath,
-      ],
-      {
-        cwd: repositoryRoot,
-        encoding: "utf8",
-        env: { ...process.env, SOURCERA_ENV: "production" },
-      },
-    );
-
-    assert.notEqual(execution.status, 0);
-    assert.match(execution.stderr, /--receipt-out must not already exist/);
-    assert.equal(
-      readFileSync(receiptPath, "utf8"),
-      "independent evidence\n",
-    );
-  } finally {
-    rmSync(fixtureRoot, { force: true, recursive: true });
-  }
-});
-
 test("the Convex receipt writer is atomic, private, complete-only, and non-overwriting", () => {
   const fixtureRoot = mkdtempSync(
     path.join(tmpdir(), "sourcera-convex-receipt-writer-"),
@@ -1746,7 +1549,6 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
     probe,
     vercelBuild,
     vercelDeploymentPlanner,
-    productionDeploy,
     productionFoundation,
     releaseIdentity,
     productionTargets,
@@ -1770,10 +1572,6 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
       path.join(repositoryRoot, "scripts/lib/convex-vercel-deployment.ts"),
       "utf8",
     ),
-    readFile(
-      path.join(repositoryRoot, "scripts/deploy-convex-production.ts"),
-      "utf8",
-    ),
     readFile(path.join(repositoryRoot, "convex/foundation.ts"), "utf8"),
     readFile(path.join(repositoryRoot, "convex/releaseIdentity.ts"), "utf8"),
     readFile(
@@ -1787,7 +1585,7 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   ]);
 
   assert.match(packageJson, /"convex:codegen"/);
-  assert.match(packageJson, /"convex:deploy:production"/);
+  assert.doesNotMatch(packageJson, /"convex:deploy:production"/);
   assert.match(packageJson, /"convex:evidence"/);
   assert.match(packageJson, /"convex:name:preview"/);
   assert.match(packageJson, /"convex:prepare:preview-probe"/);
@@ -1877,28 +1675,20 @@ test("CI owns code generation, Preview deployment, and the reactive probe", asyn
   assert.match(vercelDeploymentPlanner, /NEXT_PUBLIC_CONVEX_URL/);
   assert.match(vercelDeploymentPlanner, /validate:convex-schema/);
   assert.match(vercelDeploymentPlanner, /CONVEX_DEPLOY_KEY is forbidden/);
-  assert.match(productionDeploy, /createConvexProductionDeploymentPlan/);
-  assert.match(productionDeploy, /\["worktree", "add", "--detach"/);
-  assert.match(productionDeploy, /assertControlledConvexReleaseIdentityChange/);
-  assert.match(productionDeploy, /createConvexProductionBaseEnvironment/);
-  assert.match(productionDeploy, /releaseConfigHome/);
-  assert.match(productionDeploy, /releaseNpmUserConfig/);
-  assert.match(productionDeploy, /recordRollbackAnchor/);
-  assert.match(productionDeploy, /writeConvexProductionReceipt/);
-  assert.match(productionDeploy, /executeConvexProductionDeploymentAsync/);
-  assert.match(productionDeploy, /--untracked-files=all/);
-  assert.match(productionDeploy, /rollback_required/);
   assert.match(productionFoundation, /SOURCERA_CONVEX_BUILD_COMMIT_SHA/);
   assert.match(productionFoundation, /getDeploymentMetadata/);
   assert.match(releaseIdentity, /__UNSTAMPED_CONVEX_BUILD__/);
   assert.match(releaseIdentity, /SOURCERA_CONVEX_PREVIEW_PROBE_EXPIRES_AT/);
   assert.match(productionTargets, /"deploymentName": null/);
-  assert.match(productionRunbook, /npm run vercel:stage:production/);
-  assert.match(productionRunbook, /--known-good-receipt/);
-  assert.match(productionRunbook, /--receipt-out/);
-  assert.match(productionRunbook, /vercel promote/);
-  assert.match(productionRunbook, /vercel rollback/);
-  assert.match(productionRunbook, /SOURCERA_RELEASE_APPROVED_SHA/);
+  assert.doesNotMatch(productionRunbook, /DEC-PROD-\d{3}|PLA-\d+/);
+  assert.match(productionRunbook, /\.github\/workflows\/production-release\.yml/);
+  assert.match(productionRunbook, /native Linear Decision/);
+  assert.match(productionRunbook, /Master Spec §46\.3\.1/);
+  assert.match(productionRunbook, /cannot bootstrap, stage, deploy, promote, or roll back production/);
+  assert.doesNotMatch(
+    productionRunbook,
+    /npm run vercel:stage:production|vercel promote|vercel rollback/,
+  );
 });
 
 test("Vercel rejects metadata that does not match the checked-out source", () => {

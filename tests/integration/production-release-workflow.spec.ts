@@ -4,7 +4,6 @@ import {
   mkdir,
   mkdtemp,
   readFile,
-  realpath,
   rm,
   stat,
   writeFile,
@@ -13,17 +12,17 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { readProductionReleaseArguments } from "../../scripts/release-production";
-import { collectProductionRepositoryState } from "../../scripts/lib/production-repository-evidence";
 import {
-  createProductionGithubHandoff,
+  collectProductionRepositoryEvidence,
+  collectProductionRepositoryState,
+} from "../../scripts/lib/production-repository-evidence";
+import { createProductionJsonProof } from "../../scripts/production-release-preflight";
+import {
   createProductionPreflightReceipt,
-  readProductionGithubHandoff,
   readProductionPreflightBundle,
 } from "../../scripts/lib/production-release-workflow";
 
 const approvedSha = "0123456789abcdef0123456789abcdef01234567";
-const knownGoodSha = "fedcba9876543210fedcba9876543210fedcba98";
 const preflightArtifactDigest = "c".repeat(64);
 const identity = {
   approvedSha,
@@ -45,9 +44,10 @@ const evidence = {
   }),
   stamp: JSON.stringify({ outcome: "pass" }),
 };
-const preflightReceiptRaw = JSON.stringify(
-  createProductionPreflightReceipt({ evidence, identity }),
-);
+const failedStampEvidence = {
+  ...evidence,
+  stamp: JSON.stringify({ outcome: "fail", blocker_count: 1 }),
+};
 
 function git(cwd: string, arguments_: string[]) {
   const result = spawnSync("git", arguments_, {
@@ -116,6 +116,90 @@ test("repository proof accepts a detached checkout only at exact dispatched remo
   }
 });
 
+test("Git and remote failures become bounded immutable repository evidence", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "sourcera-repository-failure-"));
+  try {
+    git(root, ["init", "--initial-branch=main"]);
+    await writeFile(path.join(root, "proof.txt"), "local only\n");
+    git(root, ["add", "proof.txt"]);
+    git(root, [
+      "-c",
+      "user.name=Sourcera Test",
+      "-c",
+      "user.email=sourcera@example.invalid",
+      "commit",
+      "-m",
+      "local only",
+    ]);
+    const sha = git(root, ["rev-parse", "HEAD"]);
+    const proof = collectProductionRepositoryEvidence({
+      approvedSha: sha,
+      dispatchRef: "refs/heads/main",
+      environment: process.env,
+      includeUntracked: false,
+      repositoryRoot: root,
+    });
+    assert.equal(proof.clean, false);
+    assert.equal(proof.outcome, "fail");
+    assert.equal(proof.failure?.context, "read fetched origin/main");
+    assert.ok(JSON.stringify(proof).length <= 20_000);
+    const receipt = createProductionPreflightReceipt({
+      evidence: { ...evidence, repository: JSON.stringify(proof) },
+      identity,
+    });
+    assert.equal(receipt.result, "failed");
+    assert.deepEqual(receipt.failedChecks, ["repository"]);
+    assert.match(receipt.proofSha256.repository, /^[a-f0-9]{64}$/);
+  } finally {
+    await rm(root, { force: true, recursive: true });
+  }
+});
+
+test("valid stamp and exact JSON cannot pass after a nonzero subprocess exit", () => {
+  const failedStamp = createProductionJsonProof(
+    {
+      error: undefined,
+      exitCode: 1,
+      stderr: "stamp exited nonzero",
+      stdout: JSON.stringify({ outcome: "pass" }),
+    },
+    "stamp gate",
+  );
+  const failedExact = createProductionJsonProof(
+    {
+      error: undefined,
+      exitCode: 1,
+      stderr: "exact exited nonzero",
+      stdout: JSON.stringify({ open_rows: 0 }),
+    },
+    "exact status scan",
+  );
+  assert.deepEqual(JSON.parse(failedStamp), {
+    context: "stamp gate",
+    error: null,
+    exitCode: 1,
+    outcome: "fail",
+    stderr: "stamp exited nonzero",
+  });
+  assert.deepEqual(JSON.parse(failedExact), {
+    context: "exact status scan",
+    error: null,
+    exitCode: 1,
+    outcome: "fail",
+    stderr: "exact exited nonzero",
+  });
+  const receipt = createProductionPreflightReceipt({
+    evidence: {
+      ...evidence,
+      exact: failedExact,
+      stamp: failedStamp,
+    },
+    identity,
+  });
+  assert.equal(receipt.result, "failed");
+  assert.deepEqual(receipt.failedChecks, ["exact", "stamp"]);
+});
+
 test("preflight manifest binds every no-secret proof to run identity", async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), "sourcera-preflight-"));
   try {
@@ -142,6 +226,32 @@ test("preflight manifest binds every no-secret proof to run identity", async () 
   }
 });
 
+test("a failed stamp gate still produces an immutable preflight receipt", async () => {
+  const receipt = createProductionPreflightReceipt({
+    evidence: failedStampEvidence,
+    identity,
+  });
+
+  assert.equal(receipt.result, "failed");
+  assert.deepEqual(receipt.failedChecks, ["stamp"]);
+
+  const directory = await mkdtemp(path.join(os.tmpdir(), "sourcera-preflight-failed-"));
+  try {
+    for (const [name, raw] of Object.entries(failedStampEvidence)) {
+      await writeFile(path.join(directory, `${name}.json`), raw);
+    }
+    await writeFile(
+      path.join(directory, "production-preflight.json"),
+      `${JSON.stringify(receipt)}\n`,
+    );
+    const readback = await readProductionPreflightBundle(directory, identity);
+    assert.equal(readback.receipt.result, "failed");
+    assert.deepEqual(readback.receipt.failedChecks, ["stamp"]);
+  } finally {
+    await rm(directory, { force: true, recursive: true });
+  }
+});
+
 test("the normal blocked lane writes one immutable no-authority receipt", async () => {
   const directory = await mkdtemp(
     path.join(os.tmpdir(), "sourcera-no-authority-"),
@@ -151,10 +261,10 @@ test("the normal blocked lane writes one immutable no-authority receipt", async 
     const receiptPath = path.join(directory, "no-authority.json");
     await mkdir(preflightDirectory);
     const preflightReceipt = createProductionPreflightReceipt({
-      evidence,
+      evidence: failedStampEvidence,
       identity,
     });
-    for (const [name, raw] of Object.entries(evidence)) {
+    for (const [name, raw] of Object.entries(failedStampEvidence)) {
       await writeFile(path.join(preflightDirectory, `${name}.json`), raw);
     }
     await writeFile(
@@ -178,10 +288,8 @@ test("the normal blocked lane writes one immutable no-authority receipt", async 
       HOME: process.env.HOME,
       NODE_ENV: "test",
       PATH: process.env.PATH,
-      SOURCERA_KNOWN_GOOD_SHA: knownGoodSha,
       SOURCERA_PREFLIGHT_ARTIFACT_DIGEST: preflightArtifactDigest,
       SOURCERA_RELEASE_APPROVED_SHA: approvedSha,
-      SOURCERA_REQUESTED_AUTHORITY_RUN_ID: "7000",
     };
     const first = spawnSync(command, arguments_, {
       cwd: process.cwd(),
@@ -192,31 +300,43 @@ test("the normal blocked lane writes one immutable no-authority receipt", async 
     const receipt = JSON.parse(await readFile(receiptPath, "utf8")) as {
       authority: {
         historicalDownloadAttempted: boolean;
-        requestedRunId: number;
+        nativeDecision: unknown;
+        providerMutationAuthorized: boolean;
         status: string;
       };
       event: string;
+      preflight: { failedChecks: string[]; result: string };
       promotionAllowed: boolean;
       providerCredentialCount: number;
       result: string;
+      sourceProvenance: { decisionId: string };
     };
     assert.deepEqual(
       {
         historicalDownloadAttempted:
           receipt.authority.historicalDownloadAttempted,
+        decisionId: receipt.sourceProvenance.decisionId,
+        failedChecks: receipt.preflight.failedChecks,
+        nativeDecision: receipt.authority.nativeDecision,
+        preflightResult: receipt.preflight.result,
         promotionAllowed: receipt.promotionAllowed,
+        providerMutationAuthorized:
+          receipt.authority.providerMutationAuthorized,
         providerCredentialCount: receipt.providerCredentialCount,
-        requestedRunId: receipt.authority.requestedRunId,
         result: receipt.result,
         status: receipt.authority.status,
       },
       {
         historicalDownloadAttempted: false,
+        decisionId: "DEC-PROD-001",
+        failedChecks: ["stamp"],
+        nativeDecision: null,
+        preflightResult: "failed",
         promotionAllowed: false,
+        providerMutationAuthorized: false,
         providerCredentialCount: 0,
-        requestedRunId: 7000,
         result: "blocked",
-        status: "missing_attempt_bound_normal_authority",
+        status: "pending_guarded_handoff",
       },
     );
     assert.equal(receipt.event, "production_release_no_authority_receipt");
@@ -228,205 +348,6 @@ test("the normal blocked lane writes one immutable no-authority receipt", async 
     });
     assert.notEqual(second.status, 0);
     assert.match(second.stderr, /must not already exist/);
-  } finally {
-    await rm(directory, { force: true, recursive: true });
-  }
-});
-
-test("GitHub handoff binds approval proof to the immutable preflight receipt", () => {
-  const githubProofRaw = JSON.stringify({ approvedSha, result: "passed" });
-  const handoff = createProductionGithubHandoff({
-    authorizationContext: "normal",
-    githubProofRaw,
-    identity,
-    knownGoodSha,
-    preflightArtifactDigest,
-    preflightReceiptRaw,
-  });
-
-  assert.deepEqual(
-    readProductionGithubHandoff(handoff, {
-      authorizationContext: "normal",
-      githubProofRaw,
-      identity,
-      knownGoodSha,
-      preflightArtifactDigest,
-      preflightReceiptRaw,
-    }),
-    handoff,
-  );
-  assert.throws(
-    () =>
-      readProductionGithubHandoff(handoff, {
-        authorizationContext: "normal",
-        githubProofRaw: `${githubProofRaw}\n`,
-        identity,
-        knownGoodSha,
-        preflightArtifactDigest,
-        preflightReceiptRaw,
-      }),
-    /GitHub proof hash does not match/,
-  );
-});
-
-test("bootstrap handoff binds the exact machine route proof and rejects reason-only authorization", () => {
-  const githubProofRaw = JSON.stringify({ approvedSha, result: "passed" });
-  const bootstrapRouteProofRaw = JSON.stringify({
-    route: "initial_genesis",
-    result: "passed",
-  });
-  const handoff = createProductionGithubHandoff({
-    authorizationContext: "initial_genesis",
-    bootstrapRouteProofRaw,
-    githubProofRaw,
-    identity,
-    knownGoodSha,
-    preflightArtifactDigest,
-    preflightReceiptRaw,
-  });
-  assert.equal(handoff.bootstrapRoute, "initial_genesis");
-  assert.deepEqual(
-    readProductionGithubHandoff(handoff, {
-      authorizationContext: "initial_genesis",
-      bootstrapRouteProofRaw,
-      githubProofRaw,
-      identity,
-      knownGoodSha,
-      preflightArtifactDigest,
-      preflightReceiptRaw,
-    }),
-    handoff,
-  );
-  assert.throws(
-    () =>
-      readProductionGithubHandoff(handoff, {
-        authorizationContext: "initial_genesis",
-        bootstrapRouteProofRaw: JSON.stringify({
-          route: "initial_genesis",
-          result: "tampered",
-        }),
-        githubProofRaw,
-        identity,
-        knownGoodSha,
-        preflightArtifactDigest,
-        preflightReceiptRaw,
-      }),
-    /bootstrap route proof does not match/,
-  );
-  assert.throws(
-    () =>
-      createProductionGithubHandoff({
-        authorizationContext: "expired because somebody said so",
-        githubProofRaw,
-        identity,
-        knownGoodSha,
-        preflightArtifactDigest,
-        preflightReceiptRaw,
-      }),
-    /bootstrap route authorization/,
-  );
-});
-
-test("handoffs reject another run, attempt, candidate, or known-good SHA", () => {
-  const githubProofRaw = JSON.stringify({ approvedSha, result: "passed" });
-  const handoff = createProductionGithubHandoff({
-    authorizationContext: "normal",
-    githubProofRaw,
-    identity,
-    knownGoodSha,
-    preflightArtifactDigest,
-    preflightReceiptRaw,
-  });
-
-  for (const replacement of [
-    { ...identity, approvedSha: "a".repeat(40) },
-    { ...identity, runAttempt: 2 },
-    { ...identity, runId: identity.runId + 1 },
-  ]) {
-    assert.throws(
-      () =>
-        readProductionGithubHandoff(handoff, {
-          authorizationContext: "normal",
-          githubProofRaw,
-          identity: replacement,
-          knownGoodSha,
-          preflightArtifactDigest,
-          preflightReceiptRaw,
-        }),
-      /(?:handoff identity does not match|workflow identity is invalid)/,
-    );
-  }
-  assert.throws(
-    () =>
-      readProductionGithubHandoff(handoff, {
-        authorizationContext: "normal",
-        githubProofRaw,
-        identity,
-        knownGoodSha: "b".repeat(40),
-        preflightArtifactDigest,
-        preflightReceiptRaw,
-      }),
-    /known-good SHA does not match/,
-  );
-  assert.throws(
-    () =>
-      readProductionGithubHandoff(handoff, {
-        authorizationContext: "normal",
-        githubProofRaw,
-        identity,
-        knownGoodSha,
-        preflightArtifactDigest: "d".repeat(64),
-        preflightReceiptRaw,
-      }),
-    /preflight artifact digest does not match/,
-  );
-  assert.throws(
-    () =>
-      readProductionGithubHandoff(handoff, {
-        authorizationContext: "expired anchor",
-        githubProofRaw,
-        identity,
-        knownGoodSha,
-        preflightArtifactDigest,
-        preflightReceiptRaw,
-      }),
-    /authorization|bootstrap route/,
-  );
-});
-
-test("mutation CLI requires the preflight and GitHub handoff inputs", async () => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), "sourcera-mutation-"));
-  try {
-    const canonicalDirectory = await realpath(directory);
-    const parsed = readProductionReleaseArguments(
-      [
-        "--anchor-mode",
-        "normal",
-        "--github-handoff",
-        path.join(directory, "github-handoff.json"),
-        "--github-proof",
-        path.join(directory, "github-proof.json"),
-        "--known-good-convex-receipt",
-        path.join(directory, "known-good.json"),
-        "--preflight-dir",
-        path.join(directory, "preflight"),
-        "--receipt-out",
-        path.join(directory, "release.json"),
-      ],
-      process.cwd(),
-    );
-    assert.equal(
-      parsed.preflightDirectory,
-      path.join(canonicalDirectory, "preflight"),
-    );
-    assert.equal(
-      parsed.githubHandoffPath,
-      path.join(canonicalDirectory, "github-handoff.json"),
-    );
-    assert.equal(
-      parsed.githubProofPath,
-      path.join(canonicalDirectory, "github-proof.json"),
-    );
   } finally {
     await rm(directory, { force: true, recursive: true });
   }

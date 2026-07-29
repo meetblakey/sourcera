@@ -26,24 +26,11 @@ export type ProductionPreflightEvidence = Record<
 
 export interface ProductionPreflightReceipt {
   event: "production_release_preflight_receipt";
+  failedChecks: Array<keyof typeof EVIDENCE_FILES>;
   identity: ProductionWorkflowIdentity;
   proofSha256: Record<keyof typeof EVIDENCE_FILES, string>;
-  result: "passed";
-  schemaVersion: 1;
-}
-
-export interface ProductionGithubHandoff {
-  authorizationContextSha256: string;
-  bootstrapRoute: "expired_anchor" | "initial_genesis" | null;
-  bootstrapRouteProofSha256: string | null;
-  event: "production_release_github_handoff";
-  githubProofSha256: string;
-  identity: ProductionWorkflowIdentity;
-  knownGoodSha: string;
-  preflightArtifactDigest: string;
-  preflightReceiptSha256: string;
-  result: "passed";
-  schemaVersion: 1;
+  result: "failed" | "passed";
+  schemaVersion: 2;
 }
 
 type RecordValue = Record<string, unknown>;
@@ -78,7 +65,6 @@ function sha256(raw: string) {
 
 function parseJson(raw: string, context: string): unknown {
   if (!raw || raw !== raw.trimEnd()) {
-    // Receipts bind exact bytes, including a conventional trailing newline.
     if (!raw.trim()) throw new Error(`${context} is empty`);
   }
   try {
@@ -122,34 +108,35 @@ function identitiesEqual(
   );
 }
 
-function requirePassingEvidence(evidence: ProductionPreflightEvidence) {
+function failedPreflightChecks(evidence: ProductionPreflightEvidence) {
+  const failed: Array<keyof typeof EVIDENCE_FILES> = [];
   const app = requiredRecord(
     parseJson(evidence.appVerification, "application verification proof"),
     "application verification proof",
   );
   if (app.exitCode !== 0 || app.outcome !== "pass") {
-    throw new Error("application verification proof did not pass");
+    failed.push("appVerification");
   }
   const delivery = requiredRecord(
     parseJson(evidence.delivery, "delivery verification proof"),
     "delivery verification proof",
   );
   if (delivery.exitCode !== 0 || delivery.outcome !== "pass") {
-    throw new Error("delivery verification proof did not pass");
+    failed.push("delivery");
   }
   const exact = requiredRecord(
     parseJson(evidence.exact, "exact status proof"),
     "exact status proof",
   );
   if (exact.open_rows !== 0) {
-    throw new Error("exact status proof did not pass");
+    failed.push("exact");
   }
   const stamp = requiredRecord(
     parseJson(evidence.stamp, "stamp gate proof"),
     "stamp gate proof",
   );
   if (stamp.outcome !== "pass") {
-    throw new Error("stamp gate proof did not pass");
+    failed.push("stamp");
   }
   const repository = requiredRecord(
     parseJson(evidence.repository, "repository proof"),
@@ -162,8 +149,9 @@ function requirePassingEvidence(evidence: ProductionPreflightEvidence) {
     repository.fetchedMainSha !== repository.headSha ||
     repository.mainSha !== repository.headSha
   ) {
-    throw new Error("repository proof did not pass");
+    failed.push("repository");
   }
+  return failed.sort();
 }
 
 export function createProductionPreflightReceipt(options: {
@@ -171,7 +159,7 @@ export function createProductionPreflightReceipt(options: {
   identity: ProductionWorkflowIdentity;
 }): ProductionPreflightReceipt {
   const identity = readProductionWorkflowIdentity(options.identity);
-  requirePassingEvidence(options.evidence);
+  const failedChecks = failedPreflightChecks(options.evidence);
   const repository = requiredRecord(
     parseJson(options.evidence.repository, "repository proof"),
     "repository proof",
@@ -180,10 +168,12 @@ export function createProductionPreflightReceipt(options: {
     repository.headSha !== identity.approvedSha ||
     repository.mainSha !== identity.approvedSha
   ) {
-    throw new Error("repository proof does not match the approved SHA");
+    if (!failedChecks.includes("repository")) failedChecks.push("repository");
   }
+  failedChecks.sort();
   return {
     event: "production_release_preflight_receipt",
+    failedChecks,
     identity,
     proofSha256: Object.fromEntries(
       Object.keys(EVIDENCE_FILES).map((name) => [
@@ -191,8 +181,8 @@ export function createProductionPreflightReceipt(options: {
         sha256(options.evidence[name as keyof typeof EVIDENCE_FILES]),
       ]),
     ) as ProductionPreflightReceipt["proofSha256"],
-    result: "passed",
-    schemaVersion: 1,
+    result: failedChecks.length === 0 ? "passed" : "failed",
+    schemaVersion: 2,
   };
 }
 
@@ -203,11 +193,20 @@ function readProductionPreflightReceipt(
   const receipt = requiredRecord(value, "production preflight receipt");
   requireExactKeys(
     receipt,
-    ["event", "identity", "proofSha256", "result", "schemaVersion"],
+    [
+      "event",
+      "failedChecks",
+      "identity",
+      "proofSha256",
+      "result",
+      "schemaVersion",
+    ],
     "production preflight receipt",
   );
   const identity = readProductionWorkflowIdentity(receipt.identity);
-  if (!identitiesEqual(identity, readProductionWorkflowIdentity(expectedIdentity))) {
+  if (
+    !identitiesEqual(identity, readProductionWorkflowIdentity(expectedIdentity))
+  ) {
     throw new Error("preflight identity does not match this workflow run");
   }
   const proofSha256 = requiredRecord(
@@ -219,10 +218,21 @@ function readProductionPreflightReceipt(
     Object.keys(EVIDENCE_FILES),
     "preflight proof hashes",
   );
+  if (!Array.isArray(receipt.failedChecks)) {
+    throw new Error("production preflight receipt is invalid");
+  }
+  const failedChecks = receipt.failedChecks;
   if (
-    receipt.schemaVersion !== 1 ||
+    receipt.schemaVersion !== 2 ||
     receipt.event !== "production_release_preflight_receipt" ||
-    receipt.result !== "passed" ||
+    !["failed", "passed"].includes(String(receipt.result)) ||
+    failedChecks.some(
+      (value) => !Object.hasOwn(EVIDENCE_FILES, String(value)),
+    ) ||
+    new Set(failedChecks).size !== failedChecks.length ||
+    [...failedChecks]
+      .sort()
+      .some((value, index) => value !== failedChecks[index]) ||
     Object.values(proofSha256).some(
       (value) => typeof value !== "string" || !SHA256.test(value),
     )
@@ -253,182 +263,15 @@ export async function readProductionPreflightBundle(
     }
     evidence[key] = raw;
   }
-  requirePassingEvidence(evidence);
+  const failedChecks = failedPreflightChecks(evidence);
+  if (
+    failedChecks.length !== receipt.failedChecks.length ||
+    failedChecks.some((value, index) => value !== receipt.failedChecks[index]) ||
+    receipt.result !== (failedChecks.length === 0 ? "passed" : "failed")
+  ) {
+    throw new Error("preflight result does not match its proof bundle");
+  }
   return { evidence, receipt, receiptRaw };
-}
-
-export function createProductionGithubHandoff(options: {
-  authorizationContext: string;
-  bootstrapRouteProofRaw?: string;
-  githubProofRaw: string;
-  identity: ProductionWorkflowIdentity;
-  knownGoodSha: string;
-  preflightArtifactDigest: string;
-  preflightReceiptRaw: string;
-}): ProductionGithubHandoff {
-  const identity = readProductionWorkflowIdentity(options.identity);
-  if (
-    !options.authorizationContext.trim() ||
-    options.authorizationContext !== options.authorizationContext.trim() ||
-    options.authorizationContext.length > 500
-  ) {
-    throw new Error("authorization context is invalid");
-  }
-  const bootstrapRoute =
-    options.authorizationContext === "expired_anchor" ||
-    options.authorizationContext === "initial_genesis"
-      ? options.authorizationContext
-      : null;
-  if (
-    (options.authorizationContext === "normal") !==
-      (options.bootstrapRouteProofRaw === undefined) ||
-    !["normal", "expired_anchor", "initial_genesis"].includes(
-      options.authorizationContext,
-    )
-  ) {
-    throw new Error("bootstrap route authorization is incomplete");
-  }
-  if (options.bootstrapRouteProofRaw !== undefined) {
-    const routeProof = requiredRecord(
-      parseJson(options.bootstrapRouteProofRaw, "bootstrap route proof"),
-      "bootstrap route proof",
-    );
-    if (routeProof.route !== bootstrapRoute) {
-      throw new Error("bootstrap route proof does not match authorization");
-    }
-  }
-  if (
-    !FULL_GIT_COMMIT_SHA.test(options.knownGoodSha) ||
-    options.knownGoodSha === identity.approvedSha
-  ) {
-    throw new Error("known-good SHA must be a distinct full Git SHA");
-  }
-  parseJson(options.githubProofRaw, "GitHub proof");
-  parseJson(options.preflightReceiptRaw, "production preflight receipt");
-  if (!SHA256.test(options.preflightArtifactDigest)) {
-    throw new Error("preflight artifact digest is invalid");
-  }
-  return {
-    authorizationContextSha256: sha256(options.authorizationContext),
-    bootstrapRoute,
-    bootstrapRouteProofSha256:
-      options.bootstrapRouteProofRaw === undefined
-        ? null
-        : sha256(options.bootstrapRouteProofRaw),
-    event: "production_release_github_handoff",
-    githubProofSha256: sha256(options.githubProofRaw),
-    identity,
-    knownGoodSha: options.knownGoodSha,
-    preflightArtifactDigest: options.preflightArtifactDigest,
-    preflightReceiptSha256: sha256(options.preflightReceiptRaw),
-    result: "passed",
-    schemaVersion: 1,
-  };
-}
-
-export function readProductionGithubHandoff(
-  value: unknown,
-  expected: {
-    authorizationContext: string;
-    bootstrapRouteProofRaw?: string;
-    githubProofRaw: string;
-    identity: ProductionWorkflowIdentity;
-    knownGoodSha: string;
-    preflightArtifactDigest: string;
-    preflightReceiptRaw: string;
-  },
-): ProductionGithubHandoff {
-  if (
-    !["normal", "expired_anchor", "initial_genesis"].includes(
-      expected.authorizationContext,
-    ) ||
-    (expected.authorizationContext === "normal") !==
-      (expected.bootstrapRouteProofRaw === undefined)
-  ) {
-    throw new Error("bootstrap route authorization is incomplete");
-  }
-  if (expected.bootstrapRouteProofRaw !== undefined) {
-    const routeProof = requiredRecord(
-      parseJson(expected.bootstrapRouteProofRaw, "bootstrap route proof"),
-      "bootstrap route proof",
-    );
-    if (routeProof.route !== expected.authorizationContext) {
-      throw new Error("bootstrap route proof does not match authorization");
-    }
-  }
-  const handoff = requiredRecord(value, "production GitHub handoff");
-  requireExactKeys(
-    handoff,
-    [
-      "authorizationContextSha256",
-      "bootstrapRoute",
-      "bootstrapRouteProofSha256",
-      "event",
-      "githubProofSha256",
-      "identity",
-      "knownGoodSha",
-      "preflightArtifactDigest",
-      "preflightReceiptSha256",
-      "result",
-      "schemaVersion",
-    ],
-    "production GitHub handoff",
-  );
-  const identity = readProductionWorkflowIdentity(handoff.identity);
-  if (!identitiesEqual(identity, readProductionWorkflowIdentity(expected.identity))) {
-    throw new Error("GitHub handoff identity does not match this workflow run");
-  }
-  if (handoff.knownGoodSha !== expected.knownGoodSha) {
-    throw new Error("GitHub handoff known-good SHA does not match");
-  }
-  if (
-    handoff.authorizationContextSha256 !== sha256(expected.authorizationContext)
-  ) {
-    throw new Error("authorization context does not match the GitHub handoff");
-  }
-  const expectedBootstrapRoute =
-    expected.authorizationContext === "expired_anchor" ||
-    expected.authorizationContext === "initial_genesis"
-      ? expected.authorizationContext
-      : null;
-  const expectedBootstrapRouteProofSha256 =
-    expected.bootstrapRouteProofRaw === undefined
-      ? null
-      : sha256(expected.bootstrapRouteProofRaw);
-  if (
-    handoff.bootstrapRoute !== expectedBootstrapRoute ||
-    handoff.bootstrapRouteProofSha256 !== expectedBootstrapRouteProofSha256 ||
-    (expectedBootstrapRoute === null) !==
-      (expected.bootstrapRouteProofRaw === undefined)
-  ) {
-    throw new Error("bootstrap route proof does not match the GitHub handoff");
-  }
-  if (handoff.preflightArtifactDigest !== expected.preflightArtifactDigest) {
-    throw new Error("preflight artifact digest does not match the handoff");
-  }
-  if (
-    handoff.schemaVersion !== 1 ||
-    handoff.event !== "production_release_github_handoff" ||
-    handoff.result !== "passed" ||
-    typeof handoff.authorizationContextSha256 !== "string" ||
-    !SHA256.test(handoff.authorizationContextSha256) ||
-    (handoff.bootstrapRouteProofSha256 !== null &&
-      (typeof handoff.bootstrapRouteProofSha256 !== "string" ||
-        !SHA256.test(handoff.bootstrapRouteProofSha256))) ||
-    typeof handoff.preflightArtifactDigest !== "string" ||
-    !SHA256.test(handoff.preflightArtifactDigest)
-  ) {
-    throw new Error("production GitHub handoff is invalid");
-  }
-  if (handoff.githubProofSha256 !== sha256(expected.githubProofRaw)) {
-    throw new Error("GitHub proof hash does not match the handoff");
-  }
-  if (
-    handoff.preflightReceiptSha256 !== sha256(expected.preflightReceiptRaw)
-  ) {
-    throw new Error("preflight receipt hash does not match the GitHub handoff");
-  }
-  return handoff as unknown as ProductionGithubHandoff;
 }
 
 export const productionPreflightEvidenceFiles = EVIDENCE_FILES;

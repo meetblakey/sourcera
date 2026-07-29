@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import { execFileSync, spawnSync } from "node:child_process";
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -583,10 +584,11 @@ test("production release is manual, serialized, protected, retained, and provide
     "cancel-in-progress: false",
     "npm ci --ignore-scripts",
     "npm run release:production:preflight",
-    "SOURCERA_RELEASE_DISPATCH_REF: ${{ github.ref }}",
-    'test "$SOURCERA_RELEASE_DISPATCH_REF" = "refs/heads/main"',
+    "production_release_dispatch_guard_receipt",
+    "dispatch_ref_not_main",
+    "Upload the immutable non-main dispatch receipt",
+    "Fail closed after publishing non-main receipt",
     "npm run release:production:no-authority",
-    "SOURCERA_REQUESTED_AUTHORITY_RUN_ID: ${{ inputs.known_good_receipt_run_id }}",
     "production-release-no-authority-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}",
     "if: always() && steps.receipt_check.outcome == 'success'",
     "SOURCERA_RELEASE_APPROVED_SHA: ${{ github.sha }}",
@@ -611,11 +613,20 @@ test("production release is manual, serialized, protected, retained, and provide
     workflow,
     /CONVEX_DEPLOY_KEY|SOURCERA_CONVEX_CANARY_SECRET|VERCEL_TOKEN/,
   );
+  const dispatchGuard = workflow.slice(
+    workflow.indexOf("  dispatch_guard:"),
+    workflow.indexOf("  preflight:"),
+  );
   const preflight = workflow.slice(
     workflow.indexOf("  preflight:"),
     workflow.indexOf("  blocked:"),
   );
   const blocked = workflow.slice(workflow.indexOf("  blocked:"));
+  assert.ok(workflow.indexOf("  dispatch_guard:") < workflow.indexOf("  preflight:"));
+  assert.doesNotMatch(dispatchGuard, /environment:|secrets\.|actions\/checkout|actions\/setup-node/);
+  assert.match(dispatchGuard, /if: github\.ref != 'refs\/heads\/main'/);
+  assert.match(preflight, /needs: dispatch_guard/);
+  assert.doesNotMatch(preflight, /Require a main-branch dispatch/);
   assert.doesNotMatch(preflight, /environment:|secrets\./);
   assert.doesNotMatch(
     blocked,
@@ -625,130 +636,47 @@ test("production release is manual, serialized, protected, retained, and provide
     blocked,
     /id: receipt_check[\s\S]*test -s "\$RECEIPT_PATH"[\s\S]*production_release_no_authority_receipt/,
   );
-  assert.match(blocked, /Fail closed until DEC-PROD-002 is resolved[\s\S]*exit 1/);
-  assert.equal(workflow.match(/exit 1/g)?.length, 1);
+  assert.match(
+    blocked,
+    /Fail closed until production prerequisites are proved[\s\S]*exit 1/,
+  );
+  assert.equal(workflow.match(/exit 1/g)?.length, 2);
   assert.ok(
     blocked.indexOf("npm run release:production:no-authority") <
       blocked.indexOf("actions/upload-artifact@"),
   );
   assert.ok(
     blocked.indexOf("actions/upload-artifact@") <
-      blocked.indexOf("Fail closed until DEC-PROD-002 is resolved"),
+      blocked.indexOf("Fail closed until production prerequisites are proved"),
   );
   assert.doesNotMatch(
     workflow,
     /anchor_mode:|\bgenesis\b|pull_request_target|schedule:/,
   );
-
-  const bootstrap = readFileSync(
-    ".github/workflows/production-bootstrap-recovery.yml",
-    "utf8",
-  );
-  assert.match(bootstrap, /--anchor-mode genesis/);
-  assert.doesNotMatch(bootstrap, /--anchor-mode normal/);
 });
 
-test("Convex anchor recovery cannot claim or bypass a Vercel genesis", () => {
-  const workflow = readFileSync(
+test("retired production dispatches cannot return", () => {
+  for (const path of [
     ".github/workflows/production-bootstrap-recovery.yml",
-    "utf8",
-  );
-  assert.match(workflow, /^name: Convex anchor bootstrap recovery$/m);
-  assert.doesNotMatch(workflow, /first-production/i);
-  assert.doesNotMatch(workflow, /vercel_baseline_confirmed/);
-  for (const required of [
-    "baseline_sha:",
-    "baseline_run_id:",
-    "baseline_activation_attempt:",
-    "baseline_activation_artifact_name:",
-    "baseline_activation_artifact_digest:",
-    "baseline_stage_receipt_sha256:",
-    "run-id: ${{ inputs.baseline_run_id }}",
-    "name: ${{ inputs.baseline_activation_artifact_name }}",
-    "--vercel-baseline-dir",
-  ]) {
-    assert.match(
-      workflow,
-      new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-    );
-  }
-  assert.equal(
-    workflow.match(/run-id: \$\{\{ inputs\.baseline_run_id \}\}/g)?.length,
-    1,
-  );
-
-  const foundation = readFileSync("docs/runbooks/r0-foundation.md", "utf8");
-  assert.match(foundation, /immutable baseline artifact and exact attempt-specific provenance/i);
-  assert.match(foundation, /DEC-PROD-005/);
-  assert.doesNotMatch(foundation, /bootstrap recovery.*first-production/i);
-});
-
-test("the first Vercel baseline is a separate protected forward-only workflow", () => {
-  const workflow = readFileSync(
     ".github/workflows/vercel-production-baseline.yml",
-    "utf8",
-  );
-  for (const required of [
-    "name: Vercel production baseline",
-    "workflow_dispatch:",
-    "baseline_reason:",
-    "forward_only_acknowledged:",
-    "group: sourcera-production-release",
-    "cancel-in-progress: false",
-    "npm run release:production:preflight",
-    "npm run release:vercel-baseline:github",
-    "npm run vercel:baseline:stage",
-    "npm run vercel:baseline:activate",
-    "vercel-production-baseline-preflight-${{ github.sha }}-${{ github.run_id }}",
-    "vercel-production-baseline-approval-${{ github.sha }}-${{ github.run_id }}",
-    "vercel-production-baseline-stage-${{ github.sha }}-${{ github.run_id }}",
-    "vercel-production-baseline-activation-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}",
-    "if-no-files-found: error",
-    "overwrite: false",
-    "retention-days: 90",
+    "scripts/bootstrap-convex-production.ts",
+    "scripts/deploy-convex-production.ts",
+    "scripts/rollback-convex-production.ts",
+    "scripts/release-production.ts",
+    "scripts/stage-vercel-production.ts",
   ]) {
-    assert.match(
-      workflow,
-      new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-    );
+    assert.equal(existsSync(path), false, path);
   }
-  const preflight = workflow.slice(
-    workflow.indexOf("  preflight:"),
-    workflow.indexOf("  approval:"),
-  );
-  const approval = workflow.slice(
-    workflow.indexOf("  approval:"),
-    workflow.indexOf("  stage:"),
-  );
-  const stage = workflow.slice(
-    workflow.indexOf("  stage:"),
-    workflow.indexOf("  activate:"),
-  );
-  const activate = workflow.slice(workflow.indexOf("  activate:"));
-  assert.doesNotMatch(preflight, /environment:|secrets\./);
-  assert.match(approval, /environment:\s+sourcera-production-release/);
-  assert.match(
-    approval,
-    /SOURCERA_RELEASE_GITHUB_TOKEN:\s+\$\{\{ secrets\.SOURCERA_RELEASE_GITHUB_TOKEN \}\}/,
-  );
-  assert.doesNotMatch(approval, /VERCEL_TOKEN|CONVEX_DEPLOY_KEY|CANARY_SECRET/);
-  for (const providerJob of [stage, activate]) {
-    assert.match(providerJob, /environment:\s+sourcera-production-release/);
-    assert.match(
-      providerJob,
-      /VERCEL_TOKEN:\s+\$\{\{ secrets\.VERCEL_TOKEN \}\}/,
-    );
-    assert.doesNotMatch(
-      providerJob,
-      /SOURCERA_RELEASE_GITHUB_TOKEN|CONVEX_DEPLOY_KEY|CANARY_SECRET/,
-    );
-  }
-  assert.match(stage, /needs:[\s\S]*approval[\s\S]*preflight/);
-  assert.match(activate, /needs:[\s\S]*stage/);
-  assert.doesNotMatch(
-    workflow,
-    /\brollback\b|\bgenesis\b|pull_request_target|schedule:/i,
-  );
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8")) as {
+    scripts: Record<string, string>;
+  };
+  assert.equal(packageJson.scripts["convex:bootstrap:production"], undefined);
+  assert.equal(packageJson.scripts["convex:deploy:production"], undefined);
+  assert.equal(packageJson.scripts["convex:rollback:production"], undefined);
+  assert.equal(packageJson.scripts["release:production"], undefined);
+  assert.equal(packageJson.scripts["vercel:baseline:stage"], undefined);
+  assert.equal(packageJson.scripts["vercel:baseline:activate"], undefined);
+  assert.equal(packageJson.scripts["vercel:stage:production"], undefined);
 });
 
 test("every release-required workflow runs on all main changes", () => {

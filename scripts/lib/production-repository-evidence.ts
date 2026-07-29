@@ -2,6 +2,33 @@ import { spawnSync } from "node:child_process";
 import { realpathSync } from "node:fs";
 
 const FULL_GIT_SHA = /^[a-f0-9]{40}$/i;
+const MAX_FAILURE_TEXT = 4096;
+
+function bounded(value: unknown) {
+  const text = typeof value === "string" ? value : String(value ?? "");
+  return text.length <= MAX_FAILURE_TEXT
+    ? text
+    : `${text.slice(0, MAX_FAILURE_TEXT)}…`;
+}
+
+class ProductionRepositoryCommandError extends Error {
+  readonly context: string;
+  readonly exitCode: number;
+  readonly stderr: string;
+
+  constructor(input: {
+    context: string;
+    error: unknown;
+    exitCode: number;
+    stderr: unknown;
+  }) {
+    super(`${input.context} failed`);
+    this.name = "ProductionRepositoryCommandError";
+    this.context = input.context;
+    this.exitCode = input.exitCode;
+    this.stderr = bounded(input.stderr || input.error);
+  }
+}
 
 export interface ProductionRepositoryState {
   clean: boolean;
@@ -27,10 +54,16 @@ export function collectProductionRepositoryState(options: {
       cwd: repositoryRoot,
       encoding: "utf8",
       env: options.environment,
-      maxBuffer: 64 * 1024 * 1024,
+      maxBuffer: 1024 * 1024,
+      timeout: 30_000,
     });
     if (result.error || result.status !== 0) {
-      throw new Error(`${context} failed`);
+      throw new ProductionRepositoryCommandError({
+        context,
+        error: result.error?.message,
+        exitCode: result.status ?? 1,
+        stderr: result.stderr,
+      });
     }
     return result.stdout.trim();
   };
@@ -70,4 +103,59 @@ export function collectProductionRepositoryState(options: {
     mainSha,
     ref: options.dispatchRef,
   };
+}
+
+export type ProductionRepositoryEvidence =
+  | (ProductionRepositoryState & {
+      failure: null;
+      outcome: "pass";
+    })
+  | {
+      clean: false;
+      failure: {
+        context: string;
+        error: string;
+        exitCode: number;
+        stderr: string;
+      };
+      fetchedMainSha: "";
+      headSha: "";
+      mainSha: "";
+      outcome: "fail";
+      ref: string;
+    };
+
+export function collectProductionRepositoryEvidence(options: Parameters<
+  typeof collectProductionRepositoryState
+>[0]): ProductionRepositoryEvidence {
+  try {
+    return {
+      ...collectProductionRepositoryState(options),
+      failure: null,
+      outcome: "pass",
+    };
+  } catch (error) {
+    const failure = error instanceof ProductionRepositoryCommandError
+      ? {
+          context: error.context,
+          error: error.message,
+          exitCode: error.exitCode,
+          stderr: error.stderr,
+        }
+      : {
+          context: "repository validation",
+          error: bounded(error instanceof Error ? error.message : error),
+          exitCode: 1,
+          stderr: "",
+        };
+    return {
+      clean: false,
+      failure,
+      fetchedMainSha: "",
+      headSha: "",
+      mainSha: "",
+      outcome: "fail",
+      ref: options.dispatchRef,
+    };
+  }
 }

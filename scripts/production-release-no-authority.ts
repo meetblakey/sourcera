@@ -4,7 +4,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import productionReleaseConfig from "../config/production-release.json";
-import { readProductionReleaseConfig } from "./lib/production-release-controller";
+import { resolveProductionDecisionAuthority } from "./lib/production-decision-authority";
+import { readProductionReleaseConfig } from "./lib/production-release-config";
 import {
   readProductionPreflightBundle,
   readProductionWorkflowIdentity,
@@ -17,7 +18,6 @@ import {
 const repositoryRoot = realpathSync(
   path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
 );
-const FULL_GIT_SHA = /^[a-f0-9]{40}$/i;
 const SHA256 = /^[a-f0-9]{64}$/;
 const FORBIDDEN_CREDENTIALS = [
   "CONVEX_DEPLOY_KEY",
@@ -126,32 +126,19 @@ export async function main(arguments_ = process.argv.slice(2)) {
   assertProductionNoAuthorityCredentialBoundary(process.env);
   const parsed = readArguments(arguments_);
   const config = readProductionReleaseConfig(productionReleaseConfig);
-  if (
-    config.proofCollection.mode !== "blocked" ||
-    config.proofCollection.decision !== "DEC-PROD-002"
-  ) {
-    throw new Error("No-authority receipt requires the DEC-PROD-002 blocked mode");
+  if (config.productionControl.mode !== "blocked") {
+    throw new Error("No-authority receipt requires blocked production control");
   }
+  const authority = resolveProductionDecisionAuthority(
+    repositoryRoot,
+    config.productionControl,
+  );
   const identity = readProductionWorkflowIdentity({
     approvedSha: requiredEnvironment("SOURCERA_RELEASE_APPROVED_SHA"),
     repository: requiredEnvironment("GITHUB_REPOSITORY"),
     runAttempt: Number(requiredEnvironment("GITHUB_RUN_ATTEMPT")),
     runId: Number(requiredEnvironment("GITHUB_RUN_ID")),
   });
-  const knownGoodSha = requiredEnvironment("SOURCERA_KNOWN_GOOD_SHA");
-  if (!FULL_GIT_SHA.test(knownGoodSha) || knownGoodSha === identity.approvedSha) {
-    throw new Error("SOURCERA_KNOWN_GOOD_SHA must be a distinct full Git SHA");
-  }
-  const requestedRunIdRaw = requiredEnvironment(
-    "SOURCERA_REQUESTED_AUTHORITY_RUN_ID",
-  );
-  const requestedRunId = Number(requestedRunIdRaw);
-  if (
-    !/^[1-9]\d*$/.test(requestedRunIdRaw) ||
-    !Number.isSafeInteger(requestedRunId)
-  ) {
-    throw new Error("SOURCERA_REQUESTED_AUTHORITY_RUN_ID is invalid");
-  }
   const preflightArtifactDigest = requiredEnvironment(
     "SOURCERA_PREFLIGHT_ARTIFACT_DIGEST",
   );
@@ -164,24 +151,26 @@ export async function main(arguments_ = process.argv.slice(2)) {
   );
   const receipt = {
     authority: {
-      available: false,
-      expectedArtifactFormat: `production-release-${knownGoodSha}-${requestedRunId}-<attempt>`,
       historicalDownloadAttempted: false,
-      requestedRunId,
-      status: "missing_attempt_bound_normal_authority",
+      nativeDecision: null,
+      providerMutationAuthorized: false,
+      status: authority.status,
     },
     approvedSha: identity.approvedSha,
     checkedAt: new Date().toISOString(),
-    decision: "DEC-PROD-002",
     event: "production_release_no_authority_receipt",
     identity,
-    knownGoodSha,
-    preflightArtifactDigest,
-    preflightReceiptSha256: sha256(preflight.receiptRaw),
+    preflight: {
+      artifactDigest: preflightArtifactDigest,
+      failedChecks: preflight.receipt.failedChecks,
+      receiptSha256: sha256(preflight.receiptRaw),
+      result: preflight.receipt.result,
+    },
     promotionAllowed: false,
     providerCredentialCount: 0,
     result: "blocked",
-    schemaVersion: 1,
+    schemaVersion: 3,
+    sourceProvenance: config.productionControl.sourceProvenance,
   } as const;
   await writeProductionNoAuthorityReceipt(parsed.receiptOutputPath, receipt);
   process.stdout.write(`${JSON.stringify(receipt)}\n`);
