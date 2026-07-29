@@ -19,6 +19,7 @@ import {
   assertLinearRequirementLabelReplacementCandidate,
   canonicalLinearRequirementLabelReplacementFinalReceiptJson,
   compensateLinearRequirementLabelReplacementPhase,
+  compareLinearRequirementLabelReplacementStableCaptures,
   executeLinearRequirementLabelReplacementPhase,
   verifyLinearRequirementLabelRenameRecoveryState,
   verifyLinearRequirementLabelReplacementFinal,
@@ -47,6 +48,14 @@ const IMMUTABLE_MIGRATION_PATHS = [
   "tools/spec-lint/package.json",
   "tools/spec-lint/package-lock.json",
 ] as const;
+const DIAGNOSTIC_CONTROL_TRANSITION_PATHS = [
+  ".github/workflows/linear-requirement-label-replacement.yml",
+  "tools/delivery/lib/linear-requirement-label-replacement.ts",
+  "tools/delivery/linear-requirement-label-replacement-runner-cli.test.ts",
+  "tools/delivery/linear-requirement-label-replacement-workflow.test.ts",
+  "tools/delivery/linear-requirement-label-replacement.test.ts",
+  "tools/delivery/run-linear-requirement-label-replacement.ts",
+] as const;
 
 type RunnerPhase = "rename" | "create" | "replace" | "verify" | "retire" | "finalize";
 type JsonRecord = Record<string, unknown>;
@@ -63,6 +72,7 @@ interface CliArgs {
   journalOut: string;
   receiptOut: string;
   chunkReceiptsOut: string;
+  failureSummaryOut?: string;
   previousReceipt?: string;
   previousJournal?: string;
   expectedPreviousReceiptRoot?: string;
@@ -72,6 +82,59 @@ interface CliArgs {
   expectedResumeReceiptsSha256?: string;
   secondNativeIdentity?: string;
   secondCaptureReceipt?: string;
+  controlTransitionSource?: string;
+  controlTransitionCandidateRoot?: string;
+  controlTransitionHead?: string;
+  controlTransitionBeforeRoot?: string;
+  controlTransitionAfterRoot?: string;
+}
+
+interface ControlTransition {
+  source: string;
+  candidateRoot: string;
+  head: string;
+  beforeRoot: string;
+  afterRoot: string;
+}
+
+type FailureCode =
+  | "input_validation"
+  | "capture_validation"
+  | "predecessor_validation"
+  | "protected_state_validation"
+  | "retirement_replay_validation"
+  | "final_usage_validation"
+  | "stable_capture_validation"
+  | "phase_validation"
+  | "phase_execution"
+  | "evidence_persistence";
+
+interface CaptureDiagnostic {
+  oldLabelCount: number;
+  newLabelCount: number;
+  oldLabelArchivedAtIsNull: boolean | null;
+  oldLabelRetiredAtIsNull: boolean | null;
+  labelTotal: number;
+  oldLabelUses: number;
+  newLabelUses: number;
+  outsideNewLabelUses: number;
+  activeRequirementLabelCount: number;
+  protectedRootMatches: boolean;
+}
+
+interface FailureSummaryState {
+  schemaVersion: 1;
+  kind: "linear-requirement-label-replacement-failure-summary";
+  phase: RunnerPhase | null;
+  code: FailureCode;
+  candidateRoot: string | null;
+  firstCaptureRoot: string | null;
+  secondCaptureRoot: string | null;
+  differingCatalogs: string[] | null;
+  firstCatalogRoots: Record<string, string> | null;
+  secondCatalogRoots: Record<string, string> | null;
+  firstCapture: CaptureDiagnostic | null;
+  secondCapture: CaptureDiagnostic | null;
 }
 
 interface RunnerReceipt {
@@ -138,6 +201,34 @@ function parsedJson(raw: Buffer, label: string): unknown {
   }
 }
 
+function uniqueRawFlagValue(argv: string[], flag: string): string | undefined {
+  const indexes = argv.flatMap((value, index) => value === flag ? [index] : []);
+  if (indexes.length !== 1) return undefined;
+  const value = argv[indexes[0]! + 1];
+  return value && !value.startsWith("--") ? value : undefined;
+}
+
+const runnerArgv = process.argv.slice(2);
+const preliminaryPhase = uniqueRawFlagValue(runnerArgv, "--phase");
+const preliminaryFailureSummaryOut = uniqueRawFlagValue(runnerArgv, "--failure-summary-out");
+const failureSummary: FailureSummaryState = {
+  schemaVersion: 1,
+  kind: "linear-requirement-label-replacement-failure-summary",
+  phase: preliminaryPhase && PHASES.has(preliminaryPhase as RunnerPhase)
+    ? preliminaryPhase as RunnerPhase
+    : null,
+  code: "input_validation",
+  candidateRoot: null,
+  firstCaptureRoot: null,
+  secondCaptureRoot: null,
+  differingCatalogs: null,
+  firstCatalogRoots: null,
+  secondCatalogRoots: null,
+  firstCapture: null,
+  secondCapture: null,
+};
+let resolvedFailureSummaryOut: string | undefined;
+
 function parseArgs(argv: string[]): CliArgs {
   let apply = false;
   let compensate = false;
@@ -147,7 +238,9 @@ function parseArgs(argv: string[]): CliArgs {
     "--run-id", "--journal-out", "--receipt-out", "--chunk-receipts-out", "--previous-receipt",
     "--previous-journal", "--expected-previous-receipt-root", "--resume-journal", "--expected-resume-journal-sha256",
     "--resume-receipts", "--expected-resume-receipts-sha256",
-    "--second-native-identity", "--second-capture-receipt",
+    "--second-native-identity", "--second-capture-receipt", "--failure-summary-out",
+    "--control-transition-source", "--control-transition-candidate-root", "--control-transition-head",
+    "--control-transition-before-root", "--control-transition-after-root",
   ]);
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
@@ -187,6 +280,11 @@ function parseArgs(argv: string[]): CliArgs {
   const expectedResumeReceiptsSha256 = values.get("--expected-resume-receipts-sha256");
   const secondNativeIdentity = values.get("--second-native-identity");
   const secondCaptureReceipt = values.get("--second-capture-receipt");
+  const controlTransitionSource = values.get("--control-transition-source");
+  const controlTransitionCandidateRoot = values.get("--control-transition-candidate-root");
+  const controlTransitionHead = values.get("--control-transition-head");
+  const controlTransitionBeforeRoot = values.get("--control-transition-before-root");
+  const controlTransitionAfterRoot = values.get("--control-transition-after-root");
   const mutation = MUTATION_PHASES.has(phase as LinearRequirementLabelReplacementPhase);
   if (apply !== mutation) fail("--apply is required only for mutation phases");
   if (compensate && !mutation) fail("--compensate is valid only for mutation phases");
@@ -215,6 +313,15 @@ function parseArgs(argv: string[]): CliArgs {
     (phase === "finalize") !== (secondNativeIdentity !== undefined)) {
     fail("second stable capture arguments are required only for finalize");
   }
+  const transitionValues = [controlTransitionSource, controlTransitionCandidateRoot, controlTransitionHead,
+    controlTransitionBeforeRoot, controlTransitionAfterRoot];
+  if (transitionValues.some((value) => value !== undefined) &&
+    (transitionValues.some((value) => value === undefined) ||
+      !COMMIT.test(controlTransitionSource!) || !COMMIT.test(controlTransitionHead!) ||
+      !DIGEST.test(controlTransitionCandidateRoot!) || !DIGEST.test(controlTransitionBeforeRoot!) ||
+      !DIGEST.test(controlTransitionAfterRoot!))) {
+    fail("control transition arguments must be one exact commit and digest set");
+  }
   return {
     apply,
     compensate,
@@ -227,6 +334,7 @@ function parseArgs(argv: string[]): CliArgs {
     journalOut: values.get("--journal-out")!,
     receiptOut: values.get("--receipt-out")!,
     chunkReceiptsOut: values.get("--chunk-receipts-out")!,
+    failureSummaryOut: values.get("--failure-summary-out"),
     previousReceipt,
     previousJournal,
     expectedPreviousReceiptRoot,
@@ -236,6 +344,11 @@ function parseArgs(argv: string[]): CliArgs {
     expectedResumeReceiptsSha256,
     secondNativeIdentity,
     secondCaptureReceipt,
+    controlTransitionSource,
+    controlTransitionCandidateRoot,
+    controlTransitionHead,
+    controlTransitionBeforeRoot,
+    controlTransitionAfterRoot,
   };
 }
 
@@ -334,7 +447,21 @@ function secretFreeEnvironment(): NodeJS.ProcessEnv {
   return environment;
 }
 
-function repositoryHead(sourceCommit: string): { root: string; head: string } {
+function controlTreeRoot(repositoryRoot: string, commit: string, environment: NodeJS.ProcessEnv): string {
+  const tree = spawnSync("git", ["--no-optional-locks", "ls-tree", "-r", "-z", commit, "--", ...IMMUTABLE_MIGRATION_PATHS], {
+    cwd: repositoryRoot,
+    encoding: "buffer",
+    env: environment,
+  });
+  if (tree.status !== 0 || tree.signal || tree.error) fail("migration control tree is unavailable");
+  return sha256(tree.stdout);
+}
+
+function repositoryHead(
+  sourceCommit: string,
+  candidateRoot: string,
+  transition?: ControlTransition,
+): { root: string; head: string } {
   const environment = secretFreeEnvironment();
   const top = spawnSync("git", ["--no-optional-locks", "rev-parse", "--show-toplevel"], {
     cwd: process.cwd(), encoding: "utf8", env: environment,
@@ -346,16 +473,41 @@ function repositoryHead(sourceCommit: string): { root: string; head: string } {
   });
   if (head.status !== 0 || head.signal || head.error || !COMMIT.test(head.stdout.trim())) fail("repository HEAD is unavailable");
   const current = head.stdout.trim();
-  if (current !== sourceCommit) {
+  if (current === sourceCommit) {
+    if (transition) fail("control transition is not valid without a later main HEAD");
+  } else {
     const ancestor = spawnSync("git", ["--no-optional-locks", "merge-base", "--is-ancestor", sourceCommit, current], {
       cwd: root, encoding: "utf8", env: environment,
     });
     const unchanged = spawnSync("git", [
       "--no-optional-locks", "diff", "--quiet", sourceCommit, current, "--", ...IMMUTABLE_MIGRATION_PATHS,
     ], { cwd: root, encoding: "utf8", env: environment });
-    if (ancestor.status !== 0 || ancestor.signal || ancestor.error ||
-      unchanged.status !== 0 || unchanged.signal || unchanged.error) {
+    if (ancestor.status !== 0 || ancestor.signal || ancestor.error || unchanged.signal || unchanged.error ||
+      (unchanged.status !== 0 && unchanged.status !== 1)) {
       fail("HEAD is not a safe descendant with byte-identical migration controls");
+    }
+    if (unchanged.status === 0) {
+      if (transition) fail("control transition was supplied for byte-identical migration controls");
+    } else {
+      const parentReadback = spawnSync("git", ["--no-optional-locks", "rev-list", "--parents", "-n", "1", current], {
+        cwd: root, encoding: "utf8", env: environment,
+      });
+      const lineage = parentReadback.stdout.trim().split(/\s+/);
+      if (!transition || transition.source !== sourceCommit || transition.candidateRoot !== candidateRoot ||
+        transition.head !== current || parentReadback.status !== 0 || parentReadback.signal || parentReadback.error ||
+        lineage.length !== 2 || lineage[0] !== current || lineage[1] !== sourceCommit ||
+        controlTreeRoot(root, sourceCommit, environment) !== transition.beforeRoot ||
+        controlTreeRoot(root, current, environment) !== transition.afterRoot) {
+        fail("changed migration controls lack an exact digest-pinned transition");
+      }
+      const changed = spawnSync("git", [
+        "--no-optional-locks", "diff", "--name-only", "-z", sourceCommit, current, "--", ...IMMUTABLE_MIGRATION_PATHS,
+      ], { cwd: root, encoding: "buffer", env: environment });
+      if (changed.status !== 0 || changed.signal || changed.error) fail("changed migration control paths are unavailable");
+      const paths = changed.stdout.toString("utf8").split("\0").filter(Boolean).sort();
+      if (paths.join("\0") !== [...DIAGNOSTIC_CONTROL_TRANSITION_PATHS].sort().join("\0")) {
+        fail("migration control transition differs from the exact diagnostic allowlist");
+      }
     }
   }
   return { root, head: current };
@@ -548,6 +700,30 @@ function protectedNativeRoot(
   return sha256(canonicalJson(projection));
 }
 
+function captureDiagnostic(
+  native: LinearRequirementLabelCapture,
+  candidate: LinearRequirementLabelReplacementCandidate,
+): CaptureDiagnostic {
+  const old = native.labels.filter((label) => label.id === candidate.oldLabel.id);
+  const replacement = native.labels.filter((label) => label.id === candidate.newLabel.id);
+  const expected = new Set(candidate.issues.map((issue) => issue.issueId));
+  const newUses = native.issues.filter((issue) => issue.labelIds.includes(candidate.newLabel.id));
+  return {
+    oldLabelCount: old.length,
+    newLabelCount: replacement.length,
+    oldLabelArchivedAtIsNull: old.length === 1 ? old[0]!.archivedAt === null : null,
+    oldLabelRetiredAtIsNull: old.length === 1 ? old[0]!.retiredAt === null : null,
+    labelTotal: native.labels.length,
+    oldLabelUses: native.issues.filter((issue) => issue.labelIds.includes(candidate.oldLabel.id)).length,
+    newLabelUses: newUses.length,
+    outsideNewLabelUses: newUses.filter((issue) =>
+      !expected.has(issue.issueUuid) || issue.teamId !== candidate.requirementsTeamId || issue.archivedAt !== null).length,
+    activeRequirementLabelCount: native.labels.filter((label) =>
+      label.name === candidate.newLabel.name && label.archivedAt === null && label.retiredAt === null).length,
+    protectedRootMatches: protectedNativeRoot(native, candidate) === candidate.protectedNativeStateRoot,
+  };
+}
+
 class CaptureReplayTransport implements LinearRequirementLabelReplacementTransport {
   private readonly labels: Map<string, LinearRequirementLabelCapture["labels"][number]>;
   private readonly issues: Map<string, LinearRequirementLabelCapture["issues"][number]>;
@@ -660,7 +836,8 @@ function receiptJson(receipt: RunnerReceipt): string {
 }
 
 async function main(): Promise<void> {
-  const args = parseArgs(process.argv.slice(2));
+  const args = parseArgs(runnerArgv);
+  failureSummary.phase = args.phase;
 
   // Resolve every input and output identity before parsing artifacts or consulting credentials.
   const candidateRaw = readSafeInput(args.candidate, "candidate");
@@ -675,17 +852,31 @@ async function main(): Promise<void> {
   const journalOut = newOutputPath(args.journalOut, "journal output");
   const receiptOut = newOutputPath(args.receiptOut, "receipt output");
   const chunkReceiptsOut = newOutputPath(args.chunkReceiptsOut, "chunk receipt output");
-  if (new Set([journalOut, receiptOut, chunkReceiptsOut]).size !== 3) fail("journal and receipt outputs must differ");
+  resolvedFailureSummaryOut = args.failureSummaryOut
+    ? newOutputPath(args.failureSummaryOut, "failure summary output")
+    : undefined;
+  const outputPaths = [journalOut, receiptOut, chunkReceiptsOut, resolvedFailureSummaryOut]
+    .filter((value): value is string => value !== undefined);
+  if (new Set(outputPaths).size !== outputPaths.length) fail("runner outputs must differ");
 
   const candidate = assertLinearRequirementLabelReplacementCandidate(
     parsedJson(candidateRaw, "candidate") as LinearRequirementLabelReplacementCandidate,
   );
+  failureSummary.candidateRoot = candidate.root;
   if (candidate.root !== args.expectedRoot) fail("candidate root differs from --expected-root");
-  const repository = repositoryHead(candidate.sourceCommit);
+  const transition = args.controlTransitionSource ? {
+    source: args.controlTransitionSource,
+    candidateRoot: args.controlTransitionCandidateRoot!,
+    head: args.controlTransitionHead!,
+    beforeRoot: args.controlTransitionBeforeRoot!,
+    afterRoot: args.controlTransitionAfterRoot!,
+  } : undefined;
+  const repository = repositoryHead(candidate.sourceCommit, candidate.root, transition);
   if (process.env.GITHUB_REPOSITORY !== undefined && process.env.GITHUB_REPOSITORY !== "meetblakey/sourcera") fail("GitHub repository is not canonical");
   if (process.env.GITHUB_REF !== undefined && process.env.GITHUB_REF !== "refs/heads/main") fail("GitHub ref is not exact main");
   if (process.env.GITHUB_SHA !== undefined && process.env.GITHUB_SHA !== repository.head) fail("GitHub SHA differs from repository HEAD");
 
+  failureSummary.code = "capture_validation";
   const capture = validateCapture({
     nativeRaw,
     receiptRaw: captureReceiptRaw,
@@ -693,6 +884,8 @@ async function main(): Promise<void> {
     head: repository.head,
     label: "phase",
   });
+  failureSummary.firstCapture = captureDiagnostic(capture.native, candidate);
+  failureSummary.code = "predecessor_validation";
   const previous = previousReceiptRaw
     ? parsePreviousReceipt(
       previousReceiptRaw,
@@ -727,6 +920,7 @@ async function main(): Promise<void> {
 
   let secondCapture: ValidatedCapture | undefined;
   if (secondNativeRaw && secondCaptureReceiptRaw) {
+    failureSummary.code = "capture_validation";
     secondCapture = validateCapture({
       nativeRaw: secondNativeRaw,
       receiptRaw: secondCaptureReceiptRaw,
@@ -734,14 +928,28 @@ async function main(): Promise<void> {
       head: repository.head,
       label: "second",
     });
+    failureSummary.secondCapture = captureDiagnostic(secondCapture.native, candidate);
   }
 
-  if (protectedNativeRoot(capture.native, candidate) !== candidate.protectedNativeStateRoot ||
-    (secondCapture && protectedNativeRoot(secondCapture.native, candidate) !== candidate.protectedNativeStateRoot)) {
+  const comparison = secondCapture
+    ? compareLinearRequirementLabelReplacementStableCaptures(capture.native, secondCapture.native)
+    : undefined;
+  if (comparison) {
+    failureSummary.firstCaptureRoot = comparison.firstCaptureRoot;
+    failureSummary.secondCaptureRoot = comparison.secondCaptureRoot;
+    failureSummary.differingCatalogs = comparison.differingCatalogs;
+    failureSummary.firstCatalogRoots = comparison.firstCatalogRoots;
+    failureSummary.secondCatalogRoots = comparison.secondCatalogRoots;
+  }
+
+  failureSummary.code = "protected_state_validation";
+  if (!failureSummary.firstCapture.protectedRootMatches ||
+    (failureSummary.secondCapture && !failureSummary.secondCapture.protectedRootMatches)) {
     fail("protected issue, body, relation, or native metadata drifted before the phase");
   }
 
   let verification: JsonRecord | null = null;
+  failureSummary.code = "phase_validation";
   if (args.phase === "rename" && !args.compensate && sha256(canonicalJson(capture.native)) !== candidate.expectedCurrentRoot) {
     if (resumeJournalRaw === undefined) fail("rename capture differs from the candidate expected-current root");
     verifyLinearRequirementLabelRenameRecoveryState(candidate, capture.native);
@@ -785,6 +993,7 @@ async function main(): Promise<void> {
     verification = verifyLinearRequirementLabelReplacementUsage(candidate, capture.native, { oldRetired: false });
   }
   if (args.phase === "finalize") {
+    failureSummary.code = "retirement_replay_validation";
     const replay = await executeLinearRequirementLabelReplacementPhase({
       candidate,
       expectedCandidateRoot: candidate.root,
@@ -802,6 +1011,10 @@ async function main(): Promise<void> {
     });
     if (replay.applied !== 0 || replay.appendedJournalRaw !== "") fail("retirement proof was not a read-only complete replay");
     coreReceipts = [...coreReceipts, ...replay.receipts];
+    failureSummary.code = "final_usage_validation";
+    verifyLinearRequirementLabelReplacementUsage(candidate, capture.native, { oldRetired: true });
+    verifyLinearRequirementLabelReplacementUsage(candidate, secondCapture!.native, { oldRetired: true });
+    failureSummary.code = "stable_capture_validation";
     const final = verifyLinearRequirementLabelReplacementFinal({
       candidate,
       first: capture.native,
@@ -817,12 +1030,14 @@ async function main(): Promise<void> {
   let alreadyApplied = 0;
   let compensated = 0;
   let alreadyCompensated = 0;
+  failureSummary.code = "evidence_persistence";
   const journal = openDurableOutput(journalOut);
   const chunkReceipts = openDurableOutput(chunkReceiptsOut);
   try {
     if (journalRaw.length > 0) journal.append(journalRaw);
     if (resumeReceiptsRaw && resumeReceiptsRaw.length > 0) chunkReceipts.append(resumeReceiptsRaw);
     if (MUTATION_PHASES.has(args.phase as LinearRequirementLabelReplacementPhase)) {
+      failureSummary.code = "phase_execution";
       const credential = process.env.LINEAR_API_KEY;
       if (!credential) fail("LINEAR_API_KEY is unavailable");
       const transport = new CaptureBoundTransport(
@@ -872,6 +1087,7 @@ async function main(): Promise<void> {
         applied = result.applied;
         alreadyApplied = result.alreadyApplied;
       }
+      failureSummary.code = "evidence_persistence";
     }
   } finally {
     chunkReceipts.close();
@@ -919,6 +1135,14 @@ async function main(): Promise<void> {
 }
 
 main().catch(() => {
+  try {
+    const path = resolvedFailureSummaryOut ?? (preliminaryFailureSummaryOut
+      ? newOutputPath(preliminaryFailureSummaryOut, "failure summary output")
+      : undefined);
+    if (path) writeNewDurable(path, `${JSON.stringify(failureSummary, null, 2)}\n`);
+  } catch {
+    // The primary failure remains fail-closed and generic if evidence cannot be written safely.
+  }
   process.stderr.write("Linear Requirement label replacement failed\n");
   process.exitCode = 1;
 });

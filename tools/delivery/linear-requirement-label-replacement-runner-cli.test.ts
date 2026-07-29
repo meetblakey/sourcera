@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -10,7 +11,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 
 import {
@@ -20,6 +21,9 @@ import {
   buildLinearRequirementLabelReplacementCandidate,
   executeLinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelCapture,
+  type LinearRequirementLabelReplacementCandidate,
+  type LinearRequirementLabelReplacementPhase,
+  type LinearRequirementLabelReplacementPhaseReceipt,
   type LinearRequirementLabelReplacementTransport,
 } from "./lib/linear-requirement-label-replacement.js";
 
@@ -27,6 +31,13 @@ const RUNNER = resolve("tools/delivery/run-linear-requirement-label-replacement.
 const LOADER = resolve("tools/spec-lint/node_modules/tsx/dist/loader.mjs");
 
 const SHA = (value: string | Buffer): string => createHash("sha256").update(value).digest("hex");
+
+function canonicalJson(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  const row = value as Record<string, unknown>;
+  return `{${Object.keys(row).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(row[key])}`).join(",")}}`;
+}
 
 function invoke(args: string[], env: Partial<NodeJS.ProcessEnv> = {}, cwd = process.cwd()) {
   return spawnSync(process.execPath, ["--import", LOADER, RUNNER, ...args], {
@@ -135,6 +146,164 @@ function requiredArgs(root: string): string[] {
   ];
 }
 
+async function finalizedRunnerFixture(root: string): Promise<{
+  candidate: LinearRequirementLabelReplacementCandidate;
+  first: LinearRequirementLabelCapture;
+  second: LinearRequirementLabelCapture;
+  args: string[];
+  environment: Record<string, string>;
+  rewriteCapture(name: "first" | "second", native: LinearRequirementLabelCapture): void;
+}> {
+  const sourceCommit = git(process.cwd(), ["rev-parse", "HEAD"]);
+  const before = nativeFixture();
+  const beforeRaw = Buffer.from(`${JSON.stringify(before)}\n`);
+  const candidate = buildLinearRequirementLabelReplacementCandidate({
+    native: before,
+    sourceCommit,
+    nativeIdentitySha256: SHA(beforeRaw),
+    captureReceiptSha256: "c".repeat(64),
+    newLabelId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  });
+  const labels = new Map(before.labels.map((label) => [label.id, structuredClone(label)]));
+  const issues = new Map(before.issues.map((issue) => [issue.issueUuid, structuredClone(issue)]));
+  const transport: LinearRequirementLabelReplacementTransport = {
+    async readLabel(id) { return structuredClone(labels.get(id) ?? null); },
+    async readIssue(id) { return structuredClone(issues.get(id) ?? null); },
+    async listIssueIdsByLabel(id) {
+      return [...issues.values()].filter((issue) => issue.labelIds.includes(id)).map((issue) => issue.issueUuid).sort();
+    },
+    async renameLabel(input) { labels.get(input.id)!.name = input.name; },
+    async createLabel(input) {
+      labels.set(input.id, {
+        ...structuredClone(input),
+        archivedAt: null,
+        retiredAt: null,
+      });
+    },
+    async replaceIssueLabels(input) { issues.get(input.issueId)!.labelIds = [...input.labelIds]; },
+    async setLabelRetired(input) {
+      labels.get(input.id)!.retiredAt = input.retired ? "2026-07-29T09:00:00.000Z" : null;
+    },
+  };
+  let journalRaw = "";
+  let receipts: LinearRequirementLabelReplacementPhaseReceipt[] = [];
+  for (const phase of ["rename", "create", "replace", "retire"] as const satisfies readonly LinearRequirementLabelReplacementPhase[]) {
+    const result = await executeLinearRequirementLabelReplacementPhase({
+      candidate,
+      expectedCandidateRoot: candidate.root,
+      phase,
+      authorization: {
+        candidateRoot: candidate.root,
+        phase,
+        confirmation: "APPLY_LINEAR_REQUIREMENT_LABEL_REPLACEMENT_PHASE",
+      },
+      runId: `900.1.${phase}`,
+      transport,
+      resumeJournalRaw: journalRaw || undefined,
+      expectedResumeJournalSha256: journalRaw ? SHA(journalRaw) : undefined,
+      receipts,
+      clock: () => new Date("2026-07-29T09:00:00.000Z"),
+    });
+    journalRaw = result.journalRaw;
+    receipts = [...receipts, ...result.receipts];
+  }
+  const first = structuredClone(before);
+  first.issues = [...issues.values()].map((issue) => structuredClone(issue));
+  first.labels = [...labels.values()].map((label) => structuredClone(label));
+  first.coverage.totals.labels = first.labels.length;
+  first.coverage.totals.labelAssignments = first.issues.reduce((total, issue) => total + issue.labelIds.length, 0);
+  const second = structuredClone(first);
+
+  const captureReceipt = (nativeRaw: Buffer, capturedAt: string) => Buffer.from(`${JSON.stringify({
+    schemaVersion: 2,
+    captureMode: "live",
+    capturedAt,
+    fingerprintSha256: "d".repeat(64),
+    acceptedFingerprintSha256: "d".repeat(64),
+    artifactSha256s: {
+      fingerprint: "d".repeat(64),
+      nativeIdentity: SHA(nativeRaw),
+      documents: "e".repeat(64),
+      issueDescriptions: "f".repeat(64),
+    },
+    source: {
+      repository: "meetblakey/sourcera",
+      commit: sourceCommit,
+      ref: "refs/heads/main",
+      runId: "991",
+      runAttempt: "1",
+    },
+  })}\n`);
+  const rewriteCapture = (name: "first" | "second", native: LinearRequirementLabelCapture): void => {
+    const nativeRaw = Buffer.from(`${JSON.stringify(native)}\n`);
+    const prefix = name === "first" ? "" : "second-";
+    writeFileSync(join(root, `${prefix}native.json`), nativeRaw, { mode: 0o600 });
+    writeFileSync(join(root, `${prefix}capture-receipt.json`), captureReceipt(
+      nativeRaw,
+      name === "first" ? "2026-07-29T09:10:00.000Z" : "2026-07-29T09:20:00.000Z",
+    ), { mode: 0o600 });
+  };
+  rewriteCapture("first", first);
+  rewriteCapture("second", second);
+  writeFileSync(join(root, "candidate.json"), `${JSON.stringify(candidate)}\n`, { mode: 0o600 });
+  writeFileSync(join(root, "previous-journal.jsonl"), journalRaw, { mode: 0o600 });
+  const previousBody = {
+    schemaVersion: 1,
+    kind: "linear-requirement-label-replacement-runner-receipt",
+    candidateRoot: candidate.root,
+    operationsRoot: candidate.operationsRoot,
+    phase: "retire",
+    direction: "forward",
+    runId: "990.1.retire",
+    nativeIdentitySha256: SHA(JSON.stringify(first)),
+    captureReceiptSha256: "1".repeat(64),
+    secondNativeIdentitySha256: null,
+    secondCaptureReceiptSha256: null,
+    journalSha256: SHA(journalRaw),
+    coreReceipts: receipts,
+    applied: 1,
+    alreadyApplied: 0,
+    compensated: 0,
+    alreadyCompensated: 0,
+    verification: null,
+    previousReceiptRoot: "2".repeat(64),
+    complete: true,
+  };
+  const previous = { ...previousBody, root: SHA(canonicalJson(previousBody)) };
+  writeFileSync(join(root, "previous-receipt.json"), `${JSON.stringify(previous)}\n`, { mode: 0o600 });
+  const args = [
+    "--candidate", join(root, "candidate.json"),
+    "--phase", "finalize",
+    "--expected-root", candidate.root,
+    "--native-identity", join(root, "native.json"),
+    "--capture-receipt", join(root, "capture-receipt.json"),
+    "--second-native-identity", join(root, "second-native.json"),
+    "--second-capture-receipt", join(root, "second-capture-receipt.json"),
+    "--previous-receipt", join(root, "previous-receipt.json"),
+    "--previous-journal", join(root, "previous-journal.jsonl"),
+    "--expected-previous-receipt-root", previous.root,
+    "--run-id", "991.1.finalize",
+    "--journal-out", join(root, "journal.jsonl"),
+    "--receipt-out", join(root, "phase-receipt.json"),
+    "--chunk-receipts-out", join(root, "phase-core-receipts.jsonl"),
+    "--failure-summary-out", join(root, "failure-summary.json"),
+  ];
+  return {
+    candidate,
+    first,
+    second,
+    args,
+    environment: {
+      GITHUB_REPOSITORY: "meetblakey/sourcera",
+      GITHUB_SHA: sourceCommit,
+      GITHUB_REF: "refs/heads/main",
+      GITHUB_RUN_ID: "991",
+      GITHUB_RUN_ATTEMPT: "1",
+    },
+    rewriteCapture,
+  };
+}
+
 test("runner rejects unsafe material before credentials or outputs and redacts failure detail", () => {
   const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-runner-"));
   try {
@@ -148,6 +317,40 @@ test("runner rejects unsafe material before credentials or outputs and redacts f
     assert.doesNotMatch(result.stderr, /secret-linear-key|secret candidate|secret native|secret receipt/);
     assert.equal(existsSync(join(root, "journal.jsonl")), false);
     assert.equal(existsSync(join(root, "phase-receipt.json")), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("runner persists only a redacted failure category when validation stops", () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-runner-failure-"));
+  try {
+    writeFileSync(join(root, "candidate.json"), "secret candidate bytes", { mode: 0o600 });
+    writeFileSync(join(root, "native.json"), "secret native bytes", { mode: 0o600 });
+    writeFileSync(join(root, "capture-receipt.json"), "secret receipt bytes", { mode: 0o600 });
+    const failureOut = join(root, "failure-summary.json");
+    const result = invoke([
+      ...requiredArgs(root),
+      "--failure-summary-out", failureOut,
+    ], { LINEAR_API_KEY: "secret-linear-key" });
+
+    assert.equal(result.status, 1);
+    assert.equal(result.stderr, "Linear Requirement label replacement failed\n");
+    assert.deepEqual(JSON.parse(readFileSync(failureOut, "utf8")), {
+      schemaVersion: 1,
+      kind: "linear-requirement-label-replacement-failure-summary",
+      phase: "rename",
+      code: "input_validation",
+      candidateRoot: null,
+      firstCaptureRoot: null,
+      secondCaptureRoot: null,
+      differingCatalogs: null,
+      firstCatalogRoots: null,
+      secondCatalogRoots: null,
+      firstCapture: null,
+      secondCapture: null,
+    });
+    assert.doesNotMatch(readFileSync(failureOut, "utf8"), /secret-linear-key|secret candidate|secret native|secret receipt/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -185,7 +388,9 @@ test("runner source keeps the closed one-phase CLI and durable output controls",
     "--previous-receipt", "--previous-journal", "--expected-previous-receipt-root", "--resume-journal",
     "--expected-resume-journal-sha256", "--resume-receipts", "--expected-resume-receipts-sha256",
     "--apply", "--compensate", "--second-native-identity",
-    "--second-capture-receipt",
+    "--second-capture-receipt", "--failure-summary-out",
+    "--control-transition-source", "--control-transition-candidate-root", "--control-transition-head",
+    "--control-transition-before-root", "--control-transition-after-root",
   ]) assert.match(source, new RegExp(flag));
   assert.match(source, /O_EXCL/);
   assert.match(source, /O_NOFOLLOW/);
@@ -201,6 +406,125 @@ test("runner source keeps the closed one-phase CLI and durable output controls",
   assert.match(source, /IMMUTABLE_MIGRATION_PATHS/);
   assert.match(source, /byte-identical migration controls/);
   assert.doesNotMatch(source, /deleteLabel|issueLabelDelete/);
+});
+
+test("runner admits one digest-pinned six-file diagnostic control transition only", () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-control-transition-"));
+  try {
+    git(root, ["init", "--quiet"]);
+    git(root, ["config", "user.name", "Sourcera test"]);
+    git(root, ["config", "user.email", "sourcera-test@example.invalid"]);
+    const allowed = [
+      ".github/workflows/linear-requirement-label-replacement.yml",
+      "tools/delivery/lib/linear-requirement-label-replacement.ts",
+      "tools/delivery/linear-requirement-label-replacement-runner-cli.test.ts",
+      "tools/delivery/linear-requirement-label-replacement-workflow.test.ts",
+      "tools/delivery/linear-requirement-label-replacement.test.ts",
+      "tools/delivery/run-linear-requirement-label-replacement.ts",
+    ];
+    for (const path of allowed) {
+      const full = join(root, path);
+      mkdirSync(dirname(full), { recursive: true });
+      writeFileSync(full, "before\n", { mode: 0o600 });
+    }
+    git(root, ["add", "."]);
+    git(root, ["commit", "--quiet", "-m", "candidate controls"]);
+    const sourceCommit = git(root, ["rev-parse", "HEAD"]);
+    const beforeRoot = SHA(Buffer.from(spawnSync("git", ["-C", root, "ls-tree", "-r", "-z", sourceCommit, "--",
+      ".github/workflows/linear-requirement-label-replacement.yml", "delivery/linear-program-scope.json",
+      "delivery/linear-project-scope.json", "tools/delivery", "tools/spec-lint/package.json",
+      "tools/spec-lint/package-lock.json"], { encoding: "buffer" }).stdout));
+    for (const path of allowed) writeFileSync(join(root, path), "after\n", { mode: 0o600 });
+    git(root, ["add", "."]);
+    git(root, ["commit", "--quiet", "-m", "diagnostic controls"]);
+    const currentHead = git(root, ["rev-parse", "HEAD"]);
+    const afterRoot = SHA(Buffer.from(spawnSync("git", ["-C", root, "ls-tree", "-r", "-z", currentHead, "--",
+      ".github/workflows/linear-requirement-label-replacement.yml", "delivery/linear-program-scope.json",
+      "delivery/linear-project-scope.json", "tools/delivery", "tools/spec-lint/package.json",
+      "tools/spec-lint/package-lock.json"], { encoding: "buffer" }).stdout));
+
+    const native = nativeFixture();
+    const nativeRaw = Buffer.from(`${JSON.stringify(native)}\n`);
+    const receipt = Buffer.from(`${JSON.stringify({
+      schemaVersion: 2,
+      captureMode: "live",
+      capturedAt: "2026-07-29T08:00:00.000Z",
+      fingerprintSha256: "d".repeat(64),
+      acceptedFingerprintSha256: "d".repeat(64),
+      artifactSha256s: {
+        fingerprint: "d".repeat(64), nativeIdentity: SHA(nativeRaw),
+        documents: "e".repeat(64), issueDescriptions: "f".repeat(64),
+      },
+      source: {
+        repository: "meetblakey/sourcera", commit: currentHead, ref: "refs/heads/main",
+        runId: "123", runAttempt: "1",
+      },
+    })}\n`);
+    const candidate = buildLinearRequirementLabelReplacementCandidate({
+      native,
+      sourceCommit,
+      nativeIdentitySha256: SHA(nativeRaw),
+      captureReceiptSha256: "c".repeat(64),
+      newLabelId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    });
+    writeFileSync(join(root, "candidate.json"), `${JSON.stringify(candidate)}\n`, { mode: 0o600 });
+    writeFileSync(join(root, "native.json"), nativeRaw, { mode: 0o600 });
+    writeFileSync(join(root, "capture-receipt.json"), receipt, { mode: 0o600 });
+    const args = requiredArgs(root);
+    args[args.indexOf("--expected-root") + 1] = candidate.root;
+    const transition = [
+      "--control-transition-source", sourceCommit,
+      "--control-transition-candidate-root", candidate.root,
+      "--control-transition-head", currentHead,
+      "--control-transition-before-root", beforeRoot,
+      "--control-transition-after-root", afterRoot,
+    ];
+    const environment = {
+      GITHUB_REPOSITORY: "meetblakey/sourcera",
+      GITHUB_SHA: currentHead,
+      GITHUB_REF: "refs/heads/main",
+      GITHUB_RUN_ID: "123",
+      GITHUB_RUN_ATTEMPT: "1",
+    };
+    const unpinned = invoke(args, environment, root);
+    assert.equal(unpinned.status, 1);
+    assert.equal(existsSync(join(root, "journal.jsonl")), false);
+
+    const pinned = invoke([...args, ...transition], environment, root);
+    assert.equal(pinned.status, 1);
+    assert.equal(existsSync(join(root, "journal.jsonl")), true,
+      "exact transition must reach the absent-credential boundary");
+
+    writeFileSync(join(root, allowed[0]!), "after second review\n", { mode: 0o600 });
+    git(root, ["add", allowed[0]!]);
+    git(root, ["commit", "--quiet", "-m", "later control drift"]);
+    const secondHead = git(root, ["rev-parse", "HEAD"]);
+    const secondRoot = SHA(Buffer.from(spawnSync("git", ["-C", root, "ls-tree", "-r", "-z", secondHead, "--",
+      ".github/workflows/linear-requirement-label-replacement.yml", "delivery/linear-program-scope.json",
+      "delivery/linear-project-scope.json", "tools/delivery", "tools/spec-lint/package.json",
+      "tools/spec-lint/package-lock.json"], { encoding: "buffer" }).stdout));
+    const secondReceipt = JSON.parse(receipt.toString("utf8")) as { source: { commit: string } };
+    secondReceipt.source.commit = secondHead;
+    writeFileSync(join(root, "capture-receipt.json"), `${JSON.stringify(secondReceipt)}\n`, { mode: 0o600 });
+    const secondArgs = [...args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "second-journal.jsonl")],
+      ["--receipt-out", join(root, "second-phase-receipt.json")],
+      ["--chunk-receipts-out", join(root, "second-core-receipts.jsonl")],
+    ] as const) secondArgs[secondArgs.indexOf(flag) + 1] = value;
+    const reused = invoke([...secondArgs,
+      "--control-transition-source", sourceCommit,
+      "--control-transition-candidate-root", candidate.root,
+      "--control-transition-head", secondHead,
+      "--control-transition-before-root", beforeRoot,
+      "--control-transition-after-root", secondRoot,
+    ], { ...environment, GITHUB_SHA: secondHead }, root);
+    assert.equal(reused.status, 1);
+    assert.equal(existsSync(join(root, "second-journal.jsonl")), false,
+      "a second commit must not reuse the one-time transition even with recomputed digests");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("runner rejects illegal phase flag combinations", () => {
@@ -287,6 +611,7 @@ test("runner accepts a later main HEAD only when the candidate commit is an unch
     const { LINEAR_API_KEY: _credential, ...environment } = process.env;
     const args = requiredArgs(root);
     args[args.indexOf("--expected-root") + 1] = candidate.root;
+    args.push("--failure-summary-out", join(root, "failure-summary.json"));
     const result = invoke(args, {
       ...environment,
       GITHUB_REPOSITORY: "meetblakey/sourcera",
@@ -301,6 +626,31 @@ test("runner accepts a later main HEAD only when the candidate commit is an unch
       "the runner must pass repository and capture provenance before stopping on its absent credential");
     assert.equal(existsSync(join(root, "phase-core-receipts.jsonl")), true);
     assert.equal(existsSync(join(root, "phase-receipt.json")), false);
+    assert.deepEqual(JSON.parse(readFileSync(join(root, "failure-summary.json"), "utf8")), {
+      schemaVersion: 1,
+      kind: "linear-requirement-label-replacement-failure-summary",
+      phase: "rename",
+      code: "phase_execution",
+      candidateRoot: candidate.root,
+      firstCaptureRoot: null,
+      secondCaptureRoot: null,
+      differingCatalogs: null,
+      firstCatalogRoots: null,
+      secondCatalogRoots: null,
+      firstCapture: {
+        oldLabelCount: 1,
+        newLabelCount: 0,
+        oldLabelArchivedAtIsNull: true,
+        oldLabelRetiredAtIsNull: true,
+        labelTotal: 1,
+        oldLabelUses: 186,
+        newLabelUses: 0,
+        outsideNewLabelUses: 0,
+        activeRequirementLabelCount: 1,
+        protectedRootMatches: true,
+      },
+      secondCapture: null,
+    });
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -435,6 +785,67 @@ test("runner admits only journal-proven post-rename capture during crash resume"
       "exact post-rename recovery must reach the credential boundary with its durable journal intact");
     assert.equal(readFileSync(join(root, "phase-core-receipts.jsonl"), "utf8"), "");
     assert.equal(existsSync(join(root, "phase-receipt.json")), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("runner classifies a missing retired label at retirement replay without leaking capture content", async () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-finalize-replay-"));
+  try {
+    const fixture = await finalizedRunnerFixture(root);
+    const missingOld = structuredClone(fixture.first);
+    missingOld.labels = missingOld.labels.filter((label) => label.id !== OLD_REQUIREMENT_LABEL_ID);
+    fixture.rewriteCapture("first", missingOld);
+    const result = invoke(fixture.args, fixture.environment);
+    assert.equal(result.status, 1);
+    assert.equal(result.stderr, "Linear Requirement label replacement failed\n");
+    const raw = readFileSync(join(root, "failure-summary.json"), "utf8");
+    const summary = JSON.parse(raw) as Record<string, unknown>;
+    assert.equal(summary.code, "retirement_replay_validation");
+    assert.deepEqual(summary.firstCapture, {
+      oldLabelCount: 0,
+      newLabelCount: 1,
+      oldLabelArchivedAtIsNull: null,
+      oldLabelRetiredAtIsNull: null,
+      labelTotal: 1,
+      oldLabelUses: 0,
+      newLabelUses: 186,
+      outsideNewLabelUses: 0,
+      activeRequirementLabelCount: 1,
+      protectedRootMatches: true,
+    });
+    assert.doesNotMatch(raw, /Requirement 1|description-1|Canonical binding product/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("runner reports fixed catalog roots for two-capture instability", async () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-finalize-stable-"));
+  try {
+    const fixture = await finalizedRunnerFixture(root);
+    const drifted = structuredClone(fixture.second);
+    drifted.coverage.totals.labels += 1;
+    fixture.rewriteCapture("second", drifted);
+    const result = invoke(fixture.args, fixture.environment);
+    assert.equal(result.status, 1);
+    const raw = readFileSync(join(root, "failure-summary.json"), "utf8");
+    const summary = JSON.parse(raw) as Record<string, unknown> & {
+      differingCatalogs: string[];
+      firstCatalogRoots: Record<string, string>;
+      secondCatalogRoots: Record<string, string>;
+    };
+    assert.equal(summary.code, "stable_capture_validation");
+    assert.deepEqual(summary.differingCatalogs, ["coverage"]);
+    const fixedKeys = [
+      "schemaVersion", "workspace", "issues", "labels", "relations", "teams", "workflowStates",
+      "users", "initiatives", "projects", "releasePipelines", "releases", "projectMilestones",
+      "cycles", "documents", "rawDocumentIds", "coverage",
+    ].sort();
+    assert.deepEqual(Object.keys(summary.firstCatalogRoots).sort(), fixedKeys);
+    assert.deepEqual(Object.keys(summary.secondCatalogRoots).sort(), fixedKeys);
+    assert.doesNotMatch(raw, /Requirement 1|description-1|Canonical binding product/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

@@ -9,6 +9,7 @@ import {
   RETIRED_REQUIREMENT_LABEL_NAME,
   assertLinearRequirementLabelReplacementCandidate,
   buildLinearRequirementLabelReplacementCandidate,
+  compareLinearRequirementLabelReplacementStableCaptures,
   compensateLinearRequirementLabelReplacementPhase,
   executeLinearRequirementLabelReplacementPhase,
   requirementLabelRollbackName,
@@ -663,4 +664,36 @@ test("proves zero old uses, exactly 186 REQ uses, protected-state equality, and 
   assert.throws(() => verifyLinearRequirementLabelReplacementFinal({
     candidate: plan, first, second, firstCaptureSha256: SHA(JSON.stringify(first)), secondCaptureSha256: SHA(JSON.stringify(second)),
   }), /stable|protected|drift/i);
+});
+
+test("reports only the changed semantic catalog when final captures differ", async () => {
+  const plan = candidate();
+  const transport = new FakeTransport();
+  transport.labels.get(OLD_REQUIREMENT_LABEL_ID)!.name = RETIRED_REQUIREMENT_LABEL_NAME;
+  transport.labels.get(OLD_REQUIREMENT_LABEL_ID)!.retiredAt = "2026-07-29T00:00:00.000Z";
+  await transport.createLabel(plan.newLabel);
+  for (const row of plan.issues) await transport.replaceIssueLabels({ issueId: row.issueId, labelIds: row.afterLabelIds });
+  const first = finalCapture(plan, transport);
+  const second = structuredClone(first);
+  (second.coverage as unknown as Record<string, unknown>).topLevel = { issues: { attempts: 2 } };
+
+  assert.deepEqual(compareLinearRequirementLabelReplacementStableCaptures(first, second).differingCatalogs, []);
+
+  second.issues[0]!.descriptionSha256 = SHA("drift");
+  const comparison = compareLinearRequirementLabelReplacementStableCaptures(first, second);
+  assert.deepEqual(comparison.differingCatalogs, ["issues"]);
+  assert.notEqual(comparison.firstCaptureRoot, comparison.secondCaptureRoot);
+
+  const malicious = structuredClone(first) as unknown as Record<string, unknown>;
+  malicious["secret-key-value"] = "secret-body-value";
+  assert.throws(
+    () => compareLinearRequirementLabelReplacementStableCaptures(
+      malicious as unknown as LinearRequirementLabelCapture,
+      second,
+    ),
+    (error) => {
+      assert.doesNotMatch(String(error), /secret-key-value|secret-body-value/);
+      return /catalog/i.test(String(error));
+    },
+  );
 });

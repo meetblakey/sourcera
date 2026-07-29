@@ -76,6 +76,22 @@ on:
         description: Exact sha256 of the durable resume receipt stream
         required: false
         type: string
+      control_transition_source:
+        description: Exact pre-diagnostics candidate source commit
+        required: false
+        type: string
+      control_transition_head:
+        description: Exact reviewed diagnostics main commit
+        required: false
+        type: string
+      control_transition_before_root:
+        description: Exact pre-diagnostics migration-control tree digest
+        required: false
+        type: string
+      control_transition_after_root:
+        description: Exact reviewed migration-control tree digest
+        required: false
+        type: string
 
 permissions:
   actions: read
@@ -166,6 +182,10 @@ jobs:
           EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST: ${{ inputs.expected_resume_journal_artifact_digest }}
           EXPECTED_RESUME_JOURNAL_SHA256: ${{ inputs.expected_resume_journal_sha256 }}
           EXPECTED_RESUME_RECEIPTS_SHA256: ${{ inputs.expected_resume_receipts_sha256 }}
+          CONTROL_TRANSITION_SOURCE: ${{ inputs.control_transition_source }}
+          CONTROL_TRANSITION_HEAD: ${{ inputs.control_transition_head }}
+          CONTROL_TRANSITION_BEFORE_ROOT: ${{ inputs.control_transition_before_root }}
+          CONTROL_TRANSITION_AFTER_ROOT: ${{ inputs.control_transition_after_root }}
         run: |
           set -euo pipefail
           require_empty() {
@@ -184,6 +204,10 @@ jobs:
             local name="$1" value="$2"
             [[ "$value" =~ ^sha256:[a-f0-9]{64}$ ]] || { echo "$name must be an exact GitHub sha256 digest" >&2; exit 1; }
           }
+          require_commit() {
+            local name="$1" value="$2"
+            [[ "$value" =~ ^[a-f0-9]{40}$ ]] || { echo "$name must be an exact 40-character lowercase commit" >&2; exit 1; }
+          }
 
           if [[ "$MODE" == "plan" ]]; then
             [[ "$DIRECTION" == "forward" ]] || { echo "plan is forward-only" >&2; exit 1; }
@@ -194,7 +218,8 @@ jobs:
               "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST" "$EXPECTED_PREVIOUS_RECEIPT_ROOT" \
               "$RESUME_JOURNAL_RUN_ID" "$RESUME_JOURNAL_RUN_ATTEMPT" \
               "$EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST" "$EXPECTED_RESUME_JOURNAL_SHA256" \
-              "$EXPECTED_RESUME_RECEIPTS_SHA256"; do
+              "$EXPECTED_RESUME_RECEIPTS_SHA256" "$CONTROL_TRANSITION_SOURCE" "$CONTROL_TRANSITION_HEAD" \
+              "$CONTROL_TRANSITION_BEFORE_ROOT" "$CONTROL_TRANSITION_AFTER_ROOT"; do
               require_empty "handoff input" "$value"
             done
             exit 0
@@ -204,6 +229,26 @@ jobs:
           require_number candidate_run_attempt "$CANDIDATE_RUN_ATTEMPT"
           require_artifact_digest expected_candidate_artifact_digest "$EXPECTED_CANDIDATE_ARTIFACT_DIGEST"
           require_root expected_candidate_root "$EXPECTED_CANDIDATE_ROOT"
+          transition_values=(
+            "$CONTROL_TRANSITION_SOURCE" "$CONTROL_TRANSITION_HEAD"
+            "$CONTROL_TRANSITION_BEFORE_ROOT" "$CONTROL_TRANSITION_AFTER_ROOT"
+          )
+          transition_value_count=0
+          for value in "${transition_values[@]}"; do
+            [[ -z "$value" ]] || transition_value_count=$((transition_value_count + 1))
+          done
+          [[ "$transition_value_count" -eq 0 || "$transition_value_count" -eq 4 ]] || {
+            echo "control transition inputs must be empty or one exact set" >&2
+            exit 1
+          }
+          if [[ "$transition_value_count" -eq 4 ]]; then
+            require_commit control_transition_source "$CONTROL_TRANSITION_SOURCE"
+            require_commit control_transition_head "$CONTROL_TRANSITION_HEAD"
+            require_root control_transition_before_root "$CONTROL_TRANSITION_BEFORE_ROOT"
+            require_root control_transition_after_root "$CONTROL_TRANSITION_AFTER_ROOT"
+            [[ "$CONTROL_TRANSITION_HEAD" == "$GITHUB_SHA" ]] || { echo "control transition head differs from exact main" >&2; exit 1; }
+            [[ "$CONTROL_TRANSITION_SOURCE" != "$CONTROL_TRANSITION_HEAD" ]] || { echo "control transition requires a later reviewed main" >&2; exit 1; }
+          fi
 
           if [[ "$DIRECTION" == "compensation" ]]; then
             [[ "$MODE" =~ ^(rename|create|replace|retire)$ ]] || { echo "compensation is valid only for mutation phases" >&2; exit 1; }
@@ -240,6 +285,7 @@ jobs:
             require_empty expected_resume_receipts_sha256 "$EXPECTED_RESUME_RECEIPTS_SHA256"
           fi
       - name: Capture fresh accepted Linear state
+        id: capture_first
         shell: bash
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
@@ -260,6 +306,7 @@ jobs:
             --documents-out /tmp/linear-requirement-label-replacement/raw/documents.json \
             --receipt-out /tmp/linear-requirement-label-replacement/raw/capture-receipt.json
       - name: Capture second stable final Linear state
+        id: capture_second
         if: inputs.mode == 'finalize'
         shell: bash
         env:
@@ -294,6 +341,7 @@ jobs:
             '{schemaVersion: 1, kind: "github-execution", repository: $repository, commit: $commit, ref: $ref, runId: $runId, runAttempt: $runAttempt}' \
             > /tmp/linear-requirement-label-replacement/raw/github-execution.json
       - name: Build mutation-disabled replacement candidate
+        id: build_candidate
         if: inputs.mode == 'plan'
         shell: bash
         run: |
@@ -346,6 +394,7 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ inputs.candidate_run_id }}
       - name: Validate exact downloaded candidate
+        id: validate_candidate
         if: inputs.mode != 'plan'
         shell: bash
         env:
@@ -430,6 +479,7 @@ jobs:
           actual_receipts="$(sha256sum "$receipts" | awk '{print $1}')"
           test "$actual_receipts" = "$EXPECTED_RESUME_RECEIPTS_SHA256"
       - name: Apply exactly one mutation phase
+        id: apply_phase
         if: contains(fromJSON('["rename","create","replace","retire"]'), inputs.mode)
         shell: bash
         env:
@@ -442,6 +492,10 @@ jobs:
           EXPECTED_RESUME_JOURNAL_SHA256: ${{ inputs.expected_resume_journal_sha256 }}
           EXPECTED_RESUME_RECEIPTS_SHA256: ${{ inputs.expected_resume_receipts_sha256 }}
           RESUME_JOURNAL_RUN_ID: ${{ inputs.resume_journal_run_id }}
+          CONTROL_TRANSITION_SOURCE: ${{ inputs.control_transition_source }}
+          CONTROL_TRANSITION_HEAD: ${{ inputs.control_transition_head }}
+          CONTROL_TRANSITION_BEFORE_ROOT: ${{ inputs.control_transition_before_root }}
+          CONTROL_TRANSITION_AFTER_ROOT: ${{ inputs.control_transition_after_root }}
         run: |
           set -euo pipefail
           umask 077
@@ -455,8 +509,18 @@ jobs:
             --journal-out /tmp/linear-requirement-label-replacement/safe/phase-journal.jsonl
             --receipt-out /tmp/linear-requirement-label-replacement/safe/phase-receipt.json
             --chunk-receipts-out /tmp/linear-requirement-label-replacement/safe/phase-core-receipts.jsonl
+            --failure-summary-out /tmp/linear-requirement-label-replacement/safe/failure-summary.json
             --apply
           )
+          if [[ -n "$CONTROL_TRANSITION_SOURCE" ]]; then
+            args+=(
+              --control-transition-source "$CONTROL_TRANSITION_SOURCE"
+              --control-transition-candidate-root "$EXPECTED_CANDIDATE_ROOT"
+              --control-transition-head "$CONTROL_TRANSITION_HEAD"
+              --control-transition-before-root "$CONTROL_TRANSITION_BEFORE_ROOT"
+              --control-transition-after-root "$CONTROL_TRANSITION_AFTER_ROOT"
+            )
+          fi
           if [[ -n "$PRIOR_RECEIPT_RUN_ID" ]]; then
             args+=(
               --previous-receipt /tmp/linear-requirement-label-replacement/prior/phase-receipt.json
@@ -479,12 +543,17 @@ jobs:
             tools/delivery/run-linear-requirement-label-replacement.ts "${args[@]}" \
             > /tmp/linear-requirement-label-replacement/safe/phase-summary.json
       - name: Verify exactly one credential-free phase
+        id: verify_phase
         if: contains(fromJSON('["verify","finalize"]'), inputs.mode)
         shell: bash
         env:
           MODE: ${{ inputs.mode }}
           EXPECTED_CANDIDATE_ROOT: ${{ inputs.expected_candidate_root }}
           EXPECTED_PREVIOUS_RECEIPT_ROOT: ${{ inputs.expected_previous_receipt_root }}
+          CONTROL_TRANSITION_SOURCE: ${{ inputs.control_transition_source }}
+          CONTROL_TRANSITION_HEAD: ${{ inputs.control_transition_head }}
+          CONTROL_TRANSITION_BEFORE_ROOT: ${{ inputs.control_transition_before_root }}
+          CONTROL_TRANSITION_AFTER_ROOT: ${{ inputs.control_transition_after_root }}
         run: |
           set -euo pipefail
           umask 077
@@ -501,7 +570,17 @@ jobs:
             --journal-out /tmp/linear-requirement-label-replacement/safe/phase-journal.jsonl
             --receipt-out /tmp/linear-requirement-label-replacement/safe/phase-receipt.json
             --chunk-receipts-out /tmp/linear-requirement-label-replacement/safe/phase-core-receipts.jsonl
+            --failure-summary-out /tmp/linear-requirement-label-replacement/safe/failure-summary.json
           )
+          if [[ -n "$CONTROL_TRANSITION_SOURCE" ]]; then
+            args+=(
+              --control-transition-source "$CONTROL_TRANSITION_SOURCE"
+              --control-transition-candidate-root "$EXPECTED_CANDIDATE_ROOT"
+              --control-transition-head "$CONTROL_TRANSITION_HEAD"
+              --control-transition-before-root "$CONTROL_TRANSITION_BEFORE_ROOT"
+              --control-transition-after-root "$CONTROL_TRANSITION_AFTER_ROOT"
+            )
+          fi
           if [[ "$MODE" == "finalize" ]]; then
             args+=(
               --second-native-identity /tmp/linear-requirement-label-replacement/raw/second-native-identity.json
@@ -511,6 +590,48 @@ jobs:
           env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx \
             tools/delivery/run-linear-requirement-label-replacement.ts "${args[@]}" \
             > /tmp/linear-requirement-label-replacement/safe/phase-summary.json
+      - name: Persist redacted workflow failure summary
+        if: failure()
+        shell: bash
+        env:
+          MODE: ${{ inputs.mode }}
+          CAPTURE_FIRST_OUTCOME: ${{ steps.capture_first.outcome }}
+          CAPTURE_SECOND_OUTCOME: ${{ steps.capture_second.outcome }}
+          BUILD_CANDIDATE_OUTCOME: ${{ steps.build_candidate.outcome }}
+          VALIDATE_CANDIDATE_OUTCOME: ${{ steps.validate_candidate.outcome }}
+          APPLY_PHASE_OUTCOME: ${{ steps.apply_phase.outcome }}
+          VERIFY_PHASE_OUTCOME: ${{ steps.verify_phase.outcome }}
+        run: |
+          set -euo pipefail
+          umask 077
+          install -d -m 0700 /tmp/linear-requirement-label-replacement/safe
+          summary=/tmp/linear-requirement-label-replacement/safe/failure-summary.json
+          if test -e /tmp/linear-requirement-label-replacement/safe/failure-summary.json; then
+            exit 0
+          fi
+          jq -n \
+            --arg phase "$MODE" \
+            --arg captureFirst "$CAPTURE_FIRST_OUTCOME" \
+            --arg captureSecond "$CAPTURE_SECOND_OUTCOME" \
+            --arg buildCandidate "$BUILD_CANDIDATE_OUTCOME" \
+            --arg validateCandidate "$VALIDATE_CANDIDATE_OUTCOME" \
+            --arg applyPhase "$APPLY_PHASE_OUTCOME" \
+            --arg verifyPhase "$VERIFY_PHASE_OUTCOME" \
+            '{
+              schemaVersion: 1,
+              kind: "linear-requirement-label-replacement-workflow-failure-summary",
+              phase: $phase,
+              code: "workflow_pre_runner_failure",
+              runnerSummaryPresent: false,
+              stepOutcomes: {
+                captureFirst: $captureFirst,
+                captureSecond: $captureSecond,
+                buildCandidate: $buildCandidate,
+                validateCandidate: $validateCandidate,
+                applyPhase: $applyPhase,
+                verifyPhase: $verifyPhase
+              }
+            }' > "$summary"
       - name: Remove raw migration material
         if: always()
         shell: bash
