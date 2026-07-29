@@ -16,8 +16,11 @@ import test from "node:test";
 import {
   OLD_REQUIREMENT_LABEL_ID,
   REQUIREMENTS_TEAM_ID,
+  RETIRED_REQUIREMENT_LABEL_NAME,
   buildLinearRequirementLabelReplacementCandidate,
+  executeLinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelCapture,
+  type LinearRequirementLabelReplacementTransport,
 } from "./lib/linear-requirement-label-replacement.js";
 
 const RUNNER = resolve("tools/delivery/run-linear-requirement-label-replacement.ts");
@@ -297,6 +300,140 @@ test("runner accepts a later main HEAD only when the candidate commit is an unch
     assert.equal(existsSync(join(root, "journal.jsonl")), true,
       "the runner must pass repository and capture provenance before stopping on its absent credential");
     assert.equal(existsSync(join(root, "phase-core-receipts.jsonl")), true);
+    assert.equal(existsSync(join(root, "phase-receipt.json")), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("runner admits only journal-proven post-rename capture during crash resume", async () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-rename-resume-"));
+  try {
+    const sourceCommit = git(process.cwd(), ["rev-parse", "HEAD"]);
+    const before = nativeFixture();
+    const beforeRaw = Buffer.from(`${JSON.stringify(before)}\n`);
+    const candidate = buildLinearRequirementLabelReplacementCandidate({
+      native: before,
+      sourceCommit,
+      nativeIdentitySha256: SHA(beforeRaw),
+      captureReceiptSha256: "c".repeat(64),
+      newLabelId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    });
+    let oldLabel = structuredClone(before.labels[0]!);
+    const transport: LinearRequirementLabelReplacementTransport = {
+      async readLabel(id) {
+        if (id === OLD_REQUIREMENT_LABEL_ID) return structuredClone(oldLabel);
+        return null;
+      },
+      async readIssue() { return null; },
+      async listIssueIdsByLabel() { return []; },
+      async renameLabel(input) {
+        oldLabel = { ...oldLabel, name: input.name };
+        throw new Error("simulated post-rename crash");
+      },
+      async createLabel() { throw new Error("unexpected create"); },
+      async replaceIssueLabels() { throw new Error("unexpected issue mutation"); },
+      async setLabelRetired() { throw new Error("unexpected retirement"); },
+    };
+    const started: string[] = [];
+    await assert.rejects(executeLinearRequirementLabelReplacementPhase({
+      candidate,
+      expectedCandidateRoot: candidate.root,
+      phase: "rename",
+      authorization: {
+        candidateRoot: candidate.root,
+        phase: "rename",
+        confirmation: "APPLY_LINEAR_REQUIREMENT_LABEL_REPLACEMENT_PHASE",
+      },
+      runId: "123.1.rename.forward",
+      transport,
+      journalSink: (line) => { started.push(line); },
+      clock: () => new Date("2026-07-29T00:00:00.000Z"),
+    }), /simulated post-rename crash/);
+    assert.equal(started.length, 1);
+
+    const after = nativeFixture();
+    after.labels[0]!.name = RETIRED_REQUIREMENT_LABEL_NAME;
+    const afterRaw = Buffer.from(`${JSON.stringify(after)}\n`);
+    const captureReceipt = {
+      schemaVersion: 2,
+      captureMode: "live",
+      capturedAt: "2026-07-29T08:00:00.000Z",
+      fingerprintSha256: "d".repeat(64),
+      acceptedFingerprintSha256: "d".repeat(64),
+      artifactSha256s: {
+        fingerprint: "d".repeat(64),
+        nativeIdentity: SHA(afterRaw),
+        documents: "e".repeat(64),
+        issueDescriptions: "f".repeat(64),
+      },
+      source: {
+        repository: "meetblakey/sourcera",
+        commit: sourceCommit,
+        ref: "refs/heads/main",
+        runId: "123",
+        runAttempt: "1",
+      },
+    };
+    const resumeJournal = started.join("");
+    writeFileSync(join(root, "candidate.json"), `${JSON.stringify(candidate)}\n`, { mode: 0o600 });
+    writeFileSync(join(root, "native.json"), afterRaw, { mode: 0o600 });
+    writeFileSync(join(root, "capture-receipt.json"), `${JSON.stringify(captureReceipt)}\n`, { mode: 0o600 });
+    writeFileSync(join(root, "resume-journal.jsonl"), resumeJournal, { mode: 0o600 });
+    writeFileSync(join(root, "resume-receipts.jsonl"), "", { mode: 0o600 });
+
+    const args = requiredArgs(root);
+    args[args.indexOf("--expected-root") + 1] = candidate.root;
+    const unproven = invoke(args, {
+      GITHUB_REPOSITORY: "meetblakey/sourcera",
+      GITHUB_SHA: sourceCommit,
+      GITHUB_REF: "refs/heads/main",
+      GITHUB_RUN_ID: "123",
+      GITHUB_RUN_ATTEMPT: "1",
+    });
+    assert.equal(unproven.status, 1);
+    assert.equal(existsSync(join(root, "journal.jsonl")), false,
+      "post-rename capture without a pinned resume journal must fail before outputs");
+    args.push(
+      "--resume-journal", join(root, "resume-journal.jsonl"),
+      "--expected-resume-journal-sha256", SHA(resumeJournal),
+      "--resume-receipts", join(root, "resume-receipts.jsonl"),
+      "--expected-resume-receipts-sha256", SHA(""),
+    );
+    const drifted = structuredClone(after);
+    drifted.issues[0]!.labelIds = [candidate.newLabel.id];
+    const driftedRaw = Buffer.from(`${JSON.stringify(drifted)}\n`);
+    captureReceipt.artifactSha256s.nativeIdentity = SHA(driftedRaw);
+    writeFileSync(join(root, "native.json"), driftedRaw, { mode: 0o600 });
+    writeFileSync(join(root, "capture-receipt.json"), `${JSON.stringify(captureReceipt)}\n`, { mode: 0o600 });
+    const driftedResult = invoke(args, {
+      GITHUB_REPOSITORY: "meetblakey/sourcera",
+      GITHUB_SHA: sourceCommit,
+      GITHUB_REF: "refs/heads/main",
+      GITHUB_RUN_ID: "123",
+      GITHUB_RUN_ATTEMPT: "1",
+    });
+    assert.equal(driftedResult.status, 1);
+    assert.equal(existsSync(join(root, "journal.jsonl")), false,
+      "journal proof must not excuse any issue-assignment drift during rename recovery");
+
+    captureReceipt.artifactSha256s.nativeIdentity = SHA(afterRaw);
+    writeFileSync(join(root, "native.json"), afterRaw, { mode: 0o600 });
+    writeFileSync(join(root, "capture-receipt.json"), `${JSON.stringify(captureReceipt)}\n`, { mode: 0o600 });
+    const { LINEAR_API_KEY: _credential, ...environment } = process.env;
+    const result = invoke(args, {
+      ...environment,
+      GITHUB_REPOSITORY: "meetblakey/sourcera",
+      GITHUB_SHA: sourceCommit,
+      GITHUB_REF: "refs/heads/main",
+      GITHUB_RUN_ID: "123",
+      GITHUB_RUN_ATTEMPT: "1",
+    });
+    assert.equal(result.status, 1);
+    assert.equal(result.stderr, "Linear Requirement label replacement failed\n");
+    assert.equal(readFileSync(join(root, "journal.jsonl"), "utf8"), resumeJournal,
+      "exact post-rename recovery must reach the credential boundary with its durable journal intact");
+    assert.equal(readFileSync(join(root, "phase-core-receipts.jsonl"), "utf8"), "");
     assert.equal(existsSync(join(root, "phase-receipt.json")), false);
   } finally {
     rmSync(root, { recursive: true, force: true });
