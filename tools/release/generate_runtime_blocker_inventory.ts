@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 interface Finding {
@@ -41,9 +41,13 @@ const root = resolve(args.get("--root") ?? ".");
 const stampPath = args.get("--stamp-json");
 const mdPath = args.get("--md");
 const csvPath = args.get("--csv");
+const matrixPath = args.get("--matrix");
+const closurePlanPath = args.get("--closure-plan");
 const date = args.get("--date") ?? new Date().toISOString().slice(0, 10);
 if (!stampPath || !mdPath || !csvPath) {
-  throw new Error("Required: --stamp-json <path> --md <path> --csv <path> [--date YYYY-MM-DD]");
+  throw new Error(
+    "Required: --stamp-json <path> --md <path> --csv <path> [--matrix <path>] [--closure-plan <path>] [--date YYYY-MM-DD]",
+  );
 }
 
 const stamp = JSON.parse(readFileSync(resolve(root, stampPath), "utf8")) as StampResult;
@@ -126,9 +130,12 @@ const evidenceByStatus: Record<string, string[]> = {
 };
 
 function requiredArtifacts(assertion: string, status: string, gateId: string, message: string): string[] {
-  const marker = assertion.indexOf("Required missing artifacts:");
-  if (marker >= 0) {
-    const paths = [...assertion.slice(marker).matchAll(/`([^`]+)`/g)].map((item) => item[1]);
+  const marker = assertion.match(
+    /\bRequired (?:(?:missing|runtime|future)(?:\/(?:missing|runtime|future))?\s+)*artifacts?:/i,
+  );
+  if (marker?.index !== undefined) {
+    const paths = [...assertion.slice(marker.index + marker[0].length).matchAll(/`([^`]+)`/g)]
+      .map((item) => item[1]);
     if (paths.length) return paths;
   }
   const localGuardPaths = [...assertion.matchAll(/Local (?:pr_lint )?guard `([^`]+)`/gi)].map((item) => item[1]);
@@ -151,7 +158,8 @@ function missingEvidenceDescription(assertion: string, executionContext: string,
   if (boundary) return boundary;
   const pendingBoundary = assertion.match(/((?:the )?composite row remains pending for (?:`[^`]+`|[^.])*)/i)?.[1];
   if (pendingBoundary) return pendingBoundary;
-  if (assertion.includes("Required missing artifacts:") && artifacts.length) return artifacts.join(", ");
+  if (/\bRequired (?:(?:missing|runtime|future)(?:\/(?:missing|runtime|future))?\s+)*artifacts?:/i.test(assertion)
+    && artifacts.length) return artifacts.join(", ");
   const context = (executionContext || "runtime proof named by the row assertion").replace(/[.]+$/, "");
   if (/local (?:pr_lint )?guard/i.test(assertion)) return `External execution evidence required: ${context}.`;
   if (artifacts.length) return artifacts.join(", ");
@@ -195,6 +203,11 @@ function evidencePosture(assertion: string, artifactStatus: string): string {
   return "required_product_runtime_evidence_missing";
 }
 
+function artifactExists(path: string): boolean {
+  const absolutePath = resolve(root, path);
+  return existsSync(absolutePath) && !statSync(absolutePath).isDirectory();
+}
+
 function runtimeEvidenceRow(finding: Finding): InventoryRow {
   const values = cells(specLines[finding.line - 1]);
   const headers = tableHeader(finding.line);
@@ -213,7 +226,7 @@ function runtimeEvidenceRow(finding: Finding): InventoryRow {
   ));
   const artifacts = requiredArtifacts(assertion, runtimeStatus, finding.id, finding.message);
   const artifactStatus = artifacts.length > 0
-    ? artifacts.map((path) => `${path}:${existsSync(resolve(root, path)) ? "present" : "missing"}`).join("; ")
+    ? artifacts.map((path) => `${path}:${artifactExists(path) ? "present" : "missing"}`).join("; ")
     : "no named local artifact path";
   return {
     ...finding,
@@ -237,6 +250,13 @@ const rows: InventoryRow[] = stamp.findings.map((finding) => {
   }
   return runtimeEvidenceRow(finding);
 });
+
+const duplicateIds = rows
+  .map((row) => row.id)
+  .filter((id, index, ids) => ids.indexOf(id) !== index);
+if (duplicateIds.length > 0) {
+  throw new Error(`Duplicate live blocker ids: ${[...new Set(duplicateIds)].sort().join(", ")}`);
+}
 
 function csv(value: unknown): string {
   return `"${String(value ?? "").replace(/"/g, '""')}"`;
@@ -287,13 +307,13 @@ const byEvidencePosture = new Map<string, number>();
 for (const row of rows) byEvidencePosture.set(row.evidencePosture, (byEvidencePosture.get(row.evidencePosture) ?? 0) + 1);
 
 let report = `# v7.1.1 Runtime Stamp-Gate Blocker Inventory\n\n`;
-report += `**Date:** ${date}  \n`;
-report += `**Source command:** \`tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json\`  \n`;
-report += `**Full row inventory:** \`${csvPath}\`  \n`;
+report += `**Date:** ${date}\n`;
+report += `**Source command:** \`tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json\`\n`;
+report += `**Full row inventory:** \`${csvPath}\`\n`;
 report += `**JSON source:** \`${stampPath}\`\n\n`;
-report += `## Verdict\n\nStamp gate outcome: **FAIL**.  \n`;
-report += `Runtime rows parsed: **${stamp.summary.runtime_rows}**.  \n`;
-report += `Runtime active rows: **${statusCounts.runtime_active ?? 0}**.  \n`;
+report += `## Verdict\n\nStamp gate outcome: **FAIL**.\n`;
+report += `Runtime rows parsed: **${stamp.summary.runtime_rows}**.\n`;
+report += `Runtime active rows: **${statusCounts.runtime_active ?? 0}**.\n`;
 report += `Blockers: **${stamp.summary.blocker_count}**.\n\n`;
 report += `Exact-status right-edge scan: **${defectCounts.P0} open P0, ${defectCounts.P1} open P1, ${defectCounts.blockedP1} blocked P1, ${defectCounts.P2} open P2, ${defectCounts.P3} open P3**.\n\n`;
 if (ratificationRows.length === 0) {
@@ -329,4 +349,176 @@ for (const row of rows) {
 }
 writeFileSync(resolve(root, mdPath), report);
 
-process.stdout.write(JSON.stringify({ rows: rows.length, blockersByPack: Object.fromEntries(byPack) }) + "\n");
+interface MatrixGroupRouting {
+  byGate: Map<string, string>;
+  groupOrder: string[];
+}
+
+const BOOTSTRAP_EXECUTION_GROUPS: Record<string, string> = {
+  buyer_trial_audit_action_registration: "Billing, wallets, trials, subscriptions, and settlement",
+  query_scoping_console_required: "Identity, permissions, entitlements, and console isolation",
+};
+
+function unquoteCsv(value: string): string {
+  return value.replace(/""/g, '"');
+}
+
+function readMatrixGroupRouting(path: string): MatrixGroupRouting {
+  const lines = readFileSync(resolve(root, path), "utf8").split(/\r?\n/).filter(Boolean);
+  const expectedHeader = "execution_group,gate_id,release_evidence_lane,evidence_posture,required_execution,missing_evidence";
+  if (lines[0] !== expectedHeader) throw new Error(`Unexpected execution-matrix header in ${path}`);
+
+  const byGate = new Map<string, string>();
+  const groupOrder: string[] = [];
+  for (const line of lines.slice(1)) {
+    const match = line.match(/^"((?:[^"]|"")*)","((?:[^"]|"")*)",/);
+    if (!match) throw new Error(`Malformed execution-matrix row in ${path}: ${line}`);
+    const group = unquoteCsv(match[1]);
+    const gateId = unquoteCsv(match[2]);
+    if (byGate.has(gateId)) throw new Error(`Duplicate execution-matrix gate id: ${gateId}`);
+    byGate.set(gateId, group);
+    if (!groupOrder.includes(group)) groupOrder.push(group);
+  }
+  return { byGate, groupOrder };
+}
+
+interface MatrixGroupCount {
+  total: number;
+  byLane: Record<string, number>;
+}
+
+function writeExecutionMatrix(path: string): Map<string, MatrixGroupCount> {
+  const routing = readMatrixGroupRouting(path);
+  for (const [gateId, group] of Object.entries(BOOTSTRAP_EXECUTION_GROUPS)) {
+    const prior = routing.byGate.get(gateId);
+    if (prior && prior !== group) {
+      throw new Error(`Execution-group bootstrap drift for ${gateId}: expected ${group}, got ${prior}`);
+    }
+    routing.byGate.set(gateId, group);
+    if (!routing.groupOrder.includes(group)) routing.groupOrder.push(group);
+  }
+
+  const unknown = rows.filter((row) => !routing.byGate.has(row.id)).map((row) => row.id).sort();
+  if (unknown.length > 0) {
+    throw new Error(`Live blockers lack execution-group routing: ${unknown.join(", ")}`);
+  }
+
+  const groupIndex = new Map(routing.groupOrder.map((group, index) => [group, index]));
+  const sortedRows = rows
+    .map((row, index) => ({ row, index, group: routing.byGate.get(row.id)! }))
+    .sort((left, right) => (
+      (groupIndex.get(left.group) ?? Number.MAX_SAFE_INTEGER) - (groupIndex.get(right.group) ?? Number.MAX_SAFE_INTEGER)
+      || left.index - right.index
+    ));
+
+  const header = "execution_group,gate_id,release_evidence_lane,evidence_posture,required_execution,missing_evidence";
+  const body = [header, ...sortedRows.map(({ row, group }) => [
+    group,
+    row.id,
+    row.owningPack,
+    row.evidencePosture,
+    row.executionContext,
+    row.missingEvidence,
+  ].map(csv).join(","))].join("\n") + "\n";
+  writeFileSync(resolve(root, path), body);
+
+  const counts = new Map<string, MatrixGroupCount>();
+  for (const { row, group } of sortedRows) {
+    const current = counts.get(group) ?? { total: 0, byLane: {} };
+    current.total += 1;
+    current.byLane[row.owningPack] = (current.byLane[row.owningPack] ?? 0) + 1;
+    counts.set(group, current);
+  }
+  return counts;
+}
+
+function replaceRequired(text: string, pattern: RegExp, replacement: string, label: string): string {
+  if (!pattern.test(text)) throw new Error(`Closure-plan field not found: ${label}`);
+  pattern.lastIndex = 0;
+  return text.replace(pattern, replacement);
+}
+
+function refreshClosurePlan(path: string, groupCounts: Map<string, MatrixGroupCount>): void {
+  let text = readFileSync(resolve(root, path), "utf8");
+  const requiredMissing = byEvidencePosture.get("required_product_runtime_evidence_missing") ?? 0;
+  const localGuardPending = byEvidencePosture.get("local_guard_present_external_evidence_pending") ?? 0;
+  const partialChain = byEvidencePosture.get("partial_local_chain_external_evidence_pending") ?? 0;
+
+  text = replaceRequired(text, /^\*\*Date:\*\* .+$/m, `**Date:** ${date}`, "date");
+  text = replaceRequired(text, /^- \d+ runtime rows$/m, `- ${stamp.summary.runtime_rows} runtime rows`, "runtime rows");
+  text = replaceRequired(
+    text,
+    /^- \d+ `runtime_active`$/m,
+    `- ${stamp.summary.runtime_status_counts.runtime_active ?? 0} \`runtime_active\``,
+    "runtime-active rows",
+  );
+  text = replaceRequired(text, /^- \d+ product\/runtime blockers$/m, `- ${rows.length} product/runtime blockers`, "blockers");
+  text = replaceRequired(
+    text,
+    /^- \d+ rows missing required product\/runtime evidence$/m,
+    `- ${requiredMissing} rows missing required product/runtime evidence`,
+    "missing evidence",
+  );
+  text = replaceRequired(
+    text,
+    /^- \d+ rows with a local guard but external proof pending$/m,
+    `- ${localGuardPending} rows with a local guard but external proof pending`,
+    "local guards",
+  );
+  text = replaceRequired(
+    text,
+    /^- \d+ row(?:s)? with a partial local chain$/m,
+    `- ${partialChain} ${partialChain === 1 ? "row" : "rows"} with a partial local chain`,
+    "partial chains",
+  );
+  text = replaceRequired(
+    text,
+    /^- \d+ human-ratification blockers$/m,
+    `- ${ratificationRows.length} human-ratification blockers`,
+    "human ratification",
+  );
+  text = replaceRequired(
+    text,
+    /The execution matrix maps all \d+ blockers/,
+    `The execution matrix maps all ${rows.length} blockers`,
+    "matrix blocker count",
+  );
+
+  const laneOrder = ["m02_3", "m11_3", "m21_3", "m24_3"];
+  let summary = "| Execution group | Rows | M02.3 | M11.3 | M21.3 | M24.3 |\n";
+  summary += "|---|---:|---:|---:|---:|---:|\n";
+  for (const [group, counts] of groupCounts) {
+    summary += `| ${group} | ${counts.total} | ${laneOrder.map((lane) => counts.byLane[lane] ?? 0).join(" | ")} |\n`;
+  }
+  summary += `| **Total** | **${rows.length}** | ${laneOrder.map((lane) => `**${byPack.get(lane) ?? 0}**`).join(" | ")} |`;
+  text = replaceRequired(
+    text,
+    /\| Execution group \| Rows \| M02\.3 \| M11\.3 \| M21\.3 \| M24\.3 \|\n\|---\|---:\|---:\|---:\|---:\|---:\|\n(?:\|.*\|\n)*?\| \*\*Total\*\* \|.*\|/,
+    summary,
+    "execution summary",
+  );
+
+  for (const [group, counts] of groupCounts) {
+    const escaped = group.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    text = replaceRequired(
+      text,
+      new RegExp(`(## ${escaped}\\n\\n\\*\\*Rows:\\*\\*) \\d+`),
+      `$1 ${counts.total}`,
+      `${group} row count`,
+    );
+  }
+  writeFileSync(resolve(root, path), text);
+}
+
+if (matrixPath) {
+  const groupCounts = writeExecutionMatrix(matrixPath);
+  if (closurePlanPath) refreshClosurePlan(closurePlanPath, groupCounts);
+} else if (closurePlanPath) {
+  throw new Error("--closure-plan requires --matrix");
+}
+
+process.stdout.write(JSON.stringify({
+  rows: rows.length,
+  blockersByPack: Object.fromEntries(byPack),
+  matrixRows: matrixPath ? rows.length : undefined,
+}) + "\n");
