@@ -594,6 +594,9 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
         });
       }
       if (body.query.includes("DeliveryProjectCatalog")) {
+        assert.match(body.query, /projects\(\s*first:\s*5(?!\d)/);
+        assert.match(body.query, /teams\(first:\s*10(?!\d)/);
+        assert.match(body.query, /initiatives\(first:\s*10(?!\d)/);
         projectCursors.push(body.variables.after ?? null);
         const project = (
           id: string,
@@ -2110,7 +2113,7 @@ test("paginates and fingerprints complete Linear project and milestone inventori
     };
     const empty = { nodes: [], pageInfo: { hasNextPage: false, endCursor: null } };
     if (body.query.includes("DeliveryProjects")) {
-      assert.match(body.query, /projects\(first: 10/);
+      assert.match(body.query, /projects\(first: 5/);
       assert.match(body.query, /\barchivedAt\b/);
       assert.match(body.query, /\bcontent\b/);
       for (const field of ["status { id name type }", "priority", "lead { id name }", "startDate", "targetDate"]) {
@@ -2121,11 +2124,11 @@ test("paginates and fingerprints complete Linear project and milestone inventori
         data: {
           projects: body.variables.after
             ? completeConnection([
-                { id: "project-1", name: "First", content: "First project", updatedAt: "2026-07-15T01:00:00Z", archivedAt: null, status: { id: "status-1", name: "Planned", type: "planned" }, priority: 2, lead: null, startDate: "2026-07-01", startDateResolution: null, targetDate: "2026-08-01", targetDateResolution: null },
+                { id: "project-1", name: "First", content: "First project", updatedAt: "2026-07-15T01:00:00Z", archivedAt: null, status: { id: "status-1", name: "Planned", type: "planned" }, priority: 2, lead: null, startDate: "2026-07-01", startDateResolution: null, targetDate: "2026-08-01", targetDateResolution: null, initiatives: completeConnection([]) },
               ])
             : {
                 nodes: [
-                  { id: "project-2", name: "Second", content: "Second project", updatedAt: "2026-07-15T02:00:00Z", archivedAt: null, status: { id: "status-2", name: "In Progress", type: "started" }, priority: 1, lead: { id: "user-1", name: "Blake" }, startDate: "2026-07-02", startDateResolution: null, targetDate: "2026-08-02", targetDateResolution: null },
+                  { id: "project-2", name: "Second", content: "Second project", updatedAt: "2026-07-15T02:00:00Z", archivedAt: null, status: { id: "status-2", name: "In Progress", type: "started" }, priority: 1, lead: { id: "user-1", name: "Blake" }, startDate: "2026-07-02", startDateResolution: null, targetDate: "2026-08-02", targetDateResolution: null, initiatives: completeConnection([]) },
                 ],
                 pageInfo: { hasNextPage: true, endCursor: "projects-next" },
               },
@@ -2225,6 +2228,78 @@ test("paginates and fingerprints complete Linear project and milestone inventori
     fingerprintDiff(fingerprint, { ...fingerprint, projectMilestones: [] })[0],
     /projectMilestones/,
   );
+});
+
+test("bounds project query fanout and paginates native initiative assignments", async () => {
+  const initiativeCursors: Array<string | null> = [];
+  const empty = completeConnection([]);
+  const fetcher: typeof fetch = async (_input, init) => {
+    const body = JSON.parse(String(init?.body)) as {
+      query: string;
+      variables: { after: string | null; id?: string };
+    };
+    if (body.query.includes("DeliveryProjects")) {
+      if (
+        !/projects\(first: 5/.test(body.query) ||
+        !/initiatives\(first: 10/.test(body.query)
+      ) {
+        return response({ errors: [{ message: "Query too complex" }] }, 400);
+      }
+      assert.match(body.query, /pageInfo \{ hasNextPage endCursor \}/);
+      return response({
+        data: {
+          projects: completeConnection([{
+            id: "project-1",
+            name: "Bounded project",
+            content: "Project body",
+            updatedAt: "2026-07-29T00:00:00.000Z",
+            archivedAt: null,
+            status: { id: "status-1", name: "Planned", type: "planned" },
+            priority: 2,
+            lead: null,
+            startDate: null,
+            startDateResolution: null,
+            targetDate: null,
+            targetDateResolution: null,
+            initiatives: {
+              nodes: [{ id: "initiative-1", name: "First" }],
+              pageInfo: { hasNextPage: true, endCursor: "initiative-next" },
+            },
+          }]),
+        },
+      });
+    }
+    if (body.query.includes("DeliveryProjectInitiativeAssignments")) {
+      initiativeCursors.push(body.variables.after);
+      assert.equal(body.variables.id, "project-1");
+      return response({
+        data: {
+          project: {
+            initiatives: completeConnection([{
+              id: "initiative-2",
+              name: "Second",
+            }]),
+          },
+        },
+      });
+    }
+    if (body.query.includes("DeliveryIssues")) {
+      return response({ data: { issues: empty } });
+    }
+    if (body.query.includes("DeliveryPipelines")) {
+      return response({ data: { releasePipelines: empty } });
+    }
+    if (body.query.includes("DeliveryProjectMilestones")) {
+      return response({ data: { projectMilestones: empty } });
+    }
+    if (body.query.includes("DeliveryCycles")) {
+      return response({ data: { cycles: empty } });
+    }
+    return response({ data: { releases: empty } });
+  };
+
+  await fetchLinearFingerprint(fetcher, "secret");
+  assert.deepEqual(initiativeCursors, ["initiative-next"]);
 });
 
 test("paginates native cycles and binds issue due dates to stable cycle IDs", async () => {
@@ -2670,6 +2745,7 @@ test("scopes project inventories by canonical IDs while preserving every issue",
       startDateResolution: null,
       targetDate: null,
       targetDateResolution: null,
+      initiatives: completeConnection([]),
     },
     {
       id: "project-legacy",
@@ -2682,6 +2758,7 @@ test("scopes project inventories by canonical IDs while preserving every issue",
       startDateResolution: null,
       targetDate: null,
       targetDateResolution: null,
+      initiatives: completeConnection([]),
     },
   ];
   const issue = (
