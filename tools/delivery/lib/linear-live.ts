@@ -127,6 +127,7 @@ const ISSUE_LABEL_CATALOG_QUERY = `
         color
         description
         archivedAt
+        retiredAt
         inheritedFrom { id }
         isGroup
         parent { id name }
@@ -488,6 +489,7 @@ interface IssueLabelCatalogNode {
   color: string;
   description: string | null;
   archivedAt: string | null;
+  retiredAt: string | null;
   inheritedFrom: { id: string } | null;
   isGroup: boolean;
   parent: { id: string; name: string } | null;
@@ -686,6 +688,7 @@ export interface LinearNativeIdentityCapture {
     color: string;
     description: string | null;
     archivedAt: string | null;
+    retiredAt: string | null;
     inheritedFromId: string | null;
     isGroup: boolean;
     parentId: string | null;
@@ -2132,6 +2135,8 @@ export function assertLinearNativeIdentityCapture(
       !label.name?.trim() ||
       !/^#[0-9a-f]{6}$/i.test(label.color) ||
       (label.description !== null && typeof label.description !== "string") ||
+      !Object.prototype.hasOwnProperty.call(label, "retiredAt") ||
+      !isNullableNonEmptyString(label.retiredAt) ||
       typeof label.isGroup !== "boolean" ||
       (label.teamId === null) !== (label.teamKey === null) ||
       (label.teamId !== null &&
@@ -3429,6 +3434,7 @@ function buildNativeCaptureArtifacts(
       color: label.color,
       description: label.description,
       archivedAt: label.archivedAt,
+      retiredAt: label.retiredAt,
       inheritedFromId: label.inheritedFrom?.id ?? null,
       isGroup: label.isGroup,
       parentId: label.parent?.id ?? null,

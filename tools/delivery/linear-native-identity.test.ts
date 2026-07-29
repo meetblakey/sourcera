@@ -75,6 +75,7 @@ function nativeIdentity(): LinearNativeIdentityCapture {
         color: "#123456",
         description: "Canonical requirement.",
         archivedAt: null,
+        retiredAt: null,
         inheritedFromId: null,
         isGroup: false,
         parentId: null,
