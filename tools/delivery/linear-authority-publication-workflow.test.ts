@@ -12,12 +12,15 @@ test("authority workflow is manual, main-only, bounded, and single-flight", () =
   assert.doesNotMatch(workflow, /^  (?:push|pull_request|schedule):/m);
   assert.match(workflow, /github\.repository == 'meetblakey\/sourcera'/);
   assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
+  assert.match(workflow, /environment: linear-authority-migration/);
   assert.match(workflow, /group: linear-authority-writes-main/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /timeout-minutes: 120/);
   assert.match(workflow, /permissions:\n  actions: read\n  contents: read/);
   assert.doesNotMatch(workflow, /contents: write/);
   assert.match(workflow, /Re-verify exact main checkout after gates/);
+  assert.match(workflow, /persist-credentials: false/);
+  assert.match(workflow, /test "\$GITHUB_REF" = "refs\/heads\/main"/);
   assert.match(workflow, /git ls-files --others --exclude-standard/);
 });
 
