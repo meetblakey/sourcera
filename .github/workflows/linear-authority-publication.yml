@@ -1,0 +1,366 @@
+name: Linear authority publication
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Guarded authority mode
+        required: true
+        type: choice
+        default: dry-run
+        options:
+          - baseline
+          - dry-run
+          - apply
+      expected_plan_root:
+        description: Exact dry-run plan root required for apply
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: linear-authority-publication-main
+  cancel-in-progress: false
+
+jobs:
+  authority:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'meetblakey/sourcera' &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/spec-lint/package-lock.json
+      - run: npm ci --prefix tools/spec-lint
+      - name: Verify exact main checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --exit-code
+          git diff --cached --exit-code
+      - name: Verify delivery code and source contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+          tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/source-checksums.ts --contract delivery/ticket-source-checksums.json
+          npm --prefix tools/spec-lint run typecheck
+          npm --prefix tools/spec-lint run all
+          tools/spec-lint/node_modules/.bin/tsx tools/repo-hygiene/no_legacy_drift.ts
+          tools/spec-lint/node_modules/.bin/tsx tools/release/appendix_j_lineage.ts
+      - name: Re-verify exact main checkout after gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --exit-code
+          git diff --cached --exit-code
+          untracked="$(git ls-files --others --exclude-standard)"
+          if [[ -n "$untracked" ]]; then
+            printf '%s\n' "$untracked" >&2
+            exit 1
+          fi
+      - name: Capture current runtime inventory
+        shell: bash
+        run: |
+          set -uo pipefail
+          install -d -m 0700 /tmp/linear-authority/raw /tmp/linear-authority/safe
+          set +e
+          tools/spec-lint/node_modules/.bin/tsx tools/release/stamp_gate.ts --json > /tmp/linear-authority/raw/runtime-stamp.json
+          stamp_status=$?
+          tools/spec-lint/node_modules/.bin/tsx tools/release/exact_status_scan.ts --json > /tmp/linear-authority/raw/exact-status.json
+          exact_status=$?
+          set -e
+          if (( stamp_status > 1 )); then exit "$stamp_status"; fi
+          if (( exact_status > 1 )); then exit "$exact_status"; fi
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/verify.ts \
+            --stamp /tmp/linear-authority/raw/runtime-stamp.json \
+            --exact /tmp/linear-authority/raw/exact-status.json \
+            --feature-dependencies delivery/feature-dependencies.json \
+            --policy delivery/release-policy.json \
+            --release-plan delivery/release-plan.json \
+            --roadmap delivery/roadmap-contract.json \
+            --linear-project-scope delivery/linear-project-scope.json
+      - name: Capture fresh accepted Linear state
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --out /tmp/linear-authority/raw/accepted-fingerprint.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --accepted-fingerprint /tmp/linear-authority/raw/accepted-fingerprint.json \
+            --out /tmp/linear-authority/raw/fingerprint.json \
+            --descriptions-out /tmp/linear-authority/raw/issue-descriptions.json \
+            --native-identity-out /tmp/linear-authority/raw/native-identity.json \
+            --documents-out /tmp/linear-authority/raw/documents.json \
+            --receipt-out /tmp/linear-authority/raw/capture-receipt.json
+      - name: Bind GitHub execution identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          jq -n \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg commit "$GITHUB_SHA" \
+            --arg ref "$GITHUB_REF" \
+            --arg runId "$GITHUB_RUN_ID" \
+            --arg runAttempt "$GITHUB_RUN_ATTEMPT" \
+            '{schemaVersion: 1, kind: "github-execution", repository: $repository, commit: $commit, ref: $ref, runId: $runId, runAttempt: $runAttempt}' \
+            > /tmp/linear-authority/raw/github-execution.json
+      - name: Plan governed labels and build safe Requirement identity baseline
+        if: inputs.mode == 'baseline'
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-label-bootstrap.ts \
+            --native-identity /tmp/linear-authority/raw/native-identity.json \
+            --capture-receipt /tmp/linear-authority/raw/capture-receipt.json \
+            --program-scope delivery/linear-program-scope.json \
+            --out /tmp/linear-authority/safe/linear-authority-label-bootstrap-candidate.json \
+            > /tmp/linear-authority/safe/label-bootstrap-summary.json
+          if jq -e '.readyForBaseline == false and (.createLabels | length) > 0' \
+            /tmp/linear-authority/safe/label-bootstrap-summary.json >/dev/null; then
+            jq -n '{ok: true, status: "label_bootstrap_required", initialized: false}' \
+              > /tmp/linear-authority/safe/baseline-summary.json
+            printf 'Label bootstrap required. Review the uploaded mutation-disabled candidate before native creation.\n' \
+              >> "$GITHUB_STEP_SUMMARY"
+            exit 2
+          fi
+          jq -e '.readyForBaseline == true and .createLabels == [] and (.root | test("^[a-f0-9]{64}$"))' \
+            /tmp/linear-authority/safe/label-bootstrap-summary.json >/dev/null
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-requirement-baseline.ts \
+            --fingerprint /tmp/linear-authority/raw/fingerprint.json \
+            --issue-descriptions /tmp/linear-authority/raw/issue-descriptions.json \
+            --native-identity /tmp/linear-authority/raw/native-identity.json \
+            --capture-receipt /tmp/linear-authority/raw/capture-receipt.json \
+            --bootstrap-map delivery/linear-authority-requirement-bootstrap-map.json \
+            --program-scope delivery/linear-program-scope.json \
+            --program-scope-out /tmp/linear-authority/safe/linear-program-scope-candidate.json \
+            --out /tmp/linear-authority/safe/linear-authority-requirement-baseline.json \
+            > /tmp/linear-authority/safe/baseline-summary.json
+          jq -e '.initialized == true and .requirements == 186 and (.labelContractRoot | test("^[a-f0-9]{64}$"))' \
+            /tmp/linear-authority/safe/baseline-summary.json >/dev/null
+      - name: Compile guarded authority package
+        if: inputs.mode != 'baseline'
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-unified-package.ts \
+            --pre-cutover-tag pre-linear-authority-2026-07-27 \
+            --linear-fingerprint /tmp/linear-authority/raw/fingerprint.json \
+            --native-identity /tmp/linear-authority/raw/native-identity.json \
+            --raw-documents /tmp/linear-authority/raw/documents.json \
+            --issue-descriptions /tmp/linear-authority/raw/issue-descriptions.json \
+            --capture-receipt /tmp/linear-authority/raw/capture-receipt.json \
+            --github-execution /tmp/linear-authority/raw/github-execution.json \
+            --project-scope delivery/linear-project-scope.json \
+            --program-scope delivery/linear-program-scope.json \
+            --requirement-baseline delivery/linear-authority-requirement-baseline.json \
+            --out-dir /tmp/linear-authority/package \
+            > /tmp/linear-authority/safe/compiler-summary.json
+          plan_root="$(jq -er '.planRoot | select(test("^[a-f0-9]{64}$"))' /tmp/linear-authority/package/manifest.json)"
+          printf '%s\n' "$plan_root" > /tmp/linear-authority/safe/plan-root.txt
+          desired_root="$(jq -er '.desiredAuthorityRoot | select(test("^[a-f0-9]{64}$"))' /tmp/linear-authority/safe/compiler-summary.json)"
+          printf '%s\n' "$desired_root" > /tmp/linear-authority/safe/desired-authority-root.txt
+      - name: Validate expected plan root
+        if: inputs.mode != 'baseline'
+        shell: bash
+        env:
+          AUTHORITY_MODE: ${{ inputs.mode }}
+          EXPECTED_PLAN_ROOT: ${{ inputs.expected_plan_root }}
+        run: |
+          set -euo pipefail
+          plan_root="$(cat /tmp/linear-authority/safe/plan-root.txt)"
+          if [[ "$AUTHORITY_MODE" == "apply" && "$EXPECTED_PLAN_ROOT" != "$plan_root" ]]; then
+            echo "Apply requires the exact compiled dry-run plan root" >&2
+            exit 1
+          fi
+      - name: Run credential-free publication preflight
+        if: inputs.mode != 'baseline'
+        shell: bash
+        run: |
+          set -euo pipefail
+          env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx tools/delivery/publish-linear-authority.ts \
+            --package-dir /tmp/linear-authority/package \
+            > /tmp/linear-authority/safe/preflight-summary.json
+          jq -e '.mode == "dry-run" and .status == "validated_dry_run"' /tmp/linear-authority/safe/preflight-summary.json >/dev/null
+      - name: Apply exact authority package
+        if: inputs.mode == 'apply'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/publish-linear-authority.ts \
+            --package-dir /tmp/linear-authority/package \
+            --apply \
+            --run-id "$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT.apply" \
+            --journal-out /tmp/linear-authority/safe/apply-journal.jsonl \
+            --max-http-attempts 1000 \
+            > /tmp/linear-authority/safe/apply-summary.json
+          jq -e '.mode == "apply" and .status == "applied"' /tmp/linear-authority/safe/apply-summary.json >/dev/null
+      - name: Capture stable post-apply Linear state
+        if: inputs.mode == 'apply'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --out /tmp/linear-authority/raw/post-accepted-fingerprint.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --accepted-fingerprint /tmp/linear-authority/raw/post-accepted-fingerprint.json \
+            --out /tmp/linear-authority/raw/post-fingerprint.json \
+            --descriptions-out /tmp/linear-authority/raw/post-issue-descriptions.json \
+            --native-identity-out /tmp/linear-authority/raw/post-native-identity.json \
+            --documents-out /tmp/linear-authority/raw/post-documents.json \
+            --receipt-out /tmp/linear-authority/raw/post-capture-receipt.json
+      - name: Prove stable post-apply readback
+        if: inputs.mode == 'apply'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-requirement-baseline.ts \
+            --fingerprint /tmp/linear-authority/raw/post-fingerprint.json \
+            --issue-descriptions /tmp/linear-authority/raw/post-issue-descriptions.json \
+            --native-identity /tmp/linear-authority/raw/post-native-identity.json \
+            --capture-receipt /tmp/linear-authority/raw/post-capture-receipt.json \
+            --bootstrap-map delivery/linear-authority-requirement-bootstrap-map.json \
+            --program-scope delivery/linear-program-scope.json \
+            --program-scope-out /tmp/linear-authority/safe/linear-program-scope-post-apply.json \
+            --out /tmp/linear-authority/safe/linear-authority-requirement-baseline-post-apply.json \
+            > /tmp/linear-authority/safe/post-baseline-summary.json
+          jq -e '.initialized == true and .requirements == 926' /tmp/linear-authority/safe/post-baseline-summary.json >/dev/null
+          cmp --silent delivery/linear-program-scope.json /tmp/linear-authority/safe/linear-program-scope-post-apply.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-unified-package.ts \
+            --pre-cutover-tag pre-linear-authority-2026-07-27 \
+            --linear-fingerprint /tmp/linear-authority/raw/post-fingerprint.json \
+            --native-identity /tmp/linear-authority/raw/post-native-identity.json \
+            --raw-documents /tmp/linear-authority/raw/post-documents.json \
+            --issue-descriptions /tmp/linear-authority/raw/post-issue-descriptions.json \
+            --capture-receipt /tmp/linear-authority/raw/post-capture-receipt.json \
+            --github-execution /tmp/linear-authority/raw/github-execution.json \
+            --project-scope delivery/linear-project-scope.json \
+            --program-scope delivery/linear-program-scope.json \
+            --requirement-baseline /tmp/linear-authority/safe/linear-authority-requirement-baseline-post-apply.json \
+            --out-dir /tmp/linear-authority/post-package \
+            > /tmp/linear-authority/safe/post-compiler-summary.json
+          post_desired_root="$(jq -er '.desiredAuthorityRoot | select(test("^[a-f0-9]{64}$"))' /tmp/linear-authority/safe/post-compiler-summary.json)"
+          test "$post_desired_root" = "$(cat /tmp/linear-authority/safe/desired-authority-root.txt)"
+          jq -e '.operations | length == 0' /tmp/linear-authority/post-package/operations.json >/dev/null
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/publish-linear-authority.ts \
+            --package-dir /tmp/linear-authority/post-package \
+            --apply \
+            --run-id "$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT.stable" \
+            --journal-out /tmp/linear-authority/safe/stable-journal.jsonl \
+            --max-http-attempts 1000 \
+            > /tmp/linear-authority/safe/stable-summary.json
+          jq -e '.mode == "apply" and .status == "applied" and .applied == 0' /tmp/linear-authority/safe/stable-summary.json >/dev/null
+      - name: Capture final stable Linear state
+        if: inputs.mode == 'apply'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --out /tmp/linear-authority/raw/final-accepted-fingerprint.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/linear-live.ts \
+            --linear-project-scope delivery/linear-project-scope.json \
+            --linear-program-scope delivery/linear-program-scope.json \
+            --accepted-fingerprint /tmp/linear-authority/raw/final-accepted-fingerprint.json \
+            --out /tmp/linear-authority/raw/final-fingerprint.json \
+            --descriptions-out /tmp/linear-authority/raw/final-issue-descriptions.json \
+            --native-identity-out /tmp/linear-authority/raw/final-native-identity.json \
+            --documents-out /tmp/linear-authority/raw/final-documents.json \
+            --receipt-out /tmp/linear-authority/raw/final-capture-receipt.json
+      - name: Verify final stable Linear state
+        if: inputs.mode == 'apply'
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-requirement-baseline.ts \
+            --fingerprint /tmp/linear-authority/raw/final-fingerprint.json \
+            --issue-descriptions /tmp/linear-authority/raw/final-issue-descriptions.json \
+            --native-identity /tmp/linear-authority/raw/final-native-identity.json \
+            --capture-receipt /tmp/linear-authority/raw/final-capture-receipt.json \
+            --bootstrap-map delivery/linear-authority-requirement-bootstrap-map.json \
+            --program-scope delivery/linear-program-scope.json \
+            --program-scope-out /tmp/linear-authority/safe/linear-program-scope-final.json \
+            --out /tmp/linear-authority/safe/linear-authority-requirement-baseline-final.json \
+            > /tmp/linear-authority/safe/final-baseline-summary.json
+          jq -e '.initialized == true and .requirements == 926 and .labelContractChanged == false' /tmp/linear-authority/safe/final-baseline-summary.json >/dev/null
+          cmp --silent /tmp/linear-authority/safe/linear-authority-requirement-baseline-post-apply.json /tmp/linear-authority/safe/linear-authority-requirement-baseline-final.json
+          cmp --silent /tmp/linear-authority/safe/linear-program-scope-post-apply.json /tmp/linear-authority/safe/linear-program-scope-final.json
+          cmp --silent delivery/linear-program-scope.json /tmp/linear-authority/safe/linear-program-scope-final.json
+          tools/spec-lint/node_modules/.bin/tsx tools/delivery/build-linear-authority-unified-package.ts \
+            --pre-cutover-tag pre-linear-authority-2026-07-27 \
+            --linear-fingerprint /tmp/linear-authority/raw/final-fingerprint.json \
+            --native-identity /tmp/linear-authority/raw/final-native-identity.json \
+            --raw-documents /tmp/linear-authority/raw/final-documents.json \
+            --issue-descriptions /tmp/linear-authority/raw/final-issue-descriptions.json \
+            --capture-receipt /tmp/linear-authority/raw/final-capture-receipt.json \
+            --github-execution /tmp/linear-authority/raw/github-execution.json \
+            --project-scope delivery/linear-project-scope.json \
+            --program-scope delivery/linear-program-scope.json \
+            --requirement-baseline /tmp/linear-authority/safe/linear-authority-requirement-baseline-final.json \
+            --out-dir /tmp/linear-authority/final-package \
+            > /tmp/linear-authority/safe/final-compiler-summary.json
+          final_desired_root="$(jq -er '.desiredAuthorityRoot | select(test("^[a-f0-9]{64}$"))' /tmp/linear-authority/safe/final-compiler-summary.json)"
+          test "$final_desired_root" = "$(cat /tmp/linear-authority/safe/desired-authority-root.txt)"
+          jq -e '.operations | length == 0' /tmp/linear-authority/final-package/operations.json >/dev/null
+          env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx tools/delivery/publish-linear-authority.ts \
+            --package-dir /tmp/linear-authority/final-package \
+            > /tmp/linear-authority/safe/final-preflight-summary.json
+          jq -e '.mode == "dry-run" and .status == "validated_dry_run" and .operationCount == 0' /tmp/linear-authority/safe/final-preflight-summary.json >/dev/null
+      - name: Remove raw Linear authority material
+        if: always()
+        shell: bash
+        run: |
+          rm -rf /tmp/linear-authority/raw
+          rm -rf /tmp/linear-authority/package
+          rm -rf /tmp/linear-authority/post-package
+          rm -rf /tmp/linear-authority/final-package
+      - name: Upload safe authority evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linear-authority-${{ inputs.mode }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/linear-authority/safe/
+          if-no-files-found: warn
+          overwrite: false
+          retention-days: 30

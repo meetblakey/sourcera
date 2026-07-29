@@ -35,7 +35,23 @@ If repository planning data and live Linear both claim authority for the same fi
 7. Regenerate `delivery/release-plan.json` and every `reports/delivery/` file from the handoff plus the same stamp and exact-status inputs.
 8. Publish the review package as an immutable artifact. Apply its repository-shaped files on a review branch, then use the normal pull request and required checks. Never push the snapshot directly to `main`.
 
-The publication job has no Linear secret and no repository write permission. Its artifact digest comes only from the preceding pinned upload step in the same GitHub run. `tools/delivery/prepare-linear-publication.ts` also binds the exact handoff, candidate receipt, capture receipt, runtime scans, releases, generated release plan, and reports into `attestation/linear-publication-receipt.json`.
+The delivery-mirror publication job above has no Linear secret and no repository write permission. Its artifact digest comes only from the preceding pinned upload step in the same GitHub run. `tools/delivery/prepare-linear-publication.ts` also binds the exact handoff, candidate receipt, capture receipt, runtime scans, releases, generated release plan, and reports into `attestation/linear-publication-receipt.json`.
+
+## Authority cutover
+
+The separate Linear authority publication workflow is manual, main-only, and single-flight. It has three guarded modes:
+
+1. `baseline` performs a fresh read-only capture and emits only the safe Requirement identity registry plus exact native label-contract candidate. Review and commit both before publication.
+2. `dry-run` recompiles the complete authority package from the committed source set, committed baseline, and a fresh live capture. It validates every native identity, field, label, hierarchy edge, relation, source binding, and operation without obtaining a write credential.
+3. `apply` requires the operator to provide the exact dry-run plan root. It revalidates adopted targets immediately before each update, records a durable redacted journal, performs a fresh post-write capture, recompiles, reapplies, and succeeds only when the stable readback applies zero changes. Its full post-write Requirement identity registry must then be reviewed and committed before cutover is complete.
+
+Raw issue descriptions, document bodies, native captures, allocation files, and publication packages remain inside the job and are deleted on every outcome. Only safe summaries, the baseline registry, plan roots, and redacted journals may leave the job.
+
+`delivery/linear-authority-requirement-bootstrap-map.json` pins the audited REQ-1..REQ-61 identity bridge to the validated offline artifact. Baseline derivation uses that map for those rows, requires exact desired native state for REQ-62 onward, and rejects dirty governed inputs. The baseline pass also emits the exact ten-label and four-group contract for `delivery/linear-program-scope.json`; later passes require the committed UUIDs, names, colors, descriptions, scopes, and parents to match fresh native capture.
+
+The first `baseline` run emits a receipt-bound, mutation-disabled label-bootstrap candidate when any approved label is missing. Review that artifact, create only its exact `risk`, `delivery-risk`, and `financial-risk` workspace labels through native Linear label creation, and read them back before rerunning `baseline`. A partial creation is recovered only by a fresh capture and a smaller candidate. The completed run emits the initialized 10-label and four-group contract plus the 186-Requirement identity registry; both must be reviewed and committed before `dry-run` is available.
+
+Descriptions never emulate labels, parents, projects, milestones, releases, or relations. Issue references use native Linear relations unless the text itself is required product context; every retained narrative mention must resolve to the intended issue and remain semantically valid.
 
 Run `tools/delivery/source-provenance-blocks.ts` to generate the exact registered provenance blocks. Run `tools/delivery/reconcile-linear-source-provenance.ts` to prepare or apply checksum updates. It derives active owners from the live capture and fails closed when the requirement ID, document set, single section or bundle count, binding digest, or checksum drifts. Apply mode requires guarded pre-write readback, direct post-write readback, a full post-capture, and rollback on any mismatch.
 

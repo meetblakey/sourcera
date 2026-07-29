@@ -14,6 +14,8 @@ import test from "node:test";
 import {
   computeLinearAuthorityPlanRoot,
   LINEAR_AUTHORITY_COMPILER_INPUT_NAMES,
+  LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2,
+  type AuthorityBlockV1,
   type LinearAuthorityAllocation,
   type LinearAuthorityManifest,
   validateLinearAuthorityStructure,
@@ -60,6 +62,8 @@ const SOURCE_RUN_ATTEMPT = "2";
 
 const sha256 = (value: string | Buffer): string => createHash("sha256").update(value).digest("hex");
 const clone = <T>(value: T): T => structuredClone(value);
+const phase2Block = (value: LinearAuthorityManifest["blocks"][number]): AuthorityBlockV1 =>
+  value as AuthorityBlockV1;
 
 interface Fixture {
   source: Buffer;
@@ -158,7 +162,6 @@ function currentIssueNativeSha(value: {
     parentIssueUuid: value.parentIssueUuid,
     assigneeId: value.assigneeId,
     labelIds: [...value.labelIds].sort(),
-    relationIds: [...(value.relationIds ?? [])].sort(),
   }));
 }
 
@@ -234,14 +237,15 @@ function evidencePayloads(manifest: LinearAuthorityManifest): Map<string, { keys
     ...manifest.documents.map((target) => ({ family: "documents", target })),
     ...manifest.references.map((target) => ({ family: "references", target })),
   ].sort((left, right) => left.target.planKey.localeCompare(right.target.planKey));
-  const dispositions = manifest.blocks.filter((block) => block.disposition !== null).sort((left, right) => left.key.localeCompare(right.key));
+  const dispositions = manifest.blocks
+    .map(phase2Block)
+    .filter((block) => block.disposition !== null)
+    .sort((left, right) => left.key.localeCompare(right.key));
   const extractionRows = [
     ...manifest.sources.map((value) => ({ family: "sources", key: value.path, value })),
     ...manifest.blocks.map((value) => ({ family: "blocks", key: value.key, value })),
   ].sort((left, right) => left.key.localeCompare(right.key));
-  return new Map([
-    ["extraction-seed", { keys: extractionRows.map((row) => row.key), rows: extractionRows }],
-    ["semantic-plan", { keys: targets.map((row) => row.target.planKey), rows: targets }],
+  const payloads = new Map<string, { keys: string[]; rows: unknown[] }>([
     ["source-routing", { keys: manifest.blocks.map((row) => row.key).sort(), rows: manifest.blocks.slice().sort((left, right) => left.key.localeCompare(right.key)) }],
     ["risk-routing", { keys: manifest.risks.map((row) => row.planKey).sort(), rows: manifest.risks.slice().sort((left, right) => left.planKey.localeCompare(right.planKey)) }],
     ["source-contract", { keys: manifest.sources.map((row) => row.path).sort((left, right) => left.localeCompare(right)), rows: manifest.sources.slice().sort((left, right) => left.path.localeCompare(right.path)) }],
@@ -249,6 +253,22 @@ function evidencePayloads(manifest: LinearAuthorityManifest): Map<string, { keys
     ["dependency-contract", { keys: manifest.nativeRelations.map((row) => row.planKey).sort(), rows: manifest.nativeRelations.slice().sort((left, right) => left.planKey.localeCompare(right.planKey)) }],
     ["decision-adjudication", { keys: manifest.decisions.map((row) => row.planKey).sort(), rows: manifest.decisions.slice().sort((left, right) => left.planKey.localeCompare(right.planKey)) }],
   ]);
+  if (manifest.schemaVersion === 1) {
+    payloads.set("extraction-seed", { keys: extractionRows.map((row) => row.key), rows: extractionRows });
+    payloads.set("semantic-plan", { keys: targets.map((row) => row.target.planKey), rows: targets });
+  }
+  return payloads;
+}
+
+function targetEvidencePayload(manifest: LinearAuthorityManifest): { keys: string[]; rows: unknown[] } {
+  const rows = [
+    ...manifest.requirements.map((target) => ({ family: "requirements", target })),
+    ...manifest.decisions.map((target) => ({ family: "decisions", target })),
+    ...manifest.risks.map((target) => ({ family: "risks", target })),
+    ...manifest.documents.map((target) => ({ family: "documents", target })),
+    ...manifest.references.map((target) => ({ family: "references", target })),
+  ].sort((left, right) => left.target.planKey.localeCompare(right.target.planKey));
+  return { keys: rows.map((row) => row.target.planKey), rows };
 }
 
 function refreshCoreRoots(input: Pick<Fixture, "manifest" | "compilerInputs" | "capture">): void {
@@ -264,6 +284,13 @@ function refreshCoreRoots(input: Pick<Fixture, "manifest" | "compilerInputs" | "
 
 function refreshAuthorityReceipts(input: Fixture): void {
   refreshCoreRoots(input);
+  if (input.manifest.schemaVersion === 2) {
+    const lineage = JSON.parse(input.compilerInputs.get("source-lineage")!.toString("utf8")) as {
+      authority: { planRoot: string };
+    };
+    lineage.authority.planRoot = input.manifest.planRoot;
+    input.compilerInputs.set("source-lineage", Buffer.from(JSON.stringify(lineage)));
+  }
   const captureRaw = JSON.stringify(input.capture);
   input.allocation.planRoot = input.manifest.planRoot;
   input.allocation.sourceSetRoot = input.manifest.sourceSetRoot;
@@ -285,7 +312,7 @@ function refreshAuthorityReceipts(input: Fixture): void {
       payloadRoot: sha256(canonicalJson(payload.rows)),
     })));
   }
-  const semantic = evidencePayloads(input.manifest).get("semantic-plan")!;
+  const semantic = evidencePayloads(input.manifest).get("semantic-plan") ?? targetEvidencePayload(input.manifest);
   const relationRows = input.manifest.nativeRelations.slice().sort((left, right) => left.planKey.localeCompare(right.planKey)).map((target) => ({ family: "relations", target }));
   input.compilerInputs.set("allocation-lock", Buffer.from(JSON.stringify({
     schemaVersion: 1,
@@ -402,6 +429,9 @@ function fingerprintFromCapture(
 ): Buffer {
   const labelNameById = new Map(capture.labels.map((label) => [label.id, label.name]));
   const relationKeyById = new Map(capture.relations.map((relation) => [relation.relationId, relation.canonicalKey]));
+  const issueIdentifierByUuid = new Map(
+    capture.issues.map((issue) => [issue.issueUuid, issue.identifier]),
+  );
   const projectNameById = new Map(capture.projects.map((project) => [project.id, project.name]));
   const documentById = new Map(capture.documents.map((document) => [document.id, document]));
   const scopedProjectDocuments = [...programScope.canonicalProjectDocuments, ...programScope.supplementaryDocuments];
@@ -453,7 +483,9 @@ function fingerprintFromCapture(
       milestoneId: issue.milestoneId,
       milestone: issue.milestoneId === null ? null : "Milestone 1",
       parentLinearId: issue.parentIssueUuid,
-      parent: null,
+      parent: issue.parentIssueUuid === null
+        ? null
+        : issueIdentifierByUuid.get(issue.parentIssueUuid)!,
       releases: issue.releaseIds,
       relations: issue.relationIds.map((id) => relationKeyById.get(id)!).sort(),
     })),
@@ -614,10 +646,10 @@ function fixture(): Fixture {
       { issueUuid: V4_UNRELATED_LIVE, identifier: "PLA-999", title: "Unrelated", archivedAt: null, descriptionSha256: sha256("Unrelated body"), teamId: V4_TEAM, stateId: V4_STATE, projectId: V4_PROJECT, estimate: null, priority: 2, dueDate: null, cycleId: null, milestoneId: null, releaseIds: [], parentIssueUuid: null, assigneeId: null, labelIds: [], relationIds: [] },
     ],
     labels: [
-      { id: V4_REQUIREMENT_LABEL, name: "Requirement", color: "#123456", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" },
-      { id: V4_DECISION_LABEL, name: "decision", color: "#654321", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
-      { id: V4_TYPE_GROUP, name: "Type", color: "#888888", archivedAt: null, inheritedFromId: null, isGroup: true, parentId: null, parentName: null, teamId: null, teamKey: null },
-      { id: V4_RISK_LABEL, name: "risk", color: "#ff0000", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
+      { id: V4_REQUIREMENT_LABEL, name: "Requirement", color: "#123456", description: "Canonical requirement.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" },
+      { id: V4_DECISION_LABEL, name: "decision", color: "#654321", description: "Canonical decision.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
+      { id: V4_TYPE_GROUP, name: "Type", color: "#888888", description: null, archivedAt: null, inheritedFromId: null, isGroup: true, parentId: null, parentName: null, teamId: null, teamKey: null },
+      { id: V4_RISK_LABEL, name: "risk", color: "#ff0000", description: "Canonical risk.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: V4_TYPE_GROUP, parentName: "Type", teamId: null, teamKey: null },
     ],
     relations: [],
     teams: [{ id: V4_TEAM, key: "PLA", name: "Platform", archivedAt: null }],
@@ -1016,9 +1048,9 @@ function fixture(): Fixture {
       releases: [],
       states: [{ planKey: "state:approved", id: V4_STATE, name: "Approved", type: "completed", teamPlanKey: "team:platform" }],
       labels: [
-        { planKey: "label:requirement", id: V4_REQUIREMENT_LABEL, semanticRole: "requirement", name: "Requirement", teamPlanKey: "team:platform", parentId: null, parentName: null },
-        { planKey: "label:decision", id: V4_DECISION_LABEL, semanticRole: "decision", name: "decision", teamPlanKey: null, parentId: V4_TYPE_GROUP, parentName: "Type" },
-        { planKey: "label:risk", id: V4_RISK_LABEL, semanticRole: "risk", name: "risk", teamPlanKey: null, parentId: V4_TYPE_GROUP, parentName: "Type" },
+        { planKey: "label:requirement", id: V4_REQUIREMENT_LABEL, semanticRole: "requirement", name: "Requirement", color: "#123456", description: "Canonical requirement.", teamPlanKey: "team:platform", parentId: null, parentName: null },
+        { planKey: "label:decision", id: V4_DECISION_LABEL, semanticRole: "decision", name: "decision", color: "#654321", description: "Canonical decision.", teamPlanKey: null, parentId: V4_TYPE_GROUP, parentName: "Type" },
+        { planKey: "label:risk", id: V4_RISK_LABEL, semanticRole: "risk", name: "risk", color: "#ff0000", description: "Canonical risk.", teamPlanKey: null, parentId: V4_TYPE_GROUP, parentName: "Type" },
       ],
     },
     coverage: {
@@ -1041,7 +1073,7 @@ function fixture(): Fixture {
   const blockByKey = new Map(manifest.blocks.map((block) => [block.key, block]));
   for (const target of [...manifest.requirements, ...manifest.decisions, ...manifest.risks].filter((row) => row.origin === "source")) {
     const bindings = [...target.blockKeys].sort().map((key) => {
-      const block = blockByKey.get(key)!;
+      const block = phase2Block(blockByKey.get(key)!);
       return `- ${block.sourcePath} | ${block.heading} | sha256:${block.rawSha256}`;
     }).join("\n");
     target.description = `${target.description}\n\n## Source binding\n\n${bindings}`;
@@ -1082,6 +1114,7 @@ function validate(input: Fixture) {
     expectedLiveCaptureSha256: sha256(captureRaw),
     allocationRaw,
     expectedAllocationSha256: sha256(allocationRaw),
+    repositoryRoot: process.cwd(),
   });
 }
 
@@ -1253,7 +1286,7 @@ test("every block slice must match its heading and raw and normalized hashes", (
   assert.throws(() => validate(wrongNormalizedHash), /block .*normalized digest/i);
 
   const wrongHeading = fixture();
-  wrongHeading.manifest.blocks[0].heading = "# Not the source heading";
+  phase2Block(wrongHeading.manifest.blocks[0]).heading = "# Not the source heading";
   rebind(wrongHeading);
   assert.throws(() => validate(wrongHeading), /heading/i);
 });
@@ -1265,17 +1298,17 @@ test("blocks are unique, classified, and have exactly one target or disposition"
   assert.throws(() => validate(duplicate), /duplicate block/i);
 
   const both = fixture();
-  both.manifest.blocks[1].targetPlanKey = "issue:req-alpha";
+  phase2Block(both.manifest.blocks[1]).targetPlanKey = "issue:req-alpha";
   rebind(both);
   assert.throws(() => validate(both), /exactly one.*target.*disposition/i);
 
   const neither = fixture();
-  neither.manifest.blocks[0].targetPlanKey = null;
+  phase2Block(neither.manifest.blocks[0]).targetPlanKey = null;
   rebind(neither);
   assert.throws(() => validate(neither), /exactly one.*target.*disposition/i);
 
   const mismatch = fixture();
-  mismatch.manifest.blocks[1].classification = "proof_only";
+  phase2Block(mismatch.manifest.blocks[1]).classification = "proof_only";
   rebind(mismatch);
   assert.throws(() => validate(mismatch), /classification.*disposition/i);
 });
@@ -1436,6 +1469,40 @@ test("allocation binding rejects stale manifest, source-set, and capture identit
   const staleCapture = fixture();
   staleCapture.capture.issues.push({ issueUuid: V4_REPLACEMENT, identifier: "PLA-1000", title: "New live row", archivedAt: null, descriptionSha256: sha256("New live body"), teamId: V4_TEAM, stateId: V4_STATE, projectId: V4_PROJECT, estimate: null, priority: 2, dueDate: null, cycleId: null, milestoneId: null, releaseIds: [], parentIssueUuid: null, assigneeId: null, labelIds: [], relationIds: [] });
   assert.throws(() => validate(staleCapture), /manifest.*capture|allocation.*capture|native-identity.*(?:byte length|digest)/i);
+});
+
+test("Phase 3 compiler inputs replace opaque extraction evidence with bound lineage evidence", () => {
+  assert.ok(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES.includes("extraction-seed"));
+  assert.ok(!(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2 as readonly string[]).includes("extraction-seed"));
+  assert.ok(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2.includes("source-lineage"));
+  assert.ok(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2.includes("semantic-plan"));
+  assert.ok(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2.includes("feature-inventory"));
+  assert.ok(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2.includes("disposition-register"));
+  assert.ok(LINEAR_AUTHORITY_COMPILER_INPUT_NAMES_V2.includes("source-checksums"));
+});
+
+test("Phase 3 plan root binds semantic, coverage, and lineage roots", () => {
+  const input = fixture();
+  input.manifest.schemaVersion = 2;
+  input.manifest.preCutoverCommit = "8c4e00e377ddc3cce404589aaf256f0f254ea6c1";
+  input.manifest.semanticRoot = sha256("semantic");
+  input.manifest.sourceCoverageRoot = sha256("coverage");
+  input.manifest.sourceLineageRoot = sha256("lineage");
+  const baseline = computeLinearAuthorityPlanRoot(input.manifest);
+  input.manifest.semanticRoot = sha256("semantic-drift");
+  assert.notEqual(computeLinearAuthorityPlanRoot(input.manifest), baseline);
+  input.manifest.semanticRoot = sha256("semantic");
+  input.manifest.sourceCoverageRoot = sha256("coverage-drift");
+  assert.notEqual(computeLinearAuthorityPlanRoot(input.manifest), baseline);
+  input.manifest.sourceCoverageRoot = sha256("coverage");
+  input.manifest.sourceLineageRoot = sha256("lineage-drift");
+  assert.notEqual(computeLinearAuthorityPlanRoot(input.manifest), baseline);
+});
+
+test("Phase 3 manifest refuses missing authority roots before any lineage claim", () => {
+  const input = fixture();
+  input.manifest.schemaVersion = 2;
+  assert.throws(() => validate(input), /authority manifest.*contract|semanticRoot|sourceCoverageRoot|sourceLineageRoot/i);
 });
 
 test("every compiler input is present once and matches its pinned digest", () => {
@@ -1612,7 +1679,7 @@ test("Requirement is team-scoped while decision reuses the canonical grouped Typ
   const grouped = fixture();
   grouped.capture.labels[0].isGroup = true;
   rebindCapture(grouped);
-  assert.throws(() => validate(grouped), /Requirement.*non-group|grouped/i);
+  assert.throws(() => validate(grouped), /Requirement.*non-group|grouped|assigns label group/i);
 
   const wrongScope = fixture();
   wrongScope.capture.labels[1].teamId = V4_TEAM;
@@ -1621,18 +1688,71 @@ test("Requirement is team-scoped while decision reuses the canonical grouped Typ
   assert.throws(() => validate(wrongScope), /decision.*scope|team|pinned/i);
 
   const substitute = fixture();
-  substitute.capture.labels.push({ id: V4_REPLACEMENT, name: "Decision", color: "#654321", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" });
+  substitute.capture.labels.push({ id: V4_REPLACEMENT, name: "Decision", color: "#654321", description: "Substitute decision.", archivedAt: null, inheritedFromId: null, isGroup: false, parentId: null, parentName: null, teamId: V4_TEAM, teamKey: "PLA" });
   substitute.capture.coverage.totals.labels += 1;
   substitute.capture.coverage.topLevel.labels.rows += 1;
   rebindCapture(substitute);
   assert.throws(() => validate(substitute), /duplicate or substitute semantic decision label/i);
+
+  const colorDrift = fixture();
+  colorDrift.capture.labels[0].color = "#abcdef";
+  rebindCapture(colorDrift);
+  assert.throws(() => validate(colorDrift), /pinned color|label.*differs/i);
+
+  const descriptionDrift = fixture();
+  descriptionDrift.capture.labels[1].description = "Changed decision meaning.";
+  rebindCapture(descriptionDrift);
+  assert.throws(() => validate(descriptionDrift), /pinned color, description|label.*differs/i);
+
+  const unused = fixture();
+  unused.manifest.nativeCatalog.labels.push({
+    planKey: "label:unused",
+    id: V4_REPLACEMENT,
+    semanticRole: "other",
+    name: "unused",
+    color: "#abcdef",
+    description: null,
+    teamPlanKey: null,
+    parentId: null,
+    parentName: null,
+  });
+  rebind(unused);
+  assert.throws(() => validate(unused), /exactly cover every used label selector/i);
+});
+
+test("managed issues may use one adopted relation target as a cycle-safe native parent", () => {
+  const input = fixture();
+  const requirement = input.manifest.requirements[0];
+  requirement.parentPlanKey = "relation-target:execution-alpha";
+  refreshManagedPayload(requirement);
+  const captured = input.capture.issues.find((issue) => issue.issueUuid === V4_REQUIREMENT)!;
+  captured.parentIssueUuid = V4_RELATION_TARGET;
+  requirement.expectedCurrentNativeSha256 = currentIssueNativeSha({
+    teamId: V4_TEAM,
+    stateId: V4_STATE,
+    projectId: V4_PROJECT,
+    priority: 2,
+    parentIssueUuid: V4_RELATION_TARGET,
+    assigneeId: null,
+    labelIds: [V4_REQUIREMENT_LABEL],
+  });
+  rebindCapture(input);
+  assert.equal(validate(input).status, "structural_integrity_validated");
+
+  const cycle = fixture();
+  cycle.manifest.requirements[0].parentPlanKey = "decision:old-context";
+  cycle.manifest.decisions[0].parentPlanKey = "issue:req-alpha";
+  refreshManagedPayload(cycle.manifest.requirements[0]);
+  refreshManagedPayload(cycle.manifest.decisions[0]);
+  rebind(cycle);
+  assert.throws(() => validate(cycle), /parent graph contains a cycle/i);
 });
 
 test("team, workflow state, and project identities match exact active native catalog rows", () => {
   const teamDrift = fixture();
   teamDrift.capture.teams[0].key = "BUY";
   rebindCapture(teamDrift);
-  assert.throws(() => validate(teamDrift), /team.*pinned|team.*key|label.*invalid references/i);
+  assert.throws(() => validate(teamDrift), /team.*pinned|team.*key|label.*invalid references|label.*scope or group identity/i);
 
   const stateDrift = fixture();
   stateDrift.capture.workflowStates[0].name = "Done";
@@ -1775,6 +1895,18 @@ test("the adopted document inventory cannot add an ungoverned live document", ()
   input.manifest.coverage.targetFamilies.documents.sort();
   rebind(input);
   assert.throws(() => validate(input), /30-document|ungoverned document/i);
+});
+
+test("all 30 governed documents stay adopted live; canonical source context cannot become a document", () => {
+  const missing = fixture();
+  missing.manifest.documents.pop();
+  rebind(missing);
+  assert.throws(() => validate(missing), /30-document|canonical project document|coverage/i);
+
+  const sourceOrigin = fixture();
+  sourceOrigin.manifest.documents[0].origin = "source";
+  rebind(sourceOrigin);
+  assert.throws(() => validate(sourceOrigin), /canonical source files.*compiler inputs|cannot be copied into Linear documents/i);
 });
 
 test("desired issue payloads and every target-family coverage list are independently bound", () => {

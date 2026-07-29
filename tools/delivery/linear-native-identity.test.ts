@@ -73,6 +73,7 @@ function nativeIdentity(): LinearNativeIdentityCapture {
         id: "label-1",
         name: "Requirement",
         color: "#123456",
+        description: "Canonical requirement.",
         archivedAt: null,
         inheritedFromId: null,
         isGroup: false,
@@ -398,6 +399,36 @@ test("native identity validation rejects duplicate identities and bad references
   assert.throws(
     () => assertLinearNativeIdentityCapture(orphan),
     /issue PLA-1 has invalid references/,
+  );
+});
+
+test("native identity validation binds label color, description, scope, and group identity", () => {
+  const color = nativeIdentity();
+  color.labels[0].color = "green";
+  assert.throws(
+    () => assertLinearNativeIdentityCapture(color),
+    /native label .* invalid references/,
+  );
+
+  const description = nativeIdentity();
+  (description.labels[0] as unknown as { description: unknown }).description = 42;
+  assert.throws(
+    () => assertLinearNativeIdentityCapture(description),
+    /native label .* invalid references/,
+  );
+
+  const scope = nativeIdentity();
+  scope.labels[0].teamKey = "BUY";
+  assert.throws(
+    () => assertLinearNativeIdentityCapture(scope),
+    /native label .* invalid references/,
+  );
+
+  const groupAssignment = nativeIdentity();
+  groupAssignment.labels[0].isGroup = true;
+  assert.throws(
+    () => assertLinearNativeIdentityCapture(groupAssignment),
+    /assigns a label group/,
   );
 });
 

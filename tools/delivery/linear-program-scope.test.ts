@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   assertLinearPlanningSourceFingerprints,
   assertLinearProgramScope,
+  initializeLinearProgramScopeAuthorityIssueLabelContract,
   linearPlanningSourceFingerprints,
   linearPlanningSectionHeadings,
   type LinearPlanningSourceFingerprints,
@@ -16,6 +17,69 @@ import { assertLinearPlanningContractFingerprints } from "./lib/linear-live.js";
 const MASTER = "a".repeat(64);
 const UX = "b".repeat(64);
 const TEAM = "477029a4-9e0a-44ca-9816-5a169b6baafa";
+
+function authorityLabels() {
+  const groups = ["Type", "Agent", "Domain", "Risk"].map((name, index) => ({
+    id: `80000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+    name,
+    color: "#777777",
+    description: `${name} group.`,
+    archivedAt: null,
+    inheritedFromId: null,
+    isGroup: true,
+    parentId: null,
+    parentName: null,
+    teamId: null,
+    teamKey: null,
+  }));
+  const groupByName = new Map(groups.map((group) => [group.name, group]));
+  const rows = [
+    ["Requirement", null],
+    ["decision", "Type"],
+    ["human-only", "Agent"],
+    ["platform", "Domain"],
+    ["marketplace", "Domain"],
+    ["risk", "Type"],
+    ["delivery-risk", "Risk"],
+    ["financial-risk", "Risk"],
+    ["security-risk", "Risk"],
+    ["compliance-risk", "Risk"],
+  ] as const;
+  return [
+    ...groups,
+    ...rows.map(([name, parentName], index) => ({
+      id: `81000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+      name,
+      color: "#336699",
+      description: `${name} label.`,
+      archivedAt: null,
+      inheritedFromId: null,
+      isGroup: false,
+      parentId: parentName === null ? null : groupByName.get(parentName)!.id,
+      parentName,
+      teamId: name === "Requirement" ? TEAM : null,
+      teamKey: name === "Requirement" ? "REQ" : null,
+    })),
+  ];
+}
+
+test("initializes the exact authority label contract once and preserves stable bytes", () => {
+  const raw = readFileSync("delivery/linear-program-scope.json", "utf8");
+  const first = initializeLinearProgramScopeAuthorityIssueLabelContract(raw, authorityLabels());
+  assert.equal(first.changed, true);
+  assert.equal(first.contract.labels.length, 10);
+  assert.equal(first.contract.groups.length, 4);
+  const stable = initializeLinearProgramScopeAuthorityIssueLabelContract(first.raw, authorityLabels());
+  assert.equal(stable.changed, false);
+  assert.equal(stable.raw, first.raw);
+
+  const drifted = authorityLabels();
+  drifted.find((label) => label.name === "security-risk")!.color = "#000000";
+  assert.throws(
+    () => initializeLinearProgramScopeAuthorityIssueLabelContract(first.raw, drifted),
+    /differs from the fresh native capture/,
+  );
+});
 
 function scope(): LinearProgramScope {
   return {

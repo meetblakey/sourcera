@@ -26,7 +26,11 @@ import {
   fingerprintDiff,
   linearSourceProvenance,
 } from "./lib/linear-live.js";
-import type { LinearCapture, LinearFingerprint } from "./lib/linear-live.js";
+import type {
+  LinearCapture,
+  LinearFingerprint,
+  LinearNativeIdentityCapture,
+} from "./lib/linear-live.js";
 import type { LinearProgramScope } from "./lib/linear-program-scope.js";
 
 const response = (body: unknown, status = 200) =>
@@ -149,6 +153,23 @@ test("bounded consistency capture returns only the matching second read", async 
   );
   assert.equal(calls, 2);
   assert.strictEqual(accepted, second);
+});
+
+test("bounds each Linear request and response body", async () => {
+  let sawAbortSignal = false;
+  const fetcher: typeof fetch = async (_input, init) => {
+    sawAbortSignal ||= init?.signal instanceof AbortSignal;
+    return new Response("{}", {
+      status: 200,
+      headers: { "content-length": String(32 * 1024 * 1024 + 1) },
+    });
+  };
+
+  await assert.rejects(
+    () => fetchLinearFingerprint(fetcher, "secret"),
+    /bounded byte limit/,
+  );
+  assert.equal(sawAbortSignal, true);
 });
 
 test("bounded consistency capture rejects fingerprint drift explicitly", async () => {
@@ -312,6 +333,7 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
     id,
     name,
     color: "#123456",
+    description: `${name} label`,
     archivedAt: null,
     inheritedFrom: null,
     isGroup: false,
@@ -410,6 +432,7 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
         });
       }
       if (body.query.includes("DeliveryIssueLabels")) {
+        assert.match(body.query, /\bdescription\b/);
         labelCursors.push(body.variables.after ?? null);
         return response({
           data: {
@@ -746,6 +769,7 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
         id: "label-1",
         name: "codex-ready",
         color: "#123456",
+        description: "codex-ready label",
         archivedAt: null,
         inheritedFromId: null,
         isGroup: false,
@@ -758,6 +782,7 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
         id: "label-2",
         name: "human-only",
         color: "#123456",
+        description: "human-only label",
         archivedAt: null,
         inheritedFromId: null,
         isGroup: false,
@@ -1164,6 +1189,49 @@ test("enhanced capture paginates native catalogs and preserves UUID assignments"
         withoutWorkspace,
       ),
     /workspace identity/,
+  );
+  const invalidLabelDescription = structuredClone(capture.nativeIdentity!);
+  (invalidLabelDescription.labels[0] as unknown as { description: unknown }).description = 42;
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        invalidLabelDescription,
+      ),
+    /native label .* invalid references/,
+  );
+  const invalidLabelColor = structuredClone(capture.nativeIdentity!);
+  invalidLabelColor.labels[0]!.color = "green";
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        invalidLabelColor,
+      ),
+    /native label .* invalid references/,
+  );
+  const nonGroupParent: LinearNativeIdentityCapture = structuredClone(
+    capture.nativeIdentity!,
+  );
+  nonGroupParent.labels[0]!.parentId = "label-2";
+  nonGroupParent.labels[0]!.parentName = "human-only";
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        nonGroupParent,
+      ),
+    /native label .* invalid references/,
+  );
+  const assignedGroup = structuredClone(capture.nativeIdentity!);
+  assignedGroup.labels[1]!.isGroup = true;
+  assert.throws(
+    () =>
+      assertLinearNativeIdentityMatchesFingerprint(
+        capture.fingerprint,
+        assignedGroup,
+      ),
+    /assigns a label group/,
   );
   assert.deepEqual(capture.documents, {
     schemaVersion: 1,

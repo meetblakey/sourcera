@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import type { Finding } from "./model.js";
 import {
   linearProjectDocumentFingerprintFindings,
@@ -45,6 +47,38 @@ export interface LinearProgramScopeV3 extends LinearProgramScopeBase {
   canonicalProjectDocuments: LinearProjectDocumentScopeRow[];
   supplementaryDocuments: LinearSupplementaryDocumentScopeRow[];
   projectDocumentDecisionContract: LinearProjectDocumentDecisionContract;
+  authorityIssueLabelContract: LinearAuthorityIssueLabelContract;
+}
+
+export interface LinearAuthorityIssueLabelContractEntry {
+  id: string;
+  name: string;
+  parentId: string | null;
+  parentName: string | null;
+  teamId: string | null;
+  teamKey: string | null;
+  color: string;
+  description: string | null;
+}
+
+export type LinearAuthorityIssueLabelContract = {
+  schemaVersion: 1;
+  initialized: false;
+  labels: [];
+  groups: [];
+  root: null;
+} | {
+  schemaVersion: 1;
+  initialized: true;
+  labels: LinearAuthorityIssueLabelContractEntry[];
+  groups: LinearAuthorityIssueLabelContractEntry[];
+  root: string;
+};
+
+export interface LinearAuthorityIssueLabelCapture extends LinearAuthorityIssueLabelContractEntry {
+  archivedAt: string | null;
+  inheritedFromId: string | null;
+  isGroup: boolean;
 }
 
 export type LinearProgramScope = LinearProgramScopeV2 | LinearProgramScopeV3;
@@ -101,6 +135,215 @@ export interface ExpectedLinearPlanningSourceFingerprints {
 const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SHA256 = /^[a-f0-9]{64}$/;
+export const LINEAR_AUTHORITY_ISSUE_LABEL_NAMES = [
+  "Requirement",
+  "decision",
+  "human-only",
+  "platform",
+  "marketplace",
+  "risk",
+  "delivery-risk",
+  "financial-risk",
+  "security-risk",
+  "compliance-risk",
+] as const;
+export const LINEAR_AUTHORITY_ISSUE_LABEL_GROUP_NAMES = [
+  "Type",
+  "Agent",
+  "Domain",
+  "Risk",
+] as const;
+
+const LABEL_PARENT_NAMES = new Map<string, string | null>([
+  ["Requirement", null],
+  ["decision", "Type"],
+  ["human-only", "Agent"],
+  ["platform", "Domain"],
+  ["marketplace", "Domain"],
+  ["risk", "Type"],
+  ["delivery-risk", "Risk"],
+  ["financial-risk", "Risk"],
+  ["security-risk", "Risk"],
+  ["compliance-risk", "Risk"],
+]);
+
+const compareText = (left: string, right: string): number =>
+  left.localeCompare(right, undefined, { numeric: true });
+
+function canonicalJson(value: unknown): string {
+  if (value === null || typeof value !== "object") {
+    const encoded = JSON.stringify(value);
+    if (encoded === undefined) throw new Error("Authority label contract contains undefined");
+    return encoded;
+  }
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  const row = value as Record<string, unknown>;
+  return `{${Object.keys(row).sort(compareText).map((key) =>
+    `${JSON.stringify(key)}:${canonicalJson(row[key])}`
+  ).join(",")}}`;
+}
+
+export function linearAuthorityIssueLabelContractRoot(
+  labels: readonly LinearAuthorityIssueLabelContractEntry[],
+  groups: readonly LinearAuthorityIssueLabelContractEntry[],
+): string {
+  return createHash("sha256").update(canonicalJson({ labels, groups })).digest("hex");
+}
+
+function exactAuthorityLabelKeys(value: unknown): value is LinearAuthorityIssueLabelContractEntry {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const keys = Object.keys(value as Record<string, unknown>).sort(compareText);
+  return JSON.stringify(keys) === JSON.stringify([
+    "color",
+    "description",
+    "id",
+    "name",
+    "parentId",
+    "parentName",
+    "teamId",
+    "teamKey",
+  ].sort(compareText));
+}
+
+function validAuthorityIssueLabelContract(
+  value: unknown,
+): value is LinearAuthorityIssueLabelContract {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const row = value as Record<string, unknown>;
+  if (JSON.stringify(Object.keys(row).sort(compareText)) !==
+    JSON.stringify(["schemaVersion", "initialized", "labels", "groups", "root"].sort(compareText)) ||
+    row.schemaVersion !== 1 || !Array.isArray(row.labels) || !Array.isArray(row.groups)) return false;
+  if (row.initialized === false) return row.labels.length === 0 && row.groups.length === 0 && row.root === null;
+  if (row.initialized !== true || typeof row.root !== "string" || !SHA256.test(row.root) ||
+    row.labels.length !== LINEAR_AUTHORITY_ISSUE_LABEL_NAMES.length ||
+    row.groups.length !== LINEAR_AUTHORITY_ISSUE_LABEL_GROUP_NAMES.length) return false;
+  const labels = row.labels as unknown[];
+  const groups = row.groups as unknown[];
+  if ([...labels, ...groups].some((label) => !exactAuthorityLabelKeys(label))) return false;
+  const typed = labels as LinearAuthorityIssueLabelContractEntry[];
+  const typedGroups = groups as LinearAuthorityIssueLabelContractEntry[];
+  if (JSON.stringify(typed.map((label) => label.name)) !== JSON.stringify(LINEAR_AUTHORITY_ISSUE_LABEL_NAMES) ||
+    JSON.stringify(typedGroups.map((group) => group.name)) !== JSON.stringify(LINEAR_AUTHORITY_ISSUE_LABEL_GROUP_NAMES) ||
+    typed.some((label) => !UUID.test(label.id) || !text(label.name) || !text(label.color) ||
+      (label.description !== null && typeof label.description !== "string") ||
+      (label.parentId !== null && !UUID.test(label.parentId)) ||
+      (label.parentName !== null && !text(label.parentName)) ||
+      (label.teamId !== null && !UUID.test(label.teamId)) ||
+      (label.teamKey !== null && !text(label.teamKey)) ||
+      label.parentName !== LABEL_PARENT_NAMES.get(label.name) ||
+      (label.parentName === null) !== (label.parentId === null) ||
+      (label.name === "Requirement"
+        ? label.teamId === null || label.teamKey !== "REQ"
+        : label.teamId !== null || label.teamKey !== null)) ||
+    typedGroups.some((group) => !UUID.test(group.id) || !text(group.name) || !text(group.color) ||
+      (group.description !== null && typeof group.description !== "string") || group.parentId !== null ||
+      group.parentName !== null || group.teamId !== null || group.teamKey !== null) ||
+    new Set([...typed, ...typedGroups].map((label) => label.id.toLowerCase())).size !==
+      typed.length + typedGroups.length ||
+    row.root !== linearAuthorityIssueLabelContractRoot(typed, typedGroups)) return false;
+  return true;
+}
+
+export function buildLinearAuthorityIssueLabelContract(
+  labels: readonly LinearAuthorityIssueLabelCapture[],
+): LinearAuthorityIssueLabelContract & { initialized: true } {
+  const groups = LINEAR_AUTHORITY_ISSUE_LABEL_GROUP_NAMES.map((name) => {
+    const matches = labels.filter((label) => label.name === name && label.isGroup);
+    if (matches.length !== 1) throw new Error(`Authority label group ${name} must resolve exactly once`);
+    const group = matches[0]!;
+    if (!UUID.test(group.id) || group.archivedAt !== null || group.inheritedFromId !== null ||
+      !group.isGroup || group.parentId !== null || group.parentName !== null ||
+      group.teamId !== null || group.teamKey !== null ||
+      !text(group.color) || (group.description !== null && typeof group.description !== "string")) {
+      throw new Error(`Authority label group ${name} differs from its required native scope`);
+    }
+    return {
+      id: group.id,
+      name: group.name,
+      parentId: group.parentId,
+      parentName: group.parentName,
+      teamId: group.teamId,
+      teamKey: group.teamKey,
+      color: group.color,
+      description: group.description,
+    };
+  });
+  const groupByName = new Map(groups.map((group) => [group.name, group]));
+  const selected = LINEAR_AUTHORITY_ISSUE_LABEL_NAMES.map((name) => {
+    const matches = labels.filter((label) => label.name === name);
+    if (matches.length !== 1) throw new Error(`Authority label ${name} must resolve exactly once`);
+    const label = matches[0]!;
+    const expectedParentName = LABEL_PARENT_NAMES.get(name)!;
+    if (!UUID.test(label.id) || label.archivedAt !== null || label.inheritedFromId !== null ||
+      label.isGroup || label.parentName !== expectedParentName ||
+      (expectedParentName === null) !== (label.parentId === null) ||
+      (name === "Requirement"
+        ? !UUID.test(label.teamId ?? "") || label.teamKey !== "REQ"
+        : label.teamId !== null || label.teamKey !== null) ||
+      !text(label.color) || (label.description !== null && typeof label.description !== "string")) {
+      throw new Error(`Authority label ${name} differs from its required native scope`);
+    }
+    if (expectedParentName !== null) {
+      const parent = groupByName.get(expectedParentName);
+      if (!parent || parent.id !== label.parentId) {
+        throw new Error(`Authority label ${name} parent group differs from its exact native identity`);
+      }
+    }
+    return {
+      id: label.id,
+      name: label.name,
+      parentId: label.parentId,
+      parentName: label.parentName,
+      teamId: label.teamId,
+      teamKey: label.teamKey,
+      color: label.color,
+      description: label.description,
+    };
+  });
+  return {
+    schemaVersion: 1,
+    initialized: true,
+    labels: selected,
+    groups,
+    root: linearAuthorityIssueLabelContractRoot(selected, groups),
+  };
+}
+
+export function initializeLinearProgramScopeAuthorityIssueLabelContract(
+  programScopeRaw: string,
+  labels: readonly LinearAuthorityIssueLabelCapture[],
+): {
+  scope: LinearProgramScopeV3;
+  contract: LinearAuthorityIssueLabelContract & { initialized: true };
+  raw: string;
+  changed: boolean;
+} {
+  let scope: LinearProgramScopeV3;
+  try {
+    scope = JSON.parse(programScopeRaw) as LinearProgramScopeV3;
+  } catch {
+    throw new Error("Linear program scope is not valid JSON");
+  }
+  if (scope.schemaVersion !== 3 || !validAuthorityIssueLabelContract(scope.authorityIssueLabelContract)) {
+    throw new Error("Linear program scope authority label contract is missing or invalid");
+  }
+  const contract = buildLinearAuthorityIssueLabelContract(labels);
+  if (scope.authorityIssueLabelContract.initialized === true) {
+    const committed = scope.authorityIssueLabelContract;
+    if (committed.root !== contract.root || JSON.stringify(committed.labels) !== JSON.stringify(contract.labels) ||
+      JSON.stringify(committed.groups) !== JSON.stringify(contract.groups)) {
+      throw new Error("Initialized authority label contract differs from the fresh native capture");
+    }
+    return { scope, contract, raw: programScopeRaw, changed: false };
+  }
+  const initialized: LinearProgramScopeV3 = { ...scope, authorityIssueLabelContract: contract };
+  return {
+    scope: initialized,
+    contract,
+    raw: `${JSON.stringify(initialized, null, 2)}\n`,
+    changed: true,
+  };
+}
 
 function sourceFingerprint(
   content: string | null | undefined,
@@ -210,7 +453,8 @@ export function linearProgramScopeFindings(
     (scope?.schemaVersion === 3 &&
       (!Array.isArray(scope.canonicalProjectDocuments) ||
         !Array.isArray(scope.supplementaryDocuments) ||
-        !scope.projectDocumentDecisionContract)) ||
+        !scope.projectDocumentDecisionContract ||
+        !validAuthorityIssueLabelContract(scope.authorityIssueLabelContract))) ||
     Object.hasOwn(scope ?? {}, "parentInitiative") ||
     !Array.isArray(scope.outcomeInitiatives) ||
     scope.outcomeInitiatives.length !== 6 ||
