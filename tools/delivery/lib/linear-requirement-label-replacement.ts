@@ -1554,6 +1554,45 @@ export function verifyLinearRequirementLabelReplacementUsage(
   };
 }
 
+export function verifyLinearRequirementLabelRenameRecoveryState(
+  candidateInput: LinearRequirementLabelReplacementCandidate,
+  native: LinearRequirementLabelCapture,
+): { requirementUses: 186; newLabelUses: 0; protectedNativeStateRoot: string } {
+  const candidate = assertLinearRequirementLabelReplacementCandidate(candidateInput);
+  if (native?.schemaVersion !== 1 || native.coverage?.complete !== true || native.workspace?.id !== candidate.workspaceId) {
+    fail("rename recovery capture is incomplete or from another workspace");
+  }
+  assertCaptureLabelRetirementEvidence(native, "rename recovery capture");
+  if (protectedNativeRoot(native, candidate.newLabel.id) !== candidate.protectedNativeStateRoot) {
+    fail("protected issue, body, relation, or native metadata drifted during rename recovery");
+  }
+  const old = native.labels.filter((label) => label.id === candidate.oldLabel.id);
+  const replacement = native.labels.filter((label) => label.id === candidate.newLabel.id);
+  if (old.length !== 1 || replacement.length !== 0) {
+    fail("rename recovery requires exactly the renamed old label and an unallocated replacement UUID");
+  }
+  assertLabel(old[0]!, { ...candidate.oldLabel, name: candidate.retiredName }, false, "renamed old Requirement label recovery");
+  if (native.labels.some((label) =>
+    label.name === REQUIREMENT_LABEL_NAME && label.archivedAt === null && label.retiredAt === null)) {
+    fail("rename recovery found an unexpected active Requirement label name");
+  }
+  const expected = new Set(candidate.issues.map((row) => row.issueId));
+  const oldUses = native.issues.filter((issue) => issue.labelIds.includes(candidate.oldLabel.id));
+  const newUses = native.issues.filter((issue) => issue.labelIds.includes(candidate.newLabel.id));
+  if (oldUses.length !== EXPECTED_REQUIREMENT_ISSUE_COUNT || newUses.length !== 0 ||
+    new Set(oldUses.map((issue) => issue.issueUuid)).size !== EXPECTED_REQUIREMENT_ISSUE_COUNT ||
+    oldUses.some((issue) => !expected.has(issue.issueUuid))) {
+    fail("rename recovery requires exactly 186 pinned old-label uses and zero replacement-label uses");
+  }
+  const byId = new Map(native.issues.map((issue) => [issue.issueUuid, issue]));
+  for (const pin of candidate.issues) exactIssueState(byId.get(pin.issueId) ?? null, pin, "before");
+  return {
+    requirementUses: EXPECTED_REQUIREMENT_ISSUE_COUNT,
+    newLabelUses: 0,
+    protectedNativeStateRoot: candidate.protectedNativeStateRoot,
+  };
+}
+
 export function verifyLinearRequirementLabelReplacementFinal(input: {
   candidate: LinearRequirementLabelReplacementCandidate;
   first: LinearRequirementLabelCapture;

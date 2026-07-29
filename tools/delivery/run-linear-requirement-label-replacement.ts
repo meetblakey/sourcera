@@ -20,6 +20,7 @@ import {
   canonicalLinearRequirementLabelReplacementFinalReceiptJson,
   compensateLinearRequirementLabelReplacementPhase,
   executeLinearRequirementLabelReplacementPhase,
+  verifyLinearRequirementLabelRenameRecoveryState,
   verifyLinearRequirementLabelReplacementFinal,
   verifyLinearRequirementLabelReplacementUsage,
   type LinearRequirementLabelCapture,
@@ -742,7 +743,26 @@ async function main(): Promise<void> {
 
   let verification: JsonRecord | null = null;
   if (args.phase === "rename" && !args.compensate && sha256(canonicalJson(capture.native)) !== candidate.expectedCurrentRoot) {
-    fail("rename capture differs from the candidate expected-current root");
+    if (resumeJournalRaw === undefined) fail("rename capture differs from the candidate expected-current root");
+    verifyLinearRequirementLabelRenameRecoveryState(candidate, capture.native);
+    const replay = await executeLinearRequirementLabelReplacementPhase({
+      candidate,
+      expectedCandidateRoot: candidate.root,
+      phase: "rename",
+      authorization: {
+        candidateRoot: candidate.root,
+        phase: "rename",
+        confirmation: "APPLY_LINEAR_REQUIREMENT_LABEL_REPLACEMENT_PHASE",
+      },
+      runId: args.runId,
+      transport: new CaptureReplayTransport(capture.native),
+      resumeJournalRaw: journalRaw,
+      expectedResumeJournalSha256: sha256(journalRaw),
+      receipts: coreReceipts,
+    });
+    if (replay.applied !== 0 || replay.alreadyApplied !== 1) {
+      fail("rename recovery capture is not the exact journal-proven post-rename state");
+    }
   }
   if (args.phase === "verify") {
     const replay = await executeLinearRequirementLabelReplacementPhase({
