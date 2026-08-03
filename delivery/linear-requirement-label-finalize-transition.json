@@ -1,47 +1,53 @@
 {
-  "schemaVersion": 1,
-  "kind": "linear-requirement-label-finalize-transition",
+  "schemaVersion": 2,
+  "kind": "linear-requirement-label-semantic-baseline-handoff",
   "candidateRoot": "21700e0ae0f8d5d1106310022c7c1a6e78d83dd610f080f43e90d8755ca29453",
   "candidateSourceCommit": "ac9ee6ea965a905b212965b414eb7e5543e8d2a1",
   "diagnosticCommit": "7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f",
+  "transitionCommit": "147c023bd15fd5db9b26a61fc127fb4a771ee304",
   "previousReceiptRoot": "c378c5588f8d1ae616dc73c76fbca0ebb4e4555cc20f9a95b4e04d887ffe27c5",
   "candidateControlTreeRoot": "1f9d311c868a7299608d8ba52921ee697670c44a18e9aae80d074140e84617c6",
   "diagnosticControlTreeRoot": "fe2bd3ead3ee1bdfa1c0bc0ac0d5a3fc6f4f869ce708e948b9592361f7252c76",
-  "normalizedFingerprintSha256": "4e2a156a0bee192b8f3ec2dee29bfa43b6ca9c86f44ef45461b6e0b6156c6f1f",
-  "evidence": {
-    "before": {
-      "artifactId": "8722916951",
-      "artifactName": "linear-drift-fingerprint-ac9ee6ea965a905b212965b414eb7e5543e8d2a1-30448115612-1",
-      "artifactDigest": "sha256:157c5152a891d12274d7c69da560c216cd5b4f79df6ee48d7895371c0d2ed7c0",
-      "runId": "30448115612",
+  "transitionControlTreeRoot": "e61a078f3918b5bbe755000cdc860be8683608d36b4327a98124fe8c8318e059",
+  "historicalEvidence": {
+    "verify": {
+      "artifactId": "8726485898",
+      "artifactName": "linear-requirement-label-replacement-30456655778-1",
+      "artifactDigest": "sha256:b1666dcb2a175ebce2fe3840faa1d83fe1d229632c0a019011ee7e52f4527110",
+      "runId": "30456655778",
       "runAttempt": "1",
       "commit": "ac9ee6ea965a905b212965b414eb7e5543e8d2a1",
-      "capturedAt": "2026-07-29T11:56:36.152Z",
-      "fingerprintSha256": "c0eb76603e768fe5b7fc40d886bf864ea570fca34b15189d9b49b25a1ca7ce3d",
-      "receiptSha256": "cafd5b816ba1c1069a72d23f0313f316d0ce3dbe13b3e984bffcc05dd7f15af6"
+      "candidateSha256": "490eaeac812336577cd5070cfecf1831c6a94e071da2f79a2afde8976c8f08d6",
+      "receiptSha256": "f18f3fb2b86f8c3d40353283c2c3a0297c9d899f95325c8b065ed7bda1b120f4",
+      "journalSha256": "0efe0f9224f86b5346b61fbb170042876e1e90da0811f47829d83c4a73e28dea",
+      "coreReceiptsSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runnerRoot": "3f01e2524795a45be1bc995c6fb5021399dda7ff5334e292678d3afe902d7b6a"
     },
-    "after": {
-      "artifactId": "8731405740",
-      "artifactName": "linear-drift-fingerprint-7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f-30470152687-1",
-      "artifactDigest": "sha256:41739f6799efcd0690fd9d6bbc5a4f34e0b420a2886518d0ab03ba2dfe413726",
-      "runId": "30470152687",
+    "retire": {
+      "artifactId": "8727423703",
+      "artifactName": "linear-requirement-label-replacement-30458550380-1",
+      "artifactDigest": "sha256:891dedc952b485a7b44429e4d0dd7d607bec6a5730ec84f711b52b952973e10c",
+      "runId": "30458550380",
       "runAttempt": "1",
-      "commit": "7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f",
-      "capturedAt": "2026-07-29T16:22:28.303Z",
-      "fingerprintSha256": "f70e5be25c08d9a044600a1871d174c41ef4bae9abf1df36d918b4b1d7fce960",
-      "receiptSha256": "c5f17489969b812a83144bef1fc9a978a59441db0f2ddac009e39fdfe595698c"
+      "commit": "ac9ee6ea965a905b212965b414eb7e5543e8d2a1",
+      "candidateSha256": "490eaeac812336577cd5070cfecf1831c6a94e071da2f79a2afde8976c8f08d6",
+      "receiptSha256": "9523c5ec45776454ae637129f10286779c5a73cff5e5b5e4b25c00c76beae3ad",
+      "journalSha256": "eb14c187cf3c53b8e988e2cc839ad858d7d45dd908d9ee48b536e1d29b67c4b0",
+      "coreReceiptsSha256": "5d38f2c37df4d7f0d50bd8ca7e6fa65ad756a15ddf443cff0fd4b9b3de8e2b0d",
+      "runnerRoot": "c378c5588f8d1ae616dc73c76fbca0ebb4e4555cc20f9a95b4e04d887ffe27c5"
     }
   },
-  "protectedTransition": {
-    "catalog": "cycles",
-    "cycleId": "d745c4db-3f58-4862-b7e3-9ddfa869b403",
-    "cycleNumber": 7,
-    "field": "updatedAt",
-    "beforeValue": "2026-07-28T14:36:15.374Z",
-    "afterValue": "2026-07-29T14:35:38.730Z",
-    "beforeCatalogRoot": "a8ef3499433aa3ff188a46ad0130ae51702a18a9f0d88f5960347420e3fa3049",
-    "afterCatalogRoot": "4225bb4bb2e2d0dadedc7c81db2a5b854ed20afaeda3062c6758ffd38d506d03",
-    "candidateProtectedNativeStateRoot": "221e4efd9f75763b5d60cfff8597fe4130e92b0283d08f5a35b6a24da41001b4"
+  "historicalProof": {
+    "protectedNativeStateRoot": "221e4efd9f75763b5d60cfff8597fe4130e92b0283d08f5a35b6a24da41001b4",
+    "verifyPreviousReceiptRoot": "400a555672bd68f6b50ed6cf14424f3d974ec5cf364d7a70af2c50413a38471f",
+    "verifyJournalRecordCount": 376,
+    "verifyCoreReceiptCount": 10,
+    "verifyTerminalRecordSha256": "5b5ced5d370182655b4ab4a0f2ad545b4fcb720d25805bf31d1371478464002f",
+    "verifyTerminalCoreReceiptRoot": "24506b643bda338b90370d61accc839dc5fae79a197038c87d0aae98bc837b20",
+    "retireJournalRecordCount": 378,
+    "retireCoreReceiptCount": 11,
+    "retireTerminalRecordSha256": "5acfcd536fc480fe877fd4fe1279c6edba0ffd38412d9d2aa1e762f605c9f780",
+    "retireTerminalCoreReceiptRoot": "8dbc932d0be0de5230a8dc27a4871f308bddf72f5119a506c6bd810d21233723"
   },
-  "root": "34343c1f1a09906b663054b2ff2399e25c6023bbb266848bd602d177d11a1095"
+  "root": "0f2c6f52d896b7b8a3b03448c4302255bc6ce1a191224752a8e5612626e92fd1"
 }
