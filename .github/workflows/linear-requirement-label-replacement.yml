@@ -76,12 +76,16 @@ on:
         description: Exact sha256 of the durable resume receipt stream
         required: false
         type: string
+      expected_finalize_transition_root:
+        description: Exact sealed one-time finalize transition root
+        required: false
+        type: string
       control_transition_source:
-        description: Exact pre-diagnostics candidate source commit
+        description: Exact reviewed parent commit for the current control transition
         required: false
         type: string
       control_transition_head:
-        description: Exact reviewed diagnostics main commit
+        description: Exact reviewed current main commit
         required: false
         type: string
       control_transition_before_root:
@@ -182,6 +186,7 @@ jobs:
           EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST: ${{ inputs.expected_resume_journal_artifact_digest }}
           EXPECTED_RESUME_JOURNAL_SHA256: ${{ inputs.expected_resume_journal_sha256 }}
           EXPECTED_RESUME_RECEIPTS_SHA256: ${{ inputs.expected_resume_receipts_sha256 }}
+          EXPECTED_FINALIZE_TRANSITION_ROOT: ${{ inputs.expected_finalize_transition_root }}
           CONTROL_TRANSITION_SOURCE: ${{ inputs.control_transition_source }}
           CONTROL_TRANSITION_HEAD: ${{ inputs.control_transition_head }}
           CONTROL_TRANSITION_BEFORE_ROOT: ${{ inputs.control_transition_before_root }}
@@ -218,7 +223,8 @@ jobs:
               "$EXPECTED_PRIOR_RECEIPT_ARTIFACT_DIGEST" "$EXPECTED_PREVIOUS_RECEIPT_ROOT" \
               "$RESUME_JOURNAL_RUN_ID" "$RESUME_JOURNAL_RUN_ATTEMPT" \
               "$EXPECTED_RESUME_JOURNAL_ARTIFACT_DIGEST" "$EXPECTED_RESUME_JOURNAL_SHA256" \
-              "$EXPECTED_RESUME_RECEIPTS_SHA256" "$CONTROL_TRANSITION_SOURCE" "$CONTROL_TRANSITION_HEAD" \
+              "$EXPECTED_RESUME_RECEIPTS_SHA256" "$EXPECTED_FINALIZE_TRANSITION_ROOT" \
+              "$CONTROL_TRANSITION_SOURCE" "$CONTROL_TRANSITION_HEAD" \
               "$CONTROL_TRANSITION_BEFORE_ROOT" "$CONTROL_TRANSITION_AFTER_ROOT"; do
               require_empty "handoff input" "$value"
             done
@@ -229,6 +235,11 @@ jobs:
           require_number candidate_run_attempt "$CANDIDATE_RUN_ATTEMPT"
           require_artifact_digest expected_candidate_artifact_digest "$EXPECTED_CANDIDATE_ARTIFACT_DIGEST"
           require_root expected_candidate_root "$EXPECTED_CANDIDATE_ROOT"
+          if [[ "$MODE" == "finalize" ]]; then
+            require_root expected_finalize_transition_root "$EXPECTED_FINALIZE_TRANSITION_ROOT"
+          else
+            require_empty "expected_finalize_transition_root is valid only for finalize" "$EXPECTED_FINALIZE_TRANSITION_ROOT"
+          fi
           transition_values=(
             "$CONTROL_TRANSITION_SOURCE" "$CONTROL_TRANSITION_HEAD"
             "$CONTROL_TRANSITION_BEFORE_ROOT" "$CONTROL_TRANSITION_AFTER_ROOT"
@@ -408,6 +419,56 @@ jobs:
           jq -e '.mutationAuthorized == false' "$candidate" >/dev/null
           cp "$candidate" /tmp/linear-requirement-label-replacement/safe/linear-requirement-label-replacement-candidate.json
           printf '%s\n' "$candidate_root" > /tmp/linear-requirement-label-replacement/safe/candidate-root.txt
+      - name: Verify pinned finalize transition evidence
+        id: finalize_transition_evidence
+        if: inputs.mode == 'finalize'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_FINALIZE_TRANSITION_ROOT: ${{ inputs.expected_finalize_transition_root }}
+        run: |
+          set -euo pipefail
+          contract=delivery/linear-requirement-label-finalize-transition.json
+          test -s "$contract"
+          test "$(jq -er '.root | select(test("^[a-f0-9]{64}$"))' "$contract")" = "$EXPECTED_FINALIZE_TRANSITION_ROOT"
+          for side in before after; do
+            artifact_id="$(jq -er --arg side "$side" '.evidence[$side].artifactId | select(test("^[1-9][0-9]*$"))' "$contract")"
+            artifact_name="$(jq -er --arg side "$side" '.evidence[$side].artifactName' "$contract")"
+            artifact_digest="$(jq -er --arg side "$side" '.evidence[$side].artifactDigest | select(test("^sha256:[a-f0-9]{64}$"))' "$contract")"
+            run_id="$(jq -er --arg side "$side" '.evidence[$side].runId | select(test("^[1-9][0-9]*$"))' "$contract")"
+            run_attempt="$(jq -er --arg side "$side" '.evidence[$side].runAttempt | select(test("^[1-9][0-9]*$"))' "$contract")"
+            commit="$(jq -er --arg side "$side" '.evidence[$side].commit | select(test("^[a-f0-9]{40}$"))' "$contract")"
+            artifact="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${artifact_id}")"
+            jq -e \
+              --arg id "$artifact_id" --arg name "$artifact_name" --arg run "$run_id" \
+              --arg commit "$commit" \
+              '(.id | tostring) == $id and .name == $name and .expired == false and
+               (.workflow_run.id | tostring) == $run and .workflow_run.head_sha == $commit' \
+              <<<"$artifact" >/dev/null || { echo "finalize transition artifact identity differs" >&2; exit 1; }
+            test "$(jq -r '.digest' <<<"$artifact")" = "$artifact_digest" || {
+              echo "finalize transition artifact digest differs" >&2
+              exit 1
+            }
+            workflow_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}")"
+            jq -e \
+              --arg id "$run_id" --arg attempt "$run_attempt" --arg commit "$commit" \
+              '(.id | tostring) == $id and (.run_attempt | tostring) == $attempt and
+               .head_sha == $commit and .head_branch == "main"' \
+              <<<"$workflow_run" >/dev/null || {
+                echo "finalize transition workflow-run identity differs" >&2
+                exit 1
+              }
+            mapfile -t matches < <(
+              gh api --paginate --slurp \
+                "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/artifacts?per_page=100" |
+                jq -r --arg id "$artifact_id" --arg name "$artifact_name" --arg digest "$artifact_digest" \
+                  '.[] | .artifacts[] | select((.id | tostring) == $id and .name == $name and .digest == $digest and .expired == false) | .id'
+            )
+            [[ "${#matches[@]}" -eq 1 && "${matches[0]}" == "$artifact_id" ]] || {
+              echo "finalize transition artifact identity is not unique" >&2
+              exit 1
+            }
+          done
       - name: Verify pinned predecessor artifact metadata
         if: inputs.prior_receipt_run_id != ''
         shell: bash
@@ -550,6 +611,7 @@ jobs:
           MODE: ${{ inputs.mode }}
           EXPECTED_CANDIDATE_ROOT: ${{ inputs.expected_candidate_root }}
           EXPECTED_PREVIOUS_RECEIPT_ROOT: ${{ inputs.expected_previous_receipt_root }}
+          EXPECTED_FINALIZE_TRANSITION_ROOT: ${{ inputs.expected_finalize_transition_root }}
           CONTROL_TRANSITION_SOURCE: ${{ inputs.control_transition_source }}
           CONTROL_TRANSITION_HEAD: ${{ inputs.control_transition_head }}
           CONTROL_TRANSITION_BEFORE_ROOT: ${{ inputs.control_transition_before_root }}
@@ -585,6 +647,8 @@ jobs:
             args+=(
               --second-native-identity /tmp/linear-requirement-label-replacement/raw/second-native-identity.json
               --second-capture-receipt /tmp/linear-requirement-label-replacement/raw/second-capture-receipt.json
+              --finalize-transition delivery/linear-requirement-label-finalize-transition.json
+              --expected-finalize-transition-root "$EXPECTED_FINALIZE_TRANSITION_ROOT"
             )
           fi
           env -u LINEAR_API_KEY tools/spec-lint/node_modules/.bin/tsx \
@@ -599,6 +663,7 @@ jobs:
           CAPTURE_SECOND_OUTCOME: ${{ steps.capture_second.outcome }}
           BUILD_CANDIDATE_OUTCOME: ${{ steps.build_candidate.outcome }}
           VALIDATE_CANDIDATE_OUTCOME: ${{ steps.validate_candidate.outcome }}
+          FINALIZE_TRANSITION_EVIDENCE_OUTCOME: ${{ steps.finalize_transition_evidence.outcome }}
           APPLY_PHASE_OUTCOME: ${{ steps.apply_phase.outcome }}
           VERIFY_PHASE_OUTCOME: ${{ steps.verify_phase.outcome }}
         run: |
@@ -615,6 +680,7 @@ jobs:
             --arg captureSecond "$CAPTURE_SECOND_OUTCOME" \
             --arg buildCandidate "$BUILD_CANDIDATE_OUTCOME" \
             --arg validateCandidate "$VALIDATE_CANDIDATE_OUTCOME" \
+            --arg finalizeTransitionEvidence "$FINALIZE_TRANSITION_EVIDENCE_OUTCOME" \
             --arg applyPhase "$APPLY_PHASE_OUTCOME" \
             --arg verifyPhase "$VERIFY_PHASE_OUTCOME" \
             '{
@@ -628,6 +694,7 @@ jobs:
                 captureSecond: $captureSecond,
                 buildCandidate: $buildCandidate,
                 validateCandidate: $validateCandidate,
+                finalizeTransitionEvidence: $finalizeTransitionEvidence,
                 applyPhase: $applyPhase,
                 verifyPhase: $verifyPhase
               }

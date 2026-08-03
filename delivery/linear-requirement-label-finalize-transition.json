@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "kind": "linear-requirement-label-finalize-transition",
+  "candidateRoot": "21700e0ae0f8d5d1106310022c7c1a6e78d83dd610f080f43e90d8755ca29453",
+  "candidateSourceCommit": "ac9ee6ea965a905b212965b414eb7e5543e8d2a1",
+  "diagnosticCommit": "7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f",
+  "previousReceiptRoot": "c378c5588f8d1ae616dc73c76fbca0ebb4e4555cc20f9a95b4e04d887ffe27c5",
+  "candidateControlTreeRoot": "1f9d311c868a7299608d8ba52921ee697670c44a18e9aae80d074140e84617c6",
+  "diagnosticControlTreeRoot": "fe2bd3ead3ee1bdfa1c0bc0ac0d5a3fc6f4f869ce708e948b9592361f7252c76",
+  "normalizedFingerprintSha256": "4e2a156a0bee192b8f3ec2dee29bfa43b6ca9c86f44ef45461b6e0b6156c6f1f",
+  "evidence": {
+    "before": {
+      "artifactId": "8722916951",
+      "artifactName": "linear-drift-fingerprint-ac9ee6ea965a905b212965b414eb7e5543e8d2a1-30448115612-1",
+      "artifactDigest": "sha256:157c5152a891d12274d7c69da560c216cd5b4f79df6ee48d7895371c0d2ed7c0",
+      "runId": "30448115612",
+      "runAttempt": "1",
+      "commit": "ac9ee6ea965a905b212965b414eb7e5543e8d2a1",
+      "capturedAt": "2026-07-29T11:56:36.152Z",
+      "fingerprintSha256": "c0eb76603e768fe5b7fc40d886bf864ea570fca34b15189d9b49b25a1ca7ce3d",
+      "receiptSha256": "cafd5b816ba1c1069a72d23f0313f316d0ce3dbe13b3e984bffcc05dd7f15af6"
+    },
+    "after": {
+      "artifactId": "8731405740",
+      "artifactName": "linear-drift-fingerprint-7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f-30470152687-1",
+      "artifactDigest": "sha256:41739f6799efcd0690fd9d6bbc5a4f34e0b420a2886518d0ab03ba2dfe413726",
+      "runId": "30470152687",
+      "runAttempt": "1",
+      "commit": "7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f",
+      "capturedAt": "2026-07-29T16:22:28.303Z",
+      "fingerprintSha256": "f70e5be25c08d9a044600a1871d174c41ef4bae9abf1df36d918b4b1d7fce960",
+      "receiptSha256": "c5f17489969b812a83144bef1fc9a978a59441db0f2ddac009e39fdfe595698c"
+    }
+  },
+  "protectedTransition": {
+    "catalog": "cycles",
+    "cycleId": "d745c4db-3f58-4862-b7e3-9ddfa869b403",
+    "cycleNumber": 7,
+    "field": "updatedAt",
+    "beforeValue": "2026-07-28T14:36:15.374Z",
+    "afterValue": "2026-07-29T14:35:38.730Z",
+    "beforeCatalogRoot": "a8ef3499433aa3ff188a46ad0130ae51702a18a9f0d88f5960347420e3fa3049",
+    "afterCatalogRoot": "4225bb4bb2e2d0dadedc7c81db2a5b854ed20afaeda3062c6758ffd38d506d03",
+    "candidateProtectedNativeStateRoot": "221e4efd9f75763b5d60cfff8597fe4130e92b0283d08f5a35b6a24da41001b4"
+  },
+  "root": "34343c1f1a09906b663054b2ff2399e25c6023bbb266848bd602d177d11a1095"
+}
