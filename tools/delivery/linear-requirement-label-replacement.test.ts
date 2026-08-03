@@ -7,6 +7,7 @@ import {
   OLD_REQUIREMENT_LABEL_ID,
   REQUIREMENTS_TEAM_ID,
   RETIRED_REQUIREMENT_LABEL_NAME,
+  assertLinearRequirementLabelSemanticBaselineContract,
   assertLinearRequirementLabelReplacementCandidate,
   assertLinearRequirementLabelReplacementFinalReceiptV3,
   buildLinearRequirementLabelReplacementCandidate,
@@ -776,16 +777,18 @@ test("semantic baseline seals current REQ states without requiring stale candida
     runnerRoot: phase === "verify" ? historicalProof.verifyRunnerRoot : historicalProof.retireRunnerRoot,
   });
   const contractBody = {
-    schemaVersion: 2 as const,
+    schemaVersion: 3 as const,
     kind: "linear-requirement-label-semantic-baseline-handoff" as const,
     candidateRoot: plan.root,
     candidateSourceCommit: plan.sourceCommit,
     diagnosticCommit: "d".repeat(40),
     transitionCommit: "e".repeat(40),
+    baselineCommit: "1".repeat(40),
     previousReceiptRoot: historicalProof.retireRunnerRoot,
     candidateControlTreeRoot: "a".repeat(64),
     diagnosticControlTreeRoot: "b".repeat(64),
     transitionControlTreeRoot: "c".repeat(64),
+    baselineControlTreeRoot: "4".repeat(64),
     historicalEvidence: { verify: artifact("verify"), retire: artifact("retire") },
     historicalProof: {
       protectedNativeStateRoot: plan.protectedNativeStateRoot,
@@ -802,10 +805,10 @@ test("semantic baseline seals current REQ states without requiring stale candida
   };
   const semanticBaselineContract = { ...contractBody, root: SHA(CANONICAL(contractBody)) };
   const finalizeControlTransition = {
-    source: semanticBaselineContract.transitionCommit,
-    head: "1".repeat(40),
-    beforeRoot: semanticBaselineContract.transitionControlTreeRoot,
-    afterRoot: "4".repeat(64),
+    source: semanticBaselineContract.baselineCommit,
+    head: "2".repeat(40),
+    beforeRoot: semanticBaselineContract.baselineControlTreeRoot,
+    afterRoot: "5".repeat(64),
   };
   const receipt = verifyLinearRequirementLabelReplacementSemanticBaseline({
     candidate: plan,
@@ -870,6 +873,8 @@ test("semantic baseline seals current REQ states without requiring stale candida
     (contract: typeof semanticBaselineContract) => { contract.historicalEvidence.verify.artifactDigest = `sha256:${"9".repeat(64)}`; },
     (contract: typeof semanticBaselineContract) => { contract.historicalEvidence.retire.journalSha256 = "8".repeat(64); },
     (contract: typeof semanticBaselineContract) => { contract.diagnosticCommit = "f".repeat(40); },
+    (contract: typeof semanticBaselineContract) => { contract.baselineCommit = "3".repeat(40); },
+    (contract: typeof semanticBaselineContract) => { contract.baselineControlTreeRoot = "6".repeat(64); },
   ];
   for (const tamper of tamperers) {
     const changed = structuredClone(receipt);
@@ -887,6 +892,33 @@ test("semantic baseline seals current REQ states without requiring stale candida
       finalizeControlTransition,
     ), /contract|transition|artifact|digest|lineage|root/i);
   }
+
+  const missingBaseline = structuredClone(semanticBaselineContract) as unknown as Record<string, unknown>;
+  delete missingBaseline.baselineCommit;
+  const { root: _missingRoot, ...missingBody } = missingBaseline;
+  missingBaseline.root = SHA(CANONICAL(missingBody));
+  assert.throws(
+    () => assertLinearRequirementLabelSemanticBaselineContract(
+      missingBaseline as unknown as typeof semanticBaselineContract,
+      plan,
+      String(missingBaseline.root),
+      semanticBaselineContract.previousReceiptRoot,
+    ),
+    /keys differ/,
+  );
+  const legacyContract = structuredClone(semanticBaselineContract) as unknown as Record<string, unknown>;
+  legacyContract.schemaVersion = 2;
+  const { root: _legacyRoot, ...legacyBody } = legacyContract;
+  legacyContract.root = SHA(CANONICAL(legacyBody));
+  assert.throws(
+    () => assertLinearRequirementLabelSemanticBaselineContract(
+      legacyContract as unknown as typeof semanticBaselineContract,
+      plan,
+      String(legacyContract.root),
+      semanticBaselineContract.previousReceiptRoot,
+    ),
+    /identity differs/,
+  );
 
   const substitutedIssue = structuredClone(receipt);
   substitutedIssue.currentRequirementIssueStates[0]!.issueId = "ffffffff-ffff-4fff-8fff-ffffffffffff";
@@ -1075,16 +1107,18 @@ test("historical handoff recomputes verify and retire journals, receipts, and pr
     runnerRoot: phase === "verify" ? verifyReceipt.root : retireReceipt.root,
   });
   const contractBody = {
-    schemaVersion: 2 as const,
+    schemaVersion: 3 as const,
     kind: "linear-requirement-label-semantic-baseline-handoff" as const,
     candidateRoot: plan.root,
     candidateSourceCommit: plan.sourceCommit,
     diagnosticCommit: "d".repeat(40),
     transitionCommit: "e".repeat(40),
+    baselineCommit: "1".repeat(40),
     previousReceiptRoot: retireReceipt.root,
     candidateControlTreeRoot: "1".repeat(64),
     diagnosticControlTreeRoot: "2".repeat(64),
     transitionControlTreeRoot: "3".repeat(64),
+    baselineControlTreeRoot: "4".repeat(64),
     historicalEvidence: {
       verify: artifact("verify", verifyFiles),
       retire: artifact("retire", retireFiles),

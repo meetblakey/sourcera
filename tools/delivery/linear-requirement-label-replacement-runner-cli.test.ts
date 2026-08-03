@@ -183,10 +183,12 @@ function sealedTransition(input: {
   candidate: LinearRequirementLabelReplacementCandidate;
   diagnosticCommit: string;
   transitionCommit: string;
+  baselineCommit: string;
   previousReceiptRoot: string;
   candidateControlTreeRoot?: string;
   diagnosticControlTreeRoot?: string;
   transitionControlTreeRoot?: string;
+  baselineControlTreeRoot?: string;
   verifyFiles: { candidateRaw: string; receiptRaw: string; journalRaw: string; coreReceiptsRaw: string };
   retireFiles: { candidateRaw: string; receiptRaw: string; journalRaw: string; coreReceiptsRaw: string };
   verifyRunnerRoot: string;
@@ -213,16 +215,18 @@ function sealedTransition(input: {
     runnerRoot: root,
   });
   const body = {
-    schemaVersion: 2 as const,
+    schemaVersion: 3 as const,
     kind: "linear-requirement-label-semantic-baseline-handoff" as const,
     candidateRoot: input.candidate.root,
     candidateSourceCommit: input.candidate.sourceCommit,
     diagnosticCommit: input.diagnosticCommit,
     transitionCommit: input.transitionCommit,
+    baselineCommit: input.baselineCommit,
     previousReceiptRoot: input.previousReceiptRoot,
     candidateControlTreeRoot: input.candidateControlTreeRoot ?? "1".repeat(64),
     diagnosticControlTreeRoot: input.diagnosticControlTreeRoot ?? "2".repeat(64),
     transitionControlTreeRoot: input.transitionControlTreeRoot ?? "3".repeat(64),
+    baselineControlTreeRoot: input.baselineControlTreeRoot ?? "4".repeat(64),
     historicalEvidence: {
       verify: artifact("verify", input.verifyFiles, input.verifyRunnerRoot),
       retire: artifact("retire", input.retireFiles, input.retireRunnerRoot),
@@ -240,7 +244,7 @@ function sealedTransition(input: {
       retireTerminalCoreReceiptRoot: input.retireReceipts.at(-1)!.root,
     },
   };
-  return { ...body, root: SHA(canonicalJson(body)) };
+  return { ...body, root: SHA(canonicalJson(body)) } as unknown as LinearRequirementLabelSemanticBaselineContract;
 }
 
 function requiredArgs(root: string): string[] {
@@ -264,9 +268,11 @@ async function finalizedRunnerFixture(root: string, options: {
   captureCommit?: string;
   diagnosticCommit?: string;
   transitionCommit?: string;
+  baselineCommit?: string;
   candidateControlTreeRoot?: string;
   diagnosticControlTreeRoot?: string;
   transitionControlTreeRoot?: string;
+  baselineControlTreeRoot?: string;
 } = {}): Promise<{
   candidate: LinearRequirementLabelReplacementCandidate;
   first: LinearRequirementLabelCapture;
@@ -280,6 +286,7 @@ async function finalizedRunnerFixture(root: string, options: {
   const captureCommit = options.captureCommit ?? sourceCommit;
   const diagnosticCommit = options.diagnosticCommit ?? sourceCommit;
   const transitionCommit = options.transitionCommit ?? diagnosticCommit;
+  const baselineCommit = options.baselineCommit ?? transitionCommit;
   const withTransition = options.withTransition === true;
   const before = withTransition ? withCycle(nativeFixture(), CYCLE_BEFORE) : nativeFixture();
   const beforeRaw = Buffer.from(`${JSON.stringify(before)}\n`);
@@ -470,10 +477,12 @@ async function finalizedRunnerFixture(root: string, options: {
     candidate,
     diagnosticCommit,
     transitionCommit,
+    baselineCommit,
     previousReceiptRoot: previous.root,
     candidateControlTreeRoot: options.candidateControlTreeRoot,
     diagnosticControlTreeRoot: options.diagnosticControlTreeRoot,
     transitionControlTreeRoot: options.transitionControlTreeRoot,
+    baselineControlTreeRoot: options.baselineControlTreeRoot,
     verifyFiles,
     retireFiles,
     verifyRunnerRoot: verifyReceipt.root,
@@ -758,7 +767,7 @@ test("runner admits one digest-pinned six-file diagnostic control transition onl
   }
 });
 
-test("runner admits exactly the three-link semantic-baseline chain and rejects unrelated or later commits", async () => {
+test("runner admits exactly the four-link capture-consistency chain and rejects unrelated or later commits", async () => {
   const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-semantic-transition-"));
   try {
     git(root, ["init", "--quiet"]);
@@ -773,12 +782,24 @@ test("runner admits exactly the three-link semantic-baseline chain and rejects u
       "tools/delivery/run-linear-requirement-label-replacement.ts",
     ];
     const contractPath = "delivery/linear-requirement-label-finalize-transition.json";
-    for (const path of diagnosticPaths) {
+    const captureConsistencyPaths = [
+      contractPath,
+      "tools/delivery/lib/linear-live.ts",
+      "tools/delivery/linear-live.test.ts",
+      "tools/delivery/lib/linear-requirement-label-replacement.ts",
+      "tools/delivery/run-linear-requirement-label-replacement.ts",
+      "tools/delivery/linear-requirement-label-replacement-runner-cli.test.ts",
+      "tools/delivery/linear-requirement-label-replacement.test.ts",
+    ];
+    const captureSupportPaths = captureConsistencyPaths.filter((path) =>
+      path !== contractPath && !diagnosticPaths.includes(path)
+    );
+    for (const path of [...diagnosticPaths, ...captureSupportPaths]) {
       const full = join(root, path);
       mkdirSync(dirname(full), { recursive: true });
       writeFileSync(full, "candidate\n", { mode: 0o600 });
     }
-    git(root, ["add", ...diagnosticPaths]);
+    git(root, ["add", ...diagnosticPaths, ...captureSupportPaths]);
     git(root, ["commit", "--quiet", "-m", "candidate controls"]);
     const sourceCommit = git(root, ["rev-parse", "HEAD"]);
     const candidateControlTreeRoot = controlTreeRoot(root, sourceCommit);
@@ -797,20 +818,31 @@ test("runner admits exactly the three-link semantic-baseline chain and rejects u
     const transitionCommit = git(root, ["rev-parse", "HEAD"]);
     const transitionControlTreeRoot = controlTreeRoot(root, transitionCommit);
 
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "semantic baseline\n", { mode: 0o600 });
+    writeFileSync(join(root, contractPath), "semantic baseline contract\n", { mode: 0o600 });
+    git(root, ["add", ...diagnosticPaths, contractPath]);
+    git(root, ["commit", "--quiet", "-m", "semantic baseline controls"]);
+    const baselineCommit = git(root, ["rev-parse", "HEAD"]);
+    const baselineControlTreeRoot = controlTreeRoot(root, baselineCommit);
+
     const fixture = await finalizedRunnerFixture(root, {
       withTransition: true,
       sourceCommit,
-      captureCommit: transitionCommit,
+      captureCommit: baselineCommit,
       diagnosticCommit,
       transitionCommit,
+      baselineCommit,
       candidateControlTreeRoot,
       diagnosticControlTreeRoot,
       transitionControlTreeRoot,
+      baselineControlTreeRoot,
     });
+    for (const path of captureConsistencyPaths.filter((path) => path !== contractPath)) {
+      writeFileSync(join(root, path), "capture consistency\n", { mode: 0o600 });
+    }
     writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
-    for (const path of diagnosticPaths) writeFileSync(join(root, path), "semantic baseline\n", { mode: 0o600 });
-    git(root, ["add", ...diagnosticPaths, contractPath]);
-    git(root, ["commit", "--quiet", "-m", "semantic baseline controls"]);
+    git(root, ["add", ...captureConsistencyPaths]);
+    git(root, ["commit", "--quiet", "-m", "capture consistency controls"]);
     const fixHead = git(root, ["rev-parse", "HEAD"]);
     const fixControlTreeRoot = controlTreeRoot(root, fixHead);
     rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
@@ -818,10 +850,10 @@ test("runner admits exactly the three-link semantic-baseline chain and rejects u
     const transitionFlag = fixture.args.indexOf("--finalize-transition");
     fixture.args[transitionFlag + 1] = join(root, contractPath);
     fixture.args.push(
-      "--control-transition-source", transitionCommit,
+      "--control-transition-source", baselineCommit,
       "--control-transition-candidate-root", fixture.candidate.root,
       "--control-transition-head", fixHead,
-      "--control-transition-before-root", transitionControlTreeRoot,
+      "--control-transition-before-root", baselineControlTreeRoot,
       "--control-transition-after-root", fixControlTreeRoot,
     );
     const environment = { ...fixture.environment, GITHUB_SHA: fixHead };
@@ -874,9 +906,9 @@ test("runner admits exactly the three-link semantic-baseline chain and rejects u
     assert.equal(exactReceipt.verification.schemaVersion, 3);
     assert.equal(exactReceipt.verification.transitionRoot, fixture.transition!.root);
     assert.deepEqual(exactReceipt.verification.finalizeControlTransition, {
-      source: transitionCommit,
+      source: baselineCommit,
       head: fixHead,
-      beforeRoot: transitionControlTreeRoot,
+      beforeRoot: baselineControlTreeRoot,
       afterRoot: fixControlTreeRoot,
     });
     assert.equal(exactReceipt.verification.historicalProof.verifyRunnerRoot, fixture.transition!.historicalEvidence.verify.runnerRoot);
@@ -891,12 +923,55 @@ test("runner admits exactly the three-link semantic-baseline chain and rejects u
     assert.equal(exactReceipt.verification.stable, true);
     assert.equal(readFileSync(join(root, "journal.jsonl"), "utf8"), readFileSync(join(root, "previous-journal.jsonl"), "utf8"));
 
-    git(root, ["switch", "--quiet", "-c", "unrelated-finalize", transitionCommit]);
-    for (const path of diagnosticPaths) writeFileSync(join(root, path), "semantic baseline\n", { mode: 0o600 });
-    mkdirSync(dirname(join(root, contractPath)), { recursive: true });
+    const staleRootArgs = [...fixture.args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "stale-root-journal.jsonl")],
+      ["--receipt-out", join(root, "stale-root-receipt.json")],
+      ["--chunk-receipts-out", join(root, "stale-root-core-receipts.jsonl")],
+      ["--failure-summary-out", join(root, "stale-root-failure.json")],
+      ["--control-transition-before-root", "f".repeat(64)],
+    ] as const) staleRootArgs[staleRootArgs.indexOf(flag) + 1] = value;
+    const staleRoot = invoke(staleRootArgs, environment, root);
+    assert.equal(staleRoot.status, 1);
+    assert.equal(existsSync(join(root, "stale-root-journal.jsonl")), false,
+      "a stale parent control root must fail before evidence outputs");
+
+    git(root, ["switch", "--quiet", "-c", "wrong-parent-finalize", transitionCommit]);
+    for (const path of captureConsistencyPaths.filter((path) => path !== contractPath)) {
+      writeFileSync(join(root, path), "capture consistency\n", { mode: 0o600 });
+    }
+    writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
+    git(root, ["add", ...captureConsistencyPaths]);
+    git(root, ["commit", "--quiet", "-m", "capture consistency with wrong parent"]);
+    const wrongParentHead = git(root, ["rev-parse", "HEAD"]);
+    const wrongParentRoot = controlTreeRoot(root, wrongParentHead);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), wrongParentHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), wrongParentHead);
+    const wrongParentArgs = [...fixture.args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "wrong-parent-journal.jsonl")],
+      ["--receipt-out", join(root, "wrong-parent-receipt.json")],
+      ["--chunk-receipts-out", join(root, "wrong-parent-core-receipts.jsonl")],
+      ["--failure-summary-out", join(root, "wrong-parent-failure.json")],
+      ["--control-transition-head", wrongParentHead],
+      ["--control-transition-after-root", wrongParentRoot],
+    ] as const) wrongParentArgs[wrongParentArgs.indexOf(flag) + 1] = value;
+    const wrongParent = invoke(
+      wrongParentArgs,
+      { ...environment, GITHUB_SHA: wrongParentHead },
+      root,
+    );
+    assert.equal(wrongParent.status, 1);
+    assert.equal(existsSync(join(root, "wrong-parent-journal.jsonl")), false,
+      "an exact-path sibling must fail before evidence outputs");
+
+    git(root, ["switch", "--quiet", "-c", "unrelated-finalize", baselineCommit]);
+    for (const path of captureConsistencyPaths.filter((path) => path !== contractPath)) {
+      writeFileSync(join(root, path), "capture consistency\n", { mode: 0o600 });
+    }
     writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
     writeFileSync(join(root, "README.md"), "unrelated\n", { mode: 0o600 });
-    git(root, ["add", ...diagnosticPaths, contractPath, "README.md"]);
+    git(root, ["add", ...captureConsistencyPaths, "README.md"]);
     git(root, ["commit", "--quiet", "-m", "finalize transition plus unrelated path"]);
     const unrelatedHead = git(root, ["rev-parse", "HEAD"]);
     const unrelatedControlTreeRoot = controlTreeRoot(root, unrelatedHead);
@@ -915,6 +990,37 @@ test("runner admits exactly the three-link semantic-baseline chain and rejects u
     assert.equal(unrelated.status, 1);
     assert.equal(existsSync(join(root, "unrelated-journal.jsonl")), false,
       "an unrelated direct-child path must fail before evidence outputs");
+
+    git(root, ["switch", "--quiet", "-c", "merge-finalize", baselineCommit]);
+    for (const path of captureConsistencyPaths.filter((path) => path !== contractPath)) {
+      writeFileSync(join(root, path), "capture consistency\n", { mode: 0o600 });
+    }
+    writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
+    git(root, ["add", ...captureConsistencyPaths]);
+    git(root, ["commit", "--quiet", "-m", "capture consistency merge parent"]);
+    git(root, ["switch", "--quiet", "-c", "merge-side", baselineCommit]);
+    writeFileSync(join(root, "merge-side.txt"), "outside control tree\n", { mode: 0o600 });
+    git(root, ["add", "merge-side.txt"]);
+    git(root, ["commit", "--quiet", "-m", "unrelated merge side"]);
+    git(root, ["switch", "--quiet", "merge-finalize"]);
+    git(root, ["merge", "--quiet", "--no-ff", "--no-edit", "merge-side"]);
+    const mergeHead = git(root, ["rev-parse", "HEAD"]);
+    const mergeRoot = controlTreeRoot(root, mergeHead);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), mergeHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), mergeHead);
+    const mergeArgs = [...fixture.args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "merge-journal.jsonl")],
+      ["--receipt-out", join(root, "merge-receipt.json")],
+      ["--chunk-receipts-out", join(root, "merge-core-receipts.jsonl")],
+      ["--failure-summary-out", join(root, "merge-failure.json")],
+      ["--control-transition-head", mergeHead],
+      ["--control-transition-after-root", mergeRoot],
+    ] as const) mergeArgs[mergeArgs.indexOf(flag) + 1] = value;
+    const merge = invoke(mergeArgs, { ...environment, GITHUB_SHA: mergeHead }, root);
+    assert.equal(merge.status, 1);
+    assert.equal(existsSync(join(root, "merge-journal.jsonl")), false,
+      "a merge commit must fail before evidence outputs");
 
     git(root, ["switch", "--quiet", "--detach", fixHead]);
     rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);

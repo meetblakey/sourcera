@@ -4360,7 +4360,23 @@ export async function confirmLinearCaptureConsistency(
       `Linear changed during bounded two-pass capture; no capture was accepted:\n${differences.join("\n")}`,
     );
   }
-  if (JSON.stringify(first.nativeIdentity) !== JSON.stringify(second.nativeIdentity)) {
+  const semanticNativeIdentity = (
+    identity: LinearNativeIdentityCapture | undefined,
+  ): unknown => {
+    if (!identity) return identity;
+    const { coverage, ...catalogs } = identity;
+    return {
+      ...catalogs,
+      coverage: {
+        complete: coverage.complete,
+        totals: coverage.totals,
+      },
+    };
+  };
+  if (
+    JSON.stringify(semanticNativeIdentity(first.nativeIdentity)) !==
+    JSON.stringify(semanticNativeIdentity(second.nativeIdentity))
+  ) {
     throw new Error(
       "Linear native identity changed between bounded consistency reads; no capture was accepted",
     );

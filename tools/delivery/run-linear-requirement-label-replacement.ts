@@ -66,6 +66,15 @@ const FINALIZE_CONTROL_TRANSITION_PATHS = [
   ...DIAGNOSTIC_CONTROL_TRANSITION_PATHS,
   "delivery/linear-requirement-label-finalize-transition.json",
 ] as const;
+const CAPTURE_CONSISTENCY_CONTROL_TRANSITION_PATHS = [
+  "delivery/linear-requirement-label-finalize-transition.json",
+  "tools/delivery/lib/linear-live.ts",
+  "tools/delivery/linear-live.test.ts",
+  "tools/delivery/lib/linear-requirement-label-replacement.ts",
+  "tools/delivery/run-linear-requirement-label-replacement.ts",
+  "tools/delivery/linear-requirement-label-replacement-runner-cli.test.ts",
+  "tools/delivery/linear-requirement-label-replacement.test.ts",
+] as const;
 
 type RunnerPhase = "rename" | "create" | "replace" | "verify" | "retire" | "finalize";
 type JsonRecord = Record<string, unknown>;
@@ -592,14 +601,16 @@ function repositoryHead(
         exactPathSet(changedControlPaths(root, sourceCommit, current, environment), DIAGNOSTIC_CONTROL_TRANSITION_PATHS);
       const exactFinalizeChain = transition !== undefined && finalizeTransition !== undefined &&
         sourceCommit === finalizeTransition.candidateSourceCommit && candidateRoot === finalizeTransition.candidateRoot &&
-        transition.source === finalizeTransition.transitionCommit && transition.candidateRoot === candidateRoot &&
-        transition.head === current && transition.beforeRoot === finalizeTransition.transitionControlTreeRoot &&
-        soleParent(root, current, environment) === finalizeTransition.transitionCommit &&
+        transition.source === finalizeTransition.baselineCommit && transition.candidateRoot === candidateRoot &&
+        transition.head === current && transition.beforeRoot === finalizeTransition.baselineControlTreeRoot &&
+        soleParent(root, current, environment) === finalizeTransition.baselineCommit &&
+        soleParent(root, finalizeTransition.baselineCommit, environment) === finalizeTransition.transitionCommit &&
         soleParent(root, finalizeTransition.transitionCommit, environment) === finalizeTransition.diagnosticCommit &&
         soleParent(root, finalizeTransition.diagnosticCommit, environment) === sourceCommit &&
         controlTreeRoot(root, sourceCommit, environment) === finalizeTransition.candidateControlTreeRoot &&
         controlTreeRoot(root, finalizeTransition.diagnosticCommit, environment) === finalizeTransition.diagnosticControlTreeRoot &&
         controlTreeRoot(root, finalizeTransition.transitionCommit, environment) === finalizeTransition.transitionControlTreeRoot &&
+        controlTreeRoot(root, finalizeTransition.baselineCommit, environment) === finalizeTransition.baselineControlTreeRoot &&
         controlTreeRoot(root, current, environment) === transition.afterRoot &&
         exactPathSet(
           changedControlPaths(root, sourceCommit, finalizeTransition.diagnosticCommit, environment),
@@ -608,17 +619,20 @@ function repositoryHead(
           changedControlPaths(root, finalizeTransition.diagnosticCommit, finalizeTransition.transitionCommit, environment),
           FINALIZE_CONTROL_TRANSITION_PATHS,
         ) && exactPathSet(
-          changedControlPaths(root, finalizeTransition.transitionCommit, current, environment),
+          changedControlPaths(root, finalizeTransition.transitionCommit, finalizeTransition.baselineCommit, environment),
           FINALIZE_CONTROL_TRANSITION_PATHS,
+        ) && exactPathSet(
+          changedControlPaths(root, finalizeTransition.baselineCommit, current, environment),
+          CAPTURE_CONSISTENCY_CONTROL_TRANSITION_PATHS,
         );
       if (!directDiagnostic && !exactFinalizeChain) {
         fail("changed migration controls lack an exact digest-pinned transition");
       }
       if (exactFinalizeChain) {
         finalizeControlTransitionProof = {
-          source: finalizeTransition.transitionCommit,
+          source: finalizeTransition.baselineCommit,
           head: current,
-          beforeRoot: controlTreeRoot(root, finalizeTransition.transitionCommit, environment),
+          beforeRoot: controlTreeRoot(root, finalizeTransition.baselineCommit, environment),
           afterRoot: controlTreeRoot(root, current, environment),
         };
       }
