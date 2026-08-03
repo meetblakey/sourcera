@@ -21,7 +21,7 @@ import {
   buildLinearRequirementLabelReplacementCandidate,
   executeLinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelCapture,
-  type LinearRequirementLabelFinalizeTransitionContract,
+  type LinearRequirementLabelSemanticBaselineContract,
   type LinearRequirementLabelReplacementCandidate,
   type LinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelReplacementPhaseReceipt,
@@ -182,56 +182,62 @@ function withCycle(native: LinearRequirementLabelCapture, updatedAt: string): Li
 function sealedTransition(input: {
   candidate: LinearRequirementLabelReplacementCandidate;
   diagnosticCommit: string;
+  transitionCommit: string;
   previousReceiptRoot: string;
   candidateControlTreeRoot?: string;
   diagnosticControlTreeRoot?: string;
-}): LinearRequirementLabelFinalizeTransitionContract {
-  const beforeCycle = withCycle(nativeFixture(), CYCLE_BEFORE).cycles;
-  const afterCycle = withCycle(nativeFixture(), CYCLE_AFTER).cycles;
+  transitionControlTreeRoot?: string;
+  verifyFiles: { candidateRaw: string; receiptRaw: string; journalRaw: string; coreReceiptsRaw: string };
+  retireFiles: { candidateRaw: string; receiptRaw: string; journalRaw: string; coreReceiptsRaw: string };
+  verifyRunnerRoot: string;
+  retireRunnerRoot: string;
+  verifyPreviousReceiptRoot: string;
+  verifyReceipts: LinearRequirementLabelReplacementPhaseReceipt[];
+  retireReceipts: LinearRequirementLabelReplacementPhaseReceipt[];
+}): LinearRequirementLabelSemanticBaselineContract {
+  const artifact = (
+    phase: "verify" | "retire",
+    files: typeof input.verifyFiles,
+    root: string,
+  ) => ({
+    artifactId: phase === "verify" ? "8726485898" : "8727423703",
+    artifactName: `linear-requirement-label-replacement-${phase === "verify" ? "30456655778" : "30458550380"}-1`,
+    artifactDigest: `sha256:${(phase === "verify" ? "1" : "2").repeat(64)}`,
+    runId: phase === "verify" ? "30456655778" : "30458550380",
+    runAttempt: "1" as const,
+    commit: input.candidate.sourceCommit,
+    candidateSha256: SHA(files.candidateRaw),
+    receiptSha256: SHA(files.receiptRaw),
+    journalSha256: SHA(files.journalRaw),
+    coreReceiptsSha256: SHA(files.coreReceiptsRaw),
+    runnerRoot: root,
+  });
   const body = {
-    schemaVersion: 1 as const,
-    kind: "linear-requirement-label-finalize-transition" as const,
+    schemaVersion: 2 as const,
+    kind: "linear-requirement-label-semantic-baseline-handoff" as const,
     candidateRoot: input.candidate.root,
     candidateSourceCommit: input.candidate.sourceCommit,
     diagnosticCommit: input.diagnosticCommit,
+    transitionCommit: input.transitionCommit,
     previousReceiptRoot: input.previousReceiptRoot,
     candidateControlTreeRoot: input.candidateControlTreeRoot ?? "1".repeat(64),
     diagnosticControlTreeRoot: input.diagnosticControlTreeRoot ?? "2".repeat(64),
-    normalizedFingerprintSha256: "3".repeat(64),
-    evidence: {
-      before: {
-        artifactId: "8722916951",
-        artifactName: `linear-drift-fingerprint-${input.candidate.sourceCommit}-30448115612-1`,
-        artifactDigest: `sha256:${"4".repeat(64)}`,
-        runId: "30448115612",
-        runAttempt: "1",
-        commit: input.candidate.sourceCommit,
-        capturedAt: "2026-07-29T11:56:36.152Z",
-        fingerprintSha256: "5".repeat(64),
-        receiptSha256: "6".repeat(64),
-      },
-      after: {
-        artifactId: "8731405740",
-        artifactName: `linear-drift-fingerprint-${input.diagnosticCommit}-30470152687-1`,
-        artifactDigest: `sha256:${"7".repeat(64)}`,
-        runId: "30470152687",
-        runAttempt: "1",
-        commit: input.diagnosticCommit,
-        capturedAt: "2026-07-29T16:22:28.303Z",
-        fingerprintSha256: "8".repeat(64),
-        receiptSha256: "a".repeat(64),
-      },
+    transitionControlTreeRoot: input.transitionControlTreeRoot ?? "3".repeat(64),
+    historicalEvidence: {
+      verify: artifact("verify", input.verifyFiles, input.verifyRunnerRoot),
+      retire: artifact("retire", input.retireFiles, input.retireRunnerRoot),
     },
-    protectedTransition: {
-      catalog: "cycles" as const,
-      cycleId: CYCLE_ID,
-      cycleNumber: 7,
-      field: "updatedAt" as const,
-      beforeValue: CYCLE_BEFORE,
-      afterValue: CYCLE_AFTER,
-      beforeCatalogRoot: SHA(canonicalJson(beforeCycle)),
-      afterCatalogRoot: SHA(canonicalJson(afterCycle)),
-      candidateProtectedNativeStateRoot: input.candidate.protectedNativeStateRoot,
+    historicalProof: {
+      protectedNativeStateRoot: input.candidate.protectedNativeStateRoot,
+      verifyPreviousReceiptRoot: input.verifyPreviousReceiptRoot,
+      verifyJournalRecordCount: 376 as const,
+      verifyCoreReceiptCount: 10 as const,
+      verifyTerminalRecordSha256: input.verifyReceipts.at(-1)!.terminalRecordSha256,
+      verifyTerminalCoreReceiptRoot: input.verifyReceipts.at(-1)!.root,
+      retireJournalRecordCount: 378 as const,
+      retireCoreReceiptCount: 11 as const,
+      retireTerminalRecordSha256: input.retireReceipts.at(-1)!.terminalRecordSha256,
+      retireTerminalCoreReceiptRoot: input.retireReceipts.at(-1)!.root,
     },
   };
   return { ...body, root: SHA(canonicalJson(body)) };
@@ -257,20 +263,23 @@ async function finalizedRunnerFixture(root: string, options: {
   sourceCommit?: string;
   captureCommit?: string;
   diagnosticCommit?: string;
+  transitionCommit?: string;
   candidateControlTreeRoot?: string;
   diagnosticControlTreeRoot?: string;
+  transitionControlTreeRoot?: string;
 } = {}): Promise<{
   candidate: LinearRequirementLabelReplacementCandidate;
   first: LinearRequirementLabelCapture;
   second: LinearRequirementLabelCapture;
   args: string[];
   environment: Record<string, string>;
-  transition?: LinearRequirementLabelFinalizeTransitionContract;
+  transition?: LinearRequirementLabelSemanticBaselineContract;
   rewriteCapture(name: "first" | "second", native: LinearRequirementLabelCapture): void;
 }> {
   const sourceCommit = options.sourceCommit ?? git(process.cwd(), ["rev-parse", "HEAD"]);
   const captureCommit = options.captureCommit ?? sourceCommit;
   const diagnosticCommit = options.diagnosticCommit ?? sourceCommit;
+  const transitionCommit = options.transitionCommit ?? diagnosticCommit;
   const withTransition = options.withTransition === true;
   const before = withTransition ? withCycle(nativeFixture(), CYCLE_BEFORE) : nativeFixture();
   const beforeRaw = Buffer.from(`${JSON.stringify(before)}\n`);
@@ -304,6 +313,8 @@ async function finalizedRunnerFixture(root: string, options: {
   };
   let journalRaw = "";
   let receipts: LinearRequirementLabelReplacementPhaseReceipt[] = [];
+  let verifyJournalRaw = "";
+  let verifyReceipts: LinearRequirementLabelReplacementPhaseReceipt[] = [];
   for (const phase of ["rename", "create", "replace", "retire"] as const satisfies readonly LinearRequirementLabelReplacementPhase[]) {
     const result = await executeLinearRequirementLabelReplacementPhase({
       candidate,
@@ -323,6 +334,10 @@ async function finalizedRunnerFixture(root: string, options: {
     });
     journalRaw = result.journalRaw;
     receipts = [...receipts, ...result.receipts];
+    if (phase === "replace") {
+      verifyJournalRaw = journalRaw;
+      verifyReceipts = structuredClone(receipts);
+    }
   }
   const first = structuredClone(before);
   first.issues = [...issues.values()].map((issue) => structuredClone(issue));
@@ -366,8 +381,38 @@ async function finalizedRunnerFixture(root: string, options: {
   };
   rewriteCapture("first", first);
   rewriteCapture("second", second);
-  writeFileSync(join(root, "candidate.json"), `${JSON.stringify(candidate)}\n`, { mode: 0o600 });
+  const candidateRaw = `${JSON.stringify(candidate)}\n`;
+  writeFileSync(join(root, "candidate.json"), candidateRaw, { mode: 0o600 });
   writeFileSync(join(root, "previous-journal.jsonl"), journalRaw, { mode: 0o600 });
+  const verifyPreviousReceiptRoot = "2".repeat(64);
+  const verifyBody = {
+    schemaVersion: 1,
+    kind: "linear-requirement-label-replacement-runner-receipt",
+    candidateRoot: candidate.root,
+    operationsRoot: candidate.operationsRoot,
+    phase: "verify",
+    direction: "forward",
+    runId: "30456655778.1.verify",
+    nativeIdentitySha256: SHA(JSON.stringify(first)),
+    captureReceiptSha256: "1".repeat(64),
+    secondNativeIdentitySha256: null,
+    secondCaptureReceiptSha256: null,
+    journalSha256: SHA(verifyJournalRaw),
+    coreReceipts: verifyReceipts,
+    applied: 0,
+    alreadyApplied: 0,
+    compensated: 0,
+    alreadyCompensated: 0,
+    verification: {
+      requirementUses: 186,
+      oldLabelUses: 0,
+      outsideRequirementUses: 0,
+      protectedNativeStateRoot: candidate.protectedNativeStateRoot,
+    },
+    previousReceiptRoot: verifyPreviousReceiptRoot,
+    complete: true,
+  };
+  const verifyReceipt = { ...verifyBody, root: SHA(canonicalJson(verifyBody)) };
   const previousBody = {
     schemaVersion: 1,
     kind: "linear-requirement-label-replacement-runner-receipt",
@@ -375,7 +420,7 @@ async function finalizedRunnerFixture(root: string, options: {
     operationsRoot: candidate.operationsRoot,
     phase: "retire",
     direction: "forward",
-    runId: "990.1.retire",
+    runId: "30458550380.1.retire.forward",
     nativeIdentitySha256: SHA(JSON.stringify(first)),
     captureReceiptSha256: "1".repeat(64),
     secondNativeIdentitySha256: null,
@@ -387,11 +432,23 @@ async function finalizedRunnerFixture(root: string, options: {
     compensated: 0,
     alreadyCompensated: 0,
     verification: null,
-    previousReceiptRoot: "2".repeat(64),
+    previousReceiptRoot: verifyReceipt.root,
     complete: true,
   };
   const previous = { ...previousBody, root: SHA(canonicalJson(previousBody)) };
   writeFileSync(join(root, "previous-receipt.json"), `${JSON.stringify(previous)}\n`, { mode: 0o600 });
+  const verifyFiles = {
+    candidateRaw,
+    receiptRaw: `${JSON.stringify(verifyReceipt)}\n`,
+    journalRaw: verifyJournalRaw,
+    coreReceiptsRaw: "",
+  };
+  const retireFiles = {
+    candidateRaw,
+    receiptRaw: `${JSON.stringify(previous)}\n`,
+    journalRaw,
+    coreReceiptsRaw: `${JSON.stringify(receipts.at(-1))}\n`,
+  };
   const args = [
     "--candidate", join(root, "candidate.json"),
     "--phase", "finalize",
@@ -412,15 +469,40 @@ async function finalizedRunnerFixture(root: string, options: {
   const transition = withTransition ? sealedTransition({
     candidate,
     diagnosticCommit,
+    transitionCommit,
     previousReceiptRoot: previous.root,
     candidateControlTreeRoot: options.candidateControlTreeRoot,
     diagnosticControlTreeRoot: options.diagnosticControlTreeRoot,
+    transitionControlTreeRoot: options.transitionControlTreeRoot,
+    verifyFiles,
+    retireFiles,
+    verifyRunnerRoot: verifyReceipt.root,
+    retireRunnerRoot: previous.root,
+    verifyPreviousReceiptRoot,
+    verifyReceipts,
+    retireReceipts: receipts,
   }) : undefined;
   if (transition) {
     writeFileSync(join(root, "transition.json"), `${JSON.stringify(transition)}\n`, { mode: 0o600 });
+    mkdirSync(join(root, "history-verify"), { recursive: true });
+    mkdirSync(join(root, "history-retire"), { recursive: true });
+    for (const [directory, files] of [["history-verify", verifyFiles], ["history-retire", retireFiles]] as const) {
+      writeFileSync(join(root, directory, "candidate.json"), files.candidateRaw, { mode: 0o600 });
+      writeFileSync(join(root, directory, "receipt.json"), files.receiptRaw, { mode: 0o600 });
+      writeFileSync(join(root, directory, "journal.jsonl"), files.journalRaw, { mode: 0o600 });
+      writeFileSync(join(root, directory, "core-receipts.jsonl"), files.coreReceiptsRaw, { mode: 0o600 });
+    }
     args.push(
       "--finalize-transition", join(root, "transition.json"),
       "--expected-finalize-transition-root", transition.root,
+      "--historical-verify-candidate", join(root, "history-verify/candidate.json"),
+      "--historical-verify-receipt", join(root, "history-verify/receipt.json"),
+      "--historical-verify-journal", join(root, "history-verify/journal.jsonl"),
+      "--historical-verify-core-receipts", join(root, "history-verify/core-receipts.jsonl"),
+      "--historical-retire-candidate", join(root, "history-retire/candidate.json"),
+      "--historical-retire-receipt", join(root, "history-retire/receipt.json"),
+      "--historical-retire-journal", join(root, "history-retire/journal.jsonl"),
+      "--historical-retire-core-receipts", join(root, "history-retire/core-receipts.jsonl"),
     );
   }
   return {
@@ -545,6 +627,18 @@ test("runner source keeps the closed one-phase CLI and durable output controls",
   assert.doesNotMatch(source, /deleteLabel|issueLabelDelete/);
 });
 
+test("finalize runner requires both historical phase artifacts and emits a current semantic baseline", () => {
+  const source = readFileSync(RUNNER, "utf8");
+  for (const flag of [
+    "--historical-verify-candidate", "--historical-verify-receipt", "--historical-verify-journal",
+    "--historical-verify-core-receipts", "--historical-retire-candidate",
+    "--historical-retire-receipt", "--historical-retire-journal", "--historical-retire-core-receipts",
+  ]) assert.match(source, new RegExp(flag));
+  assert.match(source, /verifyLinearRequirementLabelHistoricalReceiptChain/);
+  assert.match(source, /verifyLinearRequirementLabelReplacementSemanticBaseline/);
+  assert.doesNotMatch(source, /verifyLinearRequirementLabelAcceptedProtectedTransition/);
+});
+
 test("runner admits one digest-pinned six-file diagnostic control transition only", () => {
   const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-control-transition-"));
   try {
@@ -664,8 +758,8 @@ test("runner admits one digest-pinned six-file diagnostic control transition onl
   }
 });
 
-test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rejects a third commit", async () => {
-  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-two-link-transition-"));
+test("runner admits exactly the three-link semantic-baseline chain and rejects unrelated or later commits", async () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-semantic-transition-"));
   try {
     git(root, ["init", "--quiet"]);
     git(root, ["config", "user.name", "Sourcera test"]);
@@ -695,19 +789,28 @@ test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rej
     const diagnosticCommit = git(root, ["rev-parse", "HEAD"]);
     const diagnosticControlTreeRoot = controlTreeRoot(root, diagnosticCommit);
 
+    mkdirSync(dirname(join(root, contractPath)), { recursive: true });
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "finalize transition\n", { mode: 0o600 });
+    writeFileSync(join(root, contractPath), "prior transition\n", { mode: 0o600 });
+    git(root, ["add", ...diagnosticPaths, contractPath]);
+    git(root, ["commit", "--quiet", "-m", "finalize transition controls"]);
+    const transitionCommit = git(root, ["rev-parse", "HEAD"]);
+    const transitionControlTreeRoot = controlTreeRoot(root, transitionCommit);
+
     const fixture = await finalizedRunnerFixture(root, {
       withTransition: true,
       sourceCommit,
-      captureCommit: diagnosticCommit,
+      captureCommit: transitionCommit,
       diagnosticCommit,
+      transitionCommit,
       candidateControlTreeRoot,
       diagnosticControlTreeRoot,
+      transitionControlTreeRoot,
     });
-    mkdirSync(dirname(join(root, contractPath)), { recursive: true });
     writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
-    for (const path of diagnosticPaths) writeFileSync(join(root, path), "finalize transition\n", { mode: 0o600 });
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "semantic baseline\n", { mode: 0o600 });
     git(root, ["add", ...diagnosticPaths, contractPath]);
-    git(root, ["commit", "--quiet", "-m", "finalize transition controls"]);
+    git(root, ["commit", "--quiet", "-m", "semantic baseline controls"]);
     const fixHead = git(root, ["rev-parse", "HEAD"]);
     const fixControlTreeRoot = controlTreeRoot(root, fixHead);
     rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
@@ -715,10 +818,10 @@ test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rej
     const transitionFlag = fixture.args.indexOf("--finalize-transition");
     fixture.args[transitionFlag + 1] = join(root, contractPath);
     fixture.args.push(
-      "--control-transition-source", diagnosticCommit,
+      "--control-transition-source", transitionCommit,
       "--control-transition-candidate-root", fixture.candidate.root,
       "--control-transition-head", fixHead,
-      "--control-transition-before-root", diagnosticControlTreeRoot,
+      "--control-transition-before-root", transitionControlTreeRoot,
       "--control-transition-after-root", fixControlTreeRoot,
     );
     const environment = { ...fixture.environment, GITHUB_SHA: fixHead };
@@ -739,12 +842,14 @@ test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rej
     const rejectedDrift = invoke(driftArgs, environment, root);
     assert.equal(rejectedDrift.status, 1);
     const driftFailure = readFileSync(join(root, "drift-failure.json"), "utf8");
-    assert.match(driftFailure, /protected_state_transition_validation/);
+    assert.match(driftFailure, /present_boundary_validation/);
     assert.doesNotMatch(driftFailure, /malicious-secret-transition-value/);
     assert.equal(existsSync(join(root, "drift-receipt.json")), false);
 
-    fixture.rewriteCapture("first", fixture.first);
-    fixture.rewriteCapture("second", fixture.second);
+    const current = structuredClone(fixture.first);
+    current.issues[71]!.cycleId = CYCLE_ID;
+    fixture.rewriteCapture("first", current);
+    fixture.rewriteCapture("second", current);
     rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
     rewriteCaptureCommit(join(root, "second-capture-receipt.json"), fixHead);
     const exact = invoke(fixture.args, environment, root);
@@ -753,9 +858,12 @@ test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rej
       applied: number;
       verification: {
         schemaVersion: number;
-        candidateProtectedNativeStateRoot: string;
-        finalProtectedNativeStateRoot: string;
-        acceptedProtectedStateTransition: LinearRequirementLabelFinalizeTransitionContract;
+        transitionRoot: string;
+        finalizeControlTransition: { source: string; head: string; beforeRoot: string; afterRoot: string };
+        historicalProof: { verifyRunnerRoot: string; retireRunnerRoot: string };
+        currentRequirementIssueStates: Array<{ identifier: string; fullStateRoot: string }>;
+        currentRequirementIssueStateRoot: string;
+        currentGlobalRoot: string;
         requirementUses: number;
         oldLabelUses: number;
         outsideRequirementUses: number;
@@ -763,18 +871,28 @@ test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rej
       };
     };
     assert.equal(exactReceipt.applied, 0);
-    assert.equal(exactReceipt.verification.schemaVersion, 2);
-    assert.equal(exactReceipt.verification.candidateProtectedNativeStateRoot, fixture.candidate.protectedNativeStateRoot);
-    assert.notEqual(exactReceipt.verification.finalProtectedNativeStateRoot, fixture.candidate.protectedNativeStateRoot);
-    assert.equal(exactReceipt.verification.acceptedProtectedStateTransition.root, fixture.transition!.root);
+    assert.equal(exactReceipt.verification.schemaVersion, 3);
+    assert.equal(exactReceipt.verification.transitionRoot, fixture.transition!.root);
+    assert.deepEqual(exactReceipt.verification.finalizeControlTransition, {
+      source: transitionCommit,
+      head: fixHead,
+      beforeRoot: transitionControlTreeRoot,
+      afterRoot: fixControlTreeRoot,
+    });
+    assert.equal(exactReceipt.verification.historicalProof.verifyRunnerRoot, fixture.transition!.historicalEvidence.verify.runnerRoot);
+    assert.equal(exactReceipt.verification.historicalProof.retireRunnerRoot, fixture.transition!.historicalEvidence.retire.runnerRoot);
+    assert.equal(exactReceipt.verification.currentRequirementIssueStates.length, 186);
+    assert.equal(exactReceipt.verification.currentRequirementIssueStates.find((row) => row.identifier === "REQ-72")?.fullStateRoot === fixture.candidate.issues[71]!.afterIssueRoot, false);
+    assert.match(exactReceipt.verification.currentRequirementIssueStateRoot, /^[a-f0-9]{64}$/);
+    assert.match(exactReceipt.verification.currentGlobalRoot, /^[a-f0-9]{64}$/);
     assert.equal(exactReceipt.verification.requirementUses, 186);
     assert.equal(exactReceipt.verification.oldLabelUses, 0);
     assert.equal(exactReceipt.verification.outsideRequirementUses, 0);
     assert.equal(exactReceipt.verification.stable, true);
     assert.equal(readFileSync(join(root, "journal.jsonl"), "utf8"), readFileSync(join(root, "previous-journal.jsonl"), "utf8"));
 
-    git(root, ["switch", "--quiet", "-c", "unrelated-finalize", diagnosticCommit]);
-    for (const path of diagnosticPaths) writeFileSync(join(root, path), "finalize transition\n", { mode: 0o600 });
+    git(root, ["switch", "--quiet", "-c", "unrelated-finalize", transitionCommit]);
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "semantic baseline\n", { mode: 0o600 });
     mkdirSync(dirname(join(root, contractPath)), { recursive: true });
     writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
     writeFileSync(join(root, "README.md"), "unrelated\n", { mode: 0o600 });
@@ -1089,7 +1207,7 @@ test("runner admits only journal-proven post-rename capture during crash resume"
   }
 });
 
-test("runner classifies a missing retired label at retirement replay without leaking capture content", async () => {
+test("runner classifies a missing retired label before output without leaking capture content", async () => {
   const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-finalize-replay-"));
   try {
     const fixture = await finalizedRunnerFixture(root);
@@ -1101,7 +1219,7 @@ test("runner classifies a missing retired label at retirement replay without lea
     assert.equal(result.stderr, "Linear Requirement label replacement failed\n");
     const raw = readFileSync(join(root, "failure-summary.json"), "utf8");
     const summary = JSON.parse(raw) as Record<string, unknown>;
-    assert.equal(summary.code, "retirement_replay_validation");
+    assert.equal(summary.code, "stable_capture_validation");
     assert.deepEqual(summary.firstCapture, {
       oldLabelCount: 0,
       newLabelCount: 1,

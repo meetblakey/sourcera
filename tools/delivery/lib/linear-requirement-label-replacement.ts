@@ -112,46 +112,6 @@ export interface LinearRequirementLabelReplacementCandidate {
   root: string;
 }
 
-export interface LinearRequirementLabelFinalizeTransitionEvidence {
-  artifactId: string;
-  artifactName: string;
-  artifactDigest: string;
-  runId: string;
-  runAttempt: string;
-  commit: string;
-  capturedAt: string;
-  fingerprintSha256: string;
-  receiptSha256: string;
-}
-
-export interface LinearRequirementLabelFinalizeTransitionContract {
-  schemaVersion: 1;
-  kind: "linear-requirement-label-finalize-transition";
-  candidateRoot: string;
-  candidateSourceCommit: string;
-  diagnosticCommit: string;
-  previousReceiptRoot: string;
-  candidateControlTreeRoot: string;
-  diagnosticControlTreeRoot: string;
-  normalizedFingerprintSha256: string;
-  evidence: {
-    before: LinearRequirementLabelFinalizeTransitionEvidence;
-    after: LinearRequirementLabelFinalizeTransitionEvidence;
-  };
-  protectedTransition: {
-    catalog: "cycles";
-    cycleId: string;
-    cycleNumber: number;
-    field: "updatedAt";
-    beforeValue: string;
-    afterValue: string;
-    beforeCatalogRoot: string;
-    afterCatalogRoot: string;
-    candidateProtectedNativeStateRoot: string;
-  };
-  root: string;
-}
-
 export interface LinearRequirementLabelReplacementTransport {
   readLabel(id: string): Promise<CaptureLabel | null>;
   readIssue(id: string): Promise<CaptureIssue | null>;
@@ -252,17 +212,108 @@ export interface LinearRequirementLabelReplacementFinalReceipt {
   root: string;
 }
 
-export interface LinearRequirementLabelReplacementFinalReceiptV2 {
+export interface LinearRequirementLabelHistoricalArtifactContract {
+  artifactId: string;
+  artifactName: string;
+  artifactDigest: string;
+  runId: string;
+  runAttempt: "1";
+  commit: string;
+  candidateSha256: string;
+  receiptSha256: string;
+  journalSha256: string;
+  coreReceiptsSha256: string;
+  runnerRoot: string;
+}
+
+export interface LinearRequirementLabelSemanticBaselineContract {
   schemaVersion: 2;
+  kind: "linear-requirement-label-semantic-baseline-handoff";
+  candidateRoot: string;
+  candidateSourceCommit: string;
+  diagnosticCommit: string;
+  transitionCommit: string;
+  previousReceiptRoot: string;
+  candidateControlTreeRoot: string;
+  diagnosticControlTreeRoot: string;
+  transitionControlTreeRoot: string;
+  historicalEvidence: {
+    verify: LinearRequirementLabelHistoricalArtifactContract;
+    retire: LinearRequirementLabelHistoricalArtifactContract;
+  };
+  historicalProof: {
+    protectedNativeStateRoot: string;
+    verifyPreviousReceiptRoot: string;
+    verifyJournalRecordCount: 376;
+    verifyCoreReceiptCount: 10;
+    verifyTerminalRecordSha256: string;
+    verifyTerminalCoreReceiptRoot: string;
+    retireJournalRecordCount: 378;
+    retireCoreReceiptCount: 11;
+    retireTerminalRecordSha256: string;
+    retireTerminalCoreReceiptRoot: string;
+  };
+  root: string;
+}
+
+export interface LinearRequirementLabelFinalizeControlTransition {
+  source: string;
+  head: string;
+  beforeRoot: string;
+  afterRoot: string;
+}
+
+export interface LinearRequirementLabelHistoricalArtifactFiles {
+  candidateRaw: string;
+  receiptRaw: string;
+  journalRaw: string;
+  coreReceiptsRaw: string;
+}
+
+export interface LinearRequirementLabelHistoricalProof {
+  schemaVersion: 1;
+  kind: "linear-requirement-label-historical-proof";
+  candidateRoot: string;
+  verifyRunnerRoot: string;
+  retireRunnerRoot: string;
+  candidateProtectedNativeStateRoot: string;
+  verifyJournalSha256: string;
+  retireJournalSha256: string;
+  verifyTerminalRecordSha256: string;
+  retireTerminalRecordSha256: string;
+  verifyTerminalCoreReceiptRoot: string;
+  retireTerminalCoreReceiptRoot: string;
+  root: string;
+}
+
+export interface LinearRequirementLabelCurrentIssueState {
+  issueId: string;
+  identifier: string;
+  fullStateRoot: string;
+  protectedStateRoot: string;
+}
+
+export interface LinearRequirementLabelReplacementFinalReceiptV3 {
+  schemaVersion: 3;
   kind: "linear-requirement-label-replacement-final-receipt";
   candidateRoot: string;
+  transitionRoot: string;
+  semanticBaselineContract: LinearRequirementLabelSemanticBaselineContract;
+  finalizeControlTransition: LinearRequirementLabelFinalizeControlTransition;
+  historicalProof: LinearRequirementLabelHistoricalProof;
   firstCaptureSha256: string;
   secondCaptureSha256: string;
   firstCaptureRoot: string;
   secondCaptureRoot: string;
-  candidateProtectedNativeStateRoot: string;
-  finalProtectedNativeStateRoot: string;
-  acceptedProtectedStateTransition: LinearRequirementLabelFinalizeTransitionContract;
+  currentGlobalRoot: string;
+  firstCatalogRoots: Record<string, string>;
+  secondCatalogRoots: Record<string, string>;
+  currentCatalogRoots: Record<string, string>;
+  firstProtectedNativeStateRoot: string;
+  secondProtectedNativeStateRoot: string;
+  currentProtectedNativeStateRoot: string;
+  currentRequirementIssueStates: LinearRequirementLabelCurrentIssueState[];
+  currentRequirementIssueStateRoot: string;
   requirementUses: 186;
   oldLabelUses: 0;
   outsideRequirementUses: 0;
@@ -762,80 +813,81 @@ export function assertLinearRequirementLabelReplacementCandidate(
   return candidate;
 }
 
-function transitionEvidence(
+function historicalArtifactContract(
   value: unknown,
+  phase: "verify" | "retire",
   expectedCommit: string,
-  label: "before" | "after",
-): LinearRequirementLabelFinalizeTransitionEvidence {
+): LinearRequirementLabelHistoricalArtifactContract {
   exactKeys(value, [
     "artifactId", "artifactName", "artifactDigest", "runId", "runAttempt", "commit",
-    "capturedAt", "fingerprintSha256", "receiptSha256",
-  ], `${label} transition evidence`);
-  const row = value as unknown as LinearRequirementLabelFinalizeTransitionEvidence;
-  if (Object.values(row).some((field) => typeof field !== "string")) {
-    fail(`${label} transition evidence contains a non-string field`);
-  }
-  if (!POSITIVE_INTEGER.test(row.artifactId) || !POSITIVE_INTEGER.test(row.runId) ||
-    row.runAttempt !== "1" || row.commit !== expectedCommit || !COMMIT.test(row.commit) ||
-    row.artifactName !== `linear-drift-fingerprint-${row.commit}-${row.runId}-${row.runAttempt}` ||
+    "candidateSha256", "receiptSha256", "journalSha256", "coreReceiptsSha256", "runnerRoot",
+  ], `${phase} historical artifact`);
+  const row = value as unknown as LinearRequirementLabelHistoricalArtifactContract;
+  if (Object.values(row).some((field) => typeof field !== "string") ||
+    !POSITIVE_INTEGER.test(row.artifactId) || !POSITIVE_INTEGER.test(row.runId) || row.runAttempt !== "1" ||
+    row.commit !== expectedCommit || row.artifactName !== `linear-requirement-label-replacement-${row.runId}-1` ||
     !GITHUB_DIGEST.test(row.artifactDigest)) {
-    fail(`${label} transition artifact identity differs from the sealed contract`);
+    fail(`${phase} historical artifact identity differs`);
   }
-  exactTimestamp(row.capturedAt, `${label} transition capturedAt`);
-  exactDigest(row.fingerprintSha256, `${label} transition fingerprint digest`);
-  exactDigest(row.receiptSha256, `${label} transition receipt digest`);
+  exactDigest(row.candidateSha256, `${phase} historical candidate digest`);
+  exactDigest(row.receiptSha256, `${phase} historical receipt digest`);
+  exactDigest(row.journalSha256, `${phase} historical journal digest`);
+  exactDigest(row.coreReceiptsSha256, `${phase} historical core-receipts digest`);
+  exactDigest(row.runnerRoot, `${phase} historical runner root`);
   return row;
 }
 
-export function assertLinearRequirementLabelFinalizeTransitionContract(
-  value: LinearRequirementLabelFinalizeTransitionContract,
+export function assertLinearRequirementLabelSemanticBaselineContract(
+  value: LinearRequirementLabelSemanticBaselineContract,
   candidateInput: LinearRequirementLabelReplacementCandidate,
   expectedRoot: string,
   expectedPreviousReceiptRoot: string,
-): LinearRequirementLabelFinalizeTransitionContract {
+): LinearRequirementLabelSemanticBaselineContract {
   const candidate = assertLinearRequirementLabelReplacementCandidate(candidateInput);
-  exactDigest(expectedRoot, "expected finalize transition root");
-  exactDigest(expectedPreviousReceiptRoot, "expected finalize transition predecessor root");
+  exactDigest(expectedRoot, "expected semantic-baseline transition root");
+  exactDigest(expectedPreviousReceiptRoot, "expected semantic-baseline predecessor root");
   exactKeys(value, [
     "schemaVersion", "kind", "candidateRoot", "candidateSourceCommit", "diagnosticCommit",
-    "previousReceiptRoot", "candidateControlTreeRoot", "diagnosticControlTreeRoot",
-    "normalizedFingerprintSha256", "evidence", "protectedTransition", "root",
-  ], "finalize transition contract");
-  if (value.schemaVersion !== 1 || value.kind !== "linear-requirement-label-finalize-transition" ||
+    "transitionCommit", "previousReceiptRoot", "candidateControlTreeRoot", "diagnosticControlTreeRoot",
+    "transitionControlTreeRoot", "historicalEvidence", "historicalProof", "root",
+  ], "semantic-baseline transition contract");
+  if (value.schemaVersion !== 2 || value.kind !== "linear-requirement-label-semantic-baseline-handoff" ||
     value.candidateRoot !== candidate.root || value.candidateSourceCommit !== candidate.sourceCommit ||
-    value.diagnosticCommit === value.candidateSourceCommit || !COMMIT.test(value.diagnosticCommit) ||
-    value.previousReceiptRoot !== expectedPreviousReceiptRoot || value.root !== expectedRoot) {
-    fail("finalize transition identity differs from its exact candidate or predecessor");
+    value.previousReceiptRoot !== expectedPreviousReceiptRoot || value.root !== expectedRoot ||
+    !COMMIT.test(value.diagnosticCommit) || !COMMIT.test(value.transitionCommit) ||
+    new Set([value.candidateSourceCommit, value.diagnosticCommit, value.transitionCommit]).size !== 3) {
+    fail("semantic-baseline transition identity differs from its exact candidate, lineage, or predecessor");
   }
   exactDigest(value.candidateControlTreeRoot, "candidate control-tree root");
   exactDigest(value.diagnosticControlTreeRoot, "diagnostic control-tree root");
-  exactDigest(value.normalizedFingerprintSha256, "normalized fingerprint digest");
-  exactKeys(value.evidence, ["before", "after"], "finalize transition evidence");
-  const beforeEvidence = transitionEvidence(value.evidence.before, value.candidateSourceCommit, "before");
-  const afterEvidence = transitionEvidence(value.evidence.after, value.diagnosticCommit, "after");
-  if (beforeEvidence.artifactId === afterEvidence.artifactId ||
-    beforeEvidence.artifactName === afterEvidence.artifactName ||
-    beforeEvidence.runId === afterEvidence.runId) {
-    fail("finalize transition evidence does not identify two distinct captures");
+  exactDigest(value.transitionControlTreeRoot, "transition control-tree root");
+  exactKeys(value.historicalEvidence, ["verify", "retire"], "historical artifact evidence");
+  const verify = historicalArtifactContract(value.historicalEvidence.verify, "verify", value.candidateSourceCommit);
+  const retire = historicalArtifactContract(value.historicalEvidence.retire, "retire", value.candidateSourceCommit);
+  if (verify.artifactId === retire.artifactId || verify.artifactName === retire.artifactName ||
+    verify.runId === retire.runId || verify.runnerRoot === retire.runnerRoot ||
+    retire.runnerRoot !== value.previousReceiptRoot || verify.candidateSha256 !== retire.candidateSha256) {
+    fail("historical phase artifacts are not two distinct candidate-bound receipts");
   }
-  exactKeys(value.protectedTransition, [
-    "catalog", "cycleId", "cycleNumber", "field", "beforeValue", "afterValue",
-    "beforeCatalogRoot", "afterCatalogRoot", "candidateProtectedNativeStateRoot",
-  ], "finalize protected transition");
-  const protectedTransition = value.protectedTransition;
-  if (protectedTransition.catalog !== "cycles" || protectedTransition.field !== "updatedAt" ||
-    !Number.isSafeInteger(protectedTransition.cycleNumber) || protectedTransition.cycleNumber < 1 ||
-    protectedTransition.candidateProtectedNativeStateRoot !== candidate.protectedNativeStateRoot ||
-    protectedTransition.beforeValue === protectedTransition.afterValue) {
-    fail("finalize protected transition is not the exact one-cycle timestamp contract");
+  exactKeys(value.historicalProof, [
+    "protectedNativeStateRoot", "verifyPreviousReceiptRoot", "verifyJournalRecordCount",
+    "verifyCoreReceiptCount", "verifyTerminalRecordSha256", "verifyTerminalCoreReceiptRoot",
+    "retireJournalRecordCount", "retireCoreReceiptCount", "retireTerminalRecordSha256",
+    "retireTerminalCoreReceiptRoot",
+  ], "historical proof contract");
+  const proof = value.historicalProof;
+  if (proof.protectedNativeStateRoot !== candidate.protectedNativeStateRoot ||
+    proof.verifyJournalRecordCount !== 376 || proof.verifyCoreReceiptCount !== 10 ||
+    proof.retireJournalRecordCount !== 378 || proof.retireCoreReceiptCount !== 11) {
+    fail("historical proof cardinality or protected root differs");
   }
-  exactUuid(protectedTransition.cycleId, "finalize transition cycle UUID");
-  exactTimestamp(protectedTransition.beforeValue, "finalize transition before timestamp");
-  exactTimestamp(protectedTransition.afterValue, "finalize transition after timestamp");
-  exactDigest(protectedTransition.beforeCatalogRoot, "finalize transition before cycle root");
-  exactDigest(protectedTransition.afterCatalogRoot, "finalize transition after cycle root");
+  exactDigest(proof.verifyPreviousReceiptRoot, "verify predecessor root");
+  exactDigest(proof.verifyTerminalRecordSha256, "verify terminal record root");
+  exactDigest(proof.verifyTerminalCoreReceiptRoot, "verify terminal core-receipt root");
+  exactDigest(proof.retireTerminalRecordSha256, "retire terminal record root");
+  exactDigest(proof.retireTerminalCoreReceiptRoot, "retire terminal core-receipt root");
   const { root: _root, ...body } = value;
-  if (value.root !== sha256(canonicalJson(body))) fail("finalize transition contract root seal differs");
+  if (value.root !== sha256(canonicalJson(body))) fail("semantic-baseline transition contract root seal differs");
   return value;
 }
 
@@ -997,6 +1049,160 @@ function validateReceipts(
     validated.push(receipt);
   }
   return validated;
+}
+
+interface HistoricalRunnerReceipt {
+  schemaVersion: 1;
+  kind: "linear-requirement-label-replacement-runner-receipt";
+  candidateRoot: string;
+  operationsRoot: string;
+  phase: "verify" | "retire";
+  direction: "forward";
+  runId: string;
+  nativeIdentitySha256: string;
+  captureReceiptSha256: string;
+  secondNativeIdentitySha256: null;
+  secondCaptureReceiptSha256: null;
+  journalSha256: string;
+  coreReceipts: LinearRequirementLabelReplacementPhaseReceipt[];
+  applied: number;
+  alreadyApplied: number;
+  compensated: number;
+  alreadyCompensated: number;
+  verification: JsonRecord | null;
+  previousReceiptRoot: string;
+  complete: true;
+  root: string;
+}
+
+function historicalRunnerBody(receipt: HistoricalRunnerReceipt): Omit<HistoricalRunnerReceipt, "root"> {
+  const { root: _root, ...body } = receipt;
+  return body;
+}
+
+function parseJsonText(raw: string, label: string): unknown {
+  try {
+    return JSON.parse(raw) as unknown;
+  } catch {
+    fail(`${label} is not valid JSON`);
+  }
+}
+
+function historicalRunnerReceipt(input: {
+  candidate: LinearRequirementLabelReplacementCandidate;
+  contract: LinearRequirementLabelSemanticBaselineContract;
+  phase: "verify" | "retire";
+  files: LinearRequirementLabelHistoricalArtifactFiles;
+}): { receipt: HistoricalRunnerReceipt; journal: ParsedJournal; receipts: LinearRequirementLabelReplacementPhaseReceipt[] } {
+  const evidence = input.contract.historicalEvidence[input.phase];
+  if (sha256(input.files.candidateRaw) !== evidence.candidateSha256 ||
+    sha256(input.files.receiptRaw) !== evidence.receiptSha256 ||
+    sha256(input.files.journalRaw) !== evidence.journalSha256 ||
+    sha256(input.files.coreReceiptsRaw) !== evidence.coreReceiptsSha256) {
+    fail(`${input.phase} historical artifact file digest differs`);
+  }
+  const artifactCandidate = assertLinearRequirementLabelReplacementCandidate(
+    parseJsonText(input.files.candidateRaw, `${input.phase} historical candidate`) as LinearRequirementLabelReplacementCandidate,
+  );
+  if (canonicalJson(artifactCandidate) !== canonicalJson(input.candidate)) {
+    fail(`${input.phase} historical candidate differs from the exact plan artifact`);
+  }
+  const receipt = parseJsonText(input.files.receiptRaw, `${input.phase} historical runner receipt`) as HistoricalRunnerReceipt;
+  exactKeys(receipt, [
+    "schemaVersion", "kind", "candidateRoot", "operationsRoot", "phase", "runId", "nativeIdentitySha256",
+    "captureReceiptSha256", "secondNativeIdentitySha256", "secondCaptureReceiptSha256", "direction",
+    "journalSha256", "coreReceipts", "applied", "alreadyApplied", "compensated", "alreadyCompensated",
+    "verification", "previousReceiptRoot", "complete", "root",
+  ], `${input.phase} historical runner receipt`);
+  const expectedRunId = input.phase === "verify"
+    ? `${evidence.runId}.1.verify`
+    : `${evidence.runId}.1.retire.forward`;
+  if (receipt.schemaVersion !== 1 || receipt.kind !== "linear-requirement-label-replacement-runner-receipt" ||
+    receipt.candidateRoot !== input.candidate.root || receipt.operationsRoot !== input.candidate.operationsRoot ||
+    receipt.phase !== input.phase || receipt.direction !== "forward" || receipt.runId !== expectedRunId ||
+    receipt.secondNativeIdentitySha256 !== null || receipt.secondCaptureReceiptSha256 !== null ||
+    !DIGEST.test(receipt.nativeIdentitySha256) || !DIGEST.test(receipt.captureReceiptSha256) ||
+    receipt.journalSha256 !== evidence.journalSha256 || !Array.isArray(receipt.coreReceipts) ||
+    receipt.compensated !== 0 || receipt.alreadyCompensated !== 0 || receipt.complete !== true ||
+    receipt.root !== evidence.runnerRoot || receipt.root !== sha256(canonicalJson(historicalRunnerBody(receipt)))) {
+    fail(`${input.phase} historical runner receipt is invalid or detached`);
+  }
+  const journal = parseJournal({
+    candidate: input.candidate,
+    raw: input.files.journalRaw,
+    expectedSha256: evidence.journalSha256,
+  });
+  const receipts = validateReceipts(input.candidate, journal, receipt.coreReceipts);
+  const proof = input.contract.historicalProof;
+  const expectedRecordCount = input.phase === "verify" ? proof.verifyJournalRecordCount : proof.retireJournalRecordCount;
+  const expectedReceiptCount = input.phase === "verify" ? proof.verifyCoreReceiptCount : proof.retireCoreReceiptCount;
+  const expectedTerminalRecord = input.phase === "verify" ? proof.verifyTerminalRecordSha256 : proof.retireTerminalRecordSha256;
+  const expectedTerminalReceipt = input.phase === "verify" ? proof.verifyTerminalCoreReceiptRoot : proof.retireTerminalCoreReceiptRoot;
+  if (journal.records.length !== expectedRecordCount || receipts.length !== expectedReceiptCount ||
+    journal.records.at(-1)?.recordSha256 !== expectedTerminalRecord || receipts.at(-1)?.root !== expectedTerminalReceipt ||
+    receipts.at(-1)?.journalRecordCount !== expectedRecordCount || receipts.at(-1)?.phaseComplete !== true) {
+    fail(`${input.phase} historical journal or core-receipt terminal proof differs`);
+  }
+  const emitted = input.files.coreReceiptsRaw === "" ? [] : input.files.coreReceiptsRaw.trimEnd().split("\n").map((line) =>
+    parseJsonText(line, `${input.phase} emitted core receipt`) as LinearRequirementLabelReplacementPhaseReceipt);
+  if (input.phase === "verify") {
+    if (emitted.length !== 0 || receipt.applied !== 0 || receipt.alreadyApplied !== 0 ||
+      receipt.previousReceiptRoot !== proof.verifyPreviousReceiptRoot) {
+      fail("verify historical receipt is not the exact read-only proof");
+    }
+    exactKeys(receipt.verification, [
+      "requirementUses", "oldLabelUses", "outsideRequirementUses", "protectedNativeStateRoot",
+    ], "verify historical usage proof");
+    if (receipt.verification.requirementUses !== EXPECTED_REQUIREMENT_ISSUE_COUNT ||
+      receipt.verification.oldLabelUses !== 0 || receipt.verification.outsideRequirementUses !== 0 ||
+      receipt.verification.protectedNativeStateRoot !== input.candidate.protectedNativeStateRoot) {
+      fail("verify historical usage or protected root differs");
+    }
+  } else {
+    if (emitted.length !== 1 || canonicalJson(emitted[0]) !== canonicalJson(receipts.at(-1)) ||
+      receipt.applied !== 1 || receipt.alreadyApplied !== 0 || receipt.verification !== null ||
+      receipt.previousReceiptRoot !== input.contract.historicalEvidence.verify.runnerRoot) {
+      fail("retire historical receipt is not the exact verify-linked mutation proof");
+    }
+  }
+  return { receipt, journal, receipts };
+}
+
+export function verifyLinearRequirementLabelHistoricalReceiptChain(input: {
+  candidate: LinearRequirementLabelReplacementCandidate;
+  transition: LinearRequirementLabelSemanticBaselineContract;
+  expectedTransitionRoot: string;
+  expectedPreviousReceiptRoot: string;
+  verifyFiles: LinearRequirementLabelHistoricalArtifactFiles;
+  retireFiles: LinearRequirementLabelHistoricalArtifactFiles;
+}): LinearRequirementLabelHistoricalProof {
+  const candidate = assertLinearRequirementLabelReplacementCandidate(input.candidate);
+  const transition = assertLinearRequirementLabelSemanticBaselineContract(
+    input.transition, candidate, input.expectedTransitionRoot, input.expectedPreviousReceiptRoot,
+  );
+  const verify = historicalRunnerReceipt({ candidate, contract: transition, phase: "verify", files: input.verifyFiles });
+  const retire = historicalRunnerReceipt({ candidate, contract: transition, phase: "retire", files: input.retireFiles });
+  if (!input.retireFiles.journalRaw.startsWith(input.verifyFiles.journalRaw) ||
+    canonicalJson(retire.receipts.slice(0, verify.receipts.length)) !== canonicalJson(verify.receipts) ||
+    retire.receipt.previousReceiptRoot !== verify.receipt.root ||
+    transition.previousReceiptRoot !== retire.receipt.root) {
+    fail("verify-to-retire historical receipt chain is detached");
+  }
+  const body = {
+    schemaVersion: 1 as const,
+    kind: "linear-requirement-label-historical-proof" as const,
+    candidateRoot: candidate.root,
+    verifyRunnerRoot: verify.receipt.root,
+    retireRunnerRoot: retire.receipt.root,
+    candidateProtectedNativeStateRoot: candidate.protectedNativeStateRoot,
+    verifyJournalSha256: verify.receipt.journalSha256,
+    retireJournalSha256: retire.receipt.journalSha256,
+    verifyTerminalRecordSha256: verify.journal.records.at(-1)!.recordSha256,
+    retireTerminalRecordSha256: retire.journal.records.at(-1)!.recordSha256,
+    verifyTerminalCoreReceiptRoot: verify.receipts.at(-1)!.root,
+    retireTerminalCoreReceiptRoot: retire.receipts.at(-1)!.root,
+  };
+  return { ...body, root: sha256(canonicalJson(body)) };
 }
 
 function activeForwardOperations(records: readonly LinearRequirementLabelReplacementJournalRecord[]): Set<string> {
@@ -1763,55 +1969,6 @@ export function verifyLinearRequirementLabelReplacementUsage(
   };
 }
 
-export interface LinearRequirementLabelAcceptedProtectedTransitionProof {
-  candidateProtectedNativeStateRoot: string;
-  finalProtectedNativeStateRoot: string;
-  beforeCycleCatalogRoot: string;
-  afterCycleCatalogRoot: string;
-}
-
-export function verifyLinearRequirementLabelAcceptedProtectedTransition(
-  candidateInput: LinearRequirementLabelReplacementCandidate,
-  native: LinearRequirementLabelCapture,
-  transitionInput: LinearRequirementLabelFinalizeTransitionContract,
-  expectedTransitionRoot: string,
-  expectedPreviousReceiptRoot: string,
-): LinearRequirementLabelAcceptedProtectedTransitionProof {
-  const candidate = assertLinearRequirementLabelReplacementCandidate(candidateInput);
-  const transition = assertLinearRequirementLabelFinalizeTransitionContract(
-    transitionInput,
-    candidate,
-    expectedTransitionRoot,
-    expectedPreviousReceiptRoot,
-  );
-  verifyReplacementUsageState(candidate, native, true);
-  const expected = transition.protectedTransition;
-  const matches = native.cycles.filter((cycle) => cycle.id === expected.cycleId);
-  if (matches.length !== 1 || matches[0]!.number !== expected.cycleNumber ||
-    matches[0]!.updatedAt !== expected.afterValue) {
-    fail("finalize capture does not contain the exact accepted cycle timestamp state");
-  }
-  const afterCycleCatalogRoot = sha256(canonicalJson(native.cycles));
-  if (afterCycleCatalogRoot !== expected.afterCatalogRoot) {
-    fail("finalize capture cycle catalog differs from the accepted transition");
-  }
-  const finalProtectedNativeStateRoot = protectedNativeRoot(native, candidate.newLabel.id);
-  const rewound = structuredClone(native);
-  const cycle = rewound.cycles.find((row) => row.id === expected.cycleId)!;
-  cycle.updatedAt = expected.beforeValue;
-  const beforeCycleCatalogRoot = sha256(canonicalJson(rewound.cycles));
-  if (beforeCycleCatalogRoot !== expected.beforeCatalogRoot ||
-    protectedNativeRoot(rewound, candidate.newLabel.id) !== candidate.protectedNativeStateRoot) {
-    fail("accepted cycle rewind does not reproduce the original protected native state");
-  }
-  return {
-    candidateProtectedNativeStateRoot: candidate.protectedNativeStateRoot,
-    finalProtectedNativeStateRoot,
-    beforeCycleCatalogRoot,
-    afterCycleCatalogRoot,
-  };
-}
-
 export function verifyLinearRequirementLabelRenameRecoveryState(
   candidateInput: LinearRequirementLabelReplacementCandidate,
   native: LinearRequirementLabelCapture,
@@ -1885,50 +2042,194 @@ export function verifyLinearRequirementLabelReplacementFinal(input: {
   return { ...body, root: sha256(canonicalJson(body)) };
 }
 
-export function verifyLinearRequirementLabelReplacementFinalWithTransition(input: {
+function assertHistoricalProof(
+  value: LinearRequirementLabelHistoricalProof,
+  candidate: LinearRequirementLabelReplacementCandidate,
+): LinearRequirementLabelHistoricalProof {
+  exactKeys(value, [
+    "schemaVersion", "kind", "candidateRoot", "verifyRunnerRoot", "retireRunnerRoot",
+    "candidateProtectedNativeStateRoot", "verifyJournalSha256", "retireJournalSha256",
+    "verifyTerminalRecordSha256", "retireTerminalRecordSha256", "verifyTerminalCoreReceiptRoot",
+    "retireTerminalCoreReceiptRoot", "root",
+  ], "historical receipt proof");
+  if (value.schemaVersion !== 1 || value.kind !== "linear-requirement-label-historical-proof" ||
+    value.candidateRoot !== candidate.root || value.candidateProtectedNativeStateRoot !== candidate.protectedNativeStateRoot ||
+    value.verifyRunnerRoot === value.retireRunnerRoot) {
+    fail("historical receipt proof identity differs");
+  }
+  for (const [label, digest] of Object.entries(value)) {
+    if (label.endsWith("Root") || label.endsWith("Sha256")) exactDigest(digest as string, `historical proof ${label}`);
+  }
+  const { root: _root, ...body } = value;
+  if (value.root !== sha256(canonicalJson(body))) fail("historical receipt proof root seal differs");
+  return value;
+}
+
+function assertHistoricalProofMatchesContract(
+  proof: LinearRequirementLabelHistoricalProof,
+  contract: LinearRequirementLabelSemanticBaselineContract,
+): void {
+  if (proof.verifyRunnerRoot !== contract.historicalEvidence.verify.runnerRoot ||
+    proof.retireRunnerRoot !== contract.historicalEvidence.retire.runnerRoot ||
+    proof.retireRunnerRoot !== contract.previousReceiptRoot ||
+    proof.candidateProtectedNativeStateRoot !== contract.historicalProof.protectedNativeStateRoot ||
+    proof.verifyJournalSha256 !== contract.historicalEvidence.verify.journalSha256 ||
+    proof.retireJournalSha256 !== contract.historicalEvidence.retire.journalSha256 ||
+    proof.verifyTerminalRecordSha256 !== contract.historicalProof.verifyTerminalRecordSha256 ||
+    proof.retireTerminalRecordSha256 !== contract.historicalProof.retireTerminalRecordSha256 ||
+    proof.verifyTerminalCoreReceiptRoot !== contract.historicalProof.verifyTerminalCoreReceiptRoot ||
+    proof.retireTerminalCoreReceiptRoot !== contract.historicalProof.retireTerminalCoreReceiptRoot) {
+    fail("historical proof fields differ from the embedded semantic-baseline contract");
+  }
+}
+
+function currentRequirementIssueStates(
+  candidate: LinearRequirementLabelReplacementCandidate,
+  native: LinearRequirementLabelCapture,
+): LinearRequirementLabelCurrentIssueState[] {
+  if (native?.schemaVersion !== 1 || native.coverage?.complete !== true || native.workspace?.id !== candidate.workspaceId ||
+    native.workspace.archivedAt !== null) {
+    fail("present semantic boundary capture is incomplete or from another workspace");
+  }
+  assertCaptureLabelRetirementEvidence(native, "present semantic boundary capture");
+  const requirementsTeams = native.teams.filter((team) =>
+    team.id === REQUIREMENTS_TEAM_ID && team.key === "REQ" && team.name === "Requirements" && team.archivedAt === null);
+  if (requirementsTeams.length !== 1) fail("present boundary Requirements team identity differs");
+  const issueIds = native.issues.map((issue) => issue.issueUuid);
+  const identifiers = native.issues.map((issue) => issue.identifier);
+  uniqueStrings(issueIds, "present capture issue UUIDs");
+  uniqueStrings(identifiers, "present capture issue identifiers");
+  const old = native.labels.filter((label) => label.id === candidate.oldLabel.id);
+  const replacement = native.labels.filter((label) => label.id === candidate.newLabel.id);
+  if (old.length !== 1 || replacement.length !== 1) fail("present boundary old or new Requirement label identity differs");
+  assertLabel(old[0]!, { ...candidate.oldLabel, name: candidate.retiredName }, true, "present boundary retired old label");
+  assertLabel(replacement[0]!, candidate.newLabel, false, "present boundary new Requirement label");
+  const activeRequirementNames = native.labels.filter((label) =>
+    label.name === REQUIREMENT_LABEL_NAME && label.archivedAt === null && label.retiredAt === null);
+  if (activeRequirementNames.length !== 1 || activeRequirementNames[0]!.id !== candidate.newLabel.id) {
+    fail("present boundary does not have exactly one active REQ-scoped Requirement label");
+  }
+  const expectedIds = candidate.issues.map((pin) => pin.issueId).sort();
+  const oldUses = native.issues.filter((issue) => issue.labelIds.includes(candidate.oldLabel.id));
+  const newUses = native.issues.filter((issue) => issue.labelIds.includes(candidate.newLabel.id));
+  const newUseIds = newUses.map((issue) => issue.issueUuid).sort();
+  if (oldUses.length !== 0 || newUses.length !== EXPECTED_REQUIREMENT_ISSUE_COUNT ||
+    canonicalJson(newUseIds) !== canonicalJson(expectedIds) ||
+    newUses.some((issue) => issue.teamId !== REQUIREMENTS_TEAM_ID || issue.archivedAt !== null)) {
+    fail("present boundary requires 186 exact REQ uses, zero old uses, and zero outside uses");
+  }
+  const byId = new Map(native.issues.map((issue) => [issue.issueUuid, issue]));
+  return candidate.issues.map((pin) => {
+    const issue = byId.get(pin.issueId);
+    if (!issue || issue.identifier !== pin.identifier || issue.teamId !== REQUIREMENTS_TEAM_ID || issue.archivedAt !== null) {
+      fail("present boundary Requirement issue identity, team, or active state differs");
+    }
+    const labelIds = sortedLabelIds(issue.labelIds, `${pin.identifier} present labels`);
+    if (labelIds.filter((id) => id === candidate.newLabel.id).length !== 1 || labelIds.includes(candidate.oldLabel.id)) {
+      fail("present boundary Requirement issue label state differs");
+    }
+    return {
+      issueId: pin.issueId,
+      identifier: pin.identifier,
+      fullStateRoot: issueRoot(issue),
+      protectedStateRoot: protectedIssueRoot(issue),
+    };
+  }).sort((left, right) => left.issueId.localeCompare(right.issueId) || left.identifier.localeCompare(right.identifier));
+}
+
+function sortedMerkleRoot(rows: readonly LinearRequirementLabelCurrentIssueState[]): string {
+  let level = rows.map((row) => sha256(canonicalJson(row)));
+  if (level.length === 0) fail("current Requirement state Merkle tree is empty");
+  while (level.length > 1) {
+    const next: string[] = [];
+    for (let index = 0; index < level.length; index += 2) {
+      next.push(sha256(canonicalJson([level[index]!, level[index + 1] ?? level[index]!])));
+    }
+    level = next;
+  }
+  return level[0]!;
+}
+
+function assertFinalizeControlTransition(
+  value: LinearRequirementLabelFinalizeControlTransition,
+  contract: LinearRequirementLabelSemanticBaselineContract,
+  label: string,
+): LinearRequirementLabelFinalizeControlTransition {
+  exactKeys(value, ["source", "head", "beforeRoot", "afterRoot"], label);
+  if (Object.values(value).some((field) => typeof field !== "string") ||
+    !COMMIT.test(value.source) || !COMMIT.test(value.head) ||
+    value.source !== contract.transitionCommit || value.beforeRoot !== contract.transitionControlTreeRoot ||
+    new Set([contract.candidateSourceCommit, contract.diagnosticCommit, value.source, value.head]).size !== 4 ||
+    value.afterRoot === value.beforeRoot) {
+    fail(`${label} identity or lineage differs`);
+  }
+  exactDigest(value.beforeRoot, `${label} before root`);
+  exactDigest(value.afterRoot, `${label} after root`);
+  return value;
+}
+
+export function verifyLinearRequirementLabelReplacementSemanticBaseline(input: {
   candidate: LinearRequirementLabelReplacementCandidate;
-  transition: LinearRequirementLabelFinalizeTransitionContract;
+  semanticBaselineContract: LinearRequirementLabelSemanticBaselineContract;
+  finalizeControlTransition: LinearRequirementLabelFinalizeControlTransition;
   expectedTransitionRoot: string;
   expectedPreviousReceiptRoot: string;
+  historicalProof: LinearRequirementLabelHistoricalProof;
   first: LinearRequirementLabelCapture;
   second: LinearRequirementLabelCapture;
   firstCaptureSha256: string;
   secondCaptureSha256: string;
-}): LinearRequirementLabelReplacementFinalReceiptV2 {
+}): LinearRequirementLabelReplacementFinalReceiptV3 {
   const candidate = assertLinearRequirementLabelReplacementCandidate(input.candidate);
-  const transition = assertLinearRequirementLabelFinalizeTransitionContract(
-    input.transition,
+  const semanticBaselineContract = assertLinearRequirementLabelSemanticBaselineContract(
+    input.semanticBaselineContract,
     candidate,
     input.expectedTransitionRoot,
     input.expectedPreviousReceiptRoot,
   );
-  exactDigest(input.firstCaptureSha256, "first stable capture digest");
-  exactDigest(input.secondCaptureSha256, "second stable capture digest");
-  const firstProof = verifyLinearRequirementLabelAcceptedProtectedTransition(
-    candidate, input.first, transition, transition.root, input.expectedPreviousReceiptRoot,
+  const finalizeControlTransition = assertFinalizeControlTransition(
+    input.finalizeControlTransition,
+    semanticBaselineContract,
+    "current finalize control transition",
   );
-  const secondProof = verifyLinearRequirementLabelAcceptedProtectedTransition(
-    candidate, input.second, transition, transition.root, input.expectedPreviousReceiptRoot,
-  );
-  const { firstCaptureRoot, secondCaptureRoot } = compareLinearRequirementLabelReplacementStableCaptures(
-    input.first,
-    input.second,
-  );
-  if (firstCaptureRoot !== secondCaptureRoot ||
-    firstProof.finalProtectedNativeStateRoot !== secondProof.finalProtectedNativeStateRoot) {
-    fail("two final full captures are not stable");
+  const historicalProof = assertHistoricalProof(input.historicalProof, candidate);
+  assertHistoricalProofMatchesContract(historicalProof, semanticBaselineContract);
+  exactDigest(input.firstCaptureSha256, "first current capture digest");
+  exactDigest(input.secondCaptureSha256, "second current capture digest");
+  const firstStates = currentRequirementIssueStates(candidate, input.first);
+  const secondStates = currentRequirementIssueStates(candidate, input.second);
+  const firstProtectedNativeStateRoot = protectedNativeRoot(input.first, candidate.newLabel.id);
+  const secondProtectedNativeStateRoot = protectedNativeRoot(input.second, candidate.newLabel.id);
+  if (firstProtectedNativeStateRoot !== secondProtectedNativeStateRoot) {
+    fail("two current protected-native roots are not stable");
   }
+  const comparison = compareLinearRequirementLabelReplacementStableCaptures(input.first, input.second);
+  if (comparison.firstCaptureRoot !== comparison.secondCaptureRoot || comparison.differingCatalogs.length !== 0 ||
+    canonicalJson(firstStates) !== canonicalJson(secondStates)) {
+    fail("two current full captures are not stable");
+  }
+  const currentRequirementIssueStateRoot = sortedMerkleRoot(firstStates);
   const body = {
-    schemaVersion: 2 as const,
+    schemaVersion: 3 as const,
     kind: "linear-requirement-label-replacement-final-receipt" as const,
     candidateRoot: candidate.root,
+    transitionRoot: semanticBaselineContract.root,
+    semanticBaselineContract: structuredClone(semanticBaselineContract),
+    finalizeControlTransition: structuredClone(finalizeControlTransition),
+    historicalProof: structuredClone(historicalProof),
     firstCaptureSha256: input.firstCaptureSha256,
     secondCaptureSha256: input.secondCaptureSha256,
-    firstCaptureRoot,
-    secondCaptureRoot,
-    candidateProtectedNativeStateRoot: candidate.protectedNativeStateRoot,
-    finalProtectedNativeStateRoot: firstProof.finalProtectedNativeStateRoot,
-    acceptedProtectedStateTransition: structuredClone(transition),
+    firstCaptureRoot: comparison.firstCaptureRoot,
+    secondCaptureRoot: comparison.secondCaptureRoot,
+    currentGlobalRoot: comparison.firstCaptureRoot,
+    firstCatalogRoots: comparison.firstCatalogRoots,
+    secondCatalogRoots: comparison.secondCatalogRoots,
+    currentCatalogRoots: comparison.firstCatalogRoots,
+    firstProtectedNativeStateRoot,
+    secondProtectedNativeStateRoot,
+    currentProtectedNativeStateRoot: firstProtectedNativeStateRoot,
+    currentRequirementIssueStates: firstStates,
+    currentRequirementIssueStateRoot,
     requirementUses: EXPECTED_REQUIREMENT_ISSUE_COUNT as 186,
     oldLabelUses: 0 as const,
     outsideRequirementUses: 0 as const,
@@ -1937,8 +2238,107 @@ export function verifyLinearRequirementLabelReplacementFinalWithTransition(input
   return { ...body, root: sha256(canonicalJson(body)) };
 }
 
+export function assertLinearRequirementLabelReplacementFinalReceiptV3(
+  value: LinearRequirementLabelReplacementFinalReceiptV3,
+  candidateInput: LinearRequirementLabelReplacementCandidate,
+  expectedTransitionRoot: string,
+  expectedPreviousReceiptRoot: string,
+  expectedFinalizeControlTransition: LinearRequirementLabelFinalizeControlTransition,
+): LinearRequirementLabelReplacementFinalReceiptV3 {
+  const candidate = assertLinearRequirementLabelReplacementCandidate(candidateInput);
+  exactKeys(value, [
+    "schemaVersion", "kind", "candidateRoot", "transitionRoot", "semanticBaselineContract",
+    "finalizeControlTransition", "historicalProof", "firstCaptureSha256", "secondCaptureSha256", "firstCaptureRoot",
+    "secondCaptureRoot", "currentGlobalRoot", "firstCatalogRoots", "secondCatalogRoots",
+    "currentCatalogRoots", "firstProtectedNativeStateRoot", "secondProtectedNativeStateRoot",
+    "currentProtectedNativeStateRoot",
+    "currentRequirementIssueStates", "currentRequirementIssueStateRoot", "requirementUses", "oldLabelUses",
+    "outsideRequirementUses", "stable", "root",
+  ], "semantic-baseline final receipt");
+  const contract = assertLinearRequirementLabelSemanticBaselineContract(
+    value.semanticBaselineContract,
+    candidate,
+    expectedTransitionRoot,
+    expectedPreviousReceiptRoot,
+  );
+  const finalizeControlTransition = assertFinalizeControlTransition(
+    value.finalizeControlTransition,
+    contract,
+    "receipt finalize control transition",
+  );
+  const expectedControlTransition = assertFinalizeControlTransition(
+    expectedFinalizeControlTransition,
+    contract,
+    "expected finalize control transition",
+  );
+  if (canonicalJson(finalizeControlTransition) !== canonicalJson(expectedControlTransition)) {
+    fail("receipt finalize control transition differs from the verified repository transition");
+  }
+  const historicalProof = assertHistoricalProof(value.historicalProof, candidate);
+  assertHistoricalProofMatchesContract(historicalProof, contract);
+  if (value.schemaVersion !== 3 || value.kind !== "linear-requirement-label-replacement-final-receipt" ||
+    value.candidateRoot !== candidate.root || value.transitionRoot !== contract.root ||
+    value.requirementUses !== 186 ||
+    value.oldLabelUses !== 0 || value.outsideRequirementUses !== 0 || value.stable !== true ||
+    value.firstCaptureRoot !== value.secondCaptureRoot || value.currentGlobalRoot !== value.firstCaptureRoot ||
+    value.firstProtectedNativeStateRoot !== value.secondProtectedNativeStateRoot ||
+    value.currentProtectedNativeStateRoot !== value.firstProtectedNativeStateRoot) {
+    fail("semantic-baseline final receipt identity, history, usage, or stability differs");
+  }
+  exactDigest(value.firstCaptureSha256, "semantic-baseline first capture digest");
+  exactDigest(value.secondCaptureSha256, "semantic-baseline second capture digest");
+  exactDigest(value.firstCaptureRoot, "semantic-baseline first capture root");
+  exactDigest(value.secondCaptureRoot, "semantic-baseline second capture root");
+  exactDigest(value.currentGlobalRoot, "semantic-baseline current global root");
+  exactDigest(value.firstProtectedNativeStateRoot, "semantic-baseline first protected root");
+  exactDigest(value.secondProtectedNativeStateRoot, "semantic-baseline second protected root");
+  exactDigest(value.currentProtectedNativeStateRoot, "semantic-baseline current protected root");
+  exactDigest(value.currentRequirementIssueStateRoot, "semantic-baseline Requirement Merkle root");
+  for (const [label, roots] of [
+    ["first", value.firstCatalogRoots],
+    ["second", value.secondCatalogRoots],
+    ["current", value.currentCatalogRoots],
+  ] as const) {
+    exactKeys(roots, STABLE_CAPTURE_CATALOG_KEYS, `semantic-baseline ${label} catalog roots`);
+    for (const [catalog, digest] of Object.entries(roots)) {
+      exactDigest(digest, `semantic-baseline ${label} ${catalog} catalog root`);
+    }
+  }
+  if (canonicalJson(value.firstCatalogRoots) !== canonicalJson(value.secondCatalogRoots) ||
+    canonicalJson(value.currentCatalogRoots) !== canonicalJson(value.firstCatalogRoots)) {
+    fail("semantic-baseline first, second, and current catalog roots differ");
+  }
+  if (!Array.isArray(value.currentRequirementIssueStates) ||
+    value.currentRequirementIssueStates.length !== EXPECTED_REQUIREMENT_ISSUE_COUNT) {
+    fail("semantic-baseline final receipt lacks 186 current Requirement state leaves");
+  }
+  for (const [index, row] of value.currentRequirementIssueStates.entries()) {
+    exactKeys(row, ["issueId", "identifier", "fullStateRoot", "protectedStateRoot"], `current Requirement state ${index}`);
+    exactUuid(row.issueId, `current Requirement state ${index} UUID`);
+    requirementNumber(row.identifier);
+    exactDigest(row.fullStateRoot, `${row.identifier} current full-state root`);
+    exactDigest(row.protectedStateRoot, `${row.identifier} current protected-state root`);
+  }
+  const sorted = [...value.currentRequirementIssueStates]
+    .sort((left, right) => left.issueId.localeCompare(right.issueId) || left.identifier.localeCompare(right.identifier));
+  uniqueStrings(sorted.map((row) => row.issueId), "semantic-baseline Requirement UUIDs");
+  uniqueStrings(sorted.map((row) => row.identifier), "semantic-baseline Requirement identifiers");
+  const expectedIdentities = candidate.issues
+    .map((row) => ({ issueId: row.issueId, identifier: row.identifier }))
+    .sort((left, right) => left.issueId.localeCompare(right.issueId) || left.identifier.localeCompare(right.identifier));
+  const currentIdentities = sorted.map((row) => ({ issueId: row.issueId, identifier: row.identifier }));
+  if (canonicalJson(sorted) !== canonicalJson(value.currentRequirementIssueStates) ||
+    canonicalJson(currentIdentities) !== canonicalJson(expectedIdentities) ||
+    sortedMerkleRoot(sorted) !== value.currentRequirementIssueStateRoot) {
+    fail("semantic-baseline current Requirement identity, state order, or Merkle root differs");
+  }
+  const { root: _root, ...body } = value;
+  if (value.root !== sha256(canonicalJson(body))) fail("semantic-baseline final receipt root seal differs");
+  return value;
+}
+
 export function canonicalLinearRequirementLabelReplacementFinalReceiptJson(
-  receipt: LinearRequirementLabelReplacementFinalReceipt | LinearRequirementLabelReplacementFinalReceiptV2,
+  receipt: LinearRequirementLabelReplacementFinalReceipt | LinearRequirementLabelReplacementFinalReceiptV3,
 ): string {
   return `${JSON.stringify(receipt, null, 2)}\n`;
 }

@@ -81,7 +81,7 @@ test("finalize compares a second complete stable native capture", () => {
   assert.match(workflow, /--second-capture-receipt \/tmp\/linear-requirement-label-replacement\/raw\/second-capture-receipt\.json/);
 });
 
-test("finalize alone may consume the sealed transition and exact retained artifact evidence", () => {
+test("finalize alone may consume the sealed semantic handoff and exact retained artifact evidence", () => {
   assert.match(workflow, /expected_finalize_transition_root:/);
   assert.match(workflow, /EXPECTED_FINALIZE_TRANSITION_ROOT: \$\{\{ inputs\.expected_finalize_transition_root \}\}/);
   assert.match(workflow, /delivery\/linear-requirement-label-finalize-transition\.json/);
@@ -89,7 +89,7 @@ test("finalize alone may consume the sealed transition and exact retained artifa
   assert.match(workflow, /--expected-finalize-transition-root "\$EXPECTED_FINALIZE_TRANSITION_ROOT"/);
   assert.match(workflow, /finalize transition root is valid only for finalize|expected_finalize_transition_root is valid only for finalize/);
   assert.match(namedStep("Validate phase handoff pins"), /if \[\[ "\$MODE" == "finalize" \]\]; then[\s\S]*require_root expected_finalize_transition_root[\s\S]*else[\s\S]*require_empty "expected_finalize_transition_root is valid only for finalize"/);
-  const evidence = namedStep("Verify pinned finalize transition evidence");
+  const evidence = namedStep("Verify and download pinned finalize history");
   assert.match(evidence, /id: finalize_transition_evidence/);
   assert.match(evidence, /inputs\.mode == 'finalize'/);
   assert.match(evidence, /actions\/artifacts\/\$\{artifact_id\}/);
@@ -97,6 +97,11 @@ test("finalize alone may consume the sealed transition and exact retained artifa
   assert.match(evidence, /run_attempt/);
   assert.match(evidence, /head_sha/);
   assert.match(evidence, /head_branch == "main"/);
+  assert.match(evidence, /\.status == "completed"/);
+  assert.match(evidence, /\.conclusion == "success"/);
+  assert.match(evidence, /\.event == "workflow_dispatch"/);
+  assert.match(evidence, /\.name == "Linear Requirement label replacement"/);
+  assert.match(evidence, /\.path == "\.github\/workflows\/linear-requirement-label-replacement\.yml"/);
   assert.match(evidence, /expired/);
   assert.match(evidence, /artifact identity is not unique|artifact identity differs/);
   assert.match(evidence, /artifact digest differs/);
@@ -104,6 +109,33 @@ test("finalize alone may consume the sealed transition and exact retained artifa
   assert.doesNotMatch(namedStep("Apply exactly one mutation phase"), /FINALIZE_TRANSITION/);
   assert.equal((workflow.match(/--finalize-transition delivery\/linear-requirement-label-finalize-transition\.json/g) ?? []).length, 1);
   assert.equal((workflow.match(/--expected-finalize-transition-root "\$EXPECTED_FINALIZE_TRANSITION_ROOT"/g) ?? []).length, 1);
+});
+
+test("finalize downloads and binds both successful historical phase artifacts", () => {
+  const evidence = namedStep("Verify and download pinned finalize history");
+  assert.match(evidence, /historicalEvidence\[\$phase\]/);
+  assert.match(evidence, /8726485898|artifactId/);
+  assert.match(evidence, /8727423703|artifactId/);
+  assert.match(evidence, /artifact identity is not unique|artifact identity differs/);
+  assert.match(evidence, /artifact digest differs/);
+  assert.match(evidence, /select\(\.name == \$name and \.expired == false\) \| \[\(\.id \| tostring\), \.digest\] \| @tsv/);
+  assert.doesNotMatch(evidence, /select\(\(\.id \| tostring\) == \$id and \.name == \$name/);
+  assert.match(evidence, /matched_id.*artifact_id.*matched_digest.*artifact_digest/s);
+  assert.match(evidence, /run_attempt/);
+  assert.match(evidence, /\.status == "completed"/);
+  assert.match(evidence, /\.conclusion == "success"/);
+  assert.match(evidence, /\.event == "workflow_dispatch"/);
+  assert.match(evidence, /\.name == "Linear Requirement label replacement"/);
+  assert.match(evidence, /\.path == "\.github\/workflows\/linear-requirement-label-replacement\.yml"/);
+  assert.match(evidence, /expired == false/);
+  assert.match(evidence, /gh run download/);
+  const finalize = namedStep("Verify exactly one credential-free phase");
+  for (const flag of [
+    "--historical-verify-candidate", "--historical-verify-receipt", "--historical-verify-journal",
+    "--historical-verify-core-receipts", "--historical-retire-candidate",
+    "--historical-retire-receipt", "--historical-retire-journal", "--historical-retire-core-receipts",
+  ]) assert.match(finalize, new RegExp(flag));
+  assert.doesNotMatch(namedStep("Apply exactly one mutation phase"), /historical-(?:verify|retire)/);
 });
 
 test("every later phase pins candidate and predecessor artifacts before use", () => {

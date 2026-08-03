@@ -16,20 +16,21 @@ import { basename, dirname, join, resolve } from "node:path";
 
 import { LinearRequirementLabelHttpTransport } from "./lib/linear-requirement-label-http-transport.js";
 import {
-  assertLinearRequirementLabelFinalizeTransitionContract,
   assertLinearRequirementLabelReplacementCandidate,
+  assertLinearRequirementLabelSemanticBaselineContract,
   canonicalLinearRequirementLabelReplacementFinalReceiptJson,
   compensateLinearRequirementLabelReplacementPhase,
   compareLinearRequirementLabelReplacementStableCaptures,
   executeLinearRequirementLabelReplacementPhase,
-  verifyLinearRequirementLabelAcceptedProtectedTransition,
+  verifyLinearRequirementLabelHistoricalReceiptChain,
   verifyLinearRequirementLabelRenameRecoveryState,
   verifyLinearRequirementLabelReplacementFinal,
-  verifyLinearRequirementLabelReplacementFinalWithTransition,
+  verifyLinearRequirementLabelReplacementSemanticBaseline,
   verifyLinearRequirementLabelReplacementUsage,
   type LinearRequirementLabelCapture,
   type LinearRequirementLabelExpectedLabel,
-  type LinearRequirementLabelFinalizeTransitionContract,
+  type LinearRequirementLabelFinalizeControlTransition,
+  type LinearRequirementLabelSemanticBaselineContract,
   type LinearRequirementLabelReplacementCandidate,
   type LinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelReplacementPhaseReceipt,
@@ -98,6 +99,14 @@ interface CliArgs {
   controlTransitionAfterRoot?: string;
   finalizeTransition?: string;
   expectedFinalizeTransitionRoot?: string;
+  historicalVerifyCandidate?: string;
+  historicalVerifyReceipt?: string;
+  historicalVerifyJournal?: string;
+  historicalVerifyCoreReceipts?: string;
+  historicalRetireCandidate?: string;
+  historicalRetireReceipt?: string;
+  historicalRetireJournal?: string;
+  historicalRetireCoreReceipts?: string;
 }
 
 interface ControlTransition {
@@ -114,6 +123,8 @@ type FailureCode =
   | "predecessor_validation"
   | "protected_state_validation"
   | "protected_state_transition_validation"
+  | "historical_receipt_validation"
+  | "present_boundary_validation"
   | "retirement_replay_validation"
   | "final_usage_validation"
   | "stable_capture_validation"
@@ -254,6 +265,9 @@ function parseArgs(argv: string[]): CliArgs {
     "--control-transition-source", "--control-transition-candidate-root", "--control-transition-head",
     "--control-transition-before-root", "--control-transition-after-root",
     "--finalize-transition", "--expected-finalize-transition-root",
+    "--historical-verify-candidate", "--historical-verify-receipt", "--historical-verify-journal",
+    "--historical-verify-core-receipts", "--historical-retire-candidate", "--historical-retire-receipt",
+    "--historical-retire-journal", "--historical-retire-core-receipts",
   ]);
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
@@ -300,6 +314,14 @@ function parseArgs(argv: string[]): CliArgs {
   const controlTransitionAfterRoot = values.get("--control-transition-after-root");
   const finalizeTransition = values.get("--finalize-transition");
   const expectedFinalizeTransitionRoot = values.get("--expected-finalize-transition-root");
+  const historicalVerifyCandidate = values.get("--historical-verify-candidate");
+  const historicalVerifyReceipt = values.get("--historical-verify-receipt");
+  const historicalVerifyJournal = values.get("--historical-verify-journal");
+  const historicalVerifyCoreReceipts = values.get("--historical-verify-core-receipts");
+  const historicalRetireCandidate = values.get("--historical-retire-candidate");
+  const historicalRetireReceipt = values.get("--historical-retire-receipt");
+  const historicalRetireJournal = values.get("--historical-retire-journal");
+  const historicalRetireCoreReceipts = values.get("--historical-retire-core-receipts");
   const mutation = MUTATION_PHASES.has(phase as LinearRequirementLabelReplacementPhase);
   if (apply !== mutation) fail("--apply is required only for mutation phases");
   if (compensate && !mutation) fail("--compensate is valid only for mutation phases");
@@ -341,6 +363,16 @@ function parseArgs(argv: string[]): CliArgs {
     (finalizeTransition !== undefined && (phase !== "finalize" || !DIGEST.test(expectedFinalizeTransitionRoot!)))) {
     fail("finalize transition arguments are invalid or outside finalize");
   }
+  const historicalValues = [
+    historicalVerifyCandidate, historicalVerifyReceipt, historicalVerifyJournal, historicalVerifyCoreReceipts,
+    historicalRetireCandidate, historicalRetireReceipt, historicalRetireJournal, historicalRetireCoreReceipts,
+  ];
+  const historicalValueCount = historicalValues.filter((value) => value !== undefined).length;
+  if ((historicalValueCount !== 0 && historicalValueCount !== historicalValues.length) ||
+    (finalizeTransition !== undefined) !== (historicalValueCount === historicalValues.length) ||
+    (historicalValueCount > 0 && phase !== "finalize")) {
+    fail("both historical phase artifacts are required with the finalize transition only");
+  }
   return {
     apply,
     compensate,
@@ -370,6 +402,14 @@ function parseArgs(argv: string[]): CliArgs {
     controlTransitionAfterRoot,
     finalizeTransition,
     expectedFinalizeTransitionRoot,
+    historicalVerifyCandidate,
+    historicalVerifyReceipt,
+    historicalVerifyJournal,
+    historicalVerifyCoreReceipts,
+    historicalRetireCandidate,
+    historicalRetireReceipt,
+    historicalRetireJournal,
+    historicalRetireCoreReceipts,
   };
 }
 
@@ -514,8 +554,8 @@ function repositoryHead(
   sourceCommit: string,
   candidateRoot: string,
   transition?: ControlTransition,
-  finalizeTransition?: LinearRequirementLabelFinalizeTransitionContract,
-): { root: string; head: string } {
+  finalizeTransition?: LinearRequirementLabelSemanticBaselineContract,
+): { root: string; head: string; finalizeControlTransition?: LinearRequirementLabelFinalizeControlTransition } {
   const environment = secretFreeEnvironment();
   const top = spawnSync("git", ["--no-optional-locks", "rev-parse", "--show-toplevel"], {
     cwd: process.cwd(), encoding: "utf8", env: environment,
@@ -527,6 +567,7 @@ function repositoryHead(
   });
   if (head.status !== 0 || head.signal || head.error || !COMMIT.test(head.stdout.trim())) fail("repository HEAD is unavailable");
   const current = head.stdout.trim();
+  let finalizeControlTransitionProof: LinearRequirementLabelFinalizeControlTransition | undefined;
   if (current === sourceCommit) {
     if (transition || finalizeTransition) fail("control transition is not valid without a later main HEAD");
   } else {
@@ -551,26 +592,39 @@ function repositoryHead(
         exactPathSet(changedControlPaths(root, sourceCommit, current, environment), DIAGNOSTIC_CONTROL_TRANSITION_PATHS);
       const exactFinalizeChain = transition !== undefined && finalizeTransition !== undefined &&
         sourceCommit === finalizeTransition.candidateSourceCommit && candidateRoot === finalizeTransition.candidateRoot &&
-        transition.source === finalizeTransition.diagnosticCommit && transition.candidateRoot === candidateRoot &&
-        transition.head === current && transition.beforeRoot === finalizeTransition.diagnosticControlTreeRoot &&
-        soleParent(root, current, environment) === finalizeTransition.diagnosticCommit &&
+        transition.source === finalizeTransition.transitionCommit && transition.candidateRoot === candidateRoot &&
+        transition.head === current && transition.beforeRoot === finalizeTransition.transitionControlTreeRoot &&
+        soleParent(root, current, environment) === finalizeTransition.transitionCommit &&
+        soleParent(root, finalizeTransition.transitionCommit, environment) === finalizeTransition.diagnosticCommit &&
         soleParent(root, finalizeTransition.diagnosticCommit, environment) === sourceCommit &&
         controlTreeRoot(root, sourceCommit, environment) === finalizeTransition.candidateControlTreeRoot &&
         controlTreeRoot(root, finalizeTransition.diagnosticCommit, environment) === finalizeTransition.diagnosticControlTreeRoot &&
+        controlTreeRoot(root, finalizeTransition.transitionCommit, environment) === finalizeTransition.transitionControlTreeRoot &&
         controlTreeRoot(root, current, environment) === transition.afterRoot &&
         exactPathSet(
           changedControlPaths(root, sourceCommit, finalizeTransition.diagnosticCommit, environment),
           DIAGNOSTIC_CONTROL_TRANSITION_PATHS,
         ) && exactPathSet(
-          changedControlPaths(root, finalizeTransition.diagnosticCommit, current, environment),
+          changedControlPaths(root, finalizeTransition.diagnosticCommit, finalizeTransition.transitionCommit, environment),
+          FINALIZE_CONTROL_TRANSITION_PATHS,
+        ) && exactPathSet(
+          changedControlPaths(root, finalizeTransition.transitionCommit, current, environment),
           FINALIZE_CONTROL_TRANSITION_PATHS,
         );
       if (!directDiagnostic && !exactFinalizeChain) {
         fail("changed migration controls lack an exact digest-pinned transition");
       }
+      if (exactFinalizeChain) {
+        finalizeControlTransitionProof = {
+          source: finalizeTransition.transitionCommit,
+          head: current,
+          beforeRoot: controlTreeRoot(root, finalizeTransition.transitionCommit, environment),
+          afterRoot: controlTreeRoot(root, current, environment),
+        };
+      }
     }
   }
-  return { root, head: current };
+  return { root, head: current, finalizeControlTransition: finalizeControlTransitionProof };
 }
 
 function validateCapture(input: {
@@ -912,6 +966,22 @@ async function main(): Promise<void> {
   const finalizeTransitionRaw = args.finalizeTransition
     ? readSafeInput(args.finalizeTransition, "finalize transition contract")
     : undefined;
+  const historicalVerifyCandidateRaw = args.historicalVerifyCandidate
+    ? readSafeInput(args.historicalVerifyCandidate, "historical verify candidate") : undefined;
+  const historicalVerifyReceiptRaw = args.historicalVerifyReceipt
+    ? readSafeInput(args.historicalVerifyReceipt, "historical verify receipt") : undefined;
+  const historicalVerifyJournalRaw = args.historicalVerifyJournal
+    ? readSafeInput(args.historicalVerifyJournal, "historical verify journal") : undefined;
+  const historicalVerifyCoreReceiptsRaw = args.historicalVerifyCoreReceipts
+    ? readSafeInput(args.historicalVerifyCoreReceipts, "historical verify core receipts", true) : undefined;
+  const historicalRetireCandidateRaw = args.historicalRetireCandidate
+    ? readSafeInput(args.historicalRetireCandidate, "historical retire candidate") : undefined;
+  const historicalRetireReceiptRaw = args.historicalRetireReceipt
+    ? readSafeInput(args.historicalRetireReceipt, "historical retire receipt") : undefined;
+  const historicalRetireJournalRaw = args.historicalRetireJournal
+    ? readSafeInput(args.historicalRetireJournal, "historical retire journal") : undefined;
+  const historicalRetireCoreReceiptsRaw = args.historicalRetireCoreReceipts
+    ? readSafeInput(args.historicalRetireCoreReceipts, "historical retire core receipts", true) : undefined;
   const journalOut = newOutputPath(args.journalOut, "journal output");
   const receiptOut = newOutputPath(args.receiptOut, "receipt output");
   const chunkReceiptsOut = newOutputPath(args.chunkReceiptsOut, "chunk receipt output");
@@ -927,8 +997,8 @@ async function main(): Promise<void> {
   );
   failureSummary.candidateRoot = candidate.root;
   if (candidate.root !== args.expectedRoot) fail("candidate root differs from --expected-root");
-  const finalizeTransition = finalizeTransitionRaw ? assertLinearRequirementLabelFinalizeTransitionContract(
-    parsedJson(finalizeTransitionRaw, "finalize transition contract") as LinearRequirementLabelFinalizeTransitionContract,
+  const finalizeTransition = finalizeTransitionRaw ? assertLinearRequirementLabelSemanticBaselineContract(
+    parsedJson(finalizeTransitionRaw, "finalize transition contract") as LinearRequirementLabelSemanticBaselineContract,
     candidate,
     args.expectedFinalizeTransitionRoot!,
     args.expectedPreviousReceiptRoot!,
@@ -1011,22 +1081,27 @@ async function main(): Promise<void> {
     failureSummary.secondCatalogRoots = comparison.secondCatalogRoots;
   }
 
+  let historicalProof;
   if (finalizeTransition) {
-    failureSummary.code = "protected_state_transition_validation";
-    verifyLinearRequirementLabelAcceptedProtectedTransition(
+    failureSummary.code = "historical_receipt_validation";
+    historicalProof = verifyLinearRequirementLabelHistoricalReceiptChain({
       candidate,
-      capture.native,
-      finalizeTransition,
-      finalizeTransition.root,
-      args.expectedPreviousReceiptRoot!,
-    );
-    verifyLinearRequirementLabelAcceptedProtectedTransition(
-      candidate,
-      secondCapture!.native,
-      finalizeTransition,
-      finalizeTransition.root,
-      args.expectedPreviousReceiptRoot!,
-    );
+      transition: finalizeTransition,
+      expectedTransitionRoot: finalizeTransition.root,
+      expectedPreviousReceiptRoot: args.expectedPreviousReceiptRoot!,
+      verifyFiles: {
+        candidateRaw: historicalVerifyCandidateRaw!.toString("utf8"),
+        receiptRaw: historicalVerifyReceiptRaw!.toString("utf8"),
+        journalRaw: historicalVerifyJournalRaw!.toString("utf8"),
+        coreReceiptsRaw: historicalVerifyCoreReceiptsRaw!.toString("utf8"),
+      },
+      retireFiles: {
+        candidateRaw: historicalRetireCandidateRaw!.toString("utf8"),
+        receiptRaw: historicalRetireReceiptRaw!.toString("utf8"),
+        journalRaw: historicalRetireJournalRaw!.toString("utf8"),
+        coreReceiptsRaw: historicalRetireCoreReceiptsRaw!.toString("utf8"),
+      },
+    });
   } else {
     failureSummary.code = "protected_state_validation";
     if (!failureSummary.firstCapture.protectedRootMatches ||
@@ -1080,31 +1155,16 @@ async function main(): Promise<void> {
     verification = verifyLinearRequirementLabelReplacementUsage(candidate, capture.native, { oldRetired: false });
   }
   if (args.phase === "finalize") {
-    failureSummary.code = "retirement_replay_validation";
-    const replay = await executeLinearRequirementLabelReplacementPhase({
-      candidate,
-      expectedCandidateRoot: candidate.root,
-      phase: "retire",
-      authorization: {
-        candidateRoot: candidate.root,
-        phase: "retire",
-        confirmation: "APPLY_LINEAR_REQUIREMENT_LABEL_REPLACEMENT_PHASE",
-      },
-      runId: args.runId,
-      transport: new CaptureReplayTransport(capture.native),
-      resumeJournalRaw: journalRaw,
-      expectedResumeJournalSha256: sha256(journalRaw),
-      receipts: coreReceipts,
-    });
-    if (replay.applied !== 0 || replay.appendedJournalRaw !== "") fail("retirement proof was not a read-only complete replay");
-    coreReceipts = [...coreReceipts, ...replay.receipts];
-    failureSummary.code = "stable_capture_validation";
+    failureSummary.code = finalizeTransition ? "present_boundary_validation" : "stable_capture_validation";
     const final = finalizeTransition
-      ? verifyLinearRequirementLabelReplacementFinalWithTransition({
+      ? verifyLinearRequirementLabelReplacementSemanticBaseline({
         candidate,
-        transition: finalizeTransition,
+        semanticBaselineContract: finalizeTransition,
+        finalizeControlTransition: repository.finalizeControlTransition ??
+          fail("validated finalize control transition is unavailable"),
         expectedTransitionRoot: finalizeTransition.root,
         expectedPreviousReceiptRoot: args.expectedPreviousReceiptRoot!,
+        historicalProof: historicalProof!,
         first: capture.native,
         second: secondCapture!.native,
         firstCaptureSha256: capture.nativeSha256,
