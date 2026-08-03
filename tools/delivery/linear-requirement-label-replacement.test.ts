@@ -8,19 +8,26 @@ import {
   REQUIREMENTS_TEAM_ID,
   RETIRED_REQUIREMENT_LABEL_NAME,
   assertLinearRequirementLabelReplacementCandidate,
+  assertLinearRequirementLabelFinalizeTransitionContract,
   buildLinearRequirementLabelReplacementCandidate,
   compareLinearRequirementLabelReplacementStableCaptures,
   compensateLinearRequirementLabelReplacementPhase,
   executeLinearRequirementLabelReplacementPhase,
   requirementLabelRollbackName,
+  verifyLinearRequirementLabelAcceptedProtectedTransition,
   verifyLinearRequirementLabelReplacementFinal,
+  verifyLinearRequirementLabelReplacementFinalWithTransition,
   verifyLinearRequirementLabelReplacementUsage,
+  type LinearRequirementLabelFinalizeTransitionContract,
   type LinearRequirementLabelCapture,
   type LinearRequirementLabelReplacementCandidate,
   type LinearRequirementLabelReplacementTransport,
 } from "./lib/linear-requirement-label-replacement.js";
 
 const NEW_LABEL_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+const CYCLE_ID = "d745c4db-3f58-4862-b7e3-9ddfa869b403";
+const CYCLE_BEFORE = "2026-07-28T14:36:15.374Z";
+const CYCLE_AFTER = "2026-07-29T14:35:38.730Z";
 const SHA = (value: string): string => createHash("sha256").update(value).digest("hex");
 const CANONICAL = (value: unknown): string => {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
@@ -116,6 +123,87 @@ function candidate(native = fixture()): LinearRequirementLabelReplacementCandida
     captureReceiptSha256: "c".repeat(64),
     newLabelId: NEW_LABEL_ID,
   });
+}
+
+function withProtectedCycle(native: LinearRequirementLabelCapture, updatedAt = CYCLE_BEFORE): LinearRequirementLabelCapture {
+  const result = structuredClone(native);
+  result.cycles = [{
+    id: CYCLE_ID,
+    number: 7,
+    name: "SEL cycle",
+    descriptionSha256: SHA("cycle-description"),
+    updatedAt,
+    archivedAt: null,
+    startsAt: "2026-07-20T00:00:00.000Z",
+    endsAt: "2026-08-03T00:00:00.000Z",
+    completedAt: null,
+    teamId: "40000000-0000-4000-8000-000000000001",
+    teamKey: "SEL",
+    inheritedFromId: null,
+  }];
+  result.coverage.totals.cycles = 1;
+  return result;
+}
+
+function transitionContract(
+  plan: LinearRequirementLabelReplacementCandidate,
+  beforeCycles: LinearRequirementLabelCapture["cycles"],
+  afterCycles: LinearRequirementLabelCapture["cycles"],
+): LinearRequirementLabelFinalizeTransitionContract {
+  const body = {
+    schemaVersion: 1 as const,
+    kind: "linear-requirement-label-finalize-transition" as const,
+    candidateRoot: plan.root,
+    candidateSourceCommit: plan.sourceCommit,
+    diagnosticCommit: "d".repeat(40),
+    previousReceiptRoot: "9".repeat(64),
+    candidateControlTreeRoot: "1".repeat(64),
+    diagnosticControlTreeRoot: "2".repeat(64),
+    normalizedFingerprintSha256: "3".repeat(64),
+    evidence: {
+      before: {
+        artifactId: "8722916951",
+        artifactName: `linear-drift-fingerprint-${plan.sourceCommit}-30448115612-1`,
+        artifactDigest: `sha256:${"4".repeat(64)}`,
+        runId: "30448115612",
+        runAttempt: "1",
+        commit: plan.sourceCommit,
+        capturedAt: "2026-07-29T11:56:36.152Z",
+        fingerprintSha256: "5".repeat(64),
+        receiptSha256: "6".repeat(64),
+      },
+      after: {
+        artifactId: "8731405740",
+        artifactName: `linear-drift-fingerprint-${"d".repeat(40)}-30470152687-1`,
+        artifactDigest: `sha256:${"7".repeat(64)}`,
+        runId: "30470152687",
+        runAttempt: "1",
+        commit: "d".repeat(40),
+        capturedAt: "2026-07-29T16:22:28.303Z",
+        fingerprintSha256: "8".repeat(64),
+        receiptSha256: "a".repeat(64),
+      },
+    },
+    protectedTransition: {
+      catalog: "cycles" as const,
+      cycleId: CYCLE_ID,
+      cycleNumber: 7,
+      field: "updatedAt" as const,
+      beforeValue: CYCLE_BEFORE,
+      afterValue: CYCLE_AFTER,
+      beforeCatalogRoot: SHA(CANONICAL(beforeCycles)),
+      afterCatalogRoot: SHA(CANONICAL(afterCycles)),
+      candidateProtectedNativeStateRoot: plan.protectedNativeStateRoot,
+    },
+  };
+  return { ...body, root: SHA(CANONICAL(body)) };
+}
+
+function resealTransition(
+  transition: LinearRequirementLabelFinalizeTransitionContract,
+): LinearRequirementLabelFinalizeTransitionContract {
+  const { root: _root, ...body } = structuredClone(transition);
+  return { ...body, root: SHA(CANONICAL(body)) };
 }
 
 test("seals the exact 189-write replacement in deterministic order", () => {
@@ -696,4 +784,161 @@ test("reports only the changed semantic catalog when final captures differ", asy
       return /catalog/i.test(String(error));
     },
   );
+});
+
+test("accepts only the sealed one-cycle transition by rewinding to the original protected root", async () => {
+  const before = withProtectedCycle(fixture());
+  const plan = candidate(before);
+  const transport = new FakeTransport();
+  transport.labels.get(OLD_REQUIREMENT_LABEL_ID)!.name = RETIRED_REQUIREMENT_LABEL_NAME;
+  transport.labels.get(OLD_REQUIREMENT_LABEL_ID)!.retiredAt = "2026-07-29T00:00:00.000Z";
+  await transport.createLabel(plan.newLabel);
+  for (const row of plan.issues) await transport.replaceIssueLabels({ issueId: row.issueId, labelIds: row.afterLabelIds });
+  const first = finalCapture(plan, transport);
+  first.cycles = withProtectedCycle(fixture(), CYCLE_AFTER).cycles;
+  first.coverage.totals.cycles = 1;
+  const second = structuredClone(first);
+  const transition = transitionContract(plan, before.cycles, first.cycles);
+
+  assert.doesNotThrow(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    transition,
+    plan,
+    transition.root,
+    transition.previousReceiptRoot,
+  ));
+  const receipt = verifyLinearRequirementLabelReplacementFinalWithTransition({
+    candidate: plan,
+    transition,
+    expectedTransitionRoot: transition.root,
+    expectedPreviousReceiptRoot: transition.previousReceiptRoot,
+    first,
+    second,
+    firstCaptureSha256: SHA(JSON.stringify(first)),
+    secondCaptureSha256: SHA(JSON.stringify(second)),
+  });
+  assert.equal(receipt.schemaVersion, 2);
+  assert.equal(receipt.candidateProtectedNativeStateRoot, plan.protectedNativeStateRoot);
+  assert.notEqual(receipt.finalProtectedNativeStateRoot, plan.protectedNativeStateRoot);
+  assert.equal(receipt.acceptedProtectedStateTransition.root, transition.root);
+  assert.equal(receipt.acceptedProtectedStateTransition.protectedTransition.cycleId, CYCLE_ID);
+  assert.equal(receipt.requirementUses, 186);
+  assert.equal(receipt.oldLabelUses, 0);
+  assert.equal(receipt.outsideRequirementUses, 0);
+  assert.equal(receipt.stable, true);
+  assert.match(receipt.root, /^[a-f0-9]{64}$/);
+});
+
+test("rejects any generalized transition, extra protected drift, or changed REQ pin without leaking content", async () => {
+  const before = withProtectedCycle(fixture());
+  const plan = candidate(before);
+  const transport = new FakeTransport();
+  transport.labels.get(OLD_REQUIREMENT_LABEL_ID)!.name = RETIRED_REQUIREMENT_LABEL_NAME;
+  transport.labels.get(OLD_REQUIREMENT_LABEL_ID)!.retiredAt = "2026-07-29T00:00:00.000Z";
+  await transport.createLabel(plan.newLabel);
+  for (const row of plan.issues) await transport.replaceIssueLabels({ issueId: row.issueId, labelIds: row.afterLabelIds });
+  const current = finalCapture(plan, transport);
+  current.cycles = withProtectedCycle(fixture(), CYCLE_AFTER).cycles;
+  current.coverage.totals.cycles = 1;
+  const transition = transitionContract(plan, before.cycles, current.cycles);
+
+  const wrongCycle = structuredClone(transition);
+  wrongCycle.protectedTransition.cycleId = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+  assert.throws(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    wrongCycle, plan, transition.root, transition.previousReceiptRoot,
+  ), /cycle|transition/i);
+  const resealedCycle = resealTransition(wrongCycle);
+  assert.throws(() => verifyLinearRequirementLabelAcceptedProtectedTransition(
+    plan, current, resealedCycle, resealedCycle.root, transition.previousReceiptRoot,
+  ), /cycle|transition/i);
+
+  const wrongArtifact = structuredClone(transition);
+  wrongArtifact.evidence.after.artifactDigest = "sha256:not-a-digest";
+  const resealedArtifact = resealTransition(wrongArtifact);
+  assert.throws(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    resealedArtifact, plan, resealedArtifact.root, transition.previousReceiptRoot,
+  ), /artifact|digest/i);
+
+  const nonStringEvidence = structuredClone(transition) as unknown as Record<string, unknown>;
+  ((nonStringEvidence.evidence as Record<string, unknown>).before as Record<string, unknown>).artifactId = 8722916951;
+  const resealedNonStringEvidence = resealTransition(
+    nonStringEvidence as unknown as LinearRequirementLabelFinalizeTransitionContract,
+  );
+  assert.throws(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    resealedNonStringEvidence, plan, resealedNonStringEvidence.root, transition.previousReceiptRoot,
+  ), /non-string|evidence/i);
+
+  const wrongAttempt = structuredClone(transition);
+  wrongAttempt.evidence.after.runAttempt = "2";
+  wrongAttempt.evidence.after.artifactName =
+    `linear-drift-fingerprint-${wrongAttempt.evidence.after.commit}-${wrongAttempt.evidence.after.runId}-2`;
+  const resealedWrongAttempt = resealTransition(wrongAttempt);
+  assert.throws(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    resealedWrongAttempt, plan, resealedWrongAttempt.root, transition.previousReceiptRoot,
+  ), /artifact|identity/i);
+
+  const duplicateEvidence = structuredClone(transition);
+  duplicateEvidence.evidence.after.artifactId = duplicateEvidence.evidence.before.artifactId;
+  duplicateEvidence.evidence.after.runId = duplicateEvidence.evidence.before.runId;
+  duplicateEvidence.evidence.after.artifactName =
+    `linear-drift-fingerprint-${duplicateEvidence.evidence.after.commit}-${duplicateEvidence.evidence.after.runId}-1`;
+  const resealedDuplicateEvidence = resealTransition(duplicateEvidence);
+  assert.throws(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    resealedDuplicateEvidence, plan, resealedDuplicateEvidence.root, transition.previousReceiptRoot,
+  ), /distinct|evidence/i);
+
+  const protectedDrift = structuredClone(current);
+  protectedDrift.teams[0]!.name = "malicious-secret-team-name";
+  assert.throws(() => verifyLinearRequirementLabelReplacementFinalWithTransition({
+    candidate: plan,
+    transition,
+    expectedTransitionRoot: transition.root,
+    expectedPreviousReceiptRoot: transition.previousReceiptRoot,
+    first: protectedDrift,
+    second: protectedDrift,
+    firstCaptureSha256: SHA(JSON.stringify(protectedDrift)),
+    secondCaptureSha256: SHA(JSON.stringify(protectedDrift)),
+  }), (error) => {
+    assert.doesNotMatch(String(error), /malicious-secret-team-name/);
+    return /protected|transition|drift/i.test(String(error));
+  });
+
+  const issueDrift = structuredClone(current);
+  issueDrift.issues[0]!.relationIds = ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"];
+  assert.throws(() => verifyLinearRequirementLabelReplacementFinalWithTransition({
+    candidate: plan,
+    transition,
+    expectedTransitionRoot: transition.root,
+    expectedPreviousReceiptRoot: transition.previousReceiptRoot,
+    first: issueDrift,
+    second: issueDrift,
+    firstCaptureSha256: SHA(JSON.stringify(issueDrift)),
+    secondCaptureSha256: SHA(JSON.stringify(issueDrift)),
+  }), /REQ-1|protected|transition|drift/i);
+
+  const unstable = structuredClone(current);
+  unstable.cycles[0]!.name = "different";
+  assert.throws(() => verifyLinearRequirementLabelReplacementFinalWithTransition({
+    candidate: plan,
+    transition,
+    expectedTransitionRoot: transition.root,
+    expectedPreviousReceiptRoot: transition.previousReceiptRoot,
+    first: current,
+    second: unstable,
+    firstCaptureSha256: SHA(JSON.stringify(current)),
+    secondCaptureSha256: SHA(JSON.stringify(unstable)),
+  }), /stable|protected|transition|drift/i);
+
+  const malicious = structuredClone(transition) as unknown as Record<string, unknown>;
+  malicious["secret-contract-key"] = "secret-contract-value";
+  const { root: _root, ...body } = malicious;
+  malicious.root = SHA(CANONICAL(body));
+  assert.throws(() => assertLinearRequirementLabelFinalizeTransitionContract(
+    malicious as unknown as LinearRequirementLabelFinalizeTransitionContract,
+    plan,
+    malicious.root as string,
+    transition.previousReceiptRoot,
+  ), (error) => {
+    assert.doesNotMatch(String(error), /secret-contract-key|secret-contract-value/);
+    return /contract|fields|keys/i.test(String(error));
+  });
 });

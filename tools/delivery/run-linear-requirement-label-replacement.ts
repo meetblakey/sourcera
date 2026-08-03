@@ -16,16 +16,20 @@ import { basename, dirname, join, resolve } from "node:path";
 
 import { LinearRequirementLabelHttpTransport } from "./lib/linear-requirement-label-http-transport.js";
 import {
+  assertLinearRequirementLabelFinalizeTransitionContract,
   assertLinearRequirementLabelReplacementCandidate,
   canonicalLinearRequirementLabelReplacementFinalReceiptJson,
   compensateLinearRequirementLabelReplacementPhase,
   compareLinearRequirementLabelReplacementStableCaptures,
   executeLinearRequirementLabelReplacementPhase,
+  verifyLinearRequirementLabelAcceptedProtectedTransition,
   verifyLinearRequirementLabelRenameRecoveryState,
   verifyLinearRequirementLabelReplacementFinal,
+  verifyLinearRequirementLabelReplacementFinalWithTransition,
   verifyLinearRequirementLabelReplacementUsage,
   type LinearRequirementLabelCapture,
   type LinearRequirementLabelExpectedLabel,
+  type LinearRequirementLabelFinalizeTransitionContract,
   type LinearRequirementLabelReplacementCandidate,
   type LinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelReplacementPhaseReceipt,
@@ -42,6 +46,7 @@ const MUTATION_PHASES = new Set(["rename", "create", "replace", "retire"] as con
 const PHASES = new Set(["rename", "create", "replace", "verify", "retire", "finalize"] as const);
 const IMMUTABLE_MIGRATION_PATHS = [
   ".github/workflows/linear-requirement-label-replacement.yml",
+  "delivery/linear-requirement-label-finalize-transition.json",
   "delivery/linear-program-scope.json",
   "delivery/linear-project-scope.json",
   "tools/delivery",
@@ -55,6 +60,10 @@ const DIAGNOSTIC_CONTROL_TRANSITION_PATHS = [
   "tools/delivery/linear-requirement-label-replacement-workflow.test.ts",
   "tools/delivery/linear-requirement-label-replacement.test.ts",
   "tools/delivery/run-linear-requirement-label-replacement.ts",
+] as const;
+const FINALIZE_CONTROL_TRANSITION_PATHS = [
+  ...DIAGNOSTIC_CONTROL_TRANSITION_PATHS,
+  "delivery/linear-requirement-label-finalize-transition.json",
 ] as const;
 
 type RunnerPhase = "rename" | "create" | "replace" | "verify" | "retire" | "finalize";
@@ -87,6 +96,8 @@ interface CliArgs {
   controlTransitionHead?: string;
   controlTransitionBeforeRoot?: string;
   controlTransitionAfterRoot?: string;
+  finalizeTransition?: string;
+  expectedFinalizeTransitionRoot?: string;
 }
 
 interface ControlTransition {
@@ -102,6 +113,7 @@ type FailureCode =
   | "capture_validation"
   | "predecessor_validation"
   | "protected_state_validation"
+  | "protected_state_transition_validation"
   | "retirement_replay_validation"
   | "final_usage_validation"
   | "stable_capture_validation"
@@ -241,6 +253,7 @@ function parseArgs(argv: string[]): CliArgs {
     "--second-native-identity", "--second-capture-receipt", "--failure-summary-out",
     "--control-transition-source", "--control-transition-candidate-root", "--control-transition-head",
     "--control-transition-before-root", "--control-transition-after-root",
+    "--finalize-transition", "--expected-finalize-transition-root",
   ]);
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
@@ -285,6 +298,8 @@ function parseArgs(argv: string[]): CliArgs {
   const controlTransitionHead = values.get("--control-transition-head");
   const controlTransitionBeforeRoot = values.get("--control-transition-before-root");
   const controlTransitionAfterRoot = values.get("--control-transition-after-root");
+  const finalizeTransition = values.get("--finalize-transition");
+  const expectedFinalizeTransitionRoot = values.get("--expected-finalize-transition-root");
   const mutation = MUTATION_PHASES.has(phase as LinearRequirementLabelReplacementPhase);
   if (apply !== mutation) fail("--apply is required only for mutation phases");
   if (compensate && !mutation) fail("--compensate is valid only for mutation phases");
@@ -322,6 +337,10 @@ function parseArgs(argv: string[]): CliArgs {
       !DIGEST.test(controlTransitionAfterRoot!))) {
     fail("control transition arguments must be one exact commit and digest set");
   }
+  if ((finalizeTransition === undefined) !== (expectedFinalizeTransitionRoot === undefined) ||
+    (finalizeTransition !== undefined && (phase !== "finalize" || !DIGEST.test(expectedFinalizeTransitionRoot!)))) {
+    fail("finalize transition arguments are invalid or outside finalize");
+  }
   return {
     apply,
     compensate,
@@ -349,6 +368,8 @@ function parseArgs(argv: string[]): CliArgs {
     controlTransitionHead,
     controlTransitionBeforeRoot,
     controlTransitionAfterRoot,
+    finalizeTransition,
+    expectedFinalizeTransitionRoot,
   };
 }
 
@@ -457,10 +478,43 @@ function controlTreeRoot(repositoryRoot: string, commit: string, environment: No
   return sha256(tree.stdout);
 }
 
+function soleParent(
+  repositoryRoot: string,
+  commit: string,
+  environment: NodeJS.ProcessEnv,
+): string | null {
+  const readback = spawnSync("git", ["--no-optional-locks", "rev-list", "--parents", "-n", "1", commit], {
+    cwd: repositoryRoot,
+    encoding: "utf8",
+    env: environment,
+  });
+  if (readback.status !== 0 || readback.signal || readback.error) fail("migration control lineage is unavailable");
+  const lineage = readback.stdout.trim().split(/\s+/);
+  return lineage.length === 2 && lineage[0] === commit ? lineage[1]! : null;
+}
+
+function changedControlPaths(
+  repositoryRoot: string,
+  before: string,
+  after: string,
+  environment: NodeJS.ProcessEnv,
+): string[] {
+  const changed = spawnSync("git", [
+    "--no-optional-locks", "diff", "--name-only", "-z", before, after,
+  ], { cwd: repositoryRoot, encoding: "buffer", env: environment });
+  if (changed.status !== 0 || changed.signal || changed.error) fail("changed migration control paths are unavailable");
+  return changed.stdout.toString("utf8").split("\0").filter(Boolean).sort();
+}
+
+function exactPathSet(actual: readonly string[], expected: readonly string[]): boolean {
+  return actual.join("\0") === [...expected].sort().join("\0");
+}
+
 function repositoryHead(
   sourceCommit: string,
   candidateRoot: string,
   transition?: ControlTransition,
+  finalizeTransition?: LinearRequirementLabelFinalizeTransitionContract,
 ): { root: string; head: string } {
   const environment = secretFreeEnvironment();
   const top = spawnSync("git", ["--no-optional-locks", "rev-parse", "--show-toplevel"], {
@@ -474,7 +528,7 @@ function repositoryHead(
   if (head.status !== 0 || head.signal || head.error || !COMMIT.test(head.stdout.trim())) fail("repository HEAD is unavailable");
   const current = head.stdout.trim();
   if (current === sourceCommit) {
-    if (transition) fail("control transition is not valid without a later main HEAD");
+    if (transition || finalizeTransition) fail("control transition is not valid without a later main HEAD");
   } else {
     const ancestor = spawnSync("git", ["--no-optional-locks", "merge-base", "--is-ancestor", sourceCommit, current], {
       cwd: root, encoding: "utf8", env: environment,
@@ -487,26 +541,32 @@ function repositoryHead(
       fail("HEAD is not a safe descendant with byte-identical migration controls");
     }
     if (unchanged.status === 0) {
-      if (transition) fail("control transition was supplied for byte-identical migration controls");
+      if (transition || finalizeTransition) fail("control transition was supplied for byte-identical migration controls");
     } else {
-      const parentReadback = spawnSync("git", ["--no-optional-locks", "rev-list", "--parents", "-n", "1", current], {
-        cwd: root, encoding: "utf8", env: environment,
-      });
-      const lineage = parentReadback.stdout.trim().split(/\s+/);
-      if (!transition || transition.source !== sourceCommit || transition.candidateRoot !== candidateRoot ||
-        transition.head !== current || parentReadback.status !== 0 || parentReadback.signal || parentReadback.error ||
-        lineage.length !== 2 || lineage[0] !== current || lineage[1] !== sourceCommit ||
-        controlTreeRoot(root, sourceCommit, environment) !== transition.beforeRoot ||
-        controlTreeRoot(root, current, environment) !== transition.afterRoot) {
+      const directDiagnostic = transition !== undefined && finalizeTransition === undefined &&
+        transition.source === sourceCommit && transition.candidateRoot === candidateRoot &&
+        transition.head === current && soleParent(root, current, environment) === sourceCommit &&
+        controlTreeRoot(root, sourceCommit, environment) === transition.beforeRoot &&
+        controlTreeRoot(root, current, environment) === transition.afterRoot &&
+        exactPathSet(changedControlPaths(root, sourceCommit, current, environment), DIAGNOSTIC_CONTROL_TRANSITION_PATHS);
+      const exactFinalizeChain = transition !== undefined && finalizeTransition !== undefined &&
+        sourceCommit === finalizeTransition.candidateSourceCommit && candidateRoot === finalizeTransition.candidateRoot &&
+        transition.source === finalizeTransition.diagnosticCommit && transition.candidateRoot === candidateRoot &&
+        transition.head === current && transition.beforeRoot === finalizeTransition.diagnosticControlTreeRoot &&
+        soleParent(root, current, environment) === finalizeTransition.diagnosticCommit &&
+        soleParent(root, finalizeTransition.diagnosticCommit, environment) === sourceCommit &&
+        controlTreeRoot(root, sourceCommit, environment) === finalizeTransition.candidateControlTreeRoot &&
+        controlTreeRoot(root, finalizeTransition.diagnosticCommit, environment) === finalizeTransition.diagnosticControlTreeRoot &&
+        controlTreeRoot(root, current, environment) === transition.afterRoot &&
+        exactPathSet(
+          changedControlPaths(root, sourceCommit, finalizeTransition.diagnosticCommit, environment),
+          DIAGNOSTIC_CONTROL_TRANSITION_PATHS,
+        ) && exactPathSet(
+          changedControlPaths(root, finalizeTransition.diagnosticCommit, current, environment),
+          FINALIZE_CONTROL_TRANSITION_PATHS,
+        );
+      if (!directDiagnostic && !exactFinalizeChain) {
         fail("changed migration controls lack an exact digest-pinned transition");
-      }
-      const changed = spawnSync("git", [
-        "--no-optional-locks", "diff", "--name-only", "-z", sourceCommit, current, "--", ...IMMUTABLE_MIGRATION_PATHS,
-      ], { cwd: root, encoding: "buffer", env: environment });
-      if (changed.status !== 0 || changed.signal || changed.error) fail("changed migration control paths are unavailable");
-      const paths = changed.stdout.toString("utf8").split("\0").filter(Boolean).sort();
-      if (paths.join("\0") !== [...DIAGNOSTIC_CONTROL_TRANSITION_PATHS].sort().join("\0")) {
-        fail("migration control transition differs from the exact diagnostic allowlist");
       }
     }
   }
@@ -849,6 +909,9 @@ async function main(): Promise<void> {
   const resumeReceiptsRaw = args.resumeReceipts ? readSafeInput(args.resumeReceipts, "resume core receipts", true) : undefined;
   const secondNativeRaw = args.secondNativeIdentity ? readSafeInput(args.secondNativeIdentity, "second native identity") : undefined;
   const secondCaptureReceiptRaw = args.secondCaptureReceipt ? readSafeInput(args.secondCaptureReceipt, "second capture receipt") : undefined;
+  const finalizeTransitionRaw = args.finalizeTransition
+    ? readSafeInput(args.finalizeTransition, "finalize transition contract")
+    : undefined;
   const journalOut = newOutputPath(args.journalOut, "journal output");
   const receiptOut = newOutputPath(args.receiptOut, "receipt output");
   const chunkReceiptsOut = newOutputPath(args.chunkReceiptsOut, "chunk receipt output");
@@ -864,6 +927,12 @@ async function main(): Promise<void> {
   );
   failureSummary.candidateRoot = candidate.root;
   if (candidate.root !== args.expectedRoot) fail("candidate root differs from --expected-root");
+  const finalizeTransition = finalizeTransitionRaw ? assertLinearRequirementLabelFinalizeTransitionContract(
+    parsedJson(finalizeTransitionRaw, "finalize transition contract") as LinearRequirementLabelFinalizeTransitionContract,
+    candidate,
+    args.expectedFinalizeTransitionRoot!,
+    args.expectedPreviousReceiptRoot!,
+  ) : undefined;
   const transition = args.controlTransitionSource ? {
     source: args.controlTransitionSource,
     candidateRoot: args.controlTransitionCandidateRoot!,
@@ -871,7 +940,7 @@ async function main(): Promise<void> {
     beforeRoot: args.controlTransitionBeforeRoot!,
     afterRoot: args.controlTransitionAfterRoot!,
   } : undefined;
-  const repository = repositoryHead(candidate.sourceCommit, candidate.root, transition);
+  const repository = repositoryHead(candidate.sourceCommit, candidate.root, transition, finalizeTransition);
   if (process.env.GITHUB_REPOSITORY !== undefined && process.env.GITHUB_REPOSITORY !== "meetblakey/sourcera") fail("GitHub repository is not canonical");
   if (process.env.GITHUB_REF !== undefined && process.env.GITHUB_REF !== "refs/heads/main") fail("GitHub ref is not exact main");
   if (process.env.GITHUB_SHA !== undefined && process.env.GITHUB_SHA !== repository.head) fail("GitHub SHA differs from repository HEAD");
@@ -942,10 +1011,28 @@ async function main(): Promise<void> {
     failureSummary.secondCatalogRoots = comparison.secondCatalogRoots;
   }
 
-  failureSummary.code = "protected_state_validation";
-  if (!failureSummary.firstCapture.protectedRootMatches ||
-    (failureSummary.secondCapture && !failureSummary.secondCapture.protectedRootMatches)) {
-    fail("protected issue, body, relation, or native metadata drifted before the phase");
+  if (finalizeTransition) {
+    failureSummary.code = "protected_state_transition_validation";
+    verifyLinearRequirementLabelAcceptedProtectedTransition(
+      candidate,
+      capture.native,
+      finalizeTransition,
+      finalizeTransition.root,
+      args.expectedPreviousReceiptRoot!,
+    );
+    verifyLinearRequirementLabelAcceptedProtectedTransition(
+      candidate,
+      secondCapture!.native,
+      finalizeTransition,
+      finalizeTransition.root,
+      args.expectedPreviousReceiptRoot!,
+    );
+  } else {
+    failureSummary.code = "protected_state_validation";
+    if (!failureSummary.firstCapture.protectedRootMatches ||
+      (failureSummary.secondCapture && !failureSummary.secondCapture.protectedRootMatches)) {
+      fail("protected issue, body, relation, or native metadata drifted before the phase");
+    }
   }
 
   let verification: JsonRecord | null = null;
@@ -1011,17 +1098,25 @@ async function main(): Promise<void> {
     });
     if (replay.applied !== 0 || replay.appendedJournalRaw !== "") fail("retirement proof was not a read-only complete replay");
     coreReceipts = [...coreReceipts, ...replay.receipts];
-    failureSummary.code = "final_usage_validation";
-    verifyLinearRequirementLabelReplacementUsage(candidate, capture.native, { oldRetired: true });
-    verifyLinearRequirementLabelReplacementUsage(candidate, secondCapture!.native, { oldRetired: true });
     failureSummary.code = "stable_capture_validation";
-    const final = verifyLinearRequirementLabelReplacementFinal({
-      candidate,
-      first: capture.native,
-      second: secondCapture!.native,
-      firstCaptureSha256: capture.nativeSha256,
-      secondCaptureSha256: secondCapture!.nativeSha256,
-    });
+    const final = finalizeTransition
+      ? verifyLinearRequirementLabelReplacementFinalWithTransition({
+        candidate,
+        transition: finalizeTransition,
+        expectedTransitionRoot: finalizeTransition.root,
+        expectedPreviousReceiptRoot: args.expectedPreviousReceiptRoot!,
+        first: capture.native,
+        second: secondCapture!.native,
+        firstCaptureSha256: capture.nativeSha256,
+        secondCaptureSha256: secondCapture!.nativeSha256,
+      })
+      : verifyLinearRequirementLabelReplacementFinal({
+        candidate,
+        first: capture.native,
+        second: secondCapture!.native,
+        firstCaptureSha256: capture.nativeSha256,
+        secondCaptureSha256: secondCapture!.nativeSha256,
+      });
     verification = JSON.parse(canonicalLinearRequirementLabelReplacementFinalReceiptJson(final)) as JsonRecord;
   }
 

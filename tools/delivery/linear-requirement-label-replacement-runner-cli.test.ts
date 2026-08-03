@@ -21,6 +21,7 @@ import {
   buildLinearRequirementLabelReplacementCandidate,
   executeLinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelCapture,
+  type LinearRequirementLabelFinalizeTransitionContract,
   type LinearRequirementLabelReplacementCandidate,
   type LinearRequirementLabelReplacementPhase,
   type LinearRequirementLabelReplacementPhaseReceipt,
@@ -29,6 +30,9 @@ import {
 
 const RUNNER = resolve("tools/delivery/run-linear-requirement-label-replacement.ts");
 const LOADER = resolve("tools/spec-lint/node_modules/tsx/dist/loader.mjs");
+const CYCLE_ID = "d745c4db-3f58-4862-b7e3-9ddfa869b403";
+const CYCLE_BEFORE = "2026-07-28T14:36:15.374Z";
+const CYCLE_AFTER = "2026-07-29T14:35:38.730Z";
 
 const SHA = (value: string | Buffer): string => createHash("sha256").update(value).digest("hex");
 
@@ -54,6 +58,30 @@ function git(root: string, args: readonly string[]): string {
   });
   assert.equal(result.status, 0, result.stderr);
   return result.stdout.trim();
+}
+
+const IMMUTABLE_TEST_PATHS = [
+  ".github/workflows/linear-requirement-label-replacement.yml",
+  "delivery/linear-requirement-label-finalize-transition.json",
+  "delivery/linear-program-scope.json",
+  "delivery/linear-project-scope.json",
+  "tools/delivery",
+  "tools/spec-lint/package.json",
+  "tools/spec-lint/package-lock.json",
+] as const;
+
+function controlTreeRoot(root: string, commit: string): string {
+  return SHA(Buffer.from(spawnSync(
+    "git",
+    ["-C", root, "ls-tree", "-r", "-z", commit, "--", ...IMMUTABLE_TEST_PATHS],
+    { encoding: "buffer" },
+  ).stdout));
+}
+
+function rewriteCaptureCommit(path: string, commit: string): void {
+  const receipt = JSON.parse(readFileSync(path, "utf8")) as { source: { commit: string } };
+  receipt.source.commit = commit;
+  writeFileSync(path, `${JSON.stringify(receipt)}\n`, { mode: 0o600 });
 }
 
 function nativeFixture(): LinearRequirementLabelCapture {
@@ -131,6 +159,84 @@ function nativeFixture(): LinearRequirementLabelCapture {
   } as unknown as LinearRequirementLabelCapture;
 }
 
+function withCycle(native: LinearRequirementLabelCapture, updatedAt: string): LinearRequirementLabelCapture {
+  const result = structuredClone(native);
+  result.cycles = [{
+    id: CYCLE_ID,
+    number: 7,
+    name: "SEL cycle",
+    descriptionSha256: SHA("cycle-description"),
+    updatedAt,
+    archivedAt: null,
+    startsAt: "2026-07-20T00:00:00.000Z",
+    endsAt: "2026-08-03T00:00:00.000Z",
+    completedAt: null,
+    teamId: "40000000-0000-4000-8000-000000000001",
+    teamKey: "SEL",
+    inheritedFromId: null,
+  }];
+  result.coverage.totals.cycles = 1;
+  return result;
+}
+
+function sealedTransition(input: {
+  candidate: LinearRequirementLabelReplacementCandidate;
+  diagnosticCommit: string;
+  previousReceiptRoot: string;
+  candidateControlTreeRoot?: string;
+  diagnosticControlTreeRoot?: string;
+}): LinearRequirementLabelFinalizeTransitionContract {
+  const beforeCycle = withCycle(nativeFixture(), CYCLE_BEFORE).cycles;
+  const afterCycle = withCycle(nativeFixture(), CYCLE_AFTER).cycles;
+  const body = {
+    schemaVersion: 1 as const,
+    kind: "linear-requirement-label-finalize-transition" as const,
+    candidateRoot: input.candidate.root,
+    candidateSourceCommit: input.candidate.sourceCommit,
+    diagnosticCommit: input.diagnosticCommit,
+    previousReceiptRoot: input.previousReceiptRoot,
+    candidateControlTreeRoot: input.candidateControlTreeRoot ?? "1".repeat(64),
+    diagnosticControlTreeRoot: input.diagnosticControlTreeRoot ?? "2".repeat(64),
+    normalizedFingerprintSha256: "3".repeat(64),
+    evidence: {
+      before: {
+        artifactId: "8722916951",
+        artifactName: `linear-drift-fingerprint-${input.candidate.sourceCommit}-30448115612-1`,
+        artifactDigest: `sha256:${"4".repeat(64)}`,
+        runId: "30448115612",
+        runAttempt: "1",
+        commit: input.candidate.sourceCommit,
+        capturedAt: "2026-07-29T11:56:36.152Z",
+        fingerprintSha256: "5".repeat(64),
+        receiptSha256: "6".repeat(64),
+      },
+      after: {
+        artifactId: "8731405740",
+        artifactName: `linear-drift-fingerprint-${input.diagnosticCommit}-30470152687-1`,
+        artifactDigest: `sha256:${"7".repeat(64)}`,
+        runId: "30470152687",
+        runAttempt: "1",
+        commit: input.diagnosticCommit,
+        capturedAt: "2026-07-29T16:22:28.303Z",
+        fingerprintSha256: "8".repeat(64),
+        receiptSha256: "a".repeat(64),
+      },
+    },
+    protectedTransition: {
+      catalog: "cycles" as const,
+      cycleId: CYCLE_ID,
+      cycleNumber: 7,
+      field: "updatedAt" as const,
+      beforeValue: CYCLE_BEFORE,
+      afterValue: CYCLE_AFTER,
+      beforeCatalogRoot: SHA(canonicalJson(beforeCycle)),
+      afterCatalogRoot: SHA(canonicalJson(afterCycle)),
+      candidateProtectedNativeStateRoot: input.candidate.protectedNativeStateRoot,
+    },
+  };
+  return { ...body, root: SHA(canonicalJson(body)) };
+}
+
 function requiredArgs(root: string): string[] {
   return [
     "--candidate", join(root, "candidate.json"),
@@ -146,16 +252,27 @@ function requiredArgs(root: string): string[] {
   ];
 }
 
-async function finalizedRunnerFixture(root: string): Promise<{
+async function finalizedRunnerFixture(root: string, options: {
+  withTransition?: boolean;
+  sourceCommit?: string;
+  captureCommit?: string;
+  diagnosticCommit?: string;
+  candidateControlTreeRoot?: string;
+  diagnosticControlTreeRoot?: string;
+} = {}): Promise<{
   candidate: LinearRequirementLabelReplacementCandidate;
   first: LinearRequirementLabelCapture;
   second: LinearRequirementLabelCapture;
   args: string[];
   environment: Record<string, string>;
+  transition?: LinearRequirementLabelFinalizeTransitionContract;
   rewriteCapture(name: "first" | "second", native: LinearRequirementLabelCapture): void;
 }> {
-  const sourceCommit = git(process.cwd(), ["rev-parse", "HEAD"]);
-  const before = nativeFixture();
+  const sourceCommit = options.sourceCommit ?? git(process.cwd(), ["rev-parse", "HEAD"]);
+  const captureCommit = options.captureCommit ?? sourceCommit;
+  const diagnosticCommit = options.diagnosticCommit ?? sourceCommit;
+  const withTransition = options.withTransition === true;
+  const before = withTransition ? withCycle(nativeFixture(), CYCLE_BEFORE) : nativeFixture();
   const beforeRaw = Buffer.from(`${JSON.stringify(before)}\n`);
   const candidate = buildLinearRequirementLabelReplacementCandidate({
     native: before,
@@ -213,6 +330,10 @@ async function finalizedRunnerFixture(root: string): Promise<{
   first.coverage.totals.labels = first.labels.length;
   first.coverage.totals.labelAssignments = first.issues.reduce((total, issue) => total + issue.labelIds.length, 0);
   const second = structuredClone(first);
+  if (withTransition) {
+    first.cycles[0]!.updatedAt = CYCLE_AFTER;
+    second.cycles[0]!.updatedAt = CYCLE_AFTER;
+  }
 
   const captureReceipt = (nativeRaw: Buffer, capturedAt: string) => Buffer.from(`${JSON.stringify({
     schemaVersion: 2,
@@ -228,7 +349,7 @@ async function finalizedRunnerFixture(root: string): Promise<{
     },
     source: {
       repository: "meetblakey/sourcera",
-      commit: sourceCommit,
+      commit: captureCommit,
       ref: "refs/heads/main",
       runId: "991",
       runAttempt: "1",
@@ -288,6 +409,20 @@ async function finalizedRunnerFixture(root: string): Promise<{
     "--chunk-receipts-out", join(root, "phase-core-receipts.jsonl"),
     "--failure-summary-out", join(root, "failure-summary.json"),
   ];
+  const transition = withTransition ? sealedTransition({
+    candidate,
+    diagnosticCommit,
+    previousReceiptRoot: previous.root,
+    candidateControlTreeRoot: options.candidateControlTreeRoot,
+    diagnosticControlTreeRoot: options.diagnosticControlTreeRoot,
+  }) : undefined;
+  if (transition) {
+    writeFileSync(join(root, "transition.json"), `${JSON.stringify(transition)}\n`, { mode: 0o600 });
+    args.push(
+      "--finalize-transition", join(root, "transition.json"),
+      "--expected-finalize-transition-root", transition.root,
+    );
+  }
   return {
     candidate,
     first,
@@ -295,11 +430,12 @@ async function finalizedRunnerFixture(root: string): Promise<{
     args,
     environment: {
       GITHUB_REPOSITORY: "meetblakey/sourcera",
-      GITHUB_SHA: sourceCommit,
+      GITHUB_SHA: captureCommit,
       GITHUB_REF: "refs/heads/main",
       GITHUB_RUN_ID: "991",
       GITHUB_RUN_ATTEMPT: "1",
     },
+    transition,
     rewriteCapture,
   };
 }
@@ -391,6 +527,7 @@ test("runner source keeps the closed one-phase CLI and durable output controls",
     "--second-capture-receipt", "--failure-summary-out",
     "--control-transition-source", "--control-transition-candidate-root", "--control-transition-head",
     "--control-transition-before-root", "--control-transition-after-root",
+    "--finalize-transition", "--expected-finalize-transition-root",
   ]) assert.match(source, new RegExp(flag));
   assert.match(source, /O_EXCL/);
   assert.match(source, /O_NOFOLLOW/);
@@ -522,6 +659,168 @@ test("runner admits one digest-pinned six-file diagnostic control transition onl
     assert.equal(reused.status, 1);
     assert.equal(existsSync(join(root, "second-journal.jsonl")), false,
       "a second commit must not reuse the one-time transition even with recomputed digests");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("runner admits exactly the two-link ac9-to-diagnostics-to-fix chain and rejects a third commit", async () => {
+  const root = mkdtempSync(join(tmpdir(), "linear-requirement-label-two-link-transition-"));
+  try {
+    git(root, ["init", "--quiet"]);
+    git(root, ["config", "user.name", "Sourcera test"]);
+    git(root, ["config", "user.email", "sourcera-test@example.invalid"]);
+    const diagnosticPaths = [
+      ".github/workflows/linear-requirement-label-replacement.yml",
+      "tools/delivery/lib/linear-requirement-label-replacement.ts",
+      "tools/delivery/linear-requirement-label-replacement-runner-cli.test.ts",
+      "tools/delivery/linear-requirement-label-replacement-workflow.test.ts",
+      "tools/delivery/linear-requirement-label-replacement.test.ts",
+      "tools/delivery/run-linear-requirement-label-replacement.ts",
+    ];
+    const contractPath = "delivery/linear-requirement-label-finalize-transition.json";
+    for (const path of diagnosticPaths) {
+      const full = join(root, path);
+      mkdirSync(dirname(full), { recursive: true });
+      writeFileSync(full, "candidate\n", { mode: 0o600 });
+    }
+    git(root, ["add", ...diagnosticPaths]);
+    git(root, ["commit", "--quiet", "-m", "candidate controls"]);
+    const sourceCommit = git(root, ["rev-parse", "HEAD"]);
+    const candidateControlTreeRoot = controlTreeRoot(root, sourceCommit);
+
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "diagnostics\n", { mode: 0o600 });
+    git(root, ["add", ...diagnosticPaths]);
+    git(root, ["commit", "--quiet", "-m", "diagnostics controls"]);
+    const diagnosticCommit = git(root, ["rev-parse", "HEAD"]);
+    const diagnosticControlTreeRoot = controlTreeRoot(root, diagnosticCommit);
+
+    const fixture = await finalizedRunnerFixture(root, {
+      withTransition: true,
+      sourceCommit,
+      captureCommit: diagnosticCommit,
+      diagnosticCommit,
+      candidateControlTreeRoot,
+      diagnosticControlTreeRoot,
+    });
+    mkdirSync(dirname(join(root, contractPath)), { recursive: true });
+    writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "finalize transition\n", { mode: 0o600 });
+    git(root, ["add", ...diagnosticPaths, contractPath]);
+    git(root, ["commit", "--quiet", "-m", "finalize transition controls"]);
+    const fixHead = git(root, ["rev-parse", "HEAD"]);
+    const fixControlTreeRoot = controlTreeRoot(root, fixHead);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), fixHead);
+    const transitionFlag = fixture.args.indexOf("--finalize-transition");
+    fixture.args[transitionFlag + 1] = join(root, contractPath);
+    fixture.args.push(
+      "--control-transition-source", diagnosticCommit,
+      "--control-transition-candidate-root", fixture.candidate.root,
+      "--control-transition-head", fixHead,
+      "--control-transition-before-root", diagnosticControlTreeRoot,
+      "--control-transition-after-root", fixControlTreeRoot,
+    );
+    const environment = { ...fixture.environment, GITHUB_SHA: fixHead };
+
+    const drifted = structuredClone(fixture.first);
+    drifted.teams[0]!.name = "malicious-secret-transition-value";
+    fixture.rewriteCapture("first", drifted);
+    fixture.rewriteCapture("second", drifted);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), fixHead);
+    const driftArgs = [...fixture.args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "drift-journal.jsonl")],
+      ["--receipt-out", join(root, "drift-receipt.json")],
+      ["--chunk-receipts-out", join(root, "drift-core-receipts.jsonl")],
+      ["--failure-summary-out", join(root, "drift-failure.json")],
+    ] as const) driftArgs[driftArgs.indexOf(flag) + 1] = value;
+    const rejectedDrift = invoke(driftArgs, environment, root);
+    assert.equal(rejectedDrift.status, 1);
+    const driftFailure = readFileSync(join(root, "drift-failure.json"), "utf8");
+    assert.match(driftFailure, /protected_state_transition_validation/);
+    assert.doesNotMatch(driftFailure, /malicious-secret-transition-value/);
+    assert.equal(existsSync(join(root, "drift-receipt.json")), false);
+
+    fixture.rewriteCapture("first", fixture.first);
+    fixture.rewriteCapture("second", fixture.second);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), fixHead);
+    const exact = invoke(fixture.args, environment, root);
+    assert.equal(exact.status, 0, exact.stderr);
+    const exactReceipt = JSON.parse(readFileSync(join(root, "phase-receipt.json"), "utf8")) as {
+      applied: number;
+      verification: {
+        schemaVersion: number;
+        candidateProtectedNativeStateRoot: string;
+        finalProtectedNativeStateRoot: string;
+        acceptedProtectedStateTransition: LinearRequirementLabelFinalizeTransitionContract;
+        requirementUses: number;
+        oldLabelUses: number;
+        outsideRequirementUses: number;
+        stable: boolean;
+      };
+    };
+    assert.equal(exactReceipt.applied, 0);
+    assert.equal(exactReceipt.verification.schemaVersion, 2);
+    assert.equal(exactReceipt.verification.candidateProtectedNativeStateRoot, fixture.candidate.protectedNativeStateRoot);
+    assert.notEqual(exactReceipt.verification.finalProtectedNativeStateRoot, fixture.candidate.protectedNativeStateRoot);
+    assert.equal(exactReceipt.verification.acceptedProtectedStateTransition.root, fixture.transition!.root);
+    assert.equal(exactReceipt.verification.requirementUses, 186);
+    assert.equal(exactReceipt.verification.oldLabelUses, 0);
+    assert.equal(exactReceipt.verification.outsideRequirementUses, 0);
+    assert.equal(exactReceipt.verification.stable, true);
+    assert.equal(readFileSync(join(root, "journal.jsonl"), "utf8"), readFileSync(join(root, "previous-journal.jsonl"), "utf8"));
+
+    git(root, ["switch", "--quiet", "-c", "unrelated-finalize", diagnosticCommit]);
+    for (const path of diagnosticPaths) writeFileSync(join(root, path), "finalize transition\n", { mode: 0o600 });
+    mkdirSync(dirname(join(root, contractPath)), { recursive: true });
+    writeFileSync(join(root, contractPath), `${JSON.stringify(fixture.transition)}\n`, { mode: 0o600 });
+    writeFileSync(join(root, "README.md"), "unrelated\n", { mode: 0o600 });
+    git(root, ["add", ...diagnosticPaths, contractPath, "README.md"]);
+    git(root, ["commit", "--quiet", "-m", "finalize transition plus unrelated path"]);
+    const unrelatedHead = git(root, ["rev-parse", "HEAD"]);
+    const unrelatedControlTreeRoot = controlTreeRoot(root, unrelatedHead);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), unrelatedHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), unrelatedHead);
+    const unrelatedArgs = [...fixture.args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "unrelated-journal.jsonl")],
+      ["--receipt-out", join(root, "unrelated-receipt.json")],
+      ["--chunk-receipts-out", join(root, "unrelated-core-receipts.jsonl")],
+      ["--failure-summary-out", join(root, "unrelated-failure.json")],
+      ["--control-transition-head", unrelatedHead],
+      ["--control-transition-after-root", unrelatedControlTreeRoot],
+    ] as const) unrelatedArgs[unrelatedArgs.indexOf(flag) + 1] = value;
+    const unrelated = invoke(unrelatedArgs, { ...environment, GITHUB_SHA: unrelatedHead }, root);
+    assert.equal(unrelated.status, 1);
+    assert.equal(existsSync(join(root, "unrelated-journal.jsonl")), false,
+      "an unrelated direct-child path must fail before evidence outputs");
+
+    git(root, ["switch", "--quiet", "--detach", fixHead]);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), fixHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), fixHead);
+    writeFileSync(join(root, diagnosticPaths[0]!), "third commit\n", { mode: 0o600 });
+    git(root, ["add", diagnosticPaths[0]!]);
+    git(root, ["commit", "--quiet", "-m", "later control drift"]);
+    const thirdHead = git(root, ["rev-parse", "HEAD"]);
+    const thirdControlTreeRoot = controlTreeRoot(root, thirdHead);
+    rewriteCaptureCommit(join(root, "capture-receipt.json"), thirdHead);
+    rewriteCaptureCommit(join(root, "second-capture-receipt.json"), thirdHead);
+    const replayArgs = [...fixture.args];
+    for (const [flag, value] of [
+      ["--journal-out", join(root, "replay-journal.jsonl")],
+      ["--receipt-out", join(root, "replay-receipt.json")],
+      ["--chunk-receipts-out", join(root, "replay-core-receipts.jsonl")],
+      ["--failure-summary-out", join(root, "replay-failure.json")],
+      ["--control-transition-head", thirdHead],
+      ["--control-transition-after-root", thirdControlTreeRoot],
+    ] as const) replayArgs[replayArgs.indexOf(flag) + 1] = value;
+    const replay = invoke(replayArgs, { ...environment, GITHUB_SHA: thirdHead }, root);
+    assert.equal(replay.status, 1);
+    assert.equal(existsSync(join(root, "replay-journal.jsonl")), false,
+      "a third commit must fail before evidence outputs even with recomputed head and tree root");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
