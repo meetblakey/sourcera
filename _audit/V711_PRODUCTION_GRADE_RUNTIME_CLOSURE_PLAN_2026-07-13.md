@@ -1,6 +1,6 @@
 # v7.1.1 Production-Grade Runtime Closure Plan
 
-**Date:** 2026-07-13  
+**Date:** 2026-07-29
 **Authority:** `tools/release/stamp_gate.ts --json` and `_audit/V711_RUNTIME_STAMP_GATE_BLOCKER_INVENTORY.csv`
 
 ## Verdict
@@ -9,18 +9,18 @@ Documentation is complete. Production readiness is not proven.
 
 Live baseline:
 
-- 550 runtime rows
+- 552 runtime rows
 - 333 `runtime_active`
 - 2 nonblocking release-only rows
-- 215 product/runtime blockers
-- 201 rows missing required product/runtime evidence
+- 217 product/runtime blockers
+- 203 rows missing required product/runtime evidence
 - 13 rows with a local guard but external proof pending
 - 1 row with a partial local chain
 - 0 human-ratification blockers
 
 This plan groups work for execution. It does not assign implementation ownership. The `m02_3`, `m11_3`, `m21_3`, and `m24_3` values remain release-evidence lanes.
 
-The execution matrix maps all 215 blockers to a feature area, required execution, missing evidence, release-evidence lane, and evidence posture.
+The execution matrix maps all 217 blockers to a feature area, required execution, missing evidence, release-evidence lane, and evidence posture.
 
 ## Universal production-grade exit
 
@@ -40,14 +40,14 @@ Every pending row must have:
 | Buyer and Solo workspaces, scoring, Defense View, and Pulse | 20 | 0 | 18 | 2 | 0 |
 | Seller onboarding, Maya, KB and Q&A, and bid workflows | 47 | 2 | 39 | 3 | 3 |
 | Marketplace, matching, and promoted placements | 6 | 0 | 4 | 2 | 0 |
-| Billing, wallets, trials, subscriptions, and settlement | 33 | 2 | 24 | 0 | 7 |
-| Identity, permissions, entitlements, and console isolation | 16 | 2 | 14 | 0 | 0 |
+| Billing, wallets, trials, subscriptions, and settlement | 34 | 2 | 25 | 0 | 7 |
+| Identity, permissions, entitlements, and console isolation | 17 | 2 | 15 | 0 | 0 |
 | DSAR, audit, residency, retention, backup, and disaster recovery | 45 | 2 | 25 | 18 | 0 |
 | APIs, webhooks, MCP, and Console Bridge | 12 | 1 | 8 | 1 | 2 |
 | Mobile, accessibility, localization, and performance | 11 | 0 | 4 | 7 | 0 |
 | Analytics, growth, PostHog, email, and monitoring | 16 | 5 | 5 | 6 | 0 |
 | Cross-cutting release controls | 9 | 3 | 6 | 0 | 0 |
-| **Total** | **215** | **17** | **147** | **39** | **12** |
+| **Total** | **217** | **17** | **149** | **39** | **12** |
 
 ## Buyer and Solo workspaces, scoring, Defense View, and Pulse
 
@@ -81,7 +81,7 @@ Exact gates are mapped in `_audit/V711_PRODUCTION_GRADE_RUNTIME_EXECUTION_MATRIX
 
 ## Billing, wallets, trials, subscriptions, and settlement
 
-**Rows:** 33
+**Rows:** 34
 
 **Build:** Ship charge and subscription rules, Solo trials, wallet pools and auto-top-up, allowances, committed spend, billing failure states, outcome settlement, and dispute handling.
 
@@ -91,7 +91,7 @@ Exact gates are mapped in `_audit/V711_PRODUCTION_GRADE_RUNTIME_EXECUTION_MATRIX
 
 ## Identity, permissions, entitlements, and console isolation
 
-**Rows:** 16
+**Rows:** 17
 
 **Build:** Ship trusted WorkOS and SSO inputs, role and permission matrices, entitlement enforcement, domain checks, console isolation, and core global-ban reversal.
 

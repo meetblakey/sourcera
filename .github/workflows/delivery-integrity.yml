@@ -87,6 +87,7 @@ jobs:
           cache-dependency-path: tools/spec-lint/package-lock.json
       - run: npm ci --prefix tools/spec-lint
       - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/delivery/*.test.ts
+      - run: node --import ./tools/spec-lint/node_modules/tsx/dist/loader.mjs --test tools/release/*.test.ts
       - run: tools/spec-lint/node_modules/.bin/tsc --project tools/delivery/tsconfig.json
       - run: tools/spec-lint/node_modules/.bin/tsx tools/delivery/source-checksums.ts --contract delivery/ticket-source-checksums.json
       - name: Capture live release truth

@@ -58,6 +58,7 @@ test("delivery workflow enforces every repository and Linear gate", () => {
   );
   for (const required of [
     "tools/delivery/*.test.ts",
+    "tools/release/*.test.ts",
     "tools/delivery/tsconfig.json",
     "tools/release/stamp_gate.ts --json",
     "tools/release/exact_status_scan.ts --json",
@@ -115,6 +116,10 @@ test("delivery workflow enforces every repository and Linear gate", () => {
   const deliveryIntegrity = workflow.slice(
     workflow.indexOf("  delivery-integrity:"),
     workflow.indexOf("  linear-capture:"),
+  );
+  assert.match(
+    deliveryIntegrity,
+    /--test tools\/release\/\*\.test\.ts/,
   );
   const mirrorClassification = deliveryIntegrity.slice(
     deliveryIntegrity.indexOf("      - name: Classify committed Linear mirror"),
