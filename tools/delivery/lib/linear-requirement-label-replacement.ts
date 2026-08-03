@@ -227,16 +227,18 @@ export interface LinearRequirementLabelHistoricalArtifactContract {
 }
 
 export interface LinearRequirementLabelSemanticBaselineContract {
-  schemaVersion: 2;
+  schemaVersion: 3;
   kind: "linear-requirement-label-semantic-baseline-handoff";
   candidateRoot: string;
   candidateSourceCommit: string;
   diagnosticCommit: string;
   transitionCommit: string;
+  baselineCommit: string;
   previousReceiptRoot: string;
   candidateControlTreeRoot: string;
   diagnosticControlTreeRoot: string;
   transitionControlTreeRoot: string;
+  baselineControlTreeRoot: string;
   historicalEvidence: {
     verify: LinearRequirementLabelHistoricalArtifactContract;
     retire: LinearRequirementLabelHistoricalArtifactContract;
@@ -848,19 +850,27 @@ export function assertLinearRequirementLabelSemanticBaselineContract(
   exactDigest(expectedPreviousReceiptRoot, "expected semantic-baseline predecessor root");
   exactKeys(value, [
     "schemaVersion", "kind", "candidateRoot", "candidateSourceCommit", "diagnosticCommit",
-    "transitionCommit", "previousReceiptRoot", "candidateControlTreeRoot", "diagnosticControlTreeRoot",
-    "transitionControlTreeRoot", "historicalEvidence", "historicalProof", "root",
+    "transitionCommit", "baselineCommit", "previousReceiptRoot", "candidateControlTreeRoot",
+    "diagnosticControlTreeRoot", "transitionControlTreeRoot", "baselineControlTreeRoot",
+    "historicalEvidence", "historicalProof", "root",
   ], "semantic-baseline transition contract");
-  if (value.schemaVersion !== 2 || value.kind !== "linear-requirement-label-semantic-baseline-handoff" ||
+  if (value.schemaVersion !== 3 || value.kind !== "linear-requirement-label-semantic-baseline-handoff" ||
     value.candidateRoot !== candidate.root || value.candidateSourceCommit !== candidate.sourceCommit ||
     value.previousReceiptRoot !== expectedPreviousReceiptRoot || value.root !== expectedRoot ||
     !COMMIT.test(value.diagnosticCommit) || !COMMIT.test(value.transitionCommit) ||
-    new Set([value.candidateSourceCommit, value.diagnosticCommit, value.transitionCommit]).size !== 3) {
+    !COMMIT.test(value.baselineCommit) ||
+    new Set([
+      value.candidateSourceCommit,
+      value.diagnosticCommit,
+      value.transitionCommit,
+      value.baselineCommit,
+    ]).size !== 4) {
     fail("semantic-baseline transition identity differs from its exact candidate, lineage, or predecessor");
   }
   exactDigest(value.candidateControlTreeRoot, "candidate control-tree root");
   exactDigest(value.diagnosticControlTreeRoot, "diagnostic control-tree root");
   exactDigest(value.transitionControlTreeRoot, "transition control-tree root");
+  exactDigest(value.baselineControlTreeRoot, "baseline control-tree root");
   exactKeys(value.historicalEvidence, ["verify", "retire"], "historical artifact evidence");
   const verify = historicalArtifactContract(value.historicalEvidence.verify, "verify", value.candidateSourceCommit);
   const retire = historicalArtifactContract(value.historicalEvidence.retire, "retire", value.candidateSourceCommit);
@@ -2158,8 +2168,14 @@ function assertFinalizeControlTransition(
   exactKeys(value, ["source", "head", "beforeRoot", "afterRoot"], label);
   if (Object.values(value).some((field) => typeof field !== "string") ||
     !COMMIT.test(value.source) || !COMMIT.test(value.head) ||
-    value.source !== contract.transitionCommit || value.beforeRoot !== contract.transitionControlTreeRoot ||
-    new Set([contract.candidateSourceCommit, contract.diagnosticCommit, value.source, value.head]).size !== 4 ||
+    value.source !== contract.baselineCommit || value.beforeRoot !== contract.baselineControlTreeRoot ||
+    new Set([
+      contract.candidateSourceCommit,
+      contract.diagnosticCommit,
+      contract.transitionCommit,
+      value.source,
+      value.head,
+    ]).size !== 5 ||
     value.afterRoot === value.beforeRoot) {
     fail(`${label} identity or lineage differs`);
   }

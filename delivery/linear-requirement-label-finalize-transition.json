@@ -1,14 +1,16 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "kind": "linear-requirement-label-semantic-baseline-handoff",
   "candidateRoot": "21700e0ae0f8d5d1106310022c7c1a6e78d83dd610f080f43e90d8755ca29453",
   "candidateSourceCommit": "ac9ee6ea965a905b212965b414eb7e5543e8d2a1",
   "diagnosticCommit": "7b7cda1f742a3c14b0b0f06a4738c0db199c2e3f",
   "transitionCommit": "147c023bd15fd5db9b26a61fc127fb4a771ee304",
+  "baselineCommit": "34cf6f28737421320004f7da292d4fc0cc23f5d1",
   "previousReceiptRoot": "c378c5588f8d1ae616dc73c76fbca0ebb4e4555cc20f9a95b4e04d887ffe27c5",
   "candidateControlTreeRoot": "1f9d311c868a7299608d8ba52921ee697670c44a18e9aae80d074140e84617c6",
   "diagnosticControlTreeRoot": "fe2bd3ead3ee1bdfa1c0bc0ac0d5a3fc6f4f869ce708e948b9592361f7252c76",
   "transitionControlTreeRoot": "e61a078f3918b5bbe755000cdc860be8683608d36b4327a98124fe8c8318e059",
+  "baselineControlTreeRoot": "147b38e25c8aeba82bbb159fd9ffdf6f0c3e47cade9c7b522e98694863c0d34a",
   "historicalEvidence": {
     "verify": {
       "artifactId": "8726485898",
@@ -49,5 +51,5 @@
     "retireTerminalRecordSha256": "5acfcd536fc480fe877fd4fe1279c6edba0ffd38412d9d2aa1e762f605c9f780",
     "retireTerminalCoreReceiptRoot": "8dbc932d0be0de5230a8dc27a4871f308bddf72f5119a506c6bd810d21233723"
   },
-  "root": "0f2c6f52d896b7b8a3b03448c4302255bc6ce1a191224752a8e5612626e92fd1"
+  "root": "e2382d2e0e49fe9dc7fdef788bfbe1f3cac9ed69f1ded69b3d3a1b9bbe9f90e8"
 }

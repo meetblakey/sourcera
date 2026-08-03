@@ -82,6 +82,74 @@ function consistencyCapture(marker: string): LinearCapture {
   };
 }
 
+function emptyNativeIdentityCapture(): LinearNativeIdentityCapture {
+  const connection = () => ({
+    terminal: true as const,
+    pages: 1,
+    rows: 0,
+    finalCursor: null,
+    attempts: 1,
+  });
+  return {
+    schemaVersion: 1,
+    workspace: {
+      id: "workspace-1",
+      name: "Sourcera",
+      urlKey: "sourcera",
+      archivedAt: null,
+    },
+    issues: [],
+    labels: [],
+    relations: [],
+    teams: [],
+    workflowStates: [],
+    users: [],
+    initiatives: [],
+    projects: [],
+    releasePipelines: [],
+    releases: [],
+    projectMilestones: [],
+    cycles: [],
+    documents: [],
+    rawDocumentIds: [],
+    coverage: {
+      complete: true,
+      totals: {
+        issues: 0,
+        labels: 0,
+        labelAssignments: 0,
+        relations: 0,
+        teams: 0,
+        workflowStates: 0,
+        users: 0,
+        initiatives: 0,
+        projects: 0,
+        releasePipelines: 0,
+        releases: 0,
+        projectMilestones: 0,
+        cycles: 0,
+        documents: 0,
+      },
+      topLevel: {
+        issues: connection(),
+        labels: connection(),
+        teams: connection(),
+        workflowStates: connection(),
+        users: connection(),
+        initiatives: connection(),
+        projects: connection(),
+        releasePipelines: connection(),
+        releases: connection(),
+        projectMilestones: connection(),
+        cycles: connection(),
+        documents: connection(),
+      },
+      perIssue: [],
+      perProject: [],
+    },
+  };
+}
+
 function trackedIssue(
   updatedAt = "2026-07-23T00:00:00.000Z",
 ): LinearFingerprint["issues"][number] {
@@ -233,6 +301,41 @@ test("bounded consistency capture rejects native identity drift", async () => {
   (second as unknown as { documents: unknown }).documents = structuredClone(
     (first as unknown as { documents: object }).documents,
   );
+
+  let calls = 0;
+  await assert.rejects(
+    () =>
+      confirmLinearCaptureConsistency(async () =>
+        calls++ === 0 ? first : second
+      ),
+    /native identity changed between bounded consistency reads/,
+  );
+  assert.equal(calls, 2);
+});
+
+test("bounded consistency capture ignores operational native coverage telemetry", async () => {
+  const first = consistencyCapture("first");
+  const second = consistencyCapture("second");
+  first.nativeIdentity = emptyNativeIdentityCapture();
+  second.nativeIdentity = structuredClone(first.nativeIdentity);
+  second.nativeIdentity.coverage.topLevel.issues.attempts = 3;
+  second.nativeIdentity.coverage.topLevel.issues.pages = 2;
+  second.nativeIdentity.coverage.topLevel.issues.finalCursor = "opaque-cursor";
+
+  let calls = 0;
+  const accepted = await confirmLinearCaptureConsistency(async () =>
+    calls++ === 0 ? first : second
+  );
+  assert.equal(calls, 2);
+  assert.strictEqual(accepted, second);
+});
+
+test("bounded consistency capture rejects native coverage total drift", async () => {
+  const first = consistencyCapture("first");
+  const second = consistencyCapture("second");
+  first.nativeIdentity = emptyNativeIdentityCapture();
+  second.nativeIdentity = structuredClone(first.nativeIdentity);
+  second.nativeIdentity.coverage.totals.issues = 1;
 
   let calls = 0;
   await assert.rejects(
